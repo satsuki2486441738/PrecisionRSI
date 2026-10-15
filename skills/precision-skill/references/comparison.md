@@ -32,6 +32,8 @@ For aligned reference r and candidate c, compute in FP64 with stable reductions:
 
 Do not add epsilon to relative-L2 denominators. Report coordinate counts, both signal norms, error norm and undefined metrics explicitly. Global metrics use concatenated coordinates, not averages of per-tensor ratios. For updates, compare (after-before) from each side, not final parameters alone. [Training](training.md) specifies collection stages and coverage.
 
+Training reports separate execution and input/state/coverage comparability from per-metric results; no single overall numerical verdict is required. Encode a zero-norm metric that is undefined as null with its reason and metric-level `incomparable`; retain defined errors as `no_thresholds` when no thresholds exist. An undefined cosine alone does not invalidate other metrics or imply a state/coverage mismatch. Nonfinite observations and missing coordinates still block their affected comparison scope.
+
 ## Interpretation
 
 Thresholds, when requested, apply to a specified metric, reference, coverage and aggregation and must be fixed before the target comparison. Do not fit thresholds to observed discrepancies. Without thresholds, use `no_thresholds`; self-comparison only checks the pipeline.
