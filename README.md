@@ -20,6 +20,12 @@ The bundled [Python comparator](skills/precision-skill/scripts/compare_scores.py
 
 The workflow also covers SFT loss/gradient/update semantics and RL fixed-trajectory dependencies. Those tasks use case-specific collectors and validators; the bundled scoring core does not calculate training or cache comparisons. Reports distinguish execution, comparability, numerical results, and observed coverage.
 
+## Evaluation protocols
+
+The [inference protocol](skills/precision-skill/references/inference.md#next-token-distribution-protocol-top100-union-v1) now specifies `top100-union-v1`: each side selects its top 100 next-token candidates at the same fixed-history positions, then provides probabilities for the union and its remaining tail mass. Primary diagnostics are GPU-to-NPU coarsened KL and top-1 agreement, supplemented by probability RMSE/max error, top-100 overlap, probability coverage, and auxiliary target-token NLL. Thresholds remain unset. This protocol is documented; distribution collection and comparison are not yet implemented by the bundled tool, and historical target-score reports do not satisfy it.
+
+The [anchored SFT protocol](skills/precision-skill/references/training.md#sft), `sft`, requires every valid target token, full gradients and full actual parameter updates for one same-state step. It reports target-logprob MAE/P99/max and loss differences, plus global and per-tensor relative L2, cosine and maximum absolute error for gradients/updates. Existing sampled runs are smoke tests; full-coverage collection/comparison still needs implementation. RL recommendations additionally cover fixed actions, old/reference logprobs, rewards/advantages, ratio/clipping records and algorithm-specific critic or group data; RL is not yet anchored. The reference cites TRL and msprobe and distinguishes numerical agreement from learning effectiveness. Bind execution details before collection; thresholds remain unset.
+
 Shared implementation libraries use the same upstream release, including the patch version. Platform build strings and extensions are recorded separately. A different-version comparison requires explicit approval of the versions and scope. Existing runtime inventories or associated locked-installation and launch records can establish the environment; missing a dedicated inventory file does not automatically require a rerun.
 
 ## Layout

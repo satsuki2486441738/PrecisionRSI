@@ -12,6 +12,8 @@ Bind thresholds to the metric, reference, scope, aggregation, and comparison mod
 
 ## Schema-v2 scoring handoff
 
+Schema v2 is the existing **target-token scoring** interface. New next-token distribution cases use [top100-union-v1](inference.md#next-token-distribution-protocol-top100-union-v1), including its cross-score and tail-mass requirements. That protocol is documented but not implemented by the bundled comparator. Retain old contracts and results unchanged; a schema-v2 diagnostic does not establish top-100 coverage.
+
 The loop is shared conditions, accepted single-side artifacts, counterpart execution, then offline comparison. Keep the contract and side manifests in the case; save execution records in its `runs/` directory. Create a counterpart manifest when its evidence exists. Keep the time when conditions were frozen distinct from the time of existing observations.
 
 Both contract and manifests use integer `schema_version: 2`. The [comparator module docstring](../scripts/compare_scores.py) is the complete field/type contract.
@@ -106,6 +108,8 @@ BF16 parameters can coexist with FP32 scoring. Storage dtype, autocast, or saved
 Let V contain all valid paired target coordinates and N = |V|. Check case identity, history, position, target ID, and mask. Exclude agreed padding/ignore positions and mask sentinels according to the contract. Missing observations are missing coverage; semantic, state, and mapping conflicts are incomparable. Empty sets and nonfinite valid values or metric results are incomparable. Preserve offending coordinates and values.
 
 ### Scores
+
+The following metrics apply to labeled target-token scores, not complete next-token distributions. Distribution metrics and aggregation are defined in [inference](inference.md#metrics-and-aggregation).
 
 Let l(d,i) be the natural log probability for the same target token. GPU is the default reference.
 

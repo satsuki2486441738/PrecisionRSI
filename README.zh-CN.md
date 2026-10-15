@@ -20,6 +20,12 @@
 
 工作流同时定义 SFT 的 loss、梯度、更新语义和 RL 固定轨迹依赖。这些任务使用案例专用采集器与校验器；随包评分核心尚未实现训练或 cache 比较。报告分别呈现执行、可比性、数值结果和实际覆盖。
 
+## 评测协议
+
+[推理协议](skills/precision-skill/references/inference.md#next-token-distribution-protocol-top100-union-v1)新增 `top100-union-v1`：在相同固定历史的预测位置，两端各选 next-token top-100，补齐并集内每个 token 在两端的概率及剩余尾部概率质量。主要诊断指标为 GPU→NPU 的尾部合并 KL 和 Top-1 一致率，辅以概率 RMSE／最大误差、Top-100 重合率、概率覆盖率及目标 token NLL。阈值仍未设置。当前完成的是协议定义，随包工具尚未实现分布采集和比较，历史目标 token 评分报告不满足这项新覆盖。
+
+[已锚定的 SFT 协议](skills/precision-skill/references/training.md#sft)为 `sft`：同状态单步，覆盖全部有效目标 token、全量梯度及全量实际参数更新。报告目标 logprob 的 MAE／P99／最大误差和 loss 差值，以及梯度／更新量的全局和逐张量相对 L2、余弦相似度、最大绝对误差。已有抽样运行仅作为 smoke test；全量采集和比较尚待实现。RL 建议额外覆盖固定动作、旧／参考策略 logprob、reward／advantage、ratio／clipping，以及算法需要的 critic 或分组数据；RL 尚未锚定。文档引用 TRL 和 msprobe，区分数值一致性与训练效果。采集前需绑定执行细节；阈值仍未设置。
+
 共享实现库使用相同上游发行版本，包括补丁号；平台构建标签和扩展分别记录。异版本比较需明确批准版本配对和范围。已有运行时清单，或能关联到运行的锁定安装与启动记录，均可用于确认环境；缺少专用版本清单文件不直接意味着需要重跑。
 
 ## 目录
