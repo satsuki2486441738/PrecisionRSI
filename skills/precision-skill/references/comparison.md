@@ -10,27 +10,31 @@ Keep declared settings, runtime evidence and unknowns distinct. Look up existing
 
 ## Target-token scores
 
-For N paired valid targets, let l_G,i and l_N,i be their natural log probabilities. Require finite scores at most zero, including zero as valid.
+For $N$ paired valid targets, let $\ell_{G,i}$ and $\ell_{N,i}$ be their GPU and NPU natural log probabilities. Require finite scores at most zero, including zero as valid.
 
-- NLL_side = -sum(l_side,i)/N; delta NLL = NLL_NPU-NLL_GPU.
-- e_i = abs(l_N,i-l_G,i); MAE = sum(e_i)/N; also report maximum error when requested.
+$$
+\mathrm{NLL}_{s}=-\frac{1}{N}\sum_{i=1}^{N}\ell_{s,i},\qquad
+\Delta\mathrm{NLL}=\mathrm{NLL}_{N}-\mathrm{NLL}_{G},\qquad s\in\{G,N\}.
+$$
+
+- $e_i=\lvert\ell_{N,i}-\ell_{G,i}\rvert$; $\mathrm{MAE}=\frac{1}{N}\sum_{i=1}^{N}e_i$; also report maximum error when requested.
 - Sum over all samples/batches/ranks before dividing by valid-target count. Signed delta NLL can cancel local errors, so keep absolute-error metrics.
-- For a linear percentile a, sort all errors, set h=a*(N-1), and interpolate between floor(h) and ceil(h). At N=1 the percentile is the sole value. P99 uses a=0.99; do not average per-rank percentiles.
+- For a linear percentile $a$, sort all errors, set $h=a(N-1)$, and interpolate between zero-based indices $\lfloor h\rfloor$ and $\lceil h\rceil$. At $N=1$ the percentile is the sole value. P99 uses $a=0.99$; do not average per-rank percentiles.
 
 Next-token distribution metrics are defined in [inference](inference.md#top-100-distribution-comparison).
 
 ## Tensors and actual updates
 
-For aligned reference r and candidate c, compute in FP64 with stable reductions:
+For aligned reference $r$ and candidate $c$ with $N$ coordinates, compute in FP64 with stable reductions:
 
 | Metric | Definition | Zero-norm handling |
 |---|---|---|
-| Relative L2 | norm(c-r)/norm(r) | Both reference and error norms zero: 0. Zero reference with nonzero error: undefined. |
-| Cosine | dot(r,c)/(norm(r)*norm(c)) | Undefined if either norm is zero, even for two equal zero vectors. |
-| Maximum absolute error | max(abs(c_i-r_i)) | Defined for nonempty finite coordinates. |
-| Optional RMSE | sqrt(sum((c_i-r_i)^2)/N) | Defined for nonempty finite coordinates. |
+| Relative L2 | $\frac{\lVert c-r\rVert_2}{\lVert r\rVert_2}$ | Both reference and error norms zero: 0. Zero reference with nonzero error: undefined. |
+| Cosine | $\frac{r^\top c}{\lVert r\rVert_2\lVert c\rVert_2}$ | Undefined if either norm is zero, even for two equal zero vectors. |
+| Maximum absolute error | $\max_i\lvert c_i-r_i\rvert$ | Defined for nonempty finite coordinates. |
+| Optional RMSE | $\sqrt{\frac{1}{N}\sum_{i=1}^{N}(c_i-r_i)^2}$ | Defined for nonempty finite coordinates. |
 
-Do not add epsilon to relative-L2 denominators. Report coordinate counts, both signal norms, error norm and undefined metrics explicitly. Global metrics use concatenated coordinates, not averages of per-tensor ratios. For updates, compare (after-before) from each side, not final parameters alone. [Training](training.md) specifies collection stages and coverage.
+Do not add epsilon to relative-L2 denominators. Report coordinate counts, both signal norms, error norm and undefined metrics explicitly. Global metrics use concatenated coordinates, not averages of per-tensor ratios. For updates, compare $\Delta\theta=\theta_{\mathrm{after}}-\theta_{\mathrm{before}}$ from each side, not final parameters alone. [Training](training.md) specifies collection stages and coverage.
 
 Training reports separate execution and input/state/coverage comparability from per-metric results; no single overall numerical verdict is required. Encode a zero-norm metric that is undefined as null with its reason and metric-level `incomparable`; retain defined errors as `no_thresholds` when no thresholds exist. An undefined cosine alone does not invalidate other metrics or imply a state/coverage mismatch. Nonfinite observations and missing coordinates still block their affected comparison scope.
 
