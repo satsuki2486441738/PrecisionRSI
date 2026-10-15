@@ -32,4 +32,8 @@ For a single run per side with offline exchange, retain full normalized score ro
 
 ## Diagnose and report
 
+Keep the existing inference metrics; add no default engine-specific metrics. Break down those same metrics by native prefill, first cached decode step and subsequent decode steps, and separately by a few context-length bins fixed before comparison. The first generated token's distribution belongs to the final prefill row. Context length counts the full history producing each row; use identical bins on both sides, retain counts, and omit unsupported breakdowns explicitly. Keep the main report compact; detailed breakdowns belong in the evidence.
+
+Only when an anomaly warrants it, compare cached decode against re-prefill, prefix-cache hits against misses, chunked against unchunked prefill, or single-request against batched execution. Reuse the same distribution metrics at common histories, change one condition at a time, and report these variants separately within the authorized scope and budget. Cache/hidden-state tensor errors and free-generation divergence are not default metrics.
+
 Validate raw-score semantics, row/vocabulary coverage and common history before applying [inference metrics](inference.md#top-100-distribution-comparison). First localize a mismatch to prefill, a chunk boundary or a decode step; then inspect the smallest relevant evidence for position mapping, cache state, attention, parallel reductions or sampling contamination. Report engine and stage coverage, metrics and remaining limitations. CPU adapter tests or successful requests do not establish GPU/NPU numerical agreement.
