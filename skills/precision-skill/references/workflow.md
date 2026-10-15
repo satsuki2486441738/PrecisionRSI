@@ -3,6 +3,7 @@
 ## Prepare and run
 
 - Reuse agreed conditions, saved inputs, valid observations and prior approvals. Record resolved choices in the case; do not ask the user to reconfirm them. Ask only when an unresolved choice affects the requested semantics or authorized scope.
+- Choose routine engineering details yourself: output names/paths within the workspace, serialization layout and timeouts within the remaining budget. An absent preferred filename or timeout is not a clarification blocker; unresolved task selection or resource authorization may be.
 - Before a new device run, establish the command, device allocation, output location, remaining cumulative budget and timeout. Count loading, failed attempts and cleanup. Use the project's environment manager and scheduler; verify actual device mapping and idleness.
 - Save replayable inputs/state, observations, effective numerical settings, run-associated environment evidence and completion status for every rank. Preserve native execution paths; configuration intent alone is not runtime evidence.
 - Validate each side before pairing: inputs, identities, states, coordinates, counts, finite values and completion. Reuse preparation evidence; missing a particular file is not by itself a reason to rerun.

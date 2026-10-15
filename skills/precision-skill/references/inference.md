@@ -26,6 +26,8 @@ Weight positions equally; calculate RMSE per position before aggregation. Merge 
 
 Use stable tail accumulation and FP64 offline metric arithmetic. Record any full-vocabulary numerical renormalization and its serialization tolerance in the case; this is not an acceptance threshold. Zero reference mass contributes zero to KL; positive reference mass with zero candidate mass gives infinite divergence. Preserve logprobs to distinguish underflow from true zero.
 
+If KL is nonfinite, retain the affected coordinate and score evidence; serialize its value as null with an explicit reason and report `incomparable`. Do not drop that position or present aggregates over only the remaining positions as complete coverage.
+
 Tail-merged KL is a lower bound on full-vocabulary KL: it cannot detect redistribution within the tail. Coverage is therefore part of the result. Auxiliary labeled-token NLL and errors use [comparison](comparison.md); they do not replace distribution metrics.
 
 ## Generation and cache
