@@ -6,7 +6,7 @@ Check common model/data identity, numerical policy, input history, task state an
 
 Pair by semantic coordinates: sample/position/token for scores, logical parameter/element for tensors. Validate lengths, masks, uniqueness and complete required coverage. Reordering is allowed; silently intersecting sets, replacing missing values with zero or dropping nonfinite values is not. Layout transformations must follow an independently established mapping, not one fitted to minimize error.
 
-Keep declared settings, runtime evidence and unknowns distinct. Look up existing evidence before recollecting. Required unknowns block the affected scope; unneeded internal details remain coverage limits. Parameter dtype or FP32 output does not establish every internal operation's dtype.
+Separate declared settings, execution evidence and unknowns. Required unknowns block only the affected scope; unneeded internal details remain coverage limits.
 
 ## Target-token scores
 
@@ -36,7 +36,7 @@ For aligned reference $r$ and candidate $c$ with $N$ coordinates, compute in FP6
 
 Do not add epsilon to relative-L2 denominators. Report coordinate counts, both signal norms, error norm and undefined metrics explicitly. Global metrics use concatenated coordinates, not averages of per-tensor ratios. For updates, compare $\Delta\theta=\theta_{\mathrm{after}}-\theta_{\mathrm{before}}$ from each side, not final parameters alone. [Training](training.md) specifies collection stages and coverage.
 
-Training reports separate execution and input/state/coverage comparability from per-metric results; no single overall numerical verdict is required. Encode a zero-norm metric that is undefined as null with its reason and metric-level `incomparable`; retain defined errors as `no_thresholds` when no thresholds exist. An undefined cosine alone does not invalidate other metrics or imply a state/coverage mismatch. Nonfinite observations and missing coordinates still block their affected comparison scope.
+Separate execution, comparability and metric results. Encode undefined zero-norm metrics as null with a reason and metric-level `incomparable`; retain defined errors as `no_thresholds` without thresholds. Undefined cosine does not invalidate other metrics. Missing/nonfinite observations block their affected scope.
 
 ## Interpretation
 
@@ -54,9 +54,9 @@ Retain all blockers and usable single-side diagnostics. A concise result should 
 
 ## Bundled target-score comparator
 
-[compare_scores.py](../scripts/compare_scores.py) is standard-library-only, schema v2 / core 2.0.0. It validates full-forward **target-token scores** and computes NLL, delta NLL, MAE and global linear P99. It supports only null thresholds and does not emit passed/exceeded. Top-100, training and cache observations require separate case tooling.
+[compare_scores.py](../scripts/compare_scores.py) supports schema-v2 full-forward **target-token** scoring with null thresholds, as described in [SKILL.md](../SKILL.md#available-tool). Other scopes need case tooling.
 
-Use the module's opening docstring as the authoritative field/type contract instead of duplicating its schema. Paths resolve relative to their containing JSON. `actual` fields need pointers to matching execution records; the contract cannot certify itself. The coordinator reviews provenance and shared versions, which the numeric core cannot establish automatically.
+Use the module docstring for the schema. Paths are relative to their containing JSON; `actual` fields must reference execution records. The agent reviews provenance/version alignment, which the numeric core cannot establish.
 
 ```bash
 python scripts/compare_scores.py --contract <contract.json> --reference <gpu.json> --candidate <npu.json> --output <new-report.json>

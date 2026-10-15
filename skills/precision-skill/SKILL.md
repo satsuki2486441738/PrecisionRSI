@@ -11,7 +11,7 @@ Compare native execution stacks under common inputs and numerical conditions. GP
 
 1. Reuse the user's scope, existing configurations, artifacts and approvals. Resolve facts from records; ask only for a missing decision that materially changes the next action. Do not turn this pipeline into a questionnaire.
 2. Align model/data identities, shared implementation releases, precision policy and task state. Read [environment](references/environment.md) when preparing or reviewing an environment.
-3. Collect the observations for the current task: [inference](references/inference.md) or [SFT/RL](references/training.md). Read only the applicable task section; retain native kernels and fusion.
+3. Collect the observations for the current task: [inference](references/inference.md) or [SFT/RL](references/training.md). Read common rules and the applicable task section; retain native kernels and fusion.
 4. Validate complete paired coverage and compute the task's metrics using [comparison](references/comparison.md). Investigate internals only when an observed discrepancy or the user's question requires it.
 5. Report the outcome, key metrics, coverage and evidence location. Without predefined thresholds, report diagnostics rather than a pass.
 

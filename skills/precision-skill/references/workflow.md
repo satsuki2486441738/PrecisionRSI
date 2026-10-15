@@ -2,22 +2,16 @@
 
 ## Prepare and run
 
-- Reuse agreed conditions, saved inputs, valid observations and prior approvals. Record resolved choices in the case; do not ask the user to reconfirm them. Ask only when an unresolved choice affects the requested semantics or authorized scope.
-- Choose routine engineering details yourself: output names/paths within the workspace, serialization layout and timeouts within the remaining budget. An absent preferred filename or timeout is not a clarification blocker; unresolved task selection or resource authorization may be.
-- Before a new device run, establish the command, device allocation, output location, remaining cumulative budget and timeout. Count loading, failed attempts and cleanup. Use the project's environment manager and scheduler; verify actual device mapping and idleness.
-- Save replayable inputs/state, observations, effective numerical settings, run-associated environment evidence and completion status for every rank. Preserve native execution paths; configuration intent alone is not runtime evidence.
-- Validate each side before pairing: inputs, identities, states, coordinates, counts, finite values and completion. Reuse preparation evidence; missing a particular file is not by itself a reason to rerun.
+Reuse agreed scope, configurations, artifacts and approvals. Resolve facts from records/code; choose routine paths, formats, hooks and timeouts yourself. Ask only for an unresolved decision that changes task semantics or authorization.
 
-## Failures and investigation
+Before device execution, establish command, allocation, output location, remaining cumulative budget and timeout. Include loading, failed attempts, collection and cleanup. Use the existing environment manager/scheduler; verify allocated-device mapping and idleness. Resolve ordinary failures within scope/budget; stop at exhaustion or a genuine blocker without changing the experiment to obtain agreement.
 
-Preserve failed attempts. Resolve ordinary engineering issues within the existing scope and budget; rerun only the affected validation. Do not silently change the model, data, numerical policy or required coverage to obtain agreement. Stop when the budget is exhausted or an unresolved blocker prevents useful progress.
+Save replayable inputs/state, observations, effective settings, run-associated environment and every rank's completion evidence. Validate each side before pairing; reuse valid evidence rather than rerunning for a preferred filename or layout.
 
-Begin localization at a discrepant position, tensor or stage. Collect the smallest additional evidence that can distinguish the suspected causes; a nonzero error alone does not require a whole-graph dump. Keep controlled diagnostic variants separate from native-stack results.
+## Diagnose and hand off
 
-## Handoff and report
+Start at a discrepant position, tensor or stage. Collect only evidence needed to distinguish likely causes; keep controlled variants separate from native results.
 
-A handoff contains the shared conditions, observations, environment/launch evidence, validator and a short next-action note. Either side can execute first; execution order does not change reference direction.
+A handoff contains shared conditions, observations, environment/launch evidence, validator and a short next step. Preserve failed attempts and historical runs; create new runs exclusively. Either side may execute first.
 
-Keep one case guide and a brief work log. Runs hold immutable observations and execution logs; new attempts/comparisons use exclusive directories. Separate software-test success, successful device execution and cross-device numerical agreement.
-
-Report only the outcome, principal metrics, measured coverage, unresolved blockers and evidence link. Include detailed environment inventories or formulas by reference rather than repeating them in each response.
+Report outcome, principal metrics, coverage, blockers and evidence link. Distinguish software tests, device execution and numerical agreement; keep detailed inventories and tables in artifacts.
