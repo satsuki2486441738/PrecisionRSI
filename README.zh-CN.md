@@ -16,6 +16,8 @@
 
 以 GPU 为参考。未预设阈值的数值诊断不代表精度通过。只读取当前任务需要的参考；案例配置、调研依据和执行历史留在方法说明之外。
 
+vLLM 和 SGLang 使用[引擎采集指南](skills/precision-skill/references/engines.md)，覆盖原生 prefill、固定历史的缓存 decode、原始评分语义及完整分布采集。引擎适配器仍由案例实现；方法说明不代表设备验证已完成。
+
 ## 工具与组织
 
 随包[比较器](skills/precision-skill/scripts/compare_scores.py)实现 schema-v2 full-forward **目标 token** 的 NLL、ΔNLL、MAE 和 P99，阈值为 null。Top-100、训练和 cache 比较使用案例专用工具；文档定义不代表随包比较器已实现这些能力。

@@ -16,6 +16,8 @@ Copy [skills/precision-skill](skills/precision-skill/) into your client's skill 
 
 GPU is the reference. Numerical diagnostics without predefined thresholds are not acceptance passes. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.
 
+For vLLM and SGLang, the [engine collection guide](skills/precision-skill/references/engines.md) covers native prefill and fixed-history cached decode, raw-score semantics and complete distribution collection. Engine adapters remain case-specific; this guide does not imply device validation.
+
 ## Tooling and layout
 
 The bundled [comparator](skills/precision-skill/scripts/compare_scores.py) implements schema-v2 full-forward **target-token** NLL, delta NLL, MAE and P99 with null thresholds. Top-100, training and cache comparisons use case-specific tooling; the documentation does not imply those features exist in the bundled comparator.

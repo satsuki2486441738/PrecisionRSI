@@ -1,5 +1,7 @@
 # Inference
 
+For vLLM or SGLang, also read [serving engines](engines.md) for native prefill/decode collection. The cache-off full-forward procedure below is a separate scope, not an instruction to replace an engine's execution path.
+
 ## Common forward
 
 Use the same model/weights/tokenizer/config, fixed token history, position IDs, attention mask and selected prediction positions. Preserve serialization and complete samples; reuse existing selection/tokenization records. Match parameter dtype, quantization and autocast policy while retaining each platform's native kernels.
