@@ -18,6 +18,8 @@
 
 vLLM 和 SGLang 使用[引擎采集指南](skills/precision-skill/references/engines.md)，覆盖原生 prefill、固定历史的缓存 decode、原始评分语义及完整分布采集。引擎适配器仍由案例实现；方法说明不代表设备验证已完成。
 
+TRL 或 verl 的 RL 任务使用[框架指南](skills/precision-skill/references/rl-frameworks.md)，明确固定轨迹回放和原生 optimizer step 的采集边界。默认指标覆盖动作评分、loss、梯度及实际更新；算法专属诊断按需展开。框架采集器仍由案例实现。
+
 ## 工具与组织
 
 随包[比较器](skills/precision-skill/scripts/compare_scores.py)实现 schema-v2 full-forward **目标 token** 的 NLL、ΔNLL、MAE 和 P99，阈值为 null。Top-100、训练和 cache 比较使用案例专用工具；文档定义不代表随包比较器已实现这些能力。

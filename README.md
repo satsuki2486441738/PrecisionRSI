@@ -18,6 +18,8 @@ GPU is the reference. Numerical diagnostics without predefined thresholds are no
 
 For vLLM and SGLang, the [engine collection guide](skills/precision-skill/references/engines.md) covers native prefill and fixed-history cached decode, raw-score semantics and complete distribution collection. Engine adapters remain case-specific; this guide does not imply device validation.
 
+For RL with TRL or verl, the [framework guide](skills/precision-skill/references/rl-frameworks.md) defines fixed-trajectory replay and native optimizer-step collection. Default metrics cover action scores, losses, gradients and actual updates; algorithm-specific diagnostics are conditional. Framework collectors remain case-specific.
+
 ## Tooling and layout
 
 The bundled [comparator](skills/precision-skill/scripts/compare_scores.py) implements schema-v2 full-forward **target-token** NLL, delta NLL, MAE and P99 with null thresholds. Top-100, training and cache comparisons use case-specific tooling; the documentation does not imply those features exist in the bundled comparator.
