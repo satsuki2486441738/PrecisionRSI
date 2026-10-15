@@ -1,6 +1,6 @@
 # Package and workspace
 
-`SKILL.md` routes to methods in `references/` and the target-score comparator in `scripts/`. Load only relevant references. The agent coordinates and interprets; native collectors save observations; offline validators check comparability and compute metrics.
+`SKILL.md` routes to methods in `references/` and [offline tools](tools.md) in `scripts/`. Load only relevant references. The agent coordinates and interprets; native collectors save observations; offline validators check comparability and compute metrics.
 
 Keep case configuration, implementation and history outside the installed skill:
 

@@ -22,7 +22,7 @@ TRL 或 verl 的 RL 任务使用[框架指南](skills/precision-skill/references
 
 ## 工具与组织
 
-随包[比较器](skills/precision-skill/scripts/compare_scores.py)实现 schema-v2 full-forward **目标 token** 的 NLL、ΔNLL、MAE 和 P99，阈值为 null。Top-100、训练和 cache 比较使用案例专用工具；文档定义不代表随包比较器已实现这些能力。
+[离线工具](skills/precision-skill/references/tools.md)可校验产物，并基于 NumPy 分块比较 top-100 分布、全量梯度和实际更新；原有标准库目标评分比较器继续保留。采集器、格式适配和任务 loss 重建仍放在案例中；自比较不代表跨设备精度一致。
 
 - [SKILL.md](skills/precision-skill/SKILL.md)：pipeline 与参考入口。
 - [比较](skills/precision-skill/references/comparison.md)：对齐规则、公式和结果解释。
@@ -32,4 +32,4 @@ TRL 或 verl 的 RL 任务使用[框架指南](skills/precision-skill/references
 
 私有 `projects/` 保存案例配置、采集器与运行结果；权重、数据和环境实体保留在资源目录。skill 技术文档使用英文，根目录说明保持中英双语。
 
-在仓库根目录运行维护测试：`python -B -m unittest discover -s tests -v`。
+使用含 NumPy 的现有 Python 环境，在仓库根目录运行维护测试：`python -B -m unittest discover -s tests -v`。

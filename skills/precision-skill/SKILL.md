@@ -19,4 +19,4 @@ Use [workflow](references/workflow.md) for device execution/retries and [archite
 
 ## Available tool
 
-[scripts/compare_scores.py](scripts/compare_scores.py) implements schema-v2 full-forward **target-token** scoring: NLL, delta NLL, MAE and P99, with null thresholds. Top-100 distributions, SFT, RL and cache comparisons need case-specific collectors/validators. Read the module's schema docstring only when using or adapting that interface.
+Use [offline tools](references/tools.md) for artifact validation, top-100 distributions, full training tensors or legacy target-token scores. Collectors and format adapters remain case-specific. Read a script's schema docstring only when implementing its input interface.

@@ -1,6 +1,6 @@
 # Repository maintenance
 
-- The installable package is `skills/precision-skill/`. Its `SKILL.md` routes tasks to focused English references and the standard-library comparator. Repository regression tests live in `tests/`.
+- The installable package is `skills/precision-skill/`. Its `SKILL.md` routes tasks to focused English references and the offline comparators/validator. New artifact tools require NumPy; the legacy target-score comparator is standard-library-only. Repository regression tests live in `tests/`.
 - Maintain `README.md` in English and `README.zh-CN.md` in Chinese with matching scope. Keep skill instructions, technical references, code documentation, and maintenance instructions in English. Follow the [Agent Skills specification](https://agentskills.io/specification).
 - Private `projects/<project>/environments/` directories own reusable environment declarations. Each case's manifests reference its declarations separately from actual execution evidence.
 - Cases own contracts, manifests, a current guide, a work log, dedicated collectors/tests, and `runs/`. Work records belong to the case; tool tests and actual device execution are separate evidence.

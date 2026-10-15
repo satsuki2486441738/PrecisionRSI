@@ -22,7 +22,7 @@ For RL with TRL or verl, the [framework guide](skills/precision-skill/references
 
 ## Tooling and layout
 
-The bundled [comparator](skills/precision-skill/scripts/compare_scores.py) implements schema-v2 full-forward **target-token** NLL, delta NLL, MAE and P99 with null thresholds. Top-100, training and cache comparisons use case-specific tooling; the documentation does not imply those features exist in the bundled comparator.
+The [offline tools](skills/precision-skill/references/tools.md) validate artifacts and compare top-100 distributions or full gradients/actual updates using NumPy and bounded-memory reads. The existing standard-library target-score comparator remains available. Collectors, format adapters and task-specific loss reconstruction stay with each case; no tool claims cross-device agreement from a self-check.
 
 - [SKILL.md](skills/precision-skill/SKILL.md): pipeline and reference routing.
 - [Comparison](skills/precision-skill/references/comparison.md): alignment, formulas and result interpretation.
@@ -32,4 +32,4 @@ The bundled [comparator](skills/precision-skill/scripts/compare_scores.py) imple
 
 Private `projects/` own case configurations, collectors and runs. Weights, data and installed environments remain at their resource locations. Technical skill documentation is maintained in English; the root guides are bilingual.
 
-Run maintainer tests from the repository root: `python -B -m unittest discover -s tests -v`.
+Run maintainer tests in an existing Python environment with NumPy, from the repository root: `python -B -m unittest discover -s tests -v`.

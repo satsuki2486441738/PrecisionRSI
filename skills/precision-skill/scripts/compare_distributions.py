@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+"""Top-100 union/tail comparison. Requires NumPy; shared schema in artifact_io.
+
+Contract extras: vocab_size>=100, normalization_tolerance (positive numerical
+serialization tolerance, NOT acceptance threshold), renormalization=none|full_vocabulary_fp64,
+positions=[{sample:str,
+position:int, history:[token_ids,...]}]. position=len(history)-1; adapters must
+resolve absolute causal positions without silently shifting/padding histories.
+Manifest extras: positions repeat coordinates/history with scores descriptor:
+{path: array.npy, row: int} or {path: array.safetensors, key: str, row: int}.
+Scores are full-vocabulary normalized natural log probabilities, before sampling
+processors, FP32/FP64. Arrays are [positions,vocabulary] or a single [vocabulary]
+row (row=0). Vocabulary IDs are the canonical indices 0..vocab_size-1.
+True zero probability is -inf; NaN/+inf/positive logprobs are invalid. Log-space
+normalization and tail sums preserve true zero vs exp underflow. Optional explicit
+full-vocabulary FP64 renormalization occurs only after validating original mass.
+
+Reports retain per-position results, equal-position aggregates, coverage and
+mismatch examples. Nonfinite KL serializes null with reason; its aggregate is
+blocked, never silently computed over a finite subset. Common-input/schema errors
+block affected positions and all incomplete aggregates. Same path=self-check.
+CLI --contract C --reference GPU --candidate NPU --output NEW.json
+"""
+import math
+from pathlib import Path
+import numpy as np
+from artifact_io import (Array, ArtifactError, aggregate, blocked, blocked_status, cli, contract,
+                         integer, manifest, require, result_value, unique)
+
+
+def coordinate(row):
+    require(isinstance(row.get('sample'), str) and row['sample'], 'invalid sample ID')
+    require(integer(row.get('position')), 'invalid prediction position')
+    return row['sample'], row['position']
+
+
+def check_history(row, vocab):
+    history = row.get('history')
+    require(isinstance(history, list) and history and all(integer(x) and x < vocab for x in history), 'invalid history')
+    require(len(history) == row['position'] + 1, 'prediction/history offset mismatch')
+
+
+def lse(values):
+    if not values.size:
+        return -math.inf
+    maximum = float(np.max(values))
+    if maximum == -math.inf:
+        return maximum
+    return maximum + math.log(math.fsum(np.exp(values-maximum)))
+
+
+def scores(base, record, vocab, tolerance, renormalization="none"):
+    source = Array(base, record['scores'])
+    require(not source.bf16 and source.dtype.itemsize >= 4, 'logprobs require FP32 or FP64')
+    row = record['scores'].get('row', 0)
+    require(integer(row), 'invalid score row')
+    if len(source.shape) == 1:
+        require(source.shape == [vocab] and row == 0, 'vocabulary/row mismatch')
+    else:
+        require(len(source.shape) == 2 and source.shape[1] == vocab and row < source.shape[0], 'vocabulary/row mismatch')
+    values = source.read(row*vocab, vocab)
+    require(not np.isnan(values).any() and not np.isposinf(values).any() and (values <= 0).all(), 'invalid logprobs')
+    norm = lse(values)
+    require(math.isfinite(norm) and abs(math.expm1(norm)) <= tolerance, 'full-vocabulary normalization mismatch')
+    require(renormalization in ('none', 'full_vocabulary_fp64'), 'unsupported renormalization')
+    return values-norm if renormalization == 'full_vocabulary_fp64' else values, math.exp(norm)
+
+
+def per_position(lp, lq):
+    ids = np.arange(lp.size)
+    # Explicit ID tie-breaking, including ties at the 100th cutoff.
+    tg = np.lexsort((ids, -lp))[:100]
+    tn = np.lexsort((ids, -lq))[:100]
+    union = np.union1d(tg, tn)
+    tail = np.ones(lp.size, dtype=bool)
+    tail[union] = False
+    pl = np.append(lp[union], lse(lp[tail]))
+    ql = np.append(lq[union], lse(lq[tail]))
+    true_zero = np.isfinite(pl) & np.isneginf(ql)
+    if true_zero.any():
+        i = int(np.flatnonzero(true_zero)[0])
+        where = int(union[i]) if i < union.size else 'other'
+        kl = result_value(None, f'positive reference mass with zero candidate mass at {where}')
+    else:
+        active = np.isfinite(pl)
+        value = math.fsum(np.exp(pl[active]) * (pl[active]-ql[active]))
+        kl = result_value(value)
+    p, q = np.exp(lp[union]), np.exp(lq[union])
+    error = np.abs(q-p)
+    worst = int(np.argmax(error))
+    top1 = bool(tg[0] == tn[0])
+    report = {'union_count': int(union.size), 'tail_merged_kl': kl, 'top1_agreement': top1,
+              'top100_overlap': np.intersect1d(tg, tn).size/100,
+              'probability_rmse': math.sqrt(math.fsum(error*error)/union.size),
+              'max_probability_error': float(error[worst]), 'max_error_token': int(union[worst]),
+              'coverage': {'reference_top100': math.fsum(np.exp(lp[tg])), 'candidate_top100': math.fsum(np.exp(lq[tn])),
+                           'reference_union': math.fsum(p), 'candidate_union': math.fsum(q)}}
+    if not top1:
+        best_two = np.lexsort((ids, -lp))[:2]
+        candidates = [int(tg[0]), int(tn[0])]
+        report['top1_mismatch'] = {'reference_token': candidates[0], 'candidate_token': candidates[1],
+                                 'probabilities': [{'token': i, 'reference': math.exp(lp[i]), 'candidate': math.exp(lq[i])} for i in candidates],
+                                 'reference_margin': math.exp(lp[best_two[0]])-math.exp(lp[best_two[1]])}
+    return report
+
+
+def summarize(rows):
+    result = {}
+    for field in ('probability_rmse', 'max_probability_error'):
+        values = [r[field] for r in rows]
+        result[field] = aggregate(values)
+        maximum = rows[max(range(len(rows)), key=lambda i: values[i])]
+        result[field]['max_coordinate'] = {k: maximum[k] for k in ('sample', 'position')}
+        if field == 'max_probability_error':
+            result[field]['max_coordinate']['token'] = maximum['max_error_token']
+    kl = [r['tail_merged_kl']['value'] for r in rows]
+    if any(x is None for x in kl):
+        result['tail_merged_kl'] = {'status': 'incomparable', 'value': None, 'reason': 'nonfinite KL positions retained; no partial aggregate'}
+    else:
+        result['tail_merged_kl'] = aggregate(kl)
+        worst = rows[max(range(len(rows)), key=lambda i: kl[i])]
+        result['tail_merged_kl']['max_coordinate'] = {k: worst[k] for k in ('sample', 'position')}
+    matches = sum(r['top1_agreement'] for r in rows)
+    result['top1_agreement'] = {'count': matches, 'total': len(rows), 'fraction': matches/len(rows)}
+    result['top100_overlap'] = {'mean': math.fsum(r['top100_overlap'] for r in rows)/len(rows)}
+    result['coverage'] = {}
+    for key in rows[0]['coverage']:
+        values = [r['coverage'][key] for r in rows]
+        result['coverage'][key] = {'mean': math.fsum(values)/len(values), 'p1': float(np.quantile(values, .01, method='linear')), 'min': min(values)}
+    return result
+
+
+def compare(contract_path, reference_path, candidate_path):
+    report = {'kind': 'distributions', 'schema_version': 1, 'status': 'no_thresholds', 'thresholds': None,
+              'self_comparison': Path(reference_path).resolve() == Path(candidate_path).resolve(), 'positions': []}
+    report['sources'] = {k: str(Path(v).resolve()) for k, v in [('contract', contract_path), ('reference', reference_path), ('candidate', candidate_path)]}
+    try:
+        spec = contract(contract_path, 'distributions')
+        vocab, tolerance = spec['vocab_size'], spec['normalization_tolerance']
+        renormalization = spec['renormalization']
+        require(renormalization in ('none', 'full_vocabulary_fp64'), 'unsupported renormalization')
+        require(integer(vocab, 100), 'vocabulary must contain at least 100 IDs')
+        require(type(tolerance) in (int, float) and math.isfinite(tolerance) and 0 < tolerance < 1, 'invalid normalization tolerance')
+        require(isinstance(spec.get('positions'), list) and spec['positions'], 'empty expected positions', 'not_covered')
+        expected = unique(spec['positions'], coordinate, 'expected position')
+        for row in expected.values():
+            check_history(row, vocab)
+        ref, rb = manifest(reference_path, spec, 'GPU')
+        cand, cb = manifest(candidate_path, spec, 'GPU' if report['self_comparison'] else 'NPU')
+        ri, ci = [unique(side['positions'], coordinate, 'position') for side in (ref, cand)]
+        require(set(ri) == set(ci) == set(expected), 'position coverage mismatch', 'not_covered')
+        failed = False
+        for key in sorted(expected):
+            row = {'sample': key[0], 'position': key[1]}
+            try:
+                for entry in (ri[key], ci[key]):
+                    check_history(entry, vocab)
+                    require(entry['history'] == expected[key]['history'], 'history mismatch')
+                lp, pn = scores(rb, ri[key], vocab, tolerance, renormalization)
+                lq, qn = (lp, pn) if report['self_comparison'] else scores(cb, ci[key], vocab, tolerance, renormalization)
+                row.update(per_position(lp, lq))
+                row['normalization_mass'] = {'reference': pn, 'candidate': qn}
+            except (ArtifactError, OSError, ValueError, KeyError, TypeError, OverflowError) as exc:
+                row.update(blocked(exc))
+                failed = True
+            report['positions'].append(row)
+        report['position_count'] = len(expected)
+        if failed:
+            report['status'] = blocked_status(report['positions'])
+            report['aggregate'] = {'status': 'not_covered', 'reason': 'incomplete valid position coverage; no partial aggregate'}
+        else:
+            report['aggregate'] = summarize(report['positions'])
+            if any(r['tail_merged_kl']['value'] is None for r in report['positions']):
+                report['status'] = 'incomparable'
+        report['normalization_tolerance'] = tolerance
+        report['renormalization'] = renormalization
+    except (ArtifactError, OSError, ValueError, KeyError, TypeError, OverflowError) as exc:
+        report.update(blocked(exc))
+    return report
+
+
+if __name__ == '__main__':
+    raise SystemExit(cli(compare, __doc__))

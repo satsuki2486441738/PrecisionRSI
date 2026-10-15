@@ -54,7 +54,7 @@ Retain all blockers and usable single-side diagnostics. A concise result should 
 
 ## Bundled target-score comparator
 
-[compare_scores.py](../scripts/compare_scores.py) supports schema-v2 full-forward **target-token** scoring with null thresholds, as described in [SKILL.md](../SKILL.md#available-tool). Other scopes need case tooling.
+[compare_scores.py](../scripts/compare_scores.py) supports schema-v2 full-forward **target-token** scoring with null thresholds, as described in [SKILL.md](../SKILL.md#available-tool). Use the [offline tools](tools.md) for distributions and training tensors; task-specific loss/action-score adapters remain with the case.
 
 Use the module docstring for the schema. Paths are relative to their containing JSON; `actual` fields must reference execution records. The agent reviews provenance/version alignment, which the numeric core cannot establish.
 
