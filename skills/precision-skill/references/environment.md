@@ -1,67 +1,23 @@
-# Environment and resource evidence
+# Environment and resource alignment
 
-## Shared implementation versions
+## Shared implementation
 
-Identify libraries used by both sides for the actual loading, input processing, computation, or scoring path. Examples include Torch, Transformers, and the tokenizer implementation. Match their upstream release versions, including patch versions. For source installations, align commits and relevant local implementation changes. Distinct libraries that are themselves the subject of a comparison retain their separate identities; their shared dependencies follow the same version rule.
+Match upstream releases, including patch versions, of libraries used by both sides for loading, tokenization, computation and scoring. For source installs, match relevant commits/patches. Record platform builds and extensions separately: CUDA, CANN and torch-npu need compatible platform-specific versions, not identical names. Libraries intentionally being compared retain their distinct identities.
 
-Keep CUDA, CANN, torch-npu, and other platform extensions compatible with their respective stacks. Record build strings such as `+cu126` and `+cpu` separately from the common upstream release. Include customized changes affecting the shared implementation in the version review. A Torch `+cpu` build can execute on Ascend through torch-npu registration; assess the required APIs and the actual backend rather than the suffix alone.
+Reuse an already approved version pairing. A new mismatch in shared implementation needs an explicit decision on its versions and interpretation before collection/comparison. Numerical agreement alone cannot establish equivalent implementations.
 
-Record the shared package list, target releases, observed versions, and review result in the case. A first single-side baseline establishes target releases for the other side. Inventory packages relevant to the path; distinguish installed support packages from modules actually imported.
+## Associate the environment with the run
 
-For a different-version proposal, present the libraries and exact versions, the reason, its effect on interpretation, and the same-version alternative or alignment obstacle. Obtain explicit user approval for that version pair and comparison scope before the corresponding collection or comparison. Reuse approval within its original scope; new differences need a new decision. Permission to reuse an environment or execute a device task does not itself authorize a version difference. Reference the approval from the manifest's `side_config` and explain the stack difference in the report.
+Use either a runtime inventory or a locked-installation/immutable-image record linked to the launch and evidence that dependencies remained unchanged. A lockfile alone describes intent; a later inspection alone describes the current environment.
 
-Version admission belongs to the collection/comparison coordinator. The schema-v2 numerical core validates its documented fields; it does not enforce this package policy automatically.
+For new runs, record interpreter/environment identity, relevant package releases and runtime builds, imported module locations, platform runtime/driver, and effective numerical settings. Associate every rank with its environment; use a shared inventory when homogeneity is established. Do not import unrelated frameworks or hash entire installations for routine version checks.
 
-## Declarations and execution association
+For historical runs, examine existing preparation, launcher and change records before proposing recollection. Keep unresolved facts explicit; do not backfill current versions as historical observations.
 
-An environment declaration describes the intended dependencies. A lockfile resolves versions and installation sources. Runtime records identify the environment and implementation that produced an observation. Use these records together to establish the versions for a run.
+## Reuse resources
 
-Accept either of these evidence paths when it identifies the required shared releases:
+Use the existing project environment manager and preserve its declaration/lockfile. Keep environment, model and data installations at their resource locations.
 
-| Evidence path | Association with the run |
-|---|---|
-| Runtime inventory | The collector records its interpreter, package releases, runtime build strings, and relevant loaded module locations with the run and rank. |
-| Environment preparation and launch records | A successful locked installation or immutable image record identifies the environment; the launch identifies that same interpreter/environment or image; available records establish that relevant dependencies were unchanged through execution. |
+Resolve model/weights/tokenizer/config and data sources to fixed revisions during preparation. On reuse, verify that actual loads and replayed inputs refer to those resources. Repeat content checks only after changes, conflicting provenance or a concrete integrity concern. Reuse tokenization records; validate saved token IDs, positions, masks and target mapping.
 
-A missing dedicated version JSON is a lookup gap, not an automatic rerun requirement. First examine the existing lockfile, installation/sync result, launcher, interpreter prefix, image identity, and relevant environment change records. A lockfile alone establishes a declaration; add the preparation and launch association needed for that particular run. A filesystem path alone does not establish that its contents stayed unchanged.
-
-If the original environment is still available, inspect it using the same interpreter and record the inspection time. Attribute its versions to a historical run only when the unchanged-environment association is established. Otherwise describe the inventory as current and identify exactly which historical versions remain unresolved. Do not insert current observations into old execution records.
-
-Prefer collecting the association once over requesting repeated evidence. For new runs, save a compact inventory at startup, before model loading. Include:
-
-- The run, rank, timestamp, interpreter executable/prefix, and environment or image identifier where available.
-- Participating distribution releases, runtime version strings when exposed, and relevant imported module locations. Record an unavailable module version as unavailable; package metadata remains useful.
-- The lockfile or preparation record used, and the launch association. Record a commit or relevant patch for source installations.
-- Platform extensions, driver/runtime identity, and effective numerical settings separately from common releases.
-
-Homogeneous ranks may share one inventory when each rank is associated with that environment and the execution system provides the relevant homogeneity evidence. Otherwise capture the required versions per rank. Keep inventory generation lightweight and avoid importing unused frameworks just to list versions.
-
-Routine checks use package metadata, environment preparation, and load locations. Full source hashes are reserved for a concrete integrity concern or suspected implementation change. Unknown historical versions call for bounded investigation and a minimal collection proposal when necessary; they are distinct from an observed version mismatch.
-
-## Project environment layout
-
-Use the project's existing environment manager, including existing containers:
-
-```text
-projects/<project>/environments/<gpu|npu>/<framework-version>/
-  <environment declaration and lockfile>
-  setting.yaml
-```
-
-For example, a Pixi environment may use `pixi.toml` or `pyproject.toml` with `pixi.lock`. `setting.yaml` records selected builds, Python, devices, driver/runtime, numerical switches, and capability evidence. Keep the environment installation and model weights at their own resource locations.
-
-Each side's manifest references its declaration through `side_config.environment_config` and the actual run records through `environment`. Resolve paths relative to the containing manifest. Applicability is specific to the library version, environment, capability, and contract version.
-
-## Shared resources and provenance reuse
-
-Validate model weights, tokenizer, configuration, and source data during preparation. On reuse, confirm access and the actual loading/reading association. Reference existing preparation records across sides and cases. Recheck affected contents when a resource changes, provenance conflicts, or integrity becomes suspect.
-
-| Resource | Preparation | Reuse check |
-|---|---|---|
-| Read-only shared directory or immutable snapshot with provenance | Reuse its identity and preparation record. | The loaded objects or data reads resolve to that resource. |
-| Fixed revision downloaded on each side | Keep the source, resolved revision, completion record, and downloader integrity result. | The actual local load matches its download record. |
-| Mutable branch, unestablished cross-host identity, or mixed files | Resolve a fixed version and investigate existing provenance; verify contents where identity remains unresolved. | Load the verified resource and reference the result. |
-
-Record the original repository/data source, resolved revision or snapshot, resource location, and existing verification result. For mirrors, record the actual source URL and returned version. Resolve `main` or `master` during preparation, then reuse the fixed version.
-
-Routine reuse does not require another full scan or hash of shared weights. Frozen inputs similarly reuse selection and tokenization records: check the saved arrays, target mapping, and masks. Source-data provenance and the actual replayed inputs serve different purposes and can both be reused.
+Paths locate resources; repository/revision or verified content establishes identity. Environment metadata and entry-file hashes do not attest to every installed source file or internal arithmetic dtype.
