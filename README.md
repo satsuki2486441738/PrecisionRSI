@@ -1,43 +1,57 @@
 # precision-skill
 
-通用 agent 驱动的两库精度诊断工具，面向昇腾 NPU 与 NVIDIA GPU，设计范围包括推理、SFT、RL。
-以用户提供的场景、硬件、库与环境为起点，发现共同能力与数学语义，而非绑定固定版本配对。
+English | [简体中文](README.zh-CN.md)
 
-## 能力范围
+An [Agent Skill](https://agentskills.io/home) for numerical diagnosis across Ascend NPU and NVIDIA GPU execution stacks. It organizes comparable inputs, environment evidence, collection, offline comparison, and focused investigation for inference, SFT, and RL.
 
-公开包已实现通用[离线比较器](scripts/compare_scores.py)，支持固定 token 历史的 full-forward 评分产物核验与比较；schema v2 / core 2.0.0 仅支持未设阈值的数值诊断，不覆盖 cache、SFT、RL。
-诊断工作流还包括环境准备、最小跑通、评分采集及按需定位。项目执行器、环境与运行产物由用户或 agent 在授权范围内准备，具体任务的覆盖以实际运行证据为准。
+## Package and use
 
-## 如何开始
+The installable skill is [skills/precision-skill](skills/precision-skill/). Copy that entire directory into your agent client's skill location, retaining the directory name `precision-skill`. The package follows the [Agent Skills specification](https://agentskills.io/specification).
 
-提供要比较的两库、任务场景和可用硬件/环境；已有配置、输入或观测产物也可一并提供。
-agent 自动查明可确定的信息，仅对需要用户决策的缺项集中确认，再沿以下路径推进：
+Start with a task such as:
 
-**明确任务与授权 → 约定比较条件和最小采集项 → 准备环境 → 最小跑通并验收产物 → 端到端比较 → 有异常时定位 → 报告。**
+> Compare one SFT step on GPU and NPU using the same model and initial state. Reuse the GPU handoff, align shared dependencies, and compare loss, sampled gradients, and actual parameter updates.
 
-端到端比较只采集必需的输入、实际执行条件和观测，不默认深入模型内部；条件不一致或证据缺失先解决可比性问题。异常定位从异常 case、位置或阶段出发，按需增加内部观测，逐步缩小到模块和算子；修复或经批准的优化完成后回归原端到端 case。
-两侧可独立执行、离线交付产物，无须同时在线或共用环境。
-默认在共享实现库同版本下比较原生执行栈的端到端结果：共同输入、参数存储 dtype、量化、autocast 策略和评分语义一致，平台后端的 kernel、融合及内部精度实现可不同。共享库使用不同版本时，按 [版本规则](docs/WORKFLOW.md#共享实现库版本)取得用户明确批准。精度证据范围见 [分阶段计算图精度](docs/WORKFLOW.md#24-分阶段计算图精度与证据范围)，v2 字段见 [交接规范](docs/WORKFLOW.md#21-版本化单侧交接)。
+Provide the two stacks, hardware/environment access, available artifacts, and the question to answer. The agent discovers existing facts and asks for decisions needed by the current stage. Either side can execute first; the other can consume its handoff offline.
 
-## 能回答什么
+## Implemented scope
 
-- **推理**：共同输入和固定 token 历史下，评分与约定状态的数值差异。
-- **SFT**：共同参数和优化器初态下，一步目标、梯度与实际更新的差异。
-- **RL**：具体目标及其依赖对齐后，固定轨迹下的评分、反向和更新差异。
+The bundled [Python comparator](skills/precision-skill/scripts/compare_scores.py) uses only the standard library. Schema v2 / core 2.0.0 validates saved full-forward token scores and reports token-weighted NLL, delta NLL, MAE, and global linear P99. Its current threshold mode is `thresholds: null`.
 
-报告区分执行是否完成、是否可比、数值判定与覆盖范围；数值一致性和任务效果分别评价。
-结论绑定实际执行栈与观测范围，算子归因依赖定位证据。
+The workflow also covers SFT loss/gradient/update semantics and RL fixed-trajectory dependencies. Those tasks use case-specific collectors and validators; the bundled scoring core does not calculate training or cache comparisons. Reports distinguish execution, comparability, numerical results, and observed coverage.
 
-## 目录归属
+Shared implementation libraries use the same upstream release, including the patch version. Platform build strings and extensions are recorded separately. A different-version comparison requires explicit approval of the versions and scope. Existing runtime inventories or associated locked-installation and launch records can establish the environment; missing a dedicated inventory file does not automatically require a rerun.
 
-- 根 `scripts/compare_scores.py`、`tests/` 与 `docs/`：通用比较核心、测试和规范；[SKILL.md](SKILL.md) 为薄诊断入口。[AGENTS.md](AGENTS.md) 是唯一维护规则来源，[CLAUDE.md](CLAUDE.md) 导入同一规则。
-- `projects/<project>/environments/<硬件侧>/<框架与版本>/`：项目独立管理可复用环境声明与依赖；每个 case 的双侧 manifest 分别引用各自环境。
-- `projects/<project>/cases/<case>/`：共同契约、每侧 manifest、README、WORK_LOG、专用 `scripts/` 与 `runs/<运行标识>/`；离线报告也进入案例的新 run 目录。
-- `projects/` 由使用者按任务创建，不随公开包分发；模型与源数据保持外部位置，历史 run 内容不改写、不覆盖。
+## Layout
 
-## 文档导航
+```text
+README.md / README.zh-CN.md        English and Chinese project guides
+AGENTS.md / CLAUDE.md              Repository maintenance instructions
+skills/precision-skill/
+  SKILL.md                        Discovery metadata and task routing
+  references/                     Focused English technical guidance
+  scripts/compare_scores.py       Offline scoring comparator
+tests/                            Maintainer regression tests
+```
 
-| 文档 | 内容 |
+Private projects contain their own environments, contracts, collectors, and runs. Model weights, source data, and installed environments remain at shared resource locations. Preparation records are reused with actual load bindings.
+
+## References
+
+| Document | Use |
 |---|---|
-| [ARCHITECTURE](docs/ARCHITECTURE.md) | 三层职责、共享能力、环境配置和数据边界 |
-| [WORKFLOW](docs/WORKFLOW.md) | 授权与预算、版本化交接、比较器接口、指标与六状态判定 |
+| [Skill entry](skills/precision-skill/SKILL.md) | Task selection and workflow entry. |
+| [Workflow](skills/precision-skill/references/workflow.md) | Scope, budgets, collection, and task handoffs. |
+| [Environment](skills/precision-skill/references/environment.md) | Shared versions, lockfiles, run association, and resource reuse. |
+| [Inference](skills/precision-skill/references/inference.md) | Fixed-history scoring and cache semantics. |
+| [Training](skills/precision-skill/references/training.md) | SFT steps, RL dependencies, and state divergence. |
+| [Comparison](skills/precision-skill/references/comparison.md) | Schema, evidence, formulas, and report states. |
+| [Architecture](skills/precision-skill/references/architecture.md) | Package structure, responsibilities, and workspace ownership. |
+
+Run maintainer tests from the repository root:
+
+```bash
+python -B -m unittest discover -s tests -v
+```
+
+The two README files describe the same scope. Skill instructions, technical references, and maintenance documentation are maintained in English.

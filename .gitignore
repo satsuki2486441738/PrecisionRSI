@@ -1,17 +1,15 @@
-# Publish only the generic skill; keep cases and environments local.
+# Publish the portable skill and maintainer files; keep private projects local.
 /*
 !/.gitignore
 !/README.md
+!/README.zh-CN.md
 !/AGENTS.md
 !/CLAUDE.md
-!/SKILL.md
-!/docs/
-/docs/*
-!/docs/ARCHITECTURE.md
-!/docs/WORKFLOW.md
-!/scripts/
-/scripts/*
-!/scripts/compare_scores.py
+!/skills/
+/skills/*
+!/skills/precision-skill/
 !/tests/
 /tests/*
 !/tests/test_compare_scores.py
+__pycache__/
+*.pyc
