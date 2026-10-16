@@ -336,6 +336,33 @@ class Fixture(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr.decode())
             self.assertTrue(out.exists())
 
+    def test_selected_union_queries_match_full_array_metrics(self):
+        from compare_distributions import per_position, selected_metrics, lse
+        for size in (100, 200, 257):
+            p = np.arange(1, size + 1, dtype=np.float64)
+            q = np.roll(p**2, 53)
+            lp, lq = np.log(p/p.sum()), np.log(q/q.sum())
+            ids = np.arange(size)
+            tg, tn = np.lexsort((ids, -lp))[:100], np.lexsort((ids, -lq))[:100]
+            union = np.union1d(tg, tn)
+            tail = ~np.isin(ids, union)
+            pl, ql = np.append(lp[union], lse(lp[tail])), np.append(lq[union], lse(lq[tail]))
+            queried = selected_metrics(union, pl, ql, tg, tn, normalization_tolerance=1e-12)
+            self.assertEqual(queried, per_position(lp, lq))
+            with self.assertRaises(ArtifactError):
+                selected_metrics(union[:-1], pl, ql, tg, tn)
+            with self.assertRaises(ArtifactError):
+                selected_metrics(union, pl - .1, ql, tg, tn, normalization_tolerance=1e-12)
+
+    def test_unrenormalized_scores_keep_original_mass_tolerance(self):
+        spec, r, c = self.dist_pair()
+        # Scores within the declared serialization tolerance remain valid without renormalization.
+        for manifest in (r, c):
+            descriptor = manifest['positions'][0]['scores']
+            values = np.load(self.root / descriptor['path']) - 1e-7
+            manifest['positions'][0]['scores'] = self.array(values)
+        self.assertEqual(self.run_dist(spec, r, c)['status'], 'no_thresholds')
+
     def test_strict_json(self):
         p = self.root/'bad.json'
         for s in ['{"x":1,"x":2}', '{"x":NaN}', '{"x":1e999}']:

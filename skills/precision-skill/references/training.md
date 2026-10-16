@@ -14,11 +14,25 @@ Reconstruct complete logical tensors, exclude shard padding and deduplicate repl
 
 A numerically skipped step is an event: retain finite comparable scores/losses and stored updates, label skipped versus applied, and block only affected invalid scopes. Do not describe it as agreement between two applied updates.
 
+## Reusing a training baseline
+
+A baseline covers its declared model, state, objective, optimizer, precision policy and distributed/native implementation. Establish complete gradient and actual-update coverage before treating lightweight checks as regression signals. For stateful optimizers, include both an empty-state first step and a step restored from the same parameters, moments and step counter on both sides. Independently advancing two trajectories does not provide a common restored state.
+
+After the user accepts the observed differences, routine runs may use lighter regression checks. Repeat complete affected-scope comparison after optimizer/state precision, scaling/clipping/accumulation, sharding/communication, relevant native implementations or framework/runtime versions change, or when lighter checks detect anomalies. A change in objective requires its own score/loss/gradient validation; whether the existing update baseline applies depends on the actual optimizer path and state. Lightweight checks do not establish full-coordinate agreement.
+
+Preserve native stored parameter/gradient dtypes in large captures and promote chunks during comparison. Retain shard geometry, absence inventories and checksums; deduplicate verified replicas. Keep large captures on the servers and use the project's agreed artifact store for cross-host transport, returning only reports and selected diagnostic slices locally.
+
 ## SFT
 
 Collect every valid target token's label, prediction/target position, logprob and loss term using the actual loss mask. Exclude ignored/padded positions; include active EOS. Scores remain full-vocabulary-normalized, but only the labeled token is compared.
 
 Report target-logprob MAE, P99 and maximum error, plus the objective/gradient/update metrics above. Plain CE uses the global valid-token mean of negative logprobs; preserve the implemented reduction and extra terms for other objectives.
+
+### LoRA and other adapter scopes
+
+For LoRA, align the adapter checkpoint and resolved target modules, rank, alpha/scaling, dropout, bias/modules-to-save policy, adapter dtype, quantization and merged/unmerged state. Verify actual initial adapter values; matching seeds alone are not sufficient. Collect every trainable adapter coordinate and any additionally trainable parameters, using the same gradient/update metrics above. Report the frozen-base inventory and evidence that it was excluded from updates; full adapter coverage is not full-model fine-tuning coverage.
+
+Keep zero-valued gradients distinct from absent gradients. With standard zero-B LoRA initialization, first-step A gradients and updates can be zero while B changes. Preserve those coordinates and the normal zero-norm metric semantics; do not change initialization to make metrics nonzero. Effective merged-weight changes, when requested, are a separate observation from the stored A/B parameter updates.
 
 ## RL
 

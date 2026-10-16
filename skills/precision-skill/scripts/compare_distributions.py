@@ -76,6 +76,35 @@ def per_position(lp, lq):
     tail[union] = False
     pl = np.append(lp[union], lse(lp[tail]))
     ql = np.append(lq[union], lse(lq[tail]))
+    return selected_metrics(union, pl, ql, tg, tn)
+
+
+def selected_metrics(union, pl, ql, tg, tn, normalization_tolerance=None):
+    """Shared arithmetic for validated full-array or offline union-query observations.
+
+    union contains canonical token IDs; pl/ql contain normalized log probabilities
+    for each union ID followed by the merged complement. tg/tn retain each side's
+    original ordered top-100 IDs. Callers establish full-array provenance first.
+    """
+    union = np.asarray(union, dtype=np.int64)
+    pl, ql = np.asarray(pl, dtype=np.float64), np.asarray(ql, dtype=np.float64)
+    tg, tn = np.asarray(tg, dtype=np.int64), np.asarray(tn, dtype=np.int64)
+    require(union.ndim == 1 and len(set(union.tolist())) == len(union), 'invalid queried union')
+    require(pl.shape == ql.shape == (len(union) + 1,), 'queried score count mismatch')
+    require(tg.shape == tn.shape == (100,) and len(set(tg.tolist())) == len(set(tn.tolist())) == 100,
+            'queried top-100 inventory mismatch')
+    require(set(union.tolist()) == set(tg.tolist()) | set(tn.tolist()), 'queried union coverage mismatch')
+    for values in (pl, ql):
+        require(not np.isnan(values).any() and not np.isposinf(values).any() and (values <= 0).all(),
+                'invalid queried logprobs')
+        if normalization_tolerance is not None:
+            require(abs(math.expm1(lse(values))) <= normalization_tolerance, 'queried probabilities are not normalized')
+    index = {int(token): i for i, token in enumerate(union)}
+    for top, values in ((tg, pl), (tn, ql)):
+        require(top.tolist() == sorted(top.tolist(), key=lambda token: (-values[index[token]], token)),
+                'queried top-100 order mismatch')
+        require(all(values[index[int(top[-1])]] >= values[index[int(token)]]
+                    for token in union if token not in set(top.tolist())), 'queried top-100 cutoff mismatch')
     true_zero = np.isfinite(pl) & np.isneginf(ql)
     if true_zero.any():
         i = int(np.flatnonzero(true_zero)[0])
@@ -85,7 +114,7 @@ def per_position(lp, lq):
         active = np.isfinite(pl)
         value = math.fsum(np.exp(pl[active]) * (pl[active]-ql[active]))
         kl = result_value(value)
-    p, q = np.exp(lp[union]), np.exp(lq[union])
+    p, q = np.exp(pl[:-1]), np.exp(ql[:-1])
     error = np.abs(q-p)
     worst = int(np.argmax(error))
     top1 = bool(tg[0] == tn[0])
@@ -93,14 +122,15 @@ def per_position(lp, lq):
               'top100_overlap': np.intersect1d(tg, tn).size/100,
               'probability_rmse': math.sqrt(math.fsum(error*error)/union.size),
               'max_probability_error': float(error[worst]), 'max_error_token': int(union[worst]),
-              'coverage': {'reference_top100': math.fsum(np.exp(lp[tg])), 'candidate_top100': math.fsum(np.exp(lq[tn])),
+              'coverage': {'reference_top100': math.fsum(p[[index[int(t)] for t in tg]]),
+                           'candidate_top100': math.fsum(q[[index[int(t)] for t in tn]]),
                            'reference_union': math.fsum(p), 'candidate_union': math.fsum(q)}}
     if not top1:
-        best_two = np.lexsort((ids, -lp))[:2]
         candidates = [int(tg[0]), int(tn[0])]
         report['top1_mismatch'] = {'reference_token': candidates[0], 'candidate_token': candidates[1],
-                                 'probabilities': [{'token': i, 'reference': math.exp(lp[i]), 'candidate': math.exp(lq[i])} for i in candidates],
-                                 'reference_margin': math.exp(lp[best_two[0]])-math.exp(lp[best_two[1]])}
+                                 'probabilities': [{'token': i, 'reference': float(p[index[i]]),
+                                                   'candidate': float(q[index[i]])} for i in candidates],
+                                 'reference_margin': float(p[index[int(tg[0])]]-p[index[int(tg[1])]])}
     return report
 
 

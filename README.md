@@ -11,7 +11,7 @@ Copy [skills/precision-skill](skills/precision-skill/) into your client's skill 
 | Task | Method |
 |---|---|
 | [Inference](skills/precision-skill/references/inference.md) | Compare next-token top-100 unions and aggregate tails: KL, top-1 agreement, probability errors and coverage. |
-| [SFT](skills/precision-skill/references/training.md#sft) | Same-state single step: all valid target-token scores, full gradients and full actual parameter updates. |
+| [SFT](skills/precision-skill/references/training.md#sft) | Same-state single step: all valid target-token scores, full gradients and full actual parameter updates; LoRA adapter scope and frozen-base evidence; cold/restored optimizer-state baselines and regression reuse. |
 | [RL](skills/precision-skill/references/training.md#rl) | Fixed trajectories and algorithm-specific dependencies, objectives, gradients and updates. |
 
 GPU is the reference. Numerical diagnostics without predefined thresholds are not acceptance passes. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.

@@ -11,7 +11,7 @@
 | 任务 | 方法 |
 |---|---|
 | [推理](skills/precision-skill/references/inference.md) | 比较 next-token top-100 并集及合并尾部：KL、Top-1 一致率、概率误差和覆盖率。 |
-| [SFT](skills/precision-skill/references/training.md#sft) | 同状态单步：全部有效目标 token 评分、全量梯度和全量实际参数更新。 |
+| [SFT](skills/precision-skill/references/training.md#sft) | 同状态单步：全部有效目标 token 评分、全量梯度和全量实际参数更新；LoRA 适配器范围与冻结基座证据；初始／恢复 optimizer 状态基线及回归复用。 |
 | [RL](skills/precision-skill/references/training.md#rl) | 固定轨迹，比较算法所需依赖、目标函数、梯度和更新量。 |
 
 以 GPU 为参考。未预设阈值的数值诊断不代表精度通过。只读取当前任务需要的参考；案例配置、调研依据和执行历史留在方法说明之外。
