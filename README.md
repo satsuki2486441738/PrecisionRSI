@@ -14,7 +14,7 @@ Copy [skills/precision-skill](skills/precision-skill/) into your client's skill 
 | [SFT](skills/precision-skill/references/training.md#sft) | Same-state single step: all valid target-token scores, full gradients and full actual parameter updates; LoRA adapter scope and frozen-base evidence; cold/restored optimizer-state baselines and regression reuse. |
 | [RL](skills/precision-skill/references/training.md#rl) | Fixed trajectories and algorithm-specific dependencies, objectives, gradients and updates. |
 
-GPU is the reference. Numerical diagnostics without predefined thresholds are not acceptance passes. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.
+GPU is the reference. The default task delivers collection, comparison, coverage and evidence. Numerical differences are findings, and the user judges acceptance; they do not prevent subsequent valid collection. Precision remediation is a separate task when requested. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.
 
 Choose the integration reference for the layer being collected:
 
