@@ -28,4 +28,4 @@ Use side `gpu`, `npu` or `compare` and create run directories exclusively. Keep 
 
 ## Reuse
 
-Keep model- and case-specific collectors and conversion maps with their case. Promote code when multiple cases share the same responsibility and interface. Incorporate reusable findings into the relevant method or integration flow; retain incident chronology and local workarounds in case logs. Each case reports the coverage established by its actual execution and comparison.
+Keep model- and case-specific collectors and conversion maps with their case. Promote code when multiple cases share the same responsibility and interface. Incorporate reusable findings into the relevant method or integration flow; retain incident chronology and local workarounds in case logs. Each case reports the coverage established by its actual execution and comparison. Name the native entry point and distinguish backend/loss adapters, engines, workers and trainer loops. Report source/API admission, device execution, artifact completeness and numerical comparison independently; a lower-level adapter or CPU check does not establish a higher-level integration.

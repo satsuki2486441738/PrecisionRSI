@@ -5,7 +5,7 @@ description: Compare GPU and NPU numerical results for inference, SFT, or RL. Al
 
 # Precision comparison
 
-Compare native execution stacks under common inputs and numerical conditions. GPU is the reference; either side may execute first and exchange artifacts offline.
+Integrate the selected native libraries, execute their declared inference or training path, and evaluate numerical results under common inputs and conditions. GPU is the reference; either side may execute first and exchange artifacts offline.
 
 ## Pipeline
 
@@ -15,7 +15,7 @@ Compare native execution stacks under common inputs and numerical conditions. GP
 4. Validate complete paired coverage and compute the task's metrics using [comparison](references/comparison.md). Investigate internals when localization is part of the agreed task.
 5. Report the outcome, key metrics, coverage and evidence location. Numerical differences are findings; continue valid collection stages without treating numerical acceptance as a prerequisite. The user judges acceptance.
 
-Precision remediation is a separate task when requested. Repair collection and comparison failures within the agreed execution scope.
+Repair the skill’s collectors, launchers and format adapters within the agreed scope. Library source fixes, kernel changes and numerical remediation are outside this skill. Use native configuration and build interfaces; record library failures and unsupported paths rather than patching the library or replacing its execution with a custom approximation. A working loss/backend adapter does not establish worker or trainer support.
 
 Use [workflow](references/workflow.md) for device execution/retries and [architecture](references/architecture.md) when adding a collector or case. Case-specific models, versions, budgets, paths, run history and research rationale belong outside this skill's method descriptions.
 

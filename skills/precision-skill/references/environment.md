@@ -2,7 +2,7 @@
 
 ## Shared implementation
 
-Match shared upstream releases, patches and relevant source commits for loading, tokenization, computation and scoring, including the selected model bridge. Resolve their dependency constraints together. Record compatible platform builds/extensions separately; libraries intentionally being compared retain their distinct identities. Reuse the approved pairing and resolve changes to that pairing before collection.
+Match shared upstream releases and relevant source commits for loading, tokenization, computation and scoring, including the selected model bridge. Resolve their dependency constraints together. Record compatible platform builds/extensions separately; libraries intentionally being compared retain their distinct identities. Reuse the approved pairing and resolve changes to that pairing before collection. Use unmodified declared library sources and their supported build/configuration interfaces. Keep any historical locally modified stack explicitly labeled as a separate source-variant profile; its results do not establish an unmodified-library baseline.
 
 ## Execution evidence
 
