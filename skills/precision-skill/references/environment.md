@@ -2,13 +2,13 @@
 
 ## Shared implementation
 
-Match shared upstream releases, including patches and relevant source commits, for loading, tokenization, computation and scoring. Record compatible platform builds/extensions separately; libraries intentionally being compared retain their distinct identities. Reuse the approved version pairing and resolve new mismatches before collection/comparison. Numerical agreement does not establish equivalent implementations.
+Match shared upstream releases, patches and relevant source commits for loading, tokenization, computation and scoring, including the selected model bridge. Resolve their dependency constraints together. Record compatible platform builds/extensions separately; libraries intentionally being compared retain their distinct identities. Reuse the approved pairing and resolve changes to that pairing before collection.
 
 ## Execution evidence
 
 Associate each rank with its actual environment: interpreter, relevant package/build versions, imported module paths, runtime/driver and effective numerical settings. Use a runtime inventory or a locked/immutable installation tied to launch with evidence that dependencies remained unchanged. A lockfile alone is intent; a later inspection cannot backfill historical execution. A shared inventory is sufficient when rank homogeneity is established.
 
-Review existing preparation/launch/change records before recollection. Keep unknowns explicit; do not import unrelated frameworks or hash whole installations routinely.
+Review existing preparation, launch and change records before recollection. Scope runtime inspection to the components used by the selected execution path and retain unresolved provenance explicitly.
 
 ## Resources
 

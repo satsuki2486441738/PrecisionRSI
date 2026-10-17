@@ -1,18 +1,31 @@
 # Package and workspace
 
-`SKILL.md` routes to methods in `references/` and [offline tools](tools.md) in `scripts/`. Load only relevant references. The agent coordinates and interprets; native collectors save observations; offline validators check comparability and compute metrics.
+The installable skill separates comparison methods from execution integration and case evidence:
 
-Keep case configuration, implementation and history outside the installed skill:
+| Responsibility | Location |
+|---|---|
+| Task state, observations and metrics | [Inference](inference.md), [SFT/RL](training.md) and [comparison](comparison.md). |
+| Native collection integration | [Inference engines](engines.md), [RL frameworks](rl-frameworks.md) and [training backends](training-backends.md). |
+| Artifact interfaces and arithmetic | [Offline tools](tools.md) in `scripts/`. |
+| Configuration and execution history | Private project environments and cases. |
+
+`SKILL.md` routes to the current task. The agent coordinates execution and interpretation, native collectors save observations, and offline tools validate artifacts and compute metrics. Load integration details when implementing or reviewing that layer.
+
+## Case ownership
 
 ```text
 projects/<project>/
-  environments/<side>/<version>/  # Declarations and locks
+  environments/<side>/<version>/  # Reusable declarations and locks
   cases/<case>/
     contract.json                # Shared conditions and metrics
-    <side manifests>             # Execution evidence references
-    README.md / WORK_LOG.md       # Current guide and brief history
-    scripts/ / tests/            # Case tooling
+    <side manifests>             # Environment and execution references
+    README.md / WORK_LOG.md       # Current guide and execution history
+    scripts/ / tests/            # Case collectors, adapters and regressions
     runs/<side>-<task>-<UTC>/     # Immutable observations and logs
 ```
 
-Use side `gpu`, `npu` or `compare`; create runs exclusively and preserve historical bytes/paths. Reference models, data and environments at their resource locations. Move case code into shared tooling only when reuse warrants it; report the actual collector/comparator's coverage.
+Use side `gpu`, `npu` or `compare` and create run directories exclusively. Keep model, data and environment resources at their resource locations; retain historical artifact bytes and paths.
+
+## Reuse
+
+Keep model- and case-specific collectors and conversion maps with their case. Promote code when multiple cases share the same responsibility and interface. Incorporate reusable findings into the relevant method or integration flow; retain incident chronology and local workarounds in case logs. Each case reports the coverage established by its actual execution and comparison.

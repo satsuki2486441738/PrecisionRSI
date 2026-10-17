@@ -14,6 +14,8 @@ Reconstruct complete logical tensors, exclude shard padding and deduplicate repl
 
 A numerically skipped step is an event: retain finite comparable scores/losses and stored updates, label skipped versus applied, and block only affected invalid scopes. Do not describe it as agreement between two applied updates.
 
+Read [training backends](training-backends.md) when implementing native capture or converting distributed tensors into logical coordinates.
+
 ## Reusing a training baseline
 
 A baseline covers its declared model, state, objective, optimizer, precision policy and distributed/native implementation. Establish complete gradient and actual-update coverage before treating lightweight checks as regression signals. For stateful optimizers, include both an empty-state first step and a step restored from the same parameters, moments and step counter on both sides. Independently advancing two trajectories does not provide a common restored state.
