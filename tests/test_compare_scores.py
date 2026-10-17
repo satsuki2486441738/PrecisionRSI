@@ -539,7 +539,21 @@ class CompareTests(unittest.TestCase):
         self.write("candidate/manifest.json", man)
         r = self.compare()
         self.assertEqual(r["status"], "no_thresholds")
-        self.assertIn(str(self.root / "external.json"), r["evidence_paths"])
+        self.assertIn(str((self.root / "external.json").resolve()), r["evidence_paths"])
+
+    def test_evidence_paths_resolve_directory_symlinks(self):
+        self.write("external.json", {"model": self.common["model"]})
+        alias = self.root / "evidence-alias"
+        alias.symlink_to(self.root.resolve(), target_is_directory=True)
+        man = self.manifests["candidate"]
+        man["evidence"]["model"] = [{"path": "../evidence-alias/external.json", "pointer": "/model"}]
+        self.write("candidate/manifest.json", man)
+        report = self.compare()
+        self.assertEqual(report["status"], "no_thresholds")
+        canonical = str((self.root / "external.json").resolve())
+        self.assertIn(canonical, report["evidence_paths"])
+        self.assertEqual(report["evidence_paths"].count(canonical), 1)
+        self.assertNotIn(str(alias / "external.json"), report["evidence_paths"])
 
     def test_v2_native_stacks_and_core_rule_ownership(self):
         man = self.manifests["candidate"]
@@ -613,7 +627,7 @@ class CompareTests(unittest.TestCase):
             keys = ("compute_dtype", "extra") if container == "common" else (
                 "compute_dtype", "extra", "target_shift", "reduction", "percentile")
             for key in keys:
-                with self.subTest(container=container, key=key):
+                with self.subTest(key=key):
                     doc = copy.deepcopy(self.contract if container == "common" else self.manifests["candidate"])
                     doc[container][key] = "old"
                     path = "contract.json" if container == "common" else "candidate/manifest.json"

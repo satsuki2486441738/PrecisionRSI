@@ -18,7 +18,7 @@
 
 vLLM 和 SGLang 使用[引擎采集指南](skills/precision-skill/references/engines.md)，覆盖原生 prefill、固定历史的缓存 decode、原始评分语义及完整分布采集。引擎适配器仍由案例实现；方法说明不代表设备验证已完成。
 
-TRL 或 verl 的 RL 任务使用[框架指南](skills/precision-skill/references/rl-frameworks.md)，明确固定轨迹回放和原生 optimizer step 的采集边界。默认指标覆盖动作评分、loss、梯度及实际更新；算法专属诊断按需展开。框架采集器仍由案例实现。
+TRL 或 verl 的 RL 任务使用[框架指南](skills/precision-skill/references/rl-frameworks.md)，明确固定轨迹回放和原生 optimizer step 的采集边界。默认指标覆盖动作评分、loss、梯度及实际更新；算法专属诊断按需展开。框架采集器仍由案例实现。 [Megatron-Core / MindSpeed 专节](skills/precision-skill/references/rl-frameworks.md#megatron-core-and-mindspeed)补充共享源码和模型桥接对齐、原生梯度／主参数采集，以及逻辑分片覆盖校验。这是采集方法说明，不表示该后端已完成设备验证。
 
 ## 工具与组织
 
