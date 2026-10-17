@@ -10,9 +10,9 @@ When process shutdown is asynchronous, reserve time for bounded device-idleness 
 
 Save replayable inputs/state, observations, effective settings, run-associated environment and every rank's completion evidence. Validate each side before pairing; reuse valid evidence rather than rerunning for a preferred filename or layout.
 
-## Diagnose and hand off
+## Report and hand off
 
-Start at a discrepant position, tensor or stage. Collect only evidence needed to distinguish likely causes; keep controlled variants separate from native results.
+Report numerical differences and continue collection whose inputs, semantics and coverage remain valid. Missing or incompatible evidence blocks its affected comparison. When localization is in scope, start at a discrepant position, tensor or stage and collect evidence that distinguishes likely causes. Keep precision remediation within a separately requested task.
 
 A handoff contains shared conditions, observations, environment/launch evidence, validator and a short next step. Preserve failed attempts and historical runs; create new runs exclusively. Either side may execute first.
 
