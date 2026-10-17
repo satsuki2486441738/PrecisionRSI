@@ -8,6 +8,8 @@ Match shared upstream releases, patches and relevant source commits for loading,
 
 Associate each rank with its actual environment: interpreter, relevant package/build versions, imported module paths, runtime/driver and effective numerical settings. Use a runtime inventory or a locked/immutable installation tied to launch with evidence that dependencies remained unchanged. A lockfile alone is intent; a later inspection cannot backfill historical execution. A shared inventory is sufficient when rank homogeneity is established.
 
+For adapted or wrapped implementations, record the executed method and its resolved operator bindings, following decorators and inherited methods; a selected class name does not establish the kernel path. Compare effective configurations and verify parameter conventions at adapter boundaries when they affect the result, such as a loader’s weight transformation and the receiving module’s interpretation of that weight.
+
 Review existing preparation, launch and change records before recollection. Scope runtime inspection to the components used by the selected execution path and retain unresolved provenance explicitly.
 
 ## Resources

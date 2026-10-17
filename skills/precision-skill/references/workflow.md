@@ -14,6 +14,8 @@ Save replayable inputs/state, observations, effective settings, run-associated e
 
 Report numerical differences and continue collection whose inputs, semantics and coverage remain valid. Missing or incompatible evidence blocks its affected comparison. When localization is in scope, start at a discrepant position, tensor or stage and collect evidence that distinguishes likely causes. Keep precision remediation within a separately requested task.
 
+When reviewing whether a difference comes from execution or the native stack, separate collector inputs/calls/mapping errors from reproducible library behavior under the agreed configuration. Use existing source and artifacts, then the smallest discriminating validation. Correct collection/provenance mistakes with a regression; retain native library findings without changing operators or versions to reduce the difference. A same-input cross-backend replay is useful when needed, but a different-input historical result is not an oracle.
+
 A handoff contains shared conditions, observations, environment/launch evidence, validator and a short next step. Preserve failed attempts and historical runs; create new runs exclusively. Either side may execute first.
 
 Report outcome, principal metrics, coverage, blockers and evidence link. Distinguish software tests, device execution and numerical agreement; keep detailed inventories and tables in artifacts.

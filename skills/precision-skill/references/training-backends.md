@@ -23,6 +23,8 @@ Trace one applied or skipped optimizer step through these native stages:
 2. Native clipping completes. Capture the norm, coefficient and postclip gradients before optimizer mutation.
 3. The optimizer updates its parameters and copies values back to the model. Capture stored model parameters and step status; identify master parameters and their dtype separately when present.
 
+Calling a native finalize/synchronization API establishes a capture boundary, not equality of every TP replica. Retain the relevant parameter reduction tags and check replica consistency separately; report an unresolved replica as a native finding or mapping uncertainty rather than silently averaging it.
+
 Mixed-precision optimizers may update FP32 master parameters while the model stores BF16 values. State and dtype evidence establish what the recorded gradient and update represent. Framework callbacks and RPC reductions are useful only when they expose the required stage and scope.
 
 ## Logical coordinates
