@@ -14,12 +14,12 @@ true zero probability. The selected renormalization policy first validates
 original mass, then optionally renormalizes full vocabulary in FP64.
 
 Report: per-position and equal-position aggregate top-100 union/tail metrics,
-probability mass and top-1 mismatches. Nonfinite KL is null with a reason;
+probability mass and top-1 mismatches. Tail-merged Jensen-Shannon divergence uses natural logs;
 complete coordinate sets determine aggregates. Reusing one manifest path labels
 the output as a self-check.
 
-CLI: --contract C --reference REFERENCE.json --candidate CANDIDATE.json --output NEW.json
-CLI arguments assign comparison roles; manifest side IDs identify executions.
+CLI: --contract C --side-a REFERENCE.json --side-b CANDIDATE.json --output NEW.json
+Inputs are peer executions identified by manifest side IDs. Reports use schema 2.
 """
 import math
 from pathlib import Path
@@ -105,32 +105,30 @@ def selected_metrics(union, pl, ql, tg, tn, normalization_tolerance=None):
                 'queried top-100 order mismatch')
         require(all(values[index[int(top[-1])]] >= values[index[int(token)]]
                     for token in union if token not in set(top.tolist())), 'queried top-100 cutoff mismatch')
-    true_zero = np.isfinite(pl) & np.isneginf(ql)
-    if true_zero.any():
-        i = int(np.flatnonzero(true_zero)[0])
-        where = int(union[i]) if i < union.size else 'other'
-        kl = result_value(None, f'positive reference mass with zero candidate mass at {where}')
-    else:
-        active = np.isfinite(pl)
-        value = math.fsum(np.exp(pl[active]) * (pl[active]-ql[active]))
-        kl = result_value(value)
+    mixture = np.logaddexp(pl, ql) - math.log(2)
+    terms = []
+    for values in (pl, ql):
+        active = np.isfinite(values)
+        terms.extend((np.exp(values[active]) * (values[active]-mixture[active])).tolist())
+    js = result_value(0. if np.array_equal(pl, ql) else max(0., .5*math.fsum(terms)))
     p, q = np.exp(pl[:-1]), np.exp(ql[:-1])
     error = np.abs(q-p)
     worst = int(np.argmax(error))
     top1 = bool(tg[0] == tn[0])
-    report = {'union_count': int(union.size), 'tail_merged_kl': kl, 'top1_agreement': top1,
+    report = {'union_count': int(union.size), 'tail_merged_js': js, 'top1_agreement': top1,
               'top100_overlap': np.intersect1d(tg, tn).size/100,
               'probability_rmse': math.sqrt(math.fsum(error*error)/union.size),
               'max_probability_error': float(error[worst]), 'max_error_token': int(union[worst]),
-              'coverage': {'reference_top100': math.fsum(p[[index[int(t)] for t in tg]]),
-                           'candidate_top100': math.fsum(q[[index[int(t)] for t in tn]]),
-                           'reference_union': math.fsum(p), 'candidate_union': math.fsum(q)}}
+              'coverage': {'side_a_top100': math.fsum(p[[index[int(t)] for t in tg]]),
+                           'side_b_top100': math.fsum(q[[index[int(t)] for t in tn]]),
+                           'side_a_union': math.fsum(p), 'side_b_union': math.fsum(q)}}
     if not top1:
-        candidates = [int(tg[0]), int(tn[0])]
-        report['top1_mismatch'] = {'reference_token': candidates[0], 'candidate_token': candidates[1],
-                                 'probabilities': [{'token': i, 'reference': float(p[index[i]]),
-                                                   'candidate': float(q[index[i]])} for i in candidates],
-                                 'reference_margin': float(p[index[int(tg[0])]]-p[index[int(tg[1])]])}
+        tokens = sorted([int(tg[0]), int(tn[0])])
+        report['top1_mismatch'] = {'side_a_token': int(tg[0]), 'side_b_token': int(tn[0]),
+                                 'probabilities': [{'token': i, 'side_a': float(p[index[i]]),
+                                                   'side_b': float(q[index[i]])} for i in tokens],
+                                 'side_a_margin': float(p[index[int(tg[0])]]-p[index[int(tg[1])]]),
+                                 'side_b_margin': float(q[index[int(tn[0])]]-q[index[int(tn[1])]])}
     return report
 
 
@@ -143,13 +141,10 @@ def summarize(rows):
         result[field]['max_coordinate'] = {k: maximum[k] for k in ('sample', 'position')}
         if field == 'max_probability_error':
             result[field]['max_coordinate']['token'] = maximum['max_error_token']
-    kl = [r['tail_merged_kl']['value'] for r in rows]
-    if any(x is None for x in kl):
-        result['tail_merged_kl'] = {'status': 'incomparable', 'value': None, 'reason': 'nonfinite KL positions retained; no partial aggregate'}
-    else:
-        result['tail_merged_kl'] = aggregate(kl)
-        worst = rows[max(range(len(rows)), key=lambda i: kl[i])]
-        result['tail_merged_kl']['max_coordinate'] = {k: worst[k] for k in ('sample', 'position')}
+    js = [r['tail_merged_js']['value'] for r in rows]
+    result['tail_merged_js'] = aggregate(js)
+    worst = rows[max(range(len(rows)), key=lambda i: js[i])]
+    result['tail_merged_js']['max_coordinate'] = {k: worst[k] for k in ('sample', 'position')}
     matches = sum(r['top1_agreement'] for r in rows)
     result['top1_agreement'] = {'count': matches, 'total': len(rows), 'fraction': matches/len(rows)}
     result['top100_overlap'] = {'mean': math.fsum(r['top100_overlap'] for r in rows)/len(rows)}
@@ -160,10 +155,10 @@ def summarize(rows):
     return result
 
 
-def compare(contract_path, reference_path, candidate_path):
-    report = {'kind': 'distributions', 'schema_version': 1, 'status': 'no_thresholds', 'thresholds': None,
-              'self_comparison': Path(reference_path).resolve() == Path(candidate_path).resolve(), 'positions': []}
-    report['sources'] = {k: str(Path(v).resolve()) for k, v in [('contract', contract_path), ('reference', reference_path), ('candidate', candidate_path)]}
+def compare(contract_path, side_a_path, side_b_path):
+    report = {'kind': 'distributions', 'schema_version': 2, 'status': 'no_thresholds', 'thresholds': None,
+              'self_comparison': Path(side_a_path).resolve() == Path(side_b_path).resolve(), 'positions': []}
+    report['sources'] = {k: str(Path(v).resolve()) for k, v in [('contract', contract_path), ('side_a', side_a_path), ('side_b', side_b_path)]}
     try:
         spec = contract(contract_path, 'distributions')
         vocab, tolerance = spec['vocab_size'], spec['normalization_tolerance']
@@ -175,9 +170,9 @@ def compare(contract_path, reference_path, candidate_path):
         expected = unique(spec['positions'], coordinate, 'expected position')
         for row in expected.values():
             check_history(row, vocab)
-        ref, rb = manifest(reference_path, spec)
-        cand, cb = manifest(candidate_path, spec)
-        report['sides'] = {'reference': ref['side'], 'candidate': cand['side']}
+        ref, rb = manifest(side_a_path, spec)
+        cand, cb = manifest(side_b_path, spec)
+        report['sides'] = {'side_a': ref['side'], 'side_b': cand['side']}
         require(report['self_comparison'] or ref['side'] != cand['side'], 'distinct captures require distinct side IDs')
         ri, ci = [unique(side['positions'], coordinate, 'position') for side in (ref, cand)]
         require(set(ri) == set(ci) == set(expected), 'position coverage mismatch', 'not_covered')
@@ -191,7 +186,7 @@ def compare(contract_path, reference_path, candidate_path):
                 lp, pn = scores(rb, ri[key], vocab, tolerance, renormalization)
                 lq, qn = (lp, pn) if report['self_comparison'] else scores(cb, ci[key], vocab, tolerance, renormalization)
                 row.update(per_position(lp, lq))
-                row['normalization_mass'] = {'reference': pn, 'candidate': qn}
+                row['normalization_mass'] = {'side_a': pn, 'side_b': qn}
             except (ArtifactError, OSError, ValueError, KeyError, TypeError, OverflowError) as exc:
                 row.update(blocked(exc))
                 failed = True
@@ -202,8 +197,6 @@ def compare(contract_path, reference_path, candidate_path):
             report['aggregate'] = {'status': 'not_covered', 'reason': 'incomplete valid position coverage; no partial aggregate'}
         else:
             report['aggregate'] = summarize(report['positions'])
-            if any(r['tail_merged_kl']['value'] is None for r in report['positions']):
-                report['status'] = 'incomparable'
         report['normalization_tolerance'] = tolerance
         report['renormalization'] = renormalization
     except (ArtifactError, OSError, ValueError, KeyError, TypeError, OverflowError) as exc:

@@ -215,12 +215,12 @@ def aggregate(values):
 def cli(compare, description):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--contract', required=True)
-    parser.add_argument('--reference', required=True)
-    parser.add_argument('--candidate', required=True)
+    parser.add_argument('--side-a', required=True)
+    parser.add_argument('--side-b', required=True)
     parser.add_argument('--output', required=True)
     args = parser.parse_args()
     try:
-        report = compare(args.contract, args.reference, args.candidate)
+        report = compare(args.contract, args.side_a, args.side_b)
         with Path(args.output).open('x') as stream:
             json.dump(report, stream, indent=2, allow_nan=False)
             stream.write('\n')

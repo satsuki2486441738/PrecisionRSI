@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Compare cache-off full-forward target scores using schema 2 and the standard library.
 
-API: compare(contract_path,reference_manifest_path,candidate_manifest_path).
+API: compare(contract_path,side_a_manifest_path,side_b_manifest_path).
 Resolve every path relative to its containing JSON.
 
 Contract fields:
   schema_version: 2
   inputs: shared_inputs.json path
-  reference_side: nonempty execution-side ID matching the reference manifest
   required_coverage: [full_forward_logprobs]
   thresholds: null
   common: {model,weights,tokenizer,config,weight_dtype,autocast,quantization,
@@ -31,7 +30,7 @@ Manifest fields:
   evidence: {actual_key:[{path:JSON_path,pointer:/JSON/pointer}]}
   uncovered: [coverage names]; side_config: optional object
 Side IDs name execution setups; hardware/runtime details belong in environment
-records and side_config. CLI arguments assign reference/candidate roles.
+records and side_config. The two inputs are peer executions.
 Each evidence pointer resolves to an execution value equal to actual[key].
 Expected ranks each have an environment and completed status record with rank.
 Unknown required identities/settings remain null and return incomplete coverage.
@@ -48,12 +47,12 @@ logprobs,target_count,nll_sum,finite. Summary fields are execution,samples,
 target_count,nll_sum,nll_nat_per_token,finite. Logprobs are finite and <=0.
 
 Reports contain execution/comparability/coverage, side NLL diagnostics, paired
-NLL/MAE/P99 and paired target counts. Available comparisons return no_thresholds;
+absolute NLL difference/MAE/P99 and paired target counts. Available comparisons return no_thresholds;
 other statuses are execution_failed,incomparable,not_covered. Metrics use Python
 double, coordinate-sorted math.fsum and whole-set linear P99. Summary checks use
 64*sys.float_info.epsilon for relative/absolute rounding tolerance. Reusing a
 manifest labels self_comparison. Output JSON uses finite literals.
-CLI: --contract C --reference REFERENCE.json --candidate CANDIDATE.json --output NEW.json
+CLI: --contract C --side-a REFERENCE.json --side-b CANDIDATE.json --output NEW.json
 Output paths are created exclusively. Exit: 0=diagnostics, 1=unavailable comparison,
 2=CLI/output error.
 """
@@ -65,7 +64,7 @@ from pathlib import Path
 import sys
 
 SCHEMA_VERSION = 2
-CORE_VERSION = "2.1.0"
+CORE_VERSION = "3.0.0"
 ROUNDING_TOLERANCE = 64 * sys.float_info.epsilon
 STATES = ("passed", "exceeded", "incomparable", "not_covered",
           "no_thresholds", "execution_failed")
@@ -509,9 +508,6 @@ class _Comparison:
             self.schema(doc, key)
         contract = docs["contract"]
         common = self.common(contract.get("common"), "contract.common")
-        reference_side = contract.get("reference_side")
-        if not _side_id(reference_side) or reference_side != docs["reference"].get("side"):
-            self.issue("incomparable", "reference_direction", "contract", "reference_side must match the reference manifest's nonempty side ID")
         if "thresholds" not in contract:
             self.issue("not_covered", "thresholds_missing", "contract", "explicit thresholds:null required")
         elif contract["thresholds"] is not None:
@@ -528,7 +524,7 @@ class _Comparison:
         shared = self.load(self.paths["contract"], contract.get("inputs"), "contract.inputs")
         expected, shared_doc = self.inputs(shared, "contract.inputs")
         scores = {}
-        for side in ("reference", "candidate"):
+        for side in ("side_a", "side_b"):
             manifest, owner = docs[side], self.paths[side]
             if not _side_id(manifest.get("side")):
                 self.issue("incomparable", "side_identity", side, "nonempty execution-side ID required")
@@ -555,13 +551,13 @@ class _Comparison:
             scores[side] = self.observations(rows, score_inputs, summary, side)
         metrics = None
         if not any(b["state"] != "no_thresholds" for b in self.blockers):
-            keys = sorted(scores["reference"])
-            errors = [abs(scores["candidate"][k] - scores["reference"][k]) for k in keys]
+            keys = sorted(scores["side_a"])
+            errors = [abs(scores["side_b"][k] - scores["side_a"][k]) for k in keys]
             if all([self.finite(v, f"metrics.error[{i}]") for i, v in enumerate(errors)]):
                 total = self.total(errors, "metrics.mae")
-                delta = self.side_metrics["candidate"]["nll_nat_per_token"] - self.side_metrics["reference"]["nll_nat_per_token"]
-                valid_delta = self.finite(delta, "metrics.delta_nll")
-                if total is not None and valid_delta:
+                gap = abs(self.side_metrics["side_b"]["nll_nat_per_token"] - self.side_metrics["side_a"]["nll_nat_per_token"])
+                valid_gap = self.finite(gap, "metrics.nll_abs_diff")
+                if total is not None and valid_gap:
                     errors.sort()
                     h = 0.99 * (len(errors) - 1)
                     j, k = math.floor(h), math.ceil(h)
@@ -569,9 +565,7 @@ class _Comparison:
                     self.rule_execution["percentile"].append("metrics.p99")
                     if self.finite(p99, "metrics.p99"):
                         metrics = {"target_count": len(keys),
-                                   "reference_nll_nat_per_token": self.side_metrics["reference"]["nll_nat_per_token"],
-                                   "candidate_nll_nat_per_token": self.side_metrics["candidate"]["nll_nat_per_token"],
-                                   "delta_nll_nat_per_token": delta, "mae_nat": total / len(keys),
+                                   "nll_abs_diff_nat_per_token": gap, "mae_nat": total / len(keys),
                                    "p99_nat": p99, "p99_method": "global linear h=0.99*(N-1)"}
         states = {b["state"] for b in self.blockers}
         status = next(s for s in ("execution_failed", "incomparable", "not_covered", "no_thresholds") if s in states)
@@ -579,14 +573,14 @@ class _Comparison:
         coverage["full_forward_logprobs"] = status
         blockers = sorted(self.blockers, key=lambda b: (b["where"], b["code"], b["detail"], b["state"]))
         same_observations = False
-        r, c = docs["reference"].get("observations"), docs["candidate"].get("observations")
+        r, c = docs["side_a"].get("observations"), docs["side_b"].get("observations")
         if isinstance(r, str) and isinstance(c, str):
-            same_observations = ((Path(self.paths["reference"]).parent / r).resolve()
-                                 == (Path(self.paths["candidate"]).parent / c).resolve())
+            same_observations = ((Path(self.paths["side_a"]).parent / r).resolve()
+                                 == (Path(self.paths["side_b"]).parent / c).resolve())
         return {"schema_version": SCHEMA_VERSION, "core_version": CORE_VERSION, "paths": self.paths,
                 "evidence_paths": sorted(self.evidence_paths), "self_comparison": same_observations,
                 "sides": {k: docs[k].get("side") if _side_id(docs[k].get("side")) else None
-                          for k in ("reference", "candidate")},
+                          for k in ("side_a", "side_b")},
                 "status": status, "execution": "execution_failed" if "execution_failed" in states else "completed",
                 "comparability": "incomparable" if "incomparable" in states else
                                  ("unknown" if states & {"not_covered", "execution_failed"} else "comparable"),
@@ -601,20 +595,20 @@ class _Comparison:
                                                "scope": "summary reconciliation only; not acceptance thresholds"}}
 
 
-def compare(contract, reference, candidate):
+def compare(contract, side_a, side_b):
     """Compare three filesystem paths; return a JSON-serializable diagnostic report."""
-    return _Comparison(dict(contract=contract, reference=reference, candidate=candidate)).run()
+    return _Comparison(dict(contract=contract, side_a=side_a, side_b=side_b)).run()
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    for name in ("contract", "reference", "candidate", "output"):
-        parser.add_argument("--" + name, type=Path, required=True)
+    for name in ("contract", "side_a", "side_b", "output"):
+        parser.add_argument("--" + name.replace("_", "-"), type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         # Reserve before computing; never overwrite any existing artifact.
         with args.output.open("x", encoding="utf-8") as stream:
-            report = compare(args.contract, args.reference, args.candidate)
+            report = compare(args.contract, args.side_a, args.side_b)
             json.dump(report, stream, ensure_ascii=False, indent=2, allow_nan=False)
             stream.write("\n")
     except (OSError, ValueError, TypeError) as error:

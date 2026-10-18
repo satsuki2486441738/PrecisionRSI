@@ -14,13 +14,13 @@ Updates include events:{model_name:applied|skipped|inactive}. Select active mode
 in the expected inventory. Before/after pairs allow exact initial-value checks;
 delta-only captures use common.state to identify initial conditions.
 
-API: compare(contract,reference,candidate,chunk_size=1048576).
-Reports contain global/per-tensor relative L2, cosine, maximum error, counts,
+API: compare(contract,side_a,side_b,chunk_size=1048576).
+Reports contain global/per-tensor L2 error, RMSE, cosine, maximum error, counts,
 norms, events and coordinate findings. An invalid tensor leaves valid per-tensor
 results available while its full aggregate is unavailable. Metrics are diagnostics
 with thresholds=null. Same-path inputs are labeled self-checks.
-CLI: --contract C --reference REFERENCE.json --candidate CANDIDATE.json --output NEW.json
-CLI arguments assign comparison roles; manifest side IDs identify executions.
+CLI: --contract C --side-a REFERENCE.json --side-b CANDIDATE.json --output NEW.json
+Inputs are peer executions identified by manifest side IDs. Reports use schema 2.
 Exit: 0=diagnostics, 1=unavailable comparison, 2=CLI/output error.
 """
 import math
@@ -81,21 +81,15 @@ class Stats:
         if not self.count:
             return {'status': 'not_covered', 'reason': 'no present tensor coordinates', 'count': 0}
         rn, cn, en = [s * math.sqrt(v) for s, v in zip(self.scales, self.sums)]
-        if self.scales[0]:
-            # Log-domain ratio avoids overflow in scale ratio for finite final results.
-            log_ratio = math.log(self.scales[2]) - math.log(self.scales[0]) + .5*(math.log(self.sums[2])-math.log(self.sums[0])) if self.scales[2] else -math.inf
-            rel = math.exp(log_ratio) if log_ratio < 709.782712893384 else math.inf
-            relative = result_value(rel)
-        else:
-            relative = result_value(None, 'zero reference norm with nonzero error') if self.scales[2] else result_value(0.)
+        rmse = result_value(self.scales[2] * math.sqrt(self.sums[2] / self.count))
         if self.scales[0] and self.scales[1]:
-            cosine = self.dot / math.sqrt(self.sums[0]) / math.sqrt(self.sums[1])
+            cosine = self.dot / (math.sqrt(self.sums[0]) * math.sqrt(self.sums[1]))
             require(abs(cosine) <= 1 + 1e-12, 'unstable cosine reduction')
             cosine = result_value(max(-1., min(1., cosine)))
         else:
             cosine = result_value(None, 'zero signal norm')
-        return {'count': int(self.count), 'reference_norm': result_value(rn), 'candidate_norm': result_value(cn),
-                'error_norm': result_value(en), 'relative_l2': relative, 'cosine': cosine,
+        return {'count': int(self.count), 'side_a_norm': result_value(rn), 'side_b_norm': result_value(cn),
+                'error_norm': result_value(en), 'rmse': rmse, 'cosine': cosine,
                 'max_abs': result_value(self.maximum), 'max_flat_index': self.max_index}
 
 
@@ -163,18 +157,18 @@ def inventory(spec):
     return result
 
 
-def compare(contract_path, reference_path, candidate_path, chunk_size=1_048_576):
-    report = {'kind': 'tensors', 'schema_version': 1, 'status': 'no_thresholds',
-              'self_comparison': Path(reference_path).resolve() == Path(candidate_path).resolve(),
+def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
+    report = {'kind': 'tensors', 'schema_version': 2, 'status': 'no_thresholds',
+              'self_comparison': Path(side_a_path).resolve() == Path(side_b_path).resolve(),
               'thresholds': None, 'per_tensor': {}}
-    report['sources'] = {k: str(Path(v).resolve()) for k, v in [('contract', contract_path), ('reference', reference_path), ('candidate', candidate_path)]}
+    report['sources'] = {k: str(Path(v).resolve()) for k, v in [('contract', contract_path), ('side_a', side_a_path), ('side_b', side_b_path)]}
     try:
         require(integer(chunk_size, 1), 'chunk_size must be positive')
         spec = contract(contract_path, 'tensors')
         expected = inventory(spec)
-        ref, rb = manifest(reference_path, spec)
-        cand, cb = manifest(candidate_path, spec)
-        report['sides'] = {'reference': ref['side'], 'candidate': cand['side']}
+        ref, rb = manifest(side_a_path, spec)
+        cand, cb = manifest(side_b_path, spec)
+        report['sides'] = {'side_a': ref['side'], 'side_b': cand['side']}
         require(report['self_comparison'] or ref['side'] != cand['side'], 'distinct captures require distinct side IDs')
         require(ref.get('stage') == cand.get('stage') == spec['stage'], 'tensor stages differ')
         report['stage'] = spec['stage']
@@ -185,7 +179,7 @@ def compare(contract_path, reference_path, candidate_path, chunk_size=1_048_576)
             require(set(ref['events']) == set(cand['events']), 'model event inventory mismatch')
             require(all((ref['events'][k] == 'inactive') == (cand['events'][k] == 'inactive') for k in ref['events']), 'active model schedules differ')
             require(any(v != 'inactive' for v in ref['events'].values()), 'no active optimizer event', 'not_covered')
-            report['events'] = {'reference': ref['events'], 'candidate': cand['events']}
+            report['events'] = {'side_a': ref['events'], 'side_b': cand['events']}
         ri = unique(ref['tensors'], lambda x: x['name'], 'parameter')
         ci = unique(cand['tensors'], lambda x: x['name'], 'parameter')
         require(set(ri) == set(ci) == set(expected), 'parameter inventory mismatch', 'not_covered')

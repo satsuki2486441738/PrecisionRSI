@@ -80,9 +80,9 @@ class Fixture(unittest.TestCase):
     def run_dist(self, spec, r, c):
         return distributions(self.write('contract.json', spec), self.write('gpu.json', r), self.write('npu.json', c))
 
-    def test_task_defined_sides_and_comparison_direction(self):
+    def test_task_defined_sides_and_swap_symmetry(self):
         for labels in [('cpu-baseline', 'accelerator-trial'), ('gpu-stack-a', 'gpu-stack-b'),
-                       ('reference', 'candidate'), ('NPU', 'GPU')]:
+                       ('side_a', 'side_b'), ('NPU', 'GPU')]:
             for build, run in [(self.tensor_pair, self.run_tensors),
                                (lambda: self.tensor_pair(stage='updates'), self.run_tensors),
                                (self.dist_pair, self.run_dist)]:
@@ -92,9 +92,9 @@ class Fixture(unittest.TestCase):
                     ref['side'], cand['side'] = labels
                     report = run(spec, ref, cand)
                     self.assertEqual(report['status'], 'no_thresholds')
-                    self.assertEqual(report['sides'], dict(zip(('reference', 'candidate'), labels)))
+                    self.assertEqual(report['sides'], dict(zip(('side_a', 'side_b'), labels)))
                     cp = self.write('contract.json', spec)
-                    rp, cp_side = self.write('reference.json', ref), self.write('candidate.json', cand)
+                    rp, cp_side = self.write('side_a.json', ref), self.write('side_b.json', cand)
                     for path, label in [(rp, labels[0]), (cp_side, labels[1])]:
                         checked = validate(cp, path)
                         self.assertEqual(checked['status'], 'validated')
@@ -113,10 +113,15 @@ class Fixture(unittest.TestCase):
                     self.assertEqual(compare(one_path, rp, rp)['status'], 'no_thresholds')
                     reversed_report = compare(cp, cp_side, rp)
                     self.assertEqual(reversed_report['status'], 'no_thresholds')
-                    self.assertEqual(reversed_report['sides'], {'reference': labels[1], 'candidate': labels[0]})
+                    self.assertEqual(reversed_report['sides'], {'side_a': labels[1], 'side_b': labels[0]})
                     if spec['kind'] == 'tensors':
-                        self.assertAlmostEqual(report['global']['relative_l2']['value'], .8)
-                        self.assertAlmostEqual(reversed_report['global']['relative_l2']['value'], 4/3)
+                        self.assertAlmostEqual(report['global']['rmse']['value'], math.sqrt(8))
+                        self.assertAlmostEqual(reversed_report['global']['rmse']['value'], math.sqrt(8))
+                        for key in ('rmse', 'cosine', 'error_norm', 'max_abs'):
+                            self.assertEqual(report['global'][key], reversed_report['global'][key])
+                    else:
+                        for key in ('tail_merged_js', 'probability_rmse', 'max_probability_error', 'top1_agreement', 'top100_overlap'):
+                            self.assertEqual(report['aggregate'][key], reversed_report['aggregate'][key])
 
     def test_generic_side_rank_and_identity_validation(self):
         spec, ref, cand = self.tensor_pair()
@@ -139,7 +144,7 @@ class Fixture(unittest.TestCase):
         report = self.run_tensors(spec, r, c)
         result = report['global']
         self.assertEqual(report['status'], 'no_thresholds')
-        self.assertAlmostEqual(result['relative_l2']['value'], .8)
+        self.assertAlmostEqual(result['rmse']['value'], math.sqrt(8))
         self.assertAlmostEqual(result['cosine']['value'], .6)
         self.assertEqual(result['max_abs']['value'], 4)
         self.assertEqual(result['max_flat_index'], 1)
@@ -151,7 +156,7 @@ class Fixture(unittest.TestCase):
         for m, value in [(r, 1.), (c, 2.)]:
             m['tensors'].append({'name': 'small', 'shape': [1], 'present': True, 'shards': [{'offset': 0, 'value': self.array([value])}]})
         result = self.run_tensors(spec, r, c)
-        self.assertAlmostEqual(result['global']['relative_l2']['value'], 1.)
+        self.assertAlmostEqual(result['global']['rmse']['value'], math.sqrt(10001/2))
         self.assertEqual(result['global']['count'], 2)
 
     def test_independent_shard_layouts(self):
@@ -159,7 +164,7 @@ class Fixture(unittest.TestCase):
         r['tensors'][0]['shards'] = [{'offset': 0, 'value': self.array([1, 2])}, {'offset': 2, 'value': self.array([3, 4])}]
         c['tensors'][0]['shards'] = [{'offset': 0, 'value': self.array([2])}, {'offset': 1, 'value': self.array([3, 4, 5])}]
         result = self.run_tensors(spec, r, c, chunk=3)
-        self.assertAlmostEqual(result['global']['relative_l2']['value'], 2/math.sqrt(30))
+        self.assertAlmostEqual(result['global']['rmse']['value'], 1.)
 
     def test_update_delta_and_initial_state(self):
         spec, r, c = self.tensor_pair((0., 0.), (0., 0.), stage='updates')
@@ -167,7 +172,7 @@ class Fixture(unittest.TestCase):
             m['tensors'][0]['shards'] = [{'offset': 0, 'before': self.array([1., 2.], np.float16), 'after': self.array(after, np.float16)}]
         c['events']['actor'] = 'skipped'
         result = self.run_tensors(spec, r, c)
-        self.assertIsNone(result['global']['relative_l2']['value'])
+        self.assertAlmostEqual(result['global']['rmse']['value'], .125/math.sqrt(2))
         self.assertEqual(result['global']['max_abs']['value'], .125)
         self.assertEqual(result['per_tensor']['weight']['initial_values'], 'exactly_checked')
         c['tensors'][0]['shards'][0]['before'] = self.array([1.5, 2.])
@@ -187,15 +192,15 @@ class Fixture(unittest.TestCase):
         self.assertEqual(self.run_tensors(spec, r, c)['status'], 'incomparable')
 
     def test_zero_norms(self):
-        for a, b, relative in [([0.], [0.], 0.), ([0.], [1.], None), ([1.], [0.], 1.)]:
+        for a, b, rmse in [([0.], [0.], 0.), ([0.], [1.], 1.), ([1.], [0.], 1.)]:
             result = self.run_tensors(*self.tensor_pair(a, b))['global']
-            self.assertEqual(result['relative_l2']['value'], relative)
+            self.assertEqual(result['rmse']['value'], rmse)
             self.assertIsNone(result['cosine']['value'])
             self.assertEqual(result['max_abs']['status'], 'no_thresholds')
 
     def test_extreme_norms_stay_stable(self):
         report = self.run_tensors(*self.tensor_pair([1e300, 1e300], [1e300, 0.]))
-        self.assertAlmostEqual(report['global']['relative_l2']['value'], 1/math.sqrt(2))
+        self.assertAlmostEqual(report['global']['rmse']['value']/1e300, 1/math.sqrt(2))
         self.assertAlmostEqual(report['global']['cosine']['value'], 1/math.sqrt(2))
 
     def test_absence_is_not_zero(self):
@@ -221,7 +226,7 @@ class Fixture(unittest.TestCase):
                 mutate(c)
                 result = self.run_tensors(spec, r, c)
                 self.assertNotEqual(result['status'], 'no_thresholds')
-                self.assertNotIn('relative_l2', result.get('global', {}))
+                self.assertNotIn('rmse', result.get('global', {}))
 
     def test_valid_other_tensor_preserved(self):
         spec, r, c = self.tensor_pair()
@@ -229,30 +234,30 @@ class Fixture(unittest.TestCase):
         for m in [r, c]:
             m['tensors'].append({'name': 'bad', 'shape': [1], 'present': True, 'shards': []})
         result = self.run_tensors(spec, r, c)
-        self.assertIn('relative_l2', result['per_tensor']['weight'])
-        self.assertNotIn('relative_l2', result['global'])
+        self.assertIn('rmse', result['per_tensor']['weight'])
+        self.assertNotIn('rmse', result['global'])
 
-    def test_distribution_hand_kl_union(self):
+    def test_distribution_hand_js_union(self):
         spec, r, c = self.dist_pair()
         result = self.run_dist(spec, r, c)
         row = result['positions'][0]
         p0, p100 = 202/(202*203/2), 102/(202*203/2)
-        expected = (p0-p100)*math.log(p0/p100)
+        mid = (p0+p100)/2
+        expected = p0*math.log(p0/mid)+p100*math.log(p100/mid)
         self.assertEqual(row['union_count'], 101)
-        self.assertAlmostEqual(row['tail_merged_kl']['value'], expected, places=14)
+        self.assertAlmostEqual(row['tail_merged_js']['value'], expected, places=14)
         self.assertAlmostEqual(row['probability_rmse'], math.sqrt(2*(p0-p100)**2/101))
         self.assertAlmostEqual(row['top100_overlap'], .99)
         self.assertFalse(row['top1_agreement'])
-        self.assertAlmostEqual(row['top1_mismatch']['reference_margin'], 1/(202*203/2))
+        self.assertAlmostEqual(row['top1_mismatch']['side_a_margin'], 1/(202*203/2))
 
     def test_distribution_true_zero_keeps_other_metrics(self):
         p = np.ones(202)/202
         q = p.copy();q[0] = 0;q[201] += p[0]
         result = self.run_dist(*self.dist_pair(p, q))
-        self.assertEqual(result['status'], 'incomparable')
-        self.assertIsNone(result['aggregate']['tail_merged_kl']['value'])
+        self.assertEqual(result['status'], 'no_thresholds')
+        self.assertGreater(result['aggregate']['tail_merged_js']['mean'], 0.)
         self.assertIn('mean', result['aggregate']['probability_rmse'])
-        self.assertIn('at 0', result['positions'][0]['tail_merged_kl']['reason'])
 
     def test_log_tail_underflow_is_not_true_zero(self):
         spec, r, c = self.dist_pair(np.ones(128)/128, np.ones(128)/128)
@@ -261,14 +266,32 @@ class Fixture(unittest.TestCase):
         r['positions'][0]['scores'] = self.array(lp)
         c['positions'][0]['scores'] = self.array(lq)
         result = self.run_dist(spec, r, c)
-        self.assertIn('other', result['positions'][0]['tail_merged_kl']['reason'])
+        self.assertEqual(result['status'], 'no_thresholds')
+        self.assertEqual(result['positions'][0]['tail_merged_js']['value'], 0.)
+
+    def test_js_symmetry_disjoint_support_and_tensor_swap(self):
+        from compare_distributions import per_position
+        p = np.arange(1., 129.); p /= p.sum()
+        q = np.full(128, 1/128)
+        forward, reverse = per_position(np.log(p), np.log(q)), per_position(np.log(q), np.log(p))
+        for key in ('tail_merged_js', 'probability_rmse', 'max_probability_error', 'top1_agreement', 'top100_overlap'):
+            self.assertEqual(forward[key], reverse[key])
+        p, q = np.zeros(128), np.zeros(128); p[0] = q[1] = 1.
+        with np.errstate(divide='ignore'):
+            disjoint = per_position(np.log(p), np.log(q))
+        self.assertAlmostEqual(disjoint['tail_merged_js']['value'], math.log(2))
+        for a, b in [([0.], [1.]), ([3., 4.], [3., 0.]), ([1e300, 1e300], [1e300, 0.])]:
+            forward = self.run_tensors(*self.tensor_pair(a, b))['global']
+            reverse = self.run_tensors(*self.tensor_pair(b, a))['global']
+            for key in ('rmse', 'error_norm', 'cosine', 'max_abs'):
+                self.assertEqual(forward[key], reverse[key])
 
     def test_ties_resolve_by_token_id(self):
         spec, r, c = self.dist_pair(np.ones(128)/128, np.ones(128)/128)
         result = self.run_dist(spec, r, c)['positions'][0]
         self.assertEqual(result['union_count'], 100)
         self.assertEqual(result['max_error_token'], 0)
-        self.assertEqual(result['tail_merged_kl']['value'], 0.)
+        self.assertEqual(result['tail_merged_js']['value'], 0.)
 
     def test_position_aggregation_not_averaged_percentiles(self):
         spec, r, c = self.dist_pair()
@@ -319,7 +342,7 @@ class Fixture(unittest.TestCase):
         cp, rp = self.write('contract.json', spec), self.write('gpu.json', ref)
         self.assertTrue(tensors(cp, rp, rp)['self_comparison'])
         out = self.root/'cli.json'
-        cmd = [sys.executable, str(SCRIPTS/'compare_tensors.py'), '--contract', str(cp), '--reference', str(rp), '--candidate', str(rp), '--output', str(out)]
+        cmd = [sys.executable, str(SCRIPTS/'compare_tensors.py'), '--contract', str(cp), '--side-a', str(rp), '--side-b', str(rp), '--output', str(out)]
         self.assertEqual(subprocess.run(cmd, capture_output=True).returncode, 0)
         contents = out.read_bytes()
         self.assertEqual(subprocess.run(cmd, capture_output=True).returncode, 2)
@@ -337,7 +360,7 @@ class Fixture(unittest.TestCase):
         c['positions'][0]['scores'] = self.array(np.full(128, -math.log(128)+1e-7))
         result = self.run_dist(spec, r, c)
         self.assertEqual(result['status'], 'no_thresholds')
-        self.assertAlmostEqual(result['positions'][0]['normalization_mass']['candidate'], math.exp(1e-7))
+        self.assertAlmostEqual(result['positions'][0]['normalization_mass']['side_b'], math.exp(1e-7))
         self.assertLess(result['aggregate']['probability_rmse']['max'], 1e-15)
 
     def test_invalid_position_blocks_aggregate_not_valid_position(self):
@@ -352,7 +375,7 @@ class Fixture(unittest.TestCase):
 
     def test_no_threshold_fitting(self):
         spec, r, c = self.tensor_pair()
-        spec['thresholds'] = {'relative_l2': 99}
+        spec['thresholds'] = {'rmse': 99}
         self.assertEqual(self.run_tensors(spec, r, c)['status'], 'incomparable')
 
     def test_missing_file_status_and_blocked_cli(self):
@@ -362,8 +385,8 @@ class Fixture(unittest.TestCase):
         self.assertEqual(result['status'], 'not_covered')
         out = self.root/'blocked.json'
         proc = subprocess.run([sys.executable, str(SCRIPTS/'compare_tensors.py'),
-            '--contract', str(self.root/'contract.json'), '--reference', str(self.root/'gpu.json'),
-            '--candidate', str(self.root/'npu.json'), '--output', str(out)], capture_output=True)
+            '--contract', str(self.root/'contract.json'), '--side-a', str(self.root/'gpu.json'),
+            '--side-b', str(self.root/'npu.json'), '--output', str(out)], capture_output=True)
         self.assertEqual(proc.returncode, 1)
         self.assertEqual(json.loads(out.read_text())['status'], 'not_covered')
 
@@ -383,7 +406,7 @@ class Fixture(unittest.TestCase):
     def test_distribution_and_audit_cli(self):
         spec, ref, cand = self.dist_pair()
         cp, rp, np_ = self.write('contract.json', spec), self.write('gpu.json', ref), self.write('npu.json', cand)
-        for entry, args in [('compare_distributions.py', ['--reference', str(rp), '--candidate', str(np_)]),
+        for entry, args in [('compare_distributions.py', ['--side-a', str(rp), '--side-b', str(np_)]),
                             ('validate_artifacts.py', ['--manifest', str(rp)])]:
             out = self.root/(entry+'.json')
             proc = subprocess.run([sys.executable, str(SCRIPTS/entry), '--contract', str(cp), *args, '--output', str(out)], capture_output=True)

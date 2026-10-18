@@ -4,7 +4,7 @@
 
 Match model/checkpoint/tokenizer, input IDs/positions/masks, algorithm and reductions, numerical policy, and replay state. For training, include optimizer groups, moments/step, accumulation and clipping. Match actual random inputs when enabled.
 
-Give each execution setup a distinct side ID and select reference/candidate roles. Record hardware, runtime and framework per side. Pin compatible dependencies independently per setup and retain native operators. Align upstream versions when a shared-implementation comparison is requested. Reuse existing environments, resources and valid captures.
+Give each execution setup a distinct side ID and select the pairs to compare. Record hardware, runtime and framework per side. Pin compatible dependencies independently per setup and retain native operators. Align upstream versions when a shared-implementation comparison is requested. Reuse existing environments, resources and valid captures.
 
 ## Run
 
