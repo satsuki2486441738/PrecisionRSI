@@ -11,6 +11,8 @@ Complete the requested collection and comparison, including environment preparat
 
 Determine the common conditions and allowed differences from the task and environment inspection before collection. Check model/weight/tokenizer/config identities, input IDs/positions/masks, algorithm and loss reductions, numerical settings, capture boundaries and metric definitions. For training, also check initial parameters, optimizer state, microbatch order, accumulation, clipping and random inputs. Record conditions that must match separately from each side's actual configuration, including requested differences and implementation differences required by its execution stack. Validate execution against these settings; ask about an unexpected difference when its effect on the comparison's meaning is unclear. Pin dependencies per setup and retain native operators.
 
+Infer missing settings from the task, existing configuration and environment. Use small, bounded defaults for an initial run and record them. Ask when missing information determines the comparison's meaning or resource limit and cannot be inferred from context.
+
 Reuse available environments, resources and collectors; prepare missing dependencies and implement missing collection or comparison code. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Read the selected recipe:
 
 | Task | Recipe |
