@@ -12,17 +12,23 @@ Collect requested label logprobs even when labels lie outside top-100. Use the o
 
 ## Framework integration
 
-Record attention backend, TP, KV dtype, graph/cache/chunking and batching settings. Map reordered requests/chunks to absolute prediction positions: prompt token $x_t$ uses position $t-1$; the final prefill row supplies the first output distribution. Account for BOS/templates and initial prompt entries.
+Record applicable attention backend, TP, KV dtype, graph/cache/chunking and batching settings. Map reordered requests/chunks to absolute prediction positions: prompt token $x_t$ uses position $t-1$; the final prefill row supplies the first output distribution. Account for BOS/templates and initial prompt entries.
 
 Reconstruct vocabulary shards, exclude padding and export the score rows needed for union queries. Preserve each engine's native cache while replaying a predetermined continuation.
 
-### vLLM
+Select the native entrypoint and inspect the installed version's implementation:
 
-Inspect `SamplingParams.prompt_logprobs`, `logprobs`, `max_logprobs` and the platform plugin. Check full-vocabulary support such as `-1` and `logprobs_mode="raw_logprobs"` in the installed release. Handle initial `None` prompt entries and chunk offsets. Use engine replay or a collector for fixed-history decode.
+| Framework / entrypoint | Capture mapping |
+|---|---|
+| PyTorch / [Transformers](https://huggingface.co/docs/transformers/main_classes/text_generation) | Native model forward and cache state; distinguish raw logits from processed generation scores |
+| [vLLM](https://docs.vllm.ai/en/latest/api/vllm/sampling_params/) | `prompt_logprobs`, output `logprobs`, raw-score mode and full-vocabulary limits; resolve initial `None` entries, chunk offsets and platform plugins |
+| [SGLang](https://docs.sglang.io/docs/basic_usage/sampling_params) | `return_logprob`, `logprob_start_len`, top/selected-ID queries and score transforms; preserve radix-cache and extend/decode behavior |
+| [TensorRT-LLM](https://nvidia.github.io/TensorRT-LLM/features/additional-outputs.html) | Installed execution backend, context/generation logits, vocabulary layout and effective build/precision settings |
+| [LMDeploy](https://lmdeploy.readthedocs.io/en/latest/) | Selected PyTorch/TurboMind backend, native score outputs and request/token/cache mappings |
+| [MindIE-LLM](https://github.com/Ascend/MindIE-LLM) | Service/model backend, available score access and scheduled request/prefill/decode mappings |
+| [llama.cpp](https://github.com/ggml-org/llama.cpp) | GGUF/checkpoint identity, quantization, tokenizer conversion and native context/logit-row mapping |
 
-### SGLang
-
-Inspect `return_logprob`, `logprob_start_len`, `top_logprobs_num` and `token_ids_logprob`. Set prompt coverage explicitly and check selected-ID queries at input/output positions. Trace temperature, penalties and constraints to select raw scores; capture native logits when needed. Preserve radix-cache and extend/decode behavior.
+Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector for fixed-history decode.
 
 ### Other/custom
 

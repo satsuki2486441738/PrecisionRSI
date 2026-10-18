@@ -15,17 +15,21 @@ Use dependency or clipping diagnostics to inspect discrepancies.
 
 ## Framework integration
 
-Identify the optimizer step, accumulation window, actor/critic order and native entrypoint. Read the selected framework section.
+Identify the optimizer step, accumulation window, actor/critic order and native entrypoint. Inspect the installed version's implementation:
 
-### TRL
+| Framework / entrypoint | Capture mapping |
+|---|---|
+| [TRL](https://huggingface.co/docs/trl/grpo_trainer) | Requested trainer's batch preparation, action scoring, loss and optimizer steps; retain completion/tool/truncation masks, group normalization, detached old scores and ordinary/fused loss selection |
+| [verl](https://verl.readthedocs.io/en/latest/) | Sample/group/action mappings through repeats, filtering, balancing, packing and rank redistribution; capture effective old-policy anchors, correction/rejection weights, reward/KL placement and aggregation |
+| [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF) | Experience construction, distributed worker roles, action masks, advantage estimator and actor/critic optimizer steps |
+| [slime](https://github.com/THUDM/slime) | Rollout-data conversion, Megatron loss inputs and rollout/training weight-version mapping |
+| [NeMo RL](https://docs.nvidia.com/nemo/rl/latest/index.html) | Selected policy/generation backends, batch layout, objective reduction and policy update |
+| [ms-swift](https://github.com/modelscope/ms-swift) | Selected RLHF algorithm, template/masks, reward/group normalization and native trainer/backend |
+| [AReaL](https://github.com/areal-project/AReaL) | Asynchronous trajectory/policy versions, action rescoring and effective off-policy corrections |
+| [ROLL](https://github.com/alibaba/ROLL) | Role-specific pipeline, sample dispatch, reward/advantage processing and selected training backend |
+| [MindSpeed-RL](https://github.com/Ascend/MindSpeed-RL) | Native actor/rollout/reward steps, sample redistribution and distributed parameter/gradient storage |
 
-Trace batch preparation, action scoring, `compute_loss` and optimizer integration. Capture completion/tool/truncation masks, group normalization and rollout-correction weights. Retain native scoring temperature, dynamic masks, detached old-score handling and ordinary/fused loss selection.
-
-### verl
-
-Preserve sample/group/action mappings through repeats, filtering, balancing, packing, padding removal and rank redistribution. Capture the effective old-policy anchor, correction/rejection weights, reward/KL placement, estimator and loss aggregation.
-
-Use the [training capture methods](../methods/training-state.md#distributed-capture) for distributed tensors and the selected [serving engine](inference.md#framework-integration) for rollout scores.
+Record the RL framework, training backend and rollout engine separately. Preserve the policy/state versions used for each fixed trajectory. Use [training capture](../methods/training-state.md#distributed-capture) for distributed tensors and the selected [inference entrypoint](inference.md#framework-integration) for rollout scores.
 
 ### Other/custom
 
