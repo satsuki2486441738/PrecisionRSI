@@ -1,25 +1,26 @@
 #!/usr/bin/env python3
-"""Stream complete logical tensors. Requires NumPy; see artifact_io for shared schema.
+"""Compare logical gradients or stored updates using artifact schema 1.
 
-Contract extras: stage=gradients|updates, tensors=[{name, shape, present}]. The
-independent expected inventory must contain every logical parameter once.
-Manifest extras: stage, tensors=[{name, shape, present, shards:[...]}].
-Each nonempty shard has offset (flat logical element index) and either
-value:array_descriptor, or (updates only) before/after:array_descriptors.
-Offsets must cover [0,numel) exactly, without padding/replicas; layouts may differ
-between sides. Missing gradients use present=false, shards=[], never zero fill.
-Stored deltas require FP32/FP64; before/after values are promoted before subtraction.
-Updates also require events:{model_name: applied|skipped|inactive}; events are
-reported separately from finite numerical errors. Inactive models should not be
-in the expected inventory. Exact initial values are checked when both sides
-provide before/after; delta-only inputs rely on reviewed common.state evidence.
+Contract extras: stage=gradients|updates,
+tensors=[{name,shape,present}] listing logical parameters once.
+Manifest extras: stage, tensors=[{name,shape,present,shards:[...]}].
+Shards specify offset (flat logical element index) and value:array_descriptor,
+or for updates, before/after:array_descriptors. Offsets cover [0,numel) exactly;
+adapters remove native padding and replicas. Absent gradients use present=false
+and shards=[]. Stored deltas are FP32/FP64; stored before/after values are
+promoted before subtraction.
 
-compare(contract, reference, candidate, chunk_size=1048576) returns global and
-per-tensor relative L2/cosine/max, counts and norms, no acceptance thresholds.
-Any invalid tensor blocks global metrics, retaining independent valid tensors.
-Same manifest path is a labeled self-check, not a cross-device result.
+Updates include events:{model_name:applied|skipped|inactive}. Select active models
+in the expected inventory. Before/after pairs allow exact initial-value checks;
+delta-only captures use common.state to identify initial conditions.
+
+API: compare(contract,reference,candidate,chunk_size=1048576).
+Reports contain global/per-tensor relative L2, cosine, maximum error, counts,
+norms, events and coordinate findings. An invalid tensor leaves valid per-tensor
+results available while its full aggregate is unavailable. Metrics are diagnostics
+with thresholds=null. Same-path inputs are labeled self-checks.
 CLI: --contract C --reference GPU --candidate NPU --output NEW.json
-Exit 0=diagnostics, 1=blocked scope, 2=CLI/output error.
+Exit: 0=diagnostics, 1=unavailable comparison, 2=CLI/output error.
 """
 import math
 from pathlib import Path

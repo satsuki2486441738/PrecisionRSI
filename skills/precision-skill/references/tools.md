@@ -1,26 +1,21 @@
-# Offline tools
+# Compare artifacts
 
-Run with the existing project Python environment. New artifact tools require NumPy; they import no model, Torch or device runtime. The legacy target-score comparator remains standard-library-only.
+Use the existing Python environment with NumPy. Select one tool:
 
-| Entry | Purpose |
+| Script | Comparison |
 |---|---|
-| [validate_artifacts.py](../scripts/validate_artifacts.py) | Validate one side's complete expected positions/tensors, rank evidence and numerical values. |
-| [compare_distributions.py](../scripts/compare_distributions.py) | Full-logprob top-100 union/tail metrics and coverage. |
-| [compare_tensors.py](../scripts/compare_tensors.py) | Global/per-parameter gradient or actual-update metrics, streamed across differing shard layouts. |
-| [compare_scores.py](../scripts/compare_scores.py) | Existing schema-v2 full-forward target-token NLL/MAE/P99. |
+| [compare_distributions.py](../scripts/compare_distributions.py) | Full-vocabulary logprobs: top-100 union/tail metrics |
+| [compare_tensors.py](../scripts/compare_tensors.py) | Gradients or stored before/after updates |
+| [compare_scores.py](../scripts/compare_scores.py) | Cache-off eval target scores: NLL/MAE/P99; standard library |
+| Task adapter | Native training scores/objectives; reuse the collector's mapping |
+| [validate_artifacts.py](../scripts/validate_artifacts.py) | One platform's distribution/tensor inventory and values |
 
-New tools use schema 1, separate from legacy target scoring. A thin case adapter writes a contract with reviewed common conditions and expected coverage, plus each side's manifest referencing existing arrays and execution evidence. Reuse files; do not copy large tensors into the index. NumPy and safetensors float arrays, including BF16 parameters, are supported. Schemas are defined in the entry scripts and [artifact_io.py](../scripts/artifact_io.py), not duplicated here.
+Run from the skill directory. Comparators share `--contract`, `--reference`, `--candidate` and `--output`; the validator uses `--manifest` for its platform input. Use fresh output paths.
 
-```bash
-python scripts/validate_artifacts.py --contract contract.json --manifest gpu.json --output gpu-audit.json
-python scripts/compare_tensors.py --contract gradients.json --reference gpu.json --candidate npu.json --output gradients-report.json
-python scripts/compare_distributions.py --contract distributions.json --reference gpu.json --candidate npu.json --output distribution-report.json
+```sh
+python scripts/compare_tensors.py --contract gradients.json --reference gpu.json --candidate npu.json --output report.json
 ```
 
-Run from the skill directory. Inputs resolve relative to their manifest; outputs are exclusively created. Exit codes: 0 for a valid audit/diagnostic, 1 for a blocked scope, 2 for CLI/output errors. Pairing uses a GPU reference and NPU candidate; using the same manifest twice produces an explicitly labeled self-check. No tool emits an acceptance pass or chooses thresholds.
+Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.
 
-Tensor updates accept stored before/after values or FP32/FP64 deltas. Before/after pairs also permit exact initial-value checks; delta-only files rely on reviewed initial-state provenance. Zero norms and skipped steps retain valid metric scopes. Missing data blocks complete aggregates; valid per-position/per-tensor diagnostics remain available.
-
-These tools verify declared conditions and artifacts, not the truth of backend/provenance claims. Collectors still supply canonical vocabulary/parameter maps and native observations; tensor shards must map to contiguous flat logical ranges. SFT/RL action-score and objective reconstruction, model execution, cache-state comparison and engine stage/length breakdowns remain case work.
-
-When full arrays remain on separate hosts, a case adapter may validate them in place and exchange each position's top-100 union scores plus the log-sum-exp mass of its complement. Preserve full-vocabulary normalization, both ordered top-100 ID lists, complete coordinate coverage, array identities and native validation evidence. `compare_distributions.selected_metrics` shares the same arithmetic with full-array comparison; it does not establish source authenticity or recover redistribution within the tail. Case transport and evidence validation remain the adapter's responsibility.
+Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and unavailable comparisons. Exit codes: 0=result, 1=unavailable comparison, 2=CLI/output error.

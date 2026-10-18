@@ -1,25 +1,24 @@
 #!/usr/bin/env python3
-"""Top-100 union/tail comparison. Requires NumPy; shared schema in artifact_io.
+"""Compare next-token distributions using artifact schema 1.
 
-Contract extras: vocab_size>=100, normalization_tolerance (positive numerical
-serialization tolerance, NOT acceptance threshold), renormalization=none|full_vocabulary_fp64,
-positions=[{sample:str,
-position:int, history:[token_ids,...]}]. position=len(history)-1; adapters must
-resolve absolute causal positions without silently shifting/padding histories.
-Manifest extras: positions repeat coordinates/history with scores descriptor:
-{path: array.npy, row: int} or {path: array.safetensors, key: str, row: int}.
-Scores are full-vocabulary normalized natural log probabilities, before sampling
-processors, FP32/FP64. Arrays are [positions,vocabulary] or a single [vocabulary]
-row (row=0). Vocabulary IDs are the canonical indices 0..vocab_size-1.
-True zero probability is -inf; NaN/+inf/positive logprobs are invalid. Log-space
-normalization and tail sums preserve true zero vs exp underflow. Optional explicit
-full-vocabulary FP64 renormalization occurs only after validating original mass.
+Contract extras: vocab_size>=100; normalization_tolerance>0;
+renormalization=none|full_vocabulary_fp64;
+positions=[{sample:str,position:int,history:[token_id,...]}], with
+position=len(history)-1 in canonical causal coordinates.
 
-Reports retain per-position results, equal-position aggregates, coverage and
-mismatch examples. Nonfinite KL serializes null with reason; its aggregate is
-blocked, never silently computed over a finite subset. Common-input/schema errors
-block affected positions and all incomplete aggregates. Same path=self-check.
-CLI --contract C --reference GPU --candidate NPU --output NEW.json
+Manifest positions repeat those coordinates/history and supply a scores array
+with row:int. Arrays have shape [positions,vocabulary] or [vocabulary] at row=0;
+vocabulary IDs are indices 0..vocab_size-1. Use FP32/FP64 full-vocabulary normalized
+natural logprobs before sampling processors. Values are <=0; -inf represents
+true zero probability. The selected renormalization policy first validates
+original mass, then optionally renormalizes full vocabulary in FP64.
+
+Report: per-position and equal-position aggregate top-100 union/tail metrics,
+probability mass and top-1 mismatches. Nonfinite KL is null with a reason;
+complete coordinate sets determine aggregates. Reusing one manifest path labels
+the output as a self-check.
+
+CLI: --contract C --reference GPU --candidate NPU --output NEW.json
 """
 import math
 from pathlib import Path

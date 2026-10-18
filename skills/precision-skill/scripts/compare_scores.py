@@ -1,83 +1,59 @@
 #!/usr/bin/env python3
-"""Offline score comparison, schema v2; stdlib only, no executor imports.
+"""Compare cache-off full-forward target scores using schema 2 and the standard library.
 
-API: compare(contract_path, reference_manifest_path, candidate_manifest_path).
-All paths are relative to their containing JSON (not cwd). No legacy schemas.
+API: compare(contract_path,reference_manifest_path,candidate_manifest_path).
+Resolve every path relative to its containing JSON.
 
-Contract (all keys required):
-  schema_version: 2 (integer, not bool)
-  inputs: path to the executor's shared_inputs.json
-  common: {model, weights, tokenizer, config, weight_dtype, autocast,
-           quantization, training, no_grad, forward, use_cache, logprob_dtype,
-           log_base, target_shift, target_scope, distribution, reduction,
-           percentile}
-  reference_side: "GPU"
-  required_coverage: ["full_forward_logprobs"] (may additionally request
-                     "cache", "SFT", "RL"; these remain not_covered)
-  thresholds: null (any other value explicitly unsupported)
-The four identities are {"repository": nonempty str, "revision": nonempty str};
-revision is a source identity, not a local path. Dtypes: float32/float16/bfloat16.
-quantization: "none" or a nonempty explicit scheme string. Fixed semantics:
-training=false, no_grad=true, forward="full", use_cache=false,
-logprob_dtype="float32", log_base="e", target_shift=-1,
-target_scope="assistant_body_nonspecial", distribution="raw_model",
-reduction="target_token_weighted", percentile="global_linear_0.99".
-autocast: exact {enabled: bool, target_dtype: dtype if enabled else null,
- scope: "model_forward"}; describes forward context, not internal arithmetic.
-Unknown required values are null/missing and block coverage, never inferred.
+Contract fields:
+  schema_version: 2
+  inputs: shared_inputs.json path
+  reference_side: GPU
+  required_coverage: [full_forward_logprobs]
+  thresholds: null
+  common: {model,weights,tokenizer,config,weight_dtype,autocast,quantization,
+           training,no_grad,forward,use_cache,logprob_dtype,log_base,target_shift,
+           target_scope,distribution,reduction,percentile}
+Model/weights/tokenizer/config identities are {repository:str,revision:str}.
+weight_dtype is float16|bfloat16|float32. quantization names the selected scheme
+or none. autocast={enabled:bool,target_dtype:dtype_or_null,scope:model_forward}.
+Fixed scoring semantics: training=false, no_grad=true, forward=full,
+use_cache=false, logprob_dtype=float32, log_base=e, target_shift=-1,
+target_scope=assistant_body_nonspecial, distribution=raw_model,
+reduction=target_token_weighted, percentile=global_linear_0.99.
+Additional cache/SFT/RL required_coverage entries return not_covered.
 
-Manifest (all keys required except side_config):
-  schema_version: 2; side: "GPU" or "NPU"; inputs: JSON path;
-  observations: executor-format JSONL path; summary: executor-format JSON path;
-  environment: [JSON paths]; status: [JSON paths];
-  expected_ranks: [unique nonnegative integers]; execution: "completed";
-  actual: common keys except target_shift/reduction/percentile; null for unknown facts;
-  evidence: {actual_key: [{"path": JSON path, "pointer": "/JSON/pointer"}]};
-  uncovered: [coverage names]; side_config: optional descriptive JSON object.
-Each evidence pointer must resolve to an actual JSON value strictly equal to
-actual[key]. Evidence is a small field-reference mechanism, NOT a provenance
-or authenticity verifier. It cannot point at the contract/manifest itself;
-"verified" strings, absent files/fields and null values are not evidence.
-Producer must cite actual loading/execution facts, not requested configuration.
-Identity must never be inferred from old absolute paths or model repository
-alone. This tool cannot establish undocumented tokenizer/config identities,
-internal-state dtype, or a particular SDPA kernel in historical GPU runs.
-These last two are NOT mandatory common conditions for full-forward scoring.
-Environment and status documents each carry rank; environment may contain
-arbitrary side-specific facts. Every expected rank needs both documents;
-status must have status="completed". Failed status/execution -> execution_failed.
+Manifest fields:
+  schema_version: 2; side: GPU|NPU; inputs: JSON path
+  observations: executor-format JSONL path; summary: executor-format JSON path
+  environment: [JSON paths]; status: [JSON paths]
+  expected_ranks: [unique nonnegative integers]; execution: completed
+  actual: common fields except target_shift/reduction/percentile
+  evidence: {actual_key:[{path:JSON_path,pointer:/JSON/pointer}]}
+  uncovered: [coverage names]; side_config: optional object
+Each evidence pointer resolves to an execution value equal to actual[key].
+Expected ranks each have an environment and completed status record with rank.
+Unknown required identities/settings remain null and return incomplete coverage.
 
-Input/observation/summary payloads reuse torch_fsdp_score.py fields without
-adding schema_version to old artifacts. Shared inputs require source
-{dataset,revision,file}, selection and samples; local_path is not identity.
-Samples require source_row_1based, prompt_id (string or integer), messages,
-rendered_text, input_ids, position_ids, attention_mask, score_mask,
-body_span_half_open, target_token_positions, prediction_positions,
-target_token_ids. Fixed executor scope: complete one-turn messages, positions
-0..L-1, attention all 1; no re-tokenization or special-ID inference. Existing
-body-boundary/selection evidence is reused, saved target arrays revalidated.
-JSONL rows require case coordinates, target/prediction positions, target IDs,
-logprobs, target_count, nll_sum, finite. Summary requires execution, samples,
-target_count, nll_sum, nll_nat_per_token, finite. finite flags are checked but
-never substituted for examining values. Raw-model logprobs must be finite and
-<= 0, with no epsilon allowance for positive values; zero is valid. Invalid
-logprobs block paired metrics and the affected side's NLL diagnostics.
-Other executor metadata is retained
-in source artifacts, not treated as common conditions.
+Executor input fields:
+  source={dataset,revision,file}, selection, samples
+  sample={source_row_1based,prompt_id,messages,rendered_text,input_ids,
+          position_ids,attention_mask,score_mask,body_span_half_open,
+          target_token_positions,prediction_positions,target_token_ids}
+The input format uses complete one-turn messages, positions 0..L-1 and attention
+all 1. prompt_id is string or integer; source.local_path locates a resource.
+Observations contain case coordinates, target/prediction positions, target IDs,
+logprobs,target_count,nll_sum,finite. Summary fields are execution,samples,
+target_count,nll_sum,nll_nat_per_token,finite. Logprobs are finite and <=0.
 
-Report: schema_version/core_version, paths/evidence_paths, self_comparison,
-sides, status, execution, comparability, numerical_status, coverage, blockers,
-side_metrics (raw single-side recomputations), metrics (only fully comparable).
-Six status vocabulary: passed, exceeded, incomparable, not_covered,
-no_thresholds, execution_failed. First two are never emitted in v2. Precedence:
-execution_failed > incomparable > not_covered > no_thresholds; blockers retain
-all concurrent conditions, including no_thresholds. No partial intersections.
-Python double, coordinate-sorted math.fsum, whole-set linear P99. Summary-only
-rounding tolerance: rel_tol=64*sys.float_info.epsilon, abs_tol=same (never a
-business threshold). Nonfinite inputs/results are incomparable; arithmetic
-exceptions also mark computation execution_failed. Output JSON has no NaN.
-CLI --contract --reference --candidate --output exclusively creates output;
-exit 0=diagnostic available, 1=blocked report, 2=CLI/output error.
+Reports contain execution/comparability/coverage, side NLL diagnostics, paired
+NLL/MAE/P99 and paired target counts. Available comparisons return no_thresholds;
+other statuses are execution_failed,incomparable,not_covered. Metrics use Python
+double, coordinate-sorted math.fsum and whole-set linear P99. Summary checks use
+64*sys.float_info.epsilon for relative/absolute rounding tolerance. Reusing a
+manifest labels self_comparison. Output JSON uses finite literals.
+CLI: --contract C --reference GPU --candidate NPU --output NEW.json
+Output paths are created exclusively. Exit: 0=diagnostics, 1=unavailable comparison,
+2=CLI/output error.
 """
 
 import argparse

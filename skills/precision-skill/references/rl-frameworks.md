@@ -1,23 +1,13 @@
-# RL framework integration
+# Native RL integration
 
-Apply the [RL protocol](training.md#rl) to each framework's GPU/NPU pair. Inspect the installed trainer, loss variant and backend; hooks and supported algorithms vary by release.
-
-## Update boundary
-
-Replay the fixed trajectory/dependencies into native loss, backward and optimizer execution. Identify one actual optimizer step per active model, its accumulation window and actor/critic order; a rollout batch or epoch may contain several steps. Scheduled inactive models remain outside that step's coverage.
-
-Follow [training collection](training.md#common-training-state) for stages and coverage, and [training backends](training-backends.md) for native tensor access and shard mapping. Record whether execution covers an update-boundary adapter, worker or complete trainer loop.
+Use the [fixed-trajectory protocol](rl.md). Identify the optimizer step, accumulation window, actor/critic order and native entrypoint. Read the selected framework section.
 
 ## TRL
 
-Trace batch preparation, action scoring, loss and optimizer integration. Capture effective loss inputs, including completion/tool/truncation masks, group normalization and rollout-correction weights. Preserve dynamic masks as intermediates; numerical branch changes are not missing trajectory coordinates.
-
-Old scores may be a retained snapshot or detached current scores. Preserve that rule and detach semantics rather than substituting a common denominator. Verify temperature and other score transforms used by the trainer; raw inference scores may define a different objective. Observe the selected native or fused loss path.
+Trace batch preparation, action scoring, `compute_loss` and optimizer integration. Capture completion/tool/truncation masks, group normalization and rollout-correction weights. Retain native scoring temperature, dynamic masks, detached old-score handling and ordinary/fused loss selection.
 
 ## verl
 
-Trace rollout, reward/reference/value computation, advantages and actor/critic update workers. Retain sample/group/action mappings through repeats, filtering, balancing, packing, padding removal and rank redistribution.
+Preserve sample/group/action mappings through repeats, filtering, balancing, packing, padding removal and rank redistribution. Capture the effective old-policy anchor, correction/rejection weights, reward/KL placement, estimator and loss aggregation.
 
-Distinguish rollout scores from a recomputed old-policy anchor; some configurations deliberately reuse rollout scores. Preserve correction/rejection weights, reward/KL placement, estimator and loss aggregation. Capture actual training-backend observations; RPC averages cannot supply full gradients or step objectives.
-
-For vLLM/SGLang rollout diagnosis, read [engines](engines.md). Fixed-trajectory trainer comparison does not require regenerating rollout or adding inference metrics.
+Use [backend hooks](training-backends.md) when implementing tensor capture. Read the selected [serving engine](engines.md) when collecting rollout scores through it.

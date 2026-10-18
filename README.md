@@ -2,42 +2,23 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An [Agent Skill](https://agentskills.io/home) for comparing numerical results across NVIDIA GPU and Ascend NPU execution stacks.
+An Agent Skill for GPU/NPU inference, SFT, LoRA and RL numerical comparison.
 
 ## Use
 
-Copy [skills/precision-skill](skills/precision-skill/) into your client's skill location, retaining the directory name. Provide the task, two stacks and available artifacts. The agent reuses existing configurations and approvals, aligns conditions, collects observations, validates coverage and reports numerical differences.
+Copy [skills/precision-skill](skills/precision-skill/) into your client's skill directory. Provide the task and existing artifacts, or the model, data and platform connections needed for collection.
 
-| Task | Method |
-|---|---|
-| [Inference](skills/precision-skill/references/inference.md) | Compare next-token top-100 unions and aggregate tails: KL, top-1 agreement, probability errors and coverage. |
-| [SFT](skills/precision-skill/references/training.md#sft) | Same-state single step: all valid target-token scores, full gradients and full actual parameter updates; LoRA adapter scope and frozen-base evidence; cold/restored optimizer-state baselines and regression reuse. |
-| [RL](skills/precision-skill/references/training.md#rl) | Fixed trajectories and algorithm-specific dependencies, objectives, gradients and updates. |
+Examples:
 
-GPU is the reference. A complete platform-stack comparison treats hardware and its dependency implementation as the variables: pin each side independently and align model, data, algorithm semantics and replay state. Matching upstream versions is an optional narrower scope.
+- Compare the gradients and stored updates in these GPU/NPU manifests.
+- Collect a LoRA SFT step on both platforms using the same batch and initial adapter state, then compare it.
 
-The task integrates the selected libraries, runs their declared execution path, and delivers precision metrics, coverage and replayable evidence. Numerical differences are findings, and the user judges acceptance; they do not prevent subsequent valid collection. Library source repair and numerical remediation are outside this skill. Fix skill-owned collection and integration code; retain native-library failures as results or explicit support blockers. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.
+[SKILL.md](skills/precision-skill/SKILL.md) selects the path: existing captures go directly to a comparator; collection reads the selected task protocol. Framework integration and metric definitions are read as needed.
 
-Choose the integration reference for the layer being collected:
+Results contain settings, principal differences, compared coordinates and largest discrepancies. GPU is the reference; collection retains each platform's native operators and pinned dependencies.
 
-| Layer | Reference |
-|---|---|
-| Inference engine | [vLLM / SGLang](skills/precision-skill/references/engines.md): prefill, fixed-history cached decode and score semantics. |
-| RL framework | [TRL / verl](skills/precision-skill/references/rl-frameworks.md): trajectory preparation, native objectives and update boundaries. |
-| Training backend | [FSDP / ZeRO / Megatron-Core / MindSpeed](skills/precision-skill/references/training-backends.md): native storage, optimizer stages and logical tensor mapping. |
+## Tools and development
 
-Collectors and execution evidence belong to cases. These references describe methods; each case records its actual coverage and validation status.
+[Offline tools](skills/precision-skill/references/tools.md) compare distributions, gradients, updates and target scores. Artifact tools require NumPy; the cache-off target-score comparator uses the standard library.
 
-## Tooling and layout
-
-The [offline tools](skills/precision-skill/references/tools.md) validate artifacts and compare top-100 distributions or full gradients/actual updates using NumPy and bounded-memory reads. The existing standard-library target-score comparator remains available. Collectors, format adapters and task-specific loss reconstruction stay with each case; no tool claims cross-device agreement from a self-check.
-
-- [SKILL.md](skills/precision-skill/SKILL.md): pipeline and reference routing.
-- [Comparison](skills/precision-skill/references/comparison.md): alignment, formulas and result interpretation.
-- [Environment](skills/precision-skill/references/environment.md): per-platform stack selection and execution-associated evidence.
-- [Workflow](skills/precision-skill/references/workflow.md): device runs, retries and handoffs.
-- [Architecture](skills/precision-skill/references/architecture.md): collector responsibilities and case layout.
-
-Private `projects/` own case configurations, collectors and runs. Weights, data and installed environments remain at their resource locations. Technical skill documentation is maintained in English; the root guides are bilingual.
-
-Run maintainer tests in an existing Python environment with NumPy, from the repository root: `python -B -m unittest discover -s tests -v`.
+Repository layout and test commands are in [AGENTS.md](AGENTS.md).

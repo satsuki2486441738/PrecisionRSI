@@ -1,19 +1,18 @@
-"""Shared local artifact validation and bounded-memory NumPy/safetensors reads.
+"""Artifact schema 1 and bounded-memory NumPy/safetensors readers.
 
-Schema 1 contracts: kind=tensors|distributions; common contains nonempty model,
-inputs, numerics, scope identities/settings (plus state for tensors); thresholds=null;
-expected_ranks={GPU:[...],NPU:[...]} independently fixes required rank coverage.
-Manifests repeat schema_version/kind/common and declare side=GPU|NPU,
-expected_ranks=[int,...], ranks=[{rank, environment: JSON path, status: JSON path}].
-Each referenced document has rank; status must be completed, environment has a
-nonempty versions object. Paths resolve relative to the containing manifest.
-These checks verify declared agreement and available evidence, not authenticity
-or backend semantics; the agent must review those before interpreting metrics.
+Contract fields: schema_version=1, kind=tensors|distributions, thresholds=null,
+common={model,inputs,numerics,scope} plus state for tensors, and
+expected_ranks={GPU:[int,...],NPU:[int,...]}. Common entries contain identities
+or settings; required rank sets come from the contract.
 
-Array descriptors: {path: *.npy} or {path: *.safetensors, key: tensor_name}.
-Arrays must be contiguous floating-point (F16/BF16/F32/F64); no pickle/imports
-from model or executor. Shards use flat logical offsets established by adapters.
-NumPy is the only runtime dependency. JSON rejects duplicate keys and NaN/Inf.
+Manifest fields: schema_version, kind, common, side=GPU|NPU,
+expected_ranks=[int,...], ranks=[{rank,environment:JSON_path,status:JSON_path}].
+Environment documents contain rank and a nonempty versions object; status
+records contain rank and status=completed. Resolve paths relative to each JSON.
+
+Array descriptors: {path:array.npy} or {path:array.safetensors,key:tensor_name}.
+Readers accept contiguous F16/BF16/F32/F64 arrays and flat logical shard offsets.
+JSON uses unique keys and finite numeric literals. NumPy is the runtime dependency.
 """
 import argparse
 import json

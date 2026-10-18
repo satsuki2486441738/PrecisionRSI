@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Validate one side's complete artifact inventory and values without device comparison.
+"""Validate one platform's artifact inventory and values.
 
---contract C --manifest M --output NEW.json
-Uses the tensor/distribution comparator schemas and reads every required value.
-Status validated means artifact checks only, never numerical agreement or verified
-backend semantics. No model/framework imports; NumPy required.
+Uses the tensor/distribution schemas in artifact_io.py, compare_tensors.py and
+compare_distributions.py. Reads each required array and checks coordinates,
+ranks, shapes, dtypes and numerical values. Returns status=validated for complete
+valid inputs. Requires NumPy.
+
+CLI: --contract C --manifest M --output NEW.json
 """
 import argparse
 import json

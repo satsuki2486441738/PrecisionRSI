@@ -2,42 +2,23 @@
 
 [English](README.md) | 简体中文
 
-用于比较 NVIDIA GPU 与昇腾 NPU 执行栈数值结果的 [Agent Skill](https://agentskills.io/home)。
+用于 GPU/NPU 推理、SFT、LoRA 和 RL 数值比较的 Agent Skill。
 
 ## 使用
 
-将 [skills/precision-skill](skills/precision-skill/) 整个目录复制到客户端的 skill 位置，保留目录名。提供任务、双端执行栈和已有产物；agent 复用现有配置与授权，对齐条件、采集数据、验证覆盖范围并报告数值差异。
+将 [skills/precision-skill](skills/precision-skill/) 复制到客户端的 skill 目录。提供任务和已有产物，或采集所需的模型、数据与平台连接方式。
 
-| 任务 | 方法 |
-|---|---|
-| [推理](skills/precision-skill/references/inference.md) | 比较 next-token top-100 并集及合并尾部：KL、Top-1 一致率、概率误差和覆盖率。 |
-| [SFT](skills/precision-skill/references/training.md#sft) | 同状态单步：全部有效目标 token 评分、全量梯度和全量实际参数更新；LoRA 适配器范围与冻结基座证据；初始／恢复 optimizer 状态基线及回归复用。 |
-| [RL](skills/precision-skill/references/training.md#rl) | 固定轨迹，比较算法所需依赖、目标函数、梯度和更新量。 |
+例如：
 
-以 GPU 为参考。整栈比较以硬件及其整套依赖实现为变量：两端分别固定版本，对齐模型、数据、算法语义和回放状态；共同上游版本是可选的更严格范围。
+- 比较这两份 GPU/NPU manifest 中的梯度和实际权重更新。
+- 使用相同 batch 和初始适配器状态，在双端采集 LoRA SFT 单步并比较。
 
-任务是接入选定库、跑通所声明的执行路径，并交付精度指标、覆盖率和可复现证据。数值差异作为结果报告，由用户判断是否可接受，不阻止后续有效采集；库源码修复和数值精度修复不属于此 skill；修正 skill 自身的采集、启动和接入代码，原生库失败则作为结果或明确的支持阻断记录。只读取当前任务需要的参考；案例配置、调研依据和执行历史留在方法说明之外。
+[SKILL.md](skills/precision-skill/SKILL.md) 按任务选择路径：已有产物直接使用比较器；需要采集时读取所选任务协议。框架接入和指标定义按需读取。
 
-按当前采集层选择集成参考：
+结果包含配置、主要差异、比较坐标和最大差异位置。GPU 为参考；采集保留两端原生算子和固定的依赖版本。
 
-| 层次 | 参考 |
-|---|---|
-| 推理引擎 | [vLLM / SGLang](skills/precision-skill/references/engines.md)：prefill、固定历史的缓存 decode 与评分语义。 |
-| RL 框架 | [TRL / verl](skills/precision-skill/references/rl-frameworks.md)：轨迹准备、原生目标函数与更新边界。 |
-| 训练后端 | [FSDP / ZeRO / Megatron-Core / MindSpeed](skills/precision-skill/references/training-backends.md)：原生存储、optimizer 阶段与逻辑张量映射。 |
+## 工具与开发
 
-采集器和执行证据由案例保存。这些参考描述方法；各案例记录实际覆盖范围和验证状态。
+[离线工具](skills/precision-skill/references/tools.md)比较分布、梯度、更新和目标评分。产物工具依赖 NumPy；cache-off 目标评分比较器使用标准库。
 
-## 工具与组织
-
-[离线工具](skills/precision-skill/references/tools.md)可校验产物，并基于 NumPy 分块比较 top-100 分布、全量梯度和实际更新；原有标准库目标评分比较器继续保留。采集器、格式适配和任务 loss 重建仍放在案例中；自比较不代表跨设备精度一致。
-
-- [SKILL.md](skills/precision-skill/SKILL.md)：pipeline 与参考入口。
-- [比较](skills/precision-skill/references/comparison.md)：对齐规则、公式和结果解释。
-- [环境](skills/precision-skill/references/environment.md)：各平台技术栈选择与执行关联证据。
-- [工作流](skills/precision-skill/references/workflow.md)：设备运行、重试和交接。
-- [架构](skills/precision-skill/references/architecture.md)：采集器职责与案例布局。
-
-私有 `projects/` 保存案例配置、采集器与运行结果；权重、数据和环境实体保留在资源目录。skill 技术文档使用英文，根目录说明保持中英双语。
-
-使用含 NumPy 的现有 Python 环境，在仓库根目录运行维护测试：`python -B -m unittest discover -s tests -v`。
+仓库组织与测试命令见 [AGENTS.md](AGENTS.md)。
