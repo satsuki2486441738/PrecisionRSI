@@ -18,7 +18,7 @@ probability mass and top-1 mismatches. Tail-merged Jensen-Shannon divergence use
 complete coordinate sets determine aggregates. Reusing one manifest path labels
 the output as a self-check.
 
-CLI: --contract C --side-a REFERENCE.json --side-b CANDIDATE.json --output NEW.json
+CLI: --contract C --side-a A.json --side-b B.json --output NEW.json
 Inputs are peer executions identified by manifest side IDs. Reports use schema 2.
 """
 import math

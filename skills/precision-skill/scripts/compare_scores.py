@@ -52,7 +52,7 @@ other statuses are execution_failed,incomparable,not_covered. Metrics use Python
 double, coordinate-sorted math.fsum and whole-set linear P99. Summary checks use
 64*sys.float_info.epsilon for relative/absolute rounding tolerance. Reusing a
 manifest labels self_comparison. Output JSON uses finite literals.
-CLI: --contract C --side-a REFERENCE.json --side-b CANDIDATE.json --output NEW.json
+CLI: --contract C --side-a A.json --side-b B.json --output NEW.json
 Output paths are created exclusively. Exit: 0=diagnostics, 1=unavailable comparison,
 2=CLI/output error.
 """

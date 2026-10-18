@@ -19,7 +19,7 @@ Reports contain global/per-tensor L2 error, RMSE, cosine, maximum error, counts,
 norms, events and coordinate findings. An invalid tensor leaves valid per-tensor
 results available while its full aggregate is unavailable. Metrics are diagnostics
 with thresholds=null. Same-path inputs are labeled self-checks.
-CLI: --contract C --side-a REFERENCE.json --side-b CANDIDATE.json --output NEW.json
+CLI: --contract C --side-a A.json --side-b B.json --output NEW.json
 Inputs are peer executions identified by manifest side IDs. Reports use schema 2.
 Exit: 0=diagnostics, 1=unavailable comparison, 2=CLI/output error.
 """
