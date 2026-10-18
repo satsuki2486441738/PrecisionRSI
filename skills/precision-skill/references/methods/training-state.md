@@ -1,6 +1,21 @@
-# Distributed capture hooks
+# Training state and capture
 
-Use these hooks when implementing the [training stages](training.md#common-training-state).
+## Stages
+
+Replay identical logical parameters, optimizer state and microbatch order. Match accumulation, scaling, communication, clipping and actual random inputs.
+
+Collect the requested stages:
+
+| Stage | Observations |
+|---|---|
+| Objective | Scores, masks, native losses, coefficients and effective denominators |
+| Backward | All present gradients after accumulation, unscale and synchronization; presence inventory |
+| Clipping | Native norm/coefficient and postclip gradients when enabled |
+| Update | Stored before/after parameters, including unchanged coordinates; applied/skipped event |
+
+Preserve native dtypes and logical coordinates. Use [tools](tools.md) for comparison.
+
+## Distributed capture
 
 | Backend | Resolve |
 |---|---|
@@ -14,3 +29,7 @@ Resolve `mbridge` versus `megatron.bridge` and the NPU MindSpeed adaptation. For
 - Capture stored parameters after optimizer mutation and model copy-back. Record master/state dtypes separately.
 
 Map fused projections, shards, vocabulary padding, tied weights and replicas into logical parameters. Verify converted initial values and complete coordinates. Retain reduction tags; deduplicate equal replicas and keep differing replicas as explicit views. Adapt arrays to the [tool interfaces](tools.md) with native dtypes preserved.
+
+## Reusing training captures
+
+When establishing a stateful-optimizer baseline, collect cold and common-restored steps, including parameters, moments and step counter. Reuse accepted baselines for unchanged paths; repeat affected stages after optimizer, precision, objective, sharding or dependency changes.

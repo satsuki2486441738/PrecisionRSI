@@ -1,6 +1,6 @@
 # SFT collection
 
-Apply the [common training stages](training.md#common-training-state). Collect every valid target's label, prediction/target position and full-vocabulary-normalized logprob using the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; retain implemented reductions and additional terms.
+Apply the [training state and stages](../methods/training-state.md#stages). Collect every valid target's label, prediction/target position and full-vocabulary-normalized logprob using the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; retain implemented reductions and additional terms.
 
 ## LoRA
 

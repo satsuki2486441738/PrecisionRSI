@@ -13,12 +13,12 @@
 - 比较两份执行 manifest 中的梯度和实际权重更新。
 - 使用相同 batch 和初始适配器状态，在两个执行栈上采集 LoRA SFT 单步并比较。
 
-[SKILL.md](skills/precision-skill/SKILL.md) 按任务选择路径：已有产物直接使用比较器；需要采集时读取所选任务协议。框架接入和指标定义按需读取。
+[SKILL.md](skills/precision-skill/SKILL.md) 按任务选择路径：已有产物直接使用比较器；需要采集时读取所选任务协议。`references/tasks/` 按推理、SFT、RL 组织任务流程，并包含相应框架的接入说明；`references/methods/` 存放按需读取的采集、训练状态、指标和工具方法。
 
 结果包含配置、主要差异、比较坐标和最大差异位置。任务选择对等的执行配置，可使用相同或不同硬件；比较指标采用对称定义。采集保留各侧原生算子和固定的依赖版本。
 
 ## 工具与开发
 
-[离线工具](skills/precision-skill/references/tools.md)比较分布、梯度、更新和目标评分。产物工具依赖 NumPy；cache-off 目标评分比较器使用标准库。
+[离线工具](skills/precision-skill/references/methods/tools.md)比较分布、梯度、更新和目标评分。产物工具依赖 NumPy；cache-off 目标评分比较器使用标准库。
 
 仓库组织与测试命令见 [AGENTS.md](AGENTS.md)。
