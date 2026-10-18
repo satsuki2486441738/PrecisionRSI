@@ -1,24 +1,28 @@
 # Inference
 
-## Collect scores
+## Collection
 
-Replay identical token IDs, position IDs, attention masks and prediction positions using the same checkpoint/tokenizer/config and numerical policy. For cache-off full forward, use eval/no-grad. At prediction position $t-1$, collect the distribution predicting token $x_t$.
+Replay identical token IDs, position IDs, attention masks and prediction positions using the same checkpoint/tokenizer/config and numerical policy. At prediction position $t-1$, collect the distribution predicting token $x_t$.
 
-Compute full-vocabulary natural-log softmax in FP32 before temperature or sampling processors, retaining model-defined scaling/softcapping. Save full logprob rows or queryable arrays, sample/position coordinates and vocabulary mapping.
+Compute full-vocabulary natural-log softmax in FP32 before temperature or sampling processors, retaining model-defined scaling/softcapping. Save full logprob rows or queryable arrays, sample/position coordinates and vocabulary mapping. Collect requested label logprobs even when labels lie outside top-100.
 
-Feed the same predetermined continuation while each side evolves its native cache. Record prefill/decode stages, batching, cache settings and context length with the scores.
+### Full forward
 
-Collect requested label logprobs even when labels lie outside top-100. Use the offline [tools](../methods/tools.md) for distribution and target-score comparison. Group results by prefill/first decode/later decode and requested context-length bins. For generated continuations, pair scores while token histories match.
+For cache-off scoring, use eval/no-grad and collect the requested prediction positions in the native forward pass.
+
+### Cached execution
+
+Feed the same predetermined continuation while each side evolves its native cache. Record prefill/decode stages, batching, cache settings and context length. For generated continuations, pair scores while token histories match.
 
 ## Framework integration
+
+Select the native entrypoint and inspect the installed version's implementation.
 
 Record applicable attention backend, TP, KV dtype, graph/cache/chunking and batching settings. Map reordered requests/chunks to absolute prediction positions: prompt token $x_t$ uses position $t-1$; the final prefill row supplies the first output distribution. Account for BOS/templates and initial prompt entries.
 
 Reconstruct vocabulary shards, exclude padding and export the score rows needed for union queries. Preserve each engine's native cache while replaying a predetermined continuation.
 
-Select the native entrypoint and inspect the installed version's implementation:
-
-| Framework / entrypoint | Capture mapping |
+| Framework / entrypoint | Inspect in the installed implementation |
 |---|---|
 | PyTorch / [Transformers](https://huggingface.co/docs/transformers/main_classes/text_generation) | Native model forward and cache state; distinguish raw logits from processed generation scores |
 | [vLLM](https://docs.vllm.ai/en/latest/api/vllm/sampling_params/) | `prompt_logprobs`, output `logprobs`, raw-score mode and full-vocabulary limits; resolve initial `None` entries, chunk offsets and platform plugins |
@@ -42,4 +46,4 @@ Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implemen
 | Requested target scores | Each side's NLL and absolute NLL difference; logprob MAE, P99 and maximum |
 | Coverage | Paired positions/targets, each side's top-100 and union mass; secondary top-100 overlap |
 
-Use the [distribution definitions](../methods/metrics.md#distributions) and [target-score definitions](../methods/metrics.md#target-token-scores). Keep the prefill/decode and context-length breakdowns requested by the task.
+Use the [tools](../methods/tools.md), [distribution definitions](../methods/metrics.md#distributions) and [target-score definitions](../methods/metrics.md#target-token-scores). Keep the prefill/first-decode/later-decode and context-length breakdowns requested by the task.

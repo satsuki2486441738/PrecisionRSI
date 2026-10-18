@@ -1,12 +1,14 @@
-# SFT collection
+# SFT
+
+## Collection
 
 Apply the [training state and stages](../methods/training-state.md#stages). Collect every valid target's label, prediction/target position and full-vocabulary-normalized logprob using the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; retain implemented reductions and additional terms.
 
-## Full-parameter finetuning
+### Full-parameter finetuning
 
 Collect the complete logical model-parameter inventory, retaining tied-weight mappings and trainable flags. Capture every trainable parameter's gradient and stored update for the requested stages, including absent/present-zero gradients and unchanged updates.
 
-## LoRA
+### LoRA
 
 For adapter training, align initial adapter values, target modules, rank, alpha/scaling, dropout, bias/modules-to-save, dtype, quantization and merged state. Capture every adapter/additional trainable coordinate plus frozen-base identity and unchanged-state checks.
 
@@ -14,9 +16,9 @@ With zero-B initialization, retain present-zero first-step A gradients/updates a
 
 ## Framework integration
 
-Select the native training entrypoint and inspect the installed version's implementation:
+Select the native entrypoint and inspect the installed version's implementation.
 
-| Framework / entrypoint | Capture mapping |
+| Framework / entrypoint | Inspect in the installed implementation |
 |---|---|
 | PyTorch training loop | Batch preparation, model/loss call and optimizer boundaries; retain native label shift, mask, accumulation and reduction |
 | [Transformers Trainer](https://huggingface.co/docs/transformers/main_classes/trainer) | Data collator, `compute_loss`, `training_step` and optimizer integration; resolve effective labels and accumulation denominators |

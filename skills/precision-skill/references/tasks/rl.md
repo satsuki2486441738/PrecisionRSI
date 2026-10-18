@@ -1,6 +1,12 @@
-# RL collection
+# RL
+
+## Collection
 
 Apply the [training state and stages](../methods/training-state.md#stages) to actor and critic as used. Replay fixed prompt/response IDs, action positions, masks and EOS/truncation. Capture effective old/reference scores, rewards, advantages, returns and values, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
+
+Identify the optimizer step, accumulation window and actor/critic order.
+
+### Algorithm inputs
 
 Select the algorithm's inputs:
 
@@ -15,9 +21,9 @@ Use dependency or clipping diagnostics to inspect discrepancies.
 
 ## Framework integration
 
-Identify the optimizer step, accumulation window, actor/critic order and native entrypoint. Inspect the installed version's implementation:
+Select the native entrypoint and inspect the installed version's implementation.
 
-| Framework / entrypoint | Capture mapping |
+| Framework / entrypoint | Inspect in the installed implementation |
 |---|---|
 | [TRL](https://huggingface.co/docs/trl/grpo_trainer) | Requested trainer's batch preparation, action scoring, loss and optimizer steps; retain completion/tool/truncation masks, group normalization, detached old scores and ordinary/fused loss selection |
 | [verl](https://verl.readthedocs.io/en/latest/) | Sample/group/action mappings through repeats, filtering, balancing, packing and rank redistribution; capture effective old-policy anchors, correction/rejection weights, reward/KL placement and aggregation |
