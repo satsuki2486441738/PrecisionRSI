@@ -11,9 +11,9 @@ Select the algorithm's inputs:
 | GRPO | Complete groups, reward components, mean/std, normalization and epsilon |
 | KL/entropy | Estimator, direction, coefficient and sampling distribution |
 
-Compare action-logprob MAE/P99/max, native objective differences and requested gradient/update stages. Use dependency or clipping diagnostics to inspect discrepancies.
+Use dependency or clipping diagnostics to inspect discrepancies.
 
-## Frameworks
+## Framework integration
 
 Identify the optimizer step, accumulation window, actor/critic order and native entrypoint. Read the selected framework section.
 
@@ -25,4 +25,19 @@ Trace batch preparation, action scoring, `compute_loss` and optimizer integratio
 
 Preserve sample/group/action mappings through repeats, filtering, balancing, packing, padding removal and rank redistribution. Capture the effective old-policy anchor, correction/rejection weights, reward/KL placement, estimator and loss aggregation.
 
-Use the [training capture methods](../methods/training-state.md#distributed-capture) for distributed tensors and the selected [serving engine](inference.md#serving-engines) for rollout scores.
+Use the [training capture methods](../methods/training-state.md#distributed-capture) for distributed tensors and the selected [serving engine](inference.md#framework-integration) for rollout scores.
+
+### Other/custom
+
+Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implementation). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the algorithm inputs and training stages above.
+
+## Metrics
+
+| Observations | Report |
+|---|---|
+| Action scores | Logprob MAE, P99 and maximum at paired valid actions |
+| Native objective | Each side's loss components and absolute differences; retain reward/advantage/value inputs for localization |
+| Requested gradients, postclip gradients and updates | L2 error, RMSE, cosine and maximum absolute error |
+| Coverage | Paired trajectories/groups/actions, effective masks, parameter/element counts and optimizer events |
+
+Use the [score and tensor definitions](../methods/metrics.md). Select the task adapter for native scores/objectives and the [tensor tools](../methods/tools.md) for training stages.

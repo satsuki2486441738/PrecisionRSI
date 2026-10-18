@@ -13,7 +13,7 @@ Examples:
 - Compare the gradients and stored updates in these two execution manifests.
 - Collect a LoRA SFT step on two execution stacks using the same batch and initial adapter state, then compare it.
 
-[SKILL.md](skills/precision-skill/SKILL.md) selects the path: existing captures go directly to a comparator; collection reads the selected task protocol. Task recipes in `references/tasks/` include framework integration. Collection, training state, metrics and tool usage are in `references/methods/` and are read as needed.
+[SKILL.md](skills/precision-skill/SKILL.md) selects the path: existing captures go directly to a comparator; collection reads the selected task protocol. Task recipes in `references/tasks/` define capture requirements, framework integration (including Other/custom) and metrics to report; SFT covers full-parameter and LoRA training. Collection, training state, metrics and tool usage are in `references/methods/` and are read as needed.
 
 Results contain settings, principal differences, compared coordinates and largest discrepancies. The task selects peer execution setups, which may use the same or different hardware. Comparison metrics are symmetric. Collection retains each setup's native operators and pinned dependencies.
 

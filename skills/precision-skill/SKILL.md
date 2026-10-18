@@ -13,9 +13,9 @@ Select the execution setups to compare from the task. Each side has an ID; hardw
 | Task | Recipe |
 |---|---|
 | Inference | [Scores, cache stages and serving engines](references/tasks/inference.md) |
-| SFT / LoRA | [Training targets and adapter state](references/tasks/sft.md) |
+| SFT (full / LoRA) | [Training targets, model and adapter state](references/tasks/sft.md) |
 | RL | [Fixed trajectories and framework integration](references/tasks/rl.md) |
 
-Task recipes include framework-specific capture details and link to the training methods they use. For unfamiliar implementations, follow [native adaptation](references/methods/collection.md#adapt-an-unfamiliar-implementation). Read [metrics](references/methods/metrics.md) for formulas or custom calculations.
+Each task recipe defines capture requirements, framework integration (including Other/custom) and the metrics to report. Read the linked methods for training state, [native adaptation](references/methods/collection.md#adapt-an-unfamiliar-implementation) and [metric formulas](references/methods/metrics.md) as needed.
 
 Return settings used, principal differences, compared coordinate counts, largest discrepancies and output paths. Evaluate supplied tolerances against the computed metrics.
