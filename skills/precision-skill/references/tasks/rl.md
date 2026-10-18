@@ -6,11 +6,9 @@ Apply the [training state and stages](../methods/training-state.md#stages) to ac
 
 Identify the optimizer step, accumulation window and actor/critic order.
 
-### Algorithm inputs
+Capture the inputs, configuration and intermediate values used by the native objective, as applicable:
 
-Select the algorithm's inputs:
-
-| Algorithm or term | Retain |
+| Objective component | State to capture |
 |---|---|
 | Clipped policy objective | Ratios, bounds and branch decisions; token PPO uses $r=\exp(\log\pi_{current}-\log\pi_{old})$ |
 | PPO critic | Current/old values, returns, bootstrap masks and value clipping |
@@ -39,7 +37,7 @@ Record the RL framework, training backend and rollout engine separately. Preserv
 
 ### Other/custom
 
-Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implementation). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the algorithm inputs and training stages above.
+Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implementation). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
 
 ## Metrics
 
