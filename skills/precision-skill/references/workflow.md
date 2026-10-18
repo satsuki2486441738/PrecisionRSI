@@ -4,7 +4,7 @@
 
 Reuse agreed scope, configurations, artifacts and approvals. Resolve facts from records/code; choose routine paths, formats, hooks and timeouts yourself. Ask only for an unresolved decision that changes task semantics or authorization.
 
-Before device execution, establish command, allocation, output location, remaining cumulative budget and timeout. Include loading, failed attempts, collection and cleanup. Use the existing environment manager/scheduler; verify allocated-device mapping and idleness. Resolve skill-owned launch, capture and comparison failures within scope/budget. Record native-library import/API/execution blockers without editing library source or inventing compatibility methods; resolve a changed shared version pairing before proceeding.
+Before device execution, establish command, allocation, output location, remaining cumulative budget and timeout. Include loading, failed attempts, collection and cleanup. Use the existing environment manager/scheduler; verify allocated-device mapping and idleness. Resolve skill-owned launch, capture and comparison failures within scope/budget. Record native-library import/API/execution blockers without editing library source or inventing compatibility methods; select a supported per-platform combination within the user's approved comparison scope. Resolve changes to experimental semantics or scope before proceeding.
 
 When process shutdown is asynchronous, reserve time for bounded device-idleness rechecks and keep execution failure separate from cleanup completion.
 

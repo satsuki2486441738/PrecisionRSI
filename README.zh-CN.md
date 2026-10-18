@@ -14,7 +14,9 @@
 | [SFT](skills/precision-skill/references/training.md#sft) | 同状态单步：全部有效目标 token 评分、全量梯度和全量实际参数更新；LoRA 适配器范围与冻结基座证据；初始／恢复 optimizer 状态基线及回归复用。 |
 | [RL](skills/precision-skill/references/training.md#rl) | 固定轨迹，比较算法所需依赖、目标函数、梯度和更新量。 |
 
-以 GPU 为参考。任务是接入选定库、跑通所声明的执行路径，并交付精度指标、覆盖率和可复现证据。数值差异作为结果报告，由用户判断是否可接受，不阻止后续有效采集；库源码修复和数值精度修复不属于此 skill；修正 skill 自身的采集、启动和接入代码，原生库失败则作为结果或明确的支持阻断记录。只读取当前任务需要的参考；案例配置、调研依据和执行历史留在方法说明之外。
+以 GPU 为参考。整栈比较以硬件及其整套依赖实现为变量：两端分别固定版本，对齐模型、数据、算法语义和回放状态；共同上游版本是可选的更严格范围。
+
+任务是接入选定库、跑通所声明的执行路径，并交付精度指标、覆盖率和可复现证据。数值差异作为结果报告，由用户判断是否可接受，不阻止后续有效采集；库源码修复和数值精度修复不属于此 skill；修正 skill 自身的采集、启动和接入代码，原生库失败则作为结果或明确的支持阻断记录。只读取当前任务需要的参考；案例配置、调研依据和执行历史留在方法说明之外。
 
 按当前采集层选择集成参考：
 
@@ -32,7 +34,7 @@
 
 - [SKILL.md](skills/precision-skill/SKILL.md)：pipeline 与参考入口。
 - [比较](skills/precision-skill/references/comparison.md)：对齐规则、公式和结果解释。
-- [环境](skills/precision-skill/references/environment.md)：共同版本与执行关联证据。
+- [环境](skills/precision-skill/references/environment.md)：各平台技术栈选择与执行关联证据。
 - [工作流](skills/precision-skill/references/workflow.md)：设备运行、重试和交接。
 - [架构](skills/precision-skill/references/architecture.md)：采集器职责与案例布局。
 

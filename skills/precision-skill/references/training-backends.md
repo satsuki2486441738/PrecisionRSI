@@ -4,12 +4,12 @@ Apply the [common training protocol](training.md#common-training-state) to the e
 
 ## Execution identity
 
-Establish the actual engine class, model bridge and imported source. Use [environment alignment](environment.md#shared-implementation) for shared releases and platform builds.
+Establish the actual engine class, model bridge and imported source. Use [environment alignment](environment.md#shared-implementation) for independently pinned platform stacks or a requested shared-implementation scope.
 
 | Backend | Native access and alignment |
 |---|---|
 | FSDP / ZeRO | Identify parameter/gradient sharding, synchronization points, offload and optimizer ownership. Export logical tensors after the step's accumulation and communication complete. |
-| Megatron-Core / MindSpeed | Align Megatron-Core and the model bridge. GPU uses the CUDA stack; NPU adds MindSpeed adaptation. Record TP/PP/CP/DP and applicable EP, sequence parallelism and virtual pipeline stages. |
+| Megatron-Core / MindSpeed | Select a compatible Core/model bridge on each side and align effective model semantics. GPU uses the CUDA stack; NPU adds MindSpeed adaptation. Record TP/PP/CP/DP and applicable EP, sequence parallelism and virtual pipeline stages. |
 
 `mbridge` and NVIDIA Megatron Bridge (`megatron.bridge`) are separate implementations. Resolve the effective bridge selection and support for the exact model architecture and variant, including conversion and backward. MindSpeed Core is the Megatron adaptation layer; MindSpeed-LLM and MindSpeed-RL are separate application frameworks.
 

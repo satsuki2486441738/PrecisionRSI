@@ -10,7 +10,7 @@ Integrate the selected native libraries, execute their declared inference or tra
 ## Pipeline
 
 1. Reuse the user's scope, existing configurations, artifacts and approvals. Resolve facts from records; ask only for a missing decision that materially changes the next action.
-2. Align model/data identities, shared implementation releases, precision policy and task state. Read [environment](references/environment.md) when preparing or reviewing an environment.
+2. Declare whether the comparison covers complete platform stacks or a shared implementation. Align model/data identities, algorithm semantics, numerical policy and task state; pin each selected stack independently. Read [environment](references/environment.md) when preparing or reviewing an environment.
 3. Collect the observations for the current task: [inference](references/inference.md) or [SFT/RL](references/training.md). Read common rules and the applicable task section; retain native kernels and fusion.
 4. Validate complete paired coverage and compute the task's metrics using [comparison](references/comparison.md). Investigate internals when localization is part of the agreed task.
 5. Report the outcome, key metrics, coverage and evidence location. Numerical differences are findings; continue valid collection stages without treating numerical acceptance as a prerequisite. The user judges acceptance.

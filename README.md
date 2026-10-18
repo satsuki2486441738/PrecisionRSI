@@ -14,7 +14,9 @@ Copy [skills/precision-skill](skills/precision-skill/) into your client's skill 
 | [SFT](skills/precision-skill/references/training.md#sft) | Same-state single step: all valid target-token scores, full gradients and full actual parameter updates; LoRA adapter scope and frozen-base evidence; cold/restored optimizer-state baselines and regression reuse. |
 | [RL](skills/precision-skill/references/training.md#rl) | Fixed trajectories and algorithm-specific dependencies, objectives, gradients and updates. |
 
-GPU is the reference. The task integrates the selected libraries, runs their declared execution path, and delivers precision metrics, coverage and replayable evidence. Numerical differences are findings, and the user judges acceptance; they do not prevent subsequent valid collection. Library source repair and numerical remediation are outside this skill. Fix skill-owned collection and integration code; retain native-library failures as results or explicit support blockers. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.
+GPU is the reference. A complete platform-stack comparison treats hardware and its dependency implementation as the variables: pin each side independently and align model, data, algorithm semantics and replay state. Matching upstream versions is an optional narrower scope.
+
+The task integrates the selected libraries, runs their declared execution path, and delivers precision metrics, coverage and replayable evidence. Numerical differences are findings, and the user judges acceptance; they do not prevent subsequent valid collection. Library source repair and numerical remediation are outside this skill. Fix skill-owned collection and integration code; retain native-library failures as results or explicit support blockers. Read only the current task's reference; case settings, research rationale and execution history stay outside the method descriptions.
 
 Choose the integration reference for the layer being collected:
 
@@ -32,7 +34,7 @@ The [offline tools](skills/precision-skill/references/tools.md) validate artifac
 
 - [SKILL.md](skills/precision-skill/SKILL.md): pipeline and reference routing.
 - [Comparison](skills/precision-skill/references/comparison.md): alignment, formulas and result interpretation.
-- [Environment](skills/precision-skill/references/environment.md): shared releases and execution-associated evidence.
+- [Environment](skills/precision-skill/references/environment.md): per-platform stack selection and execution-associated evidence.
 - [Workflow](skills/precision-skill/references/workflow.md): device runs, retries and handoffs.
 - [Architecture](skills/precision-skill/references/architecture.md): collector responsibilities and case layout.
 
