@@ -15,5 +15,6 @@ Read integration details when creating or adapting a collector, selecting the re
 - [vLLM / SGLang](references/engines.md): serving scores and cached decode.
 - [TRL / verl](references/rl-frameworks.md): native RL scoring and loss.
 - [Training backends](references/training-backends.md): distributed tensors and optimizer capture.
+- [Other/custom](references/custom-integration.md): frameworks, backends or environments whose required interfaces are not covered above.
 
 Read [metric definitions](references/comparison.md) for formula explanations or custom calculations. Return settings used, principal differences, compared coordinate counts, largest discrepancies and output paths. Evaluate supplied tolerances against the computed metrics.
