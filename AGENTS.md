@@ -2,7 +2,7 @@
 
 ## Layout
 
-- `skills/precision-skill/` is the installable package. Keep routing in `SKILL.md`, task recipes in `references/tasks/`, collection/training-state/metric/tool methods in `references/methods/`, and artifact interfaces in script docstrings.
+- `skills/precision-skill/` is the installable package. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.
 - Maintain matching English `README.md` and Chinese `README.zh-CN.md`. Technical documentation and maintenance instructions use English. Follow the Agent Skills specification.
 - `tests/` contains public tool regressions. Artifact tools require NumPy; the target-score comparator uses the standard library.
 - Private `projects/<project>/environments/` owns reusable environment declarations. Cases own configuration, collectors, tests and execution artifacts. Keep case-specific code there; extract shared code when reused.

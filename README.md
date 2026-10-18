@@ -13,12 +13,12 @@ Examples:
 - Compare the gradients and stored updates in these two execution manifests.
 - Collect a LoRA SFT step on two execution stacks using the same batch and initial adapter state, then compare it.
 
-[SKILL.md](skills/precision-skill/SKILL.md) selects the path: existing captures go directly to a comparator; collection reads the selected task protocol. Task recipes in `references/tasks/` define capture requirements, framework integration (including Other/custom) and metrics to report; SFT covers full-parameter and LoRA training. Collection, training state, metrics and tool usage are in `references/methods/` and are read as needed.
+[SKILL.md](skills/precision-skill/SKILL.md) routes collection and comparison. The three task recipes in `references/` cover inference, SFT (full-parameter / LoRA) and RL: what to capture, where to integrate with native frameworks (including Other/custom), and which metrics to report. `comparison.md` defines coordinate pairing, common metrics and tool usage; distribution metrics are defined in the inference recipe. Training capture stages are defined in SFT and reused by RL.
 
 Results contain settings, principal differences, compared coordinates and largest discrepancies. The task selects peer execution setups, which may use the same or different hardware. Comparison metrics are symmetric. Collection retains each setup's native operators and pinned dependencies.
 
 ## Tools and development
 
-[Offline tools](skills/precision-skill/references/methods/tools.md) compare distributions, gradients, updates and target scores. Artifact tools require NumPy; the cache-off target-score comparator uses the standard library.
+[Offline tools](skills/precision-skill/references/comparison.md) compare distributions, gradients, updates and target scores. Artifact tools require NumPy; the cache-off target-score comparator uses the standard library.
 
 Repository layout and test commands are in [AGENTS.md](AGENTS.md).

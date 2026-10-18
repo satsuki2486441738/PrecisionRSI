@@ -36,7 +36,7 @@ Resolve score availability at the native execution layer and export the observat
 
 ### Other/custom
 
-Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implementation). Locate the model or engine's native scoring path, resolve score transforms and map outputs to token/vocabulary coordinates. For cached execution, replay the fixed continuation through its native cache and identify prefill/decode boundaries.
+Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Locate the model or engine's native scoring path, resolve score transforms and map outputs to token/vocabulary coordinates. For cached execution, replay the fixed continuation through its native cache and identify prefill/decode boundaries.
 
 ## Metrics
 
@@ -46,4 +46,24 @@ Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implemen
 | Requested target scores | Each side's NLL and absolute NLL difference; logprob MAE, P99 and maximum |
 | Coverage | Paired positions/targets, each side's top-100 and union mass; secondary top-100 overlap |
 
-Use the [tools](../methods/tools.md), [distribution definitions](../methods/metrics.md#distributions) and [target-score definitions](../methods/metrics.md#target-token-scores). Keep the prefill/first-decode/later-decode and context-length breakdowns requested by the task.
+Use [comparison](comparison.md) for target-score metrics and tool usage. Keep the prefill/first-decode/later-decode and context-length breakdowns requested by the task.
+
+### Distribution comparison
+
+1. Select each side's top 100 token IDs at every position, breaking exact ties by ascending token ID.
+2. Form their union $S$ and obtain both sides' original full-vocabulary-normalized probabilities for every ID in $S$.
+3. Accumulate probability outside $S$ into one `other` category. Retain each side's own top-100 mass and union mass.
+4. Compute the following with the two executions' probabilities $p$ and $q$.
+
+| Metric | Per position | Aggregate |
+|---|---|---|
+| Tail-merged Jensen–Shannon divergence | $\frac12\sum_i[p_i\log(p_i/m_i)+q_i\log(q_i/m_i)]$, $m=(p+q)/2$, $i\in S\cup\{other\}$ | Mean, P99, maximum and coordinate |
+| Top-1 agreement | Equal argmax token IDs | Fraction and count |
+| Probability RMSE | $\sqrt{\sum_{i\in S}(q_i-p_i)^2/|S|}$ | Mean, P99, maximum |
+| Maximum probability error | $\max_{i\in S}|q_i-p_i|$ | Mean, P99, maximum and token |
+| Probability-mass coverage | Own top-100 and union mass for each side | Mean, P1, minimum |
+| Secondary top-100 overlap | $|T_A\cap T_B|/100$ | Mean |
+
+Weight positions equally and use FP64 offline arithmetic. Compute RMSE per position before aggregation. Retain top-1 mismatch examples with both token probabilities and each side's first/second margin.
+
+Use stable complement accumulation and a log-space mixture for Jensen–Shannon divergence in nats. Zero probability contributes zero. Tail merging compares the union plus one complement category.

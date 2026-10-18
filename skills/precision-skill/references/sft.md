@@ -2,7 +2,7 @@
 
 ## Collection
 
-Apply the [training state and stages](../methods/training-state.md#stages). Collect every valid target's label, prediction/target position and full-vocabulary-normalized logprob using the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; retain implemented reductions and additional terms.
+Collect every valid target's label, prediction/target position and full-vocabulary-normalized logprob using the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; retain implemented reductions and additional terms.
 
 ### Full-parameter finetuning
 
@@ -13,6 +13,23 @@ Collect the complete logical model-parameter inventory, retaining tied-weight ma
 For adapter training, align initial adapter values, target modules, rank, alpha/scaling, dropout, bias/modules-to-save, dtype, quantization and merged state. Capture every adapter/additional trainable coordinate plus frozen-base identity and unchanged-state checks.
 
 With zero-B initialization, retain present-zero first-step A gradients/updates and changing B coordinates. Use the usual zero-norm metric rules. Capture merged-weight deltas separately when requested.
+
+### Training stages
+
+Collect the requested stages:
+
+| Stage | Observations |
+|---|---|
+| Objective | Scores, masks, native losses, coefficients and effective denominators |
+| Backward | All present gradients after accumulation, unscale and synchronization; presence inventory |
+| Clipping | Native norm/coefficient and postclip gradients when enabled |
+| Update | Stored before/after parameters, including unchanged coordinates; applied/skipped event |
+
+Preserve native dtypes and logical coordinates.
+
+For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. Capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, and stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates).
+
+When establishing a stateful-optimizer baseline, collect cold and common-restored steps, including parameters, moments and step counter. Reuse accepted baselines for unchanged paths; repeat affected stages after optimizer, precision, objective, sharding or dependency changes.
 
 ## Framework integration
 
@@ -29,11 +46,11 @@ Select the native entrypoint and inspect the installed version's implementation.
 | [Megatron Bridge](https://docs.nvidia.com/nemo/megatron-bridge/latest/training/peft.html) | Native finetuning entrypoint, checkpoint/adapter conversion and logical tensor mapping |
 | [MindSpeed-LLM](https://github.com/Ascend/MindSpeed-LLM) | Native finetuning workflow, selected backend, checkpoint conversion and parameter/gradient storage |
 
-Resolve the actual distributed backend separately using [training-state capture](../methods/training-state.md#distributed-capture). Preserve each framework's native training path and map its observations to the same full-parameter or LoRA inventory.
+Resolve the distributed backend as part of framework integration: FSDP/ZeRO shard and optimizer ownership, offload and synchronization; Megatron-style tensor/pipeline/context/data/expert parallel layouts and pipeline stages. Preserve the native training path and map its observations to the selected full-parameter or LoRA inventory.
 
 ### Other/custom
 
-Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implementation). Locate the framework's effective labels, loss reduction and trainable-parameter storage, then map them to the selected full-parameter or LoRA inventory and training stages.
+Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Locate the framework's effective labels, loss reduction and trainable-parameter storage, then map them to the selected full-parameter or LoRA inventory and training stages.
 
 ## Metrics
 
@@ -43,4 +60,4 @@ Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implemen
 | Requested gradients, postclip gradients and updates | L2 error, RMSE, cosine and maximum absolute error |
 | Coverage | Valid targets, paired parameters/elements, gradient presence and optimizer events; for LoRA, adapter coverage and frozen-base checks |
 
-Use the [score and tensor definitions](../methods/metrics.md) and select the [tools](../methods/tools.md) for the captured stages. Native loss keeps its implemented reduction and additional terms.
+Use [comparison](comparison.md) for score/tensor definitions and tool usage. Native loss keeps its implemented reduction and additional terms.

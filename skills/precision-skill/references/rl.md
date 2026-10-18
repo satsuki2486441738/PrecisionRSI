@@ -2,7 +2,7 @@
 
 ## Collection
 
-Apply the [training state and stages](../methods/training-state.md#stages) to actor and critic as used. Replay fixed prompt/response IDs, action positions, masks and EOS/truncation. Capture effective old/reference scores, rewards, advantages, returns and values, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
+Apply the [training state and stages](sft.md#training-stages) to actor and critic as used. Replay fixed prompt/response IDs, action positions, masks and EOS/truncation. Capture effective old/reference scores, rewards, advantages, returns and values, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
 
 Identify the optimizer step, accumulation window and actor/critic order.
 
@@ -33,11 +33,11 @@ Select the native entrypoint and inspect the installed version's implementation.
 | [ROLL](https://github.com/alibaba/ROLL) | Role-specific pipeline, sample dispatch, reward/advantage processing and selected training backend |
 | [MindSpeed-RL](https://github.com/Ascend/MindSpeed-RL) | Native actor/rollout/reward steps, sample redistribution and distributed parameter/gradient storage |
 
-Record the RL framework, training backend and rollout engine separately. Preserve the policy/state versions used for each fixed trajectory. Use [training capture](../methods/training-state.md#distributed-capture) for distributed tensors and the selected [inference entrypoint](inference.md#framework-integration) for rollout scores.
+Record the RL framework, training backend and rollout engine separately. Preserve the policy/state versions used for each fixed trajectory. Use [training capture](sft.md#training-stages) for distributed tensors and the selected [inference entrypoint](inference.md#framework-integration) for rollout scores.
 
 ### Other/custom
 
-Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implementation). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
+Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
 
 ## Metrics
 
@@ -48,4 +48,4 @@ Follow [native adaptation](../methods/collection.md#adapt-an-unfamiliar-implemen
 | Requested gradients, postclip gradients and updates | L2 error, RMSE, cosine and maximum absolute error |
 | Coverage | Paired trajectories/groups/actions, effective masks, parameter/element counts and optimizer events |
 
-Use the [score and tensor definitions](../methods/metrics.md). Select the task adapter for native scores/objectives and the [tensor tools](../methods/tools.md) for training stages.
+Use [comparison](comparison.md) for score/tensor definitions and tool usage. Select the task adapter for native scores/objectives.
