@@ -7,7 +7,7 @@ Resolve every path relative to its containing JSON.
 Contract fields:
   schema_version: 2
   inputs: shared_inputs.json path
-  reference_side: GPU
+  reference_side: nonempty execution-side ID matching the reference manifest
   required_coverage: [full_forward_logprobs]
   thresholds: null
   common: {model,weights,tokenizer,config,weight_dtype,autocast,quantization,
@@ -23,13 +23,15 @@ reduction=target_token_weighted, percentile=global_linear_0.99.
 Additional cache/SFT/RL required_coverage entries return not_covered.
 
 Manifest fields:
-  schema_version: 2; side: GPU|NPU; inputs: JSON path
+  schema_version: 2; side: nonempty execution-side ID; inputs: JSON path
   observations: executor-format JSONL path; summary: executor-format JSON path
   environment: [JSON paths]; status: [JSON paths]
   expected_ranks: [unique nonnegative integers]; execution: completed
   actual: common fields except target_shift/reduction/percentile
   evidence: {actual_key:[{path:JSON_path,pointer:/JSON/pointer}]}
   uncovered: [coverage names]; side_config: optional object
+Side IDs name execution setups; hardware/runtime details belong in environment
+records and side_config. CLI arguments assign reference/candidate roles.
 Each evidence pointer resolves to an execution value equal to actual[key].
 Expected ranks each have an environment and completed status record with rank.
 Unknown required identities/settings remain null and return incomplete coverage.
@@ -51,7 +53,7 @@ other statuses are execution_failed,incomparable,not_covered. Metrics use Python
 double, coordinate-sorted math.fsum and whole-set linear P99. Summary checks use
 64*sys.float_info.epsilon for relative/absolute rounding tolerance. Reusing a
 manifest labels self_comparison. Output JSON uses finite literals.
-CLI: --contract C --reference GPU --candidate NPU --output NEW.json
+CLI: --contract C --reference REFERENCE.json --candidate CANDIDATE.json --output NEW.json
 Output paths are created exclusively. Exit: 0=diagnostics, 1=unavailable comparison,
 2=CLI/output error.
 """
@@ -63,7 +65,7 @@ from pathlib import Path
 import sys
 
 SCHEMA_VERSION = 2
-CORE_VERSION = "2.0.0"
+CORE_VERSION = "2.1.0"
 ROUNDING_TOLERANCE = 64 * sys.float_info.epsilon
 STATES = ("passed", "exceeded", "incomparable", "not_covered",
           "no_thresholds", "execution_failed")
@@ -82,6 +84,10 @@ SAMPLE_FIELDS = ("messages", "rendered_text", "input_ids", "position_ids",
                  "attention_mask", "score_mask", "body_span_half_open",
                  "target_token_positions", "prediction_positions", "target_token_ids")
 COVERAGE = ("full_forward_logprobs", "cache", "SFT", "RL")
+
+
+def _side_id(value):
+    return isinstance(value, str) and bool(value.strip())
 
 
 def _same(a, b):
@@ -503,8 +509,9 @@ class _Comparison:
             self.schema(doc, key)
         contract = docs["contract"]
         common = self.common(contract.get("common"), "contract.common")
-        if contract.get("reference_side") != "GPU":
-            self.issue("incomparable", "reference_direction", "contract", "GPU reference required")
+        reference_side = contract.get("reference_side")
+        if not _side_id(reference_side) or reference_side != docs["reference"].get("side"):
+            self.issue("incomparable", "reference_direction", "contract", "reference_side must match the reference manifest's nonempty side ID")
         if "thresholds" not in contract:
             self.issue("not_covered", "thresholds_missing", "contract", "explicit thresholds:null required")
         elif contract["thresholds"] is not None:
@@ -523,8 +530,8 @@ class _Comparison:
         scores = {}
         for side in ("reference", "candidate"):
             manifest, owner = docs[side], self.paths[side]
-            if manifest.get("side") not in ("GPU", "NPU") or (side == "reference" and manifest.get("side") != "GPU"):
-                self.issue("incomparable", "side_identity", side, "GPU reference; GPU or NPU candidate required")
+            if not _side_id(manifest.get("side")):
+                self.issue("incomparable", "side_identity", side, "nonempty execution-side ID required")
             actual = self.common(manifest.get("actual"), side + ".actual", ACTUAL_KEYS)
             for key in sorted(ACTUAL_KEYS):
                 if common.get(key) is not None and actual.get(key) is not None and not _same(common[key], actual[key]):
@@ -578,7 +585,7 @@ class _Comparison:
                                  == (Path(self.paths["candidate"]).parent / c).resolve())
         return {"schema_version": SCHEMA_VERSION, "core_version": CORE_VERSION, "paths": self.paths,
                 "evidence_paths": sorted(self.evidence_paths), "self_comparison": same_observations,
-                "sides": {k: docs[k].get("side") if docs[k].get("side") in ("GPU", "NPU") else None
+                "sides": {k: docs[k].get("side") if _side_id(docs[k].get("side")) else None
                           for k in ("reference", "candidate")},
                 "status": status, "execution": "execution_failed" if "execution_failed" in states else "completed",
                 "comparability": "incomparable" if "incomparable" in states else

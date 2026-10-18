@@ -2,10 +2,11 @@
 
 Contract fields: schema_version=1, kind=tensors|distributions, thresholds=null,
 common={model,inputs,numerics,scope} plus state for tensors, and
-expected_ranks={GPU:[int,...],NPU:[int,...]}. Common entries contain identities
-or settings; required rank sets come from the contract.
+expected_ranks={side_id:[int,...],...}. Side IDs are nonempty strings naming
+execution setups; hardware/runtime details belong in environment records.
+Common entries contain identities or settings; rank sets come from the contract.
 
-Manifest fields: schema_version, kind, common, side=GPU|NPU,
+Manifest fields: schema_version, kind, common, side=side_id,
 expected_ranks=[int,...], ranks=[{rank,environment:JSON_path,status:JSON_path}].
 Environment documents contain rank and a nonempty versions object; status
 records contain rank and status=completed. Resolve paths relative to each JSON.
@@ -92,7 +93,7 @@ def contract(path, kind):
     keys = ['model', 'inputs', 'numerics', 'scope'] + (['state'] if kind == 'tensors' else [])
     require(all(k in common and known(common[k]) for k in keys), 'missing/unknown common condition', 'not_covered')
     ranks = data.get('expected_ranks')
-    require(isinstance(ranks, dict) and set(ranks) == {'GPU', 'NPU'}, 'contract must declare expected ranks for each side', 'not_covered')
+    require(isinstance(ranks, dict) and ranks and all(isinstance(side, str) and side.strip() for side in ranks), 'contract must declare expected ranks keyed by nonempty side IDs', 'not_covered')
     for values in ranks.values():
         require(isinstance(values, list) and values and all(integer(r) for r in values) and len(values) == len(set(values)), 'invalid contract ranks')
     return data
@@ -105,7 +106,7 @@ def manifest(path, spec, expected_side=None):
     require(type(data.get('schema_version')) is int and data['schema_version'] == 1, 'manifest schema_version must be 1')
     require(data.get('kind') == spec['kind'], 'manifest kind mismatch')
     require(canonical(data.get('common')) == canonical(spec['common']), 'common conditions differ')
-    require(data.get('side') in ('GPU', 'NPU'), 'side must be GPU or NPU')
+    require(isinstance(data.get('side'), str) and data['side'].strip() and data['side'] in spec['expected_ranks'], 'side must name an execution declared in contract expected_ranks')
     if expected_side:
         require(data['side'] == expected_side, f'expected {expected_side} manifest')
     expected = data.get('expected_ranks')

@@ -18,7 +18,8 @@ probability mass and top-1 mismatches. Nonfinite KL is null with a reason;
 complete coordinate sets determine aggregates. Reusing one manifest path labels
 the output as a self-check.
 
-CLI: --contract C --reference GPU --candidate NPU --output NEW.json
+CLI: --contract C --reference REFERENCE.json --candidate CANDIDATE.json --output NEW.json
+CLI arguments assign comparison roles; manifest side IDs identify executions.
 """
 import math
 from pathlib import Path
@@ -174,8 +175,10 @@ def compare(contract_path, reference_path, candidate_path):
         expected = unique(spec['positions'], coordinate, 'expected position')
         for row in expected.values():
             check_history(row, vocab)
-        ref, rb = manifest(reference_path, spec, 'GPU')
-        cand, cb = manifest(candidate_path, spec, 'GPU' if report['self_comparison'] else 'NPU')
+        ref, rb = manifest(reference_path, spec)
+        cand, cb = manifest(candidate_path, spec)
+        report['sides'] = {'reference': ref['side'], 'candidate': cand['side']}
+        require(report['self_comparison'] or ref['side'] != cand['side'], 'distinct captures require distinct side IDs')
         ri, ci = [unique(side['positions'], coordinate, 'position') for side in (ref, cand)]
         require(set(ri) == set(ci) == set(expected), 'position coverage mismatch', 'not_covered')
         failed = False

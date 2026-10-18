@@ -19,7 +19,8 @@ Reports contain global/per-tensor relative L2, cosine, maximum error, counts,
 norms, events and coordinate findings. An invalid tensor leaves valid per-tensor
 results available while its full aggregate is unavailable. Metrics are diagnostics
 with thresholds=null. Same-path inputs are labeled self-checks.
-CLI: --contract C --reference GPU --candidate NPU --output NEW.json
+CLI: --contract C --reference REFERENCE.json --candidate CANDIDATE.json --output NEW.json
+CLI arguments assign comparison roles; manifest side IDs identify executions.
 Exit: 0=diagnostics, 1=unavailable comparison, 2=CLI/output error.
 """
 import math
@@ -171,8 +172,10 @@ def compare(contract_path, reference_path, candidate_path, chunk_size=1_048_576)
         require(integer(chunk_size, 1), 'chunk_size must be positive')
         spec = contract(contract_path, 'tensors')
         expected = inventory(spec)
-        ref, rb = manifest(reference_path, spec, 'GPU')
-        cand, cb = manifest(candidate_path, spec, 'GPU' if report['self_comparison'] else 'NPU')
+        ref, rb = manifest(reference_path, spec)
+        cand, cb = manifest(candidate_path, spec)
+        report['sides'] = {'reference': ref['side'], 'candidate': cand['side']}
+        require(report['self_comparison'] or ref['side'] != cand['side'], 'distinct captures require distinct side IDs')
         require(ref.get('stage') == cand.get('stage') == spec['stage'], 'tensor stages differ')
         report['stage'] = spec['stage']
         if spec['stage'] == 'updates':

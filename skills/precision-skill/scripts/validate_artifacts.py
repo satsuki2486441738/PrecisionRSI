@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate one platform's artifact inventory and values.
+"""Validate one execution side's artifact inventory and values.
 
 Uses the tensor/distribution schemas in artifact_io.py, compare_tensors.py and
 compare_distributions.py. Reads each required array and checks coordinates,

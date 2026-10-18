@@ -10,10 +10,10 @@ Use the existing Python environment with NumPy. Select one tool:
 | Task adapter | Native training scores/objectives; reuse the collector's mapping |
 | [validate_artifacts.py](../scripts/validate_artifacts.py) | One platform's distribution/tensor inventory and values |
 
-Run from the skill directory. Comparators share `--contract`, `--reference`, `--candidate` and `--output`; the validator uses `--manifest` for its platform input. Use fresh output paths.
+Run from the skill directory. Comparators share `--contract`, `--reference`, `--candidate` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths.
 
 ```sh
-python scripts/compare_tensors.py --contract gradients.json --reference gpu.json --candidate npu.json --output report.json
+python scripts/compare_tensors.py --contract gradients.json --reference reference.json --candidate candidate.json --output report.json
 ```
 
 Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.

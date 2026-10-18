@@ -80,6 +80,60 @@ class Fixture(unittest.TestCase):
     def run_dist(self, spec, r, c):
         return distributions(self.write('contract.json', spec), self.write('gpu.json', r), self.write('npu.json', c))
 
+    def test_task_defined_sides_and_comparison_direction(self):
+        for labels in [('cpu-baseline', 'accelerator-trial'), ('gpu-stack-a', 'gpu-stack-b'),
+                       ('reference', 'candidate'), ('NPU', 'GPU')]:
+            for build, run in [(self.tensor_pair, self.run_tensors),
+                               (lambda: self.tensor_pair(stage='updates'), self.run_tensors),
+                               (self.dist_pair, self.run_dist)]:
+                with self.subTest(labels=labels, kind=build.__name__):
+                    spec, ref, cand = build()
+                    spec['expected_ranks'] = {label: [0] for label in labels}
+                    ref['side'], cand['side'] = labels
+                    report = run(spec, ref, cand)
+                    self.assertEqual(report['status'], 'no_thresholds')
+                    self.assertEqual(report['sides'], dict(zip(('reference', 'candidate'), labels)))
+                    cp = self.write('contract.json', spec)
+                    rp, cp_side = self.write('reference.json', ref), self.write('candidate.json', cand)
+                    for path, label in [(rp, labels[0]), (cp_side, labels[1])]:
+                        checked = validate(cp, path)
+                        self.assertEqual(checked['status'], 'validated')
+                        self.assertEqual(checked['side'], label)
+                    self_check = run(spec, ref, ref)
+                    # run() writes distinct paths; the same identifier cannot identify two captures.
+                    self.assertEqual(self_check['status'], 'incomparable')
+                    compare = tensors if spec['kind'] == 'tensors' else distributions
+                    self_check = compare(cp, rp, rp)
+                    self.assertTrue(self_check['self_comparison'])
+                    self.assertEqual(self_check['status'], 'no_thresholds')
+                    one_side = copy.deepcopy(spec)
+                    one_side['expected_ranks'] = {labels[0]: [0]}
+                    one_path = self.write('one-side-contract.json', one_side)
+                    self.assertEqual(validate(one_path, rp)['status'], 'validated')
+                    self.assertEqual(compare(one_path, rp, rp)['status'], 'no_thresholds')
+                    reversed_report = compare(cp, cp_side, rp)
+                    self.assertEqual(reversed_report['status'], 'no_thresholds')
+                    self.assertEqual(reversed_report['sides'], {'reference': labels[1], 'candidate': labels[0]})
+                    if spec['kind'] == 'tensors':
+                        self.assertAlmostEqual(report['global']['relative_l2']['value'], .8)
+                        self.assertAlmostEqual(reversed_report['global']['relative_l2']['value'], 4/3)
+
+    def test_generic_side_rank_and_identity_validation(self):
+        spec, ref, cand = self.tensor_pair()
+        spec['expected_ranks'] = {'baseline': [0], 'trial': [0, 1]}
+        ref['side'], cand['side'] = 'baseline', 'trial'
+        self.assertEqual(self.run_tensors(spec, ref, cand)['status'], 'not_covered')
+        spec['expected_ranks']['trial'] = [0]
+        for label in ['', '   ', None, 1, ['trial'], 'undeclared']:
+            with self.subTest(label=label):
+                cand['side'] = label
+                self.assertEqual(self.run_tensors(spec, ref, cand)['status'], 'incomparable')
+        for label in ['', '   ']:
+            with self.subTest(contract_label=label):
+                spec['expected_ranks'] = {'baseline': [0], label: [0]}
+                cand['side'] = label
+                self.assertNotEqual(self.run_tensors(spec, ref, cand)['status'], 'no_thresholds')
+
     def test_tensor_hand_values_and_chunking(self):
         spec, r, c = self.tensor_pair()
         report = self.run_tensors(spec, r, c)

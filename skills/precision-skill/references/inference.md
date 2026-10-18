@@ -13,7 +13,7 @@ When adapting native engine collection, read the selected [vLLM / SGLang](engine
 1. Select each side's top 100 token IDs at every position, breaking exact ties by ascending token ID.
 2. Form their union $S$ and obtain both sides' original full-vocabulary-normalized probabilities for every ID in $S$.
 3. Accumulate probability outside $S$ into one `other` category. Retain each side's own top-100 mass and union mass.
-4. Compute the following with GPU probabilities $p$ and NPU probabilities $q$.
+4. Compute the following with reference probabilities $p$ and candidate probabilities $q$.
 
 | Metric | Per position | Aggregate |
 |---|---|---|

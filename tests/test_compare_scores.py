@@ -114,6 +114,44 @@ class CompareTests(unittest.TestCase):
         self.assertIn("no_thresholds", self.codes(report))
         json.dumps(report, allow_nan=False)
 
+    def test_task_defined_sides_and_signed_reference_direction(self):
+        for labels in [('cpu-baseline', 'accelerator-trial'), ('gpu-stack-a', 'gpu-stack-b'),
+                       ('reference', 'candidate'), ('NPU', 'GPU')]:
+            with self.subTest(labels=labels):
+                self.contract['reference_side'] = labels[0]
+                self.write('contract.json', self.contract)
+                self.make_side('reference', [-1., -2., -3., -4.], labels[0])
+                self.make_side('candidate', [-2., -3., -4., -5.], labels[1])
+                report = self.compare()
+                self.assertEqual(report['status'], 'no_thresholds')
+                self.assertEqual(report['sides'], dict(zip(('reference', 'candidate'), labels)))
+                self.assertAlmostEqual(report['metrics']['delta_nll_nat_per_token'], 1.)
+                self_check = self.compare('reference/manifest.json')
+                self.assertTrue(self_check['self_comparison'])
+                self.assertEqual(self_check['status'], 'no_thresholds')
+                self.contract['reference_side'] = labels[1]
+                self.write('contract.json', self.contract)
+                reverse = CORE.compare(self.root / 'contract.json', self.root / 'candidate/manifest.json',
+                                       self.root / 'reference/manifest.json')
+                self.assertEqual(reverse['status'], 'no_thresholds')
+                self.assertEqual(reverse['sides'], {'reference': labels[1], 'candidate': labels[0]})
+                self.assertAlmostEqual(reverse['metrics']['delta_nll_nat_per_token'], -1.)
+
+    def test_reference_binding_and_invalid_side_identifiers(self):
+        self.contract['reference_side'] = 'different-execution'
+        self.write('contract.json', self.contract)
+        self.assertBlocked(self.compare(), 'incomparable', 'reference_direction')
+        for label in ['', '   ', None, 1, ['trial']]:
+            with self.subTest(label=label):
+                self.contract['reference_side'] = label
+                self.write('contract.json', self.contract)
+                self.assertBlocked(self.compare(), 'incomparable', 'reference_direction')
+                self.contract['reference_side'] = 'GPU'
+                self.write('contract.json', self.contract)
+                self.manifests['candidate']['side'] = label
+                self.write('candidate/manifest.json', self.manifests['candidate'])
+                self.assertBlocked(self.compare(), 'incomparable', 'side_identity')
+
     def test_self_comparison_zero_is_not_pass(self):
         report = self.compare("reference/manifest.json")
         self.assertTrue(report["self_comparison"])
@@ -561,7 +599,7 @@ class CompareTests(unittest.TestCase):
         self.write("candidate/manifest.json", man)
         report = self.compare()
         self.assertEqual(report["status"], "no_thresholds")
-        self.assertEqual(report["core_version"], "2.0.0")
+        self.assertEqual(report["core_version"], "2.1.0")
         self.assertEqual(man["actual"]["weight_dtype"], "bfloat16")
         self.assertEqual(man["actual"]["logprob_dtype"], "float32")
         self.assertTrue(CORE.CORE_RULES.keys().isdisjoint(man["actual"]))
@@ -686,7 +724,7 @@ class CompareTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0 if mode == "valid" else 1, result.stderr)
                 report = self.read(output.name)
                 self.assertEqual(report["schema_version"], 2)
-                self.assertEqual(report["core_version"], "2.0.0")
+                self.assertEqual(report["core_version"], "2.1.0")
                 self.assertEqual(bool(report["rules"]["percentile"]["executed_at"]), mode == "valid")
 
     def test_cli_exclusive_create_and_blocked_output(self):

@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An Agent Skill for GPU/NPU inference, SFT, LoRA and RL numerical comparison.
+An Agent Skill for inference, SFT, LoRA and RL numerical comparison across hardware and software execution stacks.
 
 ## Use
 
@@ -10,12 +10,12 @@ Copy [skills/precision-skill](skills/precision-skill/) into your client's skill 
 
 Examples:
 
-- Compare the gradients and stored updates in these GPU/NPU manifests.
-- Collect a LoRA SFT step on both platforms using the same batch and initial adapter state, then compare it.
+- Compare the gradients and stored updates in these reference and candidate manifests.
+- Collect a LoRA SFT step on two execution stacks using the same batch and initial adapter state, then compare it.
 
 [SKILL.md](skills/precision-skill/SKILL.md) selects the path: existing captures go directly to a comparator; collection reads the selected task protocol. Framework integration and metric definitions are read as needed.
 
-Results contain settings, principal differences, compared coordinates and largest discrepancies. GPU is the reference; collection retains each platform's native operators and pinned dependencies.
+Results contain settings, principal differences, compared coordinates and largest discrepancies. The task selects reference and candidate setups, which may use the same or different hardware. Collection retains each setup's native operators and pinned dependencies.
 
 ## Tools and development
 
