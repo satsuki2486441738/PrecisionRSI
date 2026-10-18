@@ -14,9 +14,20 @@ With zero-B initialization, retain present-zero first-step A gradients/updates a
 
 ## Framework integration
 
-### PyTorch training loops
+Select the native training entrypoint and inspect the installed version's implementation:
 
-Locate native batch preparation, model/loss evaluation and optimizer boundaries. Preserve the implemented label shift, loss mask, accumulation and reduction. Use [distributed capture](../methods/training-state.md#distributed-capture) for sharded training.
+| Framework / entrypoint | Capture mapping |
+|---|---|
+| PyTorch training loop | Batch preparation, model/loss call and optimizer boundaries; retain native label shift, mask, accumulation and reduction |
+| [Transformers Trainer](https://huggingface.co/docs/transformers/main_classes/trainer) | Data collator, `compute_loss`, `training_step` and optimizer integration; resolve effective labels and accumulation denominators |
+| [TRL SFTTrainer](https://huggingface.co/docs/trl/sft_trainer) | Dataset formatting/packing, completion or assistant masks, loss path and PEFT trainable state |
+| [LLaMAFactory](https://github.com/hiyouga/LlamaFactory) | Native SFT workflow, resolved template, full/LoRA configuration and the resulting trainer/model |
+| [ms-swift](https://github.com/modelscope/ms-swift) | Native SFT entrypoint, selected training backend, resolved template/loss settings and tuner state |
+| [Axolotl](https://docs.axolotl.ai/) | Resolved training configuration, preprocessing/packing, effective labels and adapter state |
+| [Megatron Bridge](https://docs.nvidia.com/nemo/megatron-bridge/latest/training/peft.html) | Native finetuning entrypoint, checkpoint/adapter conversion and logical tensor mapping |
+| [MindSpeed-LLM](https://github.com/Ascend/MindSpeed-LLM) | Native finetuning workflow, selected backend, checkpoint conversion and parameter/gradient storage |
+
+Resolve the actual distributed backend separately using [training-state capture](../methods/training-state.md#distributed-capture). Preserve each framework's native training path and map its observations to the same full-parameter or LoRA inventory.
 
 ### Other/custom
 
