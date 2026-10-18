@@ -2,7 +2,7 @@
 
 ## Collection
 
-Replay identical token IDs, position IDs, attention masks and prediction positions using the same checkpoint/tokenizer/config and numerical policy. At prediction position $t-1$, collect the distribution predicting token $x_t$.
+Replay the selected token IDs, position IDs, attention masks and prediction positions. Check checkpoint/tokenizer/config and numerical settings against the task's common conditions and per-side configuration. At prediction position $t-1$, collect the distribution predicting token $x_t$.
 
 Compute full-vocabulary natural-log softmax in FP32 before temperature or sampling processors, retaining model-defined scaling/softcapping. Save full logprob rows or queryable arrays, sample/position coordinates and vocabulary mapping. Collect requested label logprobs even when labels lie outside top-100.
 

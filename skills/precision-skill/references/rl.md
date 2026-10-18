@@ -15,8 +15,6 @@ Capture the inputs, configuration and intermediate values used by the native obj
 | GRPO | Complete groups, reward components, mean/std, normalization and epsilon |
 | KL/entropy | Estimator, direction, coefficient and sampling distribution |
 
-Use dependency or clipping diagnostics to inspect discrepancies.
-
 ## Framework integration
 
 Select the native entrypoint and inspect the installed version's implementation.

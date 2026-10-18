@@ -10,7 +10,7 @@ Collect the complete logical model-parameter inventory, retaining tied-weight ma
 
 ### LoRA
 
-For adapter training, align initial adapter values, target modules, rank, alpha/scaling, dropout, bias/modules-to-save, dtype, quantization and merged state. Capture every adapter/additional trainable coordinate plus frozen-base identity and unchanged-state checks.
+For adapter training, check initial adapter values, target modules, rank, alpha/scaling, dropout, bias/modules-to-save, dtype, quantization and merged state against the task's common conditions and per-side configuration. Capture every adapter/additional trainable coordinate plus frozen-base identity and unchanged-state checks.
 
 With zero-B initialization, retain present-zero first-step A gradients/updates and changing B coordinates. Use the usual zero-norm metric rules. Capture merged-weight deltas separately when requested.
 

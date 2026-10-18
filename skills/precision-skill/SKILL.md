@@ -5,13 +5,13 @@ description: Collect and compare numerical results across hardware and software 
 
 # Precision comparison
 
-Select the execution setups and pairs to compare. Each side has an ID; hardware, runtime and framework are its configuration. For existing captures, check model/input/state identities and requested coordinates, then use [comparison](references/comparison.md).
+Complete the requested collection and comparison, including environment preparation, native framework integration and task-specific code. Select the execution setups and pairs to compare. Each side has an ID; hardware, runtime and framework are its configuration. For existing captures, check model/input/state identities and requested coordinates, then use [comparison](references/comparison.md).
 
 ## Collect
 
-Match model/checkpoint/tokenizer, input IDs/positions/masks, algorithm and reductions, numerical policy and replay state. For training, include optimizer groups, moments/step, microbatch order, accumulation, clipping and actual random inputs. Pin compatible dependencies independently per setup; align upstream versions when a shared-implementation comparison is requested. Retain native operators.
+Determine the common conditions and allowed differences from the task and environment inspection before collection. Check model/weight/tokenizer/config identities, input IDs/positions/masks, algorithm and loss reductions, numerical settings, capture boundaries and metric definitions. For training, also check initial parameters, optimizer state, microbatch order, accumulation, clipping and random inputs. Record conditions that must match separately from each side's actual configuration, including requested differences and implementation differences required by its execution stack. Validate execution against these settings; ask about an unexpected difference when its effect on the comparison's meaning is unclear. Pin dependencies per setup and retain native operators.
 
-Reuse available environments, resources and collectors. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Read the selected recipe:
+Reuse available environments, resources and collectors; prepare missing dependencies and implement missing collection or comparison code. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Read the selected recipe:
 
 | Task | Recipe |
 |---|---|
@@ -25,8 +25,8 @@ Run the requested stages within the task's cumulative budget. Save coordinates, 
 
 Use the installed version's documentation and source to locate batch preparation, native execution and capture boundaries. Execute through its native entrypoint, operators and state transitions. Map observations to the task's logical coordinates, preserving native storage dtypes and distinguishing captured from derived quantities.
 
-Keep collector adapters with the task and map observations to the [comparison interfaces](references/comparison.md). Report unavailable requested observations with their affected coverage. Extract reusable framework guidance when repeated use warrants it.
+Keep collector adapters with the task and map observations to the [comparison interfaces](references/comparison.md). Report unavailable requested observations with their affected coverage. During skill development, extract reusable task code into the tool library and keep task-specific logic with the task.
 
 ## Compare and report
 
-Use the task's metric selection and [comparison tools and definitions](references/comparison.md). Return settings used, principal differences, compared coordinate counts, largest discrepancies and output paths. Evaluate supplied tolerances against the computed metrics.
+Use the task's metric selection and [comparison tools and definitions](references/comparison.md). Return actual settings, metric values and aggregations, coverage counts, maximum-error coordinates and artifact paths.

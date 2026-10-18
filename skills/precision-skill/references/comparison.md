@@ -1,20 +1,22 @@
 # Compare artifacts
 
-Use the existing Python environment with NumPy. Select one tool:
+Select a tool whose scoring semantics and condition checks match the task. Prepare NumPy for array tools when needed; the target-score comparator uses the standard library.
 
 | Script | Comparison |
 |---|---|
 | [compare_distributions.py](../scripts/compare_distributions.py) | Full-vocabulary logprobs: top-100 union/tail metrics |
 | [compare_tensors.py](../scripts/compare_tensors.py) | Gradients or stored before/after updates |
-| [compare_scores.py](../scripts/compare_scores.py) | Cache-off eval target scores: NLL/MAE/P99; standard library |
-| Task adapter | Native training scores/objectives; reuse the collector's mapping |
+| [compare_scores.py](../scripts/compare_scores.py) | Cache-off single-turn eval, assistant body excluding special tokens: NLL/MAE/P99 |
+| Task adapter | Native training scores/objectives or task conditions outside the selected tool interface; reuse metric arithmetic where applicable |
 | [validate_artifacts.py](../scripts/validate_artifacts.py) | One side's distribution/tensor inventory and values |
 
-Run from the skill directory. Comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths.
+Run from the skill directory. Comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [synthetic tensor example](../examples/tensors.py) generates, validates and compares a small pair of artifacts.
 
 ```sh
 python scripts/compare_tensors.py --contract gradients.json --side-a a.json --side-b b.json --output report.json
 ```
+
+Read the selected interface before collection. Its `common` fields enforce equal conditions. Implement or extend a comparator when the task requires differences that this interface cannot express; retain both sides' actual settings and the agreed common conditions in the artifacts.
 
 Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.
 
@@ -48,4 +50,4 @@ Global metrics concatenate coordinates. Retain counts and signal/error norms. Ac
 
 Cosine is undefined when either norm is zero. Represent undefined metrics as null with a reason.
 
-Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability. Compare user-supplied tolerances to the computed metric and aggregation.
+Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability.
