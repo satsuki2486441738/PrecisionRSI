@@ -32,7 +32,7 @@ def generate(output_root):
     common = dict(model='synthetic-weight', inputs='synthetic-batch',
                   numerics='float64', scope='gradients', state='synthetic-initial')
     contract = write(root / 'contract.json', dict(
-        schema_version=1, kind='tensors', common=common, thresholds=None,
+        schema_version=2, kind='tensors', common=common, thresholds=None,
         expected_ranks={'a': [0], 'b': [0]}, stage='gradients',
         tensors=[dict(name='weight', shape=[2], present=True)]))
     manifests = []
@@ -40,10 +40,10 @@ def generate(output_root):
         folder = root / side
         folder.mkdir()
         np.save(folder / 'gradient.npy', np.array(values, dtype=np.float64), allow_pickle=False)
-        write(folder / 'environment.json', dict(rank=0, versions={'numpy': np.__version__}))
+        write(folder / 'environment.json', dict(rank=0, versions={'numpy': np.__version__}, actual=common))
         write(folder / 'status.json', dict(rank=0, status='completed'))
         manifest = write(folder / 'manifest.json', dict(
-            schema_version=1, kind='tensors', common=common, side=side,
+            schema_version=2, kind='tensors', common=common, side=side,
             expected_ranks=[0], ranks=[dict(rank=0, environment='environment.json', status='status.json')],
             stage='gradients', tensors=[dict(name='weight', shape=[2], present=True,
                                            shards=[dict(offset=0, value={'path': 'gradient.npy'})])]))

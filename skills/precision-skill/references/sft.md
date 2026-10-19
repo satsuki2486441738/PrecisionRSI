@@ -27,7 +27,7 @@ Collect the requested stages:
 
 Preserve native dtypes and logical coordinates.
 
-For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. Capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, and stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates).
+For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. Capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, and stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates); use the logical inventory exporter and explicit-view comparator from [comparison](comparison.md).
 
 When establishing a stateful-optimizer baseline, collect cold and common-restored steps, including parameters, moments and step counter. Reuse accepted baselines for unchanged paths; repeat affected stages after optimizer, precision, objective, sharding or dependency changes.
 

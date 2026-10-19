@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Compare logical gradients or stored updates using artifact schema 1.
+"""Compare logical gradients or stored updates using artifact schemas 1/2.
 
-Contract extras: stage=gradients|updates,
+Contract extras: stage=gradients|postclip-gradients|updates,
 tensors=[{name,shape,present}] listing logical parameters once.
 Manifest extras: stage, tensors=[{name,shape,present,shards:[...]}].
 Shards specify offset (flat logical element index) and value:array_descriptor,
@@ -12,7 +12,9 @@ promoted before subtraction.
 
 Updates include events:{model_name:applied|skipped|inactive}. Select active models
 in the expected inventory. Before/after pairs allow exact initial-value checks;
-delta-only captures use common.state to identify initial conditions.
+delta-only captures use the declared state to identify initial conditions.
+A common state requires equal before values; per-side state records permit
+task-selected different initial representations and retain their differences.
 
 API: compare(contract,side_a,side_b,chunk_size=1048576).
 Reports contain global/per-tensor L2 error, RMSE, cosine, maximum error, counts,
@@ -102,7 +104,7 @@ class Tensor:
         self.shards = []
         require(isinstance(entry.get('shards'), list), 'shards must be a list')
         if not self.present:
-            require(stage == 'gradients' and not entry['shards'], 'absent tensor has values or is an update')
+            require(stage in ('gradients', 'postclip-gradients') and not entry['shards'], 'absent tensor has values or is an update')
             return
         end = 0
         for shard in sorted(entry['shards'], key=lambda x: x['offset']):
@@ -145,7 +147,7 @@ class Tensor:
 
 
 def inventory(spec):
-    require(spec.get('stage') in ('gradients', 'updates'), 'invalid tensor stage')
+    require(spec.get('stage') in ('gradients', 'postclip-gradients', 'updates'), 'invalid tensor stage')
     entries = spec.get('tensors')
     require(isinstance(entries, list) and bool(entries), 'empty expected tensor inventory', 'not_covered')
     result = unique(entries, lambda x: x['name'], 'expected parameter')
@@ -153,7 +155,7 @@ def inventory(spec):
         require(isinstance(name, str) and bool(name), 'invalid parameter name')
         require(shape_size(item['shape']) > 0, 'empty expected tensor')
         require(type(item.get('present')) is bool, 'expected presence must be boolean')
-        require(spec['stage'] == 'gradients' or item['present'], 'updates must cover all parameters')
+        require(spec['stage'] != 'updates' or item['present'], 'updates must cover all parameters')
     return result
 
 
@@ -169,6 +171,7 @@ def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
         ref, rb = manifest(side_a_path, spec)
         cand, cb = manifest(side_b_path, spec)
         report['sides'] = {'side_a': ref['side'], 'side_b': cand['side']}
+        report['conditions'] = {'side_a': ref['_condition_check'], 'side_b': cand['_condition_check']}
         require(report['self_comparison'] or ref['side'] != cand['side'], 'distinct captures require distinct side IDs')
         require(ref.get('stage') == cand.get('stage') == spec['stage'], 'tensor stages differ')
         report['stage'] = spec['stage']
@@ -200,13 +203,14 @@ def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
                     rv, rinitial = r.read(start, count)
                     cv, cinitial = (rv, rinitial) if report['self_comparison'] else c.read(start, count)
                     if rinitial is not None and cinitial is not None:
-                        require(np.array_equal(rinitial, cinitial), 'initial stored parameters differ')
+                        if 'state' in spec['common']:
+                            require(np.array_equal(rinitial, cinitial), 'initial stored parameters differ')
                     else:
                         checked_initial = False
                     stats.add(rv, cv)
                 result = stats.report()
                 if spec['stage'] == 'updates':
-                    result['initial_values'] = 'exactly_checked' if checked_initial else 'declared_state_only'
+                    result['initial_values'] = ('exactly_checked' if 'state' in spec['common'] else 'per_side_state') if checked_initial else 'declared_state_only'
                 report['per_tensor'][name] = result
                 if total.max_index is None or stats.maximum > total.maximum:
                     max_coordinate = {'parameter': name, 'index': stats.max_index}

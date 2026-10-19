@@ -11,6 +11,7 @@ import tempfile
 import unittest
 
 SCRIPT = Path(__file__).resolve().parents[1] / "skills" / "precision-skill" / "scripts" / "compare_scores.py"
+sys.path.insert(0, str(SCRIPT.parent))
 SPEC = importlib.util.spec_from_file_location("compare_scores", SCRIPT)
 CORE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(CORE)
@@ -113,6 +114,36 @@ class CompareTests(unittest.TestCase):
         self.assertIsNone(report["metrics"])
         self.assertIn("no_thresholds", self.codes(report))
         json.dumps(report, allow_nan=False)
+
+    def test_schema3_contract_rank_coverage_and_imported_versions(self):
+        contract = copy.deepcopy(self.contract)
+        contract.update(schema_version=3, expected_ranks={'GPU':[0,1], 'NPU':[0,1]})
+        self.write('contract.json',contract)
+        for side in ('side_a','side_b'):
+            self.manifests[side]['schema_version']=3
+            self.write(side+'/manifest.json',self.manifests[side])
+            for rank in (0,1):
+                env=self.read(f'{side}/env{rank}.json')
+                env['versions']={'torch':'test-version'}
+                self.write(f'{side}/env{rank}.json',env)
+        self.assertEqual(self.compare()['status'],'no_thresholds')
+        m=copy.deepcopy(self.manifests['side_b'])
+        m.update(expected_ranks=[0],environment=['env0.json'],status=['status0.json'])
+        self.write('side_b/manifest.json',m)
+        self.assertBlocked(self.compare(),'not_covered','contract_rank_mismatch')
+        self.write('side_b/manifest.json',self.manifests['side_b'])
+        env=self.read('side_b/env0.json');del env['versions'];self.write('side_b/env0.json',env)
+        self.assertBlocked(self.compare(),'not_covered','runtime_versions_missing')
+
+    def test_maximum_coordinate_with_ties_and_reordered_observations(self):
+        self.make_side('side_b', [-2., -3., -4., -5.], 'NPU')
+        report = self.compare()
+        self.assertEqual(report['metrics']['max_abs_nat'], 1.)
+        self.assertEqual(report['metrics']['max_coordinate'], dict(
+            source_row_1based=1, prompt_id='p1', target_position=1,
+            prediction_position=0, token_id=11))
+        self.write_rows('side_b', list(reversed(self.rows())))
+        self.assertEqual(report['metrics'], self.compare()['metrics'])
 
     def test_task_defined_sides_and_swap_symmetry(self):
         for labels in [('cpu-baseline', 'accelerator-trial'), ('gpu-stack-a', 'gpu-stack-b'),

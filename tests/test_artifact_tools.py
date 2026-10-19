@@ -80,6 +80,59 @@ class Fixture(unittest.TestCase):
     def run_dist(self, spec, r, c):
         return distributions(self.write('contract.json', spec), self.write('gpu.json', r), self.write('npu.json', c))
 
+    def test_unknown_nested_required_conditions_remain_uncovered(self):
+        spec,a,b=self.tensor_pair()
+        for value in ({'revision':None},{'identity':{'revision':''}},{}):
+            for m in (spec,a,b):m['common']['model']=value
+            self.assertEqual(self.run_tensors(spec,a,b)['status'],'not_covered')
+        self.common['model']='fixture-model-v1'
+        spec,a,b=self.tensor_pair()
+        for m in (spec,a,b):m['common']['numerics']={'autocast':{'enabled':False,'target_dtype':None}}
+        self.assertEqual(self.run_tensors(spec,a,b)['status'],'no_thresholds')
+
+    def test_per_side_conditions_and_actual_rank_settings(self):
+        spec, a, b = self.tensor_pair()
+        spec['schema_version'] = a['schema_version'] = b['schema_version'] = 2
+        del spec['common']['numerics']
+        spec['side_conditions'] = {'GPU': {'numerics': 'float16'}, 'NPU': {'numerics': 'bfloat16'}}
+        for m in (a, b):
+            m['common'] = copy.deepcopy(spec['common'])
+            self.write(m['side']+'-env.json', dict(rank=0, versions={'torch': 'test'},
+                actual={**spec['common'], **spec['side_conditions'][m['side']]}))
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'no_thresholds')
+        bad = {**spec['common'], **spec['side_conditions']['NPU'], 'model': 'wrong'}
+        self.write('NPU-env.json', dict(rank=0, versions={'torch': 'test'}, actual=bad))
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'incomparable')
+        self.write('NPU-env.json', dict(rank=0, versions={'torch': 'test'}))
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'not_covered')
+        spec['side_conditions']['NPU']['model'] = 'wrong'
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'incomparable')
+
+    def test_legacy_array_checks_observed_conflicting_settings(self):
+        spec, a, b = self.tensor_pair()
+        self.write('NPU-env.json', dict(rank=0, versions={'torch': 'test'},
+                                      actual={**spec['common'], 'model': 'wrong'}))
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'incomparable')
+
+    def test_postclip_stage_and_task_selected_initial_states(self):
+        spec, a, b = self.tensor_pair(stage='postclip-gradients')
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'no_thresholds')
+        b['stage'] = 'gradients'
+        self.assertEqual(self.run_tensors(spec, a, b)['status'], 'incomparable')
+        spec, a, b = self.tensor_pair(stage='updates')
+        del spec['common']['state']
+        spec['side_conditions'] = {'GPU': {'state': 'initial-a'}, 'NPU': {'state': 'initial-b'}}
+        for m, initial in ((a, [1., 2.]), (b, [1.125, 2.125])):
+            m['common'] = copy.deepcopy(spec['common'])
+            self.write(m['side']+'-env.json', dict(rank=0, versions={'numpy': np.__version__},
+                actual={**spec['common'], **spec['side_conditions'][m['side']]}))
+            m['tensors'][0]['shards'] = [dict(offset=0, before=self.array(initial),
+                after=self.array(np.asarray(initial)+0.125))]
+        result = self.run_tensors(spec, a, b)
+        self.assertEqual(result['status'], 'no_thresholds')
+        self.assertEqual(result['global']['max_abs']['value'], 0.)
+        self.assertEqual(result['per_tensor']['weight']['initial_values'], 'per_side_state')
+
     def test_task_defined_sides_and_swap_symmetry(self):
         for labels in [('cpu-baseline', 'accelerator-trial'), ('gpu-stack-a', 'gpu-stack-b'),
                        ('side_a', 'side_b'), ('NPU', 'GPU')]:

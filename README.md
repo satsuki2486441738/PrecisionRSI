@@ -31,7 +31,7 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 
 ## Tools and development
 
-[Offline tools](skills/precision-skill/references/comparison.md) compare distributions, gradients, updates and target scores. Artifact tools require NumPy; the cache-off target-score comparator uses the standard library.
+[Offline tools](skills/precision-skill/references/comparison.md) compare distributions, gradients, updates and target scores. Array tools require NumPy; target-score tools use the standard library. Shared helpers support per-side execution conditions, cross-host distribution queries, logical tensor exports and explicit replica views.
 
 Run the [synthetic artifact example](skills/precision-skill/examples/tensors.py) from the skill directory:
 

@@ -4,7 +4,7 @@
 
 Replay the selected token IDs, position IDs, attention masks and prediction positions. Check checkpoint/tokenizer/config and numerical settings against the task's common conditions and per-side configuration. At prediction position $t-1$, collect the distribution predicting token $x_t$.
 
-Compute full-vocabulary natural-log softmax in FP32 before temperature or sampling processors, retaining model-defined scaling/softcapping. Save full logprob rows or queryable arrays, sample/position coordinates and vocabulary mapping. Collect requested label logprobs even when labels lie outside top-100.
+Collect the observations needed by the selected metrics. For target-score comparison, save the requested labels, logical positions and full-vocabulary-normalized logprobs. For distribution comparison, compute natural-log softmax in FP32 before sampling processors, retaining model-defined scaling/softcapping; save full logprob rows or queryable arrays and vocabulary mapping. Retain requested label scores even outside top-100.
 
 ### Full forward
 
@@ -46,7 +46,7 @@ Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Loca
 | Requested target scores | Each side's NLL and absolute NLL difference; logprob MAE, P99 and maximum |
 | Coverage | Paired positions/targets, each side's top-100 and union mass; secondary top-100 overlap |
 
-Use [comparison](comparison.md) for target-score metrics and tool usage. Keep the prefill/first-decode/later-decode and context-length breakdowns requested by the task.
+Use [comparison](comparison.md) for target-score metrics and tool usage. Across hosts, use its distribution-query tool to exchange top-100 inventories, union scores and exact tail statistics while keeping full arrays at source. Keep the prefill/first-decode/later-decode and context-length breakdowns requested by the task.
 
 ### Distribution comparison
 
@@ -59,10 +59,10 @@ Use [comparison](comparison.md) for target-score metrics and tool usage. Keep th
 |---|---|---|
 | Tail-merged Jensen–Shannon divergence | $\frac12\sum_i[p_i\log(p_i/m_i)+q_i\log(q_i/m_i)]$, $m=(p+q)/2$, $i\in S\cup\{other\}$ | Mean, P99, maximum and coordinate |
 | Top-1 agreement | Equal argmax token IDs | Fraction and count |
-| Probability RMSE | $\sqrt{\sum_{i\in S}(q_i-p_i)^2/|S|}$ | Mean, P99, maximum |
-| Maximum probability error | $\max_{i\in S}|q_i-p_i|$ | Mean, P99, maximum and token |
+| Probability RMSE | $\sqrt{\sum_{i\in S}(q_i-p_i)^2/\lvert S\rvert}$ | Mean, P99, maximum |
+| Maximum probability error | $\max_{i\in S}\lvert q_i-p_i\rvert$ | Mean, P99, maximum and token |
 | Probability-mass coverage | Own top-100 and union mass for each side | Mean, P1, minimum |
-| Secondary top-100 overlap | $|T_A\cap T_B|/100$ | Mean |
+| Secondary top-100 overlap | $\lvert T_A\cap T_B\rvert/100$ | Mean |
 
 Weight positions equally and use FP64 offline arithmetic. Compute RMSE per position before aggregation. Retain top-1 mismatch examples with both token probabilities and each side's first/second margin.
 

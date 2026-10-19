@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare next-token distributions using artifact schema 1.
+"""Compare next-token distributions using artifact schemas 1/2.
 
 Contract extras: vocab_size>=100; normalization_tolerance>0;
 renormalization=none|full_vocabulary_fp64;
@@ -173,6 +173,7 @@ def compare(contract_path, side_a_path, side_b_path):
         ref, rb = manifest(side_a_path, spec)
         cand, cb = manifest(side_b_path, spec)
         report['sides'] = {'side_a': ref['side'], 'side_b': cand['side']}
+        report['conditions'] = {'side_a': ref['_condition_check'], 'side_b': cand['_condition_check']}
         require(report['self_comparison'] or ref['side'] != cand['side'], 'distinct captures require distinct side IDs')
         ri, ci = [unique(side['positions'], coordinate, 'position') for side in (ref, cand)]
         require(set(ri) == set(ci) == set(expected), 'position coverage mismatch', 'not_covered')

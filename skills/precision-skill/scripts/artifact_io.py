@@ -1,7 +1,8 @@
 """Artifact schema 1 and bounded-memory NumPy/safetensors readers.
 
-Contract fields: schema_version=1, kind=tensors|distributions, thresholds=null,
-common={model,inputs,numerics,scope} plus state for tensors, and
+Contract fields: schema_version=1|2, kind=tensors|distributions, thresholds=null,
+common plus optional side_conditions (see conditions.py) provide model, inputs,
+numerics, scope and state for tensors;
 expected_ranks={side_id:[int,...],...}. Side IDs are nonempty strings naming
 execution setups; hardware/runtime details belong in environment records.
 Common entries contain identities or settings; rank sets come from the contract.
@@ -9,7 +10,9 @@ Common entries contain identities or settings; rank sets come from the contract.
 Manifest fields: schema_version, kind, common, side=side_id,
 expected_ranks=[int,...], ranks=[{rank,environment:JSON_path,status:JSON_path}].
 Environment documents contain rank and a nonempty versions object; status
-records contain rank and status=completed. Resolve paths relative to each JSON.
+records contain rank and status=completed. Schema 2 requires environment.actual
+settings matching common + side_conditions; schema 1 checks them when present.
+Resolve paths relative to each JSON.
 
 Array descriptors: {path:array.npy} or {path:array.safetensors,key:tensor_name}.
 Readers accept contiguous F16/BF16/F32/F64 arrays and flat logical shard offsets.
@@ -23,6 +26,7 @@ import struct
 import sys
 
 import numpy as np
+from conditions import expected_conditions, execution_settings, known
 
 
 class ArtifactError(ValueError):
@@ -72,30 +76,21 @@ def canonical(value):
     return json.dumps(value, sort_keys=True, allow_nan=False, separators=(',', ':'))
 
 
-def known(value):
-    if value is None or value == '':
-        return False
-    if isinstance(value, dict):
-        return bool(value) and all(known(v) for v in value.values())
-    if isinstance(value, list):
-        return all(known(v) for v in value)
-    return isinstance(value, (str, bool, int, float)) and not (isinstance(value, float) and not math.isfinite(value))
-
-
 def contract(path, kind):
     data = load_json(path)
     require(isinstance(data, dict), 'expected JSON object')
-    require(type(data.get('schema_version')) is int and data['schema_version'] == 1, 'schema_version must be 1')
+    require(type(data.get('schema_version')) is int and data['schema_version'] in (1, 2), 'schema_version must be 1 or 2')
     require(data.get('kind') == kind, f'expected kind {kind}')
     require('thresholds' in data and data['thresholds'] is None, 'only null thresholds supported')
     common = data.get('common')
     require(isinstance(common, dict), 'common must be an object')
     keys = ['model', 'inputs', 'numerics', 'scope'] + (['state'] if kind == 'tensors' else [])
-    require(all(k in common and known(common[k]) for k in keys), 'missing/unknown common condition', 'not_covered')
     ranks = data.get('expected_ranks')
     require(isinstance(ranks, dict) and ranks and all(isinstance(side, str) and side.strip() for side in ranks), 'contract must declare expected ranks keyed by nonempty side IDs', 'not_covered')
     for values in ranks.values():
         require(isinstance(values, list) and values and all(integer(r) for r in values) and len(values) == len(set(values)), 'invalid contract ranks')
+    for side in ranks:
+        expected_conditions(data, side, keys)
     return data
 
 
@@ -103,28 +98,14 @@ def manifest(path, spec, expected_side=None):
     path = Path(path).resolve()
     data = load_json(path)
     require(isinstance(data, dict), 'expected JSON object')
-    require(type(data.get('schema_version')) is int and data['schema_version'] == 1, 'manifest schema_version must be 1')
+    require(type(data.get('schema_version')) is int and data['schema_version'] == spec['schema_version'], 'manifest schema_version mismatch')
     require(data.get('kind') == spec['kind'], 'manifest kind mismatch')
     require(canonical(data.get('common')) == canonical(spec['common']), 'common conditions differ')
     require(isinstance(data.get('side'), str) and data['side'].strip() and data['side'] in spec['expected_ranks'], 'side must name an execution declared in contract expected_ranks')
     if expected_side:
         require(data['side'] == expected_side, f'expected {expected_side} manifest')
-    expected = data.get('expected_ranks')
-    require(isinstance(expected, list) and expected and all(integer(r) for r in expected), 'invalid expected ranks')
-    require(len(expected) == len(set(expected)), 'duplicate expected rank')
-    require(set(expected) == set(spec['expected_ranks'][data['side']]), 'expected ranks differ from contract', 'not_covered')
-    ranks = unique(data.get('ranks', []), lambda r: r['rank'], 'rank')
-    require(set(ranks) == set(expected), 'rank coverage mismatch', 'not_covered')
-    for rank, record in ranks.items():
-        require(integer(rank), 'invalid rank')
-        for field in ('environment', 'status'):
-            doc = load_json(path.parent / record[field])
-            require(isinstance(doc, dict), f'{field} must be an object')
-            require(type(doc.get('rank')) is int and doc['rank'] == rank, f'{field} rank mismatch')
-            if field == 'status':
-                require(doc.get('status') == 'completed', f'rank {rank} did not complete', 'execution_failed')
-            else:
-                require(isinstance(doc.get('versions'), dict) and bool(doc['versions']), 'missing runtime versions', 'not_covered')
+    data['_condition_check'] = execution_settings(spec, data, path.parent, load_json,
+        require_actual=spec['schema_version'] == 2 or bool(spec.get('side_conditions')))
     return data, path.parent
 
 

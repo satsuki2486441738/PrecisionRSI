@@ -27,7 +27,7 @@ def validate(contract_path, manifest_path, chunk_size=1_048_576):
         require(kind in ('tensors', 'distributions'), 'unsupported artifact kind')
         spec = contract(contract_path, kind)
         data, base = manifest(manifest_path, spec)
-        report.update(kind=kind, side=data['side'])
+        report.update(kind=kind, side=data['side'], conditions=data['_condition_check'])
         if kind == 'tensors':
             expected = inventory(spec)
             require(data.get('stage') == spec['stage'], 'tensor stage mismatch')

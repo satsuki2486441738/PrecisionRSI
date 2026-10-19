@@ -31,7 +31,7 @@
 
 ## 工具与开发
 
-[离线工具](skills/precision-skill/references/comparison.md)比较分布、梯度、更新和目标评分。产物工具依赖 NumPy；cache-off 目标评分比较器使用标准库。
+[离线工具](skills/precision-skill/references/comparison.md)比较分布、梯度、更新和目标评分。数组工具依赖 NumPy；目标评分工具使用标准库。共享工具支持各侧执行条件检查、跨主机分布查询、逻辑张量导出和显式副本视图比较。
 
 在 skill 目录运行[合成产物示例](skills/precision-skill/examples/tensors.py)：
 

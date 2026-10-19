@@ -4,19 +4,22 @@ Select a tool whose scoring semantics and condition checks match the task. Prepa
 
 | Script | Comparison |
 |---|---|
+| [compare_target_scores.py](../scripts/compare_target_scores.py) | Task-selected target/action logprobs, including EOS and cached execution; standard library |
 | [compare_distributions.py](../scripts/compare_distributions.py) | Full-vocabulary logprobs: top-100 union/tail metrics |
-| [compare_tensors.py](../scripts/compare_tensors.py) | Gradients or stored before/after updates |
-| [compare_scores.py](../scripts/compare_scores.py) | Cache-off single-turn eval, assistant body excluding special tokens: NLL/MAE/P99 |
-| Task adapter | Native training scores/objectives or task conditions outside the selected tool interface; reuse metric arithmetic where applicable |
-| [validate_artifacts.py](../scripts/validate_artifacts.py) | One side's distribution/tensor inventory and values |
+| [query_distributions.py](../scripts/query_distributions.py) | Cross-host inventory, union query and comparison; full arrays stay at source |
+| [compare_tensors.py](../scripts/compare_tensors.py) | Gradients, postclip gradients and stored before/after updates |
+| [tensor_artifacts.py](../scripts/tensor_artifacts.py) | Export logical per-rank inventories, deduplicate equal replicas and compare explicit views |
+| [compare_scores.py](../scripts/compare_scores.py) | Single-turn cache-off assistant-body evaluation with execution evidence |
+| Task adapter | Native masks, logical mappings, losses and objective reductions; reuse [score arithmetic](../scripts/score_metrics.py) |
+| [validate_artifacts.py](../scripts/validate_artifacts.py) | One side's distribution/tensor inventory, values and execution conditions |
 
-Run from the skill directory. Comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [synthetic tensor example](../examples/tensors.py) generates, validates and compares a small pair of artifacts.
+Run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [synthetic tensor example](../examples/tensors.py) generates, validates and compares a small pair of artifacts.
 
 ```sh
 python scripts/compare_tensors.py --contract gradients.json --side-a a.json --side-b b.json --output report.json
 ```
 
-Read the selected interface before collection. Its `common` fields enforce equal conditions. Implement or extend a comparator when the task requires differences that this interface cannot express; retain both sides' actual settings and the agreed common conditions in the artifacts.
+Read the selected interface before collection. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
 Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.
 
@@ -28,9 +31,7 @@ Pair scores by sample/prediction position/token and tensors by logical parameter
 
 ## Target-token scores
 
-For two executions' logprobs $\ell_{a,i},\ell_{b,i}$ over $N$ valid targets, use:
-
-Report each side's NLL and their absolute difference:
+For two executions' logprobs $\ell_{a,i},\ell_{b,i}$ over $N$ valid targets, report each side's NLL and their absolute difference:
 
 $$
 \mathrm{NLL}_{s} = -\frac{1}{N}\sum_{i=1}^{N} \ell_{s,i}

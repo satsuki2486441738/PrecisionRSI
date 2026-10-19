@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Compare cache-off full-forward target scores using schema 2 and the standard library.
+"""Compare cache-off full-forward target scores using schema 2 or 3 and the standard library.
 
 API: compare(contract_path,side_a_manifest_path,side_b_manifest_path).
 Resolve every path relative to its containing JSON.
 
 Contract fields:
-  schema_version: 2
+  schema_version: 3 (2 remains readable for existing captures)
+  expected_ranks: {side_id:[rank,...]} (required in schema 3)
   inputs: shared_inputs.json path
   required_coverage: [full_forward_logprobs]
   thresholds: null
@@ -22,7 +23,7 @@ reduction=target_token_weighted, percentile=global_linear_0.99.
 Additional cache/SFT/RL required_coverage entries return not_covered.
 
 Manifest fields:
-  schema_version: 2; side: nonempty execution-side ID; inputs: JSON path
+  schema_version: same as contract; side: nonempty execution-side ID; inputs: JSON path
   observations: executor-format JSONL path; summary: executor-format JSON path
   environment: [JSON paths]; status: [JSON paths]
   expected_ranks: [unique nonnegative integers]; execution: completed
@@ -32,6 +33,8 @@ Manifest fields:
 Side IDs name execution setups; hardware/runtime details belong in environment
 records and side_config. The two inputs are peer executions.
 Each evidence pointer resolves to an execution value equal to actual[key].
+Schema 3 binds ranks to the contract and requires imported versions in every
+environment record. Schema 2 retains its manifest-owned rank expectations.
 Expected ranks each have an environment and completed status record with rank.
 Unknown required identities/settings remain null and return incomplete coverage.
 
@@ -62,6 +65,9 @@ import json
 import math
 from pathlib import Path
 import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from score_metrics import reduce_scores
 
 SCHEMA_VERSION = 2
 CORE_VERSION = "3.0.0"
@@ -128,6 +134,8 @@ def _object(pairs):
 
 class _Comparison:
     def __init__(self, paths):
+        self.version = SCHEMA_VERSION
+        self.rank_contract = None
         self.paths = {k: str(Path(v).resolve()) for k, v in paths.items()}
         self.blockers = []
         self.evidence_paths = set(self.paths.values())
@@ -171,8 +179,8 @@ class _Comparison:
         return value
 
     def schema(self, doc, where):
-        if type(doc.get("schema_version")) is not int or doc.get("schema_version") != SCHEMA_VERSION:
-            self.issue("incomparable", "schema_version", where, "only integer schema_version 2 supported")
+        if type(doc.get("schema_version")) is not int or doc.get("schema_version") != self.version or self.version not in (2, 3):
+            self.issue("incomparable", "schema_version", where, "matching integer schema_version 2 or 3 required")
 
     def common(self, value, where, keys=COMMON_KEYS):
         obj = self.mapping(value, where)
@@ -346,6 +354,14 @@ class _Comparison:
         if not _ints(ranks) or not ranks or len(ranks) != len(set(ranks)):
             self.issue("incomparable", "expected_ranks_invalid", where, "nonempty unique integer ranks required")
             ranks = []
+        if self.rank_contract is not None:
+            expected = self.rank_contract.get(manifest.get('side'))
+            if not _ints(expected) or not expected or len(expected) != len(set(expected)):
+                self.issue('not_covered', 'contract_ranks_missing', where, 'expected ranks required per side')
+            else:
+                if set(ranks) != set(expected):
+                    self.issue('not_covered', 'contract_rank_mismatch', where, 'manifest ranks differ from contract')
+                ranks = expected
         execution = manifest.get("execution")
         if execution is None:
             self.issue("not_covered", "execution_missing", where, "execution state unknown")
@@ -370,6 +386,9 @@ class _Comparison:
                 if rank in seen:
                     self.issue("incomparable", "duplicate_rank", loc, rank)
                 seen.add(rank)
+                if kind == 'environment' and self.version == 3:
+                    if not isinstance(obj.get('versions'), dict) or not obj['versions']:
+                        self.issue('not_covered', 'runtime_versions_missing', loc, 'imported versions required')
                 if kind == "status":
                     if obj.get("status") is None:
                         self.issue("not_covered", "rank_status_missing", loc, rank)
@@ -504,6 +523,14 @@ class _Comparison:
 
     def run(self):
         docs = {k: self.mapping(self.load(v, v, k), k) for k, v in self.paths.items()}
+        self.version = docs['contract'].get('schema_version')
+        self.rank_contract = docs['contract'].get('expected_ranks')
+        if self.rank_contract is not None and not isinstance(self.rank_contract, dict):
+            self.issue('incomparable', 'contract_ranks_invalid', 'contract', 'expected_ranks must be an object')
+            self.rank_contract = {}
+        if self.version == 3 and not isinstance(self.rank_contract, dict):
+            self.issue('not_covered', 'contract_ranks_missing', 'contract', 'expected_ranks required')
+            self.rank_contract = {}
         for key, doc in docs.items():
             self.schema(doc, key)
         contract = docs["contract"]
@@ -551,22 +578,21 @@ class _Comparison:
             scores[side] = self.observations(rows, score_inputs, summary, side)
         metrics = None
         if not any(b["state"] != "no_thresholds" for b in self.blockers):
-            keys = sorted(scores["side_a"])
-            errors = [abs(scores["side_b"][k] - scores["side_a"][k]) for k in keys]
-            if all([self.finite(v, f"metrics.error[{i}]") for i, v in enumerate(errors)]):
-                total = self.total(errors, "metrics.mae")
-                gap = abs(self.side_metrics["side_b"]["nll_nat_per_token"] - self.side_metrics["side_a"]["nll_nat_per_token"])
-                valid_gap = self.finite(gap, "metrics.nll_abs_diff")
-                if total is not None and valid_gap:
-                    errors.sort()
-                    h = 0.99 * (len(errors) - 1)
-                    j, k = math.floor(h), math.ceil(h)
-                    p99 = errors[j] + (h - j) * (errors[k] - errors[j])
-                    self.rule_execution["percentile"].append("metrics.p99")
-                    if self.finite(p99, "metrics.p99"):
-                        metrics = {"target_count": len(keys),
-                                   "nll_abs_diff_nat_per_token": gap, "mae_nat": total / len(keys),
-                                   "p99_nat": p99, "p99_method": "global linear h=0.99*(N-1)"}
+            try:
+                reduced = reduce_scores(scores['side_a'], scores['side_b'])
+                coordinate = tuple(reduced['max_coordinate'])
+                row, prompt, target = coordinate
+                sample = expected[(row, prompt)]
+                index = sample['target_token_positions'].index(target)
+                reduced['max_coordinate'] = dict(source_row_1based=row, prompt_id=json.loads(prompt),
+                    target_position=target, prediction_position=sample['prediction_positions'][index],
+                    token_id=sample['target_token_ids'][index])
+                reduced.pop('side_a_nll_nat_per_token')
+                reduced.pop('side_b_nll_nat_per_token')
+                metrics = reduced
+                self.rule_execution['percentile'].append('metrics.p99')
+            except (ValueError, OverflowError) as exc:
+                self.issue('incomparable', 'nonfinite_result', 'metrics', str(exc))
         states = {b["state"] for b in self.blockers}
         status = next(s for s in ("execution_failed", "incomparable", "not_covered", "no_thresholds") if s in states)
         coverage = {x: "not_covered" for x in COVERAGE}
@@ -577,7 +603,7 @@ class _Comparison:
         if isinstance(r, str) and isinstance(c, str):
             same_observations = ((Path(self.paths["side_a"]).parent / r).resolve()
                                  == (Path(self.paths["side_b"]).parent / c).resolve())
-        return {"schema_version": SCHEMA_VERSION, "core_version": CORE_VERSION, "paths": self.paths,
+        return {"schema_version": self.version if type(self.version) is int and self.version in (2, 3) else SCHEMA_VERSION, "core_version": CORE_VERSION, "paths": self.paths,
                 "evidence_paths": sorted(self.evidence_paths), "self_comparison": same_observations,
                 "sides": {k: docs[k].get("side") if _side_id(docs[k].get("side")) else None
                           for k in ("side_a", "side_b")},
