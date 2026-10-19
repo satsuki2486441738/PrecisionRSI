@@ -2,7 +2,7 @@
 
 ## Layout
 
-- `skills/precision-skill/` is the installable package. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.
+- `skills/precision-skill/` is the installable package. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Optional internal sampling and its msProbe capability summary live in `references/layerwise.md`. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.
 - Maintain matching English `README.md` and Chinese `README.zh-CN.md`. Technical documentation and maintenance instructions use English. Follow the Agent Skills specification.
 - `skills/precision-skill/examples/` contains concise runnable artifact examples. Extract reusable task code into the tool library during skill development.
 - `tests/` contains public tool regressions. Artifact tools require NumPy; the target-score comparator uses the standard library.

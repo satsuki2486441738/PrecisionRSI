@@ -32,3 +32,5 @@ Keep collector adapters with the task and map observations to the [comparison in
 ## Compare and report
 
 Use the task's metric selection and [comparison tools and definitions](references/comparison.md). Return actual settings, metric values and aggregations, coverage counts, maximum-error coordinates and artifact paths.
+
+Before switching from model-level comparison to internal layerwise collection, ask the user to confirm the transition, scope and resource limits. After confirmation, follow [layerwise comparison](references/layerwise.md), including the optional msProbe capability summary.
