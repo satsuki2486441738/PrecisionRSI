@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An Agent Skill for inference, SFT, LoRA and RL numerical comparison across hardware and software execution stacks. A typical use case is comparing inference scores, training gradients and parameter updates between Ascend NPUs and NVIDIA GPUs using each platform's native software stack.
+An Agent Skill for inference, SFT, LoRA and RL numerical comparison across hardware and software execution stacks.
 
 ## Use
 
@@ -16,6 +16,12 @@ Examples:
 [SKILL.md](skills/precision-skill/SKILL.md) routes collection and comparison. The three task recipes in `references/` cover inference, SFT (full-parameter / LoRA) and RL: what to capture, where to integrate with native frameworks (including Other/custom), and which metrics to report. `comparison.md` defines coordinate pairing, common metrics and tool usage; distribution metrics are defined in the inference recipe. Training capture stages are defined in SFT and reused by RL.
 
 Results contain actual settings, metric values and aggregations, coverage counts, maximum-error coordinates and artifact paths. The task determines common conditions and allowed per-side differences across peer execution setups. Comparison metrics are symmetric. Collection retains native operators and records each side's dependencies.
+
+## Typical cases
+
+| Framework | Task | Execution stacks |
+|---|---|---|
+| PyTorch / Transformers; PEFT for LoRA | Full-forward inference, full-parameter SFT and LoRA SFT | Ascend 910C NPU and NVIDIA H200 GPU, each using its native software stack |
 
 ## Tools and development
 

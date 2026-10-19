@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-用于不同硬件与软件执行栈之间推理、SFT、LoRA 和 RL 数值比较的 Agent Skill。典型场景是在昇腾 NPU 与 NVIDIA GPU 上分别使用各自的原生软件栈，采集并比较推理评分、训练梯度和参数更新。
+用于不同硬件与软件执行栈之间推理、SFT、LoRA 和 RL 数值比较的 Agent Skill。
 
 ## 使用
 
@@ -16,6 +16,12 @@
 [SKILL.md](skills/precision-skill/SKILL.md) 组织采集与比较流程。`references/` 中的三个任务文档覆盖推理、SFT（全参 / LoRA）和 RL，说明采集内容、原生框架接入位置（含 Other/custom）及应报告的指标。`comparison.md` 定义坐标配对、通用指标和工具用法；分布指标在推理文档中定义。训练采集阶段在 SFT 中定义，由 RL 复用。
 
 结果包含实际配置、指标值及聚合方式、覆盖数量、最大误差坐标和产物路径。任务决定对等执行配置之间的共同条件及各侧允许存在的差异；比较指标采用对称定义。采集保留原生算子并记录各侧依赖。
+
+## 典型案例
+
+| 框架 | 任务 | 执行栈 |
+|---|---|---|
+| PyTorch / Transformers；LoRA 使用 PEFT | 完整前向推理、全参 SFT 和 LoRA SFT | 昇腾 910C NPU 与 NVIDIA H200 GPU，分别使用各自的原生软件栈 |
 
 ## 工具与开发
 
