@@ -40,12 +40,12 @@ Tools check runtime initialization and imported interfaces, capture fixed-histor
 
 For a concrete collection task and the expected agent workflow, see the [fixed-history inference example](skills/precision-skill/examples/fixed-history-inference.md), from environment preparation through capture, validation and reporting.
 
-Run the [synthetic artifact example](skills/precision-skill/examples/tensors.py) from the skill directory:
+Compare FP32 and BF16 gradients for the same small classifier and batch with the [runnable gradient example](skills/precision-skill/examples/compare_gradients.py). Run from the skill directory; requires Torch and NumPy:
 
 ```sh
-python3 examples/tensors.py
+python3 examples/compare_gradients.py
 ```
 
-It creates a fresh temporary run containing two gradient captures, validation reports and numerical comparison output.
+It runs both forward/backward passes on CPU, then prints losses, gradient-difference metrics and the generated artifact directory.
 
 Repository layout and test commands are in [AGENTS.md](AGENTS.md).

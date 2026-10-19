@@ -40,12 +40,12 @@ skill 组织任务，任务适配代码接入原生执行路径，[工具库](sk
 
 完整采集任务及 agent 的预期执行过程见[固定历史推理示例](skills/precision-skill/examples/fixed-history-inference.md)，涵盖环境准备、采集接入、校验、比较和交付。
 
-在 skill 目录运行[合成产物示例](skills/precision-skill/examples/tensors.py)：
+使用[可运行的梯度比较示例](skills/precision-skill/examples/compare_gradients.py)，比较同一小型分类模型、同一 batch 下的 FP32 与 BF16 梯度。在 skill 目录运行，依赖 Torch 和 NumPy：
 
 ```sh
-python3 examples/tensors.py
+python3 examples/compare_gradients.py
 ```
 
-示例创建独立的临时运行目录，包含两侧梯度产物、验证报告和数值比较结果。
+示例在 CPU 上实际执行两次前向和反向，随后输出 loss、梯度差异指标和产物目录。
 
 仓库组织与测试命令见 [AGENTS.md](AGENTS.md)。
