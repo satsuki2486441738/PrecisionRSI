@@ -27,7 +27,7 @@ Run the requested stages within the task's cumulative budget. Save coordinates, 
 
 `scripts/` contains callable tools and their supporting modules. Select an existing tool from the [tool index](references/comparison.md#tools) by its inputs, operation and outputs. Use CLI tools through `--help` and Python tools through their documented functions; read the selected module docstring for its artifact interface. Load implementation code only when integration or adaptation requires it.
 
-Task adapters prepare native inputs, execute the framework and map observations to logical coordinates. Tools handle reusable planning, export, validation and comparison; third-party packages such as msProbe provide optional backends. Keep task-specific code with the task. When an existing tool does not cover the requested operation, implement the missing adapter or tool; during skill development, extract reusable code with a documented input/output interface and meaningful regression coverage.
+Task adapters prepare native inputs, execute the framework and map observations to logical coordinates. Tools provide composable planning, export, validation and comparison operations; third-party packages such as msProbe are optional backends. Implement missing adapters or tools as needed. During skill development, extract reusable operations with explicit interfaces and regression coverage for correctness and supported input variations; keep task-specific settings in adapters and environments.
 
 ## Adapt an unfamiliar implementation
 

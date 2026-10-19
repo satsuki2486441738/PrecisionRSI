@@ -10,7 +10,7 @@ Spec: imports=[module,...] in initialization order; symbols=[module:attribute,..
 checks=[module:zero_argument_callable,...] returning JSON values;
 distributions=[installed_distribution,...]; python_paths=[absolute_path,...].
 Module records contain actual __file__/__version__; distribution metadata is
-recorded separately. Python paths precede the interpreter's existing paths.
+recorded separately. Python paths apply only during inspection.
 
 CLI: --spec SPEC.json --output NEW.json [--python EXECUTABLE] [--timeout 60]
 Resolve relative python_paths against SPEC.json. Exit 0=completed, 1=failed or
@@ -47,6 +47,7 @@ def inspect_runtime(spec):
                   architecture=platform.machine(), host=platform.node(), pid=os.getpid(),
                   modules={}, symbols=[], checks={}, distributions={})
     started = time.monotonic()
+    original_paths = sys.path.copy()
     try:
         paths = spec.get('python_paths', [])
         if any(not Path(path).is_absolute() for path in paths):
@@ -70,6 +71,8 @@ def inspect_runtime(spec):
     except Exception as exc:
         report.update(status='failed', error=dict(type=type(exc).__name__, message=str(exc),
                                                   traceback=traceback.format_exc()))
+    finally:
+        sys.path[:] = original_paths
     report['elapsed_seconds'] = time.monotonic() - started
     return report
 
@@ -78,6 +81,7 @@ def probe_runtime(spec, executable=None, timeout=60):
     """Run a bounded fresh-process check using the selected interpreter."""
     if not isinstance(timeout, (int, float)) or not 0 < timeout < float('inf'):
         raise ValueError('timeout must be finite and positive')
+    payload = json.dumps(spec, allow_nan=False)
     started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix='precision-runtime-') as directory:
         result_path = Path(directory) / 'result.json'
@@ -87,7 +91,7 @@ def probe_runtime(spec, executable=None, timeout=60):
                  '--worker', str(result_path)], stdin=subprocess.PIPE, stdout=log,
                 stderr=subprocess.STDOUT, text=True, start_new_session=os.name == 'posix')
             try:
-                process.communicate(json.dumps(spec, allow_nan=False), timeout=timeout)
+                process.communicate(payload, timeout=timeout)
             except subprocess.TimeoutExpired:
                 if os.name == 'posix':
                     os.killpg(process.pid, signal.SIGKILL)

@@ -8,7 +8,7 @@ import unittest
 
 TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-skill/scripts'
 sys.path.insert(0, str(TOOLS))
-from runtime_probe import probe_runtime
+from runtime_probe import inspect_runtime, probe_runtime
 
 
 class RuntimeProbeTests(unittest.TestCase):
@@ -46,6 +46,27 @@ class RuntimeProbeTests(unittest.TestCase):
         result = probe_runtime(dict(python_paths=[str(self.root)], checks=['probe_fixture:inspect_worker']))
         self.assertEqual(result['status'], 'failed')
         self.assertEqual(result['error']['type'], 'AttributeError')
+
+    def test_worker_inspection_restores_import_paths_on_success_and_failure(self):
+        before = sys.path.copy()
+        original = sys.path
+        try:
+            for symbols in ([], ['probe_fixture:removed_helper']):
+                result = inspect_runtime(dict(python_paths=[str(self.root)], symbols=symbols))
+                self.assertEqual(result['status'], 'failed' if symbols else 'completed')
+                self.assertIs(sys.path, original)
+                self.assertEqual(sys.path, before)
+        finally:
+            sys.path[:] = before
+
+    def test_invalid_payload_does_not_launch_worker(self):
+        from unittest.mock import patch
+        for value, error in [(object(), TypeError), (float('nan'), ValueError)]:
+            with self.subTest(value=type(value).__name__):
+                with patch('runtime_probe.subprocess.Popen') as launch:
+                    with self.assertRaises(error):
+                        probe_runtime({'checks': [value]})
+                    launch.assert_not_called()
 
     def test_multibyte_diagnostics_tail(self):
         (self.root/'noisy.py').write_text("print('中文' * 5000)\n")
