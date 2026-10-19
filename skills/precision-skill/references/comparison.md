@@ -7,7 +7,7 @@ Select a tool whose scoring semantics and condition checks match the task. Prepa
 | [compare_target_scores.py](../scripts/compare_target_scores.py) | Task-selected target/action logprobs, including EOS and cached execution; standard library |
 | [compare_distributions.py](../scripts/compare_distributions.py) | Full-vocabulary logprobs: top-100 union/tail metrics |
 | [query_distributions.py](../scripts/query_distributions.py) | Cross-host inventory, union query and comparison; full arrays stay at source |
-| [compare_tensors.py](../scripts/compare_tensors.py) | Gradients, postclip gradients and stored before/after updates |
+| [compare_tensors.py](../scripts/compare_tensors.py) | Observations (including activations), gradients, postclip gradients and stored before/after updates |
 | [tensor_artifacts.py](../scripts/tensor_artifacts.py) | Export logical per-rank inventories, deduplicate equal replicas and compare explicit views |
 | [compare_scores.py](../scripts/compare_scores.py) | Single-turn cache-off assistant-body evaluation with execution evidence |
 | Task adapter | Native masks, logical mappings, losses and objective reductions; reuse [score arithmetic](../scripts/score_metrics.py) |
@@ -19,7 +19,7 @@ Run from the skill directory. The score, distribution and tensor comparators sha
 python scripts/compare_tensors.py --contract gradients.json --side-a a.json --side-b b.json --output report.json
 ```
 
-Read the selected interface before collection. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
+Read the selected interface before collection. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
 Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.
 
@@ -27,7 +27,7 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Coordinates
 
-Pair scores by sample/prediction position/token and tensors by logical parameter/element. Reconstruct logical coordinates from shards, packed batches and fused projections; retain tied-weight mappings and reduction tags. Check expected coordinates, masks and ranks, and verify converted initial values. Exclude padding, deduplicate equal replicas, and retain differing replicas as explicit views. Distinguish absent gradients from present zeros.
+Pair scores by sample/prediction position/token and tensors by logical tensor/element. For `stage: observations`, declare each tensor's logical sampling `coordinates` in the contract and both manifests; retain sample/token selection, boundary, invocation and execution stage as applicable. Native names map to this identity in the adapter. Reconstruct logical coordinates from shards, packed batches and fused projections; retain tied-weight mappings and reduction tags. Check expected coordinates, masks and ranks, and verify converted initial values. Exclude padding, deduplicate equal replicas, and retain differing replicas as explicit views. Distinguish absent gradients from present zeros.
 
 ## Target-token scores
 

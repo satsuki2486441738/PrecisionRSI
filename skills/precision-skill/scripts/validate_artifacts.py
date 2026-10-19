@@ -34,8 +34,8 @@ def validate(contract_path, manifest_path, chunk_size=1_048_576):
             if spec['stage'] == 'updates':
                 require(isinstance(data.get('events'), dict) and data['events'] and all(v in ('applied', 'skipped', 'inactive') for v in data['events'].values()), 'invalid/missing optimizer events')
                 require(any(v != 'inactive' for v in data['events'].values()), 'no active optimizer event', 'not_covered')
-            observed = unique(data['tensors'], lambda x: x['name'], 'parameter')
-            require(set(expected) == set(observed), 'parameter inventory mismatch', 'not_covered')
+            observed = unique(data['tensors'], lambda x: x['name'], 'tensor')
+            require(set(expected) == set(observed), 'tensor inventory mismatch', 'not_covered')
             for name, entry in expected.items():
                 tensor = Tensor(base, observed[name], entry, spec['stage'])
                 if tensor.present:

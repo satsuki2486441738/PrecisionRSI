@@ -6,8 +6,10 @@ renormalization=none|full_vocabulary_fp64;
 positions=[{sample:str,position:int,history:[token_id,...]}], with
 position=len(history)-1 in canonical causal coordinates.
 
-Manifest positions repeat those coordinates/history and supply a scores array
-with row:int. Arrays have shape [positions,vocabulary] or [vocabulary] at row=0;
+Manifest positions repeat those coordinates/history and use
+scores={path:"rows.npy",row:3}, with row inside the scores descriptor. A row at
+position level is rejected. Arrays have shape [positions,vocabulary] or
+[vocabulary] at row=0. Multirow arrays require an explicit scores.row;
 vocabulary IDs are indices 0..vocab_size-1. Use FP32/FP64 full-vocabulary normalized
 natural logprobs before sampling processors. Values are <=0; -inf represents
 true zero probability. The selected renormalization policy first validates
@@ -50,9 +52,14 @@ def lse(values):
 
 
 def scores(base, record, vocab, tolerance, renormalization="none"):
-    source = Array(base, record['scores'])
+    require("row" not in record, "row belongs inside scores: scores={path:...,row:...}")
+    descriptor = record["scores"]
+    require(isinstance(descriptor, dict), "scores must be an array descriptor")
+    source = Array(base, descriptor)
     require(not source.bf16 and source.dtype.itemsize >= 4, 'logprobs require FP32 or FP64')
-    row = record['scores'].get('row', 0)
+    require(len(source.shape) != 2 or source.shape[0] <= 1 or 'row' in descriptor,
+            'multirow arrays require explicit scores.row')
+    row = descriptor.get('row', 0)
     require(integer(row), 'invalid score row')
     if len(source.shape) == 1:
         require(source.shape == [vocab] and row == 0, 'vocabulary/row mismatch')

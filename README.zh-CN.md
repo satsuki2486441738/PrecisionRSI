@@ -33,7 +33,7 @@
 
 ## 工具与开发
 
-[离线工具](skills/precision-skill/references/comparison.md)比较分布、梯度、更新和目标评分。数组工具依赖 NumPy；目标评分工具使用标准库。共享工具支持各侧执行条件检查、跨主机分布查询、逻辑张量导出和显式副本视图比较。
+[离线工具](skills/precision-skill/references/comparison.md)比较分布、张量观察值（含激活）、梯度、更新和目标评分。msProbe 模块规划工具生成有界的 L0 采集范围，并估算采集张量的字节数。数组工具依赖 NumPy；目标评分工具使用标准库。共享工具支持各侧执行条件检查、跨主机分布查询、逻辑张量导出和显式副本视图比较。
 
 在 skill 目录运行[合成产物示例](skills/precision-skill/examples/tensors.py)：
 

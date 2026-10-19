@@ -213,3 +213,143 @@ class TensorArtifactTests(unittest.TestCase):
             shards=[dict(offset=0,value=c.array([1.,2.]),view='r1')])])
         equal=export_manifest(cp,capture)
         self.assertEqual(len(equal['tensors'][0]['shards']),1)
+
+
+class DistributionRowTests(unittest.TestCase):
+    def fixture(self):
+        import numpy as np
+        from test_artifact_tools import Fixture
+        c=Fixture();c.setUp();self.addCleanup(c.doCleanups)
+        p=np.full((2,101),.5/100);p[0,0]=.5;p[1,1]=.5;p[1,0]=.5/100
+        q=p.copy();q[1,[1,2]]=q[1,[2,1]]
+        spec,a,b=c.dist_pair(p[0],q[0])
+        spec['positions']=[dict(sample='x',position=i,history=[1]*(i+1)) for i in range(2)]
+        for m,values in [(a,p),(b,q)]:
+            descriptor=c.array(np.log(values))
+            m['positions']=[dict(**coord,scores={**descriptor,'row':i}) for i,coord in enumerate(spec['positions'])]
+        return c,spec,a,b
+
+    def test_distinct_rows_in_full_validation_and_query_paths(self):
+        from query_distributions import inventory,query,compare
+        c,spec,a,b=self.fixture();r=c.run_dist(spec,a,b)
+        self.assertEqual(r['status'],'no_thresholds')
+        self.assertEqual(r['positions'][0]['max_probability_error'],0.)
+        self.assertGreater(r['positions'][1]['max_probability_error'],.49)
+        cp=c.root/'contract.json';ap=c.root/'gpu.json';bp=c.root/'npu.json'
+        ia,ib=inventory(cp,ap),inventory(cp,bp)
+        self.assertEqual([p['source']['row'] for p in ia['positions']],[0,1])
+        self.assertEqual(compare(cp,query(cp,ap,ib),query(cp,bp,ia))['aggregate'],r['aggregate'])
+
+    def test_misplaced_and_missing_multirow_indexes_are_rejected(self):
+        from validate_artifacts import validate
+        from query_distributions import inventory
+        for misplaced in (True,False):
+            with self.subTest(misplaced=misplaced):
+                c,spec,a,b=self.fixture()
+                for row in b['positions']:
+                    i=row['scores'].pop('row')
+                    if misplaced:row['row']=i
+                self.assertEqual(c.run_dist(spec,a,b)['status'],'incomparable')
+                cp=c.root/'contract.json';bp=c.root/'npu.json'
+                self.assertEqual(validate(cp,bp)['status'],'incomparable')
+                with self.assertRaisesRegex(ValueError,'scores'):inventory(cp,bp)
+
+    def test_legacy_single_row_and_invalid_row_types(self):
+        from compare_distributions import scores
+        import numpy as np
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d);np.save(p/'single.npy',np.log(np.full((1,100),.01)))
+            scores(p,{'scores':{'path':'single.npy'}},100,1e-6)
+            for row in (True,-1,1,'0'):
+                with self.subTest(row=row),self.assertRaises(ValueError):
+                    scores(p,{'scores':{'path':'single.npy','row':row}},100,1e-6)
+
+
+class ObservationTests(unittest.TestCase):
+    def fixture(self):
+        from test_artifact_tools import Fixture
+        c=Fixture();c.setUp();self.addCleanup(c.doCleanups)
+        spec,a,b=c.tensor_pair(r=[1.,2.,3.,4.],c=[1.,2.,3.,6.],stage='observations')
+        del spec['common']['state']
+        coords=dict(sample='x',tokens=[0,1],boundary='block.3.output',invocation=0,step=0,direction='forward')
+        for item in (spec,a,b):
+            item['schema_version']=2
+            item['common']=copy.deepcopy(spec['common'])
+            item['tensors'][0].update(name='block3-output',shape=[1,2,2],coordinates=copy.deepcopy(coords))
+        for side in ('GPU','NPU'):
+            c.write(side+'-env.json',dict(rank=0,versions={'framework':'test'},actual=spec['common']))
+        return c,spec,a,b
+
+    def test_activation_metrics_and_multidimensional_coordinates(self):
+        from validate_artifacts import validate
+        c,spec,a,b=self.fixture();r=c.run_tensors(spec,a,b)
+        self.assertEqual(r['status'],'no_thresholds');self.assertEqual(r['stage'],'observations')
+        self.assertAlmostEqual(r['global']['rmse']['value'],1.)
+        self.assertEqual(r['global']['max_coordinate']['tensor'],'block3-output')
+        self.assertEqual(r['global']['max_coordinate']['coordinate'],[0,1,1])
+        self.assertEqual(r['per_tensor']['block3-output']['coordinates'],spec['tensors'][0]['coordinates'])
+        self.assertEqual(validate(c.root/'contract.json',c.root/'gpu.json')['coordinate_count'],4)
+        json.dumps(r,allow_nan=False)
+
+    def test_missing_or_different_observation_coordinates(self):
+        c,spec,a,b=self.fixture();b['tensors'][0]['coordinates']['tokens']=[1,2]
+        r=c.run_tensors(spec,a,b)
+        self.assertEqual(r['status'],'incomparable');self.assertEqual(r['global']['status'],'not_covered')
+        c,spec,a,b=self.fixture();del spec['tensors'][0]['coordinates']
+        self.assertEqual(c.run_tensors(spec,a,b)['status'],'incomparable')
+        c,spec,a,b=self.fixture();spec['tensors'][0]['present']=False
+        self.assertEqual(c.run_tensors(spec,a,b)['status'],'incomparable')
+
+
+    def test_observation_export_preserves_and_checks_coordinates(self):
+        from tensor_artifacts import export_manifest
+        c,spec,a,b=self.fixture();cp=c.write('contract.json',spec)
+        inv=c.write('inventory.json',a['tensors'])
+        capture={**a,'ranks':[{**a['ranks'][0],'inventory':inv.name}]}
+        path=c.write('capture.json',capture)
+        result=export_manifest(cp,path)
+        self.assertEqual(result['tensors'][0]['coordinates'],spec['tensors'][0]['coordinates'])
+        a['tensors'][0]['coordinates']['tokens'][1]=True;c.write('inventory.json',a['tensors'])
+        with self.assertRaisesRegex(ValueError,'coordinates'):export_manifest(cp,path)
+        a['tensors'][0]['coordinates']['tokens']=[0,1]
+        a['tensors'][0]['coordinates']['step']=1;c.write('inventory.json',a['tensors'])
+        with self.assertRaisesRegex(ValueError,'coordinates'):export_manifest(cp,path)
+
+
+class MsProbePlanTests(unittest.TestCase):
+    def model(self):
+        class Parameter:
+            def numel(self):return 4
+            def element_size(self):return 2
+        class Block:
+            def parameters(self,recurse=False):
+                assert recurse is False
+                return []
+        class Norm:
+            def parameters(self,recurse=False):
+                assert recurse is False
+                return [Parameter()]
+        class Model:
+            def named_modules(self):
+                return iter([('layers.2',Block()),('layers.20',Block()),('layers.2.norm',Norm())])
+        return Model()
+
+    def test_full_selectors_and_direct_parameter_bytes(self):
+        from msprobe_capture import plan_modules
+        result=plan_modules(self.model(),['layers.2','layers.2.norm'],
+                            {'layers.2':64,'layers.2.norm':32},'dump',rank=3,step=2,max_tensor_bytes=104)
+        self.assertEqual(result['tensor_bytes'],104)
+        self.assertEqual(result['observations'][1]['parameter_bytes'],8)
+        self.assertEqual(result['config']['tensor']['list'],
+                         ['Module.layers.2.Block.forward.0','Module.layers.2.norm.Norm.forward.0'])
+        self.assertEqual(result['config']['rank'],[3]);self.assertEqual(result['config']['step'],[2])
+        json.dumps(result,allow_nan=False)
+
+    def test_budget_and_unknown_or_unbounded_selection(self):
+        from msprobe_capture import plan_modules
+        for paths,estimates,budget in [([],{},100),(['missing'],{'missing':1},100),
+            (['layers.2'],{},100),(['layers.2'],{'layers.2':True},100),
+            (['layers.2.norm'],{'layers.2.norm':32},39),
+            (['layers.2','layers.2'],{'layers.2':1},100)]:
+            with self.subTest(paths=paths,estimates=estimates),self.assertRaises(ValueError):
+                plan_modules(self.model(),paths,estimates,'dump',max_tensor_bytes=budget)

@@ -33,7 +33,7 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 
 ## Tools and development
 
-[Offline tools](skills/precision-skill/references/comparison.md) compare distributions, gradients, updates and target scores. Array tools require NumPy; target-score tools use the standard library. Shared helpers support per-side execution conditions, cross-host distribution queries, logical tensor exports and explicit replica views.
+[Offline tools](skills/precision-skill/references/comparison.md) compare distributions, tensor observations (including activations), gradients, updates and target scores. The msProbe module planner builds bounded L0 selections and estimates captured tensor bytes. Array tools require NumPy; target-score tools use the standard library. Shared helpers support per-side execution conditions, cross-host distribution queries, logical tensor exports and explicit replica views.
 
 Run the [synthetic artifact example](skills/precision-skill/examples/tensors.py) from the skill directory:
 

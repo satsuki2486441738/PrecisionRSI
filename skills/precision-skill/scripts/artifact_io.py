@@ -2,7 +2,7 @@
 
 Contract fields: schema_version=1|2, kind=tensors|distributions, thresholds=null,
 common plus optional side_conditions (see conditions.py) provide model, inputs,
-numerics, scope and state for tensors;
+numerics and scope; training tensors also require state;
 expected_ranks={side_id:[int,...],...}. Side IDs are nonempty strings naming
 execution setups; hardware/runtime details belong in environment records.
 Common entries contain identities or settings; rank sets come from the contract.
@@ -84,7 +84,7 @@ def contract(path, kind):
     require('thresholds' in data and data['thresholds'] is None, 'only null thresholds supported')
     common = data.get('common')
     require(isinstance(common, dict), 'common must be an object')
-    keys = ['model', 'inputs', 'numerics', 'scope'] + (['state'] if kind == 'tensors' else [])
+    keys = ['model', 'inputs', 'numerics', 'scope'] + (['state'] if kind == 'tensors' and data.get('stage') != 'observations' else [])
     ranks = data.get('expected_ranks')
     require(isinstance(ranks, dict) and ranks and all(isinstance(side, str) and side.strip() for side in ranks), 'contract must declare expected ranks keyed by nonempty side IDs', 'not_covered')
     for values in ranks.values():

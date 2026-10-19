@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Export logical training shards and compare explicit replica views.
+"""Export logical tensor shards and compare explicit replica views.
 
 export_manifest(contract_path,capture_path,view=None) returns a portable manifest.
 Capture JSON: side, common, expected_ranks, stage, optional events and
 ranks:[{rank,environment:JSON_path,status:JSON_path,inventory:JSON_path}].
 Each inventory is a list of {name,shape,present,shards:[{offset,value|before+after}]}.
+Observation-stage entries also carry contract-matching coordinates:{...}.
 Array descriptors follow artifact_io.py and resolve relative to the inventory.
 Adapters supply logical names/shapes/offsets; no framework topology is inferred.
 A shard may carry view:str. Without a selected view, duplicate intervals are
@@ -28,7 +29,7 @@ from pathlib import Path
 import sys
 import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from artifact_io import Array, blocked_status, contract, integer, load_json, require, shape_size
+from artifact_io import Array, blocked_status, canonical, contract, integer, load_json, require, shape_size
 from conditions import execution_settings
 from compare_tensors import compare, inventory
 
@@ -64,6 +65,9 @@ def export_manifest(contract_path,capture_path,view=None):
             name=row['name'];require(name in expected and name not in seen,'unexpected/duplicate logical parameter')
             seen.add(name)
             require(row['shape']==expected[name]['shape'] and type(row.get('present')) is bool and row['present']==expected[name]['present'],'logical tensor inventory differs')
+            if data['stage']=='observations':
+                require(canonical(row.get('coordinates'))==canonical(expected[name]['coordinates']),
+                        'observation coordinates differ')
             require(isinstance(row.get('shards'),list),'logical shards required')
             for shard in row['shards']:
                 if view is not None and shard.get('view',view)!=view:continue

@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""Compare logical gradients or stored updates using artifact schemas 1/2.
+"""Compare logical observations, gradients or stored updates using artifact schemas 1/2.
 
-Contract extras: stage=gradients|postclip-gradients|updates,
-tensors=[{name,shape,present}] listing logical parameters once.
+Contract extras: stage=observations|gradients|postclip-gradients|updates,
+tensors=[{name,shape,present}] listing logical tensors once.
+Observations require present=true and coordinates:{...} on each contract/manifest
+tensor. Coordinates identify sample/token selection, boundary, invocation and
+execution stage as appropriate; adapters map native records to this identity.
+Observation contracts need model/inputs/numerics/scope; state is optional.
 Manifest extras: stage, tensors=[{name,shape,present,shards:[...]}].
 Shards specify offset (flat logical element index) and value:array_descriptor,
 or for updates, before/after:array_descriptors. Offsets cover [0,numel) exactly;
@@ -98,7 +102,10 @@ class Stats:
 class Tensor:
     def __init__(self, base, entry, expected, stage):
         require(entry['shape'] == expected['shape'], 'logical shape mismatch')
-        require(type(entry.get('present')) is bool and entry['present'] == expected['present'], 'gradient presence mismatch')
+        require(type(entry.get('present')) is bool and entry['present'] == expected['present'], 'tensor presence mismatch')
+        if stage == 'observations':
+            require(canonical(entry.get('coordinates')) == canonical(expected['coordinates']),
+                    'observation coordinates differ')
         self.present = entry['present']
         self.size = shape_size(entry['shape'])
         self.shards = []
@@ -114,7 +121,7 @@ class Tensor:
                 arrays = [Array(base, shard['value'])]
                 require(stage != 'updates' or (not arrays[0].bf16 and arrays[0].dtype.itemsize >= 4), 'stored updates require FP32 or FP64')
             else:
-                require(stage == 'updates', 'gradients require value arrays')
+                require(stage == 'updates', 'observations and gradients require value arrays')
                 arrays = [Array(base, shard['before']), Array(base, shard['after'])]
                 require(arrays[0].shape == arrays[1].shape, 'before/after shape mismatch')
             size = arrays[0].size
@@ -147,15 +154,20 @@ class Tensor:
 
 
 def inventory(spec):
-    require(spec.get('stage') in ('gradients', 'postclip-gradients', 'updates'), 'invalid tensor stage')
+    require(spec.get('stage') in ('observations', 'gradients', 'postclip-gradients', 'updates'), 'invalid tensor stage')
     entries = spec.get('tensors')
     require(isinstance(entries, list) and bool(entries), 'empty expected tensor inventory', 'not_covered')
-    result = unique(entries, lambda x: x['name'], 'expected parameter')
+    result = unique(entries, lambda x: x['name'], 'expected tensor')
     for name, item in result.items():
-        require(isinstance(name, str) and bool(name), 'invalid parameter name')
+        require(isinstance(name, str) and bool(name), 'invalid tensor name')
         require(shape_size(item['shape']) > 0, 'empty expected tensor')
         require(type(item.get('present')) is bool, 'expected presence must be boolean')
-        require(spec['stage'] != 'updates' or item['present'], 'updates must cover all parameters')
+        require(spec['stage'] not in ('updates', 'observations') or item['present'],
+                'updates and observations require present tensors')
+        if spec['stage'] == 'observations':
+            require(isinstance(item.get('coordinates'), dict) and bool(item['coordinates']),
+                    'observation coordinates required')
+            canonical(item['coordinates'])
     return result
 
 
@@ -183,9 +195,9 @@ def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
             require(all((ref['events'][k] == 'inactive') == (cand['events'][k] == 'inactive') for k in ref['events']), 'active model schedules differ')
             require(any(v != 'inactive' for v in ref['events'].values()), 'no active optimizer event', 'not_covered')
             report['events'] = {'side_a': ref['events'], 'side_b': cand['events']}
-        ri = unique(ref['tensors'], lambda x: x['name'], 'parameter')
-        ci = unique(cand['tensors'], lambda x: x['name'], 'parameter')
-        require(set(ri) == set(ci) == set(expected), 'parameter inventory mismatch', 'not_covered')
+        ri = unique(ref['tensors'], lambda x: x['name'], 'tensor')
+        ci = unique(cand['tensors'], lambda x: x['name'], 'tensor')
+        require(set(ri) == set(ci) == set(expected), 'tensor inventory mismatch', 'not_covered')
         total = Stats()
         failed = False
         max_coordinate = None
@@ -211,9 +223,17 @@ def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
                 result = stats.report()
                 if spec['stage'] == 'updates':
                     result['initial_values'] = ('exactly_checked' if 'state' in spec['common'] else 'per_side_state') if checked_initial else 'declared_state_only'
+                if spec['stage'] == 'observations':
+                    result['coordinates'] = expected[name]['coordinates']
+                    result['max_coordinate'] = [int(i) for i in np.unravel_index(stats.max_index, expected[name]['shape'])]
                 report['per_tensor'][name] = result
                 if total.max_index is None or stats.maximum > total.maximum:
-                    max_coordinate = {'parameter': name, 'index': stats.max_index}
+                    if spec['stage'] == 'observations':
+                        max_coordinate = {'tensor': name, 'index': stats.max_index,
+                                          'coordinate': result['max_coordinate'],
+                                          'observation': expected[name]['coordinates']}
+                    else:
+                        max_coordinate = {'parameter': name, 'index': stats.max_index}
                 total.merge(stats)
             except (ArtifactError, OSError, ValueError, KeyError, TypeError, OverflowError) as exc:
                 report['per_tensor'][name] = blocked(exc)
