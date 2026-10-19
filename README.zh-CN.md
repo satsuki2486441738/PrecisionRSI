@@ -33,7 +33,9 @@
 
 ## 工具与开发
 
-[离线工具](skills/precision-skill/references/comparison.md)比较分布、张量观察值（含激活）、梯度、更新和目标评分。msProbe 模块规划工具生成有界的 L0 采集范围，并估算采集张量的字节数。数组工具依赖 NumPy；目标评分工具使用标准库。共享工具支持各侧执行条件检查、跨主机分布查询、逻辑张量导出和显式副本视图比较。
+skill 组织任务，任务适配代码接入原生执行路径，[工具库](skills/precision-skill/references/comparison.md#tools)提供可复用的操作。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。
+
+工具负责规划采集、导出和校验产物，以及比较分布、张量观察值（含激活）、梯度、更新和目标评分。msProbe 是可选的采集后端；内置规划工具生成有界的 L0 采集范围并估算张量数据量，任务适配代码负责执行采集。缺少的任务接入按需实现，开发阶段再将可复用操作整理进工具库。数组工具依赖 NumPy；目标评分工具使用标准库。
 
 在 skill 目录运行[合成产物示例](skills/precision-skill/examples/tensors.py)：
 

@@ -23,11 +23,17 @@ Reuse available environments, resources and collectors; prepare missing dependen
 
 Run the requested stages within the task's cumulative budget. Save coordinates, arrays, effective settings, imported package/runtime versions and per-rank completion together. Validate at the source; compare there or transfer large arrays through the agreed artifact store with size/hash verification. Return small reports locally. Release resources and account for cumulative usage before retrying; fix collection/launch errors within the budget.
 
+## Use and extend tools
+
+`scripts/` contains callable tools and their supporting modules. Select an existing tool from the [tool index](references/comparison.md#tools) by its inputs, operation and outputs. Use CLI tools through `--help` and Python tools through their documented functions; read the selected module docstring for its artifact interface. Load implementation code only when integration or adaptation requires it.
+
+Task adapters prepare native inputs, execute the framework and map observations to logical coordinates. Tools handle reusable planning, export, validation and comparison; third-party packages such as msProbe provide optional backends. Keep task-specific code with the task. When an existing tool does not cover the requested operation, implement the missing adapter or tool; during skill development, extract reusable code with a documented input/output interface and meaningful regression coverage.
+
 ## Adapt an unfamiliar implementation
 
 Use the installed version's documentation and source to locate batch preparation, native execution and capture boundaries. Execute through its native entrypoint, operators and state transitions. Map observations to the task's logical coordinates, preserving native storage dtypes and distinguishing captured from derived quantities.
 
-Keep collector adapters with the task and map observations to the [comparison interfaces](references/comparison.md). Report unavailable requested observations with their affected coverage. During skill development, extract reusable task code into the tool library and keep task-specific logic with the task.
+Map collected observations to the [comparison interfaces](references/comparison.md). Report unavailable requested observations with their affected coverage.
 
 ## Compare and report
 

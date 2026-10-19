@@ -1,17 +1,21 @@
 # Compare artifacts
 
-Select a tool whose scoring semantics and condition checks match the task. Prepare NumPy for array tools when needed; the target-score comparator uses the standard library.
+## Tools
 
-| Script | Comparison |
-|---|---|
-| [compare_target_scores.py](../scripts/compare_target_scores.py) | Task-selected target/action logprobs, including EOS and cached execution; standard library |
-| [compare_distributions.py](../scripts/compare_distributions.py) | Full-vocabulary logprobs: top-100 union/tail metrics |
-| [query_distributions.py](../scripts/query_distributions.py) | Cross-host inventory, union query and comparison; full arrays stay at source |
-| [compare_tensors.py](../scripts/compare_tensors.py) | Observations (including activations), gradients, postclip gradients and stored before/after updates |
-| [tensor_artifacts.py](../scripts/tensor_artifacts.py) | Export logical per-rank inventories, deduplicate equal replicas and compare explicit views |
-| [compare_scores.py](../scripts/compare_scores.py) | Single-turn cache-off assistant-body evaluation with execution evidence |
-| Task adapter | Native masks, logical mappings, losses and objective reductions; reuse [score arithmetic](../scripts/score_metrics.py) |
-| [validate_artifacts.py](../scripts/validate_artifacts.py) | One side's distribution/tensor inventory, values and execution conditions |
+Select tools by operation and supported input semantics. The tool library lives in `scripts/`; command-line entrypoints and importable Python functions are both tools. Prepare NumPy for array tools when needed; target-score tools use the standard library.
+
+| Operation | Tool entrypoint | Inputs and outputs |
+|---|---|---|
+| Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
+| Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
+| Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
+| Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
+| Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
+| Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |
+| Validate artifacts | [validate_artifacts.py](../scripts/validate_artifacts.py), CLI | Contract and one side's tensor/distribution manifest → validation and coverage |
+| Plan msProbe module capture | [msprobe_capture.py](../scripts/msprobe_capture.py), Python `plan_modules` | Native module inventory, selected paths and output sizes → L0 configuration, observation selection and payload estimate; execution uses the [layerwise integration](layerwise.md#integrate-and-verify) |
+
+Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
 
 Run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [synthetic tensor example](../examples/tensors.py) generates, validates and compares a small pair of artifacts.
 

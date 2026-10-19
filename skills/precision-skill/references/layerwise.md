@@ -11,7 +11,7 @@ Use after the user confirms investigating internal observations from a model-lev
 
 ## msProbe quick reference
 
-Use this summary to decide whether msProbe fits the selected observations. Prefer its public capture and comparison interfaces when they cover the task. Use native outputs or task-owned hooks for other paths; different sides may use different collectors.
+msProbe is an optional collection backend. The bundled Python tool [`plan_modules`](../scripts/msprobe_capture.py) prepares bounded L0 capture plans; the task adapter calls msProbe to execute collection and maps its records into observation artifacts. Use this summary to choose the backend and its public interfaces. Use native outputs or task-owned hooks for other paths; different sides may use different collectors.
 
 | Need | Available capability |
 |---|---|
