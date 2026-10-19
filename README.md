@@ -19,9 +19,15 @@ Results contain actual settings, metric values and aggregations, coverage counts
 
 ## Typical cases
 
-| Framework | Task | Execution stacks |
-|---|---|---|
-| PyTorch / Transformers; PEFT for LoRA | Full-forward inference, full-parameter SFT and LoRA SFT | Ascend 910C NPU and NVIDIA H200 GPU, each using its native software stack |
+### Ascend 910C (昇腾) NPU and NVIDIA H200 GPU
+
+Paired collection and numerical comparison with Qwen3.5-9B-Base, using each platform's native software stack:
+
+| Framework | Completed comparison |
+|---|---|
+| PyTorch / Transformers; PEFT for LoRA | Full-forward inference, full-parameter SFT and LoRA SFT |
+| TRL | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
+| verl / FSDP2 | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 
 ## Tools and development
 

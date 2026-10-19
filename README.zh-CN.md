@@ -19,9 +19,15 @@
 
 ## 典型案例
 
-| 框架 | 任务 | 执行栈 |
-|---|---|---|
-| PyTorch / Transformers；LoRA 使用 PEFT | 完整前向推理、全参 SFT 和 LoRA SFT | 昇腾 910C NPU 与 NVIDIA H200 GPU，分别使用各自的原生软件栈 |
+### Ascend 910C（昇腾）NPU 与 NVIDIA H200 GPU
+
+使用 Qwen3.5-9B-Base 和各平台原生软件栈，已完成以下双端采集与数值比较：
+
+| 框架 | 已完成的比较 |
+|---|---|
+| PyTorch / Transformers；LoRA 使用 PEFT | 完整前向推理、全参 SFT 和 LoRA SFT |
+| TRL | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
+| verl / FSDP2 | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
 
 ## 工具与开发
 
