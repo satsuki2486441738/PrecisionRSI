@@ -19,7 +19,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 
 Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
 
-Run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [synthetic tensor example](../examples/tensors.py) generates, validates and compares a small pair of artifacts.
+Run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [synthetic tensor example](../examples/tensors.py) generates, validates and compares a small pair of artifacts. For a worked collection task, see the [fixed-history inference example](../examples/fixed-history-inference.md).
 
 ```sh
 python scripts/compare_tensors.py --contract gradients.json --side-a a.json --side-b b.json --output report.json

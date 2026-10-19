@@ -38,6 +38,8 @@ The skill organizes the task; task adapters integrate native execution; the [too
 
 Tools check runtime initialization and imported interfaces, capture fixed-history inference distributions, plan internal capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
 
+For a concrete collection task and the expected agent workflow, see the [fixed-history inference example](skills/precision-skill/examples/fixed-history-inference.md), from environment preparation through capture, validation and reporting.
+
 Run the [synthetic artifact example](skills/precision-skill/examples/tensors.py) from the skill directory:
 
 ```sh
