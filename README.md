@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An Agent Skill for inference, SFT, LoRA and RL numerical comparison across hardware and software execution stacks.
+An Agent Skill for inference, SFT, LoRA and RL numerical comparison across hardware and software execution stacks. A typical use case is comparing inference scores, training gradients and parameter updates between Ascend NPUs and NVIDIA GPUs using each platform's native software stack.
 
 ## Use
 

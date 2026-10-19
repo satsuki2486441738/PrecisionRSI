@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-用于不同硬件与软件执行栈之间推理、SFT、LoRA 和 RL 数值比较的 Agent Skill。
+用于不同硬件与软件执行栈之间推理、SFT、LoRA 和 RL 数值比较的 Agent Skill。典型场景是在昇腾 NPU 与 NVIDIA GPU 上分别使用各自的原生软件栈，采集并比较推理评分、训练梯度和参数更新。
 
 ## 使用
 
