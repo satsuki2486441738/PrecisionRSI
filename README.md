@@ -17,6 +17,8 @@ Examples:
 
 Results contain actual settings, metric values and aggregations, coverage counts, maximum-error coordinates and artifact paths. The task determines common conditions and allowed per-side differences across peer execution setups. Comparison metrics are symmetric. Collection retains native operators and records each side's dependencies.
 
+For internal layer comparison, the agent first confirms scope and resource limits, then autonomously integrates collectors and refines sampling. The [layerwise guide](skills/precision-skill/references/layerwise.md) includes msProbe capabilities, integration and trial checks, with native hooks for other execution paths.
+
 ## Typical cases
 
 ### Ascend 910C (昇腾) NPU and NVIDIA H200 GPU
