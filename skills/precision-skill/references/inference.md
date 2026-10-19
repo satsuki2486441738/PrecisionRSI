@@ -18,7 +18,7 @@ Feed the same predetermined continuation while each side evolves its native cach
 
 Select the native entrypoint and inspect the installed version's implementation.
 
-Record applicable attention backend, TP, KV dtype, graph/cache/chunking and batching settings. Map reordered requests/chunks to absolute prediction positions: prompt token $x_t$ uses position $t-1$; the final prefill row supplies the first output distribution. Account for BOS/templates and initial prompt entries.
+Record applicable attention backend, TP, KV and recurrent-state dtypes, graph/cache/chunking and batching settings. Map reordered requests/chunks to absolute prediction positions: prompt token $x_t$ uses position $t-1$; the final prefill row supplies the first output distribution. Account for BOS/templates and initial prompt entries.
 
 Reconstruct vocabulary shards, exclude padding and export the score rows needed for union queries. Preserve each engine's native cache while replaying a predetermined continuation.
 
@@ -32,7 +32,7 @@ Reconstruct vocabulary shards, exclude padding and export the score rows needed 
 | [MindIE-LLM](https://github.com/Ascend/MindIE-LLM) | Service/model backend, available score access and scheduled request/prefill/decode mappings |
 | [llama.cpp](https://github.com/ggml-org/llama.cpp) | GGUF/checkpoint identity, quantization, tokenizer conversion and native context/logit-row mapping |
 
-Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector for fixed-history decode.
+Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector for fixed-history decode. The [inference capture tool](../scripts/inference_capture.py) saves full-vocabulary FP32 logprobs before forcing each fixed token, checks logical prefill/decode histories and exports distribution/target-score records. The adapter selects request rows, reconstructs vocabulary shards and maps native scheduling events to logical events.
 
 ### Other/custom
 

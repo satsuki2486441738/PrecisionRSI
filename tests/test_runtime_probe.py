@@ -1,0 +1,83 @@
+"""Fresh-interpreter initialization, real import identity and interface checks."""
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import unittest
+
+TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-skill/scripts'
+sys.path.insert(0, str(TOOLS))
+from runtime_probe import probe_runtime
+
+
+class RuntimeProbeTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        (self.root/'probe_fixture.py').write_text(
+            "import builtins, os, time\n"
+            "__version__='actual-module'\n"
+            "def initialize(): builtins.precision_ready=True; return {'pid':os.getpid()}\n"
+            "def inspect_worker():\n"
+            "    assert builtins.precision_ready\n"
+            "    print('worker diagnostic')\n"
+            "    return {'ready':True,'pid':os.getpid()}\n"
+            "def wait(): time.sleep(60)\n")
+        info = self.root/'probe_fixture-9.0.dist-info'
+        info.mkdir()
+        (info/'METADATA').write_text('Metadata-Version: 2.1\nName: probe-fixture\nVersion: 9.0\n')
+
+    def test_fresh_process_and_actual_module_separate_from_distribution(self):
+        spec = dict(python_paths=[str(self.root)], imports=['probe_fixture'],
+                    symbols=['probe_fixture:initialize'],
+                    checks=['probe_fixture:initialize','probe_fixture:inspect_worker'],
+                    distributions=['probe-fixture'])
+        result = probe_runtime(spec)
+        self.assertEqual(result['status'], 'completed', result)
+        self.assertNotEqual(result['pid'], __import__('os').getpid())
+        self.assertEqual(result['modules']['probe_fixture']['version'], 'actual-module')
+        self.assertEqual(result['modules']['probe_fixture']['path'], str(self.root/'probe_fixture.py'))
+        self.assertEqual(result['distributions']['probe-fixture']['version'], '9.0')
+        self.assertTrue(result['checks']['probe_fixture:inspect_worker']['ready'])
+        self.assertIn('worker diagnostic', result['diagnostics'])
+        # Initialization in the first worker is not inherited by the next one.
+        result = probe_runtime(dict(python_paths=[str(self.root)], checks=['probe_fixture:inspect_worker']))
+        self.assertEqual(result['status'], 'failed')
+        self.assertEqual(result['error']['type'], 'AttributeError')
+
+    def test_multibyte_diagnostics_tail(self):
+        (self.root/'noisy.py').write_text("print('中文' * 5000)\n")
+        result = probe_runtime(dict(python_paths=[str(self.root)], imports=['noisy']))
+        self.assertEqual(result['status'], 'completed', result)
+        self.assertGreater(result['diagnostic_bytes'], 8192)
+        self.assertTrue(result['diagnostics'].endswith('中文\n'))
+
+    def test_missing_deferred_interface_is_reported(self):
+        result = probe_runtime(dict(python_paths=[str(self.root)], imports=['probe_fixture'],
+                                    symbols=['probe_fixture:removed_helper']))
+        self.assertEqual(result['status'], 'failed')
+        self.assertIn('removed_helper', result['error']['message'])
+        self.assertEqual(result['symbols'], [])
+
+    def test_worker_timeout_is_bounded(self):
+        result = probe_runtime(dict(python_paths=[str(self.root)], checks=['probe_fixture:wait']), timeout=.3)
+        self.assertEqual(result['status'], 'timeout')
+        self.assertIsNotNone(result['returncode'])
+
+    def test_cli_relative_import_path_and_existing_output(self):
+        spec = self.root/'spec.json'
+        spec.write_text(json.dumps(dict(python_paths=['.'], imports=['probe_fixture'])))
+        output = self.root/'report.json'
+        command = [sys.executable, '-B', str(TOOLS/'runtime_probe.py'), '--spec', str(spec), '--output', str(output)]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        before = output.read_bytes()
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(output.read_bytes(), before)
+
+
+if __name__ == '__main__':
+    unittest.main()

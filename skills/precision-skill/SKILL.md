@@ -9,11 +9,11 @@ Complete the requested collection and comparison, including environment preparat
 
 ## Collect
 
-Determine the common conditions and allowed differences from the task and environment inspection before collection. Check model/weight/tokenizer/config identities, input IDs/positions/masks, algorithm and loss reductions, numerical settings, capture boundaries and metric definitions. For training, also check initial parameters, optimizer state, microbatch order, accumulation, clipping and random inputs. Record conditions that must match separately from each side's actual configuration, including requested differences and implementation differences required by its execution stack. Validate execution against these settings; ask about an unexpected difference when its effect on the comparison's meaning is unclear. Pin dependencies per setup and retain native operators.
+Determine the common conditions and allowed differences from the task and environment inspection before collection. Check model/weight/tokenizer/config identities, input IDs/positions/masks, algorithm and loss reductions, numerical settings, capture boundaries and metric definitions. For training, also check initial parameters, optimizer state, microbatch order, accumulation, clipping and random inputs. Record conditions that must match separately from each side's actual configuration, including requested differences and implementation differences required by its execution stack. Validate execution against these settings; ask about an unexpected difference when its effect on the comparison's meaning is unclear. Select an officially supported dependency combination for each setup, align versions as required by the task, and retain native operators.
 
 Infer missing settings from the task, existing configuration and environment. Use small, bounded defaults for an initial run and record them. Ask when missing information determines the comparison's meaning or resource limit and cannot be inferred from context.
 
-Reuse available environments, resources and collectors; prepare missing dependencies and implement missing collection or comparison code. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Read the selected recipe:
+Reuse available environments, resources and collectors; prepare missing dependencies and implement missing collection or comparison code. Use the [runtime probe](scripts/runtime_probe.py) to check ordered initialization and selected interfaces in the chosen interpreter, then verify initialization in native workers and run a small execution before full collection. Record imported module paths/versions separately from distribution metadata. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Read the selected recipe:
 
 | Task | Recipe |
 |---|---|
@@ -21,7 +21,7 @@ Reuse available environments, resources and collectors; prepare missing dependen
 | SFT (full / LoRA) | [Training targets, state and updates](references/sft.md) |
 | RL | [Fixed trajectories, objectives and updates](references/rl.md) |
 
-Run the requested stages within the task's cumulative budget. Save coordinates, arrays, effective settings, imported package/runtime versions and per-rank completion together. Validate at the source; compare there or transfer large arrays through the agreed artifact store with size/hash verification. Return small reports locally. Release resources and account for cumulative usage before retrying; fix collection/launch errors within the budget.
+Run the requested stages within the task's cumulative budget. Save coordinates, arrays, effective settings, imported package/runtime versions and per-rank completion together. Validate at the source; compare there or transfer large arrays through the agreed artifact store with size/hash verification. Return small reports locally. Keep full job logs with the run and read compact status at stage changes. Release resources and account for cumulative usage before retrying; fix collection/launch errors within the budget. Once requested artifacts validate and metrics are available, release remaining resources and deliver the report.
 
 ## Use and extend tools
 

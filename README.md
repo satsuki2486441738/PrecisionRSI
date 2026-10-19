@@ -28,6 +28,7 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 | Framework | Completed comparison |
 |---|---|
 | PyTorch / Transformers; PEFT for LoRA | Full-forward inference, full-parameter SFT and LoRA SFT |
+| SGLang | Native cached inference with fixed continuations; prompt scores and preconstraint distributions |
 | TRL | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 | verl / FSDP2 | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 
@@ -35,7 +36,7 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 
 The skill organizes the task; task adapters integrate native execution; the [tool library](skills/precision-skill/references/comparison.md#tools) provides reusable operations. `scripts/` contains CLI tools, callable Python tools and their supporting modules. Tool docstrings define inputs and outputs; task recipes select capture boundaries and metrics.
 
-Tools plan capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
+Tools check runtime initialization and imported interfaces, capture fixed-history inference distributions, plan internal capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
 
 Run the [synthetic artifact example](skills/precision-skill/examples/tensors.py) from the skill directory:
 
