@@ -30,8 +30,13 @@ Pair scores by sample/prediction position/token and tensors by logical parameter
 
 For two executions' logprobs $\ell_{a,i},\ell_{b,i}$ over $N$ valid targets, use:
 
-- $\mathrm{NLL}_s=-\sum_i\ell_{s,i}/N$; report each side's NLL and their absolute difference.
-- $e_i=|\ell_{a,i}-\ell_{b,i}|$; report MAE, P99 and maximum with its coordinate.
+Report each side's NLL and their absolute difference:
+
+$$
+\mathrm{NLL}_{s} = -\frac{1}{N}\sum_{i=1}^{N} \ell_{s,i}
+$$
+
+For $e_i=|\ell_{a,i}-\ell_{b,i}|$, report MAE, P99 and maximum with its coordinate.
 
 Use the global valid-target count. Native loss retains its implemented reduction. Percentiles use all paired errors, linearly interpolated at $a(N-1)$; P99 uses $a=0.99$.
 
