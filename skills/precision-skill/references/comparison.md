@@ -56,7 +56,7 @@ For paired tensors $a$ and $b$, use stable FP64 reductions:
 | L2 error | $\lVert a-b\rVert_2$ |
 | RMSE | $\lVert a-b\rVert_2/\sqrt{N}$ |
 | Cosine | $a^\top b/(\lVert a\rVert_2\lVert b\rVert_2)$ |
-| Maximum absolute error | $\max_i|a_i-b_i|$ |
+| Maximum absolute error | $\max_i \lvert a_i-b_i\rvert$ |
 
 Global metrics concatenate coordinates. Retain counts and signal/error norms. Actual updates are $\theta_{after}-\theta_{before}$, promoting stored values to at least FP32 before subtraction.
 
