@@ -33,7 +33,7 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Coordinates
 
-Pair scores by sample/prediction position/token and tensors by logical tensor/element. For `stage: observations`, declare each tensor's logical sampling `coordinates` in the contract and both manifests; retain sample/token selection, boundary, invocation and execution stage as applicable. Native names map to this identity in the adapter. Reconstruct logical coordinates from shards, packed batches and fused projections; retain tied-weight mappings and reduction tags. Check expected coordinates, masks and ranks, and verify converted initial values. Exclude padding, deduplicate equal replicas, and retain differing replicas as explicit views. Distinguish absent gradients from present zeros.
+Pair target scores by sample/target position/token, distributions by sample/prediction position, and tensors by logical tensor/element. In causal inference, prediction position $t-1$ predicts target position $t$. For `stage: observations`, declare each tensor's logical sampling `coordinates` in the contract and both manifests; retain sample/token selection, boundary, invocation and execution stage as applicable. Native names map to this identity in the adapter. Reconstruct logical coordinates from shards, packed batches and fused projections; retain tied-weight mappings and reduction tags. Check expected coordinates, masks and ranks, and verify converted initial values. Exclude padding, deduplicate equal replicas, and retain differing replicas as explicit views. Distinguish absent gradients from present zeros.
 
 ## Target-token scores
 
