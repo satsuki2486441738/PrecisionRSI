@@ -37,7 +37,7 @@
 | 框架 | 已完成的比较 |
 |---|---|
 | PyTorch / Transformers；LoRA 使用 PEFT | 完整前向推理、全参 SFT 和 LoRA SFT |
-| Transformers Trainer | 原生全参 SFT 单步（抽样梯度/更新）；LoRA SFT 梯度累积、两步 AdamW 与 checkpoint 恢复（完整 adapter 梯度/更新）；目标评分 |
+| Transformers Trainer | 原生全参 SFT 单步（抽样梯度/更新）；单设备及两卡 FSDP2 LoRA SFT 梯度累积、两步 AdamW 与 checkpoint 恢复（完整 adapter 梯度、更新和优化器状态）；目标评分 |
 | vLLM / vLLM-Ascend | 原生 prefill 目标评分；固定续写的缓存推理分布与目标评分 |
 | SGLang | 原生缓存推理，固定续写 token；比较 prompt 评分与约束前分布 |
 | TRL | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
