@@ -8,11 +8,13 @@
 !/skills/
 /skills/*
 !/skills/precision-skill/
+!/.github/
 !/tests/
 /tests/*
 !/tests/test_compare_scores.py
 !/tests/test_artifact_tools.py
 !/tests/test_shared_tools.py
+!/tests/test_repository.py
 !/tests/test_runtime_probe.py
 !/tests/test_inference_capture.py
 !/tests/test_group_metrics.py

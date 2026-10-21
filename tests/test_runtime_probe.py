@@ -59,6 +59,51 @@ class RuntimeProbeTests(unittest.TestCase):
         finally:
             sys.path[:] = before
 
+    def test_native_report_contains_only_plain_json_values(self):
+        import types
+        from unittest.mock import patch
+        class Version(str):
+            pass
+        class Count(int):
+            pass
+        class Number(float):
+            pass
+        module = types.ModuleType('native_fixture')
+        module.__version__ = Version('2.9.0')
+        module.__file__ = self.root / 'native.py'
+        original = {'version': module.__version__, 'shape': (Count(2), Count(3)),
+                    'value': Number(1.25), 'optional': None}
+        module.check = lambda: original
+        with patch.dict(sys.modules, native_fixture=module):
+            report = inspect_runtime(dict(imports=['native_fixture'], checks=['native_fixture:check']))
+            self.assertEqual(report['status'], 'completed', report)
+            self.assertEqual(report['modules']['native_fixture'],
+                             dict(path=str(module.__file__), version='2.9.0'))
+            result = report['checks']['native_fixture:check']
+            self.assertIs(type(result['version']), str)
+            self.assertIs(type(result['shape']), list)
+            self.assertTrue(all(type(x) is int for x in result['shape']))
+            self.assertIs(type(result['value']), float)
+            self.assertEqual(result, dict(version='2.9.0', shape=[2, 3], value=1.25, optional=None))
+            self.assertIsInstance(original['shape'], tuple)
+            module.__version__ = module.__file__ = None
+            report = inspect_runtime(dict(imports=['native_fixture']))
+            self.assertEqual(report['modules']['native_fixture'], dict(path=None, version=None))
+
+    def test_native_invalid_check_retains_json_failure_diagnostics(self):
+        import types
+        from unittest.mock import patch
+        module = types.ModuleType('invalid_fixture')
+        for value, error in [(object(), 'TypeError'), (float('nan'), 'ValueError')]:
+            module.check = lambda: value
+            with self.subTest(error=error), patch.dict(sys.modules, invalid_fixture=module):
+                report = inspect_runtime(dict(checks=['invalid_fixture:check']))
+                self.assertEqual(report['status'], 'failed')
+                self.assertEqual(report['error']['type'], error)
+                self.assertIn('Traceback', report['error']['traceback'])
+                self.assertEqual(report['checks'], {})
+                json.dumps(report, allow_nan=False)
+
     def test_invalid_payload_does_not_launch_worker(self):
         from unittest.mock import patch
         for value, error in [(object(), TypeError), (float('nan'), ValueError)]:

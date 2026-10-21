@@ -17,4 +17,4 @@ Create new runs exclusively as `<side>-<task>-<UTC YYYYmmddTHHMMSSZ>`, using the
 
 ## Validation
 
-Run `python -B -m unittest discover -s tests -v` from the repository root. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.
+Install maintenance dependencies with `python -m pip install -r .github/requirements.txt`. Run `python -B -m unittest discover -s tests -v` and `python -B .github/validate.py` from the repository root. With Torch installed, run `python -B .github/smoke_install.py` to verify a clean skill installation and the CPU gradient example. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.

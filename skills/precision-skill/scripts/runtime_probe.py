@@ -10,7 +10,8 @@ Spec: imports=[module,...] in initialization order; symbols=[module:attribute,..
 checks=[module:zero_argument_callable,...] returning JSON values;
 distributions=[installed_distribution,...]; python_paths=[absolute_path,...].
 Module records contain actual __file__/__version__; distribution metadata is
-recorded separately. Python paths apply only during inspection.
+recorded separately. Reports contain plain JSON values, including in native workers.
+Python paths apply only during inspection.
 
 CLI: --spec SPEC.json --output NEW.json [--python EXECUTABLE] [--timeout 60]
 Resolve relative python_paths against SPEC.json. Exit 0=completed, 1=failed or
@@ -55,15 +56,15 @@ def inspect_runtime(spec):
         sys.path[:0] = [str(path) for path in paths]
         for name in spec.get('imports', []):
             module = importlib.import_module(name)
-            report['modules'][name] = dict(path=getattr(module, '__file__', None),
-                                           version=getattr(module, '__version__', None))
+            report['modules'][name] = {key: None if value is None else str(value)
+                                      for key, value in (('path', getattr(module, '__file__', None)),
+                                                         ('version', getattr(module, '__version__', None)))}
         for name in spec.get('symbols', []):
             _symbol(name)
             report['symbols'].append(name)
         for name in spec.get('checks', []):
             result = _symbol(name)()
-            json.dumps(result, allow_nan=False)
-            report['checks'][name] = result
+            report['checks'][name] = json.loads(json.dumps(result, allow_nan=False))
         for name in spec.get('distributions', []):
             distribution = metadata.distribution(name)
             report['distributions'][name] = dict(version=distribution.version,
@@ -74,7 +75,7 @@ def inspect_runtime(spec):
     finally:
         sys.path[:] = original_paths
     report['elapsed_seconds'] = time.monotonic() - started
-    return report
+    return json.loads(json.dumps(report, allow_nan=False))
 
 
 def probe_runtime(spec, executable=None, timeout=60):
