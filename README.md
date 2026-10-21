@@ -37,7 +37,7 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 | Framework | Completed comparison |
 |---|---|
 | PyTorch / Transformers; PEFT for LoRA | Full-forward inference, full-parameter SFT and LoRA SFT |
-| Transformers Trainer | Native full-parameter SFT single step; target scores and sampled gradients/stored updates |
+| Transformers Trainer | Native full-parameter SFT single step (sampled gradients/updates); LoRA SFT with gradient accumulation, two AdamW steps and checkpoint restoration (complete adapter gradients/updates); target scores |
 | vLLM / vLLM-Ascend | Native prefill target scores; fixed-history cached inference distributions and target scores |
 | SGLang | Native cached inference with fixed continuations; prompt scores and preconstraint distributions |
 | TRL | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
