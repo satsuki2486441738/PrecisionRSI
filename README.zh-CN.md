@@ -2,11 +2,20 @@
 
 [English](README.md) | 简体中文
 
-让 agent 完成不同执行环境之间的数值精度采集与对比。
+让 agent 完成不同执行环境之间的数值精度比较与修复。
 
 ## 使用
 
-将 [skills/precision-skill](skills/precision-skill/) 复制到客户端的 skill 目录。提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
+根据任务选择 skill，将其目录复制到客户端的 skill 目录：
+
+| Skill | 任务与交付 |
+|---|---|
+| [Precision Compare](skills/precision-skill/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
+| [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
+
+同时安装两个 skill，可在修复时复用内置采集与比较工具。Precision Repair 也可以从原生失败测试出发，使用任务自身的工具完成修复。
+
+进行比较时，提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
 
 例如：
 

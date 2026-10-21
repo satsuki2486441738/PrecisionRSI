@@ -2,6 +2,7 @@
 
 ## Layout
 
+- `skills/precision-repair/` is the installable repair skill. Its entrypoint owns correctness evidence, causal diagnosis, patching and original-workload verification. Reuse comparison tools from `skills/precision-skill/`; keep framework-specific fixes and experiments with their cases.
 - `skills/precision-skill/` is the installable package. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Optional internal sampling and its msProbe capability summary live in `references/layerwise.md`. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.
 - Maintain matching English `README.md` and Chinese `README.zh-CN.md`. Technical documentation and maintenance instructions use English. Follow the Agent Skills specification.
 - `skills/precision-skill/examples/` contains concise runnable artifact examples. Extract task-independent operations into composable tools with explicit interfaces and meaningful regressions; keep task-specific settings in adapters and environments.
@@ -17,4 +18,4 @@ Create new runs exclusively as `<side>-<task>-<UTC YYYYmmddTHHMMSSZ>`, using the
 
 ## Validation
 
-Install maintenance dependencies with `python -m pip install -r .github/requirements.txt`. Run `python -B -m unittest discover -s tests -v` and `python -B .github/validate.py` from the repository root. With Torch installed, run `python -B .github/smoke_install.py` to verify a clean skill installation and the CPU gradient example. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.
+Install maintenance dependencies with `python -m pip install -r .github/requirements.txt`. Run `python -B -m unittest discover -s tests -v` and `python -B .github/validate.py` from the repository root. With Torch installed, run `python -B .github/smoke_install.py` to verify clean skill installations, companion links and the CPU gradient example. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.

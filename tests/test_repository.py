@@ -41,6 +41,56 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertIn('missing local target', errors[0])
         self.assertIn('missing heading', errors[1])
 
+    def test_all_skill_packages_are_validated(self):
+        skills = self.root / 'skills'
+        skills.mkdir()
+        with self.assertRaisesRegex(ValueError, 'no installable skills'):
+            validator.validate_skills(self.root)
+        for name in ('precision-skill', 'precision-repair'):
+            folder = skills / name
+            folder.mkdir()
+            (folder / 'SKILL.md').write_text(
+                f'---\nname: {name}\ndescription: Execute the task.\n---\n# Task\n')
+        self.assertEqual([path.name for path in validator.validate_skills(self.root)],
+                         ['precision-repair', 'precision-skill'])
+        entrypoint = skills / 'precision-repair/SKILL.md'
+        entrypoint.write_text('---\nname: wrong-name\ndescription: Repair.\n---\n')
+        with self.assertRaisesRegex(ValueError, 'directory mismatch'):
+            validator.validate_skills(self.root)
+        entrypoint.unlink()
+        with self.assertRaisesRegex(ValueError, 'missing SKILL.md'):
+            validator.validate_skills(self.root)
+
+    def test_clean_install_preserves_companion_links_and_omits_caches(self):
+        smoke_spec = importlib.util.spec_from_file_location(
+            'smoke_install', Path(__file__).resolve().parents[1] / '.github/smoke_install.py')
+        smoke = importlib.util.module_from_spec(smoke_spec)
+        smoke_spec.loader.exec_module(smoke)
+        source = self.root / 'checkout/skills'
+        for name in ('precision-skill', 'precision-repair'):
+            folder = source / name
+            folder.mkdir(parents=True)
+            (folder / 'SKILL.md').write_text(
+                f'---\nname: {name}\ndescription: Execute the task.\n---\n# Task\n')
+        repair = source / 'precision-repair/SKILL.md'
+        with repair.open('a') as stream:
+            stream.write('[tools](../precision-skill/scripts/tool.py)\n')
+        scripts = source / 'precision-skill/scripts'
+        scripts.mkdir()
+        (scripts / 'tool.py').write_text('print("tool")\n')
+        (scripts / '__pycache__').mkdir()
+        (scripts / '__pycache__/tool.pyc').write_bytes(b'cache')
+        (source.parent / 'private.txt').write_text('case-specific')
+        installed = self.root / 'installed'
+        smoke.install_skills(source, installed / 'skills')
+        self.assertEqual(len(validator.validate_skills(installed)), 2)
+        self.assertEqual(validator.validate_links(installed, [installed / 'skills/precision-repair/SKILL.md']),
+                         (1, []))
+        self.assertFalse((installed / 'private.txt').exists())
+        self.assertFalse((installed / 'skills/precision-skill/scripts/__pycache__').exists())
+        self.assertEqual((installed / 'skills/precision-skill/scripts/tool.py').read_text(),
+                         'print("tool")\n')
+
     def test_metadata_name_description_optional_fields(self):
         folder = self.root / 'test-skill'
         folder.mkdir()

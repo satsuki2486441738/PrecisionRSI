@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy only the skill package and run its CPU example from an unrelated cwd.
+"""Copy installable skills, validate their links and run the CPU comparison example.
 
 Requires Torch and NumPy in this interpreter. No model downloads or accelerators.
 All installation and execution artifacts are temporary.
@@ -14,12 +14,25 @@ import sys
 import tempfile
 
 
+def install_skills(source, destination):
+    """Copy package directories without repository maintenance files or caches."""
+    for folder in sorted(source.iterdir()):
+        if folder.is_dir() and not folder.name.startswith('.'):
+            shutil.copytree(folder, destination / folder.name,
+                            ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+
+
 def main():
-    source = Path(__file__).resolve().parents[1] / 'skills/precision-skill'
+    from validate import validate_links, validate_skills
+    source = Path(__file__).resolve().parents[1] / 'skills'
     with tempfile.TemporaryDirectory(prefix='precision-install-') as directory:
         root = Path(directory)
+        install_skills(source, root / 'skills')
+        folders = validate_skills(root)
+        _, errors = validate_links(root, sorted((root / 'skills').rglob('*.md')))
+        if errors:
+            raise ValueError('\n'.join(errors))
         installed = root / 'skills/precision-skill'
-        shutil.copytree(source, installed, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
         cwd = root / 'work'
         cwd.mkdir()
         env = {k: v for k, v in os.environ.items() if k not in ('PYTHONPATH', 'PYTHONHOME')}
@@ -44,7 +57,8 @@ def main():
                 raise ValueError(f'invalid metric {key}: {metric}')
         if not all(math.isfinite(value) for value in output['losses'].values()):
             raise ValueError('nonfinite native loss')
-        print('Clean skill installation: CPU FP32/BF16 captures validated; compared 12 gradient values.')
+        print(f'Clean installation of {len(folders)} skills: links valid; '
+              'CPU FP32/BF16 captures validated; compared 12 gradient values.')
 
 
 if __name__ == '__main__':

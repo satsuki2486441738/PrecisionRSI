@@ -2,11 +2,20 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An Agent Skill that guides agents through numerical precision collection and comparison across execution environments.
+Agent Skills for numerical precision comparison and repair across execution environments.
 
 ## Use
 
-Copy [skills/precision-skill](skills/precision-skill/) into your client's skill directory. Provide the task and existing artifacts, or the model, data and platform connections needed for collection. The agent prepares the environment, integrates native execution, writes missing collection/comparison code and runs the task. Reusable tools are extended during skill development.
+Choose the skill for the requested task and copy its directory into your client's skill directory:
+
+| Skill | Task and result |
+|---|---|
+| [Precision Compare](skills/precision-skill/SKILL.md) | Collect and compare numerical results; return metrics, coverage and evidence |
+| [Precision Repair](skills/precision-repair/SKILL.md) | Establish the cause of a numerical defect, patch the implementation and verify the original workload |
+
+Install both to reuse the bundled collection and comparison tools during repair. Precision Repair can also work from a failing native test using task-owned tooling.
+
+For comparison, provide the task and existing artifacts, or the model, data and platform connections needed for collection. The agent prepares the environment, integrates native execution, writes missing collection/comparison code and runs the task. Reusable tools are extended during skill development.
 
 Examples:
 

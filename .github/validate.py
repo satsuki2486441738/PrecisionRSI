@@ -92,18 +92,32 @@ def validate_links(root, paths):
     return count, errors
 
 
+def validate_skills(root):
+    """Validate every installable directory, including missing entrypoints."""
+    folders = sorted(path for path in (root / 'skills').iterdir()
+                     if path.is_dir() and not path.name.startswith('.'))
+    if not folders:
+        raise ValueError(f'{root}: no installable skills')
+    for folder in folders:
+        entrypoint = folder / 'SKILL.md'
+        if not entrypoint.is_file():
+            raise ValueError(f'{folder}: missing SKILL.md')
+        validate_metadata(entrypoint)
+    return folders
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[1])
     args = parser.parse_args()
     root = args.root.resolve()
-    validate_metadata(root / 'skills/precision-skill/SKILL.md')
+    folders = validate_skills(root)
     tracked = subprocess.check_output(['git', 'ls-files', '-z'], cwd=root).decode().split('\0')
     paths = [root / p for p in tracked if p.endswith('.md')]
     count, errors = validate_links(root, paths)
     if errors:
         raise ValueError('\n'.join(errors))
-    print(f'Skill metadata valid; checked {count} local links in {len(paths)} Markdown files.')
+    print(f'{len(folders)} skills valid; checked {count} local links in {len(paths)} Markdown files.')
 
 
 if __name__ == '__main__':
