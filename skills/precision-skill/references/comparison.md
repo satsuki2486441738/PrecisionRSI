@@ -11,6 +11,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 | Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
 | Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
 | Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
+| Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
 | Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
 | Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
 | Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |

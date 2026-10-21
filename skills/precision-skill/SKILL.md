@@ -13,7 +13,7 @@ Determine the common conditions and allowed differences from the task and enviro
 
 Infer missing settings from the task, existing configuration and environment. Use small, bounded defaults for an initial run and record them. Ask when missing information determines the comparison's meaning or resource limit and cannot be inferred from context.
 
-Reuse available environments, resources and collectors; prepare missing dependencies and implement missing collection or comparison code. Use the [runtime probe](scripts/runtime_probe.py) to check ordered initialization and selected interfaces in the chosen interpreter, then verify initialization in native workers and run a small execution before full collection. Record imported module paths/versions separately from distribution metadata. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Read the selected recipe:
+Reuse available environments, resources and collectors; prepare missing dependencies and implement missing collection or comparison code. Use the [runtime probe](scripts/runtime_probe.py) to check ordered initialization and selected interfaces in the chosen interpreter, then run a minimal task through native execution, capture, export, validation and comparison before expanding collection. Record imported module paths/versions separately from distribution metadata. Resolve connections, native entrypoint, device capacity, allocation, output path and timeout from the task. Record actual execution devices inside native workers and associate them with resource allocations using platform device identities or topology. Read the selected recipe:
 
 | Task | Recipe |
 |---|---|
