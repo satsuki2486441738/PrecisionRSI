@@ -12,7 +12,7 @@ The hardware was one NVIDIA RTX 5060 with 8 GB memory. The original full-vocabul
 
 ## Independent references and coverage
 
-CPU references run independently from the captured initial model values and effective inputs. They do not use the native gradients, updates or outputs to construct the reference. References reproduce the native objective's effective denominator; the objective is distinct from selected-token NLL. Requested FP32/BF16 modes and actual storage/computation dtypes are recorded separately.
+CPU references run independently from the captured initial model values and effective inputs. They do not use native current-policy scores, gradients or updates as the numerical reference. The RL objective conditions on the actual generated histories, masks, rewards and frozen native old-policy score anchors. Both retained Swift cases have FP32 `[2,4]` old-score tensors; CPU computation independently recomputes the current policy, rather than recomputing both old and current policies. References reproduce the native objective's effective denominator; the objective is distinct from selected-token NLL. Requested FP32/BF16 modes and actual storage/computation dtypes are recorded separately.
 
 SFT comparisons retain the complete trainable parameter inventory, including zero gradients and unchanged coordinates. RL native optimization covers the complete model, while the numerical gradient/update comparison samples **98,304 coordinates** from the first 12 optimizer parameters. The tiny and pretrained inventories contain 19,709,312 and 751,632,384 parameter elements respectively. The CPU reference computes full-model backward and clipping, then applies elementwise AdamW at the selected coordinates. This is explicitly sampled numerical coverage.
 
@@ -27,6 +27,8 @@ The source run's `GUIDE.md`, `GPU_PROGRESS.json`, `RUN_VALIDATION.json`, `HARDWA
 Public ZIPs contain indexed portable arrays and replay instructions. Private text paths and machine identifiers were removed; captured array/tensor bytes were preserved and their hashes checked. Public RL ZIP hashes are recorded independently from the pre-export archive hashes. Installed ms-swift 4.6.0 has its original module hashes and null checkout identity; a separate audit matched its 538 Python source files to the official 4.6 release commit. Post-execution audits do not rewrite the collectors' original provenance.
 
 The individual history entries link directly to the immutable evidence, summaries and appropriate replay packages. No generated chart substitutes for a raw measurement. Only recorded, unequal values on two comparable sides receive bars; scalar errors, similarity statistics and coverage remain numerical.
+
+An append-only [fixed-input supplement](https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json) provides 11 original-bit input tensors per Swift RL case, a typed JSON tree and a loader for independent CPU forward/backward. This replay reproduces the retained reference loss and full clipping norm. The original comparison ZIPs and numerical values remain unchanged; the supplement adds no native cases or acceptance decisions.
 
 ## Work still in progress
 

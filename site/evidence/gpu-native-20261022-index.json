@@ -334,8 +334,25 @@
         {
           "label": "公共导出与重放审计",
           "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        },
+        {
+          "label": "固定 rollout / 旧策略分数与 CPU 输入重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip"
+        },
+        {
+          "label": "固定输入哈希、范围与独立重算回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json"
         }
-      ]
+      ],
+      "fixed_inputs_archive": {
+        "revision": "5e439f054c192f8beb2f89bf4462a801da993b97",
+        "path": "tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip",
+        "sha256": "7be703f5931e70036565e33de2525d8b6529c8712219a20d2c4df8e4520a65e2",
+        "input_tensors": 11,
+        "old_policy_scores": "frozen native FP32 [2,4] anchors",
+        "current_policy": "independent CPU FP32 recomputation",
+        "native_output_used_as_reference": false
+      }
     },
     {
       "id": "swift-pretrained-bf16-cuda-20261021",
@@ -363,8 +380,26 @@
         {
           "label": "公共导出与重放审计",
           "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        },
+        {
+          "label": "固定 rollout / 旧策略分数与 CPU 输入重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip"
+        },
+        {
+          "label": "固定输入哈希、范围与独立重算回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json"
         }
-      ]
+      ],
+      "fixed_inputs_archive": {
+        "revision": "5e439f054c192f8beb2f89bf4462a801da993b97",
+        "path": "tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip",
+        "sha256": "7be703f5931e70036565e33de2525d8b6529c8712219a20d2c4df8e4520a65e2",
+        "input_tensors": 11,
+        "old_policy_scores": "frozen native FP32 [2,4] anchors",
+        "current_policy": "independent CPU FP32 recomputation",
+        "native_output_used_as_reference": false
+      }
     }
-  ]
+  ],
+  "fixed_input_supplement_revision": "5e439f054c192f8beb2f89bf4462a801da993b97"
 }

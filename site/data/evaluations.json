@@ -37242,7 +37242,8 @@
               "max_completion_length": 4,
               "max_length": 128,
               "top_k": 0,
-              "top_p": 1
+              "top_p": 1,
+              "旧策略分数": "固定原生 FP32 [2,4] tensor，作为共同目标输入"
             },
             "优化": {
               "算法": "AdamW",
@@ -37295,7 +37296,8 @@
               "原生输出读取前参考已完成": true,
               "backward 与裁剪": "完整模型",
               "AdamW": "裁剪后对声明坐标独立逐元素计算",
-              "world_size": 1
+              "world_size": 1,
+              "输出读取字段的范围": "原生当前策略分数、梯度与更新；共同 rollout/旧策略分数已作为固定输入接受"
             },
             "目标": {
               "算法": "GRPO",
@@ -37305,7 +37307,8 @@
               "max_completion_length": 4,
               "max_length": 128,
               "top_k": 0,
-              "top_p": 1
+              "top_p": 1,
+              "旧策略分数": "固定原生 FP32 [2,4] tensor，作为共同目标输入"
             },
             "范围": {
               "规则": "原生 optimizer 前 12 个参数，各取扁平区间 [0,min(8192,numel))",
@@ -37320,7 +37323,8 @@
       "common": [
         "相同初始参数值、固定原生生成 trajectory 和 action mask；CPU 参考先完成，再读取原生梯度与更新。",
         "完整模型执行 backward 和裁剪；原生 AdamW 覆盖全部模型参数。",
-        "4 个核心比较组：裁剪前梯度、裁剪后梯度、存储更新、目标分数；损失/裁剪/reward 诊断附在相关组内。"
+        "4 个核心比较组：裁剪前梯度、裁剪后梯度、存储更新、目标分数；损失/裁剪/reward 诊断附在相关组内。",
+        "旧策略分数固定为原生 FP32 [2,4] anchors；CPU 独立重算当前策略，不重新计算两侧的旧策略。"
       ],
       "differences": [
         "原生 CUDA FP32 与独立 CPU FP32 数值路径。",
@@ -37619,7 +37623,8 @@
         "本轮包含原生 rollout、reward、组内 advantage、训练 loop、裁剪及 optimizer；不宣称 reward 质量或训练效果。",
         "实际运行 ms-swift 4.6.0；保留已安装模块 SHA256，git_revision=null，未把 launcher 的另一个 source pin 代填为实际源码。",
         "原生 GRPO 损失 2.9802322387695312e-08，CPU 5.960464477539063e-08；保留该差异，未作阈值通过判断。",
-        "便携重放包含 4 个核心比较；thresholds=null，acceptance=null。"
+        "便携重放包含 4 个核心比较；thresholds=null，acceptance=null。",
+        "新增固定输入补包保留 11 个原 dtype/bit 输入 tensor、mask、group/request ID、奖励及旧策略 anchors；独立 CPU forward/backward 复现原参考 loss 与完整裁剪范数。"
       ],
       "evidence": [
         {
@@ -37641,6 +37646,14 @@
         {
           "label": "公共导出与重放审计",
           "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        },
+        {
+          "label": "固定 rollout / 旧策略分数与 CPU 输入重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip"
+        },
+        {
+          "label": "固定输入哈希、范围与独立重算回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json"
         }
       ],
       "archive": {
@@ -37651,6 +37664,15 @@
         "original_archive_sha256": "778a6eca350f5d8a6304313cdde7a56344f40319e22e3c0cce0d83a35b99b178",
         "replay_cases": 4,
         "comparison_groups": 4
+      },
+      "fixed_inputs_archive": {
+        "revision": "5e439f054c192f8beb2f89bf4462a801da993b97",
+        "path": "tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip",
+        "sha256": "7be703f5931e70036565e33de2525d8b6529c8712219a20d2c4df8e4520a65e2",
+        "input_tensors": 11,
+        "old_policy_scores": "frozen native FP32 [2,4] anchors",
+        "current_policy": "independent CPU FP32 recomputation",
+        "native_output_used_as_reference": false
       }
     },
     {
@@ -37738,7 +37760,8 @@
               "max_completion_length": 4,
               "max_length": 128,
               "top_k": 0,
-              "top_p": 1
+              "top_p": 1,
+              "旧策略分数": "固定原生 FP32 [2,4] tensor，作为共同目标输入"
             },
             "优化": {
               "算法": "AdamW",
@@ -37791,7 +37814,8 @@
               "原生输出读取前参考已完成": true,
               "backward 与裁剪": "完整模型",
               "AdamW": "裁剪后对声明坐标独立逐元素计算",
-              "world_size": 1
+              "world_size": 1,
+              "输出读取字段的范围": "原生当前策略分数、梯度与更新；共同 rollout/旧策略分数已作为固定输入接受"
             },
             "目标": {
               "算法": "GRPO",
@@ -37801,7 +37825,8 @@
               "max_completion_length": 4,
               "max_length": 128,
               "top_k": 0,
-              "top_p": 1
+              "top_p": 1,
+              "旧策略分数": "固定原生 FP32 [2,4] tensor，作为共同目标输入"
             },
             "范围": {
               "规则": "原生 optimizer 前 12 个参数，各取扁平区间 [0,min(8192,numel))",
@@ -37816,7 +37841,8 @@
       "common": [
         "相同初始参数值、固定原生生成 trajectory 和 action mask；CPU 参考先完成，再读取原生梯度与更新。",
         "完整模型执行 backward 和裁剪；原生 AdamW 覆盖全部模型参数。",
-        "4 个核心比较组：裁剪前梯度、裁剪后梯度、存储更新、目标分数；损失/裁剪/reward 诊断附在相关组内。"
+        "4 个核心比较组：裁剪前梯度、裁剪后梯度、存储更新、目标分数；损失/裁剪/reward 诊断附在相关组内。",
+        "旧策略分数固定为原生 FP32 [2,4] anchors；CPU 独立重算当前策略，不重新计算两侧的旧策略。"
       ],
       "differences": [
         "原生 CUDA 数值路径与 CPU FP32 参考；预训练模型原生为 BF16，CPU 从相同 BF16 初始表示重算。",
@@ -38115,7 +38141,8 @@
         "本轮包含原生 rollout、reward、组内 advantage、训练 loop、裁剪及 optimizer；不宣称 reward 质量或训练效果。",
         "实际运行 ms-swift 4.6.0；保留已安装模块 SHA256，git_revision=null，未把 launcher 的另一个 source pin 代填为实际源码。",
         "原生 GRPO 损失 0.0，CPU 0.03234735131263733；保留该差异，未作阈值通过判断。",
-        "便携重放包含 4 个核心比较；thresholds=null，acceptance=null。"
+        "便携重放包含 4 个核心比较；thresholds=null，acceptance=null。",
+        "新增固定输入补包保留 11 个原 dtype/bit 输入 tensor、mask、group/request ID、奖励及旧策略 anchors；独立 CPU forward/backward 复现原参考 loss 与完整裁剪范数。"
       ],
       "evidence": [
         {
@@ -38137,6 +38164,14 @@
         {
           "label": "公共导出与重放审计",
           "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        },
+        {
+          "label": "固定 rollout / 旧策略分数与 CPU 输入重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip"
+        },
+        {
+          "label": "固定输入哈希、范围与独立重算回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json"
         }
       ],
       "archive": {
@@ -38147,6 +38182,15 @@
         "original_archive_sha256": "d8d54551bb4a3d673732a650aab6b2238f8da01fc3e2ca37893114d9e9371c12",
         "replay_cases": 4,
         "comparison_groups": 4
+      },
+      "fixed_inputs_archive": {
+        "revision": "5e439f054c192f8beb2f89bf4462a801da993b97",
+        "path": "tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip",
+        "sha256": "7be703f5931e70036565e33de2525d8b6529c8712219a20d2c4df8e4520a65e2",
+        "input_tensors": 11,
+        "old_policy_scores": "frozen native FP32 [2,4] anchors",
+        "current_policy": "independent CPU FP32 recomputation",
+        "native_output_used_as_reference": false
       }
     }
   ]
