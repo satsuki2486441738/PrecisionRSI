@@ -1,0 +1,1105 @@
+{
+  "schema_version": 1,
+  "import_date": "2026-10-22",
+  "source_repository": "satsuki2486441738/precision-skills",
+  "source_branch": "validation/gpt-6-cold-skill-20261019",
+  "source_revision": "70bc3a2d0d04a6f2b688f557d022ed98e31eee01",
+  "destination_base_revision": "b3dcd6d91b514ce5a013858a730a5288b1bf1046",
+  "existing_evaluations_preserved": 3,
+  "imported_experiments": 40,
+  "imported_selected_paired_cases": 50,
+  "case_counts_by_cohort": {
+    "npu-completion": 34,
+    "local-framework-matrix": 15,
+    "luna-cold-inference": 1
+  },
+  "case_counts_by_task": {
+    "inference": 14,
+    "sft": 25,
+    "rl": 11
+  },
+  "imported_selectable_comparisons": 112,
+  "public_retained_comparison_groups": 165,
+  "latest_completion_counting": {
+    "libraries": 16,
+    "task_lanes": 17,
+    "canonical_cases": 34,
+    "core_comparison_groups": 138,
+    "public_portable_core_groups": 136,
+    "source_only_core_groups": 2,
+    "not_equal_to_website_selectable_comparison_count": true
+  },
+  "evaluations_json_sha256": "c2cc0ff2f84dc77894db6a2a6e2f0797d50052c330613e3a9b8e323445c9a688",
+  "notes": [
+    "Import only: no native jobs or original numerical archives changed.",
+    "Source-file SHA256 and byte counts below cover Git blob bytes, independent of checkout newline conversion.",
+    "Experiment/comparison/case/core-group counts have different units; do not add them.",
+    "All imported acceptance decisions remain null.",
+    "The latest cohort name is a collection lineage, not a claim that every side ran on NPU.",
+    "Side L2 norms are displayed with their absolute scalar difference; elementwise L2 error remains a separate metric."
+  ],
+  "source_files": [
+    {
+      "path": "tests/results/gpt-6-luna/compare-luna-native-20261019T140106Z/results.json",
+      "git_blob": "010ec794cb5d2e85282bbd6a526a5c379ae40517",
+      "bytes": 11199,
+      "sha256": "6ede73f408d0662effa1951f553f67cb5c70eff8f5c8f571da8440fead60ba0d"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-bridgecomplete-20261020T134310Z/INDEX.json",
+      "git_blob": "bbe36c489d8952fc943fa62bac9d02e289b8baa8",
+      "bytes": 3602,
+      "sha256": "bd2106d5d360c3dd34e96a629c22d395c08a4310ab352d6002ae6aea60480595"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-bridgecomplete-20261020T134310Z/bridge-pretrained-sft.zip",
+      "git_blob": "4df47a24fa1e1e044bab52cc0ef74a02141c560a",
+      "bytes": 29225226,
+      "sha256": "34fcdb0ece452ccaf597fb4cd6c2ffec625f11a6b187b4f05e17966e4607dabe"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-bridgecomplete-20261020T134310Z/bridge-pretrained-tensor-cli.zip",
+      "git_blob": "d2d61975af7f4f6193a38cc0fa1bf487310fd1bb",
+      "bytes": 62418,
+      "sha256": "d6c6d2c8677ff89abde0962c4764efbe900b257d9ccc3d99b42f88cd145cc5f6"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-bridgecomplete-20261020T134310Z/bridge-tiny-sft.zip",
+      "git_blob": "d195f2ce44987d966a703da248ece041b096d884",
+      "bytes": 1527454,
+      "sha256": "85958bed1ada3d3de29815856678d6af705a8efd18680be858d7a8ce13f8b0ee"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/inference-evidence.zip",
+      "git_blob": "ca188a66814872d75423327d9841b5008cb07d3c",
+      "bytes": 7594354,
+      "sha256": "96b9cf9f1be4584ce0ba41279aa8ffeca2434b6697db6907b0383d4af2e7e166"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/inference-results.json",
+      "git_blob": "fe90a0d82969a3c6c7f912d2aa80b1cafdc27c5c",
+      "bytes": 74379,
+      "sha256": "96cd0aaf7849c6ec2efda11fbe2f6b825969ade1a4a6fd913dfc800ae932fc19"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/rl-evidence.zip",
+      "git_blob": "fafe9ff3a27805fc4ad5d8b322fa6bf1d99e8f8a",
+      "bytes": 523341,
+      "sha256": "356620f059c9c97e2c0329e08011de87d972c290b080be4b2714bccffabda6be"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/rl-results.json",
+      "git_blob": "765be59e37357e16a00ea8b6601706a3e03136c2",
+      "bytes": 144102,
+      "sha256": "7b4d45fd36ce6144ec8910d40390587d26c620c6f2213b279ab4b4df025e1320"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip",
+      "git_blob": "5c5e4e218c1bd2d4f892bd3fdd96000edb48d434",
+      "bytes": 1030474,
+      "sha256": "3fea576e14d1c76863767512dee4f7918e44c75941c3a666fa34cf64c4eabde5"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-results.json",
+      "git_blob": "de0c5d7f185f4e611558ed3993f1cffcc165aca9",
+      "bytes": 57146,
+      "sha256": "f583af18cd620f0fcba23876577104b8cc16dfc8f1a9a2be62243f76eff73736"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-nemocomplete-worker-v3-20261020T131017Z/RESULTS.json",
+      "git_blob": "c6dd70f4a464797b08029b5567649c6a503bf16d",
+      "bytes": 12301,
+      "sha256": "746711dfa220a10fe25d8aabae0af0c2aecfb8e92c3ee42f1bc8cef878da4c1f"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-nemocomplete-worker-v3-20261020T131017Z/nemo-worker-evidence.zip",
+      "git_blob": "e9db7d8be1efb581c57b77cf8d33abaa6d7bb13c",
+      "bytes": 4268675,
+      "sha256": "da47d18941c9634c6886f2fcbb2af6108a2a93234923d6f6db6074e91fe129c6"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-nemoofficialcli-v2-20261020T134600Z/RESULTS.json",
+      "git_blob": "409e967d19025e49260c9f9d66b37bbfb5536c2b",
+      "bytes": 4241,
+      "sha256": "6a8bd08209a6b161f85dc9175463cda051c38f1f56b224999e978ef4a2e33a89"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-nemopretrained-20261020T135930Z/RESULTS.json",
+      "git_blob": "f71630925b9b82c8645d28ec150519b8895f75f3",
+      "bytes": 10687,
+      "sha256": "3b150113ebdfce019feaa54af5d2e849ccf2f673047500af1edb9b4afe441a94"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-nemopretrained-20261020T135930Z/nemo-pretrained-pair-evidence.zip",
+      "git_blob": "a00b86b419a80cdf06bfade13b571e1b067f550f",
+      "bytes": 2182203,
+      "sha256": "b06be333c1f8220b303d6e6381e43b5fc20e3589577d2f641ec92052487d1038"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/areal-grpo-evidence.zip",
+      "git_blob": "24b051272df5afb73c21dab09de1e8c1f960a88e",
+      "bytes": 2642188,
+      "sha256": "50267de8d669aadc48f47544ed52ee9f4716077ab6bf574f5afd22e6ddaa582e"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/llama-native-evidence.zip",
+      "git_blob": "0e9caf919e5be248b65af5eeaa4aa131cc863d31",
+      "bytes": 21618409,
+      "sha256": "4236f4889fc7c5c4e052969555ec399bfacd75383dd8de6359b42aa5221d62c7"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/lmdeploy-native-evidence.zip",
+      "git_blob": "50eef580b95f68f7b3d6c2dc846bc8034d4c3e67",
+      "bytes": 25123079,
+      "sha256": "264476b7c4e0934aa36a9e8a8e07f6f07062ce9130879e2a47d4e001b1424f0b"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindie/archive-index.json",
+      "git_blob": "ca0666b3cf5ad187d7a208ddc4dab78f43ffef11",
+      "bytes": 267557,
+      "sha256": "972b3a691c2910737c520160b1ccd01158d1561816df04f4978ebfc778140cd7"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindie/canonical-mindie-qwen3-06b-bf16-part001.zip",
+      "git_blob": "47c0c521b0c16dffa576fe3ebcc8e53c7b462b6c",
+      "bytes": 6507125,
+      "sha256": "98a20b149106262bf03a4766ac0675e386c9a693c11c7cab9fb9a7835577fb3a"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-llm/archive-index.json",
+      "git_blob": "0669feee9f5c0fc507d53268daf39e110232a467",
+      "bytes": 247526,
+      "sha256": "9ec344dad933464dc824d4e4bdd584d3d4fd670a7a988623d2f48f53b27aa3fe"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-llm/canonical-mindspeed-llm-mini-bf16-part001.zip",
+      "git_blob": "2637e1107f478e038c43b2a01b6f62a8f47ef1f9",
+      "bytes": 9449065,
+      "sha256": "6c46e193a93ed1b18822a64e70514f043ce4ec3ee887014e84ba3b72aaa4b830"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-llm/metadata-ascend-failures-scripts-installs-part001.zip",
+      "git_blob": "e797fbe891eaa6948e675ef94ef0513487032db9",
+      "bytes": 571050,
+      "sha256": "bce3528a5c2c07efa762a1a899368adbba6df87a80ac688bb5ee85dbff6d16d5"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-rl/canonical-mindspeed-rl-grpo-bf16-part001.zip",
+      "git_blob": "d811484bf18256f15589da4ee90b113c61c7eb37",
+      "bytes": 26716868,
+      "sha256": "5dd8585e6f7c55473d3dda261464d6a9b55b183e873282a00cfee75aae433d98"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-rl/summary.json",
+      "git_blob": "7a49c17c010e0dbb6a117f6c6715c21ca13db80b",
+      "bytes": 27430,
+      "sha256": "0df575ea050d9561e07af7f7a8776936636ac3f3193f65bf55e40238a2174172"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/openrlhf-community-grpo-evidence.zip",
+      "git_blob": "62cf1302d877c8cae6ff6a4d0f12553370e9b7d1",
+      "bytes": 20458106,
+      "sha256": "1ea08ba7c20d8bbbb2abf59898d738f7caad042e924fd619175144dbe0c7de50"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/roll-grpo-evidence.zip",
+      "git_blob": "d2903a1de3c4128413a8b183b6e47159f3f1870a",
+      "bytes": 10683191,
+      "sha256": "3e7d0428d78734fe0da6767b763899e6ac60dd7ab1b2eb40260b560e34c80d97"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/archive-index.json",
+      "git_blob": "8f76d087ad58a5221738c3fa49c72b539026b6d3",
+      "bytes": 964968,
+      "sha256": "046faccd185fabce30bb9995d3e66ad18deebd3464ce7bcc16d6e858c2c11606"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-axolotl-pretrained-bf16-part001.zip",
+      "git_blob": "f5c3f9415117aa1b42f357b049d25a9b7c377667",
+      "bytes": 13888427,
+      "sha256": "ed161e83567023cfffdd20bd6a730d9e6818836462d713725cd47e08ece47334"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-axolotl-pretrained-fp32-part001.zip",
+      "git_blob": "3dac3358d7a93dbd284dfbfc87e325d541503126",
+      "bytes": 19077779,
+      "sha256": "ac471e8748c018acd2c9774eaab8b08dfbebef118d47d2dd53a5b0bfe8ddf4a1"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-axolotl-tiny-bf16-part001.zip",
+      "git_blob": "3a00d72c836100a299f90ae4d5cad390eb18e5c6",
+      "bytes": 5233843,
+      "sha256": "7f931ba27afa68b73a327cf08793eb4c589806e5fdcbc5a94bd05eb6886d3066"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-axolotl-tiny-fp32-part001.zip",
+      "git_blob": "4bbfd5de4d111a36e9863ddd9592a3698837a5d1",
+      "bytes": 8532646,
+      "sha256": "98eab5794216aab72f1a6741c06554091f445b2028f0da40cf23d370266b28de"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-factory-pretrained-bf16-part001.zip",
+      "git_blob": "aff5feefb0b0d77149e2b85c8ee3a95b36efbf16",
+      "bytes": 19278695,
+      "sha256": "463f63c31f06a6cf689a0b1fc44c5bd2134d1e0d4765e06dfd5a6ddd61ff4bd2"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-factory-pretrained-fp32-part001.zip",
+      "git_blob": "e99f8d90e1d89db988d58ae9b6bafd320bd4efca",
+      "bytes": 26374634,
+      "sha256": "8dafaaced5e72846b68952efb79034c99d4071afd04691ebeb1db6042e4b1bda"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-factory-tiny-bf16-part001.zip",
+      "git_blob": "ad863fef8081154666da2e93fc6f3cf176bfe6ce",
+      "bytes": 8019263,
+      "sha256": "484798012806ca4e93ad652f45647760b9bd0ca04271f08570d0dc7cd694af09"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-factory-tiny-fp32-part001.zip",
+      "git_blob": "6f47b50874cac1f6da126279a905246c43312e3b",
+      "bytes": 8654756,
+      "sha256": "d88c2a124c1396ac5892682f46dc1e1b32a7060e3d542d400bbfdd1caac7d8e3"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-swift-pretrained-bf16-part001.zip",
+      "git_blob": "d9be19fe4b50e3c16fcc0894296f955641a61884",
+      "bytes": 13322089,
+      "sha256": "0195eb36348ce40c7eb20f065eac160405b2950a70156bd94ff3d8258489dc17"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-swift-pretrained-fp32-part001.zip",
+      "git_blob": "cde411bf12f942425e63a2e0b9bf454128b995c5",
+      "bytes": 16318666,
+      "sha256": "30c3ef163baaeb1b81eb1551a797746a50f35ba088e48cdb95fb1309870c4b08"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-swift-tiny-bf16-part001.zip",
+      "git_blob": "a378648301ce652641038e3f271c11c3f1835a4b",
+      "bytes": 8022092,
+      "sha256": "0061d166fdd9659d0f5ea073ad61750367a1d480e58b8d1bd35dee57b7b644d4"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-swift-tiny-fp32-part001.zip",
+      "git_blob": "35429c4ccc4321881d078e4aec3f248b3004766b",
+      "bytes": 8657223,
+      "sha256": "95f7e579ef76e21a366c4454955e9965745f3775c40b67e655d5fd467786ee79"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-trl-pretrained-bf16-part001.zip",
+      "git_blob": "87f61772ea3f17ca53eb7a1ce61d726c4fe75072",
+      "bytes": 14085708,
+      "sha256": "bfad3c72303a0cbd17c1de9aaaf0ea65ea44666635baa6290dddecafa94194e7"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-trl-pretrained-bf16-part002.zip",
+      "git_blob": "d9ef989ecd87688ddacbe7e31b2976365f0b58bf",
+      "bytes": 25898534,
+      "sha256": "5788e6e007073a2b5c8b8235fb476bdf8908989a859ad18e8ffeaa0e785f312a"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-trl-pretrained-fp32-part001.zip",
+      "git_blob": "30725a05b47553718977181a224a3f784f905d5f",
+      "bytes": 25969884,
+      "sha256": "e9d4be1dcf4d6f6b60785f6306741a64d34015da7850cc0e7355f7028e1e24b3"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-trl-pretrained-fp32-part002.zip",
+      "git_blob": "ae378ffd3a0f4a02cd0fa34d553c527712dbea2c",
+      "bytes": 25898169,
+      "sha256": "b07928df521315b2f8115943d3010952aa475c04b7af17ab2e02b2a46072b126"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-trl-tiny-bf16-part001.zip",
+      "git_blob": "42abdd89544d5453f8daea32121e8dc93aa033f7",
+      "bytes": 8026597,
+      "sha256": "dbd9ca8af7bea3a31172b270cab78630fd3345434acd79b7016c5e9f72662931"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/canonical-trl-tiny-fp32-part001.zip",
+      "git_blob": "5640ebfa2526e4569611fc1fd79d28f1521cd188",
+      "bytes": 8668958,
+      "sha256": "c98ae77fc2ad71838a39a85360a59cec45be9fe8bd1ce4702b0236be5c2aaf31"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json",
+      "git_blob": "6753aaf1e792cf8dc05048e18d02237e395705a1",
+      "bytes": 152413,
+      "sha256": "f7e224e36ab7007dd39b034e05d348396aeae459dedea41b1f98e5461b4ac8d0"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/slime-upstream-results.json",
+      "git_blob": "4c943c59e7dbea11aedb8615dea3632056728a0b",
+      "bytes": 13194,
+      "sha256": "4fc1d294bb1b9aaa102054a1bd93b14ef43d3895acaa378ba3c581262fdd5512"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/swift-grpo-evidence.zip",
+      "git_blob": "15f0f8004d10c8ff5cc3de6648bf0c6e5891c90d",
+      "bytes": 13594997,
+      "sha256": "cb25a33b0eeaea193323be45027b9ef0a139ecfa2cc8363315ca7d2b156efba4"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-remainingcomplete-20261020T140716Z/results.json",
+      "git_blob": "490c8f782dfb6ef6aee86d8c9eee6882ff52fd30",
+      "bytes": 19840,
+      "sha256": "d0823ff56db76b8dd57c43f8e67656b35aa54e1129ad43a47c1a00e08c3c72d2"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-skillhardening-20261020T180218Z/luna-portable-evidence.zip",
+      "git_blob": "84c8aeb03ec244d65a37d0e73e98dd422330fa15",
+      "bytes": 1559546,
+      "sha256": "bd51a97e59ce5f0bd64f6712e3f063fb6409dc0ca8066fad9a99005a09250395"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-slimereference-20261020T123737Z/slime-independent-cpu-reference.zip",
+      "git_blob": "763a809c36093f79719289fc56df182cf60d7f48",
+      "bytes": 2841832,
+      "sha256": "5c5e607a8d197c94808214460a773541665efbb4e6b10ac0e7f5c0f064a19190"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-trtcomplete-20261020T134000Z/INDEX.json",
+      "git_blob": "938fce72975528ecb509397fbd837ea3bc0d537e",
+      "bytes": 1672,
+      "sha256": "0d3916447a5994640d79862e43945b0090f18c1df47125b0562d42fa905b7b63"
+    },
+    {
+      "path": "tests/results/gpt-6/compare-trtcomplete-20261020T134000Z/tensorrt-llm-native-and-reference.zip",
+      "git_blob": "53b230dace603460fad528b89955d7bd61671029",
+      "bytes": 16460535,
+      "sha256": "9bea802aade39168dc91666ea255fb8099241c494739e36454cb436ec8aca58d"
+    }
+  ],
+  "record_mapping": [
+    {
+      "id": "llamacpp-cann-qwen3-0-6b-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "llama.cpp/Qwen3-0.6B"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/llama-native-evidence.zip!metrics/Qwen3-0.6B/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "llamacpp-cann-qwen3-0-6b-base-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "llama.cpp/Qwen3-0.6B-Base"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/llama-native-evidence.zip!metrics/Qwen3-0.6B-Base/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "lmdeploy-ascend-qwen3-0-6b-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "LMDeploy/Qwen3-0.6B"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/lmdeploy-native-evidence.zip!portable/Qwen3-0.6B/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "lmdeploy-ascend-qwen3-0-6b-base-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "LMDeploy/Qwen3-0.6B-Base"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/lmdeploy-native-evidence.zip!portable/Qwen3-0.6B-Base/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "tensorrt-llm-seeded-llama-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "TensorRT-LLM/seeded-llama"
+        ],
+        "source_result": "tests/results/gpt-6/compare-trtcomplete-20261020T134000Z/tensorrt-llm-native-and-reference.zip!metrics/seeded-llama/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "tensorrt-llm-qwen25-05b-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "TensorRT-LLM/qwen25-05b"
+        ],
+        "source_result": "tests/results/gpt-6/compare-trtcomplete-20261020T134000Z/tensorrt-llm-native-and-reference.zip!metrics/qwen25-05b/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "mindie-qwen3-06b-20261020",
+      "task": "inference",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-mindie-qwen3-06b-bf16"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindie/canonical-mindie-qwen3-06b-bf16-part001.zip!cases/mindie-qwen3-06b/metrics/"
+      },
+      "comparisons": [
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "llamacpp-luna-smollm2-135m-20261019",
+      "task": "inference",
+      "source": {
+        "cohort": "luna-cold-inference",
+        "case_ids": [
+          "smollm2-native-cpu-001"
+        ],
+        "source_result": "tests/results/gpt-6-luna/compare-luna-native-20261019T140106Z/results.json"
+      },
+      "comparisons": [
+        "targets",
+        "distributions"
+      ],
+      "public_replay_groups": 2
+    },
+    {
+      "id": "llamacpp-local-smollm2-135m-instruct-20261019",
+      "task": "inference",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "smol-llama-cpu-f32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/inference-results.json"
+      },
+      "comparisons": [
+        "llama-cpu-f32-targets",
+        "llama-cpu-f32-distributions"
+      ],
+      "public_replay_groups": 2
+    },
+    {
+      "id": "lmdeploy-local-smollm2-135m-instruct-20261019",
+      "task": "inference",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "smol-lmdeploy-pytorch-neutral",
+          "smol-lmdeploy-turbomind"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/inference-results.json"
+      },
+      "comparisons": [
+        "lmdeploy-pytorch-neutral-targets",
+        "lmdeploy-pytorch-neutral-distributions",
+        "lmdeploy-turbomind-targets",
+        "lmdeploy-turbomind-distributions",
+        "transformers-cuda-f16-targets",
+        "transformers-cuda-f16-distributions",
+        "lmdeploy-pytorch-neutral-vs-cuda-f16-targets",
+        "lmdeploy-pytorch-neutral-vs-cuda-f16-distributions",
+        "lmdeploy-turbomind-vs-cuda-f16-targets",
+        "lmdeploy-turbomind-vs-cuda-f16-distributions"
+      ],
+      "public_replay_groups": 10
+    },
+    {
+      "id": "llamacpp-local-qwen2-5-0-5b-instruct-20261019",
+      "task": "inference",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "qwen-llama-cpu-f32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/inference-results.json"
+      },
+      "comparisons": [
+        "llama-cpu-f32-targets",
+        "llama-cpu-f32-distributions"
+      ],
+      "public_replay_groups": 2
+    },
+    {
+      "id": "lmdeploy-local-qwen2-5-0-5b-instruct-20261019",
+      "task": "inference",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "qwen-lmdeploy-turbomind-neutral",
+          "qwen-lmdeploy-pytorch-neutral"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/inference-results.json"
+      },
+      "comparisons": [
+        "lmdeploy-turbomind-neutral-targets",
+        "lmdeploy-turbomind-neutral-distributions",
+        "lmdeploy-pytorch-neutral-targets",
+        "lmdeploy-pytorch-neutral-distributions"
+      ],
+      "public_replay_groups": 4
+    },
+    {
+      "id": "trl-tiny-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-trl-tiny-bf16",
+          "canonical-trl-tiny-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "trl-pretrained-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-trl-pretrained-bf16",
+          "canonical-trl-pretrained-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "factory-tiny-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-factory-tiny-bf16",
+          "canonical-factory-tiny-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "factory-pretrained-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-factory-pretrained-bf16",
+          "canonical-factory-pretrained-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "swift-tiny-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-swift-tiny-bf16",
+          "canonical-swift-tiny-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "swift-pretrained-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-swift-pretrained-bf16",
+          "canonical-swift-pretrained-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "axolotl-tiny-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-axolotl-tiny-bf16",
+          "canonical-axolotl-tiny-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "axolotl-pretrained-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-axolotl-pretrained-bf16",
+          "canonical-axolotl-pretrained-fp32"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/sft/matrix.json"
+      },
+      "comparisons": [
+        "bf16",
+        "fp32"
+      ],
+      "public_replay_groups": 8
+    },
+    {
+      "id": "megatron-bridge-tiny-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-bridge-tiny-sft"
+        ],
+        "source_result": "tests/results/gpt-6/compare-bridgecomplete-20261020T134310Z/INDEX.json"
+      },
+      "comparisons": [
+        "cold-step"
+      ],
+      "public_replay_groups": 5
+    },
+    {
+      "id": "megatron-bridge-pretrained-sft-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-bridge-pretrained-sft"
+        ],
+        "source_result": "tests/results/gpt-6/compare-bridgecomplete-20261020T134310Z/INDEX.json"
+      },
+      "comparisons": [
+        "cold-step"
+      ],
+      "public_replay_groups": 3
+    },
+    {
+      "id": "mindspeed-llm-mini-pretraining-npu-20261020",
+      "task": "sft",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-mindspeed-llm-mini-bf16"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-llm/archive-index.json"
+      },
+      "comparisons": [
+        "cold-adam-step"
+      ],
+      "public_replay_groups": 4
+    },
+    {
+      "id": "trl-tiny-qwen2-sft-local-20261019",
+      "task": "sft",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "local-trl-tiny-qwen2"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip!runs/compare-sftmatrix-20261019T130222Z/trl-tiny-qwen2"
+      },
+      "comparisons": [
+        "cold-sgd-step"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "trl-smollm2-sft-local-20261019",
+      "task": "sft",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "local-trl-smollm2"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip!runs/compare-sftmatrix-20261019T130222Z/trl-smollm2"
+      },
+      "comparisons": [
+        "cold-sgd-step"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "llamafactory-tiny-qwen2-sft-local-20261019",
+      "task": "sft",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "local-llamafactory-tiny-qwen2"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip!runs/compare-sftmatrix-20261019T124730Z/llamafactory-tiny-qwen2/comparison-v2"
+      },
+      "comparisons": [
+        "cold-sgd-step"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "llamafactory-smollm2-sft-local-20261019",
+      "task": "sft",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "local-llamafactory-smollm2"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip!runs/compare-sftmatrix-20261019T124730Z/llamafactory-smollm2"
+      },
+      "comparisons": [
+        "cold-sgd-step"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "swift-tiny-qwen2-sft-local-20261019",
+      "task": "sft",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "local-swift-tiny-qwen2"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip!runs/compare-sftmatrix-20261019T124730Z/swift-tiny-qwen2"
+      },
+      "comparisons": [
+        "cold-sgd-step"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "swift-smollm2-sft-local-20261019",
+      "task": "sft",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "local-swift-smollm2"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/sft-evidence.zip!runs/compare-sftmatrix-20261019T124730Z/swift-smollm2"
+      },
+      "comparisons": [
+        "cold-sgd-step"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "openrlhf-community-grpo-qwen3-06b-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "openrlhf-community-native-dtfs-20261020T112322Z"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/openrlhf-community-grpo-evidence.zip"
+      },
+      "comparisons": [
+        "postclip-gradients",
+        "updates",
+        "observations",
+        "target-scores",
+        "distributions"
+      ],
+      "public_replay_groups": 5
+    },
+    {
+      "id": "slime-grpo-qwen3-06b-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "Slime independent CPU precision reference supplement"
+        ],
+        "source_result": "tests/results/gpt-6/compare-slimereference-20261020T123737Z/slime-independent-cpu-reference.zip"
+      },
+      "comparisons": [
+        "scores",
+        "objectives",
+        "gradients",
+        "updates"
+      ],
+      "public_replay_groups": 4
+    },
+    {
+      "id": "nemo-rl-tiny-qwen2-worker-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "compare-nemocomplete-worker-v3-20261020T131017Z"
+        ],
+        "source_result": "tests/results/gpt-6/compare-nemocomplete-worker-v3-20261020T131017Z/RESULTS.json"
+      },
+      "comparisons": [
+        "gradients",
+        "postclip-gradients",
+        "updates",
+        "loss",
+        "training-logits",
+        "action-scores"
+      ],
+      "public_replay_groups": 6
+    },
+    {
+      "id": "nemo-rl-qwen3-06b-official-cli-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "compare-nemopretrained-20261020T135930Z"
+        ],
+        "source_result": "tests/results/gpt-6/compare-nemopretrained-20261020T135930Z/RESULTS.json"
+      },
+      "comparisons": [
+        "gradients",
+        "postclip-gradients",
+        "updates",
+        "loss",
+        "action-scores"
+      ],
+      "public_replay_groups": 5
+    },
+    {
+      "id": "ms-swift-grpo-qwen3-06b-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "native-grpo-20261020T104243Z"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/swift-grpo-evidence.zip"
+      },
+      "comparisons": [
+        "postclip-gradients",
+        "updates",
+        "observations",
+        "target-scores",
+        "distributions"
+      ],
+      "public_replay_groups": 5
+    },
+    {
+      "id": "areal-grpo-qwen3-06b-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "areal-native-dtfs-20261020T102659Z"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/areal-grpo-evidence.zip"
+      },
+      "comparisons": [
+        "postclip-gradients",
+        "updates",
+        "observations",
+        "target-scores"
+      ],
+      "public_replay_groups": 4
+    },
+    {
+      "id": "roll-grpo-qwen3-06b-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "roll-native-dtfs-20261020T112103Z"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/roll-grpo-evidence.zip"
+      },
+      "comparisons": [
+        "postclip-gradients",
+        "updates",
+        "observations",
+        "target-scores",
+        "distributions"
+      ],
+      "public_replay_groups": 5
+    },
+    {
+      "id": "mindspeed-rl-grpo-tiny-qwen3-20261020",
+      "task": "rl",
+      "source": {
+        "cohort": "npu-completion",
+        "case_ids": [
+          "canonical-mindspeed-rl-grpo-bf16"
+        ],
+        "source_result": "tests/results/gpt-6/compare-npurecovery-20261020T103823Z/mindspeed-rl/summary.json"
+      },
+      "comparisons": [
+        "gradients",
+        "updates",
+        "observations",
+        "distributions",
+        "targets"
+      ],
+      "public_replay_groups": 5
+    },
+    {
+      "id": "openrlhf-rl-local-tiny-qwen2-20261019",
+      "task": "rl",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "tiny_qwen2_random"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/rl-results.json"
+      },
+      "comparisons": [
+        "scores",
+        "gradients",
+        "updates"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "openrlhf-rl-local-smollm2-135m-20261019",
+      "task": "rl",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "smollm2_135m_pretrained"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/rl-results.json"
+      },
+      "comparisons": [
+        "scores",
+        "gradients"
+      ],
+      "public_replay_groups": 1
+    },
+    {
+      "id": "ms-swift-rl-local-smollm2-135m-20261019",
+      "task": "rl",
+      "source": {
+        "cohort": "local-framework-matrix",
+        "case_ids": [
+          "ms_swift_smollm2_complete_group"
+        ],
+        "source_result": "tests/results/gpt-6/compare-frameworkmatrix-20261019T124628Z/rl-results.json"
+      },
+      "comparisons": [
+        "scores",
+        "gradients"
+      ],
+      "public_replay_groups": 1
+    }
+  ],
+  "import_validation": {
+    "scope": "Website data import and retained evidence checks; no native model reruns.",
+    "history_validator": {
+      "repair_verification_records": 6,
+      "evaluation_records": 43
+    },
+    "repository_tests_linux": {
+      "run": 205,
+      "passed": 197,
+      "skipped": 8,
+      "skip_reason": "Node.js unavailable in the WSL interpreter environment; all eight frontend model tests covered by the Windows history suite."
+    },
+    "history_tests_windows": {
+      "run": 27,
+      "passed": 27,
+      "skipped": 0
+    },
+    "browser_regression": {
+      "status": "passed",
+      "imported_records": 40,
+      "imported_selectable_comparisons_with_all_displayed_metrics_and_coverage_checked": 112,
+      "checks": [
+        "repair and evaluation tabs",
+        "task/library/hardware filters",
+        "comparison side labels and numbers",
+        "JSON download",
+        "permalinks and back navigation",
+        "keyboard navigation",
+        "load failure/retry",
+        "abandoned request races",
+        "375px and 768px overflow checks"
+      ]
+    },
+    "metadata_and_links": {
+      "skills": 2,
+      "local_links": 77,
+      "markdown_files": 21
+    },
+    "clean_skill_installation": {
+      "status": "passed",
+      "skills": 2,
+      "cpu_gradient_values_compared": 12
+    },
+    "pinned_source_blobs_checked": 55,
+    "existing_evaluation_records_preserved": 3,
+    "repair_data_and_all_presentation_files_unchanged": true,
+    "independent_import_review": "No blocking findings; cross-case prose and norm display semantics corrected."
+  }
+}
