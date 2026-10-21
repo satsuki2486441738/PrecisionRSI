@@ -29,7 +29,7 @@
 |---|---|
 | PyTorch / Transformers；LoRA 使用 PEFT | 完整前向推理、全参 SFT 和 LoRA SFT |
 | Transformers Trainer | 原生全参 SFT 单步；目标评分及抽样梯度、实际权重更新 |
-| vLLM / vLLM-Ascend | 原生 prefill 目标评分 |
+| vLLM / vLLM-Ascend | 原生 prefill 目标评分；固定续写的缓存推理分布与目标评分 |
 | SGLang | 原生缓存推理，固定续写 token；比较 prompt 评分与约束前分布 |
 | TRL | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
 | verl / FSDP2 | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
