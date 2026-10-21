@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "source_revision": "fa8e0631759b4f1ead41b6fb39f49daf67546379",
+  "source_prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z",
+  "source_pushed_before_history": true,
+  "baseline_records": 57,
+  "baseline_sha256": "9b138da550265544c9f9b2d89a6b816ca6d670078f9522961822612d51b216d6",
+  "added_records": 6,
+  "native_experiments": 8,
+  "native_rank_capture_cases": 20,
+  "comparison_groups": 102,
+  "portable_replays": 102,
+  "independent_root_replay_matched": true,
+  "numerical_acceptance": null,
+  "added_ids": [
+    "slime-tiny-20261021t194857z",
+    "slime-pretrained-20261021t195747z",
+    "nemo-tiny-untied-fp32-h100-20261022",
+    "nemo-pretrained-untied-fp32-h100-20261022",
+    "trl-qwen3-06b-h100-ddp-native-20261022",
+    "trl-tiny-qwen2-h100-ddp-native-20261022"
+  ],
+  "all_previous_records_preserved": true,
+  "scope": [
+    "Slime: two native two-GPU experiments, one train rank plus rollout;14 groups",
+    "NeMo: two single-GPU untied-config variants;8 groups",
+    "TRL: four native four-rank experiments, sixteen rank captures;80 groups;independent CPU world1 references"
+  ],
+  "slime_source_bytes_verified": 5
+}

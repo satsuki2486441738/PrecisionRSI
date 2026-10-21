@@ -32,6 +32,8 @@ An append-only [fixed-input supplement](https://github.com/satsuki2486441738/pre
 
 ## Work still in progress
 
+An append-only [H100 continuation](h100-native-20261022-guide.md) now closes Slime, the selected NeMo untied-config route and the four-rank TRL fixture. The paragraph below records this earlier supplement's publication state; the continuation retains its own counts, conditions and immutable evidence.
+
 OpenRLHF, slime, NeMo RL, AReaL, ROLL, official NVIDIA Megatron Bridge and four-rank TRL DDP still need their selected full CUDA workflows and independently compared evidence in this supplement. A new four-H100 training allocation is preparing those workflows; dependency resolution or an import alone does not complete a case.
 
 The selected MindIE-LLM, MindSpeed-RL and historical MindSpeed-LLM routes require Ascend hardware. Their earlier NPU results remain separate from CUDA results. A newer MindSpeed-LLM FSDP2 CUDA initialization branch has been inspected but has not been measured as an alternative route. Earlier complete TensorRT-LLM CUDA evidence is preserved in its existing history; these 22 cases do not claim a new serialized TensorRT engine test.
