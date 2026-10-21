@@ -1,10 +1,14 @@
 'use strict';
 
 const $ = (id) => document.getElementById(id);
-const controls = ['search', 'library', 'model', 'hardware'];
+const controls = ['search', 'task', 'library', 'model', 'hardware'];
 let archive = null;
 let repairs = [];
 let catalog = [];
+let evaluations = [];
+let activeKind = 'repairs';
+let requestSerial = 0;
+let pendingRequest = null;
 const historyAPI = globalThis.PrecisionHistory;
 
 function node(tag, className, text) {
@@ -230,25 +234,91 @@ function showState(title, description, retry = false) {
     state.append(button);
   }
 }
+const pageCopy = {
+  repairs: { title: ['每一次修复，', '都有证据。'], intro: '从异常到根因，从补丁到验证。跨模型、框架与硬件，记录可复核的精度修复过程。',
+    eyebrow: 'REPAIR HISTORY / 精度工程记录', heading: '按库查看修复', noun: '修复',
+    labels: ['独立修复', '验证轮次', '库分组', '数据更新'], feet: ['REPAIRS', 'VERIFICATIONS', 'LIBRARY GROUPS', 'LAST UPDATED'],
+    method: ['发现偏差 ↗ 定位根因', '实施修复 ↗ 原始负载验证'], caption: '真实记录 · 修复过程 · 验证证据' },
+  evaluations: { title: ['跨环境比较，', '留下数值证据。'], intro: '记录推理、SFT 与 RL 的精度采集与比较。查看各侧实际配置、比较条件、指标和覆盖范围。',
+    eyebrow: 'EVALUATION HISTORY / 精度工程记录', heading: '按任务查看评测', noun: '评测',
+    labels: ['评测实验', '比较组', '硬件平台', '数据更新'], feet: ['EXPERIMENTS', 'COMPARISONS', 'HARDWARE', 'LAST UPDATED'],
+    method: ['对齐条件 ↗ 原生采集', '坐标配对 ↗ 输出指标'], caption: '实际配置 · 数值差异 · 覆盖与证据' }
+};
+function configurePage() {
+  const copy = pageCopy[activeKind];
+  document.title = `精度${copy.noun}历史 · Precision-Skills`;
+  $('hero-kind').textContent = copy.eyebrow;
+  $('page-title').replaceChildren(document.createTextNode(copy.title[0]), node('br'), node('span', '', copy.title[1]));
+  $('page-intro').textContent = copy.intro;
+  const methodText = node('p');
+  methodText.append(document.createTextNode(copy.method[0]), node('br'), document.createTextNode(copy.method[1]));
+  $('method').replaceChildren(node('span', 'note-index', '01 — METHOD'), methodText, node('span', 'note-caption', copy.caption));
+  $('history-title').textContent = copy.heading;
+  copy.labels.forEach((value, index) => { $(`stat-label-${index}`).textContent = value; });
+  copy.feet.forEach((value, index) => { $(`stat-foot-${index}`).textContent = value; });
+  $('task-filter').hidden = activeKind !== 'evaluations';
+  $('filters').classList.toggle('evaluation-filters', activeKind === 'evaluations');
+  $('filters').setAttribute('aria-label', `筛选${copy.noun}记录`);
+  $('search').placeholder = activeKind === 'evaluations' ? '搜索框架、比较条件或指标…' : '搜索问题、根因或修复…';
+  for (const kind of ['repairs', 'evaluations']) {
+    $(`tab-${kind}`).setAttribute('aria-selected', String(kind === activeKind));
+    $(`tab-${kind}`).tabIndex = kind === activeKind ? 0 : -1;
+  }
+  $('archive-panel').setAttribute('aria-labelledby', `tab-${activeKind}`);
+}
+function renderEvaluationGroup(group) {
+  const element = node('section', 'library-group');
+  const header = node('div', 'library-group-header');
+  const label = node('div');
+  label.append(node('p', 'eyebrow', 'EVALUATION TASK'), node('h3', '', group.title));
+  const total = historyAPI.evaluationCounts(group.records);
+  header.append(label, node('span', 'group-count', `${total.experiments} 项评测 · ${total.comparisons} 组比较`));
+  element.append(header);
+  group.records.forEach((record) => element.append(globalThis.PrecisionEvaluations.renderCard(record,
+    { node, list, text, paragraph, section, bulletList, publicURL, formatNumber, libraryLabel })));
+  return element;
+}
 function render() {
-  const filtered = historyAPI.filterCatalog(catalog, { query: $('search').value,
-    library: $('library').value, model: $('model').value, hardware: $('hardware').value });
-  $('history').replaceChildren(...filtered.map(renderLibraryGroup));
-  const shown = historyAPI.counts(filtered), total = historyAPI.counts(catalog);
-  $('result-count').textContent = `显示 ${shown.groups} 个库分组 · ${shown.fixes} / ${total.fixes} 项修复 · ${shown.verifications} / ${total.verifications} 轮验证`;
+  const filters = { query: $('search').value, task: $('task').value,
+    library: $('library').value, model: $('model').value, hardware: $('hardware').value };
+  let visible;
+  if (activeKind === 'evaluations') {
+    const filtered = historyAPI.filterEvaluations(evaluations, filters);
+    $('history').replaceChildren(...historyAPI.evaluationGroups(filtered).map(renderEvaluationGroup));
+    const shown = historyAPI.evaluationCounts(filtered), total = historyAPI.evaluationCounts(evaluations);
+    $('result-count').textContent = `显示 ${shown.experiments} / ${total.experiments} 项评测 · ${shown.comparisons} / ${total.comparisons} 组比较`;
+    visible = filtered.length;
+  } else {
+    const filtered = historyAPI.filterCatalog(catalog, filters);
+    $('history').replaceChildren(...filtered.map(renderLibraryGroup));
+    const shown = historyAPI.counts(filtered), total = historyAPI.counts(catalog);
+    $('result-count').textContent = `显示 ${shown.groups} 个库分组 · ${shown.fixes} / ${total.fixes} 项修复 · ${shown.verifications} / ${total.verifications} 轮验证`;
+    visible = filtered.length;
+  }
   $('reset').hidden = !controls.some((id) => $(id).value);
-  if (filtered.length) $('state').hidden = true;
-  else showState(repairs.length ? '没有匹配的修复' : '档案尚无修复记录', repairs.length ? '尝试其他关键词，或清除筛选以查看全部记录。' : '首条修复记录发布后，将在这里展示诊断与验证证据。');
+  if (visible) $('state').hidden = true;
+  else showState(`没有匹配的${pageCopy[activeKind].noun}`, '尝试其他关键词，或清除筛选以查看全部记录。');
 }
 function resetFilters() {
   $('filters').reset();
   if (archive) render();
 }
+function selectTab(kind) {
+  if (kind === activeKind) return;
+  activeKind = kind;
+  $('filters').reset();
+  configurePage();
+  load();
+}
 function followHash() {
-  if (!archive || !location.hash) return;
-  let id;
-  try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-  const known = repairs.some((record) => `repair-${record.id}` === id) || catalog.some((group) => group.fixes.some((fix) => `fix-${fix.root.id}` === id));
+  const route = historyAPI.routeForHash(location.hash);
+  if (!route) return;
+  if (route.kind !== activeKind) { selectTab(route.kind); return; }
+  if (!archive || !route.id || ['repairs', 'evaluations'].includes(route.id)) return;
+  const id = route.id;
+  const known = activeKind === 'evaluations' ? evaluations.some((record) => `evaluation-${record.id}` === id) :
+    repairs.some((record) => `repair-${record.id}` === id) || catalog.some((group) =>
+      `library-${group.id}` === id || group.fixes.some((fix) => `fix-${fix.root.id}` === id));
   if (!known) return;
   if (!document.getElementById(id)) resetFilters();
   const card = document.getElementById(id);
@@ -260,30 +330,49 @@ function followHash() {
   }
 }
 async function load() {
+  pendingRequest?.abort();
+  const serial = ++requestSerial, kind = activeKind, copy = pageCopy[kind];
+  archive = null;
   $('download').disabled = true;
-  $('result-count').textContent = '正在读取修复档案…';
-  showState('正在加载记录', '准备修复过程与验证证据。');
+  $('history').replaceChildren();
+  ['total-count', 'verification-count', 'group-count', 'updated-at'].forEach((id) => { $(id).textContent = '—'; });
+  $('result-count').textContent = `正在读取${copy.noun}档案…`;
+  showState('正在加载记录', `准备${copy.noun}指标与验证证据。`);
   const controller = new AbortController();
+  pendingRequest = controller;
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch('./data/repairs.json', { signal: controller.signal });
+    const response = await fetch(`./data/${kind}.json`, { signal: controller.signal });
     if (!response.ok) throw new Error('HTTP');
     const data = await response.json();
-    if (data.schema_version !== 1 || !Array.isArray(data.repairs)) throw new Error('schema');
+    if (serial !== requestSerial) return;
+    if (data.schema_version !== 1 || !Array.isArray(data[kind])) throw new Error('schema');
     const ids = new Set();
-    for (const record of data.repairs) {
+    for (const record of data[kind]) {
       if (!record || typeof record.id !== 'string' || !record.id.trim() || ids.has(record.id)) throw new Error('id');
       ids.add(record.id);
     }
-    catalog = historyAPI.buildCatalog(data);
+    let options;
+    if (kind === 'evaluations') {
+      evaluations = historyAPI.filterEvaluations(data.evaluations);
+      const totals = historyAPI.evaluationCounts(evaluations);
+      $('total-count').textContent = totals.experiments;
+      $('verification-count').textContent = totals.comparisons;
+      $('group-count').textContent = totals.hardware;
+      options = [['library', evaluations.flatMap(historyAPI.evaluationLibraries)], ['model', evaluations.map((r) => r.model.name)],
+        ['hardware', evaluations.flatMap((r) => r.sides.map((s) => s.hardware))]];
+    } else {
+      catalog = historyAPI.buildCatalog(data);
+      repairs = [...data.repairs].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      const totals = historyAPI.counts(catalog);
+      $('total-count').textContent = totals.fixes;
+      $('verification-count').textContent = totals.verifications;
+      $('group-count').textContent = totals.groups;
+      options = [['library', catalog.flatMap((g) => g.components)], ['model', repairs.map((r) => r.model?.name)], ['hardware', repairs.map((r) => r.environment?.hardware)]];
+    }
     archive = data;
-    repairs = [...data.repairs].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-    const totals = historyAPI.counts(catalog);
-    $('total-count').textContent = totals.fixes;
-    $('verification-count').textContent = totals.verifications;
-    $('group-count').textContent = totals.groups;
     $('updated-at').textContent = text(data.updated_at, '未记录');
-    [['library', catalog.flatMap((group) => group.components)], ['model', repairs.map((record) => record.model?.name)], ['hardware', repairs.map((record) => record.environment?.hardware)]].forEach(([id, values]) => {
+    options.forEach(([id, values]) => {
       const select = $(id);
       select.replaceChildren(select.options[0]);
       [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b)).forEach((value) => {
@@ -296,28 +385,40 @@ async function load() {
     render();
     followHash();
   } catch {
+    if (serial !== requestSerial) return;
     archive = null;
-    repairs = [];
-    catalog = [];
     $('history').replaceChildren();
-    ['total-count', 'verification-count', 'group-count', 'updated-at'].forEach((id) => { $(id).textContent = '—'; });
     $('result-count').textContent = '档案暂时不可用';
-    showState('暂时无法加载修复档案', '数据可能尚未发布，或网络暂时不可用。请稍后重试。', true);
+    showState(`暂时无法加载${copy.noun}档案`, '请稍后重试。', true);
   } finally { clearTimeout(timeout); }
 }
 $('filters').addEventListener('submit', (event) => event.preventDefault());
 controls.forEach((id) => $(id).addEventListener(id === 'search' ? 'input' : 'change', () => { if (archive) render(); }));
 $('reset').addEventListener('click', resetFilters);
+for (const kind of ['repairs', 'evaluations']) $('tab-' + kind).addEventListener('click', () => {
+  if (location.hash !== '#' + kind) location.hash = kind;
+});
+document.querySelector('[role="tablist"]').addEventListener('keydown', (event) => {
+  const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+  if (!keys.includes(event.key)) return;
+  event.preventDefault();
+  const kind = event.key === 'Home' ? 'repairs' : event.key === 'End' ? 'evaluations' :
+    event.target.id === 'tab-repairs' ? 'evaluations' : 'repairs';
+  $('tab-' + kind).focus();
+  $('tab-' + kind).click();
+});
 window.addEventListener('hashchange', followHash);
 $('download').addEventListener('click', () => {
   if (!archive) return;
   const url = URL.createObjectURL(new Blob([JSON.stringify(archive, null, 2)], { type: 'application/json;charset=utf-8' }));
   const link = node('a');
   link.href = url;
-  link.download = 'precision-skills-repairs.json';
+  link.download = `precision-skills-${activeKind}.json`;
   document.body.append(link);
   link.click();
   link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
+activeKind = historyAPI.routeForHash(location.hash)?.kind || 'repairs';
+configurePage();
 load();

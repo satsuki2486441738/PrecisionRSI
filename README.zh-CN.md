@@ -67,6 +67,6 @@ python3 examples/compare_gradients.py
 
 仓库组织与测试命令见 [AGENTS.md](AGENTS.md)。
 
-## 修复历史
+## 评测与修复历史
 
-在[修复历史网页](https://satsuki2486441738.github.io/precision-skills/)按条目查看不同模型、环境和库的修复过程、问题归因与前后指标。记录及公开证据维护在 [site/](site/README.md)。
+[历史网页](https://satsuki2486441738.github.io/precision-skills/)包含两个标签页：**精度评测**展示推理 / SFT / RL 的比较配置、数值指标、覆盖率和证据；**精度修复**保留按库分组的修复、问题归因及前后验证。记录及公开证据维护在 [site/](site/README.md)。

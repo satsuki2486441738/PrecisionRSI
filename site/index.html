@@ -5,33 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#f5f7f8">
-  <meta name="description" content="Precision-Skills 精度修复历史：以真实指标、因果诊断与验证证据记录每一次精度修复。">
-  <title>精度修复历史 · Precision-Skills</title>
+  <meta name="description" content="Precision-Skills 精度评测与修复历史：查看比较配置、数值指标、修复过程与验证证据。">
+  <title>精度历史 · Precision-Skills</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./history.js" defer></script>
+  <script src="./evaluations.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#history">跳至修复记录</a>
+  <a class="skip-link" href="#history">跳至历史记录</a>
   <header class="site-header wrap">
     <a class="brand" href="./" aria-label="Precision-Skills 首页"><span class="brand-mark" aria-hidden="true">P<span>·</span></span><span>Precision-Skills<span class="brand-sub">PRECISION ENGINEERING</span></span></a>
-    <span class="header-label"><span class="live-dot" aria-hidden="true"></span> 可追溯的修复档案</span>
+    <span class="header-label"><span class="live-dot" aria-hidden="true"></span> 可复核的精度档案</span>
   </header>
   <main class="wrap">
+    <nav class="history-tabs" role="tablist" aria-label="历史类型">
+      <button id="tab-repairs" role="tab" aria-selected="true" aria-controls="archive-panel" type="button">精度修复历史<span>REPAIRS</span></button>
+      <button id="tab-evaluations" role="tab" aria-selected="false" aria-controls="archive-panel" tabindex="-1" type="button">精度评测历史<span>EVALUATIONS</span></button>
+    </nav>
+    <div id="archive-panel" role="tabpanel" aria-labelledby="tab-repairs">
     <section class="hero" aria-labelledby="page-title">
-      <div><p class="eyebrow">REPAIR HISTORY / 精度工程记录</p><h1 id="page-title">每一次修复，<br><span>都有证据。</span></h1><p class="intro">从异常到根因，从补丁到验证。跨模型、框架与硬件，<br class="desktop-break">记录可复核的精度修复过程。</p></div>
-      <aside class="hero-note"><span class="note-index">01 — METHOD</span><p>发现偏差 <span aria-hidden="true">↗</span> 定位根因<br>实施修复 <span aria-hidden="true">↗</span> 原始负载验证</p><span class="note-caption">真实记录 · 修复过程 · 验证证据</span></aside>
+      <div><p class="eyebrow" id="hero-kind">REPAIR HISTORY / 精度工程记录</p><h1 id="page-title">每一次修复，<br><span>都有证据。</span></h1><p class="intro" id="page-intro">从异常到根因，从补丁到验证。跨模型、框架与硬件，<br class="desktop-break">记录可复核的精度修复过程。</p></div>
+      <aside class="hero-note" id="method"><span class="note-index">01 — METHOD</span><p>发现偏差 <span aria-hidden="true">↗</span> 定位根因<br>实施修复 <span aria-hidden="true">↗</span> 原始负载验证</p><span class="note-caption">真实记录 · 修复过程 · 验证证据</span></aside>
     </section>
     <section class="stats" aria-label="档案概览">
-      <div><span class="stat-label">独立修复</span><strong id="total-count">—</strong><span class="stat-foot">REPAIRS</span></div>
-      <div><span class="stat-label">验证轮次</span><strong id="verification-count">—</strong><span class="stat-foot">VERIFICATIONS</span></div>
-      <div><span class="stat-label">库分组</span><strong id="group-count">—</strong><span class="stat-foot">LIBRARY GROUPS</span></div>
-      <div><span class="stat-label">数据更新</span><strong class="date-stat" id="updated-at">—</strong><span class="stat-foot">LAST UPDATED</span></div>
+      <div><span class="stat-label" id="stat-label-0">独立修复</span><strong id="total-count">—</strong><span class="stat-foot" id="stat-foot-0">REPAIRS</span></div>
+      <div><span class="stat-label" id="stat-label-1">验证轮次</span><strong id="verification-count">—</strong><span class="stat-foot" id="stat-foot-1">VERIFICATIONS</span></div>
+      <div><span class="stat-label" id="stat-label-2">库分组</span><strong id="group-count">—</strong><span class="stat-foot" id="stat-foot-2">LIBRARY GROUPS</span></div>
+      <div><span class="stat-label" id="stat-label-3">数据更新</span><strong class="date-stat" id="updated-at">—</strong><span class="stat-foot" id="stat-foot-3">LAST UPDATED</span></div>
     </section>
     <section class="archive" aria-labelledby="history-title">
       <div class="section-heading"><div><p class="eyebrow">THE ARCHIVE</p><h2 id="history-title">按库查看修复</h2></div><button class="text-button" id="download" type="button" disabled>下载 JSON <span aria-hidden="true">↗</span></button></div>
       <form class="filters" id="filters" role="search" aria-label="筛选修复记录">
         <div class="search-field"><label for="search">关键词</label><input id="search" type="search" placeholder="搜索问题、根因或修复…" autocomplete="off"></div>
+        <div id="task-filter" hidden><label for="task">任务</label><select id="task"><option value="">全部任务</option><option value="inference">推理</option><option value="sft">SFT</option><option value="rl">RL</option></select></div>
         <div><label for="library">涉及的库</label><select id="library"><option value="">全部库</option></select></div>
         <div><label for="model">模型</label><select id="model"><option value="">全部模型</option></select></div>
         <div><label for="hardware">硬件</label><select id="hardware"><option value="">全部硬件</option></select></div>
@@ -40,8 +47,9 @@
       <div id="state" class="state" role="status"><span class="loading-mark" aria-hidden="true"></span><h3>正在加载记录</h3><p>准备修复过程与验证证据。</p></div>
       <div id="history" class="timeline" tabindex="-1"></div>
     </section>
+    </div>
   </main>
-  <footer class="wrap"><span>Precision-Skills <span class="footer-divider">/</span> 精度修复历史</span><span>从异常到验证。</span></footer>
-  <noscript><p class="wrap">请启用 JavaScript 以加载修复记录。</p></noscript>
+  <footer class="wrap"><span>Precision-Skills <span class="footer-divider">/</span> 精度评测与修复历史</span><span>记录数值与验证证据。</span></footer>
+  <noscript><p class="wrap">请启用 JavaScript 以加载历史记录，或直接查看 <a href="./data/evaluations.json">评测数据</a>与 <a href="./data/repairs.json">修复数据</a>。</p></noscript>
 </body>
 </html>

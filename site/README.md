@@ -1,6 +1,16 @@
-# Repair history website
+# Precision history website
 
 GitHub Pages serves this directory. Preview from the repository root with `python3 -m http.server 8000 --directory site`, then open `http://localhost:8000`.
+
+## Record an evaluation
+
+The **Evaluations** tab reads `data/evaluations.json` and groups experiments by inference, SFT and RL. Each experiment has a stable ID/date, model revision, common conditions, comparison variables, actual per-side hardware/libraries/settings, and an immutable archive revision. A comparison references two declared side IDs and owns its scope, numerical metrics and observed/expected coverage. An experiment can contain multiple steps or execution modes without becoming multiple history entries.
+
+Metric `value` is the symmetric comparison result. Optional `side_values` records each compared side's value in the same unit; optional `coordinate` identifies the maximum error. Keep finite numbers at recorded precision. Equal-array counts are measured results; coverage counts collected/paired observations. Set `acceptance: null` until a numerical acceptance decision is recorded. `status: "completed"` means collection/comparison finished.
+
+Append concise public evidence under `evidence/` and keep native arrays/checkpoints in the existing artifact store. Preserve recorded IDs, values and immutable provenance. The initial entries cover same-H200 BF16/FP16 inference, native cross-platform TRL LoRA SFT and same-platform checkpoint restoration with peer comparison. New frameworks and hardware require data entries, not UI changes.
+
+Links use `#evaluations` and `#evaluation-<id>`. Existing repair/fix links still select the Repairs tab. Both tabs support keyword, library, model and hardware filters; evaluations also support task filtering and comparison selection. JSON downloads contain the selected archive.
 
 ## Record a repair
 
@@ -10,4 +20,8 @@ Append an entry to `repairs` for each experiment. Give each repair a stable ID a
 
 Metrics carry before/after values and units. State observed/expected coverage and verification scope. Keep unattributed residual differences in `validation.remaining`. Publish concise evidence under `evidence/`; retain full execution artifacts with their private cases. Add libraries, environments and models through data entries without changing the page.
 
-Run `python3 -B .github/validate_history.py` before publishing. The Pages workflow validates data, uploads only `site/` and deploys on changes to `main`.
+## Validate and publish
+
+Run `python3 -B .github/validate_history.py` and `python3 -B -m unittest discover -s tests -p 'test_*history.py' -v`. The optional `node tests/browser_history.cjs` regression requires Playwright and Chromium; `PRECISION_BROWSER_EXECUTABLE` selects an existing browser executable. It checks both tabs, filters, comparison values, permalinks, downloads, request races and mobile overflow. It starts and stops its own local preview server.
+
+The Pages workflow validates both data files, uploads only `site/` and deploys on changes to `main`.

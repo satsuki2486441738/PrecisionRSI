@@ -1,0 +1,1121 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-22",
+  "evaluations": [
+    {
+      "id": "trl-sfttrainer-checkpoint-20261021",
+      "date": "2026-10-21",
+      "title": "TRL checkpoint 恢复：连续训练与恢复训练",
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "各端从自己的 checkpoint-1 恢复执行第 2 步，并与连续训练及另一平台比较。",
+      "sides": [
+        {
+          "id": "gpu-continuous",
+          "label": "H200 / CUDA · 连续训练",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "TRL",
+              "version": "0.29.0"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            },
+            {
+              "name": "Accelerate",
+              "version": "1.12.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "adapter_dtype": "FP32",
+            "execution": "continuous"
+          }
+        },
+        {
+          "id": "gpu-restored",
+          "label": "H200 / CUDA · checkpoint 恢复",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "TRL",
+              "version": "0.29.0"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            },
+            {
+              "name": "Accelerate",
+              "version": "1.12.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "adapter_dtype": "FP32",
+            "execution": "restored"
+          }
+        },
+        {
+          "id": "npu-continuous",
+          "label": "910C / CANN · 连续训练",
+          "hardware": "Ascend 910C",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "TRL",
+              "version": "0.29.0"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            },
+            {
+              "name": "Accelerate",
+              "version": "1.12.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "adapter_dtype": "FP32",
+            "execution": "continuous"
+          }
+        },
+        {
+          "id": "npu-restored",
+          "label": "910C / CANN · checkpoint 恢复",
+          "hardware": "Ascend 910C",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "TRL",
+              "version": "0.29.0"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            },
+            {
+              "name": "Accelerate",
+              "version": "1.12.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "adapter_dtype": "FP32",
+            "execution": "restored"
+          }
+        }
+      ],
+      "common": [
+        "相同模型 revision、冻结基座与分词输入；BF16 基座、FP32 LoRA，rank 8、alpha 16、dropout 0。",
+        "顺序采样，每步两个 microbatch，分别含 8 / 12 个目标；梯度累积 2，原生 loss 分母为 20。",
+        "AdamW lr=0.001，betas=(0.9,0.999)，eps=1e-8；关闭裁剪、autocast 与 gradient checkpointing。"
+      ],
+      "differences": [
+        "同平台：连续执行与新进程 checkpoint 恢复。",
+        "跨平台：硬件与原生执行栈；各端恢复各自 checkpoint。"
+      ],
+      "comparisons": [
+        {
+          "id": "npu-continuation",
+          "title": "910C · 连续训练 ↔ checkpoint 恢复",
+          "side_ids": [
+            "npu-continuous",
+            "npu-restored"
+          ],
+          "scope": "仅比较第 2 步。两条路径的入口参数和 AdamW 状态精确相同；恢复后的样本顺序为 [0,1]。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-continuous": 1.3779121780753485,
+                "npu-restored": 1.3779121780753485
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "step2-sample0",
+                "position": 24,
+                "token": 8064
+              }
+            },
+            {
+              "id": "gradients-cosine",
+              "label": "梯度 余弦相似度",
+              "value": 0.9999947886297161,
+              "unit": "1"
+            },
+            {
+              "id": "gradients-rmse",
+              "label": "梯度 RMSE",
+              "value": 5.01546665381427e-06,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-error-norm",
+              "label": "梯度 L2 误差",
+              "value": 0.005293900486512486,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-max-abs",
+              "label": "梯度 最大绝对差",
+              "value": 0.0006751120090484619,
+              "unit": "gradient",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.3.self_attn.q_proj.lora_A.default.weight",
+                "index": 3994
+              }
+            },
+            {
+              "id": "updates-cosine",
+              "label": "权重更新 余弦相似度",
+              "value": 0.9998304038533209,
+              "unit": "1"
+            },
+            {
+              "id": "updates-rmse",
+              "label": "权重更新 RMSE",
+              "value": 1.578938127835985e-05,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-error-norm",
+              "label": "权重更新 L2 误差",
+              "value": 0.016665929414099882,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-max-abs",
+              "label": "权重更新 最大绝对差",
+              "value": 0.0015659373602829874,
+              "unit": "parameter",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.3.self_attn.q_proj.lora_B.default.weight",
+                "index": 22971
+              }
+            },
+            {
+              "id": "exact-arrays",
+              "label": "逐元素相等的导出数组",
+              "value": 298,
+              "unit": "arrays"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "有效目标",
+              "observed": 20,
+              "expected": 20,
+              "unit": "tokens"
+            },
+            {
+              "label": "adapter 张量",
+              "observed": 32,
+              "expected": 32,
+              "unit": "tensors"
+            },
+            {
+              "label": "adapter 元素",
+              "observed": 1114112,
+              "expected": 1114112,
+              "unit": "elements"
+            },
+            {
+              "label": "配对导出数组",
+              "observed": 448,
+              "expected": 448,
+              "unit": "arrays"
+            }
+          ]
+        },
+        {
+          "id": "gpu-continuation",
+          "title": "H200 · 连续训练 ↔ checkpoint 恢复",
+          "side_ids": [
+            "gpu-continuous",
+            "gpu-restored"
+          ],
+          "scope": "仅比较第 2 步。两条路径的入口参数和 AdamW 状态精确相同；恢复后的样本顺序为 [0,1]。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-continuous": 1.3847535934692132,
+                "gpu-restored": 1.3847535934692132
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "step2-sample0",
+                "position": 24,
+                "token": 8064
+              }
+            },
+            {
+              "id": "gradients-cosine",
+              "label": "梯度 余弦相似度",
+              "value": 0.9999999999999999,
+              "unit": "1"
+            },
+            {
+              "id": "gradients-rmse",
+              "label": "梯度 RMSE",
+              "value": 0.0,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-error-norm",
+              "label": "梯度 L2 误差",
+              "value": 0.0,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-max-abs",
+              "label": "梯度 最大绝对差",
+              "value": 0.0,
+              "unit": "gradient",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.11.self_attn.q_proj.lora_A.default.weight",
+                "index": 0
+              }
+            },
+            {
+              "id": "updates-cosine",
+              "label": "权重更新 余弦相似度",
+              "value": 1.0,
+              "unit": "1"
+            },
+            {
+              "id": "updates-rmse",
+              "label": "权重更新 RMSE",
+              "value": 0.0,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-error-norm",
+              "label": "权重更新 L2 误差",
+              "value": 0.0,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-max-abs",
+              "label": "权重更新 最大绝对差",
+              "value": 0.0,
+              "unit": "parameter",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.11.self_attn.q_proj.lora_A.default.weight",
+                "index": 0
+              }
+            },
+            {
+              "id": "exact-arrays",
+              "label": "逐元素相等的导出数组",
+              "value": 448,
+              "unit": "arrays"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "有效目标",
+              "observed": 20,
+              "expected": 20,
+              "unit": "tokens"
+            },
+            {
+              "label": "adapter 张量",
+              "observed": 32,
+              "expected": 32,
+              "unit": "tensors"
+            },
+            {
+              "label": "adapter 元素",
+              "observed": 1114112,
+              "expected": 1114112,
+              "unit": "elements"
+            },
+            {
+              "label": "配对导出数组",
+              "observed": 448,
+              "expected": 448,
+              "unit": "arrays"
+            }
+          ]
+        },
+        {
+          "id": "peer-resume",
+          "title": "恢复后的第 2 步 · H200 ↔ 910C",
+          "side_ids": [
+            "gpu-restored",
+            "npu-restored"
+          ],
+          "scope": "仅比较第 2 步。每端恢复各自的 checkpoint-1；两端起点是各自独立的第 1 步训练结果。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.006841415393864736,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-restored": 1.3847535934692132,
+                "npu-restored": 1.3779121780753485
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.010755665454780683,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.08538502216339111,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.0859990119934082,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "step2-sample1",
+                "position": 43,
+                "token": 25
+              }
+            },
+            {
+              "id": "gradients-cosine",
+              "label": "梯度 余弦相似度",
+              "value": 0.9998972713161022,
+              "unit": "1"
+            },
+            {
+              "id": "gradients-rmse",
+              "label": "梯度 RMSE",
+              "value": 2.2558042815021642e-05,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-error-norm",
+              "label": "梯度 L2 误差",
+              "value": 0.02381035346778618,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-max-abs",
+              "label": "梯度 最大绝对差",
+              "value": 0.006832905113697052,
+              "unit": "gradient",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.3.self_attn.v_proj.lora_A.default.weight",
+                "index": 3994
+              }
+            },
+            {
+              "id": "updates-cosine",
+              "label": "权重更新 余弦相似度",
+              "value": 0.9934398111619556,
+              "unit": "1"
+            },
+            {
+              "id": "updates-rmse",
+              "label": "权重更新 RMSE",
+              "value": 9.83054566984281e-05,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-error-norm",
+              "label": "权重更新 L2 误差",
+              "value": 0.10376288807480376,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-max-abs",
+              "label": "权重更新 最大绝对差",
+              "value": 0.001996783190406859,
+              "unit": "parameter",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.7.self_attn.q_proj.lora_B.default.weight",
+                "index": 22393
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "有效目标",
+              "observed": 20,
+              "expected": 20,
+              "unit": "tokens"
+            },
+            {
+              "label": "adapter 张量",
+              "observed": 32,
+              "expected": 32,
+              "unit": "tensors"
+            },
+            {
+              "label": "adapter 元素",
+              "observed": 1114112,
+              "expected": 1114112,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "两端均有 128/128 份 checkpoint 参数、AdamW 动量及计数器入口数组精确一致。",
+        "H200 的 448/448 份导出数组相等；910C 为 298/448。两端各自的 20 个目标分数均与连续训练相等。",
+        "910C 的原生 microbatch loss 最大差为 5.960464477539063e-8；此处仅记录观测结果。",
+        "39 项比较与产物校验回放一致。"
+      ],
+      "evidence": [
+        {
+          "label": "评测方法与归档索引",
+          "url": "evidence/precision-evaluations.md"
+        },
+        {
+          "label": "ModelScope 证据库",
+          "url": "https://modelscope.cn/datasets/XinyuanXie/precision-skill-test"
+        }
+      ],
+      "archive": {
+        "revision": "50d2331e7001f54ca0b7409b8f50ee471fe2e973",
+        "prefix": "trl-sfttrainer-resume/compare-sft-resume-20261021T131901Z",
+        "replay_cases": 39
+      }
+    },
+    {
+      "id": "trl-sfttrainer-lora-20261021",
+      "date": "2026-10-21",
+      "title": "TRL 原生 LoRA SFT：H200 ↔ Ascend 910C",
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "在两端原生 SFTTrainer 中执行两步训练，采集全部 adapter 梯度、更新和优化器状态。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "TRL",
+              "version": "0.29.0"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            },
+            {
+              "name": "Accelerate",
+              "version": "1.12.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "adapter_dtype": "FP32"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "910C / CANN",
+          "hardware": "Ascend 910C",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "TRL",
+              "version": "0.29.0"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            },
+            {
+              "name": "Accelerate",
+              "version": "1.12.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "adapter_dtype": "FP32"
+          }
+        }
+      ],
+      "common": [
+        "相同模型 revision、冻结基座与分词输入；BF16 基座、FP32 LoRA，rank 8、alpha 16、dropout 0。",
+        "顺序采样，每步两个 microbatch，分别含 8 / 12 个目标；梯度累积 2，原生 loss 分母为 20。",
+        "AdamW lr=0.001，betas=(0.9,0.999)，eps=1e-8；关闭裁剪、autocast 与 gradient checkpointing。"
+      ],
+      "differences": [
+        "硬件平台及其原生 CUDA / CANN 执行栈。"
+      ],
+      "comparisons": [
+        {
+          "id": "step-1",
+          "title": "第 1 步 · H200 ↔ 910C",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "原生 SFTTrainer 的目标分数、累计梯度、存储权重更新和 AdamW 状态。起始 adapter 与优化器状态精确对齐。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.008873298137768826,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu": 1.6236130838187819,
+                "npu": 1.614739785681013
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.022590957929060095,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.12357451200485228,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.12436485290527344,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "step1-sample1",
+                "position": 43,
+                "token": 25
+              }
+            },
+            {
+              "id": "gradients-cosine",
+              "label": "梯度 余弦相似度",
+              "value": 0.9991550118596587,
+              "unit": "1"
+            },
+            {
+              "id": "gradients-rmse",
+              "label": "梯度 RMSE",
+              "value": 1.508825949064452e-05,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-error-norm",
+              "label": "梯度 L2 误差",
+              "value": 0.0159258848221838,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-max-abs",
+              "label": "梯度 最大绝对差",
+              "value": 0.0030671916902065277,
+              "unit": "gradient",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.3.self_attn.v_proj.lora_B.default.weight",
+                "index": 3331
+              }
+            },
+            {
+              "id": "updates-cosine",
+              "label": "权重更新 余弦相似度",
+              "value": 0.976981307644254,
+              "unit": "1"
+            },
+            {
+              "id": "updates-rmse",
+              "label": "权重更新 RMSE",
+              "value": 0.00015594120953617266,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-error-norm",
+              "label": "权重更新 L2 误差",
+              "value": 0.16459829204587928,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-max-abs",
+              "label": "权重更新 最大绝对差",
+              "value": 0.001999894855543971,
+              "unit": "parameter",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.3.self_attn.v_proj.lora_B.default.weight",
+                "index": 4980
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "有效目标",
+              "observed": 20,
+              "expected": 20,
+              "unit": "tokens"
+            },
+            {
+              "label": "adapter 张量",
+              "observed": 32,
+              "expected": 32,
+              "unit": "tensors"
+            },
+            {
+              "label": "adapter 元素",
+              "observed": 1114112,
+              "expected": 1114112,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "step-2",
+          "title": "第 2 步 · H200 ↔ 910C",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "原生 SFTTrainer 的目标分数、累计梯度、存储权重更新和 AdamW 状态。各端独立执行第 1 步后的训练轨迹。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.006841415393864736,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu": 1.3847535934692132,
+                "npu": 1.3779121780753485
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.010755665454780683,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.08538502216339111,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.0859990119934082,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "step2-sample1",
+                "position": 43,
+                "token": 25
+              }
+            },
+            {
+              "id": "gradients-cosine",
+              "label": "梯度 余弦相似度",
+              "value": 0.9998944139420356,
+              "unit": "1"
+            },
+            {
+              "id": "gradients-rmse",
+              "label": "梯度 RMSE",
+              "value": 2.3190733027773707e-05,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-error-norm",
+              "label": "梯度 L2 误差",
+              "value": 0.02447816750310683,
+              "unit": "gradient"
+            },
+            {
+              "id": "gradients-max-abs",
+              "label": "梯度 最大绝对差",
+              "value": 0.006712157279253006,
+              "unit": "gradient",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.3.self_attn.v_proj.lora_A.default.weight",
+                "index": 3994
+              }
+            },
+            {
+              "id": "updates-cosine",
+              "label": "权重更新 余弦相似度",
+              "value": 0.9934559191230967,
+              "unit": "1"
+            },
+            {
+              "id": "updates-rmse",
+              "label": "权重更新 RMSE",
+              "value": 9.818524912867926e-05,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-error-norm",
+              "label": "权重更新 L2 误差",
+              "value": 0.103636007176993,
+              "unit": "parameter"
+            },
+            {
+              "id": "updates-max-abs",
+              "label": "权重更新 最大绝对差",
+              "value": 0.0019880171166732907,
+              "unit": "parameter",
+              "coordinate": {
+                "parameter": "base_model.model.model.layers.7.self_attn.q_proj.lora_B.default.weight",
+                "index": 22393
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "有效目标",
+              "observed": 20,
+              "expected": 20,
+              "unit": "tokens"
+            },
+            {
+              "label": "adapter 张量",
+              "observed": 32,
+              "expected": 32,
+              "unit": "tensors"
+            },
+            {
+              "label": "adapter 元素",
+              "observed": 1114112,
+              "expected": 1114112,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "冻结基座共 427 个张量，8,953,803,264 个元素，训练前后未改变。",
+        "23 项产物回放检查一致。"
+      ],
+      "evidence": [
+        {
+          "label": "评测方法与归档索引",
+          "url": "evidence/precision-evaluations.md"
+        },
+        {
+          "label": "ModelScope 证据库",
+          "url": "https://modelscope.cn/datasets/XinyuanXie/precision-skill-test"
+        }
+      ],
+      "archive": {
+        "revision": "f333e60d5d399a8fe023f968e6bf11ecbf125177",
+        "prefix": "trl-sfttrainer/compare-sft-20261021T111720Z",
+        "replay_cases": 23
+      }
+    },
+    {
+      "id": "torch-bf16-fp16-20261021",
+      "date": "2026-10-21",
+      "title": "同一 H200：BF16 ↔ FP16 推理",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "在同一个物理设备分配中顺序执行两种 dtype，比较完整前向和固定历史缓存推理。",
+      "sides": [
+        {
+          "id": "bf16",
+          "label": "H200 · BF16",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16"
+          }
+        },
+        {
+          "id": "fp16",
+          "label": "H200 · FP16",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            }
+          ],
+          "settings": {
+            "dtype": "FP16"
+          }
+        }
+      ],
+      "common": [
+        "相同模型、分词输入、设备分配及 PyTorch / Transformers 版本。",
+        "SDPA、eval/inference_mode、batch=1；FP32 log_softmax，离线 FP64 指标。",
+        "原生 recurrent cache 在两侧均为 FP32；KV 与 conv cache 随所选 dtype。"
+      ],
+      "differences": [
+        "模型加载 dtype：BF16 与 FP16。"
+      ],
+      "comparisons": [
+        {
+          "id": "full",
+          "title": "完整前向",
+          "side_ids": [
+            "bf16",
+            "fp16"
+          ],
+          "scope": "完整词表归一化的目标分数；缓存推理使用固定续写 token。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.0006520986652307492,
+              "unit": "nat/token",
+              "side_values": {
+                "bf16": 1.9236363730324424,
+                "fp16": 1.9242884716976731
+              }
+            },
+            {
+              "id": "target-mae-nat",
+              "label": "目标 logprob MAE",
+              "value": 0.017444644744857993,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99-nat",
+              "label": "目标 logprob P99",
+              "value": 0.10275249958038331,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max-abs-nat",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.1068425178527832,
+              "unit": "nat"
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1 一致率",
+              "value": 1.0,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "目标分数",
+              "observed": 70,
+              "expected": 70,
+              "unit": "tokens"
+            },
+            {
+              "label": "分布观测",
+              "observed": 70,
+              "expected": 70,
+              "unit": "rows"
+            }
+          ]
+        },
+        {
+          "id": "cached",
+          "title": "固定历史缓存推理",
+          "side_ids": [
+            "bf16",
+            "fp16"
+          ],
+          "scope": "完整词表归一化的目标分数；缓存推理使用固定续写 token。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.014574372442439198,
+              "unit": "nat/token",
+              "side_values": {
+                "bf16": 2.155432070605457,
+                "fp16": 2.1408576981630176
+              }
+            },
+            {
+              "id": "target-mae-nat",
+              "label": "目标 logprob MAE",
+              "value": 0.02099548769183457,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99-nat",
+              "label": "目标 logprob P99",
+              "value": 0.061659822463989246,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max-abs-nat",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.06424379348754883,
+              "unit": "nat"
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1 一致率",
+              "value": 1.0,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "目标分数",
+              "observed": 8,
+              "expected": 8,
+              "unit": "tokens"
+            },
+            {
+              "label": "分布观测",
+              "observed": 8,
+              "expected": 8,
+              "unit": "rows"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "70 个完整前向观测与 8 个缓存观测是两种执行模式的观测，不是 78 条独立输入历史。",
+        "14 项产物回放检查一致；原生数组经独立算术复核。"
+      ],
+      "evidence": [
+        {
+          "label": "评测方法与归档索引",
+          "url": "evidence/precision-evaluations.md"
+        },
+        {
+          "label": "ModelScope 证据库",
+          "url": "https://modelscope.cn/datasets/XinyuanXie/precision-skill-test"
+        }
+      ],
+      "archive": {
+        "revision": "f582d3c922a9863d3ece0e4e6ee40290bdcf68b9",
+        "prefix": "torch-dtype-validation/compare-inference-20261021T100207Z",
+        "replay_cases": 14
+      }
+    }
+  ]
+}

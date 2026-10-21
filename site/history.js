@@ -54,7 +54,38 @@
       })).filter((fix) => fix.records.length)
     })).filter((group) => group.fixes.length);
   }
-  const api = { buildCatalog, counts, filterCatalog };
+  const taskLabels = { inference: '推理', sft: 'SFT', rl: 'RL' };
+  function evaluationLibraries(record) {
+    return [...new Set(record.sides.flatMap((side) => side.libraries.map((lib) => lib.name)))];
+  }
+  function filterEvaluations(records, filters = {}) {
+    const query = (filters.query || '').trim().toLocaleLowerCase();
+    return records.filter((record) =>
+      (!filters.task || record.task === filters.task) &&
+      (!filters.library || evaluationLibraries(record).includes(filters.library)) &&
+      (!filters.model || record.model.name === filters.model) &&
+      (!filters.hardware || record.sides.some((side) => side.hardware === filters.hardware)) &&
+      (!query || JSON.stringify(record).toLocaleLowerCase().includes(query))
+    ).sort((a, b) => b.date.localeCompare(a.date));
+  }
+  function evaluationGroups(records) {
+    return Object.entries(taskLabels).map(([id, title]) => ({ id, title,
+      records: records.filter((record) => record.task === id) })).filter((group) => group.records.length);
+  }
+  function evaluationCounts(records) {
+    return { experiments: records.length,
+      comparisons: records.reduce((n, record) => n + record.comparisons.length, 0),
+      hardware: new Set(records.flatMap((record) => record.sides.map((side) => side.hardware))).size };
+  }
+  function routeForHash(hash) {
+    let id;
+    try { id = decodeURIComponent(hash.replace(/^#/, '')); } catch { return null; }
+    if (id === 'evaluations' || id.startsWith('evaluation-')) return { kind: 'evaluations', id };
+    if (!id || id === 'repairs' || /^(repair|fix|library)-/.test(id)) return { kind: 'repairs', id };
+    return null;
+  }
+  const api = { buildCatalog, counts, filterCatalog, taskLabels, evaluationLibraries,
+    filterEvaluations, evaluationGroups, evaluationCounts, routeForHash };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.PrecisionHistory = api;
 })(globalThis);

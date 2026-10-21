@@ -67,6 +67,6 @@ It runs both forward/backward passes on CPU, then prints losses, gradient-differ
 
 Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 
-## Repair history
+## Evaluation and repair history
 
-Browse the [repair history website](https://satsuki2486441738.github.io/precision-skills/) for model/environment-specific repair records, causes, verification stages and before/after metrics. Records and public evidence are maintained in [site/](site/README.md).
+The [history website](https://satsuki2486441738.github.io/precision-skills/) has two tabs: **Evaluations** shows inference/SFT/RL comparison settings, numerical metrics, coverage and evidence; **Repairs** retains library-grouped fixes, causes and before/after verification. Records and public evidence are maintained in [site/](site/README.md).
