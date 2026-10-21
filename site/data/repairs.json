@@ -3,6 +3,118 @@
   "updated_at": "2026-10-21",
   "repairs": [
     {
+      "id": "mindspeed-gemm-compute-policy-20261021",
+      "title": "修复后追踪：同输入 GEMM 与 cuBLAS 计算模式",
+      "date": "2026-10-21",
+      "status": "validated",
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "environment": {
+        "hardware": "NVIDIA H200 ↔ Ascend 910C · 固定投影本地分片",
+        "libraries": [
+          {
+            "name": "PyTorch (CUDA)",
+            "version": "2.9.0+cu126"
+          },
+          {
+            "name": "cuBLAS",
+            "version": "12.6.4.1"
+          },
+          {
+            "name": "torch-npu",
+            "version": "2.9.0.post2"
+          },
+          {
+            "name": "CANN",
+            "version": "9.1.0"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "在相同归一化输入和相同权重下，区分 GEMM 数值路径与上游传播差异。",
+        "trigger": "首次投影的跨端差异已可由独立原生模块复现。",
+        "expected": "固定两组输入，验证原任务复现，并检查归约设置、输出类型和计算模式的影响。",
+        "observed": "同输入下差异仍存在；CUDA 归约开关无效，cuBLAS pedantic 和 FP32 输入改变结果并降低 GPU 局部误差。",
+        "location": "layer 0 input projection → torch linear / cuBLAS GemmEx"
+      },
+      "cause": {
+        "category": "native_gemm_compute_policy",
+        "summary": "直接 cuBLAS 默认模式逐值复现 Torch；pedantic 改变实测 kernel 并降低局部误差，尚未确认新增语义缺陷。",
+        "components": [
+          "CUDA Torch linear → cuBLAS 12.6.4.1",
+          "Ascend Torch linear → CANN 9.1.0"
+        ]
+      },
+      "repair": {
+        "summary": "沿用原 RMSNorm 修复；本轮补充同输入 GEMM 与计算模式定位证据。",
+        "commit": "9ca343aaa1a2ca0688560b2f3cf8b0b8be38be38",
+        "upstream_status": "本地修复提交；尚未提交上游"
+      },
+      "stages": [
+        {
+          "name": "同输入重放",
+          "result": "两组共同输入分别复现此前 GPU/NPU 归一化张量；各侧默认 GEMM 逐值复现原模型投影。"
+        },
+        {
+          "name": "策略对照",
+          "result": "GPU 三种模式、NPU 两种模式，共 10 个配置，每个配置重复 3 次均逐值一致。"
+        },
+        {
+          "name": "cuBLAS 隔离",
+          "result": "默认、禁止低精度归约、FP32 输出和两个算法选择均保留原结果；pedantic 改变计算结果。"
+        },
+        {
+          "name": "kernel 证据",
+          "result": "默认调用为 nvjet_tst；pedantic 为 magma_sgemmEx，原始 Profiler trace 已归档。"
+        },
+        {
+          "name": "独立参照",
+          "result": "CPU fsum 检查两组输入的 1,088 / 1,046 个关键坐标，与原 FP64 舍入参照全部一致。"
+        }
+      ],
+      "validation": {
+        "scope": "第 0 层输入投影本地权重分片 [3088,4096]，两组输入均为 [95,2,4096]；输出各 586,720 个数。",
+        "coverage": {
+          "observed": 10,
+          "expected": 10,
+          "unit": "同输入策略配置（GPU 6 / NPU 4）"
+        },
+        "metrics": [],
+        "checks": [
+          "同一 GPU 归一化输入：跨端原生 BF16 RMSE=4.352e-4，1,005 个值不同",
+          "CUDA 关闭 BF16 低精度归约：两组输入的输出均完全不变",
+          "同一输入针对 FP64 参照：CUDA 默认 RMSE=4.345e-4、975 个值不同；pedantic 为 1.388e-4、154 个",
+          "CUDA 改为 FP32 输入：RMSE=7.303e-5、143 个值不同；NPU 未出现同样改善",
+          "直接 cuBLAS 默认输出与 Torch 原生输出逐值一致",
+          "两组关键坐标的 fsum 校验与原 FP64 舍入参照全部一致"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "具体底层累加指令的误差机制仍未归因。",
+          "本轮测量范围为独立 GEMM；整模型继续使用此前数值策略。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "同输入 GEMM 与计算模式摘要",
+          "url": "evidence/mindspeed-gemm-policy.md"
+        },
+        {
+          "label": "输入身份、模式指标与 kernel 对应数据",
+          "url": "evidence/mindspeed-gemm-policy.json"
+        }
+      ],
+      "notes": [
+        "同一修复的第 5 轮验证，未新增独立修复。",
+        "pedantic 在单次 Profiler 中 kernel 时间约 559 μs，默认约 11.7 μs；该观察未作为性能基准。",
+        "NPU 累计 747.100 / 900 秒；本轮 GPU 调度资源均已清理，模型和权重留在源端。"
+      ],
+      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "verification_title": "同输入 GEMM 与 cuBLAS 计算模式"
+    },
+    {
       "id": "mindspeed-decoder-projection-trace-20261021",
       "title": "修复后追踪：32 层轨迹与首次输入投影隔离",
       "date": "2026-10-21",
