@@ -1,0 +1,370 @@
+{
+  "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+  "source_prefix": "tests/results/gpt-6/compare-gpurecovery-20261021T180045Z",
+  "native_cases": 22,
+  "history_entries": 14,
+  "original_comparison_groups": 120,
+  "portable_replay_groups": 96,
+  "original_history_entries_preserved": 43,
+  "acceptance": null,
+  "entries": [
+    {
+      "id": "axolotl-qwen3-06b-cuda-native-20261021t182602z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/axolotl/axolotl-pretrained-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/axolotl/axolotl-pretrained-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/axolotl/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "axolotl-tiny-qwen2-cuda-native-20261021t182602z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/axolotl/axolotl-tiny-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/axolotl/axolotl-tiny-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/axolotl/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "factory-qwen3-06b-cuda-native-20261021t181049z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/factory/factory-pretrained-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/factory/factory-pretrained-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/factory/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "factory-tiny-qwen2-cuda-native-20261021t181049z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/factory/factory-tiny-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/factory/factory-tiny-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/factory/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "swift-qwen3-06b-cuda-native-20261021t182317z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift/swift-pretrained-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift/swift-pretrained-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "swift-tiny-qwen2-cuda-native-20261021t182317z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift/swift-tiny-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift/swift-tiny-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "trl-qwen3-06b-cuda-native-20261021t175700z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/trl/trl-pretrained-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/trl/trl-pretrained-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/trl/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "trl-tiny-qwen2-cuda-native-20261021t175700z",
+      "task": "sft",
+      "comparison_groups": 10,
+      "replay_groups": 10,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "FP32 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/trl/trl-tiny-fp32-rank-0.zip"
+        },
+        {
+          "label": "BF16 完整数组与离线重放包",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/trl/trl-tiny-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告与覆盖范围",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/trl/summary.json"
+        },
+        {
+          "label": "GPU 续测 Guide",
+          "url": "evidence/gpu-native-20261022-guide.md"
+        }
+      ]
+    },
+    {
+      "id": "lmdeploy-cuda-smollm2-135m-instruct-20261021",
+      "task": "inference",
+      "comparison_groups": 8,
+      "replay_groups": 2,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ]
+    },
+    {
+      "id": "llama-cuda-smollm2-135m-instruct-20261021",
+      "task": "inference",
+      "comparison_groups": 8,
+      "replay_groups": 2,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ]
+    },
+    {
+      "id": "lmdeploy-cuda-qwen25-05b-instruct-20261021",
+      "task": "inference",
+      "comparison_groups": 8,
+      "replay_groups": 2,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ]
+    },
+    {
+      "id": "llama-cuda-qwen25-05b-instruct-20261021",
+      "task": "inference",
+      "comparison_groups": 8,
+      "replay_groups": 2,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ]
+    },
+    {
+      "id": "swift-tiny-fp32-cuda-20261021",
+      "task": "rl",
+      "comparison_groups": 4,
+      "replay_groups": 4,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "原始数组与四组便携比较",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32.zip"
+        },
+        {
+          "label": "独立参考与覆盖摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-summary.json"
+        },
+        {
+          "label": "两模型数值结果",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/results.json"
+        },
+        {
+          "label": "已安装源码哈希与发行身份",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/installed-source-release-pin.json"
+        },
+        {
+          "label": "公共导出与重放审计",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        }
+      ]
+    },
+    {
+      "id": "swift-pretrained-bf16-cuda-20261021",
+      "task": "rl",
+      "comparison_groups": 4,
+      "replay_groups": 4,
+      "source_revision": "a9fe8dff25de1c3bf806955b06e85d56a9c0a26b",
+      "evidence": [
+        {
+          "label": "原始数组与四组便携比较",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-pretrained-bf16.zip"
+        },
+        {
+          "label": "独立参考与覆盖摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-pretrained-bf16-summary.json"
+        },
+        {
+          "label": "两模型数值结果",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/results.json"
+        },
+        {
+          "label": "已安装源码哈希与发行身份",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/installed-source-release-pin.json"
+        },
+        {
+          "label": "公共导出与重放审计",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        }
+      ]
+    }
+  ]
+}
