@@ -1,0 +1,223 @@
+{
+  "case_id": "qwen35-zero-centered-rmsnorm",
+  "followup_id": "mindspeed-rmsnorm-training-verification-20261021",
+  "model": "Qwen3.5-9B-Base",
+  "scope": "Historical backend adapter whole-model backward, native clipping and first AdamW update; tensor comparison selects language-model normalization parameters with all four TP views",
+  "coverage": {
+    "logical_parameters": 112,
+    "tp_rank_views": 448,
+    "selected_scalar_observations": 1177600,
+    "ranks_per_run": 4,
+    "actions": 32,
+    "initial_parameter_records_equal": 2608,
+    "audited_tensor_files_per_run": 7768
+  },
+  "preclip_norm": {
+    "gpu": 40.75261806198775,
+    "npu_before": 0.049505140632390976,
+    "npu_after": 40.59830093383789
+  },
+  "metrics": {
+    "gradients": {
+      "before": {
+        "count": 1177600,
+        "side_a_norm": {
+          "value": 0.8074842648058843,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.0014365488134132996,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 0.8073824305376189,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 0.0007440127807722619,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.07177318770899976,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.11377160251140594,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 247834
+      },
+      "after": {
+        "count": 1177600,
+        "side_a_norm": {
+          "value": 0.8074842648058843,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.8063478546933117,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 0.041283144081395516,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 3.8042921997408873e-05,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.998692234664261,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.004638671875,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 256410
+      }
+    },
+    "postclip-gradients": {
+      "before": {
+        "count": 1177600,
+        "side_a_norm": {
+          "value": 0.019814291803859525,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.0014365488134132996,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 0.019763195587179348,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 1.821202635778471e-05,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.07177318773893825,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.0027937821578234434,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 247834
+      },
+      "after": {
+        "count": 1177600,
+        "side_a_norm": {
+          "value": 0.019814291803859525,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.019861615988835315,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 0.0010156602090803087,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 9.359433000968283e-07,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9986922345895994,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.00011367557090125047,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 235418
+      }
+    },
+    "updates": {
+      "before": {
+        "count": 1177600,
+        "side_a_norm": {
+          "value": 1.1658682387084218,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.8142132437755518,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 1.422374401873552,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 0.0013107354012305518,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": -0.0005040649203209165,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.00390625,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 2560
+      },
+      "after": {
+        "count": 1177600,
+        "side_a_norm": {
+          "value": 1.1658682387084218,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 1.165769267555261,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 0.259183745749408,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 0.00023884099048028886,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9752871182075522,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.00390625,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 14142
+      }
+    }
+  },
+  "nonfinite_counts": {
+    "original": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "fixed": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "source_runs": {
+    "original": "npu-update-original-20261021T092540Z",
+    "fixed": "npu-update-fixed-20261021T093550Z"
+  },
+  "gpu_source_run": "gpu-update-20261017T105353Z",
+  "cumulative_npu_wall_seconds": 462.3958592605777,
+  "npu_budget_seconds": 600,
+  "controller_transferred_bytes": 27383774,
+  "remaining": [
+    "Maximum absolute stored-update difference remains 0.00390625 in selected TP views; residual differences have not been attributed.",
+    "Historical GPU evidence lacks actual optimizer-group settings; its declaration and exact objective/scorer sources are retained, without an isolated optimizer-agreement conclusion."
+  ],
+  "numerical_acceptance": null
+}

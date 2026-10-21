@@ -3,6 +3,153 @@
   "updated_at": "2026-10-21",
   "repairs": [
     {
+      "id": "mindspeed-rmsnorm-training-verification-20261021",
+      "title": "RMSNorm 修复：整模型反向与首次更新验证",
+      "date": "2026-10-21",
+      "status": "validated",
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "environment": {
+        "hardware": "Ascend 910C · TP4",
+        "libraries": [
+          {
+            "name": "MindSpeed",
+            "commit": "ff884722a3ce7079fbafe3cb97a3287311f58a5b"
+          },
+          {
+            "name": "Megatron Bridge",
+            "version": "0.4.2"
+          },
+          {
+            "name": "Megatron Core",
+            "version": "0.17.1"
+          },
+          {
+            "name": "torch-npu",
+            "version": "2.9.0.post2"
+          },
+          {
+            "name": "Transformers",
+            "version": "5.2.0"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "在同一历史环境和冻结轨迹下，补齐 RMSNorm 修复的整模型反向、裁剪和首次 AdamW 更新验证。",
+        "trigger": "与原修复相同的 zero-centered gamma 配置；使用同一组初始权重和固定 GRPO 轨迹。",
+        "expected": "修复后的前向语义通过原生反向与优化器更新链路，保留可对比的梯度和实际存储更新。",
+        "observed": "修复前后均完成整模型训练步骤；修复后选定归一化参数的梯度与更新更接近保留的 GPU 观测。",
+        "location": "mindspeed/core/fusions/fused_rms_norm.py：初始化、普通前向与融合前向"
+      },
+      "cause": {
+        "category": "library_semantics",
+        "summary": "同一 RMSNorm 参数语义缺陷的训练验证续篇；不是新增独立 bug。",
+        "components": [
+          "Megatron Bridge → MindSpeed RMSNorm",
+          "MindSpeed RMSNorm → torch_npu.npu_rms_norm"
+        ]
+      },
+      "repair": {
+        "summary": "沿用原修复，不改动反向或优化器实现；复用原生采集器补齐训练步骤和数值证据。",
+        "commit": "9ca343aaa1a2ca0688560b2f3cf8b0b8be38be38",
+        "upstream_status": "本地修复提交；尚未提交上游"
+      },
+      "stages": [
+        {
+          "name": "保留条件",
+          "result": "相同模型、轨迹、初始权重与优化器设置；2,608 条初始参数记录一致。"
+        },
+        {
+          "name": "修复前训练",
+          "result": "TP4 完成反向、原生裁剪与首次更新，所有 rank 成功。"
+        },
+        {
+          "name": "修复后训练",
+          "result": "TP4 完成同一训练步骤，4 张测试卡已释放。"
+        },
+        {
+          "name": "完整存储审计",
+          "result": "每个新运行校验 7,768 个张量文件；4 个 rank 梯度非有限值计数均为零。"
+        },
+        {
+          "name": "数值比较",
+          "result": "选取 112 个语言模型归一化参数的 448 个 TP rank 视图，共 1,177,600 个标量观测。"
+        }
+      ],
+      "validation": {
+        "scope": "执行覆盖整模型反向、原生裁剪和首次 AdamW 更新；张量数值比较覆盖选定归一化参数的四个 TP rank 视图，保留逐 rank 观测。",
+        "coverage": {
+          "observed": 448,
+          "expected": 448,
+          "unit": "TP rank 视图"
+        },
+        "metrics": [
+          {
+            "id": "gradients_cosine",
+            "label": "裁剪前梯度余弦相似度",
+            "unit": "无量纲",
+            "before": 0.07177318770899976,
+            "after": 0.998692234664261
+          },
+          {
+            "id": "gradients_rmse",
+            "label": "裁剪前梯度 RMSE",
+            "unit": "梯度值",
+            "before": 0.0007440127807722619,
+            "after": 3.8042921997408873e-05
+          },
+          {
+            "id": "updates_rmse",
+            "label": "实际存储更新 RMSE",
+            "unit": "参数值",
+            "before": 0.0013107354012305518,
+            "after": 0.00023884099048028886
+          },
+          {
+            "id": "updates_max_abs",
+            "label": "实际存储更新最大绝对差异",
+            "unit": "参数值",
+            "before": 0.00390625,
+            "after": 0.00390625
+          }
+        ],
+        "checks": [
+          "2,608 条初始参数记录一致",
+          "修复模块源码 SHA256 与实际执行记录一致",
+          "两次运行各通过 7,768 个张量文件的源端审计",
+          "新运行实际参数组、初始空状态和 FP32 主参数已检查",
+          "三份选定张量压缩包均通过 SHA256 校验"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "选定视图的更新最大绝对差异仍为 0.00390625，剩余差异尚未定位。",
+          "历史 GPU 记录缺少实际优化器参数组配置，本次不单独判定优化器实现一致性。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "训练验证证据摘要",
+          "url": "evidence/mindspeed-rmsnorm-training.md"
+        },
+        {
+          "label": "训练指标与覆盖数据",
+          "url": "evidence/mindspeed-rmsnorm-training.json"
+        },
+        {
+          "label": "原始修复及回归测试补丁",
+          "url": "evidence/mindspeed-rmsnorm.patch"
+        }
+      ],
+      "notes": [
+        "关联原 RMSNorm 修复记录，本条补充训练验证过程。",
+        "NPU 累计 462.396 / 600 秒；比较复用已有 GPU 证据。",
+        "聚合按 TP rank 视图计数，未去重为整模型逻辑参数指标。"
+      ],
+      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma"
+    },
+    {
       "id": "mindspeed-rmsnorm-zero-centered-gamma",
       "title": "修复 RMSNorm 的 zero-centered gamma 语义",
       "date": "2026-10-21",
