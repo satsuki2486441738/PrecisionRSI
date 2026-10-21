@@ -69,11 +69,15 @@ class RuntimeProbeTests(unittest.TestCase):
                     launch.assert_not_called()
 
     def test_multibyte_diagnostics_tail(self):
-        (self.root/'noisy.py').write_text("print('中文' * 5000)\n")
-        result = probe_runtime(dict(python_paths=[str(self.root)], imports=['noisy']))
+        from unittest.mock import patch
+        (self.root/'noisy.py').write_text("print('中文' * 5000)\n", encoding='utf-8')
+        # A caller's locale/stdio policy must not corrupt the UTF-8 diagnostic
+        # protocol of the fresh worker, including on Windows with a CP936 locale.
+        with patch.dict('os.environ', {'PYTHONIOENCODING': 'ascii'}):
+            result = probe_runtime(dict(python_paths=[str(self.root)], imports=['noisy']))
         self.assertEqual(result['status'], 'completed', result)
         self.assertGreater(result['diagnostic_bytes'], 8192)
-        self.assertTrue(result['diagnostics'].endswith('中文\n'))
+        self.assertTrue(result['diagnostics'].rstrip('\r\n').endswith('中文'))
 
     def test_missing_deferred_interface_is_reported(self):
         result = probe_runtime(dict(python_paths=[str(self.root)], imports=['probe_fixture'],

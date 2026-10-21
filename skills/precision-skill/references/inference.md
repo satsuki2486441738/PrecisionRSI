@@ -4,11 +4,11 @@
 
 Replay the selected token IDs, position IDs, attention masks and prediction positions. Check checkpoint/tokenizer/config and numerical settings against the task's common conditions and per-side configuration. At prediction position $t-1$, collect the distribution predicting token $x_t$.
 
-Collect the observations needed by the selected metrics. For target-score comparison, save the requested labels, logical positions and full-vocabulary-normalized logprobs. For distribution comparison, compute natural-log softmax in FP32 before sampling processors, retaining model-defined scaling/softcapping; save full logprob rows or queryable arrays and vocabulary mapping. Retain requested label scores even outside top-100.
+Collect the observations needed by the selected metrics. For target-score comparison, save the requested labels, logical positions and full-vocabulary-normalized logprobs. For distribution comparison, use full-vocabulary-normalized scores before sampling processors, retaining model-defined scaling/softcapping. When deriving logprobs from logits, declare the FP32/FP64 policy and record native score dtype separately from derivation dtype; save full logprob rows or queryable arrays and vocabulary mapping. Retain requested label scores even outside top-100.
 
 ### Full forward
 
-For cache-off scoring, use eval/no-grad and collect the requested prediction positions in the native forward pass.
+For cache-off scoring, use eval/no-grad and collect the requested prediction positions in the native forward pass. Record actual cache flags and forward shapes.
 
 ### Cached execution
 
@@ -32,7 +32,7 @@ Reconstruct vocabulary shards, exclude padding and export the score rows needed 
 | [MindIE-LLM](https://github.com/Ascend/MindIE-LLM) | Service/model backend, available score access and scheduled request/prefill/decode mappings |
 | [llama.cpp](https://github.com/ggml-org/llama.cpp) | GGUF/checkpoint identity, quantization, tokenizer conversion and native context/logit-row mapping |
 
-Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector for fixed-history decode. The [inference capture tool](../scripts/inference_capture.py) saves full-vocabulary FP32 logprobs before forcing each fixed token, checks logical prefill/decode histories and exports distribution/target-score records. The adapter selects request rows, reconstructs vocabulary shards and maps native scheduling events to logical events.
+Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector for fixed-history decode. The [inference capture tool](../scripts/inference_capture.py) saves full-vocabulary logprobs before forcing each fixed token, checks logical prefill/decode histories and exports distribution/target-score records. FP32 remains the default; `logprob_dtype='float64'` explicitly derives logprobs offline from copied native values. Use `validate_generation_scores` to check context/generation row alignment when both outputs are available. `export_records` verifies normalization and target scores against the selected saved rows. The adapter selects request rows, reconstructs vocabulary shards and maps native scheduling events to logical events.
 
 ### Other/custom
 

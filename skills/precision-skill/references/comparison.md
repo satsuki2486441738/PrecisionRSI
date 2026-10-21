@@ -7,7 +7,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 | Operation | Tool entrypoint | Inputs and outputs |
 |---|---|---|
 | Check runtime initialization / interfaces | [runtime_probe.py](../scripts/runtime_probe.py), CLI / Python `probe_runtime`, `inspect_runtime` | Ordered imports, symbols and task checks → actual module identity, distribution metadata and diagnostics in a fresh interpreter or native worker |
-| Capture fixed-history inference / export scores | [inference_capture.py](../scripts/inference_capture.py), Python `FixedHistory`, `validate_history`, `export_records` | Native full-vocabulary logit row and fixed tokens → preconstraint logprob arrays, history checks and distribution/target-score records |
+| Capture fixed-history inference / export scores | [inference_capture.py](../scripts/inference_capture.py), Python `FixedHistory`, `derive_logprobs`, `validate_history`, `validate_generation_scores`, `export_records` | Native full-vocabulary logit row and fixed tokens → declared logprob derivation, history/score-row checks and distribution/target-score records |
 | Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
 | Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
 | Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
@@ -16,6 +16,8 @@ Select tools by operation and supported input semantics. The tool library lives 
 | Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
 | Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |
 | Validate artifacts | [validate_artifacts.py](../scripts/validate_artifacts.py), CLI | Contract and one side's tensor/distribution manifest → validation and coverage |
+| Package / verify / extract evidence | [evidence_bundle.py](../scripts/evidence_bundle.py), CLI / Python `pack`, `verify`, `extract` | Selected files and optional literal text replacements → indexed source/export hashes and verified extraction |
+| Replay retained comparisons | [replay_bundle.py](../scripts/replay_bundle.py), CLI / Python `replay` | Indexed ZIP and `REPLAY.json` → installed comparator/validator reports and expected-value checks |
 | Plan msProbe module capture | [msprobe_capture.py](../scripts/msprobe_capture.py), Python `plan_modules` | Native module inventory, selected paths and output sizes → L0 configuration, observation selection and payload estimate; execution uses the [layerwise integration](layerwise.md#integrate-and-verify) |
 
 Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
@@ -31,6 +33,19 @@ Read the selected interface before collection. Distribution matrix rows belong i
 Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.
 
 Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and unavailable comparisons. Exit codes: 0=comparison metrics computed successfully, 1=unavailable comparison, 2=CLI/output error.
+
+## Portable evidence
+
+Pack selected artifacts with `evidence_bundle.py`; its index records original/exported SHA256 and byte counts. Optional literal replacements apply to UTF-8 text while preserving numeric arrays. Keep the replacement file outside the selected directory. Read the module docstring for file-selection, index and size-limit interfaces.
+
+```sh
+python scripts/evidence_bundle.py pack SELECTED_FILES NEW.zip
+python scripts/evidence_bundle.py verify NEW.zip
+python scripts/evidence_bundle.py extract NEW.zip NEW_DIRECTORY
+python scripts/replay_bundle.py --bundle NEW.zip --output-root runs
+```
+
+For replay, include `REPLAY.json` with named cases selecting a supported validator/comparator, relative input paths and expected report fields. Preserve side identities and order. Replay uses the installed skill CLIs and retained arrays; expected-value checks establish reproducibility of those metrics. The [replay tool docstring](../scripts/replay_bundle.py) owns case fields and supported operations.
 
 ## Coordinates
 

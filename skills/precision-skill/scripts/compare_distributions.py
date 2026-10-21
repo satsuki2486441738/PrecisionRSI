@@ -31,6 +31,7 @@ from artifact_io import (Array, ArtifactError, aggregate, blocked, blocked_statu
 
 
 def coordinate(row):
+    require(isinstance(row, dict), 'distribution position must be an object')
     require(isinstance(row.get('sample'), str) and row['sample'], 'invalid sample ID')
     require(integer(row.get('position')), 'invalid prediction position')
     return row['sample'], row['position']

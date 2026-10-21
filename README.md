@@ -38,6 +38,8 @@ The skill organizes the task; task adapters integrate native execution; the [too
 
 Tools check runtime initialization and imported interfaces, capture fixed-history inference distributions, plan internal capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
 
+[Evidence tools](skills/precision-skill/references/comparison.md#portable-evidence) package selected artifacts with source/export hashes and replay retained comparisons through installed skill CLIs.
+
 For a concrete collection task and the expected agent workflow, see the [fixed-history inference example](skills/precision-skill/examples/fixed-history-inference.md), from environment preparation through capture, validation and reporting.
 
 Compare FP32 and BF16 gradients for the same small classifier and batch with the [runnable gradient example](skills/precision-skill/examples/compare_gradients.py). Run from the skill directory; requires Torch and NumPy:

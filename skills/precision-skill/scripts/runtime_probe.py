@@ -89,7 +89,9 @@ def probe_runtime(spec, executable=None, timeout=60):
             process = subprocess.Popen(
                 [str(executable or sys.executable), '-B', str(Path(__file__).resolve()),
                  '--worker', str(result_path)], stdin=subprocess.PIPE, stdout=log,
-                stderr=subprocess.STDOUT, text=True, start_new_session=os.name == 'posix')
+                stderr=subprocess.STDOUT, text=True, encoding='utf-8',
+                env=dict(os.environ, PYTHONIOENCODING='utf-8'),
+                start_new_session=os.name == 'posix')
             try:
                 process.communicate(payload, timeout=timeout)
             except subprocess.TimeoutExpired:
@@ -102,7 +104,7 @@ def probe_runtime(spec, executable=None, timeout=60):
                               elapsed_seconds=time.monotonic() - started)
             else:
                 if result_path.exists():
-                    report = json.loads(result_path.read_text())
+                    report = json.loads(result_path.read_text(encoding='utf-8'))
                 else:
                     report = dict(status='failed', executable=str(executable or sys.executable),
                                   error=dict(type='WorkerExit', message='worker produced no report'))
@@ -119,7 +121,7 @@ def probe_runtime(spec, executable=None, timeout=60):
 def main():
     if len(sys.argv) == 3 and sys.argv[1] == '--worker':
         report = inspect_runtime(json.load(sys.stdin))
-        Path(sys.argv[2]).write_text(json.dumps(report, indent=2, allow_nan=False) + '\n')
+        Path(sys.argv[2]).write_text(json.dumps(report, indent=2, allow_nan=False) + '\n', encoding='utf-8')
         return 0 if report['status'] == 'completed' else 1
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--spec', type=Path, required=True)
@@ -130,11 +132,11 @@ def main():
     try:
         if args.output.exists():
             raise FileExistsError(args.output)
-        spec = json.loads(args.spec.read_text())
+        spec = json.loads(args.spec.read_text(encoding='utf-8'))
         spec['python_paths'] = [str((args.spec.resolve().parent / path).resolve())
                                 for path in spec.get('python_paths', [])]
         result = probe_runtime(spec, args.python, args.timeout)
-        with args.output.open('x') as stream:
+        with args.output.open('x', encoding='utf-8') as stream:
             json.dump(result, stream, indent=2, allow_nan=False)
             stream.write('\n')
     except (ValueError, OSError, TypeError) as exc:

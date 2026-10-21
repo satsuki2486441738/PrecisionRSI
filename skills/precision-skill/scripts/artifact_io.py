@@ -53,7 +53,8 @@ def unique(items, key, label):
     return result
 
 
-def load_json(path):
+def parse_json(data):
+    """Decode JSON text/bytes with unique keys and finite numeric literals."""
     def pairs(values):
         out = {}
         for key, value in values:
@@ -62,10 +63,14 @@ def load_json(path):
         return out
     def constant(value):
         raise ArtifactError(f'nonfinite JSON value: {value}')
+    return json.loads(data, object_pairs_hook=pairs, parse_constant=constant,
+                      parse_float=lambda s: float(s) if math.isfinite(float(s)) else constant(s))
+
+
+def load_json(path):
     try:
         with Path(path).open() as stream:
-            return json.load(stream, object_pairs_hook=pairs, parse_constant=constant,
-                             parse_float=lambda s: float(s) if math.isfinite(float(s)) else constant(s))
+            return parse_json(stream.read())
     except FileNotFoundError as exc:
         raise ArtifactError(f'missing file: {path}', 'not_covered') from exc
     except json.JSONDecodeError as exc:
@@ -141,7 +146,7 @@ class Array:
                 require(len(prefix) == 8, 'truncated safetensors header')
                 length = struct.unpack('<Q', prefix)[0]
                 require(0 < length <= 100_000_000 and 8 + length <= self.path.stat().st_size, 'invalid safetensors header length')
-                header = json.loads(stream.read(length))
+                header = parse_json(stream.read(length))
             key = descriptor.get('key')
             require(key in header and key != '__metadata__', 'missing safetensors key', 'not_covered')
             entry = header[key]

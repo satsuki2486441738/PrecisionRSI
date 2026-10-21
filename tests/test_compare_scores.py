@@ -608,7 +608,12 @@ class CompareTests(unittest.TestCase):
     def test_evidence_paths_resolve_directory_symlinks(self):
         self.write("external.json", {"model": self.common["model"]})
         alias = self.root / "evidence-alias"
-        alias.symlink_to(self.root.resolve(), target_is_directory=True)
+        try:
+            alias.symlink_to(self.root.resolve(), target_is_directory=True)
+        except OSError as exc:
+            if getattr(exc, 'winerror', None) == 1314:
+                self.skipTest('Windows account lacks directory symlink privilege')
+            raise
         man = self.manifests["side_b"]
         man["evidence"]["model"] = [{"path": "../evidence-alias/external.json", "pointer": "/model"}]
         self.write("side_b/manifest.json", man)

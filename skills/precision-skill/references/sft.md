@@ -25,7 +25,7 @@ Collect the requested stages:
 | Clipping | Native norm/coefficient and postclip gradients when enabled |
 | Update | Stored before/after parameters, including unchanged coordinates; applied/skipped event |
 
-Preserve native dtypes and logical coordinates.
+Record native parameter/gradient/master storage separately from exported-array and offline-reduction dtypes; preserve logical coordinates. Label independent norm diagnostics as full-model or sampled.
 
 For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. Capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, and stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates); use the logical inventory exporter and explicit-view comparator from [comparison](comparison.md).
 

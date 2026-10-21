@@ -505,6 +505,54 @@ class Fixture(unittest.TestCase):
         np.save(self.root/'object.npy', np.array([{'x': 1}], dtype=object))
         with self.assertRaises(ValueError):Array(self.root, {'path': 'object.npy'})
 
+    def test_safetensors_header_rejects_duplicate_keys_and_nonfinite_json(self):
+        entry = '"x":{"dtype":"F32","shape":[1],"data_offsets":[0,4]}'
+        headers = [
+            '{'+entry+',"x":{"dtype":"F32","shape":[1],"data_offsets":[4,8]}}',
+            '{"x":{"dtype":"F32","shape":[1],"data_offsets":[0,4],"data_offsets":[4,8]}}',
+            '{'+entry+',"unused":NaN}',
+            '{'+entry+',"unused":1e999}',
+        ]
+        for header in headers:
+            with self.subTest(header=header):
+                encoded = header.encode('utf-8')
+                (self.root/'ambiguous.safetensors').write_bytes(
+                    struct.pack('<Q', len(encoded)) + encoded + struct.pack('<ff', 1., 99.))
+                with self.assertRaises(ArtifactError):
+                    Array(self.root, {'path': 'ambiguous.safetensors', 'key': 'x'})
+
+    def test_distribution_position_objects_fail_with_diagnostics(self):
+        from query_distributions import inventory
+        for bad in (None, [], 0, 'row', True):
+            for location in ('contract', 'manifest'):
+                with self.subTest(bad=bad, location=location):
+                    spec, ref, cand = self.dist_pair()
+                    (spec if location == 'contract' else cand)['positions'] = [bad]
+                    result = self.run_dist(spec, ref, cand)
+                    self.assertEqual(result['status'], 'incomparable')
+                    self.assertIn('position must be an object', result['reason'])
+                    cp, mp = self.root/'contract.json', self.root/'npu.json'
+                    self.assertEqual(validate(cp, mp)['status'], 'incomparable')
+                    with self.assertRaisesRegex(ArtifactError, 'position must be an object'):
+                        inventory(cp, mp)
+
+    def test_null_distribution_position_cli_writes_diagnostic_report(self):
+        spec, ref, cand = self.dist_pair()
+        cand['positions'] = [None]
+        cp, ap, bp = self.write('contract.json', spec), self.write('a.json', ref), self.write('b.json', cand)
+        for script, arguments in [
+            ('compare_distributions.py', ['--side-a', str(ap), '--side-b', str(bp)]),
+            ('validate_artifacts.py', ['--manifest', str(bp)]),
+        ]:
+            with self.subTest(script=script):
+                out = self.root/(script+'.json')
+                process = subprocess.run([sys.executable, '-B', str(SCRIPTS/script),
+                    '--contract', str(cp), *arguments, '--output', str(out)], capture_output=True)
+                self.assertEqual(process.returncode, 1, process.stderr.decode())
+                self.assertTrue(out.is_file(), process.stderr.decode())
+                self.assertEqual(json.loads(out.read_text())['status'], 'incomparable')
+                self.assertNotIn(b'Traceback', process.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()
