@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-用于不同硬件与软件执行栈之间推理、SFT、LoRA 和 RL 数值比较的 Agent Skill。
+让 agent 完成不同执行环境之间的数值精度采集与对比。
 
 ## 使用
 

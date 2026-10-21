@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-An Agent Skill for inference, SFT, LoRA and RL numerical comparison across hardware and software execution stacks.
+An Agent Skill that guides agents through numerical precision collection and comparison across execution environments.
 
 ## Use
 
