@@ -48390,6 +48390,1168 @@
         ],
         "source_result": "tests/results/gpt-6/compare-h100native-20261021T200953Z/trl-ddp/summary.json"
       }
+    },
+    {
+      "id": "areal-tiny-cuda-h100-20261022",
+      "date": "2026-10-22",
+      "title": "AReaL 原生 GRPO · 随机 tiny Qwen3",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "随机 tiny Qwen3",
+        "revision": "seed-20261022; weights-sha256:3e23654cd24b3a2546d4af6cb17f4cc86563b813278a34a884c7fb95cd74a1ce"
+      },
+      "summary": "两 GPU 原生 rollout/actor 流程及完整一步 AdamW 完成；全初值 SHA/alias 审计一致，比较 65,856/19,709,312 参数元素与32个动作目标。",
+      "sides": [
+        {
+          "id": "native",
+          "label": "AReaL CUDA BF16 compute / FP32 参数",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0+cu129"
+            },
+            {
+              "name": "areal",
+              "version": "2.1.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "vllm",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "ec8035f688a53b6a23ae32548fc5ade496c30f02686b5b9025243a26d39f3a76",
+              "奖励组": 1,
+              "轨迹": 4,
+              "有效动作": 32,
+              "真实每序列 token": 33,
+              "原生补齐长度": 256,
+              "cu_seqlens": [
+                0,
+                33,
+                256
+              ],
+              "输入包 typed 张量总数（含实际补齐模型输入）": 59
+            },
+            "目标": {
+              "temperature": 1.5,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": false,
+              "group_std_epsilon": 0.0001,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion"
+            },
+            "优化": {
+              "算法": "torch.optim.adamw.AdamW",
+              "实际参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": true,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "max_grad_norm": 1,
+              "冷启动 optimizer 步": 1,
+              "完整原生 optimizer 元素": 19709312
+            },
+            "初值审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 24,
+              "parameter_elements": 19709312,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid60567-000.json"
+            },
+            "数值采样": {
+              "参数": 12,
+              "元素": 65856,
+              "完整模型参数": 24,
+              "完整模型元素": 19709312,
+              "规则": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each"
+            },
+            "模型": {
+              "仓库": "Qwen/Qwen3-0.6B",
+              "来源版本": "c1899de289a04d12100db370d81485cdf75e47ca",
+              "随机初始化": true,
+              "tiny_seed": 20261022,
+              "embed/head 共享存储": true
+            },
+            "数值": {
+              "参数/梯度存储": "FP32",
+              "forward/backward compute": "BF16",
+              "attention": "SDPA causal",
+              "原生 attention_mask": {
+                "full_attention": null,
+                "sliding_attention": null
+              },
+              "TF32": false
+            },
+            "执行": {
+              "入口": "areal.PPOTrainer.train -> areal.workflow.rlvr.RLVRWorkflow",
+              "训练 actor": "fsdp:d1p1t1",
+              "rollout": "vllm:d1p1t1",
+              "GPU": 2,
+              "单 actor rank": true,
+              "每步 microbatch": 4,
+              "每微批有效序列": 1,
+              "跨训练 rank 分片覆盖": false,
+              "原生算子替换": false
+            },
+            "源码身份": {
+              "pin": "3b93679888e9f4929f6f155f13c6a286a62dfd72",
+              "模块 SHA256": "91649f17b3e510309edf9dedd35e33b101e1b9d81a0321843b7f0d7fad7a2a40",
+              "依赖声明变体": "official pyproject.vllm.toml at pinned checkout",
+              "working_tree_status": "M pyproject.toml",
+              "native adapter ZIP SHA256": "c96d6ab4d0657744233e0207e0dccb1f4bb1b542d0b85b0c0b92b258c3ac017f",
+              "reference adapter ZIP SHA256": "a66154bbd6a6e42dc6bd5a275f9d783726f9da6cd945f615a75109b5bfda39cc"
+            }
+          }
+        },
+        {
+          "id": "cpu",
+          "label": "独立 CPU FP32 当前策略",
+          "hardware": "CPU（x86_64；型号未记录）",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0+cu129"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "ec8035f688a53b6a23ae32548fc5ade496c30f02686b5b9025243a26d39f3a76",
+              "奖励组": 1,
+              "轨迹": 4,
+              "有效动作": 32,
+              "真实每序列 token": 33,
+              "原生补齐长度": 256,
+              "cu_seqlens": [
+                0,
+                33,
+                256
+              ],
+              "输入包 typed 张量总数（含实际补齐模型输入）": 59
+            },
+            "目标": {
+              "temperature": 1.5,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": false,
+              "group_std_epsilon": 0.0001,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion"
+            },
+            "优化": {
+              "算法": "torch.optim.adamw.AdamW",
+              "实际参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": true,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "max_grad_norm": 1,
+              "冷启动 optimizer 步": 1,
+              "完整原生 optimizer 元素": 19709312
+            },
+            "初值审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 24,
+              "parameter_elements": 19709312,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid60567-000.json"
+            },
+            "数值采样": {
+              "参数": 12,
+              "元素": 65856,
+              "完整模型参数": 24,
+              "完整模型元素": 19709312,
+              "规则": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each"
+            },
+            "数值": {
+              "实际设备": "cpu",
+              "计算 dtype": "FP32",
+              "attention": "Transformers eager causal"
+            },
+            "初值审计方式": "独立来源 checkpoint；通过公开 HF tie_weights 恢复声明的共享存储，再逐一核对全模型参数 SHA256 和 alias；未用原生参数数组初始化",
+            "执行": {
+              "当前策略": "独立 CPU forward/backward 与完整模型 clip",
+              "AdamW": "declared flattened coordinates; elementwise AdamW after full model backward and clipping",
+              "原生梯度与更新读取前参考已完成": true,
+              "old anchors": "原生 compute_logp 形成 prox_logp；recompute_logprob=True/use_decoupled_loss=False 时覆盖 data.logprobs；CPU 冻结该有效 old anchors",
+              "补齐坐标核对": "两次原生 prepare 各4微批，逐条完整33-token历史与position_ids匹配；补齐尾部仅位于未来因果位置"
+            },
+            "CPU clip 返回范数": "未留存；独立 FP64 诊断范数单列保留"
+          }
+        }
+      ],
+      "common": [
+        "1个奖励组、4条轨迹、32个动作；4组比较分别为裁剪前梯度、裁剪后梯度、存储更新和目标分数。",
+        "全部初始参数与embed/head共享存储通过独立来源 SHA256/alias 核验；原生完整模型 optimizer 执行一次。",
+        "temperature=1.5、实际有序历史/position_ids/action masks及冻结原生 actor old anchors；合成 reward 独立核对。"
+      ],
+      "differences": [
+        "原生 BF16 SDPA 因果计算与 CPU FP32 eager 因果计算；FP32 参数与梯度存储。",
+        "原生每微批33个真实token补齐到256，cu=[0,33,256]；CPU匹配真实历史与position，数值比较仅覆盖12个参数的声明坐标。"
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "裁剪前梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "每个选中参数保留前 8192 个扁平坐标；全模型 backward/裁剪/原生 optimizer 完成，数值比较仅覆盖声明的 12 个参数采样。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.019173265716767893,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.00244180470079991,
+              "unit": "数值",
+              "side_values": {
+                "native": 1.8275767350714054,
+                "cpu": 1.8300185397722053
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 7.471338560084235e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.999945933355827,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0009835995733737946,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1758
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 65856,
+              "expected": 65856,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 65856,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "postclip-gradients",
+          "title": "裁剪后梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "每个选中参数保留前 8192 个扁平坐标；全模型 backward/裁剪/原生 optimizer 完成，数值比较仅覆盖声明的 12 个参数采样。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.005256325221569302,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.00016015934090174433,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.5053236905523374,
+                "cpu": 0.5051635312114356
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 2.0482575004376576e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999459333551103,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.00027370965108275414,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1758
+              }
+            },
+            {
+              "id": "full-preclip-norm-difference",
+              "label": "全模型裁剪前 FP64 范数差",
+              "value": 0.005980893108299412,
+              "unit": "数值",
+              "side_values": {
+                "native": 3.6166446956364853,
+                "cpu": 3.6226255887447847
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 65856,
+              "expected": 65856,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 65856,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ],
+          "diagnostics": {
+            "原生 clip 实际返回范数": 3.6166446208953857,
+            "CPU clip 返回范数已留存": false,
+            "FP64 诊断范数代填 clip 返回值": false
+          }
+        },
+        {
+          "id": "updates",
+          "title": "存储参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "每个选中参数保留前 8192 个扁平坐标；全模型 backward/裁剪/原生 optimizer 完成，数值比较仅覆盖声明的 12 个参数采样。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.02782096574167345,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 1.9498901169812122e-05,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.2527760219807145,
+                "cpu": 0.25279552088188434
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.00010841129372278218,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9939436781839474,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0019995812326669693,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.self_attn.v_proj.weight",
+                "index": 1776
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 65856,
+              "expected": 65856,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 65856,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "动作分数与 GRPO 目标",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "32 个动作目标；CPU 独立重算当前策略，使用原生 actor 重评分后冻结的 old anchors。",
+          "metrics": [
+            {
+              "id": "nll-absolute-difference",
+              "label": "目标 NLL 绝对差",
+              "value": 4.953145980834961e-05,
+              "unit": "nat/token",
+              "side_values": {
+                "native": 11.94261771440506,
+                "cpu": 11.942568182945251
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.0007703900337219238,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.003452425003051759,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大差",
+              "value": 0.0037412643432617188,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "0",
+                "position": 25,
+                "token": 43689
+              }
+            },
+            {
+              "id": "objective-absolute-difference",
+              "label": "GRPO 损失绝对差",
+              "value": 0.00015346519649028778,
+              "unit": "loss",
+              "side_values": {
+                "native": -4.470348358154297e-08,
+                "cpu": -0.00015350989997386932
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对有效目标",
+              "observed": 32,
+              "expected": 32,
+              "unit": "token"
+            }
+          ],
+          "diagnostics": {
+            "reward 公式独立核对": true,
+            "reward 质量结论": false
+          }
+        }
+      ],
+      "notes": [
+        "CPU完整模型 backward/裁剪，AdamW 参考仅执行采样坐标；原生AdamW覆盖完整模型。",
+        "FP64范数是诊断量；CPU实际clip返回值未留存，不以诊断值代填。",
+        "此前 eager/causal 条件不一致的尝试单独保留，未计入本轮闭合记录。thresholds=null，acceptance=null；不作 reward质量或生产性能结论。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值、实际补齐输入与四组 REPLAY",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/e0162f0c0243a0a05f47ce24ddd2240983200c3f/tests/results/gpt-6/compare-h100native-20261021T200953Z/areal/areal-tiny-cuda.zip"
+        },
+        {
+          "label": "固定输入与实际补齐模型输入",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/e0162f0c0243a0a05f47ce24ddd2240983200c3f/tests/results/gpt-6/compare-h100native-20261021T200953Z/areal/areal-tiny-cuda-fixed-inputs.zip"
+        },
+        {
+          "label": "公共字节与输入审计索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/e0162f0c0243a0a05f47ce24ddd2240983200c3f/tests/results/gpt-6/compare-h100native-20261021T200953Z/areal/public-export-index.json"
+        },
+        {
+          "label": "H100 原生执行与比较边界说明",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "e0162f0c0243a0a05f47ce24ddd2240983200c3f",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/areal",
+        "bundle": "areal-tiny-cuda.zip",
+        "sha256": "050a4cad69d7f4f2f38f62985463c8b281cb4f2e6b1f9626e0efcb87cc87c4f5",
+        "replay_cases": 4,
+        "comparison_groups": 4
+      }
+    },
+    {
+      "id": "areal-pretrained-cuda-h100-20261022",
+      "date": "2026-10-22",
+      "title": "AReaL 原生 GRPO · Qwen3-0.6B",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3-0.6B",
+        "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+      },
+      "summary": "两 GPU 原生 rollout/actor 流程及完整一步 AdamW 完成；全初值 SHA/alias 审计一致，比较 67,840/596,049,920 参数元素与32个动作目标。",
+      "sides": [
+        {
+          "id": "native",
+          "label": "AReaL CUDA BF16 compute / FP32 参数",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0+cu129"
+            },
+            {
+              "name": "areal",
+              "version": "2.1.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "vllm",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "47acb943515fe62858d7fb6cc2f351d18ba200a172305e121d789a0ef567b732",
+              "奖励组": 1,
+              "轨迹": 4,
+              "有效动作": 32,
+              "真实每序列 token": 33,
+              "原生补齐长度": 256,
+              "cu_seqlens": [
+                0,
+                33,
+                256
+              ],
+              "输入包 typed 张量总数（含实际补齐模型输入）": 59
+            },
+            "目标": {
+              "temperature": 1.5,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": false,
+              "group_std_epsilon": 0.0001,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion"
+            },
+            "优化": {
+              "算法": "torch.optim.adamw.AdamW",
+              "实际参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": true,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "max_grad_norm": 1,
+              "冷启动 optimizer 步": 1,
+              "完整原生 optimizer 元素": 596049920
+            },
+            "初值审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 310,
+              "parameter_elements": 596049920,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid61151-000.json"
+            },
+            "数值采样": {
+              "参数": 12,
+              "元素": 67840,
+              "完整模型参数": 310,
+              "完整模型元素": 596049920,
+              "规则": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each"
+            },
+            "模型": {
+              "仓库": "Qwen/Qwen3-0.6B",
+              "来源版本": "c1899de289a04d12100db370d81485cdf75e47ca",
+              "随机初始化": false,
+              "tiny_seed": null,
+              "embed/head 共享存储": true
+            },
+            "数值": {
+              "参数/梯度存储": "FP32",
+              "forward/backward compute": "BF16",
+              "attention": "SDPA causal",
+              "原生 attention_mask": {
+                "full_attention": null,
+                "sliding_attention": null
+              },
+              "TF32": false
+            },
+            "执行": {
+              "入口": "areal.PPOTrainer.train -> areal.workflow.rlvr.RLVRWorkflow",
+              "训练 actor": "fsdp:d1p1t1",
+              "rollout": "vllm:d1p1t1",
+              "GPU": 2,
+              "单 actor rank": true,
+              "每步 microbatch": 4,
+              "每微批有效序列": 1,
+              "跨训练 rank 分片覆盖": false,
+              "原生算子替换": false
+            },
+            "源码身份": {
+              "pin": "3b93679888e9f4929f6f155f13c6a286a62dfd72",
+              "模块 SHA256": "91649f17b3e510309edf9dedd35e33b101e1b9d81a0321843b7f0d7fad7a2a40",
+              "依赖声明变体": "official pyproject.vllm.toml at pinned checkout",
+              "working_tree_status": "M pyproject.toml",
+              "native adapter ZIP SHA256": "c96d6ab4d0657744233e0207e0dccb1f4bb1b542d0b85b0c0b92b258c3ac017f",
+              "reference adapter ZIP SHA256": "a66154bbd6a6e42dc6bd5a275f9d783726f9da6cd945f615a75109b5bfda39cc"
+            }
+          }
+        },
+        {
+          "id": "cpu",
+          "label": "独立 CPU FP32 当前策略",
+          "hardware": "CPU（x86_64；型号未记录）",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0+cu129"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "47acb943515fe62858d7fb6cc2f351d18ba200a172305e121d789a0ef567b732",
+              "奖励组": 1,
+              "轨迹": 4,
+              "有效动作": 32,
+              "真实每序列 token": 33,
+              "原生补齐长度": 256,
+              "cu_seqlens": [
+                0,
+                33,
+                256
+              ],
+              "输入包 typed 张量总数（含实际补齐模型输入）": 59
+            },
+            "目标": {
+              "temperature": 1.5,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": false,
+              "group_std_epsilon": 0.0001,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion"
+            },
+            "优化": {
+              "算法": "torch.optim.adamw.AdamW",
+              "实际参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": true,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "max_grad_norm": 1,
+              "冷启动 optimizer 步": 1,
+              "完整原生 optimizer 元素": 596049920
+            },
+            "初值审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 310,
+              "parameter_elements": 596049920,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid61151-000.json"
+            },
+            "数值采样": {
+              "参数": 12,
+              "元素": 67840,
+              "完整模型参数": 310,
+              "完整模型元素": 596049920,
+              "规则": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each"
+            },
+            "数值": {
+              "实际设备": "cpu",
+              "计算 dtype": "FP32",
+              "attention": "Transformers eager causal"
+            },
+            "初值审计方式": "独立来源 checkpoint；通过公开 HF tie_weights 恢复声明的共享存储，再逐一核对全模型参数 SHA256 和 alias；未用原生参数数组初始化",
+            "执行": {
+              "当前策略": "独立 CPU forward/backward 与完整模型 clip",
+              "AdamW": "declared flattened coordinates; elementwise AdamW after full model backward and clipping",
+              "原生梯度与更新读取前参考已完成": true,
+              "old anchors": "原生 compute_logp 形成 prox_logp；recompute_logprob=True/use_decoupled_loss=False 时覆盖 data.logprobs；CPU 冻结该有效 old anchors",
+              "补齐坐标核对": "两次原生 prepare 各4微批，逐条完整33-token历史与position_ids匹配；补齐尾部仅位于未来因果位置"
+            },
+            "CPU clip 返回范数": "未留存；独立 FP64 诊断范数单列保留"
+          }
+        }
+      ],
+      "common": [
+        "1个奖励组、4条轨迹、32个动作；4组比较分别为裁剪前梯度、裁剪后梯度、存储更新和目标分数。",
+        "全部初始参数与embed/head共享存储通过独立来源 SHA256/alias 核验；原生完整模型 optimizer 执行一次。",
+        "temperature=1.5、实际有序历史/position_ids/action masks及冻结原生 actor old anchors；合成 reward 独立核对。"
+      ],
+      "differences": [
+        "原生 BF16 SDPA 因果计算与 CPU FP32 eager 因果计算；FP32 参数与梯度存储。",
+        "原生每微批33个真实token补齐到256，cu=[0,33,256]；CPU匹配真实历史与position，数值比较仅覆盖12个参数的声明坐标。"
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "裁剪前梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "每个选中参数保留前 8192 个扁平坐标；全模型 backward/裁剪/原生 optimizer 完成，数值比较仅覆盖声明的 12 个参数采样。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.15794025107318407,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.019470810215082457,
+              "unit": "数值",
+              "side_values": {
+                "native": 1.6458171350926494,
+                "cpu": 1.626346324877567
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.0006063870311611574,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9954110848821187,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.019174180924892426,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.mlp.up_proj.weight",
+                "index": 2325
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 67840,
+              "expected": 67840,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 67840,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "postclip-gradients",
+          "title": "裁剪后梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "每个选中参数保留前 8192 个扁平坐标；全模型 backward/裁剪/原生 optimizer 完成，数值比较仅覆盖声明的 12 个参数采样。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.002571722501621717,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.0001793448217201031,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.026868891655650415,
+                "cpu": 0.02668954683393031
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 9.873728591238838e-06,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9954110850070189,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0003071657847613096,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.mlp.up_proj.weight",
+                "index": 2325
+              }
+            },
+            {
+              "id": "full-preclip-norm-difference",
+              "label": "全模型裁剪前 FP64 范数差",
+              "value": 0.3027789538309804,
+              "unit": "数值",
+              "side_values": {
+                "native": 61.25362404784124,
+                "cpu": 60.95084509401026
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 67840,
+              "expected": 67840,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 67840,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ],
+          "diagnostics": {
+            "原生 clip 实际返回范数": 61.25362777709961,
+            "CPU clip 返回范数已留存": false,
+            "FP64 诊断范数代填 clip 返回值": false
+          }
+        },
+        {
+          "id": "updates",
+          "title": "存储参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "每个选中参数保留前 8192 个扁平坐标；全模型 backward/裁剪/原生 optimizer 完成，数值比较仅覆盖声明的 12 个参数采样。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.08679511315937394,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.0006683536529008549,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.2509134273815295,
+                "cpu": 0.25158178103443035
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.0003332363386178352,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.94033334255171,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0019996343180537224,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.mlp.down_proj.weight",
+                "index": 173
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 67840,
+              "expected": 67840,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 67840,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "动作分数与 GRPO 目标",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "32 个动作目标；CPU 独立重算当前策略，使用原生 actor 重评分后冻结的 old anchors。",
+          "metrics": [
+            {
+              "id": "nll-absolute-difference",
+              "label": "目标 NLL 绝对差",
+              "value": 0.002315393285243772,
+              "unit": "nat/token",
+              "side_values": {
+                "native": 1.7000372807233362,
+                "cpu": 1.70235267400858
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.019382156766369008,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.08806210279464724,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大差",
+              "value": 0.09189558029174805,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "2",
+                "position": 25,
+                "token": 36953
+              }
+            },
+            {
+              "id": "objective-absolute-difference",
+              "label": "GRPO 损失绝对差",
+              "value": 0.004621915519237518,
+              "unit": "loss",
+              "side_values": {
+                "native": 2.682209014892578e-07,
+                "cpu": 0.004622183740139008
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对有效目标",
+              "observed": 32,
+              "expected": 32,
+              "unit": "token"
+            }
+          ],
+          "diagnostics": {
+            "reward 公式独立核对": true,
+            "reward 质量结论": false
+          }
+        }
+      ],
+      "notes": [
+        "CPU完整模型 backward/裁剪，AdamW 参考仅执行采样坐标；原生AdamW覆盖完整模型。",
+        "FP64范数是诊断量；CPU实际clip返回值未留存，不以诊断值代填。",
+        "此前 eager/causal 条件不一致的尝试单独保留，未计入本轮闭合记录。thresholds=null，acceptance=null；不作 reward质量或生产性能结论。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值、实际补齐输入与四组 REPLAY",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/e0162f0c0243a0a05f47ce24ddd2240983200c3f/tests/results/gpt-6/compare-h100native-20261021T200953Z/areal/areal-pretrained-cuda.zip"
+        },
+        {
+          "label": "固定输入与实际补齐模型输入",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/e0162f0c0243a0a05f47ce24ddd2240983200c3f/tests/results/gpt-6/compare-h100native-20261021T200953Z/areal/areal-pretrained-cuda-fixed-inputs.zip"
+        },
+        {
+          "label": "公共字节与输入审计索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/e0162f0c0243a0a05f47ce24ddd2240983200c3f/tests/results/gpt-6/compare-h100native-20261021T200953Z/areal/public-export-index.json"
+        },
+        {
+          "label": "H100 原生执行与比较边界说明",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "e0162f0c0243a0a05f47ce24ddd2240983200c3f",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/areal",
+        "bundle": "areal-pretrained-cuda.zip",
+        "sha256": "76ecb99e17bab96339fbd54811129833c34740dbe6a56abe54416589a7349b47",
+        "replay_cases": 4,
+        "comparison_groups": 4
+      }
     }
   ]
 }
