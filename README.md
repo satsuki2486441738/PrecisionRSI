@@ -40,7 +40,7 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 | Transformers Trainer | Native full-parameter SFT single step (sampled gradients/updates); Single-device and two-device FSDP2 LoRA SFT with gradient accumulation, two AdamW steps and checkpoint restoration (complete adapter gradients, updates and optimizer state); target scores |
 | vLLM / vLLM-Ascend | Native prefill target scores; fixed-history cached inference distributions and target scores |
 | SGLang | Native cached inference with fixed continuations; prompt scores and preconstraint distributions |
-| TRL | Native SFTTrainer LoRA SFT with completion-only labels, gradient accumulation and two AdamW steps (complete adapter gradients, updates and optimizer state); fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
+| TRL | Native SFTTrainer LoRA SFT with completion-only labels, gradient accumulation, two AdamW steps and native checkpoint restoration (complete adapter gradients, updates and optimizer state); fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 | verl / FSDP2 | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 
 ### Precision repair: historical MindSpeed / Megatron Bridge
