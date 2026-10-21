@@ -123,13 +123,13 @@ function renderCard(record) {
   const legend = node('div', 'legend');
   legend.setAttribute('aria-hidden', 'true');
   legend.append(node('span', '', '修复前'), node('span', '', '修复后'));
-  panelHeading.append(legend);
+  if (metrics.length) panelHeading.append(legend);
   panel.append(panelHeading);
   if (metrics.length) {
     const graphics = node('div', 'metrics');
     metrics.forEach((metric) => graphics.append(metricGraphic(metric)));
     panel.append(graphics, node('p', 'scale-note', '每项指标独立尺度，前后共用线性零基线；条长不可跨指标比较。极小值请以标注数值为准，负值或缺失值仅显示数值。'));
-  } else panel.append(node('p', 'scale-note', '本记录未提供可展示的前后数值。'));
+  } else bulletList(panel, record.validation?.checks);
   const coverage = record.validation?.coverage;
   if (coverage) {
     const line = node('div', 'coverage');

@@ -3,6 +3,122 @@
   "updated_at": "2026-10-21",
   "repairs": [
     {
+      "id": "mindspeed-rmsnorm-layerwise-replay-20261021",
+      "title": "RMSNorm 修复：层间采样与同输入反向重放",
+      "date": "2026-10-21",
+      "status": "validated",
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "environment": {
+        "hardware": "NVIDIA H200 ↔ Ascend 910C · 整模型 TP4 / 单设备算子重放",
+        "libraries": [
+          {
+            "name": "MindSpeed",
+            "commit": "ff884722a3ce7079fbafe3cb97a3287311f58a5b"
+          },
+          {
+            "name": "Megatron Bridge",
+            "version": "0.4.2"
+          },
+          {
+            "name": "Megatron Core",
+            "version": "0.17.1"
+          },
+          {
+            "name": "torch-npu",
+            "version": "2.9.0.post2"
+          },
+          {
+            "name": "Transformers",
+            "version": "5.2.0"
+          },
+          {
+            "name": "Transformer Engine",
+            "version": "2.11.0"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "继续定位修复后剩余的归一化参数梯度差异，区分输入误差传播与局部反向计算。",
+        "trigger": "同一模型和固定轨迹下，最终归一化参数的跨端梯度仍有差异。",
+        "expected": "保留模型执行条件，采样边界，再用两份完全相同的输入与传入梯度分别重放两侧原生算子。",
+        "observed": "同输入参数梯度逐值一致或最大仅差 1.19e-7；原整模型边界最大差异约为 1.34e-3。",
+        "location": "语言模型 decoder.final_layernorm 的前向与反向边界"
+      },
+      "cause": {
+        "category": "boundary_diagnosis",
+        "summary": "最终 RMSNorm 参数梯度差异主要随其输入和传入梯度传播；本轮未确认新的独立库缺陷。",
+        "components": [
+          "Megatron Bridge → Transformer Engine RMSNorm",
+          "Megatron Bridge → repaired MindSpeed RMSNorm"
+        ]
+      },
+      "repair": {
+        "summary": "沿用已验证的 zero-centered gamma 修复，增加边界采样、独立 FP64 计算和双端同输入重放。",
+        "commit": "9ca343aaa1a2ca0688560b2f3cf8b0b8be38be38",
+        "upstream_status": "本地修复提交；尚未提交上游"
+      },
+      "stages": [
+        {
+          "name": "原任务复现",
+          "result": "两端 TP4 完成整模型反向；新 action scores 与 objective 均复现各自前次记录。"
+        },
+        {
+          "name": "边界采样",
+          "result": "每端采集 4 个 rank 的最终归一化输入、输出、传入/传出梯度、gamma 和参数梯度。"
+        },
+        {
+          "name": "独立计算",
+          "result": "FP64 解析导数经独立 autograd 检查；各侧输入重算的跨端参数梯度 RMSE 为 6.26e-5。"
+        },
+        {
+          "name": "同输入重放",
+          "result": "GPU 与 NPU 各自的 rank-0 输入分别在两侧原生算子上执行，共完成 4 个重放组合。"
+        }
+      ],
+      "validation": {
+        "scope": "最终 RMSNorm 层的边界定位与原生同输入反向重放；保持 BF16 存储参数、zero-centered gamma 和 epsilon=1e-6。",
+        "coverage": {
+          "observed": 4,
+          "expected": 4,
+          "unit": "同输入原生重放组合"
+        },
+        "metrics": [],
+        "checks": [
+          "两端整模型采样全部 4 个 rank 成功，参数初值一致",
+          "GPU 输入重放：跨端参数梯度 RMSE=0，最大差异=0",
+          "NPU 输入重放：跨端参数梯度 RMSE=1.86e-9，最大差异=1.19e-7",
+          "原整模型边界：跨端参数梯度 RMSE=6.28e-5，最大差异=1.34e-3",
+          "采集器与 FP64 导数通过真实 CPU autograd 检查",
+          "失败重放计入累计用量；每次设备执行结束均确认选定设备空闲"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "首个上游差异算子尚未定位。",
+          "同输入前向和输入梯度仍有小幅数值差异，指标保留在证据数据中。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "层间与重放证据摘要",
+          "url": "evidence/mindspeed-rmsnorm-layerwise.md"
+        },
+        {
+          "label": "层间与重放指标数据",
+          "url": "evidence/mindspeed-rmsnorm-layerwise.json"
+        }
+      ],
+      "notes": [
+        "本条为原 RMSNorm 修复的定位续篇，未新增独立修复。",
+        "原模型边界指标与同输入重放属于不同实验条件，分别列出。",
+        "NPU 累计 558.337 / 900 秒，包含失败尝试；完整模型与大张量保留在源端。"
+      ],
+      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "verification_title": "层间采样与同输入反向重放"
+    },
+    {
       "id": "mindspeed-rmsnorm-training-verification-20261021",
       "title": "RMSNorm 修复：整模型反向与首次更新验证",
       "date": "2026-10-21",

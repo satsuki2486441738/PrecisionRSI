@@ -44,7 +44,11 @@ class RepairHistoryTests(unittest.TestCase):
         self.check_invalid(lambda d: d['repairs'][0]['validation']['coverage'].update(observed=33, expected=32))
 
     def test_nonfinite_metric(self):
-        self.check_invalid(lambda d: d['repairs'][0]['validation']['metrics'][0].update(after=float('nan')))
+        def nonfinite(data):
+            data['repairs'][0]['validation']['metrics'] = [{
+                'id': 'invalid-error', 'label': 'Error', 'unit': 'value',
+                'before': 0, 'after': float('nan')}]
+        self.check_invalid(nonfinite)
 
     def test_escaped_evidence(self):
         self.check_invalid(lambda d: d['repairs'][0]['evidence'][0].update(url='../README.md'))
