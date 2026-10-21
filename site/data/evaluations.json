@@ -49552,6 +49552,5194 @@
         "replay_cases": 4,
         "comparison_groups": 4
       }
+    },
+    {
+      "id": "openrlhf-tiny-cuda-h100-20261022",
+      "date": "2026-10-22",
+      "title": "OpenRLHF 原生策略优化 · 随机 tiny Qwen3",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "随机 tiny Qwen3",
+        "revision": "seed-20261022; weights-sha256:3e23654cd24b3a2546d4af6cb17f4cc86563b813278a34a884c7fb95cd74a1ce"
+      },
+      "summary": "两GPU原生rollout/actor流程与完整一步optimizer完成；全初值/alias审计一致，比较98,304/19,709,312元素和32动作目标。",
+      "sides": [
+        {
+          "id": "native",
+          "label": "OpenRLHF 原生 CUDA",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            },
+            {
+              "name": "openrlhf",
+              "version": "0.9.0"
+            },
+            {
+              "name": "transformers",
+              "version": "4.57.0"
+            },
+            {
+              "name": "deepspeed",
+              "version": "0.18.1"
+            },
+            {
+              "name": "vllm",
+              "version": "0.11.0"
+            },
+            {
+              "name": "ray",
+              "version": "2.48.0"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "e5e3b4cbb908968c84649c0113418e35e76ca455059027adc28afb7c5c629d3a",
+              "trajectories": 4,
+              "groups": 2,
+              "actions": 32,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 98304,
+              "full_model_elements": 19709312,
+              "full_model_parameter_count": 24,
+              "native_optimizer_full_parameter_elements": 19709312,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 37
+            },
+            "目标": {
+              "算法": "group_norm / clipped PPO",
+              "temperature": 1.5,
+              "group_size": 2,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-09,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "OpenRLHF actor重评分后detach的旧策略；CPU保留原生有效anchors，当前策略独立计算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 24,
+              "parameter_elements": 19709312,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid76080-000.json",
+              "all_master_parameters_equal": true
+            },
+            "优化": {
+              "原生 optimizer": "deepspeed.ops.adam.fused_adam.FusedAdam",
+              "真实参数组": [
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                },
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151669,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  128,
+                  256
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.q_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.k_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.v_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.o_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              }
+            ],
+            "拓扑与实际存储": {
+              "actor GPU": 1,
+              "vLLM engine": 1,
+              "vLLM TP": 1,
+              "DP": 1,
+              "DeepSpeed ZeRO stage": 0,
+              "actor attention": "eager",
+              "actor compute": "BF16",
+              "rollout": "vLLM",
+              "模型参数存储": "BF16",
+              "leaf gradient": "BF16",
+              "master/clip gradient": "FP32",
+              "FP32 master": true,
+              "真实 optimizer wrapper": "deepspeed.runtime.fp16.fused_optimizer.FP16_Optimizer"
+            },
+            "原生入口": "openrlhf.cli.train_ppo_ray",
+            "源码身份": {
+              "pin": "06ab51e75c0e8c5b4d6b66912996b2a611e3dc2f",
+              "实际模块身份": null,
+              "native adapter ZIP SHA256": "899b9e7ecce26a6a74218692ed6eb20b52a8b680f7b8be9370418baa6d3014d8",
+              "reference adapter ZIP SHA256": "020159c82848bd6a0a32cb46801d8e0e46251427d50410711620ad3b220356bc"
+            },
+            "原生算子替换": false,
+            "合成reward": "同组 i%2 加文本checksum合成奖励；有效奖励与索引顺序独立核对"
+          }
+        },
+        {
+          "id": "cpu",
+          "label": "独立 CPU FP32 当前策略",
+          "hardware": "CPU（x86_64；型号未记录）",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "e5e3b4cbb908968c84649c0113418e35e76ca455059027adc28afb7c5c629d3a",
+              "trajectories": 4,
+              "groups": 2,
+              "actions": 32,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 98304,
+              "full_model_elements": 19709312,
+              "full_model_parameter_count": 24,
+              "native_optimizer_full_parameter_elements": 19709312,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 37
+            },
+            "目标": {
+              "算法": "group_norm / clipped PPO",
+              "temperature": 1.5,
+              "group_size": 2,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-09,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "OpenRLHF actor重评分后detach的旧策略；CPU保留原生有效anchors，当前策略独立计算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 24,
+              "parameter_elements": 19709312,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid76080-000.json",
+              "all_master_parameters_equal": true
+            },
+            "优化": {
+              "原生 optimizer": "deepspeed.ops.adam.fused_adam.FusedAdam",
+              "真实参数组": [
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                },
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151669,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  128,
+                  256
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.q_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.k_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.v_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.o_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              }
+            ],
+            "执行": {
+              "设备": "cpu",
+              "当前策略": "独立来源模型FP32/eager因果forward、完整模型backward和clip",
+              "初始表示": "匹配原生参数存储；若为BF16，独立来源先BF16再FP32",
+              "架构共享": "公开HF tie_weights复原声明alias后全量SHA核对",
+              "native输出读取边界": "当前策略/完整backward/clip/坐标AdamW完成后，才读取原生loss/梯度/after-state"
+            },
+            "CPU clip 返回范数": "未留存；FP64诊断范数独立报告"
+          }
+        }
+      ],
+      "common": [
+        "2个奖励组、4条轨迹、32个有效动作；原生有序输入与有效old anchors保持固定。",
+        "完整初始参数、共享关系与适用时的FP32 master通过独立来源SHA审计；比较坐标只覆盖声明的12参数前缀。",
+        "本记录有5组实际比较；CPU完整backward/clip，原生完整optimizer，CPU AdamW仅在采样坐标执行。"
+      ],
+      "differences": [
+        "CUDA原生数值路径与独立CPU FP32当前策略；各自实际参数/梯度/master表示单独记录。",
+        "CPU目标使用冻结的原生old anchors；loss差异、存储更新和master更新均按实际保留报告。"
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "FP32 master 裁剪前梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.01458797868210177,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.001467875801366647,
+              "unit": "数值",
+              "side_values": {
+                "native": 1.6038920728864037,
+                "cpu": 1.6053599486877703
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 4.652747936165098e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999590934264205,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0006183739751577377,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1664
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "postclip-gradients",
+          "title": "FP32 master 裁剪后梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.005781047131982515,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 8.096940626567406e-05,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.6391162339983122,
+                "cpu": 0.6390352645920465
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 1.84383016306475e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999590934222988,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0002350127324461937,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1664
+              }
+            },
+            {
+              "id": "full-preclip-norm-difference",
+              "label": "全模型裁剪前 FP64 诊断范数差",
+              "value": 0.002615709590314541,
+              "unit": "数值",
+              "side_values": {
+                "native": 2.5095458641776904,
+                "cpu": 2.512161573768005
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ],
+          "diagnostics": {
+            "原生 clip 返回范数": null,
+            "原生 optimizer global norm 字段": 2.5095458030700684,
+            "真实 clip 函数": "FP16_Optimizer.unscale_and_clip_grads",
+            "返回值语义": "Actual clipping return is combined scale, not norm; norm is native _global_grad_norm field",
+            "原生 loss scale": 1.0,
+            "原生系数": 0.39847833892655415,
+            "原始训练标量": {
+              "source_private_clip_pt_sha256": "19456692addeb2b92f50054d22352ec1928e9b77b511b200752fa0b6d56e2a11",
+              "native_returned_norm": {
+                "kind": "NoneType",
+                "value": null
+              },
+              "native_clip_function_return": {
+                "kind": "python_float",
+                "value": 2.50954669880893,
+                "ieee754_binary64_le_hex": "5a5a39388d130440"
+              },
+              "recorded_native_optimizer_global_norm_field": {
+                "kind": "tensor",
+                "dtype": "torch.float32",
+                "shape": [],
+                "value": 2.5095458030700684,
+                "retained_storage_hex": "669c2040"
+              },
+              "clip_metadata": {
+                "real_clip_function": "FP16_Optimizer.unscale_and_clip_grads",
+                "norm_semantics": "Actual clipping return is combined scale, not norm; norm is native _global_grad_norm field",
+                "native_loss_scale": 1.0,
+                "native_coefficient": 0.39847833892655415,
+                "max_norm": 1.0,
+                "full_fp64_preclip_norm": 2.5095458641776904,
+                "full_fp64_postclip_norm": 0.9999996440404744
+              },
+              "fixed_reference_input": false
+            },
+            "CPU clip 返回范数已留存": false,
+            "FP64 诊断值代填返回值": false
+          }
+        },
+        {
+          "id": "updates",
+          "title": "BF16 模型存储参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.08516032237156478,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.07913181509535805,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.227887224885855,
+                "cpu": 0.30701903998121305
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.00027161371893392805,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9929219881644064,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0018310546875,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.mlp.gate_proj.weight",
+                "index": 2563
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "master-updates",
+          "title": "FP32 master 参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.08845338291824784,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.08287906320201685,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.22796076318376615,
+                "cpu": 0.310839826385783
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.0002821167372040636,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9932608560386139,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.0017344579100608826,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1734
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "动作分数与策略目标",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "32 个动作；CPU独立重算当前策略，冻结原生实际使用的 old anchors。",
+          "metrics": [
+            {
+              "id": "nll-absolute-difference",
+              "label": "目标 NLL 绝对差",
+              "value": 0.00027108192443847656,
+              "unit": "nat/token",
+              "side_values": {
+                "native": 11.937732815742493,
+                "cpu": 11.938003897666931
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.0006783008575439453,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.0026400375366210952,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大差",
+              "value": 0.0030279159545898438,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "1",
+                "position": 18,
+                "token": 143400
+              }
+            },
+            {
+              "id": "objective-absolute-difference",
+              "label": "策略损失绝对差",
+              "value": 5.9446319937705994e-05,
+              "unit": "loss",
+              "side_values": {
+                "native": 2.9802322387695312e-08,
+                "cpu": 5.947612226009369e-05
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对有效目标",
+              "observed": 32,
+              "expected": 32,
+              "unit": "token"
+            }
+          ],
+          "diagnostics": {
+            "合成 reward 公式独立核对": true,
+            "reward 质量结论": false
+          }
+        }
+      ],
+      "notes": [
+        "同组 i%2 加文本checksum合成奖励；有效奖励与索引顺序独立核对；仅验证执行与梯度，不作回答质量结论。",
+        "原生unscale/clip的返回语义与optimizer global norm、独立FP64范数分开记录；CPU clip返回值未留存。",
+        "此前失败或退化reward尝试单独保留；thresholds=null，acceptance=null；不宣称分片或生产性能验证。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值与实际比较 REPLAY",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf/openrlhf-tiny-cuda.zip"
+        },
+        {
+          "label": "固定原生输入与old anchors",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf/openrlhf-tiny-cuda-fixed-inputs.zip"
+        },
+        {
+          "label": "公共字节与覆盖索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf/public-export-index.json"
+        },
+        {
+          "label": "H100执行与比较边界说明",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf",
+        "bundle": "openrlhf-tiny-cuda.zip",
+        "sha256": "f7af68124c382798e2d534550cb8ce5c2e2df66de24b6d64a855a90e885c757e",
+        "replay_cases": 5,
+        "comparison_groups": 5
+      }
+    },
+    {
+      "id": "openrlhf-pretrained-cuda-h100-20261022",
+      "date": "2026-10-22",
+      "title": "OpenRLHF 原生策略优化 · Qwen3-0.6B",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3-0.6B",
+        "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+      },
+      "summary": "两GPU原生rollout/actor流程与完整一步optimizer完成；全初值/alias审计一致，比较98,304/596,049,920元素和32动作目标。",
+      "sides": [
+        {
+          "id": "native",
+          "label": "OpenRLHF 原生 CUDA",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            },
+            {
+              "name": "openrlhf",
+              "version": "0.9.0"
+            },
+            {
+              "name": "transformers",
+              "version": "4.57.0"
+            },
+            {
+              "name": "deepspeed",
+              "version": "0.18.1"
+            },
+            {
+              "name": "vllm",
+              "version": "0.11.0"
+            },
+            {
+              "name": "ray",
+              "version": "2.48.0"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "8754aae9b0148eb26d70766f157a3646cd5aceb1615116a80a282b130e633e81",
+              "trajectories": 4,
+              "groups": 2,
+              "actions": 32,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 98304,
+              "full_model_elements": 596049920,
+              "full_model_parameter_count": 310,
+              "native_optimizer_full_parameter_elements": 596049920,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 37
+            },
+            "目标": {
+              "算法": "group_norm / clipped PPO",
+              "temperature": 1.5,
+              "group_size": 2,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-09,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "OpenRLHF actor重评分后detach的旧策略；CPU保留原生有效anchors，当前策略独立计算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 310,
+              "parameter_elements": 596049920,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid79053-000.json",
+              "all_master_parameters_equal": true
+            },
+            "优化": {
+              "原生 optimizer": "deepspeed.ops.adam.fused_adam.FusedAdam",
+              "真实参数组": [
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                },
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151936,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  2048,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  1024,
+                  2048
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  1024,
+                  3072
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.q_proj.weight",
+                "shape": [
+                  2048,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.k_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.v_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.o_proj.weight",
+                "shape": [
+                  1024,
+                  2048
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              }
+            ],
+            "拓扑与实际存储": {
+              "actor GPU": 1,
+              "vLLM engine": 1,
+              "vLLM TP": 1,
+              "DP": 1,
+              "DeepSpeed ZeRO stage": 0,
+              "actor attention": "eager",
+              "actor compute": "BF16",
+              "rollout": "vLLM",
+              "模型参数存储": "BF16",
+              "leaf gradient": "BF16",
+              "master/clip gradient": "FP32",
+              "FP32 master": true,
+              "真实 optimizer wrapper": "deepspeed.runtime.fp16.fused_optimizer.FP16_Optimizer"
+            },
+            "原生入口": "openrlhf.cli.train_ppo_ray",
+            "源码身份": {
+              "pin": "06ab51e75c0e8c5b4d6b66912996b2a611e3dc2f",
+              "实际模块身份": null,
+              "native adapter ZIP SHA256": "899b9e7ecce26a6a74218692ed6eb20b52a8b680f7b8be9370418baa6d3014d8",
+              "reference adapter ZIP SHA256": "020159c82848bd6a0a32cb46801d8e0e46251427d50410711620ad3b220356bc"
+            },
+            "原生算子替换": false,
+            "合成reward": "同组 i%2 加文本checksum合成奖励；有效奖励与索引顺序独立核对"
+          }
+        },
+        {
+          "id": "cpu",
+          "label": "独立 CPU FP32 当前策略",
+          "hardware": "CPU（x86_64；型号未记录）",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "8754aae9b0148eb26d70766f157a3646cd5aceb1615116a80a282b130e633e81",
+              "trajectories": 4,
+              "groups": 2,
+              "actions": 32,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 98304,
+              "full_model_elements": 596049920,
+              "full_model_parameter_count": 310,
+              "native_optimizer_full_parameter_elements": 596049920,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 37
+            },
+            "目标": {
+              "算法": "group_norm / clipped PPO",
+              "temperature": 1.5,
+              "group_size": 2,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-09,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "OpenRLHF actor重评分后detach的旧策略；CPU保留原生有效anchors，当前策略独立计算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 310,
+              "parameter_elements": 596049920,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid79053-000.json",
+              "all_master_parameters_equal": true
+            },
+            "优化": {
+              "原生 optimizer": "deepspeed.ops.adam.fused_adam.FusedAdam",
+              "真实参数组": [
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                },
+                {
+                  "weight_decay": 0.0,
+                  "lr": 0.001,
+                  "bias_correction": true,
+                  "betas": [
+                    0.9,
+                    0.95
+                  ],
+                  "eps": 1e-08,
+                  "initial_lr": 0.001,
+                  "step": 0
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151936,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  2048,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  1024,
+                  2048
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  1024,
+                  3072
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.q_proj.weight",
+                "shape": [
+                  2048,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.k_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.v_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.1.self_attn.o_proj.weight",
+                "shape": [
+                  1024,
+                  2048
+                ],
+                "native_parameter_dtype": "torch.bfloat16",
+                "native_gradient_dtype": "torch.float32",
+                "native_leaf_gradient_dtype": "torch.bfloat16",
+                "native_master_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              }
+            ],
+            "执行": {
+              "设备": "cpu",
+              "当前策略": "独立来源模型FP32/eager因果forward、完整模型backward和clip",
+              "初始表示": "匹配原生参数存储；若为BF16，独立来源先BF16再FP32",
+              "架构共享": "公开HF tie_weights复原声明alias后全量SHA核对",
+              "native输出读取边界": "当前策略/完整backward/clip/坐标AdamW完成后，才读取原生loss/梯度/after-state"
+            },
+            "CPU clip 返回范数": "未留存；FP64诊断范数独立报告"
+          }
+        }
+      ],
+      "common": [
+        "2个奖励组、4条轨迹、32个有效动作；原生有序输入与有效old anchors保持固定。",
+        "完整初始参数、共享关系与适用时的FP32 master通过独立来源SHA审计；比较坐标只覆盖声明的12参数前缀。",
+        "本记录有5组实际比较；CPU完整backward/clip，原生完整optimizer，CPU AdamW仅在采样坐标执行。"
+      ],
+      "differences": [
+        "CUDA原生数值路径与独立CPU FP32当前策略；各自实际参数/梯度/master表示单独记录。",
+        "CPU目标使用冻结的原生old anchors；loss差异、存储更新和master更新均按实际保留报告。"
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "FP32 master 裁剪前梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.03965213123609766,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.01550137412808028,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.29524257776399543,
+                "cpu": 0.27974120363591515
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.00012646808429988762,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9919362241585441,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.005539417848922312,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.self_attn.v_proj.weight",
+                "index": 4123
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "postclip-gradients",
+          "title": "FP32 master 裁剪后梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.0015594301235058454,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 8.81354516665319e-05,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.01230404785650423,
+                "cpu": 0.012215912404837699
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 4.973708453274314e-06,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9919362240210696,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.00023021364904707298,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.self_attn.v_proj.weight",
+                "index": 4123
+              }
+            },
+            {
+              "id": "full-preclip-norm-difference",
+              "label": "全模型裁剪前 FP64 诊断范数差",
+              "value": 1.0897454586225592,
+              "unit": "数值",
+              "side_values": {
+                "native": 23.995564929090886,
+                "cpu": 22.905819470468327
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ],
+          "diagnostics": {
+            "原生 clip 返回范数": null,
+            "原生 optimizer global norm 字段": 23.995563507080078,
+            "真实 clip 函数": "FP16_Optimizer.unscale_and_clip_grads",
+            "返回值语义": "Actual clipping return is combined scale, not norm; norm is native _global_grad_norm field",
+            "原生 loss scale": 1.0,
+            "原生系数": 0.041674367102105106,
+            "原始训练标量": {
+              "source_private_clip_pt_sha256": "87ff957d8dc8aa091820b7979f511663d5ee7d7301c46fc02558a129dc428a0a",
+              "native_returned_norm": {
+                "kind": "NoneType",
+                "value": null
+              },
+              "native_clip_function_return": {
+                "kind": "python_float",
+                "value": 23.995565368753656,
+                "ieee754_binary64_le_hex": "bfd33b5fddfe3740"
+              },
+              "recorded_native_optimizer_global_norm_field": {
+                "kind": "tensor",
+                "dtype": "torch.float32",
+                "shape": [],
+                "value": 23.995563507080078,
+                "retained_storage_hex": "eaf6bf41"
+              },
+              "clip_metadata": {
+                "real_clip_function": "FP16_Optimizer.unscale_and_clip_grads",
+                "norm_semantics": "Actual clipping return is combined scale, not norm; norm is native _global_grad_norm field",
+                "native_loss_scale": 1.0,
+                "native_coefficient": 0.041674367102105106,
+                "max_norm": 1.0,
+                "full_fp64_preclip_norm": 23.995564929090886,
+                "full_fp64_postclip_norm": 1.0000000038101233
+              },
+              "fixed_reference_input": false
+            },
+            "CPU clip 返回范数已留存": false,
+            "FP64 诊断值代填返回值": false
+          }
+        },
+        {
+          "id": "updates",
+          "title": "BF16 模型存储参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.12315813248934734,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.07524403815135206,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.22380785723028662,
+                "cpu": 0.2990518953816387
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.00039280544566795315,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9289837364339217,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.001953125,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.mlp.down_proj.weight",
+                "index": 1224
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "master-updates",
+          "title": "FP32 master 参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共98,304/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.12566738762486565,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.08079062541387191,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.22204220408526146,
+                "cpu": 0.30283282949913337
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.00040080856378836734,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9311054640304142,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.001734480494633317,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.self_attn.v_proj.weight",
+                "index": 3095
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 98304,
+              "expected": 98304,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 98304,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "动作分数与策略目标",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "32 个动作；CPU独立重算当前策略，冻结原生实际使用的 old anchors。",
+          "metrics": [
+            {
+              "id": "nll-absolute-difference",
+              "label": "目标 NLL 绝对差",
+              "value": 0.008574801367103646,
+              "unit": "nat/token",
+              "side_values": {
+                "native": 0.4170463979244232,
+                "cpu": 0.42562119929152686
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 0.013875802876100352,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 0.10296456336975099,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大差",
+              "value": 0.10620713233947754,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "2",
+                "position": 19,
+                "token": 1744
+              }
+            },
+            {
+              "id": "objective-absolute-difference",
+              "label": "策略损失绝对差",
+              "value": 0.0032210424542427063,
+              "unit": "loss",
+              "side_values": {
+                "native": -2.9802322387695312e-08,
+                "cpu": -0.003221072256565094
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对有效目标",
+              "observed": 32,
+              "expected": 32,
+              "unit": "token"
+            }
+          ],
+          "diagnostics": {
+            "合成 reward 公式独立核对": true,
+            "reward 质量结论": false
+          }
+        }
+      ],
+      "notes": [
+        "同组 i%2 加文本checksum合成奖励；有效奖励与索引顺序独立核对；仅验证执行与梯度，不作回答质量结论。",
+        "原生unscale/clip的返回语义与optimizer global norm、独立FP64范数分开记录；CPU clip返回值未留存。",
+        "此前失败或退化reward尝试单独保留；thresholds=null，acceptance=null；不宣称分片或生产性能验证。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值与实际比较 REPLAY",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf/openrlhf-pretrained-cuda.zip"
+        },
+        {
+          "label": "固定原生输入与old anchors",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf/openrlhf-pretrained-cuda-fixed-inputs.zip"
+        },
+        {
+          "label": "公共字节与覆盖索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf/public-export-index.json"
+        },
+        {
+          "label": "H100执行与比较边界说明",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/openrlhf",
+        "bundle": "openrlhf-pretrained-cuda.zip",
+        "sha256": "96ef0e7c7bdb5c58708372d7000b9b31a04d5969b08e2d6a3d6f52430f0fe9b9",
+        "replay_cases": 5,
+        "comparison_groups": 5
+      }
+    },
+    {
+      "id": "roll-tiny-cuda-h100-20261022",
+      "date": "2026-10-22",
+      "title": "ROLL 原生策略优化 · 随机 tiny Qwen3",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "随机 tiny Qwen3",
+        "revision": "seed-20261022; weights-sha256:3e23654cd24b3a2546d4af6cb17f4cc86563b813278a34a884c7fb95cd74a1ce"
+      },
+      "summary": "两GPU原生rollout/actor流程与完整一步optimizer完成；全初值/alias审计一致，比较65,856/19,709,312元素和32动作目标。",
+      "sides": [
+        {
+          "id": "native",
+          "label": "ROLL 原生 CUDA",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            },
+            {
+              "name": "roll",
+              "version": "0.3.0"
+            },
+            {
+              "name": "transformers",
+              "version": "4.57.0"
+            },
+            {
+              "name": "vllm",
+              "version": "0.11.0"
+            },
+            {
+              "name": "ray",
+              "version": "2.48.0"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "828499ede7a7f34a107e656e800410567682cdfbc37f07fcfc6aab24b662fc47",
+              "trajectories": 4,
+              "groups": 1,
+              "actions": 32,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 65856,
+              "full_model_elements": 19709312,
+              "full_model_parameter_count": 24,
+              "native_optimizer_full_parameter_elements": 19709312,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 15
+            },
+            "目标": {
+              "算法": "GRPO / clipped PPO",
+              "temperature": 1.0,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "seq-mean-token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-06,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "原生get_old_log_probs_with_cache的实际返回值；首个actor训练forward的detach旧策略冻结供CPU当前策略重算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 24,
+              "parameter_elements": 19709312,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid82288-000.json"
+            },
+            "优化": {
+              "原生 optimizer": "torch.optim.adamw.AdamW",
+              "真实参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.999
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": false,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151669,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_norm.weight",
+                "shape": [
+                  32
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  32
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_norm.weight",
+                "shape": [
+                  32
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  32
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  128,
+                  256
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.input_layernorm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              },
+              {
+                "name": "model.layers.0.post_attention_layernorm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              }
+            ],
+            "拓扑与实际存储": {
+              "actor GPU": 1,
+              "vLLM GPU": 1,
+              "actor strategy": "fsdp2_train",
+              "FSDP size": 1,
+              "DP": 1,
+              "actor attention": "SDPA",
+              "actor compute/参数/梯度": "FP32",
+              "rollout compute": "BF16",
+              "vLLM TP": 1,
+              "官方平台环境默认已恢复": true,
+              "跨训练 rank 分片覆盖": false
+            },
+            "原生入口": "roll.pipeline.rlvr.rlvr_pipeline.RLVRPipeline.run",
+            "源码身份": {
+              "pin": "d3506ea9e280ae720fb74df9f82db6efac1c72d5",
+              "实际模块身份": {
+                "module_path": "/workspace/gpu-validation/rl-v6/runtime/sources/roll/roll/pipeline/rlvr/actor_worker.py",
+                "module_file_sha256": "24ebc7737d76ba4e583204c5cd0125c3b8a9b871ba4ec2a0e3b60af6c11e850b",
+                "git_revision": "d3506ea9e280ae720fb74df9f82db6efac1c72d5",
+                "working_tree_status": "",
+                "identity_kind": "git checkout"
+              },
+              "native adapter ZIP SHA256": "899b9e7ecce26a6a74218692ed6eb20b52a8b680f7b8be9370418baa6d3014d8",
+              "reference adapter ZIP SHA256": "899b9e7ecce26a6a74218692ed6eb20b52a8b680f7b8be9370418baa6d3014d8"
+            },
+            "原生算子替换": false,
+            "合成reward": "按完整原生response mask与实际生成tokens核对局部response坐标；非退化token mean/100合成奖励"
+          }
+        },
+        {
+          "id": "cpu",
+          "label": "独立 CPU FP32 当前策略",
+          "hardware": "CPU（x86_64；型号未记录）",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "828499ede7a7f34a107e656e800410567682cdfbc37f07fcfc6aab24b662fc47",
+              "trajectories": 4,
+              "groups": 1,
+              "actions": 32,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 65856,
+              "full_model_elements": 19709312,
+              "full_model_parameter_count": 24,
+              "native_optimizer_full_parameter_elements": 19709312,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 15
+            },
+            "目标": {
+              "算法": "GRPO / clipped PPO",
+              "temperature": 1.0,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "seq-mean-token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-06,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "原生get_old_log_probs_with_cache的实际返回值；首个actor训练forward的detach旧策略冻结供CPU当前策略重算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 24,
+              "parameter_elements": 19709312,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid82288-000.json"
+            },
+            "优化": {
+              "原生 optimizer": "torch.optim.adamw.AdamW",
+              "真实参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.999
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": false,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151669,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  64,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  128,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_norm.weight",
+                "shape": [
+                  32
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  32
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_norm.weight",
+                "shape": [
+                  32
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  32
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  256,
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  128,
+                  256
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.input_layernorm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              },
+              {
+                "name": "model.layers.0.post_attention_layernorm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              }
+            ],
+            "执行": {
+              "设备": "cpu",
+              "当前策略": "独立来源模型FP32/eager因果forward、完整模型backward和clip",
+              "初始表示": "匹配原生参数存储；若为BF16，独立来源先BF16再FP32",
+              "架构共享": "公开HF tie_weights复原声明alias后全量SHA核对",
+              "native输出读取边界": "当前策略/完整backward/clip/坐标AdamW完成后，才读取原生loss/梯度/after-state"
+            },
+            "CPU clip 返回范数": "未留存；FP64诊断范数独立报告"
+          }
+        }
+      ],
+      "common": [
+        "1个奖励组、4条轨迹、32个有效动作；原生有序输入与有效old anchors保持固定。",
+        "完整初始参数、共享关系与适用时的FP32 master通过独立来源SHA审计；比较坐标只覆盖声明的12参数前缀。",
+        "本记录有4组实际比较；CPU完整backward/clip，原生完整optimizer，CPU AdamW仅在采样坐标执行。"
+      ],
+      "differences": [
+        "CUDA原生数值路径与独立CPU FP32当前策略；各自实际参数/梯度/master表示单独记录。",
+        "CPU目标使用冻结的原生old anchors；loss差异、存储更新和master更新均按实际保留报告。"
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "裁剪前梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共65,856/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 3.0548972617669395e-06,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 3.088638633741425e-07,
+              "unit": "数值",
+              "side_values": {
+                "native": 2.0161266421063058,
+                "cpu": 2.016126950970169
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 1.1904164916973066e-08,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.999999999998864,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 1.3224780559539795e-07,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1755
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 65856,
+              "expected": 65856,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 65856,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "postclip-gradients",
+          "title": "裁剪后梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共65,856/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 7.347451872862142e-07,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 1.6301400124207888e-07,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.47523661268470646,
+                "cpu": 0.4752367756987077
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 2.863116868404406e-09,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999999999988637,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 3.3527612686157227e-08,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1695
+              }
+            },
+            {
+              "id": "full-preclip-norm-difference",
+              "label": "全模型裁剪前 FP64 诊断范数差",
+              "value": 1.0096041958007618e-07,
+              "unit": "数值",
+              "side_values": {
+                "native": 4.242362985028732,
+                "cpu": 4.242363085989152
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 65856,
+              "expected": 65856,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 65856,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ],
+          "diagnostics": {
+            "原生 clip 返回范数": 4.242362976074219,
+            "原生 optimizer global norm 字段": null,
+            "真实 clip 函数": null,
+            "返回值语义": null,
+            "原生 loss scale": null,
+            "原生系数": 0.23571763932704926,
+            "原始训练标量": {
+              "source_private_clip_pt_sha256": "45c326d580c0410a40c0f34ec1c7f2fe63c6a82ae9bf59a9a08401f05e3a3965",
+              "native_returned_norm": {
+                "kind": "tensor",
+                "dtype": "torch.float32",
+                "shape": [],
+                "value": 4.242362976074219,
+                "retained_storage_hex": "70c18740"
+              },
+              "native_clip_function_return": {
+                "kind": "NoneType",
+                "value": null
+              },
+              "recorded_native_optimizer_global_norm_field": {
+                "kind": "NoneType",
+                "value": null
+              },
+              "clip_metadata": {
+                "real_clip_function": null,
+                "norm_semantics": null,
+                "native_loss_scale": null,
+                "native_coefficient": 0.23571763932704926,
+                "max_norm": 1.0,
+                "full_fp64_preclip_norm": 4.242362985028732,
+                "full_fp64_postclip_norm": 0.9999997878438548
+              },
+              "fixed_reference_input": false
+            },
+            "CPU clip 返回范数已留存": false,
+            "FP64 诊断值代填返回值": false
+          }
+        },
+        {
+          "id": "updates",
+          "title": "模型存储参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共65,856/19,709,312个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 5.211881458482794e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 6.020497589354079e-08,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.25266269658745955,
+                "cpu": 0.25266263638248365
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 2.0309388857682184e-07,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999999787246686,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 3.336556255817413e-05,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.self_attn.v_proj.weight",
+                "index": 1381
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 65856,
+              "expected": 65856,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 65856,
+              "expected": 19709312,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 24,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "动作分数与策略目标",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "32 个动作；CPU独立重算当前策略，冻结原生实际使用的 old anchors。",
+          "metrics": [
+            {
+              "id": "nll-absolute-difference",
+              "label": "目标 NLL 绝对差",
+              "value": 2.9802322387695312e-08,
+              "unit": "nat/token",
+              "side_values": {
+                "native": 11.861415803432465,
+                "cpu": 11.861415833234787
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 2.682209014892578e-07,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 9.5367431640625e-07,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大差",
+              "value": 9.5367431640625e-07,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "0",
+                "position": 17,
+                "token": 86521
+              }
+            },
+            {
+              "id": "objective-absolute-difference",
+              "label": "策略损失绝对差",
+              "value": 5.960464477539063e-08,
+              "unit": "loss",
+              "side_values": {
+                "native": 8.940696716308594e-08,
+                "cpu": 2.9802322387695312e-08
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对有效目标",
+              "observed": 32,
+              "expected": 32,
+              "unit": "token"
+            }
+          ],
+          "diagnostics": {
+            "合成 reward 公式独立核对": true,
+            "reward 质量结论": false
+          }
+        }
+      ],
+      "notes": [
+        "按完整原生response mask与实际生成tokens核对局部response坐标；非退化token mean/100合成奖励；仅验证执行与梯度，不作回答质量结论。",
+        "原生unscale/clip的返回语义与optimizer global norm、独立FP64范数分开记录；CPU clip返回值未留存。",
+        "此前失败或退化reward尝试单独保留；thresholds=null，acceptance=null；不宣称分片或生产性能验证。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值与实际比较 REPLAY",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/roll/roll-tiny-cuda.zip"
+        },
+        {
+          "label": "固定原生输入与old anchors",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/roll/roll-tiny-cuda-fixed-inputs.zip"
+        },
+        {
+          "label": "公共字节与覆盖索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/roll/public-export-index.json"
+        },
+        {
+          "label": "H100执行与比较边界说明",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/roll",
+        "bundle": "roll-tiny-cuda.zip",
+        "sha256": "01141c5bd0c3ab858ba92b3871cebefb66ed14a9adcaa7d0b65e5219d9056844",
+        "replay_cases": 4,
+        "comparison_groups": 4
+      }
+    },
+    {
+      "id": "roll-pretrained-cuda-h100-20261022",
+      "date": "2026-10-22",
+      "title": "ROLL 原生策略优化 · Qwen3-0.6B",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3-0.6B",
+        "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+      },
+      "summary": "两GPU原生rollout/actor流程与完整一步optimizer完成；全初值/alias审计一致，比较67,840/596,049,920元素和27动作目标。",
+      "sides": [
+        {
+          "id": "native",
+          "label": "ROLL 原生 CUDA",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            },
+            {
+              "name": "roll",
+              "version": "0.3.0"
+            },
+            {
+              "name": "transformers",
+              "version": "4.57.0"
+            },
+            {
+              "name": "vllm",
+              "version": "0.11.0"
+            },
+            {
+              "name": "ray",
+              "version": "2.48.0"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "ff7570dd4af998961860f6af06fea935f6b7e21a3b888a7e753bd16fb94e268c",
+              "trajectories": 4,
+              "groups": 1,
+              "actions": 27,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 67840,
+              "full_model_elements": 596049920,
+              "full_model_parameter_count": 310,
+              "native_optimizer_full_parameter_elements": 596049920,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 15
+            },
+            "目标": {
+              "算法": "GRPO / clipped PPO",
+              "temperature": 1.0,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "seq-mean-token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-06,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "原生get_old_log_probs_with_cache的实际返回值；首个actor训练forward的detach旧策略冻结供CPU当前策略重算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 310,
+              "parameter_elements": 596049920,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid85116-000.json"
+            },
+            "优化": {
+              "原生 optimizer": "torch.optim.adamw.AdamW",
+              "真实参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.999
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": false,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151936,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  2048,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  1024,
+                  2048
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_norm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_norm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  1024,
+                  3072
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.input_layernorm.weight",
+                "shape": [
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  1024
+                ]
+              },
+              {
+                "name": "model.layers.0.post_attention_layernorm.weight",
+                "shape": [
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  1024
+                ]
+              }
+            ],
+            "拓扑与实际存储": {
+              "actor GPU": 1,
+              "vLLM GPU": 1,
+              "actor strategy": "fsdp2_train",
+              "FSDP size": 1,
+              "DP": 1,
+              "actor attention": "SDPA",
+              "actor compute/参数/梯度": "FP32",
+              "rollout compute": "BF16",
+              "vLLM TP": 1,
+              "官方平台环境默认已恢复": true,
+              "跨训练 rank 分片覆盖": false
+            },
+            "原生入口": "roll.pipeline.rlvr.rlvr_pipeline.RLVRPipeline.run",
+            "源码身份": {
+              "pin": "d3506ea9e280ae720fb74df9f82db6efac1c72d5",
+              "实际模块身份": {
+                "module_path": "/workspace/gpu-validation/rl-v6/runtime/sources/roll/roll/pipeline/rlvr/actor_worker.py",
+                "module_file_sha256": "24ebc7737d76ba4e583204c5cd0125c3b8a9b871ba4ec2a0e3b60af6c11e850b",
+                "git_revision": "d3506ea9e280ae720fb74df9f82db6efac1c72d5",
+                "working_tree_status": "",
+                "identity_kind": "git checkout"
+              },
+              "native adapter ZIP SHA256": "899b9e7ecce26a6a74218692ed6eb20b52a8b680f7b8be9370418baa6d3014d8",
+              "reference adapter ZIP SHA256": "899b9e7ecce26a6a74218692ed6eb20b52a8b680f7b8be9370418baa6d3014d8"
+            },
+            "原生算子替换": false,
+            "合成reward": "按完整原生response mask与实际生成tokens核对局部response坐标；非退化token mean/100合成奖励"
+          }
+        },
+        {
+          "id": "cpu",
+          "label": "独立 CPU FP32 当前策略",
+          "hardware": "CPU（x86_64；型号未记录）",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.8.0+cu128"
+            }
+          ],
+          "settings": {
+            "输入": {
+              "固定输入 SHA256": "ff7570dd4af998961860f6af06fea935f6b7e21a3b888a7e753bd16fb94e268c",
+              "trajectories": 4,
+              "groups": 1,
+              "actions": 27,
+              "sampled_parameter_count": 12,
+              "sampled_elements": 67840,
+              "full_model_elements": 596049920,
+              "full_model_parameter_count": 310,
+              "native_optimizer_full_parameter_elements": 596049920,
+              "selection": "first 12 native optimizer coordinates; flattened [0,min(8192,numel)) each",
+              "optimizer_events": 1,
+              "输入 typed 张量": 15
+            },
+            "目标": {
+              "算法": "GRPO / clipped PPO",
+              "temperature": 1.0,
+              "group_size": 4,
+              "loss_type": "grpo",
+              "epsilon_low": 0.2,
+              "epsilon_high": 0.2,
+              "scale_rewards": "group",
+              "loss_reduction": "seq-mean-token-mean",
+              "group_std_unbiased": true,
+              "group_std_epsilon": 1e-06,
+              "beta": 0.0,
+              "max_grad_norm": 1.0,
+              "old_policy_semantics": "frozen native effective anchors; independent CPU current model",
+              "reward_claim": "synthetic execution/gradient check only; no answer quality/performance conclusion",
+              "old anchors构造": "原生get_old_log_probs_with_cache的实际返回值；首个actor训练forward的detach旧策略冻结供CPU当前策略重算"
+            },
+            "初始参数与alias审计": {
+              "all_parameters_equal": true,
+              "aliases_equal": true,
+              "unique_parameter_count": 310,
+              "parameter_elements": 596049920,
+              "aliases": [
+                [
+                  "lm_head.weight",
+                  "model.embed_tokens.weight"
+                ]
+              ],
+              "initial_state_record": "initial_state-pid85116-000.json"
+            },
+            "优化": {
+              "原生 optimizer": "torch.optim.adamw.AdamW",
+              "真实参数组": [
+                {
+                  "lr": 0.001,
+                  "betas": [
+                    0.9,
+                    0.999
+                  ],
+                  "eps": 1e-08,
+                  "weight_decay": 0.0,
+                  "amsgrad": false,
+                  "maximize": false,
+                  "foreach": null,
+                  "capturable": false,
+                  "differentiable": false,
+                  "fused": false,
+                  "decoupled_weight_decay": true,
+                  "initial_lr": 0.001
+                }
+              ],
+              "完整原生一步": true,
+              "CPU参考optimizer范围": "declared flattened coordinates; elementwise AdamW after full model backward and clipping"
+            },
+            "采样坐标": [
+              {
+                "name": "model.embed_tokens.weight",
+                "shape": [
+                  151936,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_proj.weight",
+                "shape": [
+                  2048,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.v_proj.weight",
+                "shape": [
+                  1024,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.o_proj.weight",
+                "shape": [
+                  1024,
+                  2048
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.q_norm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              },
+              {
+                "name": "model.layers.0.self_attn.k_norm.weight",
+                "shape": [
+                  128
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  128
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.gate_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.up_proj.weight",
+                "shape": [
+                  3072,
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.mlp.down_proj.weight",
+                "shape": [
+                  1024,
+                  3072
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  8192
+                ]
+              },
+              {
+                "name": "model.layers.0.input_layernorm.weight",
+                "shape": [
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  1024
+                ]
+              },
+              {
+                "name": "model.layers.0.post_attention_layernorm.weight",
+                "shape": [
+                  1024
+                ],
+                "native_parameter_dtype": "torch.float32",
+                "native_gradient_dtype": "torch.float32",
+                "device": "cuda:0",
+                "slice": [
+                  0,
+                  1024
+                ]
+              }
+            ],
+            "执行": {
+              "设备": "cpu",
+              "当前策略": "独立来源模型FP32/eager因果forward、完整模型backward和clip",
+              "初始表示": "匹配原生参数存储；若为BF16，独立来源先BF16再FP32",
+              "架构共享": "公开HF tie_weights复原声明alias后全量SHA核对",
+              "native输出读取边界": "当前策略/完整backward/clip/坐标AdamW完成后，才读取原生loss/梯度/after-state"
+            },
+            "CPU clip 返回范数": "未留存；FP64诊断范数独立报告"
+          }
+        }
+      ],
+      "common": [
+        "1个奖励组、4条轨迹、27个有效动作；原生有序输入与有效old anchors保持固定。",
+        "完整初始参数、共享关系与适用时的FP32 master通过独立来源SHA审计；比较坐标只覆盖声明的12参数前缀。",
+        "本记录有4组实际比较；CPU完整backward/clip，原生完整optimizer，CPU AdamW仅在采样坐标执行。"
+      ],
+      "differences": [
+        "CUDA原生数值路径与独立CPU FP32当前策略；各自实际参数/梯度/master表示单独记录。",
+        "CPU目标使用冻结的原生old anchors；loss差异、存储更新和master更新均按实际保留报告。"
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "裁剪前梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共67,840/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.0001259753400701106,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 5.8576044068558986e-05,
+              "unit": "数值",
+              "side_values": {
+                "native": 9.665744553480444,
+                "cpu": 9.665803129524512
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 4.836627265410333e-07,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999999999334317,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 3.039836883544922e-05,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.mlp.up_proj.weight",
+                "index": 2325
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 67840,
+              "expected": 67840,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 67840,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "postclip-gradients",
+          "title": "裁剪后梯度",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共67,840/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 1.4962032678371683e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 1.4946831793510862e-05,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.05842848183938576,
+                "cpu": 0.05844342867117927
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 5.74443975764608e-08,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999999999334296,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 4.967674612998962e-06,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 27
+              }
+            },
+            {
+              "id": "full-preclip-norm-difference",
+              "label": "全模型裁剪前 FP64 诊断范数差",
+              "value": 0.002658069858370027,
+              "unit": "数值",
+              "side_values": {
+                "native": 165.4286505534497,
+                "cpu": 165.43130862330807
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 67840,
+              "expected": 67840,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 67840,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ],
+          "diagnostics": {
+            "原生 clip 返回范数": 165.42864990234375,
+            "原生 optimizer global norm 字段": null,
+            "真实 clip 函数": null,
+            "返回值语义": null,
+            "原生 loss scale": null,
+            "原生系数": 0.0060449023731052876,
+            "原始训练标量": {
+              "source_private_clip_pt_sha256": "dc5d3fb270032054afbb6f78eda8395c3e5bfb664b3bf8332552838524a0ef8e",
+              "native_returned_norm": {
+                "kind": "tensor",
+                "dtype": "torch.float32",
+                "shape": [],
+                "value": 165.42864990234375,
+                "retained_storage_hex": "bc6d2543"
+              },
+              "native_clip_function_return": {
+                "kind": "NoneType",
+                "value": null
+              },
+              "recorded_native_optimizer_global_norm_field": {
+                "kind": "NoneType",
+                "value": null
+              },
+              "clip_metadata": {
+                "real_clip_function": null,
+                "norm_semantics": null,
+                "native_loss_scale": null,
+                "native_coefficient": 0.0060449023731052876,
+                "max_norm": 1.0,
+                "full_fp64_preclip_norm": 165.4286505534497,
+                "full_fp64_postclip_norm": 1.000000042225336
+              },
+              "fixed_reference_input": false
+            },
+            "CPU clip 返回范数已留存": false,
+            "FP64 诊断值代填返回值": false
+          }
+        },
+        {
+          "id": "updates",
+          "title": "模型存储参数更新",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "原生完整模型 backward/clip/optimizer；数值比较仅为12个参数的声明前缀，共67,840/596,049,920个元素。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.00017047923408564108,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-difference",
+              "label": "两侧 L2 范数绝对差",
+              "value": 2.394037266761906e-07,
+              "unit": "数值",
+              "side_values": {
+                "native": 0.2508644868449592,
+                "cpu": 0.2508647262486859
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 6.545285063775086e-07,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.999999769095002,
+              "unit": "1"
+            },
+            {
+              "id": "maximum-error",
+              "label": "最大绝对差",
+              "value": 0.00015234202146530151,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.self_attn.q_proj.weight",
+                "index": 13
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "采样配对元素",
+              "observed": 67840,
+              "expected": 67840,
+              "unit": "元素"
+            },
+            {
+              "label": "相对全模型的数值采样",
+              "observed": 67840,
+              "expected": 596049920,
+              "unit": "元素"
+            },
+            {
+              "label": "采样参数",
+              "observed": 12,
+              "expected": 310,
+              "unit": "参数张量"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "动作分数与策略目标",
+          "side_ids": [
+            "native",
+            "cpu"
+          ],
+          "scope": "27 个动作；CPU独立重算当前策略，冻结原生实际使用的 old anchors。",
+          "metrics": [
+            {
+              "id": "nll-absolute-difference",
+              "label": "目标 NLL 绝对差",
+              "value": 7.247241868402199e-06,
+              "unit": "nat/token",
+              "side_values": {
+                "native": 1.2280762719138794,
+                "cpu": 1.228069024672011
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "目标 logprob MAE",
+              "value": 7.895718260476349e-06,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "目标 logprob P99",
+              "value": 2.9277801513671868e-05,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "目标 logprob 最大差",
+              "value": 3.0517578125e-05,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "3",
+                "position": 23,
+                "token": 13250
+              }
+            },
+            {
+              "id": "objective-absolute-difference",
+              "label": "策略损失绝对差",
+              "value": 7.003545761108398e-07,
+              "unit": "loss",
+              "side_values": {
+                "native": -5.960464477539063e-08,
+                "cpu": -7.599592208862305e-07
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对有效目标",
+              "observed": 27,
+              "expected": 27,
+              "unit": "token"
+            }
+          ],
+          "diagnostics": {
+            "合成 reward 公式独立核对": true,
+            "reward 质量结论": false
+          }
+        }
+      ],
+      "notes": [
+        "按完整原生response mask与实际生成tokens核对局部response坐标；非退化token mean/100合成奖励；仅验证执行与梯度，不作回答质量结论。",
+        "原生unscale/clip的返回语义与optimizer global norm、独立FP64范数分开记录；CPU clip返回值未留存。",
+        "此前失败或退化reward尝试单独保留；thresholds=null，acceptance=null；不宣称分片或生产性能验证。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值与实际比较 REPLAY",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/roll/roll-pretrained-cuda.zip"
+        },
+        {
+          "label": "固定原生输入与old anchors",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/roll/roll-pretrained-cuda-fixed-inputs.zip"
+        },
+        {
+          "label": "公共字节与覆盖索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/roll/public-export-index.json"
+        },
+        {
+          "label": "H100执行与比较边界说明",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/roll",
+        "bundle": "roll-pretrained-cuda.zip",
+        "sha256": "113544e4b3bb0e2b4604a3cc3cf2ec0a225ebc7ebcc7b567634e5cef4fe583e0",
+        "replay_cases": 4,
+        "comparison_groups": 4
+      }
+    },
+    {
+      "id": "megatron-bridge-qwen3-06b-h100-native-20261022",
+      "date": "2026-10-22",
+      "title": "Megatron Bridge · Qwen/Qwen3-0.6B H100 SFT",
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen/Qwen3-0.6B",
+        "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+      },
+      "summary": "完成官方 checkpoint 转换、保存、新进程冷恢复、完整参数 finetune 与一次原生 SGD 更新；独立 CPU FP32 重算五组指标。",
+      "sides": [
+        {
+          "id": "bridge-pretrained-cuda-bf16",
+          "label": "Megatron Bridge · H100 BF16",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.57.1"
+            },
+            {
+              "name": "megatron-bridge",
+              "version": "0.2.0"
+            },
+            {
+              "name": "megatron-core",
+              "version": "0.16.0rc0"
+            },
+            {
+              "name": "transformer-engine",
+              "version": "2.9.0"
+            }
+          ],
+          "settings": {
+            "模型": {
+              "架构": "Qwen3ForCausalLM",
+              "训练": "完整参数训练",
+              "vocab_size": 151936,
+              "hidden_size": 1024,
+              "intermediate_size": 3072,
+              "层数": 28,
+              "attention heads": 16,
+              "KV heads": 8,
+              "head_dim": 128,
+              "rope_theta": 1000000,
+              "权重绑定": true,
+              "权重 SHA256": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+              "请求来源版本": "c1899de289a04d12100db370d81485cdf75e47ca",
+              "原始本地来源核验标记": false,
+              "随机种子": null
+            },
+            "输入": {
+              "原始 token 数": 17,
+              "原生输入长度": 16,
+              "有效目标": 14,
+              "包含两个 EOS": true,
+              "首尾 prediction mask": 0,
+              "目标顺序及掩码一致": true,
+              "未使用 logits 行": "CPU 保留17行，原生16行；只比较相同14个预测位置"
+            },
+            "数值": {
+              "实际设备": "cuda:0",
+              "参数存储 dtype": "BF16",
+              "梯度 dtype": "FP32 main_grad",
+              "原始 logits dtype": "BF16",
+              "分布推导": "原始 logits 独立 FP64 log_softmax",
+              "loss": "原生 loss_sum/token_count 派生值"
+            },
+            "执行": {
+              "入口": "official megatron.bridge.training.finetune.finetune after save_megatron_model checkpoint conversion/restore",
+              "optimizer": "SGD",
+              "原生 optimizer 外层": "megatron.core.optimizer.optimizer.ChainedOptimizer",
+              "学习率": 0.001,
+              "momentum": 0,
+              "weight_decay": 0,
+              "梯度裁剪": false,
+              "optimizer 步": 1,
+              "读取原生梯度或更新作为参考": false
+            },
+            "范围": {
+              "world_size": 1,
+              "rank": 0,
+              "TP": 1,
+              "PP": 1,
+              "物理 GPU": 3,
+              "逻辑 CUDA": 0,
+              "完整原生训练": true,
+              "原生物理参数元素": 596049920,
+              "导出逻辑 tensor": 311,
+              "完整逻辑坐标": 751632384,
+              "比较梯度及更新坐标": 876544,
+              "每 tensor 采样上限": 4096,
+              "逻辑别名": "预训练 lm_head 与 embedding 绑定；逻辑重复坐标不算独立物理参数"
+            },
+            "初值与映射": {
+              "全部导出逻辑初值 FP32 SHA256 相等": true,
+              "绑定权重标记": true,
+              "CPU storage alias 组": [
+                [
+                  "0/model.embed_tokens.weight",
+                  "0/lm_head.weight"
+                ]
+              ],
+              "zero-centered gamma": false,
+              "官方映射": [
+                "AutoMapping",
+                "GatedMLPMapping",
+                "QKVMapping"
+              ],
+              "零输入导出为零": true,
+              "测试后恢复原始存储": true
+            },
+            "checkpoint": {
+              "官方 HF 转换并保存 iteration0": true,
+              "新进程冷恢复 loader 返回": true,
+              "finetune iteration1 保存": true,
+              "原生算子替换": false
+            },
+            "依赖": {
+              "Bridge 来源": "7af9601c9da746d21481194356295bfe23df3737",
+              "MCore 官方 gitlink": "0d8e0714cd29c01e164fe6de9f532182bdffa942",
+              "pip check 返回码": 1,
+              "原始元数据失败": [
+                "megatron-bridge 0.2.0 has requirement megatron-core[dev,mlm]<0.16.0,>=0.15.0a0, but you have megatron-core 0.16.0rc0.",
+                "transformer_engine_cu12 2.9.0 is not supported on this platform"
+              ],
+              "版本或 wheel metadata 改写": false
+            }
+          }
+        },
+        {
+          "id": "bridge-pretrained-cpu-fp32",
+          "label": "独立 CPU FP32",
+          "hardware": "CPU（型号未记录）",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.57.1"
+            }
+          ],
+          "settings": {
+            "模型": {
+              "架构": "Qwen3ForCausalLM",
+              "训练": "完整参数训练",
+              "vocab_size": 151936,
+              "hidden_size": 1024,
+              "intermediate_size": 3072,
+              "层数": 28,
+              "attention heads": 16,
+              "KV heads": 8,
+              "head_dim": 128,
+              "rope_theta": 1000000,
+              "权重绑定": true,
+              "权重 SHA256": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+              "请求来源版本": "c1899de289a04d12100db370d81485cdf75e47ca",
+              "原始本地来源核验标记": false,
+              "随机种子": null
+            },
+            "输入": {
+              "原始 token 数": 17,
+              "原生输入长度": 16,
+              "有效目标": 14,
+              "包含两个 EOS": true,
+              "首尾 prediction mask": 0,
+              "目标顺序及掩码一致": true,
+              "未使用 logits 行": "CPU 保留17行，原生16行；只比较相同14个预测位置"
+            },
+            "数值": {
+              "实际设备": "cpu",
+              "参数存储 dtype": "FP32",
+              "梯度 dtype": "FP32",
+              "原始 logits dtype": "FP32",
+              "分布推导": "原始 logits 独立 FP64 log_softmax",
+              "loss": "独立 causal CE"
+            },
+            "执行": {
+              "入口": "独立 Transformers eager forward / causal CE / backward / SGD",
+              "optimizer": "SGD",
+              "原生 optimizer 外层": null,
+              "学习率": 0.001,
+              "momentum": 0,
+              "weight_decay": 0,
+              "梯度裁剪": false,
+              "optimizer 步": 1,
+              "读取原生梯度或更新作为参考": false
+            },
+            "范围": {
+              "world_size": 1,
+              "rank": 0,
+              "TP": null,
+              "PP": null,
+              "物理 GPU": null,
+              "逻辑 CUDA": null,
+              "完整原生训练": false,
+              "原生物理参数元素": 596049920,
+              "导出逻辑 tensor": 311,
+              "完整逻辑坐标": 751632384,
+              "比较梯度及更新坐标": 876544,
+              "每 tensor 采样上限": 4096,
+              "逻辑别名": "预训练 lm_head 与 embedding 绑定；逻辑重复坐标不算独立物理参数"
+            },
+            "初值与映射": {
+              "全部导出逻辑初值 FP32 SHA256 相等": true,
+              "绑定权重标记": true,
+              "CPU storage alias 组": [
+                [
+                  "0/model.embed_tokens.weight",
+                  "0/lm_head.weight"
+                ]
+              ],
+              "zero-centered gamma": false,
+              "官方映射": [
+                "AutoMapping",
+                "GatedMLPMapping",
+                "QKVMapping"
+              ],
+              "零输入导出为零": true,
+              "测试后恢复原始存储": true
+            }
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "原生梯度",
+          "side_ids": [
+            "bridge-pretrained-cuda-bf16",
+            "bridge-pretrained-cpu-fp32"
+          ],
+          "scope": "完整原生模型执行一步；数值比较按实际逻辑坐标覆盖，保留零值和未改变更新。每个逻辑 tensor 取前4096元素；小 tensor 全取，绑定别名按逻辑清单计数。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 6.561226006796975,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-abs-diff",
+              "label": "两侧 L2 范数绝对差",
+              "value": 1.2680913830365483,
+              "unit": "数值",
+              "side_values": {
+                "bridge-pretrained-cuda-bf16": 43.34397806347556,
+                "bridge-pretrained-cpu-fp32": 44.61206944651211
+              },
+              "derivation": "Absolute difference of recorded norms; distinct from the norm of the elementwise difference."
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.007008065253554125,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9892841726984443,
+              "unit": "1"
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "value": 0.9147639274597168,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.6.mlp.gate_proj.weight",
+                "index": 3080
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑元素",
+              "observed": 876544,
+              "expected": 751632384,
+              "unit": "元素"
+            },
+            {
+              "label": "逻辑 tensor",
+              "observed": 311,
+              "expected": 311,
+              "unit": "tensor"
+            }
+          ]
+        },
+        {
+          "id": "updates",
+          "title": "SGD 存储更新",
+          "side_ids": [
+            "bridge-pretrained-cuda-bf16",
+            "bridge-pretrained-cpu-fp32"
+          ],
+          "scope": "完整原生模型执行一步；数值比较按实际逻辑坐标覆盖，保留零值和未改变更新。每个逻辑 tensor 取前4096元素；小 tensor 全取，绑定别名按逻辑清单计数。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.014371385176342222,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-abs-diff",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.0019720314868793692,
+              "unit": "数值",
+              "side_values": {
+                "bridge-pretrained-cuda-bf16": 0.042640038648207,
+                "bridge-pretrained-cpu-fp32": 0.04461207013508637
+              },
+              "derivation": "Absolute difference of recorded norms; distinct from the norm of the elementwise difference."
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 1.53501197787475e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9467349989879775,
+              "unit": "1"
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "value": 0.0015843510627746582,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.layers.0.input_layernorm.weight",
+                "index": 429
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑元素",
+              "observed": 876544,
+              "expected": 751632384,
+              "unit": "元素"
+            },
+            {
+              "label": "逻辑 tensor",
+              "observed": 311,
+              "expected": 311,
+              "unit": "tensor"
+            }
+          ]
+        },
+        {
+          "id": "observations",
+          "title": "objective 与完整词表 logits",
+          "side_ids": [
+            "bridge-pretrained-cuda-bf16",
+            "bridge-pretrained-cpu-fp32"
+          ],
+          "scope": "原生显示值由真实返回 loss_sum / token_count14 派生；CPU 独立 causal CE。匹配14个预测位置的全词表原始 logits。",
+          "metrics": [
+            {
+              "id": "objective-abs-diff",
+              "label": "objective 绝对差",
+              "value": 0.005504608154296875,
+              "unit": "loss",
+              "side_values": {
+                "bridge-pretrained-cuda-bf16": 9.779166221618652,
+                "bridge-pretrained-cpu-fp32": 9.773661613464355
+              }
+            },
+            {
+              "id": "logits-error-norm",
+              "label": "logits · L2 误差",
+              "value": 74.18887866150583,
+              "unit": "数值"
+            },
+            {
+              "id": "logits-norm-abs-diff",
+              "label": "logits · 两侧 L2 范数绝对差",
+              "value": 5.750606660228186,
+              "unit": "数值",
+              "side_values": {
+                "bridge-pretrained-cuda-bf16": 3988.8992763466554,
+                "bridge-pretrained-cpu-fp32": 3983.148669686427
+              },
+              "derivation": "Absolute difference of recorded norms; distinct from the norm of the elementwise difference."
+            },
+            {
+              "id": "logits-rmse",
+              "label": "logits · RMSE",
+              "value": 0.05086797448578575,
+              "unit": "数值"
+            },
+            {
+              "id": "logits-cosine",
+              "label": "logits · 余弦相似度",
+              "value": 0.9998278326475832,
+              "unit": "1"
+            },
+            {
+              "id": "logits-max-abs",
+              "label": "logits · 最大绝对误差",
+              "value": 0.45691871643066406,
+              "unit": "数值",
+              "coordinate": {
+                "row": 6,
+                "token": 8015
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对 logits",
+              "observed": 2127104,
+              "expected": 2127104,
+              "unit": "元素"
+            },
+            {
+              "label": "objective",
+              "observed": 1,
+              "expected": 1,
+              "unit": "标量"
+            }
+          ]
+        },
+        {
+          "id": "distributions",
+          "title": "词表概率分布",
+          "side_ids": [
+            "bridge-pretrained-cuda-bf16",
+            "bridge-pretrained-cpu-fp32"
+          ],
+          "scope": "两侧原始 dtype logits 各自以 FP64 对完整词表归一化；概率 RMSE 使用 Top-100 并集，JS 合并其余尾部概率。",
+          "metrics": [
+            {
+              "id": "probability-rmse-mean",
+              "label": "Top-100 并集概率 RMSE 均值",
+              "value": 0.0011162820119914195,
+              "unit": "数值"
+            },
+            {
+              "id": "probability-rmse-p99",
+              "label": "Top-100 并集概率 RMSE P99",
+              "value": 0.006499303141462462,
+              "unit": "数值"
+            },
+            {
+              "id": "js-mean",
+              "label": "尾部合并 JS 均值",
+              "value": 0.00031261245971401255,
+              "unit": "nat"
+            },
+            {
+              "id": "js-max",
+              "label": "尾部合并 JS 最大值",
+              "value": 0.002494938924261193,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "batch-0",
+                "position": 8
+              }
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1 一致率",
+              "value": 0.8571428571428571,
+              "unit": "1"
+            },
+            {
+              "id": "top100-overlap",
+              "label": "Top-100 重合率",
+              "value": 0.9842857142857142,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "预测位置",
+              "observed": 14,
+              "expected": 14,
+              "unit": "位置"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "有效目标分数",
+          "side_ids": [
+            "bridge-pretrained-cuda-bf16",
+            "bridge-pretrained-cpu-fp32"
+          ],
+          "scope": "实际标签、EOS、掩码和有序历史逐位置配对；P99 使用 global linear h=0.99*(N-1)。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.00550163209086918,
+              "unit": "nat/token",
+              "side_values": {
+                "bridge-pretrained-cuda-bf16": 9.779166229944021,
+                "bridge-pretrained-cpu-fp32": 9.773664597853152
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE",
+              "value": 0.06296087950828623,
+              "unit": "nat"
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99 绝对差",
+              "value": 0.1772672158431975,
+              "unit": "nat"
+            },
+            {
+              "id": "max-abs",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.18353166579507274,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "batch-0",
+                "position": 7,
+                "token": 31
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对目标",
+              "observed": 14,
+              "expected": 14,
+              "unit": "目标"
+            }
+          ]
+        }
+      ],
+      "common": [
+        "相同有序 token、标签、掩码和起始逻辑参数；全部导出逻辑初值 canonical FP32 SHA256 一致。",
+        "CPU 从专用起始输入与原始 HF checkpoint 独立计算，不读取原生梯度、after 参数或训练结果。",
+        "完整原生训练与梯度/更新数值采样范围分别记录；原始 dtype 数组字节保留。"
+      ],
+      "differences": [
+        "原生单卡 H100，world1 / TP1 / PP1；参考为独立单进程 CPU FP32。",
+        "原生 BF16 参数、FP32 main_grad、BF16 logits；CPU 参数、梯度、logits 均 FP32。"
+      ],
+      "notes": [
+        "每个模型仅一次原生实验、五组原始比较；不是四卡 DDP 或长期收敛实验。",
+        "梯度与更新比较覆盖 876,544/751,632,384 个逻辑坐标；原生物理独立参数为 596,049,920，逻辑别名不增加物理参数。",
+        "官方 Bridge0.2.0 gitlink 指向 MCore0.16.0rc0，超出其声明范围；保留原 metadata 和 pip check 失败。",
+        "原始 TEcu12 wheel 内部平台标签为 cp310；真实 cp311 Torch 绑定已编译并完成原生 CUDA 流程，平台检查失败仍保留。",
+        "gamma=false；官方 Auto/QKV/GatedMLP 映射经独立零输入导出测试，原存储恢复后才执行 checkpoint/train。",
+        "原始 local_source_revision_verified=false 未改写；请求 revision、文件哈希与另存的来源核验回执分别保留。",
+        "公开包排除含私有路径的原始 PT，数值 safetensors 与原始导出逐字节一致；每包五项重放匹配。",
+        "completed 仅指该范围执行与比较完成；thresholds=null、acceptance=null，没有阈值通过或模型排名结论。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值与五组离线重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/bridge-pretrained-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/summary.json"
+        },
+        {
+          "label": "逐包哈希与覆盖",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/PUBLICATION-INDEX.json"
+        },
+        {
+          "label": "原生流程与依赖差异",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/guide-notes.json"
+        },
+        {
+          "label": "H100 原生续测 Guide",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge",
+        "replay_cases": 5,
+        "comparison_groups": 5,
+        "native_experiments": 1,
+        "rank_captures": 1
+      },
+      "import_source": {
+        "cohort": "h100-native-20261022",
+        "case_ids": [
+          "bridge-pretrained-bf16-rank-0"
+        ],
+        "source_result": "tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/summary.json"
+      }
+    },
+    {
+      "id": "megatron-bridge-tiny-qwen3-h100-native-20261022",
+      "date": "2026-10-22",
+      "title": "Megatron Bridge · tiny Qwen3（种子20261022随机权重） H100 SFT",
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny Qwen3（种子20261022随机权重）",
+        "revision": "sha256:245e4b941a1160ff5b50f77a7c03173fafb781c46452d559ac59a66d02fcc877"
+      },
+      "summary": "完成官方 checkpoint 转换、保存、新进程冷恢复、完整参数 finetune 与一次原生 SGD 更新；独立 CPU FP32 重算五组指标。",
+      "sides": [
+        {
+          "id": "bridge-tiny-cuda-bf16",
+          "label": "Megatron Bridge · H100 BF16",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.57.1"
+            },
+            {
+              "name": "megatron-bridge",
+              "version": "0.2.0"
+            },
+            {
+              "name": "megatron-core",
+              "version": "0.16.0rc0"
+            },
+            {
+              "name": "transformer-engine",
+              "version": "2.9.0"
+            }
+          ],
+          "settings": {
+            "模型": {
+              "架构": "Qwen3ForCausalLM",
+              "训练": "完整参数训练",
+              "vocab_size": 128,
+              "hidden_size": 128,
+              "intermediate_size": 256,
+              "层数": 2,
+              "attention heads": 4,
+              "KV heads": 2,
+              "head_dim": 32,
+              "rope_theta": 1000000.0,
+              "权重绑定": true,
+              "权重 SHA256": "245e4b941a1160ff5b50f77a7c03173fafb781c46452d559ac59a66d02fcc877",
+              "请求来源版本": null,
+              "原始本地来源核验标记": false,
+              "随机种子": 20261022
+            },
+            "输入": {
+              "原始 token 数": 17,
+              "原生输入长度": 16,
+              "有效目标": 14,
+              "包含两个 EOS": true,
+              "首尾 prediction mask": 0,
+              "目标顺序及掩码一致": true,
+              "未使用 logits 行": "CPU 保留17行，原生16行；只比较相同14个预测位置"
+            },
+            "数值": {
+              "实际设备": "cuda:0",
+              "参数存储 dtype": "BF16",
+              "梯度 dtype": "FP32 main_grad",
+              "原始 logits dtype": "BF16",
+              "分布推导": "原始 logits 独立 FP64 log_softmax",
+              "loss": "原生 loss_sum/token_count 派生值"
+            },
+            "执行": {
+              "入口": "official megatron.bridge.training.finetune.finetune after save_megatron_model checkpoint conversion/restore",
+              "optimizer": "SGD",
+              "原生 optimizer 外层": "megatron.core.optimizer.optimizer.ChainedOptimizer",
+              "学习率": 0.001,
+              "momentum": 0,
+              "weight_decay": 0,
+              "梯度裁剪": false,
+              "optimizer 步": 1,
+              "读取原生梯度或更新作为参考": false
+            },
+            "范围": {
+              "world_size": 1,
+              "rank": 0,
+              "TP": 1,
+              "PP": 1,
+              "物理 GPU": 3,
+              "逻辑 CUDA": 0,
+              "完整原生训练": true,
+              "原生物理参数元素": 312064,
+              "导出逻辑 tensor": 24,
+              "完整逻辑坐标": 312064,
+              "比较梯度及更新坐标": 312064,
+              "每 tensor 采样上限": 0,
+              "逻辑别名": "共享输出由导出 embedding 坐标表示一次"
+            },
+            "初值与映射": {
+              "全部导出逻辑初值 FP32 SHA256 相等": true,
+              "绑定权重标记": true,
+              "CPU storage alias 组": [
+                [
+                  "0/model.embed_tokens.weight",
+                  "0/lm_head.weight"
+                ]
+              ],
+              "zero-centered gamma": false,
+              "官方映射": [
+                "AutoMapping",
+                "GatedMLPMapping",
+                "QKVMapping"
+              ],
+              "零输入导出为零": true,
+              "测试后恢复原始存储": true
+            },
+            "checkpoint": {
+              "官方 HF 转换并保存 iteration0": true,
+              "新进程冷恢复 loader 返回": true,
+              "finetune iteration1 保存": true,
+              "原生算子替换": false
+            },
+            "依赖": {
+              "Bridge 来源": "7af9601c9da746d21481194356295bfe23df3737",
+              "MCore 官方 gitlink": "0d8e0714cd29c01e164fe6de9f532182bdffa942",
+              "pip check 返回码": 1,
+              "原始元数据失败": [
+                "megatron-bridge 0.2.0 has requirement megatron-core[dev,mlm]<0.16.0,>=0.15.0a0, but you have megatron-core 0.16.0rc0.",
+                "transformer_engine_cu12 2.9.0 is not supported on this platform"
+              ],
+              "版本或 wheel metadata 改写": false
+            }
+          }
+        },
+        {
+          "id": "bridge-tiny-cpu-fp32",
+          "label": "独立 CPU FP32",
+          "hardware": "CPU（型号未记录）",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.57.1"
+            }
+          ],
+          "settings": {
+            "模型": {
+              "架构": "Qwen3ForCausalLM",
+              "训练": "完整参数训练",
+              "vocab_size": 128,
+              "hidden_size": 128,
+              "intermediate_size": 256,
+              "层数": 2,
+              "attention heads": 4,
+              "KV heads": 2,
+              "head_dim": 32,
+              "rope_theta": 1000000.0,
+              "权重绑定": true,
+              "权重 SHA256": "245e4b941a1160ff5b50f77a7c03173fafb781c46452d559ac59a66d02fcc877",
+              "请求来源版本": null,
+              "原始本地来源核验标记": false,
+              "随机种子": 20261022
+            },
+            "输入": {
+              "原始 token 数": 17,
+              "原生输入长度": 16,
+              "有效目标": 14,
+              "包含两个 EOS": true,
+              "首尾 prediction mask": 0,
+              "目标顺序及掩码一致": true,
+              "未使用 logits 行": "CPU 保留17行，原生16行；只比较相同14个预测位置"
+            },
+            "数值": {
+              "实际设备": "cpu",
+              "参数存储 dtype": "FP32",
+              "梯度 dtype": "FP32",
+              "原始 logits dtype": "FP32",
+              "分布推导": "原始 logits 独立 FP64 log_softmax",
+              "loss": "独立 causal CE"
+            },
+            "执行": {
+              "入口": "独立 Transformers eager forward / causal CE / backward / SGD",
+              "optimizer": "SGD",
+              "原生 optimizer 外层": null,
+              "学习率": 0.001,
+              "momentum": 0,
+              "weight_decay": 0,
+              "梯度裁剪": false,
+              "optimizer 步": 1,
+              "读取原生梯度或更新作为参考": false
+            },
+            "范围": {
+              "world_size": 1,
+              "rank": 0,
+              "TP": null,
+              "PP": null,
+              "物理 GPU": null,
+              "逻辑 CUDA": null,
+              "完整原生训练": false,
+              "原生物理参数元素": 312064,
+              "导出逻辑 tensor": 24,
+              "完整逻辑坐标": 312064,
+              "比较梯度及更新坐标": 312064,
+              "每 tensor 采样上限": 0,
+              "逻辑别名": "共享输出由导出 embedding 坐标表示一次"
+            },
+            "初值与映射": {
+              "全部导出逻辑初值 FP32 SHA256 相等": true,
+              "绑定权重标记": true,
+              "CPU storage alias 组": [
+                [
+                  "0/model.embed_tokens.weight",
+                  "0/lm_head.weight"
+                ]
+              ],
+              "zero-centered gamma": false,
+              "官方映射": [
+                "AutoMapping",
+                "GatedMLPMapping",
+                "QKVMapping"
+              ],
+              "零输入导出为零": true,
+              "测试后恢复原始存储": true
+            }
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "gradients",
+          "title": "原生梯度",
+          "side_ids": [
+            "bridge-tiny-cuda-bf16",
+            "bridge-tiny-cpu-fp32"
+          ],
+          "scope": "完整原生模型执行一步；数值比较按实际逻辑坐标覆盖，保留零值和未改变更新。保留全部导出坐标。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.07261101785946462,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-abs-diff",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.0018450850599780466,
+              "unit": "数值",
+              "side_values": {
+                "bridge-tiny-cuda-bf16": 7.882877207813902,
+                "bridge-tiny-cpu-fp32": 7.88472229287388
+              },
+              "derivation": "Absolute difference of recorded norms; distinct from the norm of the elementwise difference."
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.0001299812440447101,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.9999576139078497,
+              "unit": "1"
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "value": 0.00421731173992157,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1422
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑元素",
+              "observed": 312064,
+              "expected": 312064,
+              "unit": "元素"
+            },
+            {
+              "label": "逻辑 tensor",
+              "observed": 24,
+              "expected": 24,
+              "unit": "tensor"
+            }
+          ]
+        },
+        {
+          "id": "updates",
+          "title": "SGD 存储更新",
+          "side_ids": [
+            "bridge-tiny-cuda-bf16",
+            "bridge-tiny-cpu-fp32"
+          ],
+          "scope": "完整原生模型执行一步；数值比较按实际逻辑坐标覆盖，保留零值和未改变更新。保留全部导出坐标。",
+          "metrics": [
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "value": 0.004826252422166475,
+              "unit": "数值"
+            },
+            {
+              "id": "norm-abs-diff",
+              "label": "两侧 L2 范数绝对差",
+              "value": 0.0004904430930211204,
+              "unit": "数值",
+              "side_values": {
+                "bridge-tiny-cuda-bf16": 0.007394279490980347,
+                "bridge-tiny-cpu-fp32": 0.007884722584001467
+              },
+              "derivation": "Absolute difference of recorded norms; distinct from the norm of the elementwise difference."
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 8.639491807168275e-06,
+              "unit": "数值"
+            },
+            {
+              "id": "cosine",
+              "label": "余弦相似度",
+              "value": 0.8023031774941614,
+              "unit": "1"
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "value": 0.00018218904733657837,
+              "unit": "数值",
+              "coordinate": {
+                "parameter": "model.embed_tokens.weight",
+                "index": 1473
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑元素",
+              "observed": 312064,
+              "expected": 312064,
+              "unit": "元素"
+            },
+            {
+              "label": "逻辑 tensor",
+              "observed": 24,
+              "expected": 24,
+              "unit": "tensor"
+            }
+          ]
+        },
+        {
+          "id": "observations",
+          "title": "objective 与完整词表 logits",
+          "side_ids": [
+            "bridge-tiny-cuda-bf16",
+            "bridge-tiny-cpu-fp32"
+          ],
+          "scope": "原生显示值由真实返回 loss_sum / token_count14 派生；CPU 独立 causal CE。匹配14个预测位置的全词表原始 logits。",
+          "metrics": [
+            {
+              "id": "objective-abs-diff",
+              "label": "objective 绝对差",
+              "value": 0.0003204345703125,
+              "unit": "loss",
+              "side_values": {
+                "bridge-tiny-cuda-bf16": 4.9110307693481445,
+                "bridge-tiny-cpu-fp32": 4.911351203918457
+              }
+            },
+            {
+              "id": "logits-error-norm",
+              "label": "logits · L2 误差",
+              "value": 0.06708385369001733,
+              "unit": "数值"
+            },
+            {
+              "id": "logits-norm-abs-diff",
+              "label": "logits · 两侧 L2 范数绝对差",
+              "value": 0.0003637355952399446,
+              "unit": "数值",
+              "side_values": {
+                "bridge-tiny-cuda-bf16": 10.872863891199387,
+                "bridge-tiny-cpu-fp32": 10.873227626794627
+              },
+              "derivation": "Absolute difference of recorded norms; distinct from the norm of the elementwise difference."
+            },
+            {
+              "id": "logits-rmse",
+              "label": "logits · RMSE",
+              "value": 0.001584707087960969,
+              "unit": "数值"
+            },
+            {
+              "id": "logits-cosine",
+              "label": "logits · 余弦相似度",
+              "value": 0.9999809677203223,
+              "unit": "1"
+            },
+            {
+              "id": "logits-max-abs",
+              "label": "logits · 最大绝对误差",
+              "value": 0.0052735209465026855,
+              "unit": "数值",
+              "coordinate": {
+                "row": 11,
+                "token": 34
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对 logits",
+              "observed": 1792,
+              "expected": 1792,
+              "unit": "元素"
+            },
+            {
+              "label": "objective",
+              "observed": 1,
+              "expected": 1,
+              "unit": "标量"
+            }
+          ]
+        },
+        {
+          "id": "distributions",
+          "title": "词表概率分布",
+          "side_ids": [
+            "bridge-tiny-cuda-bf16",
+            "bridge-tiny-cpu-fp32"
+          ],
+          "scope": "两侧原始 dtype logits 各自以 FP64 对完整词表归一化；概率 RMSE 使用 Top-100 并集，JS 合并其余尾部概率。",
+          "metrics": [
+            {
+              "id": "probability-rmse-mean",
+              "label": "Top-100 并集概率 RMSE 均值",
+              "value": 1.4531027697886785e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "probability-rmse-p99",
+              "label": "Top-100 并集概率 RMSE P99",
+              "value": 1.730811126535043e-05,
+              "unit": "数值"
+            },
+            {
+              "id": "js-mean",
+              "label": "尾部合并 JS 均值",
+              "value": 2.754064827080302e-07,
+              "unit": "nat"
+            },
+            {
+              "id": "js-max",
+              "label": "尾部合并 JS 最大值",
+              "value": 3.8376695497511334e-07,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "batch-0",
+                "position": 11
+              }
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1 一致率",
+              "value": 1.0,
+              "unit": "1"
+            },
+            {
+              "id": "top100-overlap",
+              "label": "Top-100 重合率",
+              "value": 0.9992857142857143,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "预测位置",
+              "observed": 14,
+              "expected": 14,
+              "unit": "位置"
+            }
+          ]
+        },
+        {
+          "id": "target-scores",
+          "title": "有效目标分数",
+          "side_ids": [
+            "bridge-tiny-cuda-bf16",
+            "bridge-tiny-cpu-fp32"
+          ],
+          "scope": "实际标签、EOS、掩码和有序历史逐位置配对；P99 使用 global linear h=0.99*(N-1)。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "目标 NLL 绝对差",
+              "value": 0.000320776457726879,
+              "unit": "nat/token",
+              "side_values": {
+                "bridge-tiny-cuda-bf16": 4.911030804380036,
+                "bridge-tiny-cpu-fp32": 4.911351580837763
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE",
+              "value": 0.0009420898578516024,
+              "unit": "nat"
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99 绝对差",
+              "value": 0.0019631541963391628,
+              "unit": "nat"
+            },
+            {
+              "id": "max-abs",
+              "label": "目标 logprob 最大绝对差",
+              "value": 0.0019813802824968363,
+              "unit": "nat",
+              "coordinate": {
+                "sample": "batch-0",
+                "position": 12,
+                "token": 13
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对目标",
+              "observed": 14,
+              "expected": 14,
+              "unit": "目标"
+            }
+          ]
+        }
+      ],
+      "common": [
+        "相同有序 token、标签、掩码和起始逻辑参数；全部导出逻辑初值 canonical FP32 SHA256 一致。",
+        "CPU 从专用起始输入与原始 HF checkpoint 独立计算，不读取原生梯度、after 参数或训练结果。",
+        "完整原生训练与梯度/更新数值采样范围分别记录；原始 dtype 数组字节保留。"
+      ],
+      "differences": [
+        "原生单卡 H100，world1 / TP1 / PP1；参考为独立单进程 CPU FP32。",
+        "原生 BF16 参数、FP32 main_grad、BF16 logits；CPU 参数、梯度、logits 均 FP32。"
+      ],
+      "notes": [
+        "每个模型仅一次原生实验、五组原始比较；不是四卡 DDP 或长期收敛实验。",
+        "梯度与更新比较覆盖 312,064/312,064 个逻辑坐标；原生物理独立参数为 312,064，逻辑别名不增加物理参数。",
+        "官方 Bridge0.2.0 gitlink 指向 MCore0.16.0rc0，超出其声明范围；保留原 metadata 和 pip check 失败。",
+        "原始 TEcu12 wheel 内部平台标签为 cp310；真实 cp311 Torch 绑定已编译并完成原生 CUDA 流程，平台检查失败仍保留。",
+        "gamma=false；官方 Auto/QKV/GatedMLP 映射经独立零输入导出测试，原存储恢复后才执行 checkpoint/train。",
+        "原始 local_source_revision_verified=false 未改写；请求 revision、文件哈希与另存的来源核验回执分别保留。",
+        "公开包排除含私有路径的原始 PT，数值 safetensors 与原始导出逐字节一致；每包五项重放匹配。",
+        "completed 仅指该范围执行与比较完成；thresholds=null、acceptance=null，没有阈值通过或模型排名结论。"
+      ],
+      "evidence": [
+        {
+          "label": "原始数值与五组离线重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/bridge-tiny-bf16-rank-0.zip"
+        },
+        {
+          "label": "完整数值报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/summary.json"
+        },
+        {
+          "label": "逐包哈希与覆盖",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/PUBLICATION-INDEX.json"
+        },
+        {
+          "label": "原生流程与依赖差异",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/3ca83a738a3a972eed48e5c8c90c3204186ff6bf/tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/guide-notes.json"
+        },
+        {
+          "label": "H100 原生续测 Guide",
+          "url": "evidence/h100-native-20261022-guide.md"
+        }
+      ],
+      "archive": {
+        "revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+        "prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge",
+        "replay_cases": 5,
+        "comparison_groups": 5,
+        "native_experiments": 1,
+        "rank_captures": 1
+      },
+      "import_source": {
+        "cohort": "h100-native-20261022",
+        "case_ids": [
+          "bridge-tiny-bf16-rank-0"
+        ],
+        "source_result": "tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/summary.json"
+      }
     }
   ]
 }

@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "source_revision": "e0162f0c0243a0a05f47ce24ddd2240983200c3f",
+  "source_revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
   "source_prefix": "tests/results/gpt-6/compare-h100native-20261021T200953Z",
   "source_pushed_before_history": true,
   "baseline_records": 57,
   "baseline_sha256": "9b138da550265544c9f9b2d89a6b816ca6d670078f9522961822612d51b216d6",
-  "added_records": 8,
-  "native_experiments": 10,
-  "native_rank_capture_cases": 22,
-  "comparison_groups": 110,
-  "portable_replays": 110,
+  "added_records": 14,
+  "native_experiments": 16,
+  "native_rank_capture_cases": 28,
+  "comparison_groups": 138,
+  "portable_replays": 138,
   "independent_root_replay_matched": true,
   "numerical_acceptance": null,
   "added_ids": [
@@ -20,20 +20,30 @@
     "trl-qwen3-06b-h100-ddp-native-20261022",
     "trl-tiny-qwen2-h100-ddp-native-20261022",
     "areal-tiny-cuda-h100-20261022",
-    "areal-pretrained-cuda-h100-20261022"
+    "areal-pretrained-cuda-h100-20261022",
+    "openrlhf-tiny-cuda-h100-20261022",
+    "openrlhf-pretrained-cuda-h100-20261022",
+    "roll-tiny-cuda-h100-20261022",
+    "roll-pretrained-cuda-h100-20261022",
+    "megatron-bridge-qwen3-06b-h100-native-20261022",
+    "megatron-bridge-tiny-qwen3-h100-native-20261022"
   ],
   "all_previous_records_preserved": true,
   "scope": [
     "Slime: two native two-GPU experiments, one train rank plus rollout;14 groups",
     "NeMo: two single-GPU untied-config variants;8 groups",
     "TRL: four native four-rank experiments, sixteen rank captures;80 groups;independent CPU world1 references",
-    "AReaL: two SDPA matched-condition native two-GPU workflows;8 groups; full initial state/alias audit; sampled gradient/update coverage"
+    "AReaL: two SDPA matched-condition native two-GPU workflows;8 groups; full initial state/alias audit; sampled gradient/update coverage",
+    "OpenRLHF: BF16 model/FP32 masters;two models;10 groups",
+    "ROLL: two matched native models;32/27 actual actions;8 groups",
+    "Bridge: official convert/save/cold restore/train/save;two models;10 groups;original dependency metadata failures retained"
   ],
   "slime_source_bytes_verified": 5,
   "initial_source_revision": "fa8e0631759b4f1ead41b6fb39f49daf67546379",
   "source_revisions": [
     "fa8e0631759b4f1ead41b6fb39f49daf67546379",
-    "e0162f0c0243a0a05f47ce24ddd2240983200c3f"
+    "e0162f0c0243a0a05f47ce24ddd2240983200c3f",
+    "3ca83a738a3a972eed48e5c8c90c3204186ff6bf"
   ],
   "publications": [
     {
@@ -47,7 +57,15 @@
       "history_entries": 2,
       "native_experiments": 2,
       "comparison_groups": 8
+    },
+    {
+      "source_revision": "3ca83a738a3a972eed48e5c8c90c3204186ff6bf",
+      "history_entries": 6,
+      "native_experiments": 6,
+      "comparison_groups": 28
     }
   ],
-  "previous_history_sha256": "474e1e00d642c3c8f1cc6fbbd6cd982f903c5fd6c5c9fc8861e4fe76c48c1261"
+  "previous_history_sha256": "e96319225be5c8e7c8be30d73a721eef445d70736f4ab3757a58c6077ac658b0",
+  "resource_state": "Stopped",
+  "resource_runtime": "2h10min"
 }
