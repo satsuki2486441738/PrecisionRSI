@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-21",
+  "repairs": [
+    {
+      "id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "title": "修复 RMSNorm 的 zero-centered gamma 语义",
+      "date": "2026-10-21",
+      "status": "validated",
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "environment": {
+        "hardware": "Ascend 910C · TP4",
+        "libraries": [
+          {
+            "name": "MindSpeed",
+            "commit": "ff884722a3ce7079fbafe3cb97a3287311f58a5b"
+          },
+          {
+            "name": "Megatron Bridge",
+            "version": "0.4.2"
+          },
+          {
+            "name": "Megatron Core",
+            "version": "0.17.1"
+          },
+          {
+            "name": "torch-npu",
+            "version": "2.9.0.post2"
+          },
+          {
+            "name": "Transformers",
+            "version": "5.2.0"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "历史 MindSpeed RMSNorm 未遵循 Bridge 使用的 zero-centered gamma 约定，导致前向评分显著偏离。",
+        "trigger": "layernorm_zero_centered_gamma=True；最小复现使用非零输入和全零存储 gamma。",
+        "expected": "归一化输入乘以 (1 + stored gamma)。",
+        "observed": "原实现直接乘以 stored gamma；最小复现输出全零。",
+        "location": "mindspeed/core/fusions/fused_rms_norm.py：初始化、普通前向与融合前向"
+      },
+      "cause": {
+        "category": "library_semantics",
+        "summary": "参数存储约定与 RMSNorm 对有效缩放的解释不一致，问题位于原生内核调用之前。",
+        "components": [
+          "Megatron Bridge → MindSpeed RMSNorm",
+          "MindSpeed RMSNorm → torch_npu.npu_rms_norm"
+        ]
+      },
+      "repair": {
+        "summary": "启用 zero-centered 配置时将 gamma 初始化为零，两条前向路径均使用 1 + gamma，保留 checkpoint 表示与原生内核。",
+        "commit": "9ca343aaa1a2ca0688560b2f3cf8b0b8be38be38",
+        "upstream_status": "本地修复提交；尚未提交上游"
+      },
+      "stages": [
+        {
+          "name": "复现",
+          "result": "源码与指定上游提交一致；原始整模型评分精确复现历史 NPU 结果。"
+        },
+        {
+          "name": "定位",
+          "result": "独立 CPU FP64 数学检查确认 gamma 解释错误。"
+        },
+        {
+          "name": "修改",
+          "result": "修正初始化及两条前向路径，增加永久回归测试。"
+        },
+        {
+          "name": "算子验证",
+          "result": "CPU 回归通过；真实 NPU 前向、反向和 checkpoint 检查通过。"
+        },
+        {
+          "name": "原任务复测",
+          "result": "TP4 前向覆盖 32/32 actions；2,608 条初始参数记录一致，每 rank 记录到 46 次原生融合 RMSNorm 调用。"
+        }
+      ],
+      "validation": {
+        "scope": "整模型前向、评分与派生 GRPO objective；反向和 checkpoint 检查为算子级。比较使用同一份保留的 CUDA 观测。",
+        "coverage": {
+          "observed": 32,
+          "expected": 32,
+          "unit": "actions"
+        },
+        "metrics": [
+          {
+            "id": "mae_nat",
+            "label": "Action logprob 平均绝对误差",
+            "unit": "nat/token",
+            "before": 10.637649923563004,
+            "after": 0.026155292987823486
+          },
+          {
+            "id": "p99_nat",
+            "label": "Action logprob P99 绝对误差",
+            "unit": "nat/token",
+            "before": 13.878965330123902,
+            "after": 0.10877090454101565
+          },
+          {
+            "id": "max_abs_nat",
+            "label": "Action logprob 最大绝对误差",
+            "unit": "nat/token",
+            "before": 13.952625274658203,
+            "after": 0.11327171325683594
+          },
+          {
+            "id": "nll_abs_diff_nat_per_token",
+            "label": "NLL 绝对差异",
+            "unit": "nat/token",
+            "before": 10.637649923563004,
+            "after": 0.00041621923446655273
+          }
+        ],
+        "checks": [
+          "原源码与指定上游源码逐字节一致",
+          "2,608 条参数记录的名称、形状、类型与 SHA256 一致",
+          "实际修复模块及原生融合调用已确认",
+          "证据包与可移植比较在两端回放通过"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "剩余模型评分差异尚未归因。",
+          "尚未验证整模型反向与优化器更新。",
+          "缺陷结论限于记录的历史版本及配置。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "修复证据摘要",
+          "url": "evidence/mindspeed-rmsnorm.md"
+        },
+        {
+          "label": "实现与回归测试补丁",
+          "url": "evidence/mindspeed-rmsnorm.patch"
+        }
+      ],
+      "notes": [
+        "固定两条 completion、32 个 action；验证完成与用户精度验收分别记录。"
+      ]
+    }
+  ]
+}

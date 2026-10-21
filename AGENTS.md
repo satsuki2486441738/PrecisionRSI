@@ -10,6 +10,8 @@
 - Private `projects/<project>/environments/` owns reusable environment declarations. Cases own configuration, collectors, tests and execution artifacts. Keep case-specific code there; extract shared code when reused.
 - Keep current guides focused on task semantics and tool usage. Work logs and `runs/` own dated decisions, one-off execution failures and results; resolve tool defects in code and regressions.
 
+`site/` hosts the GitHub Pages repair history. Append distinct repair experiments to `site/data/repairs.json` with stable IDs, actual component versions, evidence, verification scope and before/after metrics; preserve prior records. Keep full execution artifacts in private cases. Run `python -B .github/validate_history.py` for history changes.
+
 ## Changes
 
 Confirm the approach before editing and change at most three files per batch. For a bug fix, reproduce the behavior temporarily, add a meaningful regression and remove the temporary reproducer. Preserve permanent tests.

@@ -66,3 +66,7 @@ python3 examples/compare_gradients.py
 It runs both forward/backward passes on CPU, then prints losses, gradient-difference metrics and the generated artifact directory.
 
 Repository layout and test commands are in [AGENTS.md](AGENTS.md).
+
+## Repair history
+
+Browse the [repair history website](https://satsuki2486441738.github.io/precision-skills/) for model/environment-specific repair records, causes, verification stages and before/after metrics. Records and public evidence are maintained in [site/](site/README.md).

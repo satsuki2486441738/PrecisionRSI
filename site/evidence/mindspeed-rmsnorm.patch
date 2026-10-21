@@ -1,0 +1,125 @@
+diff --git a/mindspeed/core/fusions/fused_rms_norm.py b/mindspeed/core/fusions/fused_rms_norm.py
+index 001efcc..d0ebe9b 100644
+--- a/mindspeed/core/fusions/fused_rms_norm.py
++++ b/mindspeed/core/fusions/fused_rms_norm.py
+@@ -21,7 +21,9 @@ class RMSNorm(torch.nn.Module):
+         """
+         super().__init__()
+         self.eps = eps
+-        self.weight = torch.nn.Parameter(torch.ones(dim))
++        self.zero_centered_gamma = getattr(config, 'layernorm_zero_centered_gamma', False)
++        self.weight = torch.nn.Parameter(
++            torch.zeros(dim) if self.zero_centered_gamma else torch.ones(dim))
+         self.config = config
+ 
+         setattr(self.weight, 'sequence_parallel', sequence_parallel)
+@@ -31,10 +33,12 @@ class RMSNorm(torch.nn.Module):
+ 
+     def unfused_rmsnorm(self, x):
+         output = self._norm(x.float()).type_as(x)
+-        return output * self.weight
++        weight = self.weight + 1 if self.zero_centered_gamma else self.weight
++        return output * weight
+ 
+     def fused_rmsnorm(self, x):
+-        return torch_npu.npu_rms_norm(x, self.weight, epsilon=self.eps)[0]
++        weight = self.weight + 1 if self.zero_centered_gamma else self.weight
++        return torch_npu.npu_rms_norm(x, weight, epsilon=self.eps)[0]
+ 
+     def forward(self, x):
+         if self.config.use_fused_rmsnorm:
+diff --git a/tests_extend/unit_tests/features/test_zero_centered_rmsnorm.py b/tests_extend/unit_tests/features/test_zero_centered_rmsnorm.py
+new file mode 100644
+index 0000000..e8536f2
+--- /dev/null
++++ b/tests_extend/unit_tests/features/test_zero_centered_rmsnorm.py
+@@ -0,0 +1,89 @@
++"""Run a selected native RMSNorm source against independent FP64 mathematics.
++
++RMSNORM_SOURCE selects a module file; RMSNORM_DEVICE defaults to cpu.
++NPU tests call the actual fused kernel. CPU fused-boundary checks intercept only
++that kernel and verify its effective weight; they are reported separately.
++BF16 tolerances (0.02) allow native BF16 rounding; FP32 uses 3e-6.
++"""
++import importlib.util
++import io
++import os
++from pathlib import Path
++from types import SimpleNamespace
++import unittest
++from unittest.mock import patch
++
++import torch
++import torch_npu
++
++spec=importlib.util.spec_from_file_location('repair_native_rmsnorm',os.environ.get('RMSNORM_SOURCE', str(Path(__file__).resolve().parents[3] / 'mindspeed/core/fusions/fused_rms_norm.py')))
++module=importlib.util.module_from_spec(spec)
++spec.loader.exec_module(module)
++DEVICE=os.environ.get('RMSNORM_DEVICE','cpu')
++
++
++def oracle(x, weight, zero_centered, eps):
++    x64=x.detach().cpu().double().requires_grad_()
++    w64=weight.detach().cpu().double().requires_grad_()
++    scale=1+w64 if zero_centered else w64
++    y=x64/torch.sqrt((x64*x64).mean(-1,keepdim=True)+eps)*scale
++    return x64,w64,y
++
++
++class NativeRMSNormTests(unittest.TestCase):
++    def make(self,dim,centered,fused,dtype):
++        cfg=SimpleNamespace(layernorm_zero_centered_gamma=centered,use_fused_rmsnorm=fused)
++        return module.RMSNorm(dim,eps=1e-6,config=cfg).to(device=DEVICE,dtype=dtype)
++
++    def test_initialization_matches_parameter_convention(self):
++        for centered in (False,True):
++            norm=self.make(8,centered,False,torch.float32)
++            self.assertTrue(torch.equal(norm.weight.detach().cpu(),torch.full((8,),0. if centered else 1.)))
++
++    def test_forward_backward_against_fp64(self):
++        for centered in (False,True):
++            for fused in ((False,True) if DEVICE=='npu' else (False,)):
++                for dtype in (torch.float32,torch.bfloat16):
++                    for stored in (0.,.25):
++                        with self.subTest(centered=centered,fused=fused,dtype=str(dtype),stored=stored):
++                            norm=self.make(8,centered,fused,dtype)
++                            with torch.no_grad():norm.weight.fill_(stored)
++                            x=torch.linspace(-2,3,48).reshape(2,8,3).transpose(1,2).to(device=DEVICE,dtype=dtype).detach().requires_grad_()
++                            x64,w64,expected=oracle(x,norm.weight,centered,norm.eps)
++                            upstream=torch.linspace(.25,1.25,48).reshape(2,3,8).to(device=DEVICE,dtype=dtype)
++                            y=norm(x)
++                            (y*upstream).sum().backward()
++                            (expected*upstream.cpu().double()).sum().backward()
++                            tol=.02 if dtype==torch.bfloat16 else 3e-6
++                            for observed,wanted in ((y,expected),(x.grad,x64.grad),(norm.weight.grad,w64.grad)):
++                                torch.testing.assert_close(observed.detach().cpu().double(),wanted.detach(),atol=tol,rtol=tol)
++                            self.assertEqual(y.dtype,dtype)
++
++    def test_checkpoint_preserves_stored_gamma(self):
++        for centered in (False,True):
++            first=self.make(8,centered,False,torch.float32)
++            with torch.no_grad():first.weight.copy_(torch.linspace(-.5,.5,8,device=DEVICE))
++            data=io.BytesIO();torch.save(first.state_dict(),data);data.seek(0)
++            second=self.make(8,centered,False,torch.float32)
++            second.load_state_dict(torch.load(data,weights_only=True,map_location=DEVICE))
++            self.assertTrue(torch.equal(first.weight,second.weight))
++            x=torch.linspace(-2,3,16,device=DEVICE).reshape(2,8)
++            _,_,expected=oracle(x,first.weight,centered,first.eps)
++            torch.testing.assert_close(second(x).detach().cpu().double(),expected.detach(),atol=3e-6,rtol=3e-6)
++
++    @unittest.skipUnless(DEVICE=='cpu','CPU interception is separate from real NPU kernel tests')
++    def test_fused_call_receives_effective_weight(self):
++        norm=self.make(4,True,True,torch.float32)
++        with torch.no_grad():norm.weight.zero_()
++        x=torch.tensor([[1.,2.,3.,4.]])
++        seen=[]
++        def kernel(value,weight,epsilon):
++            seen.append(weight.detach().clone())
++            return value/torch.sqrt((value*value).mean(-1,keepdim=True)+epsilon)*weight,None
++        with patch.object(torch_npu,'npu_rms_norm',kernel):y=norm(x)
++        self.assertTrue(torch.equal(seen[0],torch.ones(4)))
++        _,_,expected=oracle(x,norm.weight,True,norm.eps)
++        torch.testing.assert_close(y.double(),expected,atol=3e-6,rtol=3e-6)
++
++
++if __name__=='__main__':unittest.main(verbosity=2)
