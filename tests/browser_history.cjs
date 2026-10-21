@@ -60,7 +60,7 @@ const repairs = require('../site/data/repairs.json');
       assert.equal(await card.locator('.comparison-title').innerText(), comparison.side_ids.map((id) => restoration.sides.find((s) => s.id === id).label).join(' ↔ '));
     }
     // Compare rendered charts with recorded values and independent linear geometry.
-    let chartComparisons = 0, chartMetrics = 0;
+    let chartComparisons = 0, chartMetrics = 0, drawnCharts = 0;
     for (const record of data.evaluations) {
       const current = page.locator('#evaluation-' + record.id);
       for (const comparison of record.comparisons) {
@@ -74,8 +74,8 @@ const repairs = require('../site/data/repairs.json');
               value: Number(bar.dataset.value), side: bar.dataset.sideId || null,
               left: parseFloat(bar.style.left), width: parseFloat(bar.style.width),
               zero: parseFloat(bar.parentElement.querySelector('.evaluation-zero').style.left) })),
-            labels: [...chart.querySelectorAll('.evaluation-bar-label')].map((label) => label.textContent),
-            values: [...chart.querySelectorAll('.evaluation-bar-value')].map((value) => value.textContent) };
+            labels: [...chart.querySelectorAll('.evaluation-bar-label,.evaluation-pair-label')].map((label) => label.textContent),
+            values: [...chart.querySelectorAll('.evaluation-bar-value,.evaluation-pair-value')].map((value) => value.textContent) };
         }));
         assert.equal(rendered.length, comparison.metrics.length);
         rendered.forEach((graphic, index) => {
@@ -83,22 +83,22 @@ const repairs = require('../site/data/repairs.json');
           const context = record.id + '/' + comparison.id + '/' + metric.id;
           assert.equal(graphic.id, metric.id, context);
           assert.equal(graphic.value, String(metric.value), context);
-          if (graphic.kind === 'none') {
+          const expected = metric.side_values ? comparison.side_ids.map((id) => metric.side_values[id]) : [];
+          const drawPair = expected.length === 2 && expected[0] !== expected[1];
+          assert.equal(graphic.kind, drawPair ? 'sides' : 'none', context);
+          if (metric.side_values) {
+            assert.deepEqual(graphic.values, expected.map(String), context);
+            assert.deepEqual(graphic.labels, comparison.side_ids.map((id) => record.sides.find((side) => side.id === id).label), context);
+          }
+          if (!drawPair) {
             assert.equal(graphic.bars.length, 0, context);
             assert.equal(graphic.domain, null, context);
             return;
           }
-          const expected = metric.side_values ? comparison.side_ids.map((id) => metric.side_values[id]) : [metric.value];
+          drawnCharts++;
           assert.deepEqual(graphic.bars.map((bar) => bar.value), expected, context);
-          assert.deepEqual(graphic.values, expected.map(String), context);
-          if (metric.side_values) {
-            assert.equal(graphic.kind, 'sides', context);
-            assert.deepEqual(graphic.bars.map((bar) => bar.side), comparison.side_ids, context);
-            assert.deepEqual(graphic.labels, comparison.side_ids.map((id) => record.sides.find((side) => side.id === id).label), context);
-            assert.deepEqual(graphic.domain, [Math.min(0, ...expected), Math.max(0, ...expected)], context);
-          }
-          if (graphic.kind === 'cosine') assert.deepEqual(graphic.domain, [-1, 1], context);
-          if (graphic.kind === 'fraction') assert.deepEqual(graphic.domain, [0, 1], context);
+          assert.deepEqual(graphic.bars.map((bar) => bar.side), comparison.side_ids, context);
+          assert.deepEqual(graphic.domain, [Math.min(0, ...expected), Math.max(0, ...expected)], context);
           const [minimum, maximum] = graphic.domain;
           const span = maximum - minimum;
           const zero = span ? -minimum / span * 100 : 0;
@@ -111,14 +111,62 @@ const repairs = require('../site/data/repairs.json');
             if (bar.value === 0) assert.equal(bar.width, 0, context);
           });
         });
-        const coverage = await current.locator('.evaluation-coverage-track').evaluateAll((tracks) => tracks.map((track) => ({
-          observed: Number(track.dataset.observed), expected: Number(track.dataset.expected),
-          width: parseFloat(track.querySelector('.evaluation-coverage-bar').style.width) })));
-        assert.deepEqual(coverage.map((row) => [row.observed, row.expected]), comparison.coverage.map((row) => [row.observed, row.expected]));
-        coverage.forEach((row) => assert.ok(Math.abs(row.width - row.observed / row.expected * 100) < 0.0001));
+        const coverage = await current.locator('.evaluation-coverage-heading strong').allTextContents();
+        assert.deepEqual(coverage, comparison.coverage.map((row) => `${row.observed} / ${row.expected} ${row.unit}`));
+        assert.equal(await current.locator('.evaluation-coverage-track').count(), 0);
         chartComparisons++;
         chartMetrics += rendered.length;
       }
+    }
+    // Reproduce the reported long JSON/forward-shape display and verify literal text safety.
+    const readingRecord = data.evaluations.find((record) => record.id === 'llamacpp-local-qwen2-5-0-5b-instruct-20261019');
+    const reading = page.locator('#evaluation-' + readingRecord.id);
+    await reading.locator('.details > summary').click();
+    const firstConfiguration = reading.locator('.evaluation-configuration-side').first();
+    assert.equal(await firstConfiguration.evaluate((element) => element.open), true);
+    const settings = firstConfiguration.locator('.evaluation-settings');
+    const readableText = await settings.textContent();
+    assert.equal(readableText.includes('recorded_conditions'), false);
+    assert.equal(readableText.includes('"model":'), false);
+    assert.equal(readableText.includes('one6-token'), false);
+    assert.ok(readableText.includes('1 次 6 token 预填充，随后 2 次单 token 缓存解码'));
+    assert.ok(readableText.includes(readingRecord.model.name));
+    const prompt = readingRecord.sides[0].settings.recorded_conditions.inputs.prompt;
+    assert.ok((await settings.locator('.evaluation-setting-row[data-setting-key="prompt"]').innerText()).includes('[' + prompt.join(', ') + ']'));
+    const revision = settings.locator('.evaluation-setting-row[data-setting-key="revision"] details').first();
+    assert.equal(await revision.evaluate((element) => element.open), false);
+    const literalSafety = await page.evaluate(() => {
+      const node = (tag, className, text) => {
+        const element = document.createElement(tag); element.className = className || '';
+        if (text !== undefined) element.textContent = String(text);
+        return element;
+      };
+      const hostile = '<img src=x onerror="window.precisionUnsafeMarkup=true">';
+      const config = {recorded_conditions: {model: {name: hostile},
+        inputs: {prompt: [1, 2, 3], long_prompt: Array.from({length: 30}, (_, i) => i)},
+        numerics: {zero: 0, flag: false, missing: null, empty: ''}}};
+      const before = JSON.stringify(config);
+      const host = PrecisionEvaluationSettings.renderSettings(config, {node});
+      document.body.append(host);
+      const values = {};
+      host.querySelectorAll('.evaluation-setting-row').forEach((row) => {
+        values[row.dataset.settingKey] = row.querySelector('dd').textContent;
+      });
+      const result = {literal: host.textContent.includes(hostile), images: host.querySelectorAll('img').length,
+        executed: Boolean(window.precisionUnsafeMarkup), unchanged: before === JSON.stringify(config), values,
+        longArrayCollapsed: host.querySelector('[data-setting-key="long_prompt"] details').open === false};
+      host.remove();
+      return result;
+    });
+    assert.equal(literalSafety.literal, true);
+    assert.equal(literalSafety.images, 0);
+    assert.equal(literalSafety.executed, false);
+    assert.equal(literalSafety.unchanged, true);
+    assert.equal(literalSafety.longArrayCollapsed, true);
+    assert.equal(literalSafety.values.zero, '0');
+    assert.equal(new Set(['zero', 'flag', 'missing', 'empty'].map((key) => literalSafety.values[key])).size, 4);
+    if (process.env.PRECISION_CONFIG_SCREENSHOT) {
+      await firstConfiguration.screenshot({path: process.env.PRECISION_CONFIG_SCREENSHOT});
     }
     const downloadEvent = page.waitForEvent('download');
     await page.locator('#download').click();
@@ -127,7 +175,7 @@ const repairs = require('../site/data/repairs.json');
     assert.deepEqual(JSON.parse(await readFile(await download.path(), 'utf8')), data);
     await page.goto(url + '#evaluation-' + restoration.id, { waitUntil: 'networkidle' });
     await page.waitForSelector('.evaluation-card');
-    assert.equal(await page.locator('#evaluation-' + restoration.id + ' details').evaluate((e) => e.open), true);
+    assert.equal(await page.locator('#evaluation-' + restoration.id + ' .details').evaluate((e) => e.open), true);
     await page.locator('#tab-repairs').click();
     await page.waitForSelector('.verification-card');
     await page.goBack({ waitUntil: 'networkidle' });
@@ -155,6 +203,7 @@ const repairs = require('../site/data/repairs.json');
     await page.screenshot({ path: process.env.PRECISION_DESKTOP_SCREENSHOT || '/tmp/precision-evaluations-desktop.png' });
     for (const width of [375, 768]) {
       await page.setViewportSize({ width, height: 950 });
+      await page.locator('#evaluation-' + readingRecord.id + ' .details').first().evaluate((element) => { element.open = true; });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `Overflow at ${width}px`);
     }
     await page.setViewportSize({ width: 375, height: 950 });
@@ -176,7 +225,7 @@ const repairs = require('../site/data/repairs.json');
     assert.equal(await page.locator('.verification-card').count(), repairs.repairs.length);
     assert.deepEqual(errors, []);
     console.log(JSON.stringify({ status: 'passed', evaluations: data.evaluations.length, repairRecords: repairs.repairs.length,
-      chartComparisons, chartMetrics,
+      chartComparisons, chartMetrics, drawnCharts,
       checks: ['tabs', 'task/library/hardware filters', 'all comparison values', 'zero and tiny values', 'JSON download',
         'permalinks', 'back navigation', 'keyboard', 'load failure/retry', 'abandoned requests', 'mobile layout'] }));
   } finally {

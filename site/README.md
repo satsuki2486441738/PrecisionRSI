@@ -12,17 +12,20 @@ Append concise public evidence under `evidence/` and keep native arrays/checkpoi
 
 Links use `#evaluations` and `#evaluation-<id>`. Existing repair/fix links still select the Repairs tab. Both tabs support keyword, library, model and hardware filters; evaluations also support task filtering and comparison selection. JSON downloads contain the selected archive.
 
-Evaluation charts use the Repair tab's gray/green palette. Paired bars show the
-actual declared sides and a shared linear domain including zero; they are not
-before/after repairs. Signed values retain their signs. Error-magnitude bars share a scale
-only within the selected comparison, metric family and unit. JS divergence is
-scaled separately from target-score errors. Cosine and agreement charts use
-their mathematical domains; unrecognized metrics retain their numerical values
-without an invented range. Coverage bars show collected/paired observations,
-not numerical acceptance. Always retain exact numerical labels and scale notes;
-colors and bar lengths do not imply a pass or a model ranking. Existing evidence
-can be reused when its pinned hashes match; the branch import Guide records the
-available archives and replay limits.
+Evaluation charts use the Repair tab's gray/green palette. Only two recorded,
+unequal side values receive bars, with the actual side labels and a common
+linear domain including zero. Negative values retain their signs; no relative
+cutoff hides small differences. Equal pairs, scalar errors, cosine/JS summaries
+and coverage counts remain numerical, without decorative bars. Keep exact labels;
+colors and bar lengths do not imply acceptance. Existing evidence can be reused
+when its pinned hashes match.
+
+Display nested settings as labelled fields and groups rather than serialized
+JSON. The recorded-conditions wrapper is expanded into model, inputs, numerics,
+execution and scope. Put long arrays and revision/hash details behind disclosures,
+retain empty/false/zero/unknown states, and keep original values in the JSON
+download. Human-readable execution descriptions must preserve the recorded
+meaning. Render all supplied text as text, never HTML.
 
 ## Record a repair
 
@@ -39,6 +42,6 @@ Run `python3 -B .github/validate_history.py` and `python3 -B -m unittest discove
 The Pages workflow validates both data files, uploads only `site/` and deploys on changes to `main`.
 
 With Node.js available, run `python3 -B -m unittest discover -s tests -p 'test_evaluation_charts.py' -v`
-for signed, zero, extreme-value and metric-domain geometry checks. The browser
+for signed, zero, extreme-value and selective-chart geometry checks. The browser
 regression checks every recorded comparison's chart values, side labels,
 coverage and linear geometry against the archived measurements.

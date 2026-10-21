@@ -105,18 +105,24 @@ zero. Negative values retain their signs. The central comparison result remains
 separate from the two side values: for example, a difference between side L2
 norms is not the L2 norm of the elementwise difference.
 
-Nonnegative error summaries share a linear scale only with the same unit in the
-selected comparison. JS divergence uses its own group, separate from logprob
-errors even when both are recorded in nats. Cosine charts use [-1, 1], and agreement/overlap charts use
-[0, 1]. An unrecognized or out-of-range metric remains numerical rather than
-receiving a guessed domain. Exact labels remain available even when a tiny
-value has no visible bar width. All-zero data is not given an artificial
-nonzero magnitude. Coverage bars represent observed/expected collection counts.
-Neither colors, display scales nor full coverage establish numerical acceptance.
+Following the readability review, bars are reserved for unequal recorded side
+values. Scalar MAE/P99/maximum errors, cosine, JS divergence and coverage counts
+are shown as exact numbers. Equal pairs retain both side values without two
+identical bars. The current archive therefore has 248 paired charts rather than
+1,324 metric charts plus 261 coverage bars. No numerical threshold is introduced
+to hide small differences. Neither bar lengths nor full collection coverage
+establish numerical acceptance.
 
-Charts refresh when the comparison selection changes. The update preserves the
-evaluation data, original reports, archive hashes and acceptance decisions.
-Browser verification covered all 119 selectable comparisons and 1,326 metrics,
-including displayed values, side ordering, linear geometry, coverage and mobile
-overflow. Geometry regressions additionally cover negative values, zero-only
-domains, extreme finite numbers, tiny values and separation of JS/error scales.
+Nested settings are presented as model, input, numerical-precision, execution
+and scope groups. Long arrays and revision/hash details can be expanded when
+needed. The recorded-conditions wrapper no longer appears as a serialized JSON
+paragraph. The recorded phrase `one6-token prefill plus two single-token cached
+decode calls` is displayed as one 6-token prefill followed by two single-token
+cached decode calls. The original data and downloadable JSON remain intact.
+
+Charts refresh when the comparison selection changes. Verification covers all
+119 selectable comparisons and 1,326 metrics, including numerical text, side
+ordering, linear geometry, coverage counts and mobile overflow. Geometry tests
+cover signed values, extremes, tiny differences, scalar-only and equal-pair
+suppression. Configuration rendering checks cover grouping, long values and
+literal text safety.

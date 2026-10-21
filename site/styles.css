@@ -55,7 +55,7 @@
 .evaluation-card .evaluation-value{font:15px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;margin:5px 0 0;overflow-wrap:anywhere;color:var(--ink)}
 .evaluation-card .metric-unit{display:block;font:10px/1.7 Inter,system-ui,sans-serif;color:var(--muted)}
 .evaluation-card .evaluation-chart{margin:12px 0 0;min-width:0}
-.evaluation-card .side-values,.evaluation-card .evaluation-scalar-values{list-style:none;padding:0;margin:0;font-size:10px;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}
+.evaluation-card .side-values{list-style:none;padding:0;margin:0;font-size:10px;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}
 .evaluation-card .evaluation-bar-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px 10px;align-items:baseline;margin:10px 0 0}
 .evaluation-card .evaluation-bar-row:first-child{margin-top:0}
 .evaluation-card .evaluation-bar-label{min-width:0;overflow-wrap:anywhere}
@@ -74,10 +74,37 @@
 .evaluation-card .evaluation-coverage .coverage{display:block;min-width:0;margin:0}
 .evaluation-card .evaluation-coverage-heading{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;overflow-wrap:anywhere}
 .evaluation-card .evaluation-coverage-heading strong{color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.evaluation-card .evaluation-coverage-track{height:5px;margin-top:7px;background:var(--track,#e6ecef)}
-.evaluation-card .evaluation-coverage-bar{display:block;height:100%;background:var(--before)}
-.evaluation-card .evaluation-coverage-note{display:block;font-size:9px;line-height:1.7;margin-top:4px;color:var(--muted)}
 .evaluation-card .side-heading{font-weight:650;color:var(--ink);margin-top:16px}
 .evaluation-card code{font-size:10px;overflow-wrap:anywhere}
+.evaluation-card .evaluation-chart:empty{display:none}
+.evaluation-card .evaluation-pair-values{list-style:none;padding:0;margin:0;font-size:10px;line-height:1.8;color:var(--muted)}
+.evaluation-card .evaluation-pair-values li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 12px;margin:6px 0 0;align-items:baseline}
+.evaluation-card .evaluation-pair-label{min-width:0;overflow-wrap:anywhere}
+.evaluation-card .evaluation-pair-value{min-width:0;text-align:right;color:var(--ink);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}
+.evaluation-card .evaluation-configuration-side{margin-top:12px;border:1px solid var(--line);border-radius:7px;padding:0 12px;min-width:0}
+.evaluation-card .evaluation-configuration-side>summary.side-heading{font-size:11px;line-height:1.8;font-weight:600;color:var(--ink);padding:10px 0;margin:0;cursor:pointer;overflow-wrap:anywhere}
+.evaluation-card .evaluation-configuration-side[open]>summary.side-heading{border-bottom:1px solid var(--line);margin-bottom:10px}
+.evaluation-card .evaluation-configuration-side>.evaluation-settings{padding-bottom:10px}
+.evaluation-card .evaluation-settings{min-width:0;color:var(--ink);font-size:11px;line-height:1.9}
+.evaluation-card .evaluation-settings .evaluation-setting-fields{margin:0;min-width:0}
+.evaluation-card .evaluation-settings .evaluation-setting-row{display:grid;grid-template-columns:minmax(88px,.85fr) minmax(0,1.6fr);gap:6px 12px;padding:6px 0;min-width:0}
+.evaluation-card .evaluation-settings .evaluation-setting-row+.evaluation-setting-row{border-top:1px solid #edf1f3}
+.evaluation-card .evaluation-settings .evaluation-setting-row>dt{margin:0;color:var(--muted);font-weight:400;min-width:0;overflow-wrap:anywhere}
+.evaluation-card .evaluation-settings .evaluation-setting-value{margin:0;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.evaluation-card .evaluation-settings .evaluation-settings-group{margin:9px 0 0;border-top:1px solid var(--line);min-width:0}
+.evaluation-card .evaluation-settings .evaluation-settings-group>summary{padding:9px 0;margin:0;color:var(--accent);font-size:11px;font-weight:600;line-height:1.8;cursor:pointer;overflow-wrap:anywhere}
+.evaluation-card .evaluation-settings .evaluation-settings-group-body{padding:0 0 5px 12px;border-left:2px solid #e8eef0;min-width:0}
+.evaluation-card .evaluation-settings .evaluation-setting-value-details{min-width:0}
+.evaluation-card .evaluation-settings .evaluation-setting-value-details>summary{padding:0;margin:0;color:var(--muted);font-size:10px;font-weight:400;line-height:1.9;cursor:pointer;overflow-wrap:anywhere}
+.evaluation-card .evaluation-settings .evaluation-setting-value-details[open]>summary{margin-bottom:5px}
+.evaluation-card .evaluation-settings .evaluation-setting-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.evaluation-card .evaluation-settings .evaluation-setting-array,.evaluation-card .evaluation-settings .evaluation-setting-code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;line-height:1.9;overflow-wrap:anywhere;white-space:pre-wrap}
+.evaluation-card .evaluation-settings .evaluation-setting-code{display:block;background:#f7f9fa;border-radius:4px;padding:6px 8px}
+.evaluation-card .evaluation-settings .evaluation-setting-count{display:block;font-size:10px;color:var(--muted);margin-top:1px}
+.evaluation-card .evaluation-settings .evaluation-setting-items{margin:4px 0 0;padding-left:20px;min-width:0}
+.evaluation-card .evaluation-settings .evaluation-setting-items>li{padding:3px 0;min-width:0}
+.evaluation-card .evaluation-settings-compact{margin:5px 0 12px}
+.evaluation-card .evaluation-settings-compact .evaluation-setting-row{padding-block:3px}
+.evaluation-card .evaluation-settings-compact .evaluation-setting-row>dt{font-size:10px}
 @media(max-width:850px){.evaluation-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.history-tabs{gap:0;padding-top:18px}.history-tabs button{padding:13px 12px;gap:6px;font-size:12px}.history-tabs button span{font-size:7px;letter-spacing:.5px}.evaluation-card .card-body{margin:0 18px 18px}.evaluation-card .comparison-picker{display:block}.evaluation-card .comparison-picker label{display:block;margin-bottom:8px}.evaluation-card .comparison-picker select{width:100%;font-size:11px}.evaluation-card .evaluation-value{font-size:13px}.evaluation-card .evaluation-date{width:100%;margin-left:0}.evaluation-card .evaluation-metrics{padding:13px}.evaluation-card .evaluation-metric-grid,.evaluation-card .evaluation-coverage{grid-template-columns:1fr}.evaluation-card .evaluation-metric{padding-block:16px}.evaluation-card .evaluation-axis{font-size:9px}}
