@@ -4,6 +4,8 @@ const $ = (id) => document.getElementById(id);
 const controls = ['search', 'library', 'model', 'hardware'];
 let archive = null;
 let repairs = [];
+let catalog = [];
+const historyAPI = globalThis.PrecisionHistory;
 
 function node(tag, className, text) {
   const element = document.createElement(tag);
@@ -36,7 +38,7 @@ function paragraph(parent, label, value) {
 }
 function section(title) {
   const element = node('section', 'detail-section');
-  element.append(node('h4', '', title));
+  element.append(node('h6', '', title));
   return element;
 }
 function bulletList(parent, values) {
@@ -72,8 +74,22 @@ function metricGraphic(metric) {
   });
   return item;
 }
+function renderDiagnosis(record) {
+  const diagnosis = node('div', 'diagnosis');
+  [['根因 / CAUSE', record.cause?.summary], ['修复 / REPAIR', record.repair?.summary]].forEach(([label, summary]) => {
+    const block = node('div');
+    block.append(node('span', 'small-label', label), node('p', '', text(summary)));
+    diagnosis.append(block);
+  });
+  return diagnosis;
+}
+function openAncestors(element) {
+  for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+    if (parent.tagName === 'DETAILS') parent.open = true;
+  }
+}
 function renderCard(record) {
-  const card = node('article', 'repair-card');
+  const card = node('article', 'repair-card verification-card');
   card.id = `repair-${record.id}`;
   const header = node('div', 'card-header');
   const rail = node('div', 'date-rail');
@@ -88,24 +104,18 @@ function renderCard(record) {
   const link = node('a', 'permalink', '条目链接 ↗');
   link.href = `#${encodeURIComponent(card.id)}`;
   link.setAttribute('aria-label', `链接至：${text(record.title)}`);
-  link.addEventListener('click', () => { card.querySelector('details').open = true; });
+  link.addEventListener('click', () => { openAncestors(card); card.querySelector('details').open = true; });
   const mobileDate = node('time', 'mobile-date', text(record.date));
   if (/^\d{4}-\d{2}-\d{2}$/.test(record.date)) mobileDate.dateTime = record.date;
   top.append(link, mobileDate);
-  const title = node('h3', '', text(record.title));
+  const title = node('h5', '', text(record.verification_title, text(record.title)));
   heading.append(top, title, node('p', 'card-summary', text(record.problem?.summary)));
   const tags = node('div', 'tags');
-  [record.model?.name, record.environment?.hardware, ...libraries(record).map(libraryLabel)].filter(Boolean).forEach((tag) => tags.append(node('span', '', tag)));
+  [record.model?.name, record.environment?.hardware].filter(Boolean).forEach((tag) => tags.append(node('span', '', tag)));
   heading.append(tags);
   header.append(rail, heading);
   const body = node('div', 'card-body');
-  const diagnosis = node('div', 'diagnosis');
-  [['根因 / CAUSE', record.cause?.summary], ['修复 / REPAIR', record.repair?.summary]].forEach(([label, summary]) => {
-    const block = node('div');
-    block.append(node('span', 'small-label', label), node('p', '', text(summary)));
-    diagnosis.append(block);
-  });
-  body.append(diagnosis);
+
   const metrics = list(record.validation?.metrics);
   const panel = node('section', 'metric-panel');
   const panelHeading = node('div', 'metric-heading');
@@ -148,11 +158,11 @@ function renderCard(record) {
     stageList.append(li);
   });
   stages.append(stageList.childElementCount ? stageList : node('p', '', '未记录阶段。'));
-  const validation = section('04 / 验证边界与证据');
+  const validation = section('04 / 验证范围与证据');
   paragraph(validation, '范围', record.validation?.scope);
   bulletList(validation, record.validation?.checks);
   if (list(record.validation?.remaining).length) {
-    paragraph(validation, '仍待确认', '以下事项不包含在已完成验证中');
+    validation.append(node('p', '', '待定位与后续验证'));
     bulletList(validation, record.validation.remaining);
   }
   const evidence = node('ul');
@@ -180,6 +190,35 @@ function renderCard(record) {
   card.append(header, body);
   return card;
 }
+function renderLibraryGroup(group, groupIndex) {
+  const section = node('section', 'library-group');
+  section.id = `library-${group.id}`;
+  const header = node('div', 'library-group-header');
+  const label = node('div');
+  label.append(node('p', 'eyebrow', 'LIBRARY GROUP'), node('h3', '', group.title));
+  if (group.description) label.append(node('p', 'group-description', group.description));
+  const totals = historyAPI.counts([group]);
+  header.append(label, node('span', 'group-count', `${totals.fixes} 项修复 · ${totals.verifications} 轮验证`));
+  section.append(header);
+  group.fixes.forEach((fix, index) => {
+    const item = node('details', 'repair-item');
+    item.id = `fix-${fix.root.id}`;
+    item.open = groupIndex === 0 && index === 0;
+    const summary = node('summary', 'issue-summary');
+    const title = node('div', 'issue-title');
+    title.append(node('h4', '', fix.root.title));
+    const metadata = [fix.root.affected_library ? `缺陷所在：${fix.root.affected_library}` : '', `${fix.records.length} 轮验证`].filter(Boolean);
+    title.append(node('span', '', metadata.join(' · ')));
+    summary.append(title);
+    item.append(summary);
+    const content = node('div', 'issue-content');
+    content.append(renderDiagnosis(fix.root), node('h4', 'verification-heading', '验证历史'));
+    fix.records.forEach((record) => content.append(renderCard(record)));
+    item.append(content);
+    section.append(item);
+  });
+  return section;
+}
 function showState(title, description, retry = false) {
   const state = $('state');
   state.replaceChildren(node('h3', '', title), node('p', '', description));
@@ -192,17 +231,14 @@ function showState(title, description, retry = false) {
   }
 }
 function render() {
-  const query = $('search').value.trim().toLocaleLowerCase();
-  const filtered = repairs.filter((record) =>
-    (!query || JSON.stringify(record).toLocaleLowerCase().includes(query)) &&
-    (!$('library').value || libraries(record).some((lib) => lib.name === $('library').value)) &&
-    (!$('model').value || record.model?.name === $('model').value) &&
-    (!$('hardware').value || record.environment?.hardware === $('hardware').value));
-  $('history').replaceChildren(...filtered.map(renderCard));
-  $('result-count').textContent = `显示 ${filtered.length} / ${repairs.length} 条修复记录 · 按日期倒序`;
+  const filtered = historyAPI.filterCatalog(catalog, { query: $('search').value,
+    library: $('library').value, model: $('model').value, hardware: $('hardware').value });
+  $('history').replaceChildren(...filtered.map(renderLibraryGroup));
+  const shown = historyAPI.counts(filtered), total = historyAPI.counts(catalog);
+  $('result-count').textContent = `显示 ${shown.groups} 个库分组 · ${shown.fixes} / ${total.fixes} 项修复 · ${shown.verifications} / ${total.verifications} 轮验证`;
   $('reset').hidden = !controls.some((id) => $(id).value);
   if (filtered.length) $('state').hidden = true;
-  else showState(repairs.length ? '没有匹配的修复记录' : '档案尚无修复记录', repairs.length ? '尝试其他关键词，或清除筛选以查看全部记录。' : '首条修复记录发布后，将在这里展示诊断与验证证据。');
+  else showState(repairs.length ? '没有匹配的修复' : '档案尚无修复记录', repairs.length ? '尝试其他关键词，或清除筛选以查看全部记录。' : '首条修复记录发布后，将在这里展示诊断与验证证据。');
 }
 function resetFilters() {
   $('filters').reset();
@@ -212,11 +248,14 @@ function followHash() {
   if (!archive || !location.hash) return;
   let id;
   try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-  if (!repairs.some((record) => `repair-${record.id}` === id)) return;
+  const known = repairs.some((record) => `repair-${record.id}` === id) || catalog.some((group) => group.fixes.some((fix) => `fix-${fix.root.id}` === id));
+  if (!known) return;
   if (!document.getElementById(id)) resetFilters();
   const card = document.getElementById(id);
   if (card) {
-    card.querySelector('details').open = true;
+    openAncestors(card);
+    if (card.tagName === 'DETAILS') card.open = true;
+    else if (card.querySelector('details')) card.querySelector('details').open = true;
     card.scrollIntoView({ block: 'start' });
   }
 }
@@ -236,13 +275,15 @@ async function load() {
       if (!record || typeof record.id !== 'string' || !record.id.trim() || ids.has(record.id)) throw new Error('id');
       ids.add(record.id);
     }
+    catalog = historyAPI.buildCatalog(data);
     archive = data;
     repairs = [...data.repairs].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-    $('total-count').textContent = repairs.length;
-    $('validated-count').textContent = repairs.filter((record) => record.status === 'validated').length;
-    $('library-count').textContent = new Set(repairs.flatMap((record) => libraries(record).map((lib) => lib.name)).filter(Boolean)).size;
+    const totals = historyAPI.counts(catalog);
+    $('total-count').textContent = totals.fixes;
+    $('verification-count').textContent = totals.verifications;
+    $('group-count').textContent = totals.groups;
     $('updated-at').textContent = text(data.updated_at, '未记录');
-    [['library', repairs.flatMap((record) => libraries(record).map((lib) => lib.name))], ['model', repairs.map((record) => record.model?.name)], ['hardware', repairs.map((record) => record.environment?.hardware)]].forEach(([id, values]) => {
+    [['library', catalog.flatMap((group) => group.components)], ['model', repairs.map((record) => record.model?.name)], ['hardware', repairs.map((record) => record.environment?.hardware)]].forEach(([id, values]) => {
       const select = $(id);
       select.replaceChildren(select.options[0]);
       [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b)).forEach((value) => {
@@ -257,8 +298,9 @@ async function load() {
   } catch {
     archive = null;
     repairs = [];
+    catalog = [];
     $('history').replaceChildren();
-    ['total-count', 'validated-count', 'library-count', 'updated-at'].forEach((id) => { $(id).textContent = '—'; });
+    ['total-count', 'verification-count', 'group-count', 'updated-at'].forEach((id) => { $(id).textContent = '—'; });
     $('result-count').textContent = '档案暂时不可用';
     showState('暂时无法加载修复档案', '数据可能尚未发布，或网络暂时不可用。请稍后重试。', true);
   } finally { clearTimeout(timeout); }

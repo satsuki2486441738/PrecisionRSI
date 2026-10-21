@@ -58,9 +58,38 @@ def validate(site):
                 target = (site / url.path).resolve()
                 if url.netloc or not target.is_relative_to(site.resolve()) or not target.is_file():
                     raise ValueError(f'{identity}: missing or escaped evidence')
+    groups = {}
+    for group in data.get('library_groups', []):
+        identity = group['id']
+        if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', identity) or identity in groups:
+            raise ValueError('Library group IDs must be unique stable slugs')
+        components = group['components']
+        if (not group['title'] or not isinstance(components, list) or not components
+                or any(not isinstance(name, str) or not name.strip() for name in components)
+                or len(set(components)) != len(components)):
+            raise ValueError('Library groups need a title and distinct component names')
+        groups[identity] = group
+    records = {record['id']: record for record in data['repairs']}
+    for record in records.values():
+        root, seen = record, set()
+        while root.get('related_repair_id') is not None:
+            if root['id'] in seen:
+                raise ValueError('Cyclic repair relationship')
+            seen.add(root['id'])
+            parent = root['related_repair_id']
+            if not isinstance(parent, str) or parent not in records:
+                raise ValueError('Missing parent repair')
+            root = records[parent]
+        group = groups.get(root.get('library_group_id'))
+        if group is None:
+            raise ValueError('Independent fixes require a declared library group')
+        if record.get('library_group_id', group['id']) != group['id']:
+            raise ValueError('Follow-up library group differs from its repair')
+        if root.get('affected_library') and root['affected_library'] not in group['components']:
+            raise ValueError('Affected library must belong to the declared group')
     return len(ids)
 
 
 if __name__ == '__main__':
     count = validate(Path(__file__).resolve().parents[1] / 'site')
-    print(f'Validated {count} repair history entries and evidence links.')
+    print(f'Validated {count} verification records, library groups and evidence links.')

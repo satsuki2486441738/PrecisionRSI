@@ -147,7 +147,8 @@
         "NPU 累计 462.396 / 600 秒；比较复用已有 GPU 证据。",
         "聚合按 TP rank 视图计数，未去重为整模型逻辑参数指标。"
       ],
-      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma"
+      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "verification_title": "整模型反向与首次更新验证"
     },
     {
       "id": "mindspeed-rmsnorm-zero-centered-gamma",
@@ -287,7 +288,21 @@
       ],
       "notes": [
         "固定两条 completion、32 个 action；验证完成与用户精度验收分别记录。"
-      ]
+      ],
+      "library_group_id": "megatron-bridge-mindspeed",
+      "affected_library": "MindSpeed",
+      "verification_title": "前向评分验证"
+    }
+  ],
+  "library_groups": [
+    {
+      "id": "megatron-bridge-mindspeed",
+      "title": "Megatron Bridge ↔ MindSpeed",
+      "components": [
+        "Megatron Bridge",
+        "MindSpeed"
+      ],
+      "description": "Megatron Bridge 定义参数表示；MindSpeed RMSNorm 执行相应的归一化计算。"
     }
   ]
 }
