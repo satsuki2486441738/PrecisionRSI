@@ -74,7 +74,7 @@ the elementwise difference; these quantities must not be confused.
 
 ## Verification and reuse
 
-The import changes only evaluation data and concise public evidence. Large
+The data import itself changes only evaluation data and concise public evidence. Large
 arrays, checkpoints and existing archives retain their original locations and
 bytes. Use each record's pinned evidence links and archive prefix to find the
 specific manifests, reports, source versions and replay instructions. The later
@@ -86,3 +86,37 @@ Before publishing, validate both histories with
 checks, and exercise both tabs, filters, comparison selection, deep links and
 JSON download with the existing browser regression. Preserve the original
 Repair data and site presentation files during this data import.
+
+## Evaluation charts (2026-10-22)
+
+The subsequent chart update reuses the retained evidence. All 55 pinned source
+files were checked against their Git blob identities, byte counts and SHA256
+hashes. The 39 ZIP files contain 4,707 members whose CRC checks passed. These
+records were already present locally, so no duplicate download or native model
+execution was needed.
+An additional semantic audit compared 157 metrics and their side values across
+six experiments and 17 comparison scopes with the corresponding ZIP reports;
+all values matched exactly.
+
+The Evaluation tab uses the same gray/green bars, backgrounds, borders and
+typography as Repair. Where both side values were recorded, the chart labels
+the actual compared configurations and uses a common linear domain including
+zero. Negative values retain their signs. The central comparison result remains
+separate from the two side values: for example, a difference between side L2
+norms is not the L2 norm of the elementwise difference.
+
+Nonnegative error summaries share a linear scale only with the same unit in the
+selected comparison. JS divergence uses its own group, separate from logprob
+errors even when both are recorded in nats. Cosine charts use [-1, 1], and agreement/overlap charts use
+[0, 1]. An unrecognized or out-of-range metric remains numerical rather than
+receiving a guessed domain. Exact labels remain available even when a tiny
+value has no visible bar width. All-zero data is not given an artificial
+nonzero magnitude. Coverage bars represent observed/expected collection counts.
+Neither colors, display scales nor full coverage establish numerical acceptance.
+
+Charts refresh when the comparison selection changes. The update preserves the
+evaluation data, original reports, archive hashes and acceptance decisions.
+Browser verification covered all 119 selectable comparisons and 1,326 metrics,
+including displayed values, side ordering, linear geometry, coverage and mobile
+overflow. Geometry regressions additionally cover negative values, zero-only
+domains, extreme finite numbers, tiny values and separation of JS/error scales.

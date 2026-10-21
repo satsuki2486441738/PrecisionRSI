@@ -59,6 +59,67 @@ const repairs = require('../site/data/repairs.json');
       assert.deepEqual(values, comparison.metrics.map((metric) => String(metric.value)));
       assert.equal(await card.locator('.comparison-title').innerText(), comparison.side_ids.map((id) => restoration.sides.find((s) => s.id === id).label).join(' ↔ '));
     }
+    // Compare rendered charts with recorded values and independent linear geometry.
+    let chartComparisons = 0, chartMetrics = 0;
+    for (const record of data.evaluations) {
+      const current = page.locator('#evaluation-' + record.id);
+      for (const comparison of record.comparisons) {
+        await current.locator('.comparison-picker select').selectOption(comparison.id);
+        const rendered = await current.locator('.evaluation-metric').evaluateAll((items) => items.map((item) => {
+          const chart = item.querySelector('.evaluation-chart');
+          return { id: item.dataset.metricId, value: item.querySelector('.evaluation-value').firstChild.textContent,
+            kind: chart.dataset.kind,
+            domain: chart.hasAttribute('data-domain-min') ? [Number(chart.dataset.domainMin), Number(chart.dataset.domainMax)] : null,
+            bars: [...chart.querySelectorAll('.evaluation-bar')].map((bar) => ({
+              value: Number(bar.dataset.value), side: bar.dataset.sideId || null,
+              left: parseFloat(bar.style.left), width: parseFloat(bar.style.width),
+              zero: parseFloat(bar.parentElement.querySelector('.evaluation-zero').style.left) })),
+            labels: [...chart.querySelectorAll('.evaluation-bar-label')].map((label) => label.textContent),
+            values: [...chart.querySelectorAll('.evaluation-bar-value')].map((value) => value.textContent) };
+        }));
+        assert.equal(rendered.length, comparison.metrics.length);
+        rendered.forEach((graphic, index) => {
+          const metric = comparison.metrics[index];
+          const context = record.id + '/' + comparison.id + '/' + metric.id;
+          assert.equal(graphic.id, metric.id, context);
+          assert.equal(graphic.value, String(metric.value), context);
+          if (graphic.kind === 'none') {
+            assert.equal(graphic.bars.length, 0, context);
+            assert.equal(graphic.domain, null, context);
+            return;
+          }
+          const expected = metric.side_values ? comparison.side_ids.map((id) => metric.side_values[id]) : [metric.value];
+          assert.deepEqual(graphic.bars.map((bar) => bar.value), expected, context);
+          assert.deepEqual(graphic.values, expected.map(String), context);
+          if (metric.side_values) {
+            assert.equal(graphic.kind, 'sides', context);
+            assert.deepEqual(graphic.bars.map((bar) => bar.side), comparison.side_ids, context);
+            assert.deepEqual(graphic.labels, comparison.side_ids.map((id) => record.sides.find((side) => side.id === id).label), context);
+            assert.deepEqual(graphic.domain, [Math.min(0, ...expected), Math.max(0, ...expected)], context);
+          }
+          if (graphic.kind === 'cosine') assert.deepEqual(graphic.domain, [-1, 1], context);
+          if (graphic.kind === 'fraction') assert.deepEqual(graphic.domain, [0, 1], context);
+          const [minimum, maximum] = graphic.domain;
+          const span = maximum - minimum;
+          const zero = span ? -minimum / span * 100 : 0;
+          graphic.bars.forEach((bar) => {
+            const end = span ? (bar.value - minimum) / span * 100 : 0;
+            assert.ok([bar.left, bar.width, bar.zero].every(Number.isFinite), context);
+            assert.ok(Math.abs(bar.zero - zero) < 0.0001, context);
+            assert.ok(Math.abs(bar.left - Math.min(zero, end)) < 0.0001, context);
+            assert.ok(Math.abs(bar.width - Math.abs(end - zero)) < 0.0001, context);
+            if (bar.value === 0) assert.equal(bar.width, 0, context);
+          });
+        });
+        const coverage = await current.locator('.evaluation-coverage-track').evaluateAll((tracks) => tracks.map((track) => ({
+          observed: Number(track.dataset.observed), expected: Number(track.dataset.expected),
+          width: parseFloat(track.querySelector('.evaluation-coverage-bar').style.width) })));
+        assert.deepEqual(coverage.map((row) => [row.observed, row.expected]), comparison.coverage.map((row) => [row.observed, row.expected]));
+        coverage.forEach((row) => assert.ok(Math.abs(row.width - row.observed / row.expected * 100) < 0.0001));
+        chartComparisons++;
+        chartMetrics += rendered.length;
+      }
+    }
     const downloadEvent = page.waitForEvent('download');
     await page.locator('#download').click();
     const download = await downloadEvent;
@@ -86,13 +147,18 @@ const repairs = require('../site/data/repairs.json');
     await page.unroute('**/data/evaluations.json');
     await page.getByRole('button', { name: '重新加载' }).click();
     await page.waitForSelector('.evaluation-card');
-    await page.screenshot({ path: process.env.PRECISION_DESKTOP_SCREENSHOT || '/tmp/precision-evaluations-desktop.png', fullPage: true });
+    if (process.env.PRECISION_CHART_SCREENSHOT) {
+      const illustration = page.locator('#evaluation-tensorrt-llm-qwen25-05b-20261020');
+      await illustration.locator('.comparison-picker select').selectOption('targets');
+      await illustration.screenshot({ path: process.env.PRECISION_CHART_SCREENSHOT });
+    }
+    await page.screenshot({ path: process.env.PRECISION_DESKTOP_SCREENSHOT || '/tmp/precision-evaluations-desktop.png' });
     for (const width of [375, 768]) {
       await page.setViewportSize({ width, height: 950 });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `Overflow at ${width}px`);
     }
     await page.setViewportSize({ width: 375, height: 950 });
-    await page.screenshot({ path: process.env.PRECISION_MOBILE_SCREENSHOT || '/tmp/precision-evaluations-mobile.png', fullPage: true });
+    await page.screenshot({ path: process.env.PRECISION_MOBILE_SCREENSHOT || '/tmp/precision-evaluations-mobile.png' });
     await page.locator('#evaluation-' + restoration.id).screenshot({ path: '/tmp/precision-evaluations-mobile-card.png' });
     await page.goto(url + '#repair-' + repairs.repairs[0].id, { waitUntil: 'networkidle' });
     await page.waitForSelector('.verification-card');
@@ -110,6 +176,7 @@ const repairs = require('../site/data/repairs.json');
     assert.equal(await page.locator('.verification-card').count(), repairs.repairs.length);
     assert.deepEqual(errors, []);
     console.log(JSON.stringify({ status: 'passed', evaluations: data.evaluations.length, repairRecords: repairs.repairs.length,
+      chartComparisons, chartMetrics,
       checks: ['tabs', 'task/library/hardware filters', 'all comparison values', 'zero and tiny values', 'JSON download',
         'permalinks', 'back navigation', 'keyboard', 'load failure/retry', 'abandoned requests', 'mobile layout'] }));
   } finally {
