@@ -3,6 +3,130 @@
   "updated_at": "2026-10-21",
   "repairs": [
     {
+      "id": "mindspeed-decoder-projection-trace-20261021",
+      "title": "修复后追踪：32 层轨迹与首次输入投影隔离",
+      "date": "2026-10-21",
+      "status": "validated",
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "environment": {
+        "hardware": "NVIDIA H200 ↔ Ascend 910C · 整模型 TP4 / 单设备算子重放",
+        "libraries": [
+          {
+            "name": "MindSpeed",
+            "commit": "ff884722a3ce7079fbafe3cb97a3287311f58a5b"
+          },
+          {
+            "name": "Megatron Bridge",
+            "version": "0.4.2"
+          },
+          {
+            "name": "Megatron Core",
+            "version": "0.17.1"
+          },
+          {
+            "name": "torch-npu",
+            "version": "2.9.0.post2"
+          },
+          {
+            "name": "Transformers",
+            "version": "5.2.0"
+          },
+          {
+            "name": "Transformer Engine",
+            "version": "2.11.0"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "从最终归一化层向前追踪，定位首次非零差异，并隔离原生归一化与 BF16 投影计算。",
+        "trigger": "最终 RMSNorm 同输入参数反向接近一致，但原模型跨端梯度仍有差异。",
+        "expected": "找到相同输入与参数下首次出现输出差异的边界，并通过独立重放与高精度计算检查。",
+        "observed": "首次捕获差异位于第 0 层 GDN 输入归一化/投影；独立模块逐值复现原输出，归一化和 BF16 GEMM 均有小幅数值差异。",
+        "location": "language_model.decoder.layers.0.self_attention.in_proj"
+      },
+      "cause": {
+        "category": "native_numerical_paths",
+        "summary": "差异已收敛到可独立复现的原生归一化与 BF16 GEMM 数值路径；本轮未确认新增语义缺陷。",
+        "components": [
+          "Megatron Bridge → Transformer Engine CUDA implementation",
+          "Megatron Bridge → Transformer Engine Ascend implementation"
+        ]
+      },
+      "repair": {
+        "summary": "沿用 zero-centered gamma 修复；补齐 32 层边界采样、原生首次投影重放及独立 FP64 参照。",
+        "commit": "9ca343aaa1a2ca0688560b2f3cf8b0b8be38be38",
+        "upstream_status": "本地修复提交；尚未提交上游"
+      },
+      "stages": [
+        {
+          "name": "全层采样",
+          "result": "两端 TP4 完成原生前向/反向；rank 0 采集 32 个 block 和首次投影，共 33 个对应边界。"
+        },
+        {
+          "name": "原任务复现",
+          "result": "8 个 rank 的输入、action scores 和 objective 均与前次记录精确一致。"
+        },
+        {
+          "name": "首次分叉",
+          "result": "第 0 层输入、gamma 和投影权重一致；首次投影输出 RMSE=4.23e-4。"
+        },
+        {
+          "name": "原生隔离",
+          "result": "两端独立 LayerNormLinear 输出逐值复现各自原模型投影；原生归一化 + torch linear 同样逐值复现。"
+        },
+        {
+          "name": "高精度检查",
+          "result": "CPU FP64 归一化和矩阵乘法参照在各输出边界直接舍入 BF16，不经过 FP32；测量结果支持继续检查 GEMM 累加与归约策略。"
+        }
+      ],
+      "validation": {
+        "scope": "完整 TP4 原生执行；数值轨迹为 rank 0 的 33 个边界。首次投影是 [3088,4096] 权重的本地 TP 分片。",
+        "coverage": {
+          "observed": 33,
+          "expected": 33,
+          "unit": "rank-0 对应边界"
+        },
+        "metrics": [],
+        "checks": [
+          "第 0 层输入逐值一致，gamma 和投影矩阵 SHA256 相同",
+          "首次投影输出：RMSE=4.231e-4，最大差异=0.0625",
+          "独立重放的归一化输出：778,240 个数中 7 个不同，最大差异=0.001953125",
+          "首次投影输出：586,720 个数中 1,154 个不同",
+          "第 31 层输出：RMSE=0.0501874，最大差异=4",
+          "两端隔离模块与各自原模型输出均逐值一致"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "尚未将 GEMM 差异进一步归因到某个累加/归约设置。",
+          "本轮保留测量结果，未修改库实现或数值策略。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "32 层激活与梯度轨迹图",
+          "url": "evidence/mindspeed-decoder-trace.svg"
+        },
+        {
+          "label": "追踪与投影隔离摘要",
+          "url": "evidence/mindspeed-decoder-trace.md"
+        },
+        {
+          "label": "逐层及算子指标数据",
+          "url": "evidence/mindspeed-decoder-trace.json"
+        }
+      ],
+      "notes": [
+        "同一 RMSNorm 修复的后续定位记录，未新增独立修复。",
+        "两侧的原生归一化输出作为各自 GEMM 的高精度计算输入；相关误差分量不能按比例直接相加。",
+        "NPU 累计 716.046 / 900 秒，包含失败采样；完整模型和权重留在源端。"
+      ],
+      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "verification_title": "32 层轨迹与首次输入投影隔离"
+    },
+    {
       "id": "mindspeed-rmsnorm-layerwise-replay-20261021",
       "title": "RMSNorm 修复：层间采样与同输入反向重放",
       "date": "2026-10-21",
