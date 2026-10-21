@@ -1,0 +1,13 @@
+diff --git a/trl/trainer/dpo_trainer.py b/trl/trainer/dpo_trainer.py
+index f0539451..4e3d1af3 100644
+--- a/trl/trainer/dpo_trainer.py
++++ b/trl/trainer/dpo_trainer.py
+@@ -966,7 +966,7 @@ class DPOTrainer(Trainer):
+         all_logps = self.get_batch_logps(
+             all_logits,
+             concatenated_batch["concatenated_labels"],
+-            average_log_prob=False,
++            average_log_prob=self.loss_type == "ipo",
+             is_encoder_decoder=self.is_encoder_decoder,
+             label_pad_token_id=self.label_pad_token_id,
+         )

@@ -9,6 +9,12 @@ validator = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(validator)
 
 
+smoke_spec = importlib.util.spec_from_file_location(
+    'smoke_install', Path(__file__).resolve().parents[1] / '.github/smoke_install.py')
+smoke = importlib.util.module_from_spec(smoke_spec)
+smoke_spec.loader.exec_module(smoke)
+
+
 class RepositoryValidationTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory()
@@ -62,10 +68,6 @@ class RepositoryValidationTests(unittest.TestCase):
             validator.validate_skills(self.root)
 
     def test_clean_install_preserves_companion_links_and_omits_caches(self):
-        smoke_spec = importlib.util.spec_from_file_location(
-            'smoke_install', Path(__file__).resolve().parents[1] / '.github/smoke_install.py')
-        smoke = importlib.util.module_from_spec(smoke_spec)
-        smoke_spec.loader.exec_module(smoke)
         source = self.root / 'checkout/skills'
         for name in ('precision-skill', 'precision-repair'):
             folder = source / name
@@ -90,6 +92,32 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertFalse((installed / 'skills/precision-skill/scripts/__pycache__').exists())
         self.assertEqual((installed / 'skills/precision-skill/scripts/tool.py').read_text(),
                          'print("tool")\n')
+
+    def test_smoke_artifact_directory_accepts_symlink_spelling(self):
+        selected = self.root / 'selected'
+        selected.mkdir()
+        alias = self.root / 'alias'
+        alias.symlink_to(selected, target_is_directory=True)
+        artifacts = selected / 'run'
+        artifacts.mkdir()
+        for reported, output_root in ((artifacts, alias), (alias / 'run', selected)):
+            with self.subTest(reported=reported, output_root=output_root):
+                accepted = smoke.validate_artifact_directory(reported, output_root)
+                self.assertTrue(accepted.samefile(artifacts))
+
+    def test_smoke_artifact_directory_rejects_different_directory(self):
+        selected = self.root / 'selected'
+        selected.mkdir()
+        other = self.root / 'other'
+        other.mkdir()
+        artifacts = other / 'run'
+        artifacts.mkdir()
+        escaped = selected / 'linked-run'
+        escaped.symlink_to(artifacts, target_is_directory=True)
+        for reported in (artifacts, escaped):
+            with self.subTest(reported=reported):
+                with self.assertRaisesRegex(ValueError, 'outside selected output root'):
+                    smoke.validate_artifact_directory(reported, selected)
 
     def test_metadata_name_description_optional_fields(self):
         folder = self.root / 'test-skill'

@@ -1,7 +1,440 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-21",
+  "updated_at": "2026-10-22",
   "repairs": [
+    {
+      "id": "trl-0710-ipo-completion-average-backport",
+      "title": "历史缺陷回移植：TRL IPO 使用 completion 均值",
+      "date": "2026-10-22",
+      "status": "validated",
+      "classification": "historical_upstream_bug_reproduction_and_backport",
+      "model": {
+        "name": "微型随机 GPT-2 · 1,240 参数",
+        "revision": "随机初始化；policy seed 2024 / reference seed 77"
+      },
+      "environment": {
+        "hardware": "CPU · 单线程 · FP32 / FP64",
+        "libraries": [
+          {
+            "name": "TRL",
+            "version": "0.7.10",
+            "commit": "09ca7607d50714a80c9f0feb206b29f1c5a49bab"
+          },
+          {
+            "name": "PyTorch",
+            "version": "2.2.2"
+          },
+          {
+            "name": "Transformers",
+            "version": "4.37.2"
+          },
+          {
+            "name": "Accelerate",
+            "version": "0.26.1"
+          },
+          {
+            "name": "Datasets",
+            "version": "2.16.1"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "TRL 0.7.10 的 IPO 评分错误使用 token 总和，使偏好 gap 随 completion 长度改变。",
+        "trigger": "DPOTrainer loss_type=ipo；两对不等长 completion，含 EOS 共 13 个 target。",
+        "expected": "按每条 completion 的有效 token 取平均，再计算 IPO loss；意图来自项目实现与作者确认。",
+        "observed": "同一原生 FP64 负载 loss 对独立 oracle 的绝对误差为 0.5565106547209888，梯度和 SGD 存储更新也偏离。",
+        "location": "trl/trainer/dpo_trainer.py · DPOTrainer.concatenated_forward"
+      },
+      "cause": {
+        "category": "loss_reduction_semantics",
+        "summary": "average_log_prob 无条件为 False；IPO 需要按 completion token 数归一化，sigmoid/hinge 保持求和。",
+        "components": [
+          "TRL DPOTrainer → completion score reduction → IPO loss"
+        ]
+      },
+      "repair": {
+        "summary": "回移植一行上游修复：average_log_prob=self.loss_type == \"ipo\"，保留原生接口与数值策略。",
+        "commit": "29d439a2043edf4455b05cae5a1e2ade69d22794",
+        "upstream_status": "上游已修复（PR #1265）；本条为 0.7.10 历史版本复现与隔离回移植，非新发现"
+      },
+      "stages": [
+        {
+          "name": "独立预期",
+          "result": "chosen/rejected 分别前向，显式 causal target 坐标与 logsumexp；不使用 TRL 评分或 loss helper。"
+        },
+        {
+          "name": "原版回归",
+          "result": "6 个测试中 4 个 IPO 失败，2 个 sigmoid/hinge 对照通过。"
+        },
+        {
+          "name": "最小回移植",
+          "result": "仅为 IPO 启用 completion-token averaging；不更改 dtype。"
+        },
+        {
+          "name": "补丁回归",
+          "result": "同一永久回归 6/6 通过，覆盖 FP32/FP64、额外 padding 与单对偏好。"
+        },
+        {
+          "name": "原任务复验",
+          "result": "原 6 种配置复跑，输入/初值哈希一致；对照全部 1,240 个参数梯度与实际 SGD 更新。"
+        }
+      ],
+      "validation": {
+        "scope": "原生微型 CPU DPOTrainer：构造、tokenization/collation、compute_loss、backward、一次 SGD；FP64 指标如下，FP32 结果另见证据。无完整 Trainer.train、9B 或 GPU/NPU 验证。",
+        "coverage": {
+          "observed": 6,
+          "expected": 6,
+          "unit": "回归测试"
+        },
+        "metrics": [
+          {
+            "id": "ipo-loss-fp64",
+            "label": "IPO loss 绝对误差（FP64）",
+            "unit": "无量纲",
+            "before": 0.5565106547209888,
+            "after": 8.881784197001252e-16
+          },
+          {
+            "id": "ipo-gradient-fp64",
+            "label": "参数梯度最大绝对误差（FP64）",
+            "unit": "梯度值",
+            "before": 4.726013461672909,
+            "after": 8.881784197001252e-16
+          },
+          {
+            "id": "ipo-update-fp64",
+            "label": "实际 SGD 更新最大绝对误差（FP64）",
+            "unit": "参数值",
+            "before": 0.04726013461672908,
+            "after": 1.0408340855860843e-17
+          }
+        ],
+        "checks": [
+          "原版 4 个 IPO 失败 / 2 个非 IPO 对照通过；补丁版 6/6 通过",
+          "输入、初始参数、completion target 数及梯度坐标修复前后一致",
+          "双精度/单精度与原生 SGD 更新均对照独立 oracle；sigmoid/hinge loss 与梯度误差保持不变",
+          "FP64 容差 1e-10；FP32 容差 2e-5"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "未验证完整 Trainer.train、收敛、分布式、BF16/FP16、reference cache、encoder-decoder 或空 completion。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "历史回移植与原生验证摘要",
+          "url": "evidence/trl-ipo-average.md"
+        },
+        {
+          "label": "独立 oracle、前后指标与来源哈希",
+          "url": "evidence/trl-ipo-average.json"
+        },
+        {
+          "label": "最小源码回移植补丁",
+          "url": "evidence/trl-ipo-average.patch"
+        }
+      ],
+      "notes": [
+        "这是上游已修复缺陷的复现与回移植，不是新发现。",
+        "token averaging 的预期来自项目/作者确认；论文正文并未单独明确该归一化。",
+        "本条新增 1 项独立库修复；仅为原生微型 CPU 负载。"
+      ],
+      "library_group_id": "trl",
+      "affected_library": "TRL",
+      "verification_title": "IPO 原生 loss / backward / SGD 验证"
+    },
+    {
+      "id": "peft-0171-lora-svd-double-scaling-backport",
+      "title": "历史缺陷回移植：PEFT LoRA SVD 去除重复缩放",
+      "date": "2026-10-22",
+      "status": "validated",
+      "classification": "historical_upstream_bug_reproduction_and_backport",
+      "model": {
+        "name": "微型双 LoRA Linear · 3 种形状",
+        "revision": "固定随机 fixture；无预训练权重；源 rank=2"
+      },
+      "environment": {
+        "hardware": "CPU · 单线程 · FP32 / FP64",
+        "libraries": [
+          {
+            "name": "PEFT",
+            "version": "0.17.1",
+            "commit": "53c25fe4fdd7c6aa4b40db0560815ea570d32303"
+          },
+          {
+            "name": "PyTorch",
+            "version": "2.6.0"
+          },
+          {
+            "name": "Transformers",
+            "version": "4.53.3"
+          },
+          {
+            "name": "NumPy",
+            "version": "2.2.6"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "LoRA 加权 SVD 组合把源适配器 alpha/r 缩放应用两次，非单位缩放时改变实际增量。",
+        "trigger": "两个源 LoRA 适配器通过 add_weighted_adapter(combination_type=svd) 组合；源 scale 不全为 1。",
+        "expected": "全 rank SVD 保持 Σ w_i (alpha_i/r_i) B_i A_i。",
+        "observed": "原实现实际组合成 Σ w_i (alpha_i/r_i)² B_i A_i；同一微型负载 delta entry 为 2.2812502384，预期 0.78125。",
+        "location": "src/peft/tuners/lora/model.py · _svd_generalized_task_arithmetic_weighted_adapter"
+      },
+      "cause": {
+        "category": "adapter_scaling_semantics",
+        "summary": "get_delta_weight 已含源缩放；valid_weights 又乘 target.scaling，导致重复应用 alpha/r。",
+        "components": [
+          "PEFT add_weighted_adapter → get_delta_weight → weighted full-rank SVD"
+        ]
+      },
+      "repair": {
+        "summary": "回移植一行上游修复：valid_weights 仅保存用户 weight；不改分解、rank、dtype 或接口。",
+        "commit": "9a267b211fa6b43ba403e255b5e0dd59bf7c982e",
+        "upstream_status": "上游已修复（PR #3111）；本条为 PEFT 0.17.1 历史版本复现与隔离回移植，非新发现"
+      },
+      "stages": [
+        {
+          "name": "独立公式",
+          "result": "从保存的源因子与配置构造 FP64 dense delta，并对平方输出求导得到输入梯度。"
+        },
+        {
+          "name": "原版回归",
+          "result": "24 个用例中 12 个非单位 scale 失败，12 个单位 scale 对照通过，无执行错误。"
+        },
+        {
+          "name": "最小回移植",
+          "result": "去掉已缩放 delta 之外的第二次 source scale。"
+        },
+        {
+          "name": "补丁回归",
+          "result": "同测试、同 24 组 fixture，24/24 通过；源因子逐值不变。"
+        },
+        {
+          "name": "原任务复验",
+          "result": "原两适配器负载 delta entry 恢复为 0.78125；前向、基向量、输入梯度、保存加载与安全合并对照通过。"
+        }
+      ],
+      "validation": {
+        "scope": "原生微型 CPU Linear：24 组 FP32/FP64、3 种形状、scale 与权重符号组合；SVD 使用完整 min(in,out) rank，排除截断近似。指标为所有配对用例的最大绝对误差。",
+        "coverage": {
+          "observed": 24,
+          "expected": 24,
+          "unit": "原生回归用例"
+        },
+        "metrics": [
+          {
+            "id": "delta-max-abs",
+            "label": "组合 delta 最大绝对误差",
+            "unit": "参数值",
+            "before": 1.8386437858590967,
+            "after": 1.9718805555068997e-07
+          },
+          {
+            "id": "output-max-abs",
+            "label": "前向输出最大绝对误差",
+            "unit": "张量值",
+            "before": 4.5465921511820895,
+            "after": 4.144419198937044e-07
+          },
+          {
+            "id": "input-gradient-max-abs",
+            "label": "输入梯度最大绝对误差",
+            "unit": "梯度值",
+            "before": 56.05958776139278,
+            "after": 2.5047252929510933e-06
+          }
+        ],
+        "checks": [
+          "原版 12 个失败 / 12 个单位 scale 对照通过；补丁版 24/24 通过",
+          "同一测试 SHA256、24 个输入/源状态 fixture 哈希修复前后一致",
+          "六类边界共 3,520 个配对标量观测，无遗漏；包含相关观测而非独立试验",
+          "checkpoint 使用原生 PyTorch 序列化；safe merge/unload 对照通过",
+          "FP32 容差 atol=rtol=1e-5；FP64 为 1e-10；源因子零修改"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "未验证 Qwen3.5-9B、GPU/NPU、分布式、BF16、量化、优化器步骤或 LoRA 因子反向。",
+          "未验证截断 SVD、随机合并、embedding/convolution、safetensors 往返或 unmerge。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "历史回移植与原生验证摘要",
+          "url": "evidence/peft-lora-svd-scaling.md"
+        },
+        {
+          "label": "独立 oracle、前后指标与来源哈希",
+          "url": "evidence/peft-lora-svd-scaling.json"
+        },
+        {
+          "label": "最小源码回移植补丁",
+          "url": "evidence/peft-lora-svd-scaling.patch"
+        }
+      ],
+      "notes": [
+        "这是上游已修复缺陷的复现与回移植，不是新发现。",
+        "full-rank SVD 对照排除了预期的低秩截断误差。",
+        "checkpoint 用于验证修复组合的持久性，不另计一项修复；缺陷引入提交未二分定位。"
+      ],
+      "library_group_id": "peft",
+      "affected_library": "PEFT",
+      "verification_title": "LoRA 原生 SVD 组合与持久性验证"
+    },
+    {
+      "id": "transformers-4513-qwen2-disabled-window-backport",
+      "title": "历史缺陷回移植：Qwen2 关闭滑窗时保留 causal 历史",
+      "date": "2026-10-22",
+      "status": "validated",
+      "classification": "historical_upstream_bug_reproduction_and_backport",
+      "model": {
+        "name": "微型随机 Qwen2 · 24,928 参数",
+        "revision": "随机初始化 seed=23；2 层、hidden=32、词表 97；非预训练模型"
+      },
+      "environment": {
+        "hardware": "CPU · 单线程 · FP32",
+        "libraries": [
+          {
+            "name": "Transformers",
+            "version": "4.51.3",
+            "commit": "5f4ecf2d9f867a1255131d2461d75793c0cf1db2"
+          },
+          {
+            "name": "PyTorch",
+            "version": "2.9.0+cu126"
+          },
+          {
+            "name": "Tokenizers",
+            "version": "0.21.4"
+          },
+          {
+            "name": "huggingface-hub",
+            "version": "0.30.2"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "Qwen2 关闭滑窗时仍按数值 window 屏蔽合法的历史 key，改变注意力语义。",
+        "trigger": "use_sliding_window=False，但配置保留 sliding_window 数值；序列/缓存超过窗口长度。",
+        "expected": "禁用滑窗时仅应用 causal/padding 可见性；启用时另要求 q-k < window。",
+        "observed": "历史原版 18 个原生推理场景均偏离显式 4D mask oracle；最大 logit 误差 0.12348369508981705。",
+        "location": "src/transformers/models/qwen2/modeling_qwen2.py · causal mask builder"
+      },
+      "cause": {
+        "category": "attention_mask_semantics",
+        "summary": "mask builder 仅检查 sliding_window 非空，遗漏 use_sliding_window 布尔开关。",
+        "components": [
+          "Qwen2Config → Qwen2Model causal mask → eager / SDPA attention"
+        ]
+      },
+      "repair": {
+        "summary": "回移植一行 guard：同时检查 use_sliding_window 与数值 window；仅修改隔离 modeling 源文件。",
+        "commit": "0a52bd24031001a887a63aa6df2bd61785ec4fb3",
+        "upstream_status": "上游已修复（PR #38045）；已核对 4.52.0 固定源码，本条为 4.51.3 历史复现与隔离回移植"
+      },
+      "stages": [
+        {
+          "name": "独立可见性",
+          "result": "用 k<=q 和非 padding key 构造 4D mask；交给同一原生模型绕过有缺陷的 builder。"
+        },
+        {
+          "name": "原版回归",
+          "result": "18 个原生场景及 4 个禁用滑窗 mask 子例失败，共 22 失败 / 12 对照通过，无执行错误。"
+        },
+        {
+          "name": "最小回移植",
+          "result": "给 window mask 添加布尔开关，不改 dtype、接口或 attention backend。"
+        },
+        {
+          "name": "补丁回归",
+          "result": "同负载 34/34 子用例通过；有效 logit 与 target 坐标完整配对。"
+        },
+        {
+          "name": "缓存与 padding",
+          "result": "eager/SDPA、无/左/右 padding、完整前向/DynamicCache/StaticCache；另核对启用滑窗的精确 mask。"
+        }
+      ],
+      "validation": {
+        "scope": "原生微型随机 Qwen2 CPU FP32 推理：18 个场景、25,608 个有效 logit、228 个 target scores；另 16 个 mask 用例、414 个 mask 元素。模型状态与输入坐标相同；padding query 不计分。",
+        "coverage": {
+          "observed": 34,
+          "expected": 34,
+          "unit": "原生/精确 mask 子用例"
+        },
+        "metrics": [
+          {
+            "id": "logits-max-abs",
+            "label": "Logit 最大绝对误差",
+            "unit": "logit",
+            "before": 0.12348369508981705,
+            "after": 5.960464477539063e-08
+          },
+          {
+            "id": "logits-rmse",
+            "label": "全局 logit RMSE",
+            "unit": "logit",
+            "before": 0.018204872510839642,
+            "after": 6.498900616537927e-09
+          },
+          {
+            "id": "target-logprob-mae",
+            "label": "Target logprob 平均绝对误差",
+            "unit": "nat/token",
+            "before": 0.006720593988269109,
+            "after": 1.7546466774669461e-09
+          },
+          {
+            "id": "nll-abs-diff",
+            "label": "Target 加权 NLL 绝对差异",
+            "unit": "nat/token",
+            "before": 0.0011539648998306618,
+            "after": 1.9100365733493163e-10
+          },
+          {
+            "id": "mask-wrong-elements",
+            "label": "精确 mask 不同元素数",
+            "unit": "元素",
+            "before": 27,
+            "after": 0
+          }
+        ],
+        "checks": [
+          "原版 22 个子例失败 / 12 对照通过；补丁版 34/34 通过，无执行错误",
+          "显式 4D oracle 独立构造可见性，绕过被修复的 native mask helper",
+          "两次执行的模型状态、配置、输入、position IDs 和有效评分坐标一致",
+          "mask 精确零差异；logit 容差 atol=2e-6、rtol=0",
+          "batch=2、长度 8；prefill=5 后逐 token 解码 3 次，StaticCache 容量 12"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "未验证预训练 checkpoint、9B、生成质量、训练/反向、GPU/NPU、BF16、长上下文、FlashAttention2 或 SlidingWindowCache。",
+          "仅做生成 modeling 文件的隔离回移植，未执行上游源码再生成；不声称已穷尽首个修复版本。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "历史回移植与原生验证摘要",
+          "url": "evidence/transformers-qwen2-disabled-window.md"
+        },
+        {
+          "label": "独立 oracle、前后指标与来源哈希",
+          "url": "evidence/transformers-qwen2-disabled-window.json"
+        },
+        {
+          "label": "最小源码回移植补丁",
+          "url": "evidence/transformers-qwen2-disabled-window.patch"
+        }
+      ],
+      "notes": [
+        "这是上游已修复缺陷的复现与回移植，不是新发现。",
+        "Torch 安装包带 CUDA 构建标识，但该负载仅在 CPU 执行。",
+        "跨 backend/padding/cache 场景的重复坐标按观测计数；不把执行场景当作独立模型。"
+      ],
+      "library_group_id": "transformers",
+      "affected_library": "Transformers",
+      "verification_title": "Qwen2 原生全量/缓存推理与精确 mask 验证"
+    },
     {
       "id": "mindspeed-selective-projection-20261021",
       "title": "修复后验证：首次投影选择性 FP32",
@@ -816,6 +1249,30 @@
         "MindSpeed"
       ],
       "description": "Megatron Bridge 定义参数表示；MindSpeed RMSNorm 执行相应的归一化计算。"
+    },
+    {
+      "id": "trl",
+      "title": "TRL",
+      "components": [
+        "TRL"
+      ],
+      "description": "历史 DPOTrainer IPO completion 评分归约语义。"
+    },
+    {
+      "id": "peft",
+      "title": "PEFT",
+      "components": [
+        "PEFT"
+      ],
+      "description": "历史 LoRA 适配器加权 SVD 组合语义。"
+    },
+    {
+      "id": "transformers",
+      "title": "Transformers",
+      "components": [
+        "Transformers"
+      ],
+      "description": "历史 Qwen2 causal mask 与滑窗配置语义。"
     }
   ]
 }

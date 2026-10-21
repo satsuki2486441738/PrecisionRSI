@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "repair_id": "trl-0710-ipo-completion-average-backport",
+  "record_date": "2026-10-22",
+  "classification": "historical_upstream_bug_reproduction_and_backport",
+  "novel_discovery": false,
+  "baseline": {
+    "version": "0.7.10",
+    "sha": "09ca7607d50714a80c9f0feb206b29f1c5a49bab"
+  },
+  "upstream": {
+    "original_feature_commit": "55d7c952c796345d9fa520e692f7760372b14b43",
+    "fix_commit": "29d439a2043edf4455b05cae5a1e2ade69d22794",
+    "fix_pr": 1265,
+    "fix_merged_at": "2024-01-24T11:18:04Z",
+    "current_snapshot_sha": "770e1be9c0d01bdfbf50bf1281d75a8ef341b474",
+    "status": "already_fixed_upstream; current snapshot normalizes chosen/rejected scores by completion-token count"
+  },
+  "native_workload": {
+    "label": "native tiny CPU GPT-2 DPOTrainer loss/backward/SGD workload",
+    "native_entrypoint": "DPOTrainer.__init__ -> tokenizer + DPODataCollatorWithPadding -> compute_loss -> get_batch_loss_metrics -> concatenated_forward -> dpo_loss",
+    "model": "random-initialized GPT2LMHeadModel; 1 layer, 2 heads, width 8, vocabulary 12, 1240 trainable parameters",
+    "beta": 0.3,
+    "device": "cpu",
+    "threads": 1,
+    "policy_seed": 2024,
+    "reference_seed": 77,
+    "optimizer": "torch.optim.SGD lr=0.01, one step",
+    "versions": {
+      "torch": "2.2.2",
+      "trl": "0.7.10",
+      "transformers": "4.37.2",
+      "accelerate": "0.26.1",
+      "datasets": "2.16.1",
+      "numpy": "1.26.4",
+      "pyarrow": "15.0.2",
+      "pandas": "2.2.3"
+    },
+    "coverage": "2 unequal-length pairs, 13 valid completion targets (EOS included), all 1240 parameter gradients and stored updates; FP64 and FP32; single pair and extra right padding; sigmoid/hinge controls",
+    "limitations": [
+      "No Qwen3.5-9B validation",
+      "No full Trainer.train loop or convergence claim",
+      "No GPU/NPU, distributed, PEFT, BF16/FP16, reference-cache or encoder-decoder validation",
+      "Performance samples are cold, single samples; no performance comparison claimed",
+      "No empty-completion behavior tested"
+    ]
+  },
+  "correctness": {
+    "primary_sources": [
+      "https://github.com/huggingface/trl/commit/29d439a2043edf4455b05cae5a1e2ade69d22794",
+      "https://github.com/huggingface/trl/blob/770e1be9c0d01bdfbf50bf1281d75a8ef341b474/trl/trainer/dpo_trainer.py"
+    ],
+    "definition": "L = mean_pairs[(mean_chosen(log pi - log ref) - mean_rejected(log pi - log ref) - 1/(2 beta))^2]; select completion labels after causal shift, include EOS, exclude -100.",
+    "oracle": "Separate chosen/rejected model forwards; explicit target-index loop and logsumexp; no TRL score/loss/concatenation helpers.",
+    "caveat": "The 2024 docs attribute normalization to the paper; current source clarifies it was confirmed with the IPO authors and not explicit in the paper."
+  },
+  "patch": {
+    "file": "trl-ipo-average.patch",
+    "sha256": "0d4601e1a20f06693c8db77c485a78a8e05fc163d9ab1c976cd0cbf78554b6dd",
+    "change": "average_log_prob=self.loss_type == \"ipo\""
+  },
+  "regression": {
+    "test_sha256": "3126e5b3e85aa6ac467c59935048c3c19f8072d18190878ea86875a46f86a446",
+    "before": {
+      "failed": 4,
+      "passed_controls": 2,
+      "tests": 6
+    },
+    "after": {
+      "passed": 6,
+      "tests": 6
+    },
+    "same_original_workload": true,
+    "matching_fields": [
+      "batch_sha256",
+      "initial_parameters_sha256",
+      "oracle_loss",
+      "completion_target_counts",
+      "gradient_coordinates"
+    ],
+    "tolerances": {
+      "fp64": 1e-10,
+      "fp32": 2e-05,
+      "justification": "Tiny finite-logit workload; FP64 tolerance bounds arithmetic reordering; FP32 tolerance allows independent logsumexp and separate-versus-concatenated forwards. Baseline semantic errors exceed either tolerance by many orders."
+    },
+    "control_result": "Sigmoid and hinge loss/gradient-error metrics are unchanged across all FP32/FP64 controls."
+  },
+  "metrics": [
+    {
+      "dtype": "torch.float64",
+      "loss_type": "ipo",
+      "pairs": 2,
+      "completion_target_counts": [
+        [
+          4,
+          2
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "gradient_coordinates": 1240,
+      "before": {
+        "native_loss": 3.593896407215378,
+        "oracle_loss": 3.037385752494389,
+        "loss_abs_error": 0.5565106547209888,
+        "gradient_max_abs_error": 4.726013461672909,
+        "gradient_l2_error": 17.07184550225709,
+        "update_max_abs_error": 0.04726013461672908
+      },
+      "after": {
+        "native_loss": 3.037385752494388,
+        "oracle_loss": 3.037385752494389,
+        "loss_abs_error": 8.881784197001252e-16,
+        "gradient_max_abs_error": 8.881784197001252e-16,
+        "gradient_l2_error": 3.1580949954517967e-15,
+        "update_max_abs_error": 1.0408340855860843e-17
+      }
+    },
+    {
+      "dtype": "torch.float32",
+      "loss_type": "ipo",
+      "pairs": 2,
+      "completion_target_counts": [
+        [
+          4,
+          2
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "gradient_coordinates": 1240,
+      "before": {
+        "native_loss": 3.5938985347747803,
+        "oracle_loss": 3.037386417388916,
+        "loss_abs_error": 0.5565121173858643,
+        "gradient_max_abs_error": 4.726014733314514,
+        "gradient_l2_error": 17.071851939159313,
+        "update_max_abs_error": 0.04726014565676451
+      },
+      "after": {
+        "native_loss": 3.037386178970337,
+        "oracle_loss": 3.037386417388916,
+        "loss_abs_error": 2.384185791015625e-07,
+        "gradient_max_abs_error": 4.76837158203125e-07,
+        "gradient_l2_error": 1.206316908408623e-06,
+        "update_max_abs_error": 3.725290298461914e-09
+      }
+    }
+  ],
+  "source_evidence_sha256": {
+    "finding": "a05e7857d23f2d000761f62fbc14388745d717a03d88f8bc27f11b06a97e7b83",
+    "report": "b57c834c221311c6d5552fe39ab4b8091b488e6e140e3f5bfc606bf9a9f127ce",
+    "original_regression_log": "7f5be87d4f399ed19121a8a0659699466fbd1814adfc82e83e1f68f3f5ee3706",
+    "patched_regression_log": "d99cb0847256e86a5e7c4f46a8e71b1a5ba3e53e7b72e3825338e929781d7a50"
+  },
+  "numerical_acceptance": null
+}

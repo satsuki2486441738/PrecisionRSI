@@ -43,15 +43,26 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 | TRL | Native SFTTrainer LoRA SFT with completion-only labels, gradient accumulation, two AdamW steps and native checkpoint restoration (complete adapter gradients, updates and optimizer state); fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 | verl / FSDP2 | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 
-### Precision repair: historical MindSpeed / Megatron Bridge
+### Precision repair
 
 Qwen3.5-9B-Base: repaired zero-centered RMSNorm parameter semantics in a pinned historical stack. Verification covered native NPU operator forward/backward, checkpoint round trips, and the original TP4 model forward with unchanged loaded parameter bytes.
+
+Additional historical backports were verified using small native CPU workloads:
+
+| Library / pinned version | Repair | Verification |
+|---|---|---|
+| TRL 0.7.10 | IPO completion logprob averaging | Native DPOTrainer loss, all gradients and one SGD update; 6 regressions |
+| PEFT 0.17.1 | Duplicate LoRA scaling in SVD adapter combination | Forward, input gradients, checkpoint reload and merge; 24 workloads |
+| Transformers 4.51.3 | Qwen2 attention mask ignores disabled sliding window | Eager/SDPA full forward and dynamic/static cache; 18 workloads and 16 mask cases |
+
+The [repair history](https://satsuki2486441738.github.io/precision-skills/) records affected and upstream-fixed revisions, patches, before/after metrics and verification scope.
+
 
 ## Tools and development
 
 The skill organizes the task; task adapters integrate native execution; the [tool library](skills/precision-skill/references/comparison.md#tools) provides reusable operations. `scripts/` contains CLI tools, callable Python tools and their supporting modules. Tool docstrings define inputs and outputs; task recipes select capture boundaries and metrics.
 
-Tools check runtime initialization and imported interfaces, capture fixed-history inference distributions, plan internal capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
+Tools check runtime initialization and imported interfaces, record command runs, capture fixed-history inference distributions, plan internal capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
 
 [Evidence tools](skills/precision-skill/references/comparison.md#portable-evidence) package selected artifacts with source/export hashes and replay retained comparisons through installed skill CLIs.
 

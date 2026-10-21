@@ -1,0 +1,11 @@
+--- a/src/transformers/models/qwen2/modeling_qwen2.py
++++ b/src/transformers/models/qwen2/modeling_qwen2.py
+@@ -704,7 +704,7 @@
+                 (sequence_length, target_length), fill_value=min_dtype, dtype=dtype, device=device
+             )
+             diagonal_attend_mask = torch.arange(target_length, device=device) > cache_position.reshape(-1, 1)
+-            if config.sliding_window is not None:
++            if config.use_sliding_window and config.sliding_window is not None:
+                 # if we have sliding window, we should not attend to tokens beyond sliding window length, so we mask them out also
+                 # the check is needed to verify is current checkpoint was trained with sliding window or not
+                 if not isinstance(past_key_values, SlidingWindowCache) or sequence_length > target_length:

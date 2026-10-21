@@ -22,6 +22,13 @@ def install_skills(source, destination):
                             ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
 
 
+def validate_artifact_directory(artifacts, output_root):
+    """Require the example run directory to belong to the selected output root."""
+    artifacts = Path(artifacts).resolve()
+    if artifacts.parent != Path(output_root).resolve():
+        raise ValueError('example wrote outside selected output root')
+    return artifacts
+
 def main():
     from validate import validate_links, validate_skills
     source = Path(__file__).resolve().parents[1] / 'skills'
@@ -40,9 +47,7 @@ def main():
                                  '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,
                                 text=True, check=True, timeout=120)
         output = json.loads(result.stdout)
-        artifacts = Path(output['artifacts'])
-        if artifacts.parent != cwd:
-            raise ValueError('example wrote outside selected output root')
+        artifacts = validate_artifact_directory(output['artifacts'], cwd)
         report = json.loads((artifacts / 'report.json').read_text())
         if report['status'] != 'no_thresholds' or report['global']['count'] != 12:
             raise ValueError(f'incomplete gradient comparison: {report}')

@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "repair_id": "transformers-4513-qwen2-disabled-window-backport",
+  "record_date": "2026-10-22",
+  "classification": "historical_upstream_fixed_reproduction_and_backport",
+  "novel_discovery": false,
+  "baseline": {
+    "library": "transformers",
+    "version": "4.51.3",
+    "commit": "5f4ecf2d9f867a1255131d2461d75793c0cf1db2"
+  },
+  "upstream_fix": {
+    "pr": 38045,
+    "commit": "0a52bd24031001a887a63aa6df2bd61785ec4fb3",
+    "merged_utc": "2025-05-20T09:32:19Z",
+    "verified_fixed_version": "4.52.0"
+  },
+  "introduction_commit": "96f01a36ac60c57be279cb7f027eac7e37fa90e8",
+  "verified_fixed_commit": "113424bcd53b92600f77d82f48add0a60fb41556",
+  "oracle": "Explicit causal and padding visibility 4D mask, constructed independently with k<=q and valid key; enabled-window controls additionally require q-k<window. Same native model with explicit mask bypasses faulty builder.",
+  "workload": {
+    "model": "Qwen2ForCausalLM",
+    "initialization": "tiny random-init, not pretrained",
+    "parameters": 24928,
+    "seed": 23,
+    "batch": 2,
+    "sequence_length": 8,
+    "vocab": 97,
+    "layers": 2,
+    "hidden": 32,
+    "query_heads": 4,
+    "kv_heads": 2,
+    "dtype": "float32",
+    "device": "cpu",
+    "threads": 1,
+    "sliding_window": 4,
+    "use_sliding_window": false,
+    "cache_prefill": 5,
+    "decode_chunks": [
+      1,
+      1,
+      1
+    ],
+    "static_cache_capacity": 12,
+    "backends": [
+      "eager",
+      "sdpa"
+    ],
+    "padding": [
+      "none",
+      "left",
+      "right"
+    ],
+    "cache": [
+      "none",
+      "DynamicCache",
+      "StaticCache"
+    ]
+  },
+  "runtime": {
+    "packages": {
+      "torch": "2.9.0+cu126",
+      "transformers": "4.51.3",
+      "numpy": "1.26.0",
+      "tokenizers": "0.21.4",
+      "huggingface-hub": "0.30.2",
+      "safetensors": "0.8.0",
+      "PyYAML": "6.0.3"
+    },
+    "runtime_source_hashes": {
+      "modeling_qwen2.py": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff",
+      "configuration_qwen2.py": "4d3fc49747ab9dd0be658842bd30b877bd8bb644e494bba484b98c191e3952ed"
+    },
+    "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:27:28) [GCC 14.4.0]"
+  },
+  "coverage": {
+    "native_scenarios": 18,
+    "exact_mask_cases": 16,
+    "mask_entries": 414,
+    "logit_values": 25608,
+    "target_scores": 228,
+    "baseline_failed_subtests": 22,
+    "patched_failed_subtests": 0,
+    "execution_errors": 0,
+    "padding_query_logits_excluded": true
+  },
+  "regression": {
+    "before": {
+      "failed_subcases": 22,
+      "passed_subcases": 12,
+      "total_subcases": 34,
+      "execution_errors": 0
+    },
+    "after": {
+      "passed_subcases": 34,
+      "total_subcases": 34,
+      "execution_errors": 0
+    },
+    "same_original_workload": true,
+    "matching": "Identical weights/config/input/positions and retained state hashes; valid queries only; target t uses logits t-1 with both endpoints unpadded."
+  },
+  "metrics": {
+    "original": {
+      "success": false,
+      "failures": 22,
+      "errors": 0,
+      "mask_wrong_elements": 27,
+      "logits_count": 25608,
+      "logits_max_abs": 0.12348369508981705,
+      "scores": {
+        "target_count": 228,
+        "side_a_nll_nat_per_token": 4.53177365881746,
+        "side_b_nll_nat_per_token": 4.53061969391763,
+        "nll_abs_diff_nat_per_token": 0.0011539648998306618,
+        "mae_nat": 0.006720593988269109,
+        "p99_nat": 0.03229817280207836,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.03229817280207836,
+        "max_coordinate": [
+          "sdpa",
+          "left",
+          "dynamic",
+          0,
+          7,
+          9
+        ]
+      }
+    },
+    "patched": {
+      "success": true,
+      "failures": 0,
+      "errors": 0,
+      "mask_wrong_elements": 0,
+      "logits_count": 25608,
+      "logits_max_abs": 5.960464477539063e-08,
+      "scores": {
+        "target_count": 228,
+        "side_a_nll_nat_per_token": 4.530619693726626,
+        "side_b_nll_nat_per_token": 4.53061969391763,
+        "nll_abs_diff_nat_per_token": 1.9100365733493163e-10,
+        "mae_nat": 1.7546466774669461e-09,
+        "p99_nat": 1.5255793073265522e-08,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 2.999031778472272e-08,
+        "max_coordinate": [
+          "eager",
+          "left",
+          "dynamic",
+          1,
+          4,
+          17
+        ]
+      }
+    },
+    "score_tool_sha256": "a3cab6c905960fa297798c0cbe8e122aedb6eef07c3af5b4170597bd95bb0a4a"
+  },
+  "global_logit_rmse": {
+    "original": 0.018204872510839642,
+    "patched": 6.498900616537927e-09
+  },
+  "test_tolerances": {
+    "logits_max_abs_atol": 2e-06,
+    "logits_rtol": 0,
+    "mask_errors": 0,
+    "reason": "Exact mask oracle; FP32 logits tolerance exceeds measured execution-order variation and is >60,000 times below original semantic error."
+  },
+  "patch": {
+    "file": "transformers-qwen2-disabled-window.patch",
+    "sha256": "5fd9850087493766a65fe909dc9a4be7b01c4ac14a412c213486a0f6744ec4f2",
+    "change": "Guard window masking with config.use_sliding_window as well as the numeric window"
+  },
+  "source_evidence_sha256": {
+    "finding": "a58ffe6ee0fe28ea8079cfc81676875381a634bc4d6bba8be7d8117df7544a72",
+    "report": "8d04feaf3a69ae6b55f127605a224764950f8063bd2b926551c0e2a75f248f06",
+    "regression": "1187c6e229de1b615b940cad31fadcb3338a4cbeb43c21d8304f5dd2ed909efe",
+    "original_modeling": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff",
+    "patched_modeling": "84d98665b645082826e945dfc81e4bf27c08044d138b598b159e9179dbc53e67",
+    "summary": "34c75b196cc0557a9ba0da1663a7c0ec3bf6f398459eb2c13f0341aea76887da"
+  },
+  "limitations": [
+    "No pretrained Qwen checkpoint or full9B workload; no quality benchmark or generation-text claim",
+    "CPU FP32 only; no GPU/NPU, FlashAttention2, BF16, long context, SlidingWindowCache, training or other model family verification",
+    "One generated modeling source file patched for isolated execution; no upstream PR or generated-source regeneration",
+    "Elapsed test timing is diagnostic only; no performance or memory improvement claimed"
+  ],
+  "numerical_acceptance": null
+}

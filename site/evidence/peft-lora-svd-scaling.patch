@@ -1,0 +1,13 @@
+diff --git a/src/peft/tuners/lora/model.py b/src/peft/tuners/lora/model.py
+index 7ab4c65..bd1e26e 100644
+--- a/src/peft/tuners/lora/model.py
++++ b/src/peft/tuners/lora/model.py
+@@ -793,7 +793,7 @@ class LoraModel(BaseTuner):
+         for adapter, weight in zip(adapters, weights):
+             if adapter in target.lora_A or adapter in target.lora_embedding_A:
+                 valid_adapters.append(adapter)
+-                valid_weights.append(weight * target.scaling[adapter])
++                valid_weights.append(weight)
+ 
+         # if no valid adapter, nothing to do
+         if len(valid_adapters) == 0:

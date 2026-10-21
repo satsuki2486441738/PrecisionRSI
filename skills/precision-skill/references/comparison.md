@@ -6,6 +6,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 
 | Operation | Tool entrypoint | Inputs and outputs |
 |---|---|---|
+| Record a bounded native command | [record_run.py](../scripts/record_run.py), CLI / Python `record_run` | Output root, side/task IDs, timeout and literal argv → fresh UTC run with command metadata and streamed stdout/stderr; POSIX timeout cleans up the owned process group |
 | Check runtime initialization / interfaces | [runtime_probe.py](../scripts/runtime_probe.py), CLI / Python `probe_runtime`, `inspect_runtime` | Ordered imports, symbols and task checks → actual module identity, distribution metadata and diagnostics in a fresh interpreter or native worker |
 | Capture fixed-history inference / export scores | [inference_capture.py](../scripts/inference_capture.py), Python `FixedHistory`, `derive_logprobs`, `validate_history`, `validate_generation_scores`, `export_records` | Native full-vocabulary logit row and fixed tokens → declared logprob derivation, history/score-row checks and distribution/target-score records |
 | Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |

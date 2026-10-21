@@ -43,15 +43,26 @@
 | TRL | 原生 SFTTrainer LoRA SFT：completion-only 标签、梯度累积、两步 AdamW 及原生 checkpoint 恢复（完整 adapter 梯度、更新及优化器状态）；固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
 | verl / FSDP2 | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
 
-### 精度修复：历史 MindSpeed / Megatron Bridge 组合
+### 精度修复
 
 在固定的历史软件栈上，修复 Qwen3.5-9B-Base 的零中心 RMSNorm 权重语义。验证覆盖 NPU 原生算子的前向/反向、权重保存与加载，以及加载权重字节不变时的原始 TP4 模型前向复验。
+
+另用小型原生 CPU 工作负载验证了以下历史缺陷的回补：
+
+| 库 / 固定版本 | 修复内容 | 验证范围 |
+|---|---|---|
+| TRL 0.7.10 | IPO 的 completion logprob 平均归约 | 原生 DPOTrainer loss、全部梯度和一次 SGD 更新；6 项回归 |
+| PEFT 0.17.1 | SVD adapter 合并重复应用 LoRA 缩放 | 前向、输入梯度、checkpoint 加载及合并；24 组工作负载 |
+| Transformers 4.51.3 | Qwen2 attention mask 忽略关闭滑动窗口的配置 | Eager/SDPA 完整前向及动态/静态 cache；18 组工作负载和 16 组 mask 检查 |
+
+[修复历史](https://satsuki2486441738.github.io/precision-skills/)记录受影响版本、上游修复版本、补丁、前后指标和验证范围。
+
 
 ## 工具与开发
 
 skill 组织任务，任务适配代码接入原生执行路径，[工具库](skills/precision-skill/references/comparison.md#tools)提供可复用的操作。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。
 
-工具负责检查运行环境初始化和实际导入的接口、采集固定历史的推理分布、规划内部采样、导出和校验产物，以及比较分布、张量观察值（含激活）、梯度、更新和目标评分。msProbe 是可选的采集后端；内置规划工具生成有界的 L0 采集范围并估算张量数据量，任务适配代码负责执行采集。缺少的任务接入按需实现，开发阶段再将可复用操作整理进工具库。数组工具依赖 NumPy；目标评分工具使用标准库。
+工具负责检查运行环境初始化和实际导入的接口、记录命令执行、采集固定历史的推理分布、规划内部采样、导出和校验产物，以及比较分布、张量观察值（含激活）、梯度、更新和目标评分。msProbe 是可选的采集后端；内置规划工具生成有界的 L0 采集范围并估算张量数据量，任务适配代码负责执行采集。缺少的任务接入按需实现，开发阶段再将可复用操作整理进工具库。数组工具依赖 NumPy；目标评分工具使用标准库。
 
 [证据工具](skills/precision-skill/references/comparison.md#portable-evidence)为选定产物记录原始/导出哈希，并通过已安装 skill 的命令行工具重放保留的比较。
 
