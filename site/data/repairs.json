@@ -3,6 +3,167 @@
   "updated_at": "2026-10-21",
   "repairs": [
     {
+      "id": "mindspeed-selective-projection-20261021",
+      "title": "修复后验证：首次投影选择性 FP32",
+      "date": "2026-10-21",
+      "status": "validated",
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "environment": {
+        "hardware": "NVIDIA H200 TP4 ↔ Ascend 910C 留存观测",
+        "libraries": [
+          {
+            "name": "PyTorch (CUDA)",
+            "version": "2.9.0+cu126"
+          },
+          {
+            "name": "cuBLAS",
+            "version": "12.6.4.1"
+          },
+          {
+            "name": "torch-npu",
+            "version": "2.9.0.post2"
+          },
+          {
+            "name": "CANN",
+            "version": "9.1.0"
+          },
+          {
+            "name": "Transformer Engine",
+            "version": "2.11.0"
+          },
+          {
+            "name": "Megatron Core",
+            "version": "0.17.1"
+          },
+          {
+            "name": "Megatron Bridge",
+            "version": "0.4.2"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "检验局部更高精度投影是否改善完整固定轨迹的跨端差异。",
+        "trigger": "同输入 GEMM 实验中，FP32 输入降低 GPU 局部参考误差。",
+        "expected": "只改第 0 层输入投影前向，保留原生归一化、BF16 保存张量、TP4 通信及反向。",
+        "observed": "投影、scores RMSE 和最终 norm 参数梯度差异缩小，但 NLL 绝对差异增大。",
+        "location": "layer 0 GDN input projection forward GEMM"
+      },
+      "cause": {
+        "category": "selective_precision_experiment",
+        "summary": "局部精度改善与任务指标并非一致改善；原生反向本身存在重复运行差异，未确认新增语义缺陷。",
+        "components": [
+          "Transformer Engine CUDA LayerNormLinear forward GEMM",
+          "Qwen3.5 fixed-trajectory native forward/backward"
+        ]
+      },
+      "repair": {
+        "summary": "沿用原 RMSNorm 修复；验证选择性 FP32 候选后保留原默认策略。",
+        "commit": "9ca343aaa1a2ca0688560b2f3cf8b0b8be38be38",
+        "upstream_status": "本地修复提交；尚未提交上游"
+      },
+      "stages": [
+        {
+          "name": "作用域验证",
+          "result": "四个 rank 各一次前向替换，离开目标前向即恢复原函数；保留原生反向。"
+        },
+        {
+          "name": "同输入重放",
+          "result": "融合/非融合模式下，固定传入梯度的输入、gamma 和完整投影权重梯度均逐值一致。"
+        },
+        {
+          "name": "原生复跑",
+          "result": "未加载适配器时前向逐值复现，但反向仍有小幅重复运行差异。"
+        },
+        {
+          "name": "原任务验证",
+          "result": "TP4 完成固定轨迹前向与反向；32 scores、33 个 rank-0 边界及四 rank 最终 norm。"
+        },
+        {
+          "name": "预热测量",
+          "result": "每模式 3 次预热、20 次交替样本；模块前向中位 stream 时间 0.292 → 0.409 ms。"
+        }
+      ],
+      "validation": {
+        "scope": "固定轨迹 TP4 前向/原生反向；仅第 0 层投影前向改 FP32，NPU 复用历史观测，无优化器更新。",
+        "coverage": {
+          "observed": 33,
+          "expected": 33,
+          "unit": "rank-0 对应边界"
+        },
+        "metrics": [
+          {
+            "id": "projection_rmse",
+            "label": "首次投影输出 RMSE",
+            "unit": "张量值",
+            "before": 0.000423104361044838,
+            "after": 0.00014116284701437104
+          },
+          {
+            "id": "scores_rmse",
+            "label": "Action logprob RMSE",
+            "unit": "nat/token",
+            "before": 0.04199240066809621,
+            "after": 0.021703171892309678
+          },
+          {
+            "id": "nll_abs_diff",
+            "label": "NLL 绝对差异",
+            "unit": "nat/token",
+            "before": 0.00041621923446655273,
+            "after": 0.003326714038848877
+          },
+          {
+            "id": "objective_abs_diff",
+            "label": "GRPO objective 绝对差异",
+            "unit": "objective",
+            "before": 0.011062069796025753,
+            "after": 0.0044992283947067335
+          },
+          {
+            "id": "norm_gamma_grad_rmse",
+            "label": "最终 norm 参数梯度 RMSE（rank 0）",
+            "unit": "梯度值",
+            "before": 6.284117298085227e-05,
+            "after": 3.581397788750171e-05
+          }
+        ],
+        "checks": [
+          "两条 completion、32 scores，四个 TP rank 的任务与 token 坐标一致",
+          "每 rank 一次 FP32 override，目标前向外恢复原生 dispatcher",
+          "固定传入梯度下，两种 wgrad 模式的全部 12,648,448 个权重梯度逐值一致",
+          "原生入口复跑前向逐值一致，反向存在重复运行差异",
+          "最终 norm 输入/输出及梯度覆盖四个 rank",
+          "预热测试输出逐值复现独立原生/FP32 参照"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "NLL 差异增大，候选尚不作为默认修复。",
+          "底层原生反向重复差异机制尚未定位。",
+          "没有执行新优化器更新或稳态吞吐基准。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "选择性 FP32 原模型验证摘要",
+          "url": "evidence/mindspeed-selective-projection.md"
+        },
+        {
+          "label": "任务、反向隔离与预热测量数据",
+          "url": "evidence/mindspeed-selective-projection.json"
+        }
+      ],
+      "notes": [
+        "同一修复的第 6 轮验证，独立库修复仍为 1 项。",
+        "before/after 对应原生 GPU 与选择性 FP32 GPU 相对同一份 NPU 留存观测的差异。",
+        "本轮无新增 NPU 用量；全部自建 GPU 调度资源已清理。"
+      ],
+      "related_repair_id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "verification_title": "首次投影选择性 FP32 原模型验证"
+    },
+    {
       "id": "mindspeed-gemm-compute-policy-20261021",
       "title": "修复后追踪：同输入 GEMM 与 cuBLAS 计算模式",
       "date": "2026-10-21",

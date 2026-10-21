@@ -1,0 +1,1156 @@
+{
+  "scope": "Fixed-trajectory TP4 forward/backward, one forward GEMM per rank selected; native backward",
+  "model_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+  "controller_run": "compare-selective-projection-20261021T145508Z",
+  "coverage": {
+    "target_scores": 32,
+    "ranks": 4,
+    "rank0_boundaries": 33
+  },
+  "scores": [
+    {
+      "side": "control",
+      "count": 32,
+      "target_logprobs": {
+        "different_count": 31,
+        "metrics": {
+          "count": 32,
+          "rmse": 0.04199240066809621,
+          "max_abs": 0.11327171325683594,
+          "cosine": 0.9998148521486624
+        }
+      },
+      "nll": 1.4336629509925842,
+      "peer_nll": 1.4340791702270508,
+      "absolute_nll_difference": 0.00041621923446655273,
+      "objective": -0.006476094946265221,
+      "peer_objective": 0.004585974849760532,
+      "absolute_objective_difference": 0.011062069796025753
+    },
+    {
+      "side": "candidate",
+      "count": 32,
+      "target_logprobs": {
+        "different_count": 31,
+        "metrics": {
+          "count": 32,
+          "rmse": 0.021703171892309678,
+          "max_abs": 0.09537315368652344,
+          "cosine": 0.9999530642553266
+        }
+      },
+      "nll": 1.430752456188202,
+      "peer_nll": 1.4340791702270508,
+      "absolute_nll_difference": 0.003326714038848877,
+      "objective": 8.674645505379885e-05,
+      "peer_objective": 0.004585974849760532,
+      "absolute_objective_difference": 0.0044992283947067335
+    }
+  ],
+  "traces": {
+    "control_peer": [
+      {
+        "id": "block-00",
+        "name": "chunk0.module.module.language_model.decoder.layers.0",
+        "shape": [
+          95,
+          2,
+          4096
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          },
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          }
+        ],
+        "metrics": {
+          "input": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output": {
+            "count": 778240,
+            "rmse": 0.00038611411477766096,
+            "max_abs": 0.0625,
+            "cosine": 0.9999950448018029
+          },
+          "output_grad": {
+            "count": 778240,
+            "rmse": 0.0001275374592055796,
+            "max_abs": 0.004638671875,
+            "cosine": 0.9983462046555983
+          },
+          "input_grad": {
+            "count": 778240,
+            "rmse": 0.00026928659218786286,
+            "max_abs": 0.010009765625,
+            "cosine": 0.9983328169210971
+          }
+        }
+      },
+      {
+        "id": "layer0-self_attention-in_proj",
+        "name": "chunk0.module.module.language_model.decoder.layers.0.self_attention.in_proj",
+        "shape": [
+          95,
+          2,
+          3088
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.extensions.transformer_engine",
+            "class": "TELayerNormColumnParallelLinear",
+            "source_sha256": "828453e6d8d02e62d31dda4319f6fbb88098b07a637196c5c7d57d10ea391100"
+          },
+          {
+            "module": "megatron.core.extensions.transformer_engine",
+            "class": "TELayerNormColumnParallelLinear",
+            "source_sha256": "828453e6d8d02e62d31dda4319f6fbb88098b07a637196c5c7d57d10ea391100"
+          }
+        ],
+        "metrics": {
+          "input": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output": {
+            "count": 586720,
+            "rmse": 0.000423104361044838,
+            "max_abs": 0.0625,
+            "cosine": 0.999999991522639
+          },
+          "layer_norm_weight": {
+            "count": 4096,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output_grad": {
+            "count": 586720,
+            "rmse": 1.0250759895347395e-06,
+            "max_abs": 0.00019073486328125,
+            "cosine": 0.9985131143338035
+          },
+          "input_grad": {
+            "count": 778240,
+            "rmse": 0.00026928659218786286,
+            "max_abs": 0.010009765625,
+            "cosine": 0.9983328169210971
+          }
+        }
+      },
+      {
+        "id": "block-31",
+        "name": "chunk0.module.module.language_model.decoder.layers.31",
+        "shape": [
+          95,
+          2,
+          4096
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          },
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          }
+        ],
+        "metrics": {
+          "output": {
+            "count": 778240,
+            "rmse": 0.050187378548939614,
+            "max_abs": 4.0,
+            "cosine": 0.9999304242187298
+          },
+          "output_grad": {
+            "count": 778240,
+            "rmse": 2.396464782576373e-06,
+            "max_abs": 6.866455078125e-05,
+            "cosine": 0.9987696754146128
+          }
+        }
+      }
+    ],
+    "candidate_peer": [
+      {
+        "id": "block-00",
+        "name": "chunk0.module.module.language_model.decoder.layers.0",
+        "shape": [
+          95,
+          2,
+          4096
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          },
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          }
+        ],
+        "metrics": {
+          "input": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output": {
+            "count": 778240,
+            "rmse": 0.00038765289627696014,
+            "max_abs": 0.0625,
+            "cosine": 0.9999949907224274
+          },
+          "output_grad": {
+            "count": 778240,
+            "rmse": 0.0001062167962567757,
+            "max_abs": 0.0042724609375,
+            "cosine": 0.9987203067284308
+          },
+          "input_grad": {
+            "count": 778240,
+            "rmse": 0.00021827921259824184,
+            "max_abs": 0.00732421875,
+            "cosine": 0.9987320702826407
+          }
+        }
+      },
+      {
+        "id": "layer0-self_attention-in_proj",
+        "name": "chunk0.module.module.language_model.decoder.layers.0.self_attention.in_proj",
+        "shape": [
+          95,
+          2,
+          3088
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.extensions.transformer_engine",
+            "class": "TELayerNormColumnParallelLinear",
+            "source_sha256": "828453e6d8d02e62d31dda4319f6fbb88098b07a637196c5c7d57d10ea391100"
+          },
+          {
+            "module": "megatron.core.extensions.transformer_engine",
+            "class": "TELayerNormColumnParallelLinear",
+            "source_sha256": "828453e6d8d02e62d31dda4319f6fbb88098b07a637196c5c7d57d10ea391100"
+          }
+        ],
+        "metrics": {
+          "input": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output": {
+            "count": 586720,
+            "rmse": 0.00014116284701437104,
+            "max_abs": 0.03125,
+            "cosine": 0.9999999990559059
+          },
+          "layer_norm_weight": {
+            "count": 4096,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output_grad": {
+            "count": 586720,
+            "rmse": 8.044301943606463e-07,
+            "max_abs": 0.0001239776611328125,
+            "cosine": 0.9989261886811744
+          },
+          "input_grad": {
+            "count": 778240,
+            "rmse": 0.00021827921259824184,
+            "max_abs": 0.00732421875,
+            "cosine": 0.9987320702826407
+          }
+        }
+      },
+      {
+        "id": "block-31",
+        "name": "chunk0.module.module.language_model.decoder.layers.31",
+        "shape": [
+          95,
+          2,
+          4096
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          },
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          }
+        ],
+        "metrics": {
+          "output": {
+            "count": 778240,
+            "rmse": 0.04964116208420116,
+            "max_abs": 3.0,
+            "cosine": 0.9999317134312413
+          },
+          "output_grad": {
+            "count": 778240,
+            "rmse": 1.2811172781410656e-06,
+            "max_abs": 4.57763671875e-05,
+            "cosine": 0.9996585979261408
+          }
+        }
+      }
+    ]
+  },
+  "final_norm": [
+    {
+      "side": "control",
+      "rank": 0,
+      "tensor": "input",
+      "different_count": 664124,
+      "metrics": {
+        "count": 778240,
+        "rmse": 0.050187378548939614,
+        "max_abs": 4.0,
+        "cosine": 0.9999304242187298
+      }
+    },
+    {
+      "side": "control",
+      "rank": 0,
+      "tensor": "output",
+      "different_count": 678091,
+      "metrics": {
+        "count": 778240,
+        "rmse": 0.025846007915570443,
+        "max_abs": 0.75,
+        "cosine": 0.9999193144222979
+      }
+    },
+    {
+      "side": "control",
+      "rank": 0,
+      "tensor": "input_grad",
+      "different_count": 115489,
+      "metrics": {
+        "count": 778240,
+        "rmse": 2.396464782576373e-06,
+        "max_abs": 6.866455078125e-05,
+        "cosine": 0.9987696754146128
+      }
+    },
+    {
+      "side": "control",
+      "rank": 0,
+      "tensor": "output_grad",
+      "different_count": 110810,
+      "metrics": {
+        "count": 778240,
+        "rmse": 4.158046679294606e-06,
+        "max_abs": 0.00011444091796875,
+        "cosine": 0.9987774985757227
+      }
+    },
+    {
+      "side": "control",
+      "rank": 0,
+      "tensor": "weight_grad",
+      "different_count": 3941,
+      "metrics": {
+        "count": 4096,
+        "rmse": 6.284117298085227e-05,
+        "max_abs": 0.0013427734375,
+        "cosine": 0.9985802282590086
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 0,
+      "tensor": "input",
+      "different_count": 664666,
+      "metrics": {
+        "count": 778240,
+        "rmse": 0.04964116208420119,
+        "max_abs": 3.0,
+        "cosine": 0.9999317134312408
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 0,
+      "tensor": "output",
+      "different_count": 677299,
+      "metrics": {
+        "count": 778240,
+        "rmse": 0.025464073507875953,
+        "max_abs": 0.75,
+        "cosine": 0.9999216622015586
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 0,
+      "tensor": "input_grad",
+      "different_count": 109176,
+      "metrics": {
+        "count": 778240,
+        "rmse": 1.2811172781410656e-06,
+        "max_abs": 4.57763671875e-05,
+        "cosine": 0.9996585979261408
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 0,
+      "tensor": "output_grad",
+      "different_count": 102557,
+      "metrics": {
+        "count": 778240,
+        "rmse": 2.091548592991903e-06,
+        "max_abs": 6.866455078125e-05,
+        "cosine": 0.9996973897789767
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 0,
+      "tensor": "weight_grad",
+      "different_count": 3858,
+      "metrics": {
+        "count": 4096,
+        "rmse": 3.581397788750171e-05,
+        "max_abs": 0.0006103515625,
+        "cosine": 0.9995548016034876
+      }
+    },
+    {
+      "side": "control",
+      "rank": 1,
+      "tensor": "weight_grad",
+      "different_count": 3941,
+      "metrics": {
+        "count": 4096,
+        "rmse": 6.284119144851893e-05,
+        "max_abs": 0.0013427734375,
+        "cosine": 0.9985802273946348
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 1,
+      "tensor": "weight_grad",
+      "different_count": 3858,
+      "metrics": {
+        "count": 4096,
+        "rmse": 3.581400026541231e-05,
+        "max_abs": 0.0006103515625,
+        "cosine": 0.999554801004706
+      }
+    },
+    {
+      "side": "control",
+      "rank": 2,
+      "tensor": "weight_grad",
+      "different_count": 3941,
+      "metrics": {
+        "count": 4096,
+        "rmse": 6.284119144851893e-05,
+        "max_abs": 0.0013427734375,
+        "cosine": 0.9985802273946348
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 2,
+      "tensor": "weight_grad",
+      "different_count": 3858,
+      "metrics": {
+        "count": 4096,
+        "rmse": 3.581400026541231e-05,
+        "max_abs": 0.0006103515625,
+        "cosine": 0.999554801004706
+      }
+    },
+    {
+      "side": "control",
+      "rank": 3,
+      "tensor": "weight_grad",
+      "different_count": 3941,
+      "metrics": {
+        "count": 4096,
+        "rmse": 6.284119144851893e-05,
+        "max_abs": 0.0013427734375,
+        "cosine": 0.9985802273946348
+      }
+    },
+    {
+      "side": "candidate",
+      "rank": 3,
+      "tensor": "weight_grad",
+      "different_count": 3858,
+      "metrics": {
+        "count": 4096,
+        "rmse": 3.581400026541231e-05,
+        "max_abs": 0.0006103515625,
+        "cosine": 0.999554801004706
+      }
+    }
+  ],
+  "policies": {
+    "control": [
+      {
+        "rank": 0,
+        "mode": "native",
+        "forward_calls": 1,
+        "fp32_overrides": 0,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      },
+      {
+        "rank": 1,
+        "mode": "native",
+        "forward_calls": 1,
+        "fp32_overrides": 0,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      },
+      {
+        "rank": 2,
+        "mode": "native",
+        "forward_calls": 1,
+        "fp32_overrides": 0,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      },
+      {
+        "rank": 3,
+        "mode": "native",
+        "forward_calls": 1,
+        "fp32_overrides": 0,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      }
+    ],
+    "candidate": [
+      {
+        "rank": 0,
+        "mode": "fp32-fprop",
+        "forward_calls": 1,
+        "fp32_overrides": 1,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      },
+      {
+        "rank": 1,
+        "mode": "fp32-fprop",
+        "forward_calls": 1,
+        "fp32_overrides": 1,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      },
+      {
+        "rank": 2,
+        "mode": "fp32-fprop",
+        "forward_calls": 1,
+        "fp32_overrides": 1,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      },
+      {
+        "rank": 3,
+        "mode": "fp32-fprop",
+        "forward_calls": 1,
+        "fp32_overrides": 1,
+        "backend_restored_outside_forward": true,
+        "torch_peak_allocated_bytes": 16560694784
+      }
+    ]
+  },
+  "unit": {
+    "scope": "Native TE, fixed captured inputs/weights/upstream gradient, forward-only GEMM policy",
+    "rows": [
+      {
+        "fused_wgrad": false,
+        "mode": "native",
+        "vs_prior_output": {
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "different_count": 0,
+          "count": 586720
+        }
+      },
+      {
+        "fused_wgrad": false,
+        "mode": "fp32-fprop",
+        "vs_prior_output": {
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "different_count": 0,
+          "count": 586720
+        }
+      },
+      {
+        "fused_wgrad": false,
+        "fixed_upstream_backward": {
+          "input_grad": {
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "different_count": 0,
+            "count": 778240
+          },
+          "gamma_grad": {
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "different_count": 0,
+            "count": 4096
+          },
+          "weight_grad": {
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "different_count": 0,
+            "count": 12648448
+          }
+        }
+      },
+      {
+        "fused_wgrad": true,
+        "mode": "native",
+        "vs_prior_output": {
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "different_count": 0,
+          "count": 586720
+        }
+      },
+      {
+        "fused_wgrad": true,
+        "mode": "fp32-fprop",
+        "vs_prior_output": {
+          "rmse": 0.0,
+          "max_abs": 0.0,
+          "different_count": 0,
+          "count": 586720
+        }
+      },
+      {
+        "fused_wgrad": true,
+        "fixed_upstream_backward": {
+          "input_grad": {
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "different_count": 0,
+            "count": 778240
+          },
+          "gamma_grad": {
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "different_count": 0,
+            "count": 4096
+          },
+          "weight_grad": {
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "different_count": 0,
+            "count": 12648448
+          }
+        }
+      }
+    ]
+  },
+  "warm_benchmark": {
+    "scope": "Warm local shard TE training forward, autograd enabled; no TP communication or backward in benchmark",
+    "warmups_per_mode": 3,
+    "samples": {
+      "native": [
+        {
+          "module_cuda_stream_ms": 0.31196799874305725,
+          "gemm_cuda_stream_ms": 0.07980799674987793,
+          "synchronized_wall_ms": 0.33430755138397217
+        },
+        {
+          "module_cuda_stream_ms": 0.2754240036010742,
+          "gemm_cuda_stream_ms": 0.07168000191450119,
+          "synchronized_wall_ms": 0.29581785202026367
+        },
+        {
+          "module_cuda_stream_ms": 0.2993600070476532,
+          "gemm_cuda_stream_ms": 0.07945600152015686,
+          "synchronized_wall_ms": 0.32263249158859253
+        },
+        {
+          "module_cuda_stream_ms": 0.28227201104164124,
+          "gemm_cuda_stream_ms": 0.07155200093984604,
+          "synchronized_wall_ms": 0.30452385544776917
+        },
+        {
+          "module_cuda_stream_ms": 0.28278398513793945,
+          "gemm_cuda_stream_ms": 0.0769599974155426,
+          "synchronized_wall_ms": 0.30462443828582764
+        },
+        {
+          "module_cuda_stream_ms": 0.3327679932117462,
+          "gemm_cuda_stream_ms": 0.09238400310277939,
+          "synchronized_wall_ms": 0.35829097032546997
+        },
+        {
+          "module_cuda_stream_ms": 0.3072640001773834,
+          "gemm_cuda_stream_ms": 0.0838719978928566,
+          "synchronized_wall_ms": 0.32956525683403015
+        },
+        {
+          "module_cuda_stream_ms": 0.2710399925708771,
+          "gemm_cuda_stream_ms": 0.06950400024652481,
+          "synchronized_wall_ms": 0.29256194829940796
+        },
+        {
+          "module_cuda_stream_ms": 0.29721599817276,
+          "gemm_cuda_stream_ms": 0.07872000336647034,
+          "synchronized_wall_ms": 0.31972676515579224
+        },
+        {
+          "module_cuda_stream_ms": 0.36614400148391724,
+          "gemm_cuda_stream_ms": 0.08383999764919281,
+          "synchronized_wall_ms": 0.39949268102645874
+        },
+        {
+          "module_cuda_stream_ms": 0.2894720137119293,
+          "gemm_cuda_stream_ms": 0.0799039974808693,
+          "synchronized_wall_ms": 0.3105923533439636
+        },
+        {
+          "module_cuda_stream_ms": 0.27881601452827454,
+          "gemm_cuda_stream_ms": 0.07414399832487106,
+          "synchronized_wall_ms": 0.30099600553512573
+        },
+        {
+          "module_cuda_stream_ms": 0.3118079900741577,
+          "gemm_cuda_stream_ms": 0.07852800190448761,
+          "synchronized_wall_ms": 0.33349916338920593
+        },
+        {
+          "module_cuda_stream_ms": 0.28937599062919617,
+          "gemm_cuda_stream_ms": 0.08432000130414963,
+          "synchronized_wall_ms": 0.3111734986305237
+        },
+        {
+          "module_cuda_stream_ms": 0.31561601161956787,
+          "gemm_cuda_stream_ms": 0.07923199981451035,
+          "synchronized_wall_ms": 0.33779069781303406
+        },
+        {
+          "module_cuda_stream_ms": 0.28355199098587036,
+          "gemm_cuda_stream_ms": 0.08185599744319916,
+          "synchronized_wall_ms": 0.30422210693359375
+        },
+        {
+          "module_cuda_stream_ms": 0.29407998919487,
+          "gemm_cuda_stream_ms": 0.07913599908351898,
+          "synchronized_wall_ms": 0.31724199652671814
+        },
+        {
+          "module_cuda_stream_ms": 0.26864001154899597,
+          "gemm_cuda_stream_ms": 0.07011199742555618,
+          "synchronized_wall_ms": 0.29041990637779236
+        },
+        {
+          "module_cuda_stream_ms": 0.3006080090999603,
+          "gemm_cuda_stream_ms": 0.08144000172615051,
+          "synchronized_wall_ms": 0.32368674874305725
+        },
+        {
+          "module_cuda_stream_ms": 0.27456000447273254,
+          "gemm_cuda_stream_ms": 0.07199999690055847,
+          "synchronized_wall_ms": 0.29684603214263916
+        }
+      ],
+      "fp32-fprop": [
+        {
+          "module_cuda_stream_ms": 0.40723198652267456,
+          "gemm_cuda_stream_ms": 0.2393600046634674,
+          "synchronized_wall_ms": 0.42618438601493835
+        },
+        {
+          "module_cuda_stream_ms": 0.4496319890022278,
+          "gemm_cuda_stream_ms": 0.2431039959192276,
+          "synchronized_wall_ms": 0.47353655099868774
+        },
+        {
+          "module_cuda_stream_ms": 0.4017919898033142,
+          "gemm_cuda_stream_ms": 0.22870400547981262,
+          "synchronized_wall_ms": 0.4321150481700897
+        },
+        {
+          "module_cuda_stream_ms": 0.40457600355148315,
+          "gemm_cuda_stream_ms": 0.23894399404525757,
+          "synchronized_wall_ms": 0.423673540353775
+        },
+        {
+          "module_cuda_stream_ms": 0.39721599221229553,
+          "gemm_cuda_stream_ms": 0.22784000635147095,
+          "synchronized_wall_ms": 0.4167817533016205
+        },
+        {
+          "module_cuda_stream_ms": 0.41328001022338867,
+          "gemm_cuda_stream_ms": 0.2404160052537918,
+          "synchronized_wall_ms": 0.44459104537963867
+        },
+        {
+          "module_cuda_stream_ms": 0.4119679927825928,
+          "gemm_cuda_stream_ms": 0.22787199914455414,
+          "synchronized_wall_ms": 0.431060791015625
+        },
+        {
+          "module_cuda_stream_ms": 0.39561599493026733,
+          "gemm_cuda_stream_ms": 0.23817600309848785,
+          "synchronized_wall_ms": 0.4150383174419403
+        },
+        {
+          "module_cuda_stream_ms": 0.411296010017395,
+          "gemm_cuda_stream_ms": 0.24380800127983093,
+          "synchronized_wall_ms": 0.4305131733417511
+        },
+        {
+          "module_cuda_stream_ms": 0.44464001059532166,
+          "gemm_cuda_stream_ms": 0.24320000410079956,
+          "synchronized_wall_ms": 0.46594440937042236
+        },
+        {
+          "module_cuda_stream_ms": 0.40825599431991577,
+          "gemm_cuda_stream_ms": 0.22988800704479218,
+          "synchronized_wall_ms": 0.4282072186470032
+        },
+        {
+          "module_cuda_stream_ms": 0.4045119881629944,
+          "gemm_cuda_stream_ms": 0.23852799832820892,
+          "synchronized_wall_ms": 0.42443349957466125
+        },
+        {
+          "module_cuda_stream_ms": 0.40809598565101624,
+          "gemm_cuda_stream_ms": 0.23059199750423431,
+          "synchronized_wall_ms": 0.4305541515350342
+        },
+        {
+          "module_cuda_stream_ms": 0.44624000787734985,
+          "gemm_cuda_stream_ms": 0.24540799856185913,
+          "synchronized_wall_ms": 0.46949461102485657
+        },
+        {
+          "module_cuda_stream_ms": 0.4102399945259094,
+          "gemm_cuda_stream_ms": 0.22915199398994446,
+          "synchronized_wall_ms": 0.44083595275878906
+        },
+        {
+          "module_cuda_stream_ms": 0.3909760117530823,
+          "gemm_cuda_stream_ms": 0.23756800591945648,
+          "synchronized_wall_ms": 0.4210919141769409
+        },
+        {
+          "module_cuda_stream_ms": 0.4155519902706146,
+          "gemm_cuda_stream_ms": 0.23052799701690674,
+          "synchronized_wall_ms": 0.43506547808647156
+        },
+        {
+          "module_cuda_stream_ms": 0.3935999870300293,
+          "gemm_cuda_stream_ms": 0.2375359982252121,
+          "synchronized_wall_ms": 0.41307881474494934
+        },
+        {
+          "module_cuda_stream_ms": 0.7804800271987915,
+          "gemm_cuda_stream_ms": 0.2648319900035858,
+          "synchronized_wall_ms": 0.8023157715797424
+        },
+        {
+          "module_cuda_stream_ms": 0.43673598766326904,
+          "gemm_cuda_stream_ms": 0.2383359968662262,
+          "synchronized_wall_ms": 0.46223029494285583
+        }
+      ]
+    },
+    "peak_increment_bytes": {
+      "native": [
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112,
+        3802112
+      ],
+      "fp32-fprop": [
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792,
+        57889792
+      ]
+    },
+    "median": {
+      "native": {
+        "module_cuda_stream_ms": 0.29177600145339966,
+        "gemm_cuda_stream_ms": 0.07918399944901466,
+        "synchronized_wall_ms": 0.3142077475786209,
+        "peak_increment_bytes_median": 3802112.0,
+        "samples": 20
+      },
+      "fp32-fprop": {
+        "module_cuda_stream_ms": 0.4092479944229126,
+        "gemm_cuda_stream_ms": 0.23825599998235703,
+        "synchronized_wall_ms": 0.4308074712753296,
+        "peak_increment_bytes_median": 57889792.0,
+        "samples": 20
+      }
+    },
+    "measurement": "Instrumented module/dispatch CUDA stream time, includes launch gaps and casts; separate from isolated kernel duration"
+  },
+  "native_repeat": {
+    "all_forward_fields_equal": true,
+    "changed_boundaries": [
+      {
+        "boundary": "block-00",
+        "tensor": "output_grad",
+        "rmse": 8.843798004319481e-06,
+        "cosine": 0.9999913196725023,
+        "max_abs": 0.0001373291015625
+      },
+      {
+        "boundary": "block-00",
+        "tensor": "input_grad",
+        "rmse": 1.5101553989549692e-05,
+        "cosine": 0.9999939474410334,
+        "max_abs": 0.00018310546875
+      },
+      {
+        "boundary": "layer0-self_attention-in_proj",
+        "tensor": "output_grad",
+        "rmse": 7.469882057093783e-08,
+        "cosine": 0.9999909072243766,
+        "max_abs": 5.7220458984375e-06
+      },
+      {
+        "boundary": "layer0-self_attention-in_proj",
+        "tensor": "input_grad",
+        "rmse": 1.5101553989549692e-05,
+        "cosine": 0.9999939474410334,
+        "max_abs": 0.00018310546875
+      },
+      {
+        "boundary": "block-29",
+        "tensor": "output_grad",
+        "rmse": 9.708952630107663e-12,
+        "cosine": 0.9999999999999701,
+        "max_abs": 7.450580596923828e-09
+      }
+    ],
+    "scope_control_pair": [
+      {
+        "id": "block-00",
+        "name": "chunk0.module.module.language_model.decoder.layers.0",
+        "shape": [
+          95,
+          2,
+          4096
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          },
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          }
+        ],
+        "metrics": {
+          "input": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 0.9999999999999999
+          },
+          "output_grad": {
+            "count": 778240,
+            "rmse": 8.888800974974406e-06,
+            "max_abs": 0.0001220703125,
+            "cosine": 0.9999912314765056
+          },
+          "input_grad": {
+            "count": 778240,
+            "rmse": 1.526739536605254e-05,
+            "max_abs": 0.000244140625,
+            "cosine": 0.999993814154987
+          }
+        }
+      },
+      {
+        "id": "layer0-self_attention-in_proj",
+        "name": "chunk0.module.module.language_model.decoder.layers.0.self_attention.in_proj",
+        "shape": [
+          95,
+          2,
+          3088
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.extensions.transformer_engine",
+            "class": "TELayerNormColumnParallelLinear",
+            "source_sha256": "828453e6d8d02e62d31dda4319f6fbb88098b07a637196c5c7d57d10ea391100"
+          },
+          {
+            "module": "megatron.core.extensions.transformer_engine",
+            "class": "TELayerNormColumnParallelLinear",
+            "source_sha256": "828453e6d8d02e62d31dda4319f6fbb88098b07a637196c5c7d57d10ea391100"
+          }
+        ],
+        "metrics": {
+          "input": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output": {
+            "count": 586720,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "layer_norm_weight": {
+            "count": 4096,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          },
+          "output_grad": {
+            "count": 586720,
+            "rmse": 7.605947900510824e-08,
+            "max_abs": 5.7220458984375e-06,
+            "cosine": 0.9999905758040054
+          },
+          "input_grad": {
+            "count": 778240,
+            "rmse": 1.526739536605254e-05,
+            "max_abs": 0.000244140625,
+            "cosine": 0.999993814154987
+          }
+        }
+      },
+      {
+        "id": "block-31",
+        "name": "chunk0.module.module.language_model.decoder.layers.31",
+        "shape": [
+          95,
+          2,
+          4096
+        ],
+        "implementations": [
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          },
+          {
+            "module": "megatron.core.transformer.transformer_layer",
+            "class": "TransformerLayer",
+            "source_sha256": "712585dd174b2d4a2a17c2a2ddd26646a1a82165fe6637e44020b986d2b8f0ad"
+          }
+        ],
+        "metrics": {
+          "output": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 0.9999999999999999
+          },
+          "output_grad": {
+            "count": 778240,
+            "rmse": 0.0,
+            "max_abs": 0.0,
+            "cosine": 1.0
+          }
+        }
+      }
+    ]
+  },
+  "decision": "Retain existing default; candidate improves several peer differences but increases absolute NLL difference. No additional semantic library defect established.",
+  "numerical_acceptance": null,
+  "npu_seconds_added": 0,
+  "policy_configuration": {
+    "mode": "fp32-fprop",
+    "forward_calls": 1,
+    "fp32_overrides": 1,
+    "backend_restored_outside_forward": true,
+    "backward_policy": "native TE; fixed saved BF16 operands",
+    "source_sha256": "c4085835dbbd49db60367c83d6350647737bf6b1878b585dc0be0461c55367e2",
+    "rank": 0,
+    "target_name": "chunk0.module.module.language_model.decoder.layers.0.self_attention.in_proj",
+    "provider": {
+      "module": "megatron.core.extensions.transformer_engine",
+      "class": "TELayerNormColumnParallelLinear",
+      "native_source_sha256": "c99d95ffc48453ffb6fcfed864c3534ed2386fb171d3af8e21dbd7c93b2af06d",
+      "tp_size": 4,
+      "sequence_parallel": false,
+      "parallel_mode": "column",
+      "fuse_wgrad_accumulation": true
+    },
+    "observe_wall_seconds": 70.4509826186113,
+    "torch_peak_allocated_bytes": 16560694784,
+    "allow_tf32": false
+  }
+}
