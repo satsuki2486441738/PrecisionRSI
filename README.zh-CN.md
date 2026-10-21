@@ -43,6 +43,10 @@
 | TRL | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
 | verl / FSDP2 | 固定轨迹 GRPO 的动作评分、loss、梯度及单步参数更新 |
 
+### 精度修复：历史 MindSpeed / Megatron Bridge 组合
+
+在固定的历史软件栈上，修复 Qwen3.5-9B-Base 的零中心 RMSNorm 权重语义。验证覆盖 NPU 原生算子的前向/反向、权重保存与加载，以及加载权重字节不变时的原始 TP4 模型前向复验。
+
 ## 工具与开发
 
 skill 组织任务，任务适配代码接入原生执行路径，[工具库](skills/precision-skill/references/comparison.md#tools)提供可复用的操作。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。

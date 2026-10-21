@@ -43,6 +43,10 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 | TRL | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 | verl / FSDP2 | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 
+### Precision repair: historical MindSpeed / Megatron Bridge
+
+Qwen3.5-9B-Base: repaired zero-centered RMSNorm parameter semantics in a pinned historical stack. Verification covered native NPU operator forward/backward, checkpoint round trips, and the original TP4 model forward with unchanged loaded parameter bytes.
+
 ## Tools and development
 
 The skill organizes the task; task adapters integrate native execution; the [tool library](skills/precision-skill/references/comparison.md#tools) provides reusable operations. `scripts/` contains CLI tools, callable Python tools and their supporting modules. Tool docstrings define inputs and outputs; task recipes select capture boundaries and metrics.
