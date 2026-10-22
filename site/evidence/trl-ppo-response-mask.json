@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "repair_id": "trl-0710-ppo-response-mask-backport",
+  "record_date": "2026-10-22",
+  "classification": "historical_upstream_fixed_reproduction_and_backport",
+  "novel_discovery": false,
+  "source": {
+    "library": "TRL",
+    "version": "0.7.10",
+    "baseline_commit": "09ca7607d50714a80c9f0feb206b29f1c5a49bab",
+    "introducing_commit": "9d09b3e107f1b1d0f31b0e144df68c382c504013",
+    "upstream_fix_commit": "3bf94492a8dc84ac192f7c5206553e1460f53aa4",
+    "upstream_pr": 1718,
+    "checked_upstream_commit": "9c37460182946a5630da9b800a726f3bb27191f8",
+    "upstream_status": "Legacy PPOTrainer absent from current public API and experimental tree; no claim to have executed current API",
+    "baseline_source_sha256": "ee4e38ab467e6ac980e164e0427af8e91361c60059c84bc3bace6b1cdbab0a46",
+    "patched_source_sha256": "16c5bf112e1dc57aace6d6aae1d992b9b5741f53ff465e697f407999d4a555e8"
+  },
+  "versions": {
+    "torch": "2.2.2",
+    "trl": "0.7.10",
+    "transformers": "4.37.2",
+    "accelerate": "0.26.1",
+    "numpy": "1.26.4",
+    "datasets": "2.16.1",
+    "tokenizers": "0.15.2"
+  },
+  "workload": {
+    "device": "cpu",
+    "threads": 1,
+    "model": "random GPT2LMHeadModel with native AutoModelForCausalLMWithValueHead",
+    "parameters": 1121,
+    "seed": 415,
+    "layers": 1,
+    "hidden": 8,
+    "heads": 2,
+    "vocab": 12,
+    "dropout": 0,
+    "batch": 2,
+    "minibatch": 2,
+    "ppo_epochs_config": 1,
+    "optimizer": "one direct torch.optim.SGD step, lr=0.01",
+    "native_entrypoints": [
+      "PPOTrainer.__init__",
+      "PPOTrainer.prepare_model_inputs",
+      "PPOTrainer.batched_forward_pass",
+      "PPOTrainer.loss"
+    ],
+    "additional_stages": [
+      "autograd backward",
+      "direct SGD update"
+    ],
+    "scope": "Native tiny CPU PPO forward, policy/value loss, backward and single SGD update; not full PPOTrainer.step/train"
+  },
+  "correctness": {
+    "oracle": "Enumerate nonpadding token coordinates; map each selected response token to preceding predictor position. Independent model forward and per-selected-token logsumexp, scalar policy/value objective at initial policy (ratio approximately 1, value clipping inactive).",
+    "primary_sources": [
+      "https://github.com/huggingface/trl/commit/3bf94492a8dc84ac192f7c5206553e1460f53aa4",
+      "https://github.com/huggingface/trl/commit/9d09b3e107f1b1d0f31b0e144df68c382c504013"
+    ],
+    "semantics": "Response masks select response-only token coordinates; score token at position t with predictor logits at t-1.",
+    "oracle_scope": "Initial policy; ratio approximately one, value clipping inactive. Explicit selected-coordinate scalar policy/value objective, independent forward/backward/SGD."
+  },
+  "regression": {
+    "before": {
+      "tests": 6,
+      "failures": 2,
+      "passes": 4
+    },
+    "after": {
+      "tests": 6,
+      "failures": 0,
+      "passes": 6
+    },
+    "same_workload": true,
+    "matched_configurations": [
+      {
+        "dtype": "torch.float64",
+        "padding": "left",
+        "include_response_mask": true,
+        "inputs_sha256": "0aa034218ddd97e9154ea0b983675795116f79a86f56287968b24402afe8901b",
+        "initial_parameters_sha256": "254dbac45c2c93103642cc947ee310d4907c63cb28a3847356683313de467379",
+        "selected_coordinates": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "mask_coordinates": 8,
+        "gradient_coordinates": 1121
+      },
+      {
+        "dtype": "torch.float64",
+        "padding": "right",
+        "include_response_mask": true,
+        "inputs_sha256": "f00cb9a9646c6d67f92cdb00f9bb91e777d3e04cd8a6bdf231892eb57101f2a2",
+        "initial_parameters_sha256": "254dbac45c2c93103642cc947ee310d4907c63cb28a3847356683313de467379",
+        "selected_coordinates": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "mask_coordinates": 8,
+        "gradient_coordinates": 1121
+      },
+      {
+        "dtype": "torch.float64",
+        "padding": "left",
+        "include_response_mask": false,
+        "inputs_sha256": "0aa034218ddd97e9154ea0b983675795116f79a86f56287968b24402afe8901b",
+        "initial_parameters_sha256": "254dbac45c2c93103642cc947ee310d4907c63cb28a3847356683313de467379",
+        "selected_coordinates": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "mask_coordinates": 8,
+        "gradient_coordinates": 1121
+      },
+      {
+        "dtype": "torch.float32",
+        "padding": "left",
+        "include_response_mask": true,
+        "inputs_sha256": "0aa034218ddd97e9154ea0b983675795116f79a86f56287968b24402afe8901b",
+        "initial_parameters_sha256": "254dbac45c2c93103642cc947ee310d4907c63cb28a3847356683313de467379",
+        "selected_coordinates": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "mask_coordinates": 8,
+        "gradient_coordinates": 1121
+      },
+      {
+        "dtype": "torch.float32",
+        "padding": "right",
+        "include_response_mask": true,
+        "inputs_sha256": "f00cb9a9646c6d67f92cdb00f9bb91e777d3e04cd8a6bdf231892eb57101f2a2",
+        "initial_parameters_sha256": "254dbac45c2c93103642cc947ee310d4907c63cb28a3847356683313de467379",
+        "selected_coordinates": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "mask_coordinates": 8,
+        "gradient_coordinates": 1121
+      },
+      {
+        "dtype": "torch.float32",
+        "padding": "left",
+        "include_response_mask": false,
+        "inputs_sha256": "0aa034218ddd97e9154ea0b983675795116f79a86f56287968b24402afe8901b",
+        "initial_parameters_sha256": "254dbac45c2c93103642cc947ee310d4907c63cb28a3847356683313de467379",
+        "selected_coordinates": [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        "mask_coordinates": 8,
+        "gradient_coordinates": 1121
+      }
+    ],
+    "controls": "All four control-case measurements unchanged",
+    "tolerances": {
+      "mask_mismatches": 0,
+      "loss_max_gradient_atol": 2e-06,
+      "update_atol": 2e-07,
+      "reason": "Native value-head wrapper emits FP32 logits even for FP64 model parameters; independent oracle scores in FP64."
+    }
+  },
+  "comparisons": [
+    {
+      "dtype": "torch.float64",
+      "padding": "left",
+      "response_mask": true,
+      "before": {
+        "mask_mismatches": 1,
+        "native_selected_tokens": 4,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 0.2708968572729336,
+        "gradient_max_abs_error": 0.5824297139336153,
+        "gradient_l2_error": 1.4581475418012395,
+        "update_max_abs_error": 0.005824297139336153
+      },
+      "after": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 3,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 6.806343488818811e-09,
+        "gradient_max_abs_error": 9.245487672671082e-08,
+        "gradient_l2_error": 3.568930081259225e-07,
+        "update_max_abs_error": 9.245487639364391e-10
+      },
+      "same_inputs_and_initial_state": true,
+      "mask_coordinates": 8,
+      "gradient_coordinates": 1121
+    },
+    {
+      "dtype": "torch.float64",
+      "padding": "right",
+      "response_mask": true,
+      "before": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 3,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 1.2898980772391155e-08,
+        "gradient_max_abs_error": 9.269632525454874e-08,
+        "gradient_l2_error": 3.592058060036718e-07,
+        "update_max_abs_error": 9.269632492148183e-10
+      },
+      "after": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 3,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 1.2898980772391155e-08,
+        "gradient_max_abs_error": 9.269632525454874e-08,
+        "gradient_l2_error": 3.592058060036718e-07,
+        "update_max_abs_error": 9.269632492148183e-10
+      },
+      "same_inputs_and_initial_state": true,
+      "mask_coordinates": 8,
+      "gradient_coordinates": 1121
+    },
+    {
+      "dtype": "torch.float64",
+      "padding": "left",
+      "response_mask": false,
+      "before": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 4,
+        "oracle_selected_tokens": 4,
+        "loss_abs_error": 1.673903793353304e-09,
+        "gradient_max_abs_error": 1.5143107490178664e-07,
+        "gradient_l2_error": 4.3249951942230965e-07,
+        "update_max_abs_error": 1.514310748844394e-09
+      },
+      "after": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 4,
+        "oracle_selected_tokens": 4,
+        "loss_abs_error": 1.673903793353304e-09,
+        "gradient_max_abs_error": 1.5143107490178664e-07,
+        "gradient_l2_error": 4.3249951942230965e-07,
+        "update_max_abs_error": 1.514310748844394e-09
+      },
+      "same_inputs_and_initial_state": true,
+      "mask_coordinates": 8,
+      "gradient_coordinates": 1121
+    },
+    {
+      "dtype": "torch.float32",
+      "padding": "left",
+      "response_mask": true,
+      "before": {
+        "mask_mismatches": 1,
+        "native_selected_tokens": 4,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 0.2708968458734202,
+        "gradient_max_abs_error": 0.5824297070503235,
+        "gradient_l2_error": 1.4581474563056447,
+        "update_max_abs_error": 0.005824297200888395
+      },
+      "after": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 3,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 3.594535114004316e-08,
+        "gradient_max_abs_error": 1.7881393432617188e-07,
+        "gradient_l2_error": 6.089571056134116e-07,
+        "update_max_abs_error": 3.725290298461914e-09
+      },
+      "same_inputs_and_initial_state": true,
+      "mask_coordinates": 8,
+      "gradient_coordinates": 1121
+    },
+    {
+      "dtype": "torch.float32",
+      "padding": "right",
+      "response_mask": true,
+      "before": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 3,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 6.512221017995756e-08,
+        "gradient_max_abs_error": 1.4901161193847656e-07,
+        "gradient_l2_error": 4.915895112184677e-07,
+        "update_max_abs_error": 3.725290298461914e-09
+      },
+      "after": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 3,
+        "oracle_selected_tokens": 3,
+        "loss_abs_error": 6.512221017995756e-08,
+        "gradient_max_abs_error": 1.4901161193847656e-07,
+        "gradient_l2_error": 4.915895112184677e-07,
+        "update_max_abs_error": 3.725290298461914e-09
+      },
+      "same_inputs_and_initial_state": true,
+      "mask_coordinates": 8,
+      "gradient_coordinates": 1121
+    },
+    {
+      "dtype": "torch.float32",
+      "padding": "left",
+      "response_mask": false,
+      "before": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 4,
+        "oracle_selected_tokens": 4,
+        "loss_abs_error": 1.184292508504825e-08,
+        "gradient_max_abs_error": 1.1920928955078125e-07,
+        "gradient_l2_error": 4.2182341979177545e-07,
+        "update_max_abs_error": 3.725290298461914e-09
+      },
+      "after": {
+        "mask_mismatches": 0,
+        "native_selected_tokens": 4,
+        "oracle_selected_tokens": 4,
+        "loss_abs_error": 1.184292508504825e-08,
+        "gradient_max_abs_error": 1.1920928955078125e-07,
+        "gradient_l2_error": 4.2182341979177545e-07,
+        "update_max_abs_error": 3.725290298461914e-09
+      },
+      "same_inputs_and_initial_state": true,
+      "mask_coordinates": 8,
+      "gradient_coordinates": 1121
+    }
+  ],
+  "patch": {
+    "file": "trl-ppo-response-mask.patch",
+    "sha256": "e44c2455458e3a0962aa4d7a8c90854df7f070f4dbe103fcfe6d9d972b8191b4",
+    "change": "Multiply the response window by the response-only mask directly; remove query concatenation and padded-coordinate reslicing."
+  },
+  "source_evidence_sha256": {
+    "finding.json": "35b676a2d8883b0c566b931bb5989f643fcf8b3c04eec64f586bd0fd4fdae7c7",
+    "REPORT.md": "d9445c99f385f04c9fb7241e4a51b8ceca0043fc5b2401994b663ece05df4953",
+    "test_regression.py": "764fb77b3584478b716e8bd69321a0a5065e770dc5295f366412150749ac167e",
+    "workload.py": "8a7c792dbcd45ca6249f3a15b961e189c0e7bee0aa977881ce02869af92072c4",
+    "original-metrics.json": "b551202aae5ae2ebad5c74ef71ac4d52bb9014f5cded6107da85a23a22e61003",
+    "patched-metrics.json": "7c2a47433546ac71e277abb1e19da9fdf76a401f59debb4018c6ade2a658dc3b",
+    "runtime-provenance.json": "c6617109be7a4c2216bc392dc5390e86621ec610b6f46d913f40b4497fe9cf8e"
+  },
+  "limitations": [
+    "No full PPO step, reward generation, GAE, convergence, distributed or accelerator-device validation",
+    "PPO clipping inactive at tested initial policy; no claim for clipping boundaries",
+    "FP64 model still uses FP32 logits due native wrapper behavior; 2e-6 loss/gradient and 2e-7 update tolerances",
+    "One cold timing per case; no performance claim",
+    "Encoder-decoder not tested; no standalone dependency-environment archive."
+  ],
+  "numerical_acceptance": null
+}

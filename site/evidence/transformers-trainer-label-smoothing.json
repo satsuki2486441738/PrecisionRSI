@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "repair_id": "transformers-4533-trainer-label-smoothing-backport",
+  "record_date": "2026-10-22",
+  "classification": "historical-upstream-fixed-backport",
+  "novel_discovery": false,
+  "source": {
+    "library": "Transformers",
+    "baseline_version": "4.53.3",
+    "baseline_commit": "a5923d4de7df2fbd1f373dfcfe983216b79b6937",
+    "upstream_fix_commit": "2da6655ef1cb6f814400b129ff8e2f4d0942963f",
+    "upstream_pr": "https://github.com/huggingface/transformers/pull/47261",
+    "merged_utc": "2026-07-22T14:47:09Z",
+    "executed_candidate": "4.53.3 plus two-file backport",
+    "source_hashes": {
+      "before": [
+        {
+          "file": "trainer.py",
+          "sha256": "0cc15cec0a3b0eeb3cec5f421538bd62ede7a83ade081f217f6a90aed02d3cab"
+        },
+        {
+          "file": "trainer_pt_utils.py",
+          "sha256": "8c5503a0f0d581949c6e49f4730fa2029d4c390c5b6153f168f6f72d22482615"
+        },
+        {
+          "file": "modeling_llama.py",
+          "sha256": "4b18e2aec9f94e1545a9abc5cdbd11cf3834b9df68402d16cb69415cc5fd4c50"
+        },
+        {
+          "file": "accelerator.py",
+          "sha256": "b16097a6b8fc372e580eeb35bd94f1e88c6d9dc80ab340f3d05c1daf3e64e14e"
+        }
+      ],
+      "after": [
+        {
+          "file": "trainer.py",
+          "sha256": "86a4be9bd92de373cff5775bf39f715928c594ac94711f33960ab33ac4490396"
+        },
+        {
+          "file": "trainer_pt_utils.py",
+          "sha256": "b4113cc960e08ce55cd01d34c78a351c11975615a9010d140087b783de8c25bf"
+        },
+        {
+          "file": "modeling_llama.py",
+          "sha256": "4b18e2aec9f94e1545a9abc5cdbd11cf3834b9df68402d16cb69415cc5fd4c50"
+        },
+        {
+          "file": "accelerator.py",
+          "sha256": "b16097a6b8fc372e580eeb35bd94f1e88c6d9dc80ab340f3d05c1daf3e64e14e"
+        }
+      ]
+    }
+  },
+  "versions": {
+    "python": "3.12.14",
+    "torch": "2.6.0",
+    "transformers": "4.53.3",
+    "accelerate": "1.15.0",
+    "numpy": "2.2.6"
+  },
+  "cause": "Trainer skips gradient-accumulation normalization because the model accepts loss kwargs, but LabelSmoother mean-reduces the current microbatch and receives no total target count.",
+  "expected": "Sum dense-target smoothed token losses over active shifted labels, then divide by the total active shifted-target count in the accumulation window.",
+  "oracle": "q_k=(1-epsilon)*one_hot(y)+epsilon/V; manual full-window forward/backward and SGD trajectory. Independently compared with PyTorch cross_entropy for the noncausal masked utility case.",
+  "workload": {
+    "model": "random LlamaForCausalLM; one layer; 968 trainable parameters",
+    "native_entrypoint": "Trainer.train",
+    "primary": {
+      "seed": 813,
+      "batch_size": 1,
+      "gradient_accumulation_steps": 4,
+      "max_steps": 2,
+      "dataset_size": 8,
+      "epsilon": 0.1,
+      "unequal_targets": false,
+      "dtype": "float32",
+      "device": "cpu",
+      "optimizer": "SGD",
+      "learning_rate": 0.03,
+      "clipping": false,
+      "dropout": 0.0,
+      "attention": "eager",
+      "first_label_always_ignored": true,
+      "sampler": "native Trainer RandomSampler; actual batches captured"
+    },
+    "paired_identity": "Same initial parameter arrays, actual native sampler windows, inputs and oracle trajectories; case audit verified byte identity."
+  },
+  "coverage": {
+    "native_train_calls_per_suite": 6,
+    "optimizer_steps_per_native_case": 2,
+    "trainable_coordinates_per_step": 968,
+    "gradient_coordinates_primary_workload": 1936,
+    "update_coordinates_primary_workload": 1936,
+    "missing_coordinates": 0,
+    "tests": 8,
+    "native_red_test_methods": 4,
+    "other_red_test_methods": 1,
+    "baseline_passing_control_methods": 3,
+    "red_failure_records_including_subtests": 13,
+    "patched_test_methods_passed": 8
+  },
+  "metrics": {
+    "affected": {
+      "gradients": {
+        "count": 1936,
+        "side_a_norm": 7.013051866299986,
+        "side_b_norm": 1.8346891858638747,
+        "error_norm": 5.524955987748248,
+        "rmse": 0.1255671815397329,
+        "cosine": 0.8558418897821141,
+        "max_abs": 1.353308618068695,
+        "max_flat_index": 906,
+        "max_coordinate": {
+          "parameter": "step1_all_parameters",
+          "index": 906
+        }
+      },
+      "updates": {
+        "count": 1936,
+        "side_a_norm": 0.2103915522358381,
+        "side_b_norm": 0.055040674501705696,
+        "error_norm": 0.16574867642485544,
+        "rmse": 0.003767015373292169,
+        "cosine": 0.8558418943690063,
+        "max_abs": 0.04059925675392151,
+        "max_flat_index": 906,
+        "max_coordinate": {
+          "parameter": "step1_all_parameters",
+          "index": 906
+        }
+      }
+    },
+    "patched": {
+      "gradients": {
+        "count": 1936,
+        "side_a_norm": 1.8346891844735693,
+        "side_b_norm": 1.8346891858638747,
+        "error_norm": 1.1985815787594928e-07,
+        "rmse": 2.724049042635211e-09,
+        "cosine": 0.9999999999999979,
+        "max_abs": 5.960464477539063e-08,
+        "max_flat_index": 1861,
+        "max_coordinate": {
+          "parameter": "step2_all_parameters",
+          "index": 893
+        }
+      },
+      "updates": {
+        "count": 1936,
+        "side_a_norm": 0.055040675228691875,
+        "side_b_norm": 0.055040674501705696,
+        "error_norm": 6.448442377637417e-09,
+        "rmse": 1.4655550858266856e-10,
+        "cosine": 0.9999999999999929,
+        "max_abs": 1.862645149230957e-09,
+        "max_flat_index": 309,
+        "max_coordinate": {
+          "parameter": "step1_all_parameters",
+          "index": 309
+        }
+      }
+    }
+  },
+  "reported_train_loss": {
+    "affected": 11.601189613342285,
+    "patched": 2.940302848815918,
+    "oracle": 2.9403027296066284
+  },
+  "same_original_workload": true,
+  "regression": {
+    "before": {
+      "failed_test_methods": 5,
+      "failed_native_methods": 4,
+      "failed_utility_methods": 1,
+      "passed_control_methods": 3,
+      "failure_records_including_subtests": 13
+    },
+    "after": {
+      "passed_test_methods": 8
+    },
+    "controls_and_boundaries": [
+      "GAS=4 with equal and unequal active target counts",
+      "Partial final window (4 then 2 microbatches)",
+      "Batch size 2 / GAS=2",
+      "Full batch GAS=1 and no-smoothing native controls",
+      "Causal utility FP32/FP64 epsilon 0, 0.1 and 0.7",
+      "Noncausal masked utility checked with torch cross_entropy; int/tensor denominator"
+    ],
+    "tolerances": {
+      "gradient_max_abs": 2e-06,
+      "update_max_abs": 2e-07,
+      "final_parameter_max_abs": 3e-07,
+      "reported_training_loss_abs": 2e-06
+    }
+  },
+  "patch": {
+    "file": "transformers-trainer-label-smoothing.patch",
+    "sha256": "5c7b02f0bc13b31fa58252a07aba8c06e68a35521108fd33a7608a2b7394ad1f",
+    "changed_files": [
+      "src/transformers/trainer.py",
+      "src/transformers/trainer_pt_utils.py"
+    ],
+    "change": "Pass num_items_in_batch to LabelSmoother; divide summed token losses by full-window target count, retaining local-count fallback."
+  },
+  "source_evidence_sha256": {
+    "finding.json": "a4c2d42239a1fbde12ac9fb532c512f31bf7ead9e5922aa303e3d8d55238fcdb",
+    "REPORT.md": "d1966e38c2f83f824607e79573d9c0e787b95fd49bae8c5f7dbcb9cae68529ca",
+    "test_trainer_accumulation.py": "9bbabe241020050af29fd362cbbb17646299e3180da3d016ce59160bb0b470fe",
+    "workload.py": "139020caed701051d3c9847aadbaa3525b839a82aef8e22eb47ec31a0571d994",
+    "upstream_status.json": "58bef2114a0b92a5f2a3e59ca44e7c142b0eee1753b65e78b4c286c6317726d9",
+    "audit_case.py": "9e6553a713c7485692e77d4c1d86f3baba6e4748c2f016ab82d9fda1ba793d92"
+  },
+  "limitations": [
+    "Historical released baseline and isolated backport executed; latest Transformers release and entire upstream fix revision were not executed.",
+    "CPU FP32 native Trainer only; FP32/FP64 standalone utility checks; no distributed or accelerator coverage.",
+    "Causal examples ignore the first label, so 4.53.3 pre-shift item counting equals active shifted-target count; no claim about a separate first-label counting issue.",
+    "No optimizer substitution claim beyond native Trainer SGD with constant learning rate and clipping disabled; no full upstream suite or public repository validation.",
+    "No mixed precision, other optimizers, noncausal native model training, performance or memory benchmark."
+  ],
+  "numerical_acceptance": null
+}

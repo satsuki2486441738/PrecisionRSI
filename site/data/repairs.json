@@ -3,6 +3,410 @@
   "updated_at": "2026-10-22",
   "repairs": [
     {
+      "id": "pytorch-230-asgd-foreach-schedule-backport",
+      "title": "历史源码回移植：PyTorch ASGD foreach 学习率公式",
+      "date": "2026-10-22",
+      "status": "validated",
+      "classification": "historical_upstream_fixed_partial_source_backport",
+      "model": {
+        "name": "微型双参数 ASGD · 5 个标量",
+        "revision": "固定初值/梯度回放与可分离二次目标；无预训练模型"
+      },
+      "environment": {
+        "hardware": "CPU · 连续实数张量 · FP32 / FP64",
+        "libraries": [
+          {
+            "name": "PyTorch",
+            "version": "2.6.0 runtime；v2.3.0 ASGD 源码",
+            "commit": "97ff6cfd9c86c5c09d7ce775ab64ec5c99230f5d"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "ASGD noncapturable foreach 的学习率公式括号错误，指数仅作用于 step，改变后续参数更新。",
+        "trigger": "foreach=True、capturable=False；参数同步推进，alpha=0.75、lambd=0.2、lr=0.5。",
+        "expected": "存储下一步 eta=lr/((1+lambd*lr*step)**alpha)，由独立 Python 标量递推核对。",
+        "observed": "第一次调用 eta 偏离，第二次消费错误 eta 后参数/update/ax 偏离；FP64 固定回放 eta 最大误差 0.022730721150762245。",
+        "location": "torch/optim/asgd.py · _multi_tensor_asgd · noncapturable eta"
+      },
+      "cause": {
+        "category": "optimizer_schedule_parentheses",
+        "summary": "旧公式把 step**alpha 放在加法项内，未对整个 (1+lambd*lr*step) 求幂。",
+        "components": [
+          "ASGD.step → asgd → _multi_tensor_asgd → stored eta"
+        ]
+      },
+      "repair": {
+        "summary": "单表达式部分回移植：仅修正 noncapturable foreach eta 的括号；保留其他源码与原生算子。",
+        "commit": "7e166e805740766268b4297621961a4afdd6c41b",
+        "upstream_status": "上游已修复（PR #126375）；本条是 v2.3.0 源码在 Torch 2.6.0 CPU 上的部分回移植，不是完整 2.3 安装"
+      },
+      "stages": [
+        {
+          "name": "独立递推",
+          "result": "Python 标量和 math.pow 定义 schedule；固定梯度回放及二次目标解析梯度，不复用优化器 helper。"
+        },
+        {
+          "name": "原版复现",
+          "result": "12 个含 checkpoint 变体场景均偏离 oracle；第一次 eta 分叉、第二次更新分叉。"
+        },
+        {
+          "name": "最小回移植",
+          "result": "仅修正一个表达式；同步参数步数，未触碰 unequal-step 或 capturable 分支。"
+        },
+        {
+          "name": "回归与对照",
+          "result": "候选 7/7 测试方法、12/12 场景通过；v2.4.0 源码和已安装 2.6.0 同样 12/12 通过。"
+        },
+        {
+          "name": "原任务与状态",
+          "result": "同初始 fixture/测试；每源 3,624 坐标完整配对，save/load 与不间断边界精确一致。"
+        }
+      ],
+      "validation": {
+        "scope": "历史 v2.3.0 原生 ASGD 源文件，实际 Torch 2.6.0 CPU helpers/算子；同步步数、noncapturable foreach。FP32/FP64 × 固定回放/二次目标共 4 条轨迹，各含 3 种 checkpoint 方式。",
+        "coverage": {
+          "observed": 12,
+          "expected": 12,
+          "unit": "场景（4 条轨迹及 checkpoint 变体）"
+        },
+        "metrics": [
+          {
+            "id": "eta-fp64-max-abs",
+            "label": "下一步 eta 最大绝对误差（FP64 固定回放）",
+            "unit": "学习率值",
+            "before": 0.022730721150762245,
+            "after": 0.0
+          },
+          {
+            "id": "update-fp64-max-abs",
+            "label": "实际存储更新最大绝对误差（FP64 固定回放）",
+            "unit": "参数值",
+            "before": 0.008969101605693142,
+            "after": 2.220446049250313e-16
+          }
+        ],
+        "checks": [
+          "原版 0/12 场景通过；候选 12/12；永久回归 7/7 测试方法通过",
+          "每场景 12 次调用含 2 次 no-gradient，每参数实际推进 10 步",
+          "每源 3,624 个配对坐标，另显式记录无梯度坐标，无缺失",
+          "候选全部坐标最大误差：FP64=2.220446049250313e-16；FP32=4.141734866180968e-8",
+          "每源 8 个精确 checkpoint continuation 检查，四源共 32 个",
+          "FP64 容差 2e-12；FP32 容差 3e-6；alpha=1、lambd=0 和单 tensor 原版对照通过"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "未验证完整 PyTorch 2.3 二进制安装；实际运行时为 Torch 2.6.0。",
+          "unequal-parameter-step 是另一个缺陷，未修改；capturable 分支也未修改或验证。",
+          "未验证 GPU/NPU、compiled、complex、sparse、非连续、分布式或 differentiable 路径。",
+          "仅检查同源 checkpoint continuation；未修复或迁移已存储错误 eta 的 checkpoint。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "历史源码回移植与原生验证摘要",
+          "url": "evidence/pytorch-asgd-foreach-schedule.md"
+        },
+        {
+          "label": "标量 oracle、状态指标及来源哈希",
+          "url": "evidence/pytorch-asgd-foreach-schedule.json"
+        },
+        {
+          "label": "单表达式部分回移植补丁",
+          "url": "evidence/pytorch-asgd-foreach-schedule.patch"
+        }
+      ],
+      "notes": [
+        "这是上游已修复缺陷的历史源码复现；只回移植整个上游提交中的一个 schedule 表达式。",
+        "12 场景包含 4 条轨迹的 checkpoint 变体，不作为 12 份独立数据集。",
+        "v2.4.0 源码经同运行时复验；当前 main 仅检查源码，未执行。"
+      ],
+      "library_group_id": "pytorch",
+      "affected_library": "PyTorch",
+      "verification_title": "ASGD schedule / 更新 / averaging / checkpoint 验证"
+    },
+    {
+      "id": "transformers-4533-trainer-label-smoothing-backport",
+      "title": "历史缺陷回移植：Trainer label smoothing 按累积窗口归一化",
+      "date": "2026-10-22",
+      "status": "validated",
+      "classification": "historical_upstream_bug_reproduction_and_backport",
+      "model": {
+        "name": "微型随机 Llama · 968 参数",
+        "revision": "随机初始化 seed=813；1 层、FP32、dropout=0"
+      },
+      "environment": {
+        "hardware": "CPU · FP32 · eager attention",
+        "libraries": [
+          {
+            "name": "Transformers",
+            "version": "4.53.3",
+            "commit": "a5923d4de7df2fbd1f373dfcfe983216b79b6937"
+          },
+          {
+            "name": "PyTorch",
+            "version": "2.6.0"
+          },
+          {
+            "name": "Accelerate",
+            "version": "1.15.0"
+          },
+          {
+            "name": "NumPy",
+            "version": "2.2.6"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "Trainer label smoothing 未接收整个梯度累积窗口的 target 数，错误累加各 microbatch 的均值。",
+        "trigger": "模型支持 loss kwargs，启用 label smoothing 与 gradient accumulation；主负载 GAS=4。",
+        "expected": "独立 dense-target smoothed token loss 求和后，除以当前优化器窗口的有效 shifted-target 总数。",
+        "observed": "等长 microbatch 的局部梯度约为预期 4 倍；主负载两步轨迹梯度最大误差为 1.353308618068695。",
+        "location": "src/transformers/trainer.py · compute_loss；trainer_pt_utils.py · LabelSmoother"
+      },
+      "cause": {
+        "category": "accumulation_loss_denominator",
+        "summary": "Trainer 因 loss-kwargs 支持跳过旧累积步数除法，但 smoother 仍按每个 microbatch 的有效 token 数归约。",
+        "components": [
+          "Trainer.train → compute_loss → LabelSmoother → accumulation window"
+        ]
+      },
+      "repair": {
+        "summary": "回移植两文件修复：向 LabelSmoother 传入 num_items_in_batch，以窗口总数作分母，并保留独立调用的本地计数 fallback。",
+        "commit": "2da6655ef1cb6f814400b129ff8e2f4d0942963f",
+        "upstream_status": "上游已修复（PR #47261）；执行的是 4.53.3 加隔离回移植，未执行完整上游修复版本"
+      },
+      "stages": [
+        {
+          "name": "独立目标",
+          "result": "显式 dense q 分布、有效 shifted labels、全窗口 forward/backward 和独立 SGD 轨迹；不调用 Trainer/smoother/model loss。"
+        },
+        {
+          "name": "原版回归",
+          "result": "8 个测试方法中 5 个失败（4 个原生、1 个 utility），3 个对照通过；含子测试共 13 条失败记录。"
+        },
+        {
+          "name": "最小回移植",
+          "result": "仅修改 Trainer 与 LabelSmoother 的窗口分母传递，不改 dtype 或目标函数。"
+        },
+        {
+          "name": "补丁回归",
+          "result": "同一永久回归 8/8 方法通过；6 个方法各执行原生 Trainer.train 两步。"
+        },
+        {
+          "name": "原任务复验",
+          "result": "原始初值、实际 sampler 窗口、输入和 oracle 轨迹一致；完整比较两步梯度与存储更新。"
+        }
+      ],
+      "validation": {
+        "scope": "原生 Trainer.train，微型 Llama CPU FP32，8 个长度 5 的样本、batch=1/GAS=4、smoothing=0.1、两次 SGD 更新；每步 968 个参数。",
+        "coverage": {
+          "observed": 1936,
+          "expected": 1936,
+          "unit": "两步梯度坐标（更新同数）"
+        },
+        "metrics": [
+          {
+            "id": "gradients-max-abs",
+            "label": "两步轨迹梯度最大绝对误差",
+            "unit": "梯度值",
+            "before": 1.353308618068695,
+            "after": 5.960464477539063e-08
+          },
+          {
+            "id": "updates-max-abs",
+            "label": "两步实际存储更新最大绝对误差",
+            "unit": "参数值",
+            "before": 0.04059925675392151,
+            "after": 1.862645149230957e-09
+          }
+        ],
+        "checks": [
+          "原版 5 个方法失败 / 3 个对照通过；补丁后 8/8 方法通过",
+          "每侧梯度 1,936/1,936、更新 1,936/1,936 坐标完整，无缺失",
+          "原始初始参数、实际 sampler 输入窗口和 oracle 轨迹修复前后一致",
+          "覆盖不等 target 数、最后不满窗口、batch=2/GAS=2、GAS=1 与无 smoothing 对照",
+          "独立 utility 覆盖 FP32/FP64、epsilon=0/0.1/0.7、非 causal mask 与 int/tensor 分母",
+          "梯度容差 2e-6、更新 2e-7、最终参数 3e-7、报告 loss 2e-6"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "所有 causal 样本首个 label 均忽略；未验证另一个首 label/shifted-count 问题。",
+          "仅 CPU FP32 原生 Trainer 与恒定 SGD、无裁剪；未验证 GPU/NPU、分布式、混合精度或其他优化器。",
+          "独立 utility 有 FP64 覆盖；不等同于 FP64 原生训练或 noncausal 原生训练。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "历史回移植与原生训练摘要",
+          "url": "evidence/transformers-trainer-label-smoothing.md"
+        },
+        {
+          "label": "独立目标、两步指标及来源哈希",
+          "url": "evidence/transformers-trainer-label-smoothing.json"
+        },
+        {
+          "label": "两文件最小回移植补丁",
+          "url": "evidence/transformers-trainer-label-smoothing.patch"
+        }
+      ],
+      "notes": [
+        "这是上游已修复缺陷的历史复现与回移植，与 Qwen2 mask 为不同独立缺陷。",
+        "13 为含子测试的失败记录数；测试方法总数为 8。",
+        "更新从实际存储的前后参数提升精度后相减；指标覆盖整条两步轨迹。"
+      ],
+      "library_group_id": "transformers",
+      "affected_library": "Transformers",
+      "verification_title": "Label smoothing 原生 Trainer.train 两步累积验证"
+    },
+    {
+      "id": "trl-0710-ppo-response-mask-backport",
+      "title": "历史缺陷回移植：TRL PPO 左侧 padding 的 response mask 坐标",
+      "date": "2026-10-22",
+      "status": "validated",
+      "classification": "historical_upstream_bug_reproduction_and_backport",
+      "model": {
+        "name": "微型随机 GPT-2 + value head · 1,121 参数",
+        "revision": "随机初始化 seed=415；1 层、hidden=8、词表 12"
+      },
+      "environment": {
+        "hardware": "CPU · 单线程 · FP32 / FP64 参数（评分 logits 为 FP32）",
+        "libraries": [
+          {
+            "name": "TRL",
+            "version": "0.7.10",
+            "commit": "09ca7607d50714a80c9f0feb206b29f1c5a49bab"
+          },
+          {
+            "name": "PyTorch",
+            "version": "2.2.2"
+          },
+          {
+            "name": "Transformers",
+            "version": "4.37.2"
+          },
+          {
+            "name": "Accelerate",
+            "version": "0.26.1"
+          }
+        ]
+      },
+      "problem": {
+        "summary": "PPO response-only mask 被按含左侧 padding 的坐标再次切片，广播后纳入调用者排除的 token。",
+        "trigger": "两条不等长 query，左侧 padding，显式 response_masks。",
+        "expected": "每个选中的 response token 映射到前一个 predictor 坐标；独立 oracle 选中 3 个 token。",
+        "observed": "原版选中 4 个 token，8 个 mask 坐标中 1 个错误，并改变 policy/value loss、梯度与更新。",
+        "location": "trl/trainer/ppo_trainer.py · PPOTrainer.batched_forward_pass"
+      },
+      "cause": {
+        "category": "response_mask_coordinates",
+        "summary": "response mask 先拼接 query 零值，再用 padded 坐标切片；单元素切片静默广播到两个 response token。",
+        "components": [
+          "PPOTrainer → response-mask coordinates → policy/value loss"
+        ]
+      },
+      "repair": {
+        "summary": "回移植上游最小运行时修复：直接应用 response-only mask，移除 query 拼接和重复坐标切片。",
+        "commit": "3bf94492a8dc84ac192f7c5206553e1460f53aa4",
+        "upstream_status": "上游已修复（PR #1718）；本条为 TRL 0.7.10 历史版本复现与隔离回移植"
+      },
+      "stages": [
+        {
+          "name": "独立坐标",
+          "result": "枚举非 padding token，将 response token 映射到前一 predictor；独立前向和逐 token logsumexp。"
+        },
+        {
+          "name": "原版回归",
+          "result": "6 个测试中 2 个失败，4 个对照通过；左侧 padding 的 mask 多选 1 个 token。"
+        },
+        {
+          "name": "最小回移植",
+          "result": "仅修正 response mask 的坐标应用，不改 dtype 或依赖。"
+        },
+        {
+          "name": "补丁回归",
+          "result": "同一永久回归 6/6 通过，四个对照指标不变。"
+        },
+        {
+          "name": "原任务复验",
+          "result": "六组配置的输入、初始状态和 oracle 坐标一致；覆盖全部 1,121 个梯度与实际 SGD 更新坐标。"
+        }
+      ],
+      "validation": {
+        "scope": "原生 PPOTrainer 构造、prepare_model_inputs、batched_forward_pass、loss、backward 与一次直接 SGD；CPU 微型负载。以下为左侧 padding 的 FP32 指标。",
+        "coverage": {
+          "observed": 6,
+          "expected": 6,
+          "unit": "原生回归测试"
+        },
+        "metrics": [
+          {
+            "id": "mask-mismatches",
+            "label": "Mask 不同元素数",
+            "unit": "元素",
+            "before": 1,
+            "after": 0
+          },
+          {
+            "id": "loss-abs-error",
+            "label": "Policy/value 总 loss 绝对误差（FP32）",
+            "unit": "无量纲",
+            "before": 0.2708968458734202,
+            "after": 3.594535114004316e-08
+          },
+          {
+            "id": "gradient-max-abs-error",
+            "label": "参数梯度最大绝对误差（FP32）",
+            "unit": "梯度值",
+            "before": 0.5824297070503235,
+            "after": 1.7881393432617188e-07
+          },
+          {
+            "id": "update-max-abs-error",
+            "label": "实际 SGD 更新最大绝对误差（FP32）",
+            "unit": "参数值",
+            "before": 0.005824297200888395,
+            "after": 3.725290298461914e-09
+          }
+        ],
+        "checks": [
+          "原版 2 个失败 / 4 个对照通过；补丁版 6/6 通过",
+          "六组相同配置：输入、response mask、初始参数哈希及 oracle 坐标修复前后一致",
+          "每组覆盖 8 个 mask 坐标及全部 1,121 个梯度/更新坐标",
+          "独立 policy/value oracle 适用于初始 policy；ratio 约为 1、value clipping 未触发",
+          "Mask 必须精确一致；loss/梯度容差 2e-6，更新容差 2e-7"
+        ],
+        "acceptance": null,
+        "remaining": [
+          "未执行 PPOTrainer.step/train、生成、reward、GAE、收敛、分布式或 GPU/NPU 验证。",
+          "未验证 clipping 边界、encoder-decoder 或完整 PPO 优化器调度。",
+          "FP64 参数模型的原生 wrapper 仍输出 FP32 logits，不代表完整 FP64 评分。"
+        ]
+      },
+      "evidence": [
+        {
+          "label": "历史回移植与原生验证摘要",
+          "url": "evidence/trl-ppo-response-mask.md"
+        },
+        {
+          "label": "独立坐标、前后指标与来源哈希",
+          "url": "evidence/trl-ppo-response-mask.json"
+        },
+        {
+          "label": "最小源码回移植补丁",
+          "url": "evidence/trl-ppo-response-mask.patch"
+        }
+      ],
+      "notes": [
+        "这是上游已修复缺陷的复现与回移植，与 IPO averaging 为不同独立缺陷。",
+        "上游修复明确 response-only mask 语义；不以原错误 docstring 作为预期。",
+        "当前上游快照已无旧 PPOTrainer API；未声称在当前 API 执行。"
+      ],
+      "library_group_id": "trl",
+      "affected_library": "TRL",
+      "verification_title": "PPO response-mask 原生 loss / backward / SGD 验证"
+    },
+    {
       "id": "trl-0710-ipo-completion-average-backport",
       "title": "历史缺陷回移植：TRL IPO 使用 completion 均值",
       "date": "2026-10-22",
@@ -1256,7 +1660,7 @@
       "components": [
         "TRL"
       ],
-      "description": "历史 DPOTrainer IPO completion 评分归约语义。"
+      "description": "TRL 偏好目标归约与 PPO response-mask 坐标语义。"
     },
     {
       "id": "peft",
@@ -1272,7 +1676,15 @@
       "components": [
         "Transformers"
       ],
-      "description": "历史 Qwen2 causal mask 与滑窗配置语义。"
+      "description": "Transformers 注意力 mask 与 Trainer 训练目标归约语义。"
+    },
+    {
+      "id": "pytorch",
+      "title": "PyTorch",
+      "components": [
+        "PyTorch"
+      ],
+      "description": "PyTorch 原生优化器的公式、状态与更新语义。"
     }
   ]
 }

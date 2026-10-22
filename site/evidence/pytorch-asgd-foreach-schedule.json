@@ -1,0 +1,829 @@
+{
+  "schema_version": 1,
+  "repair_id": "pytorch-230-asgd-foreach-schedule-backport",
+  "record_date": "2026-10-22",
+  "classification": "historical_upstream_fixed_partial_source_backport",
+  "novel_discovery": false,
+  "source": {
+    "library": "PyTorch",
+    "affected": "v2.3.0 source; not a full v2.3.0 installation",
+    "baseline_commit": "97ff6cfd9c86c5c09d7ce775ab64ec5c99230f5d",
+    "file": "torch/optim/asgd.py",
+    "source_hashes": {
+      "baseline": "38d655c5069bf1dfb53f953cb01f1ae62bfa2105f77ee06516983f347915e35f",
+      "candidate": "67e854be363566107592daece949a48f38f5baf9cf0eba6629dddc7ad4e21a3c"
+    },
+    "upstream": {
+      "first_fix": "2c5ad9a3d7ea79ca897aec153a401f4b9175a717",
+      "first_fix_date": "2024-05-15",
+      "revert": "e3c5d1b7d7645e3e9c9efc71cbbaa77248fda9c2",
+      "revert_date": "2024-05-16",
+      "revert_reason": "lint failure",
+      "landed_fix": "7e166e805740766268b4297621961a4afdd6c41b",
+      "landed_fix_date": "2024-05-17",
+      "pull_request": 126375,
+      "fixed_release_source": "v2.4.0",
+      "current_status": "Already fixed in verified v2.4.0 source, installed Torch 2.6.0 source, and inspected pinned main source. This is not a new current-upstream defect.",
+      "inspected_main_commit": "37f56e48ce431907080585a595c437f9edb23411",
+      "status_checked_utc": "2026-10-22T01:51:57.067698+00:00"
+    },
+    "fixed_release_source_commit": "d990dada86a8ad94882b5c23e859b88c0c255bda",
+    "primary_sources": [
+      "https://github.com/pytorch/pytorch/blob/97ff6cfd9c86c5c09d7ce775ab64ec5c99230f5d/torch/optim/asgd.py",
+      "https://github.com/pytorch/pytorch/commit/7e166e805740766268b4297621961a4afdd6c41b"
+    ]
+  },
+  "runtime": {
+    "torch": "2.6.0",
+    "python": "3.12",
+    "device": "cpu",
+    "loading": "byte-for-byte historical ASGD source imports installed torch.optim.optimizer helpers and native Torch ops",
+    "native_entrypoint": "historical module.ASGD(foreach=True, capturable=False).step()",
+    "native_dispatch": "ASGD.step -> asgd -> _multi_tensor_asgd"
+  },
+  "defect": "Noncapturable foreach ASGD stores a different learning-rate schedule than the algorithm: exponent applies to step alone instead of the whole affine term.",
+  "oracle": "Python scalar recurrence using math.pow; explicit gradients for fixed replay and analytic gradients for separable quadratic; no Torch optimizer helpers or patched code in oracle",
+  "initial_fixture": {
+    "parameters": [
+      [
+        1.0,
+        -2.0,
+        0.125
+      ],
+      [
+        0.5,
+        -0.25
+      ]
+    ],
+    "optimizer_state": {},
+    "hyperparameters": {
+      "lr": 0.5,
+      "lambd": 0.2,
+      "alpha": 0.75,
+      "t0": 2.0,
+      "weight_decay": 0.05,
+      "maximize": false,
+      "foreach": true,
+      "capturable": false,
+      "differentiable": false
+    },
+    "calls": 12,
+    "no_gradient_calls": [
+      3,
+      8
+    ],
+    "checkpoint_after_calls": [
+      2,
+      5
+    ],
+    "quadratic_diagonal": [
+      [
+        0.5,
+        1.0,
+        2.0
+      ],
+      [
+        1.5,
+        0.25
+      ]
+    ],
+    "quadratic_target": [
+      [
+        0.25,
+        -0.5,
+        0.0
+      ],
+      [
+        1.0,
+        0.5
+      ]
+    ],
+    "fixed_gradient_cycle": [
+      [
+        [
+          0.25,
+          -0.5,
+          0.125
+        ],
+        [
+          -0.25,
+          0.5
+        ]
+      ],
+      [
+        [
+          -0.125,
+          0.25,
+          0.5
+        ],
+        [
+          0.125,
+          -0.25
+        ]
+      ],
+      [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ]
+    ],
+    "boundary_semantics": "Only parameters with gradients advance. Stored eta/mu from previous active step drive parameter/ax update; increment step then store next eta/mu. Both parameters always active or skipped together."
+  },
+  "patch": {
+    "file": "pytorch-asgd-foreach-schedule.patch",
+    "sha256": "f2290c5d618dc9addaa6cd4195970b73d4e6603ba8fbce80e4c9237b6d0b6328",
+    "changed_expressions": 1,
+    "before": "lr / (1 + lambd * lr * step ** alpha)",
+    "after": "lr / ((1 + lambd * lr * step) ** alpha)",
+    "scope": "noncapturable foreach schedule with synchronized per-parameter steps; deliberately not full upstream commit"
+  },
+  "coverage": {
+    "scenarios_per_source": 12,
+    "unique_dtype_workload_trajectories": 4,
+    "calls_per_scenario": 12,
+    "no_gradient_calls": [
+      3,
+      8
+    ],
+    "active_steps_per_parameter": 10,
+    "parameters": 2,
+    "parameter_elements": 5,
+    "native_dispatch_calls_per_source": 144,
+    "present_gradient_parameter_updates_per_source": 240,
+    "paired_coordinates_per_scenario": 302,
+    "paired_coordinates_per_source": 3624,
+    "fields": [
+      "parameter",
+      "update",
+      "ax",
+      "eta",
+      "mu",
+      "step",
+      "gradient"
+    ],
+    "absent_gradient_coordinates_per_scenario": 10,
+    "missing_coordinates": 0
+  },
+  "scenario_results": {
+    "baseline": {
+      "cases": 12,
+      "passed": 0,
+      "paired_coordinates": 3624
+    },
+    "candidate": {
+      "cases": 12,
+      "passed": 12,
+      "paired_coordinates": 3624
+    },
+    "release": {
+      "cases": 12,
+      "passed": 12,
+      "paired_coordinates": 3624
+    },
+    "installed": {
+      "cases": 12,
+      "passed": 12,
+      "paired_coordinates": 3624
+    }
+  },
+  "regression": {
+    "test_methods": 7,
+    "baseline_failure_records_including_subtests": 18,
+    "candidate_passed_methods": 7,
+    "same_final_test_source": true,
+    "same_initial_fixture": true
+  },
+  "metrics": [
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "parameter",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.00935452104138107,
+        "rmse": 0.003925103392898159
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 2.220446049250313e-16,
+        "rmse": 8.92216926358191e-17
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "update",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008969101605693142,
+        "rmse": 0.0028145526575793804
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 2.220446049250313e-16,
+        "rmse": 4.239734207189668e-17
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "ax",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008177224650697701,
+        "rmse": 0.003590012458974138
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 2.220446049250313e-16,
+        "rmse": 1.0409882718080376e-16
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "eta",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.022730721150762245,
+        "rmse": 0.012572786935218613
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "mu",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "step",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "fixed",
+      "field": "gradient",
+      "baseline": {
+        "count": 50,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 50,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "parameter",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008220575824242737,
+        "rmse": 0.002307245568375364
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 1.1102230246251565e-16,
+        "rmse": 4.519183929556313e-17
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "update",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008220575824242737,
+        "rmse": 0.0013978818214084234
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 1.1102230246251565e-16,
+        "rmse": 4.389464075840841e-17
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "ax",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008220575824242737,
+        "rmse": 0.0024715124372577534
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 1.1102230246251565e-16,
+        "rmse": 4.443059973816888e-17
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "eta",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.022730721150762245,
+        "rmse": 0.012572786935218613
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "mu",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "step",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float64",
+      "workload": "quadratic",
+      "field": "gradient",
+      "baseline": {
+        "count": 50,
+        "max_abs_error": 0.008220575824242737,
+        "rmse": 0.0017108687383106717
+      },
+      "candidate": {
+        "count": 50,
+        "max_abs_error": 1.6653345369377348e-16,
+        "rmse": 4.6568563140901486e-17
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "parameter",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.009354473040656397,
+        "rmse": 0.003925107883489586
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 4.141734866180968e-08,
+        "rmse": 1.5253880401159307e-08
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "update",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008969090665161272,
+        "rmse": 0.002814552357541586
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 4.141734866180968e-08,
+        "rmse": 1.2345429087234335e-08
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "ax",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008177262948406261,
+        "rmse": 0.0035900295531641757
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 4.141734866180968e-08,
+        "rmse": 1.5399549043411773e-08
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "eta",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.022730728430487346,
+        "rmse": 0.012572788646577408
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 1.2222935830141779e-08,
+        "rmse": 8.185465604354632e-09
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "mu",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 9.934107481068821e-09,
+        "rmse": 3.797187572009848e-09
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 9.934107481068821e-09,
+        "rmse": 3.797187572009848e-09
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "step",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "fixed",
+      "field": "gradient",
+      "baseline": {
+        "count": 50,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 50,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "parameter",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008220543312618345,
+        "rmse": 0.002307244254121336
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 2.5601192277235896e-08,
+        "rmse": 1.1350606922081817e-08
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "update",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008220543312618345,
+        "rmse": 0.001397877643283635
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 3.374027979230476e-08,
+        "rmse": 1.0418174335048988e-08
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "ax",
+      "baseline": {
+        "count": 60,
+        "max_abs_error": 0.008220543312618345,
+        "rmse": 0.0024715156086155513
+      },
+      "candidate": {
+        "count": 60,
+        "max_abs_error": 3.455636360394365e-08,
+        "rmse": 1.2742522122639042e-08
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "eta",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.022730728430487346,
+        "rmse": 0.012572788646577408
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 1.2222935830141779e-08,
+        "rmse": 8.185465604354632e-09
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "mu",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 9.934107481068821e-09,
+        "rmse": 3.797187572009848e-09
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 9.934107481068821e-09,
+        "rmse": 3.797187572009848e-09
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "step",
+      "baseline": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      },
+      "candidate": {
+        "count": 24,
+        "max_abs_error": 0.0,
+        "rmse": 0.0
+      }
+    },
+    {
+      "dtype": "float32",
+      "workload": "quadratic",
+      "field": "gradient",
+      "baseline": {
+        "count": 50,
+        "max_abs_error": 0.008220543312618345,
+        "rmse": 0.001710867139345097
+      },
+      "candidate": {
+        "count": 50,
+        "max_abs_error": 3.0951762319819665e-08,
+        "rmse": 9.625123176859382e-09
+      }
+    }
+  ],
+  "first_divergent_boundaries": {
+    "fixed": {
+      "parameter": {
+        "call": 2,
+        "parameter": 0,
+        "actual": [
+          0.7215909090909091,
+          -1.4431818181818181,
+          -0.18572443181818182
+        ],
+        "expected": [
+          0.7209058611055554,
+          -1.4418117222111109,
+          -0.19133326219826405
+        ]
+      },
+      "update": {
+        "call": 2,
+        "parameter": 0,
+        "actual": [
+          -0.02840909090909094,
+          0.05681818181818188,
+          -0.23259943181818182
+        ],
+        "expected": [
+          -0.029094138894444566,
+          0.05818827778888913,
+          -0.23820826219826405
+        ]
+      },
+      "ax": {
+        "call": 2,
+        "parameter": 0,
+        "actual": [
+          0.7215909090909091,
+          -1.4431818181818181,
+          -0.18572443181818182
+        ],
+        "expected": [
+          0.7209058611055554,
+          -1.4418117222111109,
+          -0.19133326219826405
+        ]
+      },
+      "eta": {
+        "call": 1,
+        "parameter": 0,
+        "actual": 0.45454545454545453,
+        "expected": 0.46550622231111144
+      }
+    },
+    "quadratic": {
+      "parameter": {
+        "call": 2,
+        "parameter": 0,
+        "actual": [
+          0.5099431818181819,
+          -0.6590909090909091,
+          0.00035511363636363583
+        ],
+        "expected": [
+          0.505661631909722,
+          -0.6508703332666663,
+          0.0007404531281250109
+        ]
+      },
+      "update": {
+        "call": 2,
+        "parameter": 0,
+        "actual": [
+          -0.17755681818181812,
+          0.34090909090909094,
+          0.015980113636363636
+        ],
+        "expected": [
+          -0.18183836809027798,
+          0.3491296667333337,
+          0.016365453128125
+        ]
+      },
+      "ax": {
+        "call": 2,
+        "parameter": 0,
+        "actual": [
+          0.5099431818181819,
+          -0.6590909090909091,
+          0.00035511363636363605
+        ],
+        "expected": [
+          0.505661631909722,
+          -0.6508703332666663,
+          0.0007404531281250126
+        ]
+      },
+      "eta": {
+        "call": 1,
+        "parameter": 0,
+        "actual": 0.45454545454545453,
+        "expected": 0.46550622231111144
+      },
+      "gradient": {
+        "call": 4,
+        "parameter": 0,
+        "actual": [
+          0.12997159090909094,
+          -0.15909090909090906,
+          0.0007102272727272717
+        ],
+        "expected": [
+          0.127830815954861,
+          -0.15087033326666632,
+          0.0014809062562500218
+        ]
+      }
+    }
+  },
+  "causal_controls": [
+    {
+      "source": "affected",
+      "label": "alpha-one",
+      "pass_oracle": true,
+      "max_abs_error": 1.6653345369377348e-16
+    },
+    {
+      "source": "affected",
+      "label": "lambda-zero",
+      "pass_oracle": true,
+      "max_abs_error": 1.1102230246251565e-16
+    },
+    {
+      "source": "affected",
+      "label": "single-tensor",
+      "pass_oracle": true,
+      "max_abs_error": 2.220446049250313e-16
+    },
+    {
+      "source": "affected",
+      "label": "alpha-zero",
+      "pass_oracle": false,
+      "max_abs_error": 0.09102124382798821
+    },
+    {
+      "source": "candidate",
+      "label": "alpha-one",
+      "pass_oracle": true,
+      "max_abs_error": 1.6653345369377348e-16
+    },
+    {
+      "source": "candidate",
+      "label": "lambda-zero",
+      "pass_oracle": true,
+      "max_abs_error": 1.1102230246251565e-16
+    },
+    {
+      "source": "candidate",
+      "label": "single-tensor",
+      "pass_oracle": true,
+      "max_abs_error": 2.220446049250313e-16
+    },
+    {
+      "source": "candidate",
+      "label": "alpha-zero",
+      "pass_oracle": true,
+      "max_abs_error": 1.1102230246251565e-16
+    }
+  ],
+  "checkpoint_continuation": {
+    "exact_checks": 32,
+    "all_exact": true,
+    "checks_per_source": 8,
+    "cuts_after_calls": [
+      2,
+      5
+    ],
+    "scope": "same-source save/load versus uninterrupted; four sources, both dtypes/workloads"
+  },
+  "verification_tolerances_and_worst_errors": {
+    "float64_absolute_tolerance": 2e-12,
+    "float32_absolute_tolerance": 3e-06,
+    "candidate_maximum_across_all_coordinates": {
+      "float64": 2.220446049250313e-16,
+      "float32": 4.141734866180968e-08
+    },
+    "checkpoint_continuation": "bitwise/exact JSON boundary equality across save/load vs uninterrupted; 8 checks per source, 32 total"
+  },
+  "source_evidence_sha256": {
+    "finding.json": "3982b175336d96aad0661afb72ee5367f362982bacd74ee9c87cd8a0e7957e7b",
+    "REPORT.md": "75fd4a8762a12d281cc0d272a0b681540369904a2146cbd62192a0948dfa95ae",
+    "analysis.json": "b7b10fba0814588afdab191d0ccd9c92771a631031cfcb9b3a876fa0051e4a79",
+    "initial_state.json": "e73f2e6daf0962f3d776a0e448835bc8530dfa6b863c6dc9193dcbd2fb3917b7",
+    "test_optimizer.py": "410518d2f0ee86d305a1eeafe7a8c521e282f05b894bd8e1c01a1ebf1335bf32",
+    "workload.py": "2a4f7716508219340fe1c3b1eb7e8ed9128089bea89ff932b7856d2431fa8e4b",
+    "provenance-affected.json": "801d9ed45a7348c7b4b86d15dfb8629becc94ba79fe0e8b006e06fdb8719da17",
+    "provenance-current.json": "1707fce588d40cec56f3fe22bb31c364be2f3866449b333c296da6e707d94f2e",
+    "provenance-primary.json": "7e9b02ccd5b252f6539ac50c12cdde969ca8d2f842ab67b5190a02c45d254b20"
+  },
+  "limitations": [
+    "Old ASGD source validated on Torch 2.6.0 runtime; no full PyTorch 2.3 binary/build validation.",
+    "CPU real contiguous tiny FP64/FP32 tensors only; no CUDA/NPU, capturable, compiled, complex, sparse, distributed or differentiable coverage.",
+    "Synchronized parameter steps only. Older source also has per-parameter step handling bug; untouched and out of scope.",
+    "Capturable branch has corresponding historical schedule error; untouched and unvalidated in this CPU-specific partial backport.",
+    "Checkpoint continuation is same-source; no repair of checkpoints already carrying incorrect eta.",
+    "No performance claim; scalar parenthesization changes no dtype, dispatch or allocation policy."
+  ],
+  "numerical_acceptance": null
+}
