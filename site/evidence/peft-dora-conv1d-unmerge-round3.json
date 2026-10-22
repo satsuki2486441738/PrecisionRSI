@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "repair_id": "peft-0171-dora-conv1d-unmerge-orientation",
+  "record_date": "2026-10-22",
+  "classification": "independent_rediscovery_of_historical_upstream_fixed_defect",
+  "novel_discovery": false,
+  "source": {
+    "library": "PEFT",
+    "baseline_version": "0.17.1",
+    "baseline_source_file": "src/peft/tuners/lora/variants.py",
+    "baseline_source_sha256": "c477a90d68caa2d3d2ffa22266f32ad3ab1767f01d84250e5242f1fc29f202c2",
+    "candidate_source_sha256": "fb5464899239808d3f62401e9c66665ed8a7437d5794cd2c32a39290a4a1c3b5",
+    "local_source_commit": null,
+    "upstream_fix_merge_commit": "607895c9907936b296598d2a6520a9e5a74f82a5",
+    "upstream_pr": "https://github.com/huggingface/peft/pull/3532",
+    "merged_at": "2026-08-14T11:41:44Z",
+    "inspected_main_commit": "a8b13931ca7e44f5c0c428cf33e785ad2e8d51fa",
+    "inspected_source_sha256": "bd3e376b0b1ece6335b5bdaa1cd5259971e50da2e5d5a721bdf9c12a0cf52edb",
+    "current_execution": "Not executed: current source inspected at pinned revision; native execution tests use installed PEFT 0.17.1 and local backport only."
+  },
+  "versions": {
+    "peft": "0.17.1",
+    "torch": "2.6.0",
+    "transformers": "4.53.3"
+  },
+  "scope": {
+    "device": "cpu",
+    "threads": 1,
+    "interop_threads": 1,
+    "adapters": [
+      "default"
+    ],
+    "rank": 3,
+    "configured_alphas": [
+      1,
+      7,
+      13
+    ],
+    "storage_shapes": [
+      [
+        5,
+        5
+      ],
+      [
+        7,
+        5
+      ]
+    ],
+    "input_shapes": [
+      [
+        4,
+        5
+      ],
+      [
+        4,
+        7
+      ]
+    ],
+    "dtypes": [
+      "float32",
+      "float64"
+    ],
+    "safe_merge": [
+      false,
+      true
+    ],
+    "controls": [
+      "plain LoRA Conv1D",
+      "plain LoRA Linear",
+      "DoRA Linear"
+    ],
+    "cases": 34,
+    "affected_cases": 10,
+    "controls_passing_before_and_after": 24,
+    "stages": [
+      "premerge",
+      "merge",
+      "unmerge",
+      "three cycles",
+      "disabled original base",
+      "training input/adapter gradients",
+      "SGD actual update",
+      "adapter safetensors save/load on original CPU base",
+      "reload merge/unmerge"
+    ]
+  },
+  "correctness": {
+    "oracle": "Stored Conv1D W=(input,output); D=(alpha/r)*A.T@B.T; V=W+D; n[j]=sqrt(sum_i V[i,j]^2); f[j]=magnitude[j]/n[j]; Y=X@(V*f[None,:])+b. Merge Wm=V*f[None,:]; unmerge W=Wm/f[None,:]-D. Independent dense algebra, no PEFT delta/norm/merge helpers.",
+    "training_norm": "Detached norm matching the defined DoRA gradient convention",
+    "type": "transformers.pytorch_utils.Conv1D affine projection; not torch.nn.Conv1d"
+  },
+  "regression": {
+    "before": {
+      "passed": 24,
+      "failed": 10,
+      "square_corruption_cases": 6,
+      "rectangular_exceptions": 4
+    },
+    "after": {
+      "passed": 34,
+      "failed": 0
+    },
+    "same_initial_fixture_sha256": "4ee19e2cd5e2b03fca7bb3c0798e05ce4d049d47057e49e564ad59e8cf79e6e1",
+    "same_test_sha256": "96cd99bf002977f1f3cb47227d695abb970209af480cc4d7e11d9fa9bdb4412f",
+    "controls_passing_before_and_after": 24
+  },
+  "metrics": {
+    "primary_config": {
+      "kind": "dora",
+      "storage": "conv1d",
+      "ni": 5,
+      "no": 5,
+      "dtype": "torch.float64",
+      "safe": false,
+      "alpha": 7
+    },
+    "unit": "maximum absolute error in each boundary value",
+    "before": {
+      "premerge_output": 8.881784197001252e-16,
+      "merged_output": 0.0,
+      "unmerged_output": 2.479339473837877,
+      "restored_weight": 2.161740176813238,
+      "restored_bias": 0.0,
+      "three_cycles_output": 2.123096204311567,
+      "disabled_base_output": 4.200234397842747,
+      "training_output": 2.123096204311567,
+      "input_gradient": 0.4505962051464292,
+      "adapter_gradient_0": 3.629427961482915,
+      "adapter_gradient_1": 4.371820268877045,
+      "adapter_gradient_2": 0.3022965015715151,
+      "sgd_parameter_0": 0.03629427961482917,
+      "sgd_parameter_1": 0.04371820268877044,
+      "sgd_parameter_2": 0.0030229650157149734,
+      "post_update_output": 1.8952013407798927,
+      "adapter_checkpoint_reload": 1.750035635481843,
+      "reload_cycle_output": 2.2371257634368895
+    },
+    "after": {
+      "premerge_output": 8.881784197001252e-16,
+      "merged_output": 0.0,
+      "unmerged_output": 8.881784197001252e-16,
+      "restored_weight": 2.220446049250313e-16,
+      "restored_bias": 0.0,
+      "three_cycles_output": 8.881784197001252e-16,
+      "disabled_base_output": 4.579669976578771e-16,
+      "training_output": 8.881784197001252e-16,
+      "input_gradient": 2.220446049250313e-16,
+      "adapter_gradient_0": 8.881784197001252e-16,
+      "adapter_gradient_1": 8.881784197001252e-16,
+      "adapter_gradient_2": 1.6653345369377348e-16,
+      "sgd_parameter_0": 5.551115123125783e-17,
+      "sgd_parameter_1": 2.7755575615628914e-17,
+      "sgd_parameter_2": 0.0,
+      "post_update_output": 6.661338147750939e-16,
+      "adapter_checkpoint_reload": 6.661338147750939e-16,
+      "reload_cycle_output": 6.661338147750939e-16
+    },
+    "candidate_maxima_by_dtype": {
+      "torch.float64": {
+        "adapter_checkpoint_reload": 1.3322676295501878e-15,
+        "adapter_gradient_0": 1.7763568394002505e-15,
+        "adapter_gradient_1": 1.1102230246251565e-15,
+        "adapter_gradient_2": 3.3306690738754696e-16,
+        "disabled_base_output": 4.579669976578771e-16,
+        "input_gradient": 8.881784197001252e-16,
+        "merged_output": 0.0,
+        "post_update_output": 1.3322676295501878e-15,
+        "premerge_output": 1.7763568394002505e-15,
+        "reload_cycle_output": 1.3322676295501878e-15,
+        "restored_bias": 0.0,
+        "restored_weight": 2.220446049250313e-16,
+        "sgd_parameter_0": 5.551115123125783e-17,
+        "sgd_parameter_1": 2.7755575615628914e-17,
+        "sgd_parameter_2": 0.0,
+        "three_cycles_output": 1.3322676295501878e-15,
+        "training_output": 1.3322676295501878e-15,
+        "unmerged_output": 1.3322676295501878e-15
+      },
+      "torch.float32": {
+        "adapter_checkpoint_reload": 5.960464477539062e-07,
+        "adapter_gradient_0": 4.76837158203125e-07,
+        "adapter_gradient_1": 4.76837158203125e-07,
+        "adapter_gradient_2": 1.1920928955078125e-07,
+        "disabled_base_output": 2.980232238769531e-07,
+        "input_gradient": 2.384185791015625e-07,
+        "merged_output": 0.0,
+        "post_update_output": 5.960464477539062e-07,
+        "premerge_output": 4.76837158203125e-07,
+        "reload_cycle_output": 5.960464477539062e-07,
+        "restored_bias": 0.0,
+        "restored_weight": 1.4901161193847656e-07,
+        "sgd_parameter_0": 2.9802322387695312e-08,
+        "sgd_parameter_1": 2.9802322387695312e-08,
+        "sgd_parameter_2": 0.0,
+        "three_cycles_output": 4.76837158203125e-07,
+        "training_output": 4.76837158203125e-07,
+        "unmerged_output": 4.76837158203125e-07
+      }
+    }
+  },
+  "verification_tolerances": {
+    "float64_abs": 3e-12,
+    "float32_abs": 3e-05,
+    "training_and_post_update_multiplier": 5,
+    "all_candidate_cases_pass": true
+  },
+  "patch": {
+    "file": "peft-dora-conv1d-unmerge-round3.patch",
+    "sha256": "f694034f5711d1513ce1d0fa0ade9a15c9676006cfd310f7ba086d1d20c08902",
+    "change": "Orient inverse DoRA factor using fan_in_fan_out, as merge already does; two changed source lines."
+  },
+  "discovery": {
+    "upstream_lookup_after_native_failure_hypothesis_and_red_green": true,
+    "chronology_sha256": "85040acafed0a2e3d30cd736d66bee91cc7955fc173f6a429a76eac3e68a67e7",
+    "earliest_retained_conv1d_run": "2026-10-22T04:00:51Z"
+  },
+  "source_evidence_sha256": {
+    "finding.json": "7dc30edf9b8959f9c8b59907fdfb4d38d2ce4b2aa51b4a0949a8ba4b768f0c80",
+    "REPORT.md": "10c1226d348dd6e74ddac824819dcbde9428c026a7ba1ace2b81ac13802e7446",
+    "chronology.json": "85040acafed0a2e3d30cd736d66bee91cc7955fc173f6a429a76eac3e68a67e7",
+    "test_regression.py": "96cd99bf002977f1f3cb47227d695abb970209af480cc4d7e11d9fa9bdb4412f",
+    "upstream-status.json": "5f6390f4779a8d18e1fb5074980fe69b058cad1b3b2e90ee16fa3c49e8889c01"
+  },
+  "limitations": [
+    "GPU/NPU/MPS",
+    "quantization",
+    "multiple active adapters",
+    "zero magnitude",
+    "dropout",
+    "save while merged",
+    "full pretrained workload",
+    "execution of current upstream",
+    "One active adapter; nonzero finite factors; unmerged adapter checkpoint reload on original CPU base; no first-affected/first-fixed-release or exhaustive novelty claim."
+  ],
+  "numerical_acceptance": null,
+  "private_indexed_bundle": {
+    "filename": "selected-evidence.zip",
+    "sha256": "92fb1a60d7721d1a1fdd538c22ee3f017bdd822bc9a9e58a9789a14bd9df092e",
+    "bytes": 56998,
+    "index": "EXPORT.json",
+    "verify_receipt_sha256": "ba8079030a7b64a2931e8f29c429bf0c744c92576a9e61078d9a46b2f5b7d6aa",
+    "verification": "Payload inventory and SHA256 integrity only; no new numerical execution. Not published.",
+    "verification_receipt": {
+      "action": "verify",
+      "bundle": "selected-evidence.zip",
+      "index": "EXPORT.json",
+      "file_count": 52,
+      "payload_bytes": 236103,
+      "archive_sha256": "92fb1a60d7721d1a1fdd538c22ee3f017bdd822bc9a9e58a9789a14bd9df092e",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index"
+    },
+    "verification_scope": "Index sizes and SHA256 integrity only; no numerical replay or current-upstream execution."
+  }
+}

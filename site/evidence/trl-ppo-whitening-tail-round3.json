@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "repair_id": "trl-0710-ppo-whitening-tail-leakage",
+  "record_date": "2026-10-22",
+  "classification": "independently_confirmed_historical_defect_local_backport",
+  "source": {
+    "library": "TRL",
+    "version": "0.7.10",
+    "file": "trl/trainer/ppo_trainer.py",
+    "baseline_sha256": "ee4e38ab467e6ac980e164e0427af8e91361c60059c84bc3bace6b1cdbab0a46",
+    "candidate_sha256": "489a50cc0f08727b4e6f6e9c4f2f3eb12528d65343645c11395d5e15ec2ed419",
+    "local_patch_commit": null,
+    "submitted": false
+  },
+  "runtime": {
+    "torch": "2.2.2",
+    "transformers": "4.37.2",
+    "accelerate": "0.26.1",
+    "numpy": "1.26.4",
+    "device": "cpu",
+    "torch_threads": 1,
+    "parameters": 1113,
+    "models": "random local GPT2, 1 layer, 8 hidden, 2 heads, vocab 11, dropout disabled; no downloads"
+  },
+  "semantics": {
+    "selected_lengths": [
+      2,
+      4
+    ],
+    "coordinates": "Response-prefix token slots, native mask [[1,1,0,0],[1,1,1,1]]; EOS included, query excluded, zero terminal bootstrap",
+    "whitening": "Valid-token unbiased sample variance, epsilon 1e-8, reward mean retained; advantage mean removed",
+    "terminal_evidence": "Native implementation already zeros masked old values/rewards and bootstraps zero at tensor end; native non-whitened control and padding-extension invariance identify episode-end intent",
+    "oracle": "Independent scalar rewards, episode-length GAE, returns, advantage moments, clipped policy/value objective and analytical output derivatives"
+  },
+  "root_cause": "Reward masking precedes masked_whiten(...,shift_mean=False). Its affine transform maps zero padding to a nonzero value; the unmasked GAE recursion carries this tail into valid returns. Global advantage normalization then affects all selected tokens.",
+  "causal_replay": {
+    "invalid_tail_reward": -0.11747631336794973,
+    "predicted_last_valid_return_error": -0.21762487051412685,
+    "observed_last_valid_return_error": -0.21762487051412682,
+    "changed_factor": "Re-mask reward whitening output only, native source/GAE unchanged"
+  },
+  "workload": {
+    "constructor": "Native PPOTrainer and AutoModelForCausalLMWithValueHead.from_pretrained(local GPT2 model), local tokenizer, SGD lr=0.01, explicit CPU Accelerator state before factory.",
+    "selected_lengths": [
+      2,
+      4
+    ],
+    "full_native_step": true,
+    "ppo_epochs": 1,
+    "minibatches": 1,
+    "whiten_rewards": true,
+    "adap_kl_ctrl": false,
+    "queries": "one token each; ordinary right padding; no custom response masks",
+    "initial_parameters_sha256": "38b6c18d8799345b76286a41a2607aab26b17042f344503cbfee560d64551f1e",
+    "same_inputs_state_and_code": true,
+    "code_sha256": "b2b811a3e8d2d452f014b804c1299b66726b3ee46da6e8538913c26aee5ae446"
+  },
+  "metrics": {
+    "unit": "absolute error in each measured value",
+    "before": {
+      "fixture_returns": {
+        "count": 6,
+        "side_a_norm": 4.2800365180125555,
+        "side_b_norm": 4.184365540210503,
+        "error_norm": 0.3001724697013662,
+        "rmse": 0.12254489759989844,
+        "cosine": 0.9977399770257942,
+        "max_abs": 0.21762487051412682,
+        "max_flat_index": 1
+      },
+      "fixture_advantages": {
+        "count": 6,
+        "side_a_norm": 2.236067936326143,
+        "side_b_norm": 2.2360679468792504,
+        "error_norm": 0.2846376770304321,
+        "rmse": 0.11620284504927905,
+        "cosine": 0.9918981390213428,
+        "max_abs": 0.20173888740686996,
+        "max_flat_index": 1
+      },
+      "gradients": {
+        "count": 1113,
+        "side_a_norm": 6.334892963621019,
+        "side_b_norm": 6.1837396749288995,
+        "error_norm": 0.19396778208720167,
+        "rmse": 0.0058140935816295754,
+        "cosine": 0.9998113999473703,
+        "max_abs": 0.06682920455932617,
+        "max_flat_index": 223
+      },
+      "updates": {
+        "count": 1113,
+        "side_a_norm": 0.06334892901311148,
+        "side_b_norm": 0.06183739500676751,
+        "error_norm": 0.0019396787724219441,
+        "rmse": 5.8140964338559956e-05,
+        "cosine": 0.9998113999009768,
+        "max_abs": 0.0006682928651571274,
+        "max_flat_index": 223
+      },
+      "actual_objective": {
+        "policy": -6.953874986947994e-08,
+        "value_scaled": 0.19345184564590456,
+        "total": 0.19345177710056305
+      },
+      "expected_objective": {
+        "policy": 6.194719057162068e-08,
+        "value_scaled": 0.19732820255989658,
+        "total": 0.19732826450708715,
+        "entropy": 2.3964064185818725,
+        "return_mean": 1.6697077569563348,
+        "return_var": 0.2650209324217676,
+        "old_value_mean": -0.01735109897951285,
+        "old_value_var": 0.8716374044124979
+      },
+      "loss_with_oracle_targets": {
+        "expected": {
+          "policy": 0.08246418214923486,
+          "value_scaled": 0.16524426829908492,
+          "total": 0.2477084504483198,
+          "entropy": 1.0966428156614736,
+          "return_mean": 1.6805437557572276,
+          "return_var": 0.2746697410866801,
+          "old_value_mean": 0.08333333333333333,
+          "old_value_var": 0.07766666666666668
+        },
+        "actual": {
+          "policy": 0.08246418214923486,
+          "value_scaled": 0.16524426829908492,
+          "total": 0.2477084504483198,
+          "entropy": 1.0966428156614736,
+          "return_mean": 1.6805437557572274,
+          "return_var": 0.27466974108668,
+          "old_value_mean": 0.08333333333333333,
+          "old_value_var": 0.07766666666666666
+        },
+        "logit_gradient": {
+          "count": 24,
+          "side_a_norm": 0.32105650208374037,
+          "side_b_norm": 0.3210565020837405,
+          "error_norm": 5.837479818990137e-17,
+          "rmse": 1.1915705783600121e-17,
+          "cosine": 0.9999999999999999,
+          "max_abs": 5.551115123125783e-17,
+          "max_flat_index": 0
+        },
+        "value_gradient": {
+          "count": 8,
+          "side_a_norm": 0.06380443852221505,
+          "side_b_norm": 0.06380443852221505,
+          "error_norm": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "max_abs": 0.0,
+          "max_flat_index": 0
+        },
+        "statistics": {
+          "count": 8,
+          "side_a_norm": 2.0520083548434838,
+          "side_b_norm": 2.052008354843484,
+          "error_norm": 2.2929868617541516e-16,
+          "rmse": 8.106932795590107e-17,
+          "cosine": 1.0,
+          "max_abs": 2.220446049250313e-16,
+          "max_flat_index": 4
+        }
+      }
+    },
+    "after": {
+      "fixture_returns": {
+        "count": 6,
+        "side_a_norm": 4.2800365180125555,
+        "side_b_norm": 4.2800365180125555,
+        "error_norm": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "max_abs": 0.0,
+        "max_flat_index": 0
+      },
+      "fixture_advantages": {
+        "count": 6,
+        "side_a_norm": 2.236067936326143,
+        "side_b_norm": 2.236067936326143,
+        "error_norm": 2.220717083251841e-16,
+        "rmse": 9.066039528414604e-17,
+        "cosine": 1.0,
+        "max_abs": 2.220446049250313e-16,
+        "max_flat_index": 4
+      },
+      "gradients": {
+        "count": 1113,
+        "side_a_norm": 6.334892963621019,
+        "side_b_norm": 6.334893555855347,
+        "error_norm": 8.861528859814575e-07,
+        "rmse": 2.656201845114188e-08,
+        "cosine": 0.9999999999999944,
+        "max_abs": 3.5762786865234375e-07,
+        "max_flat_index": 610
+      },
+      "updates": {
+        "count": 1113,
+        "side_a_norm": 0.06334892901311148,
+        "side_b_norm": 0.06334893427931063,
+        "error_norm": 9.758214520759266e-09,
+        "rmse": 2.924979179676585e-10,
+        "cosine": 0.9999999999999919,
+        "max_abs": 3.725290298461914e-09,
+        "max_flat_index": 610
+      },
+      "actual_objective": {
+        "policy": 1.5894572413799324e-07,
+        "value_scaled": 0.19732822179794313,
+        "total": 0.1973283886909485
+      },
+      "expected_objective": {
+        "policy": 6.194719057162068e-08,
+        "value_scaled": 0.19732820255989658,
+        "total": 0.19732826450708715,
+        "entropy": 2.3964064185818725,
+        "return_mean": 1.6697077569563348,
+        "return_var": 0.2650209324217676,
+        "old_value_mean": -0.01735109897951285,
+        "old_value_var": 0.8716374044124979
+      },
+      "loss_with_oracle_targets": {
+        "expected": {
+          "policy": 0.08246418214923486,
+          "value_scaled": 0.16524426829908492,
+          "total": 0.2477084504483198,
+          "entropy": 1.0966428156614736,
+          "return_mean": 1.6805437557572276,
+          "return_var": 0.2746697410866801,
+          "old_value_mean": 0.08333333333333333,
+          "old_value_var": 0.07766666666666668
+        },
+        "actual": {
+          "policy": 0.08246418214923486,
+          "value_scaled": 0.16524426829908492,
+          "total": 0.2477084504483198,
+          "entropy": 1.0966428156614736,
+          "return_mean": 1.6805437557572274,
+          "return_var": 0.27466974108668,
+          "old_value_mean": 0.08333333333333333,
+          "old_value_var": 0.07766666666666666
+        },
+        "logit_gradient": {
+          "count": 24,
+          "side_a_norm": 0.32105650208374037,
+          "side_b_norm": 0.3210565020837405,
+          "error_norm": 5.837479818990137e-17,
+          "rmse": 1.1915705783600121e-17,
+          "cosine": 0.9999999999999999,
+          "max_abs": 5.551115123125783e-17,
+          "max_flat_index": 0
+        },
+        "value_gradient": {
+          "count": 8,
+          "side_a_norm": 0.06380443852221505,
+          "side_b_norm": 0.06380443852221505,
+          "error_norm": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "max_abs": 0.0,
+          "max_flat_index": 0
+        },
+        "statistics": {
+          "count": 8,
+          "side_a_norm": 2.0520083548434838,
+          "side_b_norm": 2.052008354843484,
+          "error_norm": 2.2929868617541516e-16,
+          "rmse": 8.106932795590107e-17,
+          "cosine": 1.0,
+          "max_abs": 2.220446049250313e-16,
+          "max_flat_index": 4
+        }
+      }
+    },
+    "parameter_count": 1113,
+    "selected_tokens": 6,
+    "slots": 8
+  },
+  "regression": {
+    "methods": 4,
+    "original_and_pristine_red": {
+      "failed_methods": 3,
+      "failure_records_including_subtests": 4,
+      "passed_methods": 1
+    },
+    "candidate_green": {
+      "passed_methods": 4,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "verification_tolerances": {
+    "FP64_GAE_and_loss_absolute": 1e-10,
+    "FP32_local_loss_and_output_gradients_absolute": 3e-06,
+    "FP32_native_step_parameter_gradient_absolute": 3e-06,
+    "FP32_stored_update_absolute": 1e-07,
+    "rationale": "FP64 scalar/parallel reduction differences near rounding; FP32 native model/logsoftmax/reduction gradients allow low-micro absolute rounding, while failure is O(1e-2). Stored-update threshold covers FP32 parameter storage."
+  },
+  "upstream": {
+    "classification": "historical_defect_local_backport",
+    "current_main_status": "unknown",
+    "first_fix_commit": "not identified; no claim of newly discovered current-main issue",
+    "lookup_order": "Only after recorded native failure, permanent red regression, and independent causal replay/hypothesis; initial web searches returned no usable results; subsequent primary-source checks recorded",
+    "observations": [
+      {
+        "ref": "v0.7.10",
+        "url": "https://raw.githubusercontent.com/huggingface/trl/v0.7.10/trl/trainer/ppo_trainer.py",
+        "sha256": "ee4e38ab467e6ac980e164e0427af8e91361c60059c84bc3bace6b1cdbab0a46",
+        "line": 1145,
+        "status": "installed source identical; missing post-whitening re-mask"
+      },
+      {
+        "ref": "v0.11.4",
+        "url": "https://raw.githubusercontent.com/huggingface/trl/v0.11.4/trl/trainer/ppo_trainer.py",
+        "sha256": "13e4d6bcc210aadaa3e74d441dc462b1bea11af390de6490451da84a5826fdef",
+        "line": 1179,
+        "status": "same legacy pattern; source-only observation, not runtime-tested"
+      },
+      {
+        "ref": "v0.15.0",
+        "url": "https://raw.githubusercontent.com/huggingface/trl/v0.15.0/trl/trainer/ppo_trainer.py",
+        "sha256": "b3d295d318c8923ecd19ab90898b860c6fdac0408be7f0ab2cd9138ea8e78276",
+        "line": 509,
+        "status": "rewritten PPO explicitly zeros reward padding after whitening; equivalent root-cause safeguard already exists, different API/validity constraints, not runtime-tested"
+      }
+    ],
+    "main_observed_sha": "9c37460182946a5630da9b800a726f3bb27191f8",
+    "main_limit": "git ls-remote succeeded; old main source paths returned 404, API rate limited; cannot infer current PPO correctness or absence from these results"
+  },
+  "scope": {
+    "covered": [
+      "native supported constructor",
+      "prepare_model_inputs",
+      "batched_forward_pass with fixed responses",
+      "compute_rewards sampled KL",
+      "compute_advantages",
+      "clipped policy and value loss controls",
+      "one complete native PPOTrainer.step",
+      "Accelerate backward",
+      "all 1113 parameter gradients and actual SGD updates"
+    ],
+    "not_covered": [
+      "generation",
+      "multiple PPO epochs or minibatches",
+      "distributed/GPU/MPS/accelerator execution",
+      "other dtypes beyond selected FP64 helper and FP32 model/control",
+      "arbitrary masks with holes",
+      "current TRL runtime",
+      "stochastic training trajectories"
+    ],
+    "excluded_defects": "IPO completion averaging and PPO response-mask left-padding slicing were not investigated; excluded reports were not read"
+  },
+  "patch": {
+    "file": "trl-ppo-whitening-tail-round3.patch",
+    "sha256": "b1fcc9d0af298db169abee8698f77c7d6a104eea87d62e61f5aa9f5b0987db33",
+    "change": "Re-mask rewards immediately after optional masked_whiten(...,shift_mean=False); selected whitening values and GAE recurrence unchanged."
+  },
+  "source_evidence_sha256": {
+    "finding.json": "bf8ddd78408cfe5a2516be7f6341337b0f90b08e84202f141d0f2461b862a1b1",
+    "REPORT.md": "07210a7cb4192efe17953e6d90416fcedb0faefa6c8cb0f34fae1f7f258e1ff9",
+    "metrics.json": "1cc701e7b9bfc2ed486434033f82dfa0a421146bdbb92609b407afa62e508545",
+    "test_ppo_whitening.py": "b2b811a3e8d2d452f014b804c1299b66726b3ee46da6e8538913c26aee5ae446",
+    "DISCOVERY.md": "07445e594009df94b14c7edd4b0d547382891b8809c7deae86944b34d98aa3df",
+    "frozen-model-state.json": "4b5a408887c57213048337a6b74007a5c5839afcda9b0a5a480908f0d2ab8c67",
+    "source-provenance.json": "ca4a487906681b98a6d152d713aa228e46d3c6540fc3857885b5ecf04c3601f5"
+  },
+  "private_indexed_bundle": {
+    "filename": "selected-evidence.zip",
+    "sha256": "7278ff225ff7223fd1fc0b02847025b5105e3c3e66314716245d30000479a5bb",
+    "bytes": 61908,
+    "index": "EXPORT.json",
+    "published": false,
+    "verification_receipt": {
+      "action": "verify",
+      "bundle": "selected-evidence.zip",
+      "index": "EXPORT.json",
+      "file_count": 34,
+      "payload_bytes": 183962,
+      "archive_sha256": "7278ff225ff7223fd1fc0b02847025b5105e3c3e66314716245d30000479a5bb",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index"
+    },
+    "verification_scope": "Index sizes and SHA256 integrity only; no numerical replay or current-upstream execution."
+  },
+  "limitations": [
+    "generation",
+    "multiple PPO epochs or minibatches",
+    "distributed/GPU/MPS/accelerator execution",
+    "other dtypes beyond selected FP64 helper and FP32 model/control",
+    "arbitrary masks with holes",
+    "current TRL runtime",
+    "stochastic training trajectories",
+    "Oracle shares Torch/Transformers model Jacobian, not TRL target/whitening/GAE/objective helpers.",
+    "No current-main correctness conclusion or identified first-fix commit; later rewrite inspected only.",
+    "Command wall times are not a patch benchmark; peak memory unmeasured."
+  ],
+  "numerical_acceptance": null
+}

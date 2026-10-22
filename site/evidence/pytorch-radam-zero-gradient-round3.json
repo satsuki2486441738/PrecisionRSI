@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "repair_id": "pytorch-260-radam-foreach-unrectified-zero-gradient",
+  "record_date": "2026-10-22",
+  "classification": "independent_native_defect_isolated_candidate",
+  "novelty": "unproven",
+  "source": {
+    "library": "PyTorch",
+    "version": "2.6.0",
+    "runtime_commit": "2236df1770800ffea5697b11b0bb0d910b2e59e1",
+    "file": "torch/optim/radam.py",
+    "baseline_sha256": "a094af74aff4ae21354d3f9cc6cf9e155323dac89bb7c02d2f846e11f63f560c",
+    "candidate_sha256": "b6c5aa1e6ee534e8727e3a7fd609388bc38997eaf8d552de00da4434b9d4dd83",
+    "local_patch_commit": null,
+    "submitted": false
+  },
+  "runtime": {
+    "torch": "2.6.0",
+    "git_version": "2236df1770800ffea5697b11b0bb0d910b2e59e1",
+    "python": "3.12.14",
+    "device": "cpu",
+    "threads": 1,
+    "interop_threads": 1,
+    "parameter_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "default_dtypes_tested": [
+      "float32",
+      "float64"
+    ],
+    "moment_state_dtype": "parameter dtype",
+    "step_state_dtype": "float32 or float64 according to explicit default dtype"
+  },
+  "domain": {
+    "constructor_eps_zero_supported": true,
+    "negative_eps_rejected": true,
+    "finite_contract": "unrectified rho_t <= 5: theta -= lr*m/(1-beta1**t), no adaptive division; rectified nonzero variance also tested",
+    "excluded": "rho_t > 5, v=0, eps=0 is mathematically undefined; no expected-finite claim"
+  },
+  "cause": "The foreach path evaluates the unused adaptive factor for unrectified parameters: zero variance plus eps=0 divided by zero rectification coefficient gives NaN, which contaminates the otherwise finite momentum update.",
+  "oracle": "Independent Python binary64 scalar piecewise RAdam recurrence branches before adaptive division. Same stored dtype-rounded gradients; analytic affine/quadratic objectives. Native single-tensor path is a control, not the oracle.",
+  "regression": {
+    "baseline": {
+      "tests": 6,
+      "failures": 26,
+      "errors": 0,
+      "successful": false
+    },
+    "candidate": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "successful": true
+    }
+  },
+  "matrix": {
+    "matrix_configurations_per_side": 32,
+    "regression_matrix_configurations": 64,
+    "optimizer_calls_per_side": 448,
+    "gradient_present_transitions_per_configuration": [
+      14,
+      11,
+      9,
+      11,
+      0
+    ],
+    "numeric_metrics": {
+      "baseline": {
+        "gradients": {
+          "count": 2880,
+          "finite_count": 2880,
+          "nonfinite_mismatches": 0,
+          "max_abs": 0.0,
+          "sum_squared": 0.0,
+          "rmse_finite_subset": 0.0
+        },
+        "parameters": {
+          "count": 4480,
+          "finite_count": 3984,
+          "nonfinite_mismatches": 496,
+          "max_abs": 4.80874513097973e-07,
+          "sum_squared": 2.2022703945570377e-11,
+          "rmse_finite_subset": 7.434908967117434e-08
+        },
+        "updates": {
+          "count": 4480,
+          "finite_count": 3984,
+          "nonfinite_mismatches": 496,
+          "max_abs": 1.1809473132728954e-07,
+          "sum_squared": 2.605001564991303e-12,
+          "rmse_finite_subset": 2.5570800821767232e-08
+        },
+        "steps": {
+          "count": 1632,
+          "finite_count": 1632,
+          "nonfinite_mismatches": 0,
+          "max_abs": 0.0,
+          "sum_squared": 0.0,
+          "rmse_finite_subset": 0.0
+        },
+        "state": {
+          "count": 6528,
+          "finite_count": 6528,
+          "nonfinite_mismatches": 0,
+          "max_abs": 6.092838689131241e-08,
+          "sum_squared": 4.0081462334625894e-13,
+          "rmse_finite_subset": 7.835770473888556e-09
+        }
+      },
+      "candidate": {
+        "gradients": {
+          "count": 2880,
+          "finite_count": 2880,
+          "nonfinite_mismatches": 0,
+          "max_abs": 0.0,
+          "sum_squared": 0.0,
+          "rmse_finite_subset": 0.0
+        },
+        "parameters": {
+          "count": 4480,
+          "finite_count": 4480,
+          "nonfinite_mismatches": 0,
+          "max_abs": 4.80874513097973e-07,
+          "sum_squared": 2.3087389369998605e-11,
+          "rmse_finite_subset": 7.178743014784574e-08
+        },
+        "updates": {
+          "count": 4480,
+          "finite_count": 4480,
+          "nonfinite_mismatches": 0,
+          "max_abs": 1.1809473132728954e-07,
+          "sum_squared": 2.944453487658089e-12,
+          "rmse_finite_subset": 2.5636772067999077e-08
+        },
+        "steps": {
+          "count": 1632,
+          "finite_count": 1632,
+          "nonfinite_mismatches": 0,
+          "max_abs": 0.0,
+          "sum_squared": 0.0,
+          "rmse_finite_subset": 0.0
+        },
+        "state": {
+          "count": 6528,
+          "finite_count": 6528,
+          "nonfinite_mismatches": 0,
+          "max_abs": 6.092838689131241e-08,
+          "sum_squared": 4.0081462334625894e-13,
+          "rmse_finite_subset": 7.835770473888556e-09
+        }
+      }
+    },
+    "original_objective_metrics": {
+      "baseline": {
+        "gradients": {
+          "count": 48,
+          "finite_count": 48,
+          "nonfinite_mismatches": 0,
+          "max_abs": 2.3841857821338408e-08,
+          "sum_squared": 2.2737367374916617e-15,
+          "rmse_finite_subset": 6.882551515565257e-09
+        },
+        "parameters": {
+          "count": 64,
+          "finite_count": 56,
+          "nonfinite_mismatches": 8,
+          "max_abs": 7.152557368605983e-08,
+          "sum_squared": 1.705302563706658e-14,
+          "rmse_finite_subset": 1.745045314447787e-08
+        },
+        "updates": {
+          "count": 64,
+          "finite_count": 56,
+          "nonfinite_mismatches": 8,
+          "max_abs": 9.536743150739824e-08,
+          "sum_squared": 2.1600499112049906e-14,
+          "rmse_finite_subset": 1.9639837026550463e-08
+        },
+        "state": {
+          "count": 144,
+          "finite_count": 144,
+          "nonfinite_mismatches": 0,
+          "max_abs": 4.053115854052436e-08,
+          "sum_squared": 7.336439052430981e-15,
+          "rmse_finite_subset": 7.1377512859204886e-09
+        }
+      },
+      "candidate": {
+        "gradients": {
+          "count": 48,
+          "finite_count": 48,
+          "nonfinite_mismatches": 0,
+          "max_abs": 2.3841857821338408e-08,
+          "sum_squared": 2.2737367374916617e-15,
+          "rmse_finite_subset": 6.882551515565257e-09
+        },
+        "parameters": {
+          "count": 64,
+          "finite_count": 64,
+          "nonfinite_mismatches": 0,
+          "max_abs": 7.152557368605983e-08,
+          "sum_squared": 1.705302563706658e-14,
+          "rmse_finite_subset": 1.6323404227647043e-08
+        },
+        "updates": {
+          "count": 64,
+          "finite_count": 64,
+          "nonfinite_mismatches": 0,
+          "max_abs": 9.536743150739824e-08,
+          "sum_squared": 2.1600499112049906e-14,
+          "rmse_finite_subset": 1.8371385321357226e-08
+        },
+        "state": {
+          "count": 144,
+          "finite_count": 144,
+          "nonfinite_mismatches": 0,
+          "max_abs": 4.053115854052436e-08,
+          "sum_squared": 7.336439052430981e-15,
+          "rmse_finite_subset": 7.1377512859204886e-09
+        }
+      }
+    },
+    "same_mode_checkpoint_continuations": 16,
+    "healthy_native_single_to_foreach_transfers": 1,
+    "original_quadratic_checkpoint_continuations": 4,
+    "checkpoint_exact_match": true,
+    "equal_state_snapshots": 448,
+    "equal_gradient_snapshots": 448,
+    "bitwise_equal_control_parameter_snapshots": 336,
+    "dispatch": {
+      "baseline": {
+        "_multi_tensor_radam": 448,
+        "_single_tensor_radam": 448
+      },
+      "candidate": {
+        "_multi_tensor_radam": 448,
+        "_single_tensor_radam": 448
+      }
+    },
+    "controls": [
+      "native single-tensor",
+      "positive eps",
+      "nonzero variance across rectification",
+      "absent and delayed gradients",
+      "different groups",
+      "coupled and decoupled decay",
+      "maximize",
+      "explicit float32 and float64 defaults",
+      "undefined rectified-zero-variance exclusion"
+    ]
+  },
+  "paired_identity": "Frozen-input JSON hashes match; 448 gradient snapshots and 448 moment/local-step snapshots exactly equal; unchanged installed source rechecked.",
+  "patch": {
+    "file": "pytorch-radam-zero-gradient-round3.patch",
+    "sha256": "7112fdb9eee2898c86ae0e2772abf11f442934460e7973ef045202f8db02b427",
+    "added_lines": 6,
+    "behavior": "Zero unused adaptive intermediates for noncapturable unrectified parameters before adding momentum coefficient",
+    "scope": "Eager CPU noncapturable foreach only; no epsilon substitution or skipping present-zero gradients."
+  },
+  "upstream": {
+    "novelty": "unproven",
+    "checked_after_native_failure_and_hypothesis": true,
+    "matching_report_found_in_bounded_search": false,
+    "inspected_source_commit": "9d2b3dd0d265930c916e1431aaaa3a1f3cf127a5",
+    "revision_scope": "last path-changing commit, verified byte-identical to fetched main file",
+    "url": "https://raw.githubusercontent.com/pytorch/pytorch/9d2b3dd0d265930c916e1431aaaa3a1f3cf127a5/torch/optim/radam.py",
+    "sha256": "d8b60f7b22f66cecd87256a86ccf265c90de5f59c3e80fd16f73bdda7f924c68",
+    "same_buffer_block_present": true,
+    "current_runtime_reproduced": false,
+    "limitation": "Bounded searches do not establish novelty; current source inspection is not current-runtime reproduction."
+  },
+  "verification_tolerances": {
+    "fp32_atol": 3e-06,
+    "fp64_atol": 2e-12,
+    "nonfinite_counts": "Explicit finite/nonfinite pairing. Finite-subset RMSE is not whole-array RMSE."
+  },
+  "source_evidence_sha256": {
+    "finding.json": "5d14c50d4f9f1da3787094df43c131e2a4a638cb584b7bdafc60a216efec0ecc",
+    "REPORT.md": "d7988f033cb72743c013fc8ad46f3ddfd6837b1658cd433d7bed6c49b03e4bc5",
+    "test_radam.py": "9bed659a8b03bc95666947fdffa222ecce20cec5c899f414cf6d6926d7b0ffe4",
+    "workload.py": "7b76ecaac987b039cb01c198e7a4bbf8be302c5238a2d578bc1c3ef620023da1",
+    "controls.py": "eb298902d950460080922fedfc21269cb82a2b09ed2055ff2b0563878fde1181"
+  },
+  "private_indexed_bundle": {
+    "filename": "evidence.zip",
+    "sha256": "cc51d03765e2cfcb8193c1fef7ea476e288319d3cd03e78027bba15bd36980eb",
+    "bytes": 142761,
+    "index": "EXPORT.json",
+    "published": false,
+    "verification_receipt": {
+      "action": "verify",
+      "bundle": "evidence.zip",
+      "index": "EXPORT.json",
+      "file_count": 78,
+      "payload_bytes": 1138149,
+      "archive_sha256": "cc51d03765e2cfcb8193c1fef7ea476e288319d3cd03e78027bba15bd36980eb",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index"
+    },
+    "verification_scope": "Index sizes and SHA256 integrity only; no numerical replay or current-upstream execution."
+  },
+  "limitations": [
+    "capturable execution untested and unchanged",
+    "no GPU/NPU/compile/differentiable verification",
+    "does not recover previously corrupted parameters",
+    "Rectified rho_t>5 with v=0 and eps=0 is mathematically undefined; excluded from finite acceptance.",
+    "No complex, sparse, large-model or repair of already-NaN checkpoints.",
+    "Tiny descriptive CPU timing and whole-process RSS do not establish speed or incremental allocation improvement."
+  ],
+  "numerical_acceptance": null
+}

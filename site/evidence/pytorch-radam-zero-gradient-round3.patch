@@ -1,0 +1,15 @@
+--- a/torch/optim/radam.py
++++ b/torch/optim/radam.py
+@@ -539,6 +539,12 @@
+         torch._foreach_add_(buffer, eps)
+         torch._foreach_div_(buffer, bias_correction2)
+         torch._foreach_reciprocal_(buffer)
++        if not capturable:
++            # Unrectified steps do not use the adaptive term. In particular,
++            # zero variance and eps=0 must not propagate its unused 0/0.
++            for intermediate, rect_factor in zip(buffer, rect):
++                if rect_factor == 0:
++                    intermediate.zero_()
+         torch._foreach_add_(buffer, unrect_step_size)
+ 
+         # Here, buffer = sqrt(1 - beta2^t) * rect_step_size / (sqrt(v) + eps) + unrect_step_size
