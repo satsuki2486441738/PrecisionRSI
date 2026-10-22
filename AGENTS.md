@@ -2,8 +2,7 @@
 
 ## Layout
 
-- Precision-Skills contains three installable packages: `precision-compare`, `precision-repair` and `operator-optimize`. Compare owns shared artifact tools; repair and optimization reuse its contracts, inputs/state and metrics for original-workload verification.
-- `skills/operator-optimize/` owns operator numerical/performance objectives, implementation changes and original-workload verification; keep workload-specific benchmarks and patches with their cases.
+- Precision-Skills currently contains two installable packages: `precision-compare` and `precision-repair`. Compare owns shared artifact tools; repair reuses its contracts, inputs/state and metrics for original-workload verification.
 
 - `skills/precision-repair/` is the installable repair skill. Its entrypoint owns correctness evidence, causal diagnosis, patching and original-workload verification. Reuse comparison tools from `skills/precision-compare/`; keep framework-specific fixes and experiments with their cases.
 - `skills/precision-compare/` is the installable comparison skill. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Optional internal sampling and its msProbe capability summary live in `references/layerwise.md`. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.

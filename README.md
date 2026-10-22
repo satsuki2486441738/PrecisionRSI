@@ -1,8 +1,8 @@
-# Precision-Skills: Numerical Comparison, Repair and Operator Optimization
+# Precision-Skills: Numerical Precision Comparison and Repair
 
 English | [简体中文](README.zh-CN.md)
 
-Three Agent Skills for numerical precision comparison, repair and operator optimization across devices and execution environments.
+Agent Skills for numerical precision comparison and repair across devices and execution environments.
 
 ## Use
 
@@ -12,11 +12,10 @@ Choose the skill for the requested task and copy its directory into your client'
 |---|---|
 | [Precision Compare](skills/precision-compare/SKILL.md) | Collect and compare numerical results; return metrics, coverage and evidence |
 | [Precision Repair](skills/precision-repair/SKILL.md) | Establish the cause of a numerical defect, patch the implementation and verify the original workload |
-| [Operator Optimize](skills/operator-optimize/SKILL.md) | Improve operator numerical accuracy, latency or memory and verify the original workload |
 
-Install the three directories side by side to use the linked workflow and shared comparison tools. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
+Install the two directories side by side to use the linked workflow and shared comparison tools. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
 
-Start with comparison to collect metrics and coverage. When repair is requested, carry the contract, per-side manifests/configurations, original inputs/state, source identities, native commands and reports into repair. Establish correctness evidence to identify the responsible behavior, then patch and rerun the original comparison. For an operator accuracy or efficiency objective, use operator optimization with the same workload and evidence, adding latency and memory measurements. Each skill can also start from an existing workload or test; collection is reused when its inputs and conditions still match.
+Start with comparison to collect metrics and coverage. When repair is requested, carry the contract, per-side manifests/configurations, original inputs/state, source identities, native commands and reports into repair. Establish correctness evidence to identify the responsible behavior, then patch and rerun the original comparison. Each skill can also start from an existing workload or test; collection is reused when its inputs and conditions still match.
 
 For comparison, provide the task and existing artifacts, or the model, data and platform connections needed for collection. The agent prepares the environment, integrates native execution, writes missing collection/comparison code and runs the task. Reusable tools are extended during skill development.
 

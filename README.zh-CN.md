@@ -1,8 +1,8 @@
-# Precision-Skills: Numerical Comparison, Repair and Operator Optimization
+# Precision-Skills: Numerical Precision Comparison and Repair
 
 [English](README.md) | 简体中文
 
-三个 skill，让 agent 完成不同硬件与执行环境之间的数值精度比较、精度修复和算子优化。
+让 agent 完成不同硬件与执行环境之间的数值精度比较与修复。
 
 ## 使用
 
@@ -12,11 +12,10 @@
 |---|---|
 | [Precision Compare](skills/precision-compare/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
 | [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
-| [Operator Optimize](skills/operator-optimize/SKILL.md) | 改善算子数值精度、耗时或显存占用，并回到原始任务复验 |
 
-将三个目录并排安装，即可联动执行并复用比较工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
+将两个目录并排安装，即可联动执行并复用比较工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
 
-从比较开始，采集指标与覆盖率。用户要求修复时，沿用比较约定、各侧 manifest 与实际配置、原始输入与状态、源码身份、原生执行命令和报告进入修复流程。先用正确性证据判断问题归属，再修补实现并重跑原始比较。需要改善算子精度或效率时，以同一工作负载和证据进入算子优化，补充耗时与显存测量。各 skill 也可以直接从已有负载或失败测试开始；输入和条件仍匹配的采集结果可直接复用。
+从比较开始，采集指标与覆盖率。用户要求修复时，沿用比较约定、各侧 manifest 与实际配置、原始输入与状态、源码身份、原生执行命令和报告进入修复流程。先用正确性证据判断问题归属，再修补实现并重跑原始比较。各 skill 也可以直接从已有负载或失败测试开始；输入和条件仍匹配的采集结果可直接复用。
 
 进行比较时，提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
 
