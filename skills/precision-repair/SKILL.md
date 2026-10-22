@@ -19,7 +19,7 @@ Retain the original inputs, state, source revisions, effective settings and comp
 
 Trace the affected output to corresponding internal boundaries. Reuse existing captures; when internal sampling is needed, obtain confirmation of its scope and resource limits unless already covered by the repair request. Within that scope, choose collectors and refine sampling autonomously.
 
-Separate propagated input error from local computation error: replay the isolated operation with identical inputs and state, then compare its result with the correctness evidence. Inspect native dispatch, precision conversions, accumulation, reductions and state mutations as indicated by the observations. For training, include backward, accumulation and optimizer boundaries relevant to the failure.
+Separate propagated input error from local computation error: replay the isolated operation with identical inputs and state, then compare its result with the correctness evidence. Inspect native dispatch, precision conversions, accumulation, reductions and state mutations as indicated by the observations. For training, include backward, accumulation and optimizer boundaries relevant to the failure. The [training replay example](examples/causal-replay.md) illustrates local error versus trajectory propagation.
 
 Test a specific causal hypothesis with a bounded experiment. Preserve the initial failure and change one relevant factor at a time. Check that instrumentation and the experiment exercise the original implementation. Use the observed result to narrow the cause or revise the hypothesis.
 

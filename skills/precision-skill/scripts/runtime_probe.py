@@ -13,11 +13,19 @@ Module records contain actual __file__/__version__; distribution metadata is
 recorded separately. Reports contain plain JSON values, including in native workers.
 Python paths apply only during inspection.
 
+Optional sources=[{"module":"already.imported.module"}, {"path":"/absolute/file"}].
+After checks, fingerprint each selected regular file with resolved path, SHA256
+and byte count; module entries also retain their name and use the loaded module's
+__file__ without importing it. Unavailable or changing files fail inspection,
+retaining earlier records. These are on-disk file identities; task checks own
+execution/dispatch evidence. Omit sources to keep the existing report shape.
+
 CLI: --spec SPEC.json --output NEW.json [--python EXECUTABLE] [--timeout 60]
-Resolve relative python_paths against SPEC.json. Exit 0=completed, 1=failed or
+Resolve relative python_paths and sources path entries against SPEC.json. Exit 0=completed, 1=failed or
 timed out, 2=CLI/output error. Requires only the Python standard library.
 """
 import argparse
+import hashlib
 import importlib
 import importlib.metadata as metadata
 import json
@@ -42,6 +50,43 @@ def _symbol(name):
     return value
 
 
+def _file_stamp(info):
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+def _source_fingerprint(selection):
+    if not isinstance(selection, dict) or set(selection) not in ({'module'}, {'path'}):
+        raise ValueError('each sources entry needs exactly one module or path')
+    if 'module' in selection:
+        name = selection['module']
+        if not isinstance(name, str) or not name or name not in sys.modules:
+            raise ValueError('source module must already be imported')
+        value = getattr(sys.modules[name], '__file__', None)
+        if value is None:
+            raise ValueError(f'source module has no file: {name}')
+    else:
+        value = selection['path']
+        if not isinstance(value, str) or not value or not Path(value).is_absolute():
+            raise ValueError('source path must be an absolute file path')
+    path = Path(value).resolve(strict=True)
+    if not path.is_file():
+        raise ValueError(f'source is not a regular file: {path}')
+    digest, size = hashlib.sha256(), 0
+    with path.open('rb') as stream:
+        before = os.fstat(stream.fileno())
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(block)
+            size += len(block)
+        after = os.fstat(stream.fileno())
+    if (size != before.st_size or _file_stamp(before) != _file_stamp(after)
+            or _file_stamp(before) != _file_stamp(path.stat())):
+        raise RuntimeError(f'source file changed during fingerprinting: {path}')
+    record = dict(path=str(path), sha256=digest.hexdigest(), bytes=size)
+    if 'module' in selection:
+        record['module'] = name
+    return record
+
+
 def inspect_runtime(spec):
     """Initialize imports in order, resolve interfaces and run selected checks."""
     report = dict(status='completed', executable=sys.executable, python=sys.version,
@@ -50,6 +95,8 @@ def inspect_runtime(spec):
     started = time.monotonic()
     original_paths = sys.path.copy()
     try:
+        if 'sources' in spec:
+            report['sources'] = []
         paths = spec.get('python_paths', [])
         if any(not Path(path).is_absolute() for path in paths):
             raise ValueError('python_paths must be absolute')
@@ -69,6 +116,11 @@ def inspect_runtime(spec):
             distribution = metadata.distribution(name)
             report['distributions'][name] = dict(version=distribution.version,
                                                  location=str(distribution.locate_file('')))
+        selections = spec.get('sources', [])
+        if not isinstance(selections, list):
+            raise ValueError('sources must be a list')
+        for selection in selections:
+            report['sources'].append(_source_fingerprint(selection))
     except Exception as exc:
         report.update(status='failed', error=dict(type=type(exc).__name__, message=str(exc),
                                                   traceback=traceback.format_exc()))
@@ -136,6 +188,11 @@ def main():
         spec = json.loads(args.spec.read_text(encoding='utf-8'))
         spec['python_paths'] = [str((args.spec.resolve().parent / path).resolve())
                                 for path in spec.get('python_paths', [])]
+        if isinstance(spec.get('sources'), list):
+            for selection in spec['sources']:
+                if (isinstance(selection, dict) and isinstance(selection.get('path'), str)
+                        and selection['path']):
+                    selection['path'] = str((args.spec.resolve().parent / selection['path']).resolve())
         result = probe_runtime(spec, args.python, args.timeout)
         with args.output.open('x', encoding='utf-8') as stream:
             json.dump(result, stream, indent=2, allow_nan=False)

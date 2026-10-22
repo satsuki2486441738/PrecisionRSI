@@ -1,4 +1,5 @@
 """Fresh-interpreter initialization, real import identity and interface checks."""
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -46,6 +47,91 @@ class RuntimeProbeTests(unittest.TestCase):
         result = probe_runtime(dict(python_paths=[str(self.root)], checks=['probe_fixture:inspect_worker']))
         self.assertEqual(result['status'], 'failed')
         self.assertEqual(result['error']['type'], 'AttributeError')
+
+    def test_selected_module_fingerprint_tracks_source_with_same_version(self):
+        source = self.root / 'probe_fixture.py'
+        spec = dict(python_paths=[str(self.root)], imports=['probe_fixture'],
+                    sources=[{'module': 'probe_fixture'}])
+        before = probe_runtime(spec)
+        self.assertEqual(before['status'], 'completed', before)
+        self.assertEqual(before['sources'], [dict(module='probe_fixture',
+                         path=str(source.resolve()), bytes=source.stat().st_size,
+                         sha256=hashlib.sha256(source.read_bytes()).hexdigest())])
+        source.write_text(source.read_text() + '\n# isolated candidate source\n')
+        after = probe_runtime(spec)
+        self.assertEqual(after['status'], 'completed', after)
+        self.assertEqual(before['modules'], after['modules'])
+        self.assertNotEqual(before['sources'][0]['sha256'], after['sources'][0]['sha256'])
+        self.assertEqual(after['sources'][0]['sha256'], hashlib.sha256(source.read_bytes()).hexdigest())
+
+    def test_loaded_module_identity_wins_over_search_path(self):
+        import types
+        from unittest.mock import patch
+        loaded = self.root / 'loaded.py'
+        loaded.write_text('# actual loaded implementation\n')
+        (self.root / 'native_fixture.py').write_text('raise AssertionError("shadow imported")\n')
+        module = types.ModuleType('native_fixture')
+        module.__file__ = loaded
+        with patch.dict(sys.modules, native_fixture=module):
+            report = inspect_runtime(dict(python_paths=[str(self.root)],
+                                          sources=[{'module': 'native_fixture'}]))
+        self.assertEqual(report['status'], 'completed', report)
+        self.assertEqual(report['sources'][0]['path'], str(loaded.resolve()))
+        self.assertEqual(report['sources'][0]['sha256'], hashlib.sha256(loaded.read_bytes()).hexdigest())
+
+    def test_explicit_file_hashes_binary_bytes_without_execution(self):
+        source = self.root / 'selected.bin'
+        content = b'raise AssertionError("must not execute")\n\x00\xff' * 60000
+        source.write_bytes(content)
+        report = inspect_runtime(dict(sources=[{'path': str(source)}]))
+        self.assertEqual(report['status'], 'completed', report)
+        self.assertEqual(report['sources'], [dict(path=str(source.resolve()), bytes=len(content),
+                         sha256=hashlib.sha256(content).hexdigest())])
+        self.assertEqual(report['modules'], {})
+        self.assertNotIn('sources', inspect_runtime({}))
+
+    def test_invalid_or_unavailable_sources_fail_with_partial_evidence(self):
+        source = self.root / 'retained.py'
+        source.write_text('# retained evidence\n')
+        marker = self.root / 'unexpected-import'
+        (self.root / 'unselected_fixture.py').write_text(
+            'from pathlib import Path\nPath(' + repr(str(marker)) + ').touch()\n')
+        invalid = [None, 'json', {}, {'module': 'json', 'path': str(source)},
+                   {'path': 'relative.py'}, {'path': ''}, {'path': None},
+                   {'path': str(self.root)}, {'path': str(self.root / 'missing.py')},
+                   {'module': 'sys'}, {'module': 'unselected_fixture'}]
+        for selection in invalid:
+            with self.subTest(selection=selection):
+                report = inspect_runtime(dict(python_paths=[str(self.root)], imports=['json'],
+                    sources=[{'path': str(source)}, selection]))
+                self.assertEqual(report['status'], 'failed', report)
+                self.assertEqual(len(report['sources']), 1)
+                self.assertEqual(report['sources'][0]['sha256'], hashlib.sha256(source.read_bytes()).hexdigest())
+                self.assertIn('json', report['modules'])
+                self.assertIn('Traceback', report['error']['traceback'])
+        self.assertFalse(marker.exists())
+        for selections in [None, 'json', {'module': 'json'}]:
+            with self.subTest(sources=selections):
+                self.assertEqual(inspect_runtime({'sources': selections})['status'], 'failed')
+
+    def test_changing_file_does_not_produce_a_successful_fingerprint(self):
+        from unittest.mock import patch
+        source = self.root / 'changing.py'
+        source.write_bytes(b'original file contents')
+        sha256 = hashlib.sha256
+        class ChangingHash:
+            def __init__(self):
+                self.inner = sha256()
+            def update(self, block):
+                self.inner.update(block)
+                source.write_bytes(b'replaced with a different file length')
+            def hexdigest(self):
+                return self.inner.hexdigest()
+        with patch('runtime_probe.hashlib.sha256', ChangingHash):
+            report = inspect_runtime(dict(sources=[{'path': str(source)}]))
+        self.assertEqual(report['status'], 'failed', report)
+        self.assertEqual(report['sources'], [])
+        self.assertIn('changed', report['error']['message'])
 
     def test_worker_inspection_restores_import_paths_on_success_and_failure(self):
         before = sys.path.copy()
@@ -138,11 +224,15 @@ class RuntimeProbeTests(unittest.TestCase):
 
     def test_cli_relative_import_path_and_existing_output(self):
         spec = self.root/'spec.json'
-        spec.write_text(json.dumps(dict(python_paths=['.'], imports=['probe_fixture'])))
+        spec.write_text(json.dumps(dict(python_paths=['.'], imports=['probe_fixture'],
+                                       sources=[{'path': 'probe_fixture.py'}, {'module': 'probe_fixture'}])))
         output = self.root/'report.json'
         command = [sys.executable, '-B', str(TOOLS/'runtime_probe.py'), '--spec', str(spec), '--output', str(output)]
         result = subprocess.run(command, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(output.read_text())
+        self.assertEqual(report['sources'][0]['path'], str((self.root/'probe_fixture.py').resolve()))
+        self.assertEqual(report['sources'][0]['sha256'], report['sources'][1]['sha256'])
         before = output.read_bytes()
         result = subprocess.run(command, capture_output=True, text=True)
         self.assertEqual(result.returncode, 2)
