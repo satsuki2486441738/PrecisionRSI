@@ -9,7 +9,8 @@ for a supported FILES index; an index is an archive member, not an external file
 
 REPLAY.json contains cases:[{name,operation,inputs,expected}]. Names are unique
 nonempty strings. Operations are validate (contract/manifest), compare_tensors,
-compare_distributions or compare_target_scores (contract/side_a/side_b). Inputs
+compare_distributions, compare_target_scores or inspect_nonfinite
+(contract/side_a/side_b). Inputs
 are relative file paths inside the bundle. Explicit side order is preserved.
 Consumed rank environment/status and array references must also be relative
 and resolve to retained files inside inputs. Parent references such as ../arrays
@@ -41,6 +42,7 @@ from evidence_bundle import DEFAULT_MAX_EXPANDED_BYTES, extract
 OPERATIONS = {
     'validate': ('validate_artifacts.py', ('contract', 'manifest')),
     'compare_tensors': ('compare_tensors.py', ('contract', 'side_a', 'side_b')),
+    'inspect_nonfinite': ('inspect_nonfinite.py', ('contract', 'side_a', 'side_b')),
     'compare_distributions': ('compare_distributions.py', ('contract', 'side_a', 'side_b')),
     'compare_target_scores': ('compare_target_scores.py', ('contract', 'side_a', 'side_b')),
 }
@@ -176,7 +178,7 @@ def validate_references(cases, inputs):
             kind = contract.get('kind') if isinstance(contract, dict) else None
             keys = ('manifest',)
         else:
-            kind = {'compare_tensors': 'tensors', 'compare_distributions': 'distributions',
+            kind = {'compare_tensors': 'tensors', 'inspect_nonfinite': 'tensors', 'compare_distributions': 'distributions',
                     'compare_target_scores': 'target-scores'}[operation]
             keys = ('side_a', 'side_b')
         for key in keys:

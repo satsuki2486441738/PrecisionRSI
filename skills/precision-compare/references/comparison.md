@@ -13,6 +13,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 | Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
 | Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
 | Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
+| Inspect tensor NaN / Inf | [inspect_nonfinite.py](../scripts/inspect_nonfinite.py), CLI / Python `compare` | Contract and paired tensor manifests → per-side and paired nonfinite counts, bounded logical coordinates and separate finite-subset metrics |
 | Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
 | Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
 | Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |
@@ -79,4 +80,4 @@ Global metrics concatenate coordinates. Retain counts and signal/error norms. Ac
 
 Cosine is undefined when either norm is zero. Represent undefined metrics as null with a reason.
 
-Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability.
+Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability. For tensor NaN or Inf, use `inspect_nonfinite.py` with the same contract and manifests. Report anomaly counts and paired finite coverage separately from finite-subset error metrics; matching nonfinite locations do not establish correctness. Its docstring defines supported capture encodings and coordinate limits. Retain the original arrays for repair and evidence replay.

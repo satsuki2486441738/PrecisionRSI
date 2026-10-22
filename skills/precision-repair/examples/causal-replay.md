@@ -27,6 +27,8 @@ The intended objective is `L(w) = mean((w-y)**2)/2`; its analytic gradient is `w
    it fails on the original path, then fix the responsible reduction. Rerun from
    `w=0`: expected gradients are `[-2, -1.8]` and stored parameters `[0.2, 0.38]`.
    Verify both steps and nearby batch partitions with a justified dtype tolerance.
-5. **Report both views.** Retain same-state local errors and original-trajectory
-   before/after errors, paired-coordinate counts, patch and regression results.
-   Compare actual stored updates using the existing tensor tools.
+5. **Report both views.** Keep two verification results: the same-state local
+   regression establishes the corrected reduction; the original trajectory rerun
+   establishes its effect on both training steps. Report before/after errors,
+   paired-coordinate counts and patch/regression results for each view. Compare
+   actual stored updates using the existing tensor tools.

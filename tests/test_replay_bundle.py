@@ -146,6 +146,38 @@ class ReplayBundleTests(unittest.TestCase):
         self.assertEqual(reversed_report['sides'], dict(side_a=self.right, side_b=self.left))
         self.assertEqual(json.loads((root / 'replay.json').read_text()), result)
 
+    def test_nonfinite_diagnostics_replay_retains_anomalies_and_finite_scope(self):
+        np.save(self.source / 'left.npy', np.array([np.nan, 4.]), allow_pickle=False)
+        np.save(self.source / 'right.npy', np.array([np.inf, 2.]), allow_pickle=False)
+        case = copy.deepcopy(self.case)
+        case.update(name='nonfinite', operation='inspect_nonfinite', expected=dict(
+            kind='nonfinite_tensors', status='no_thresholds'))
+        case['expected']['global'] = dict(
+            count=2, paired_finite_count=1, paired_finite_fraction=0.5,
+            side_a=dict(nan=1, finite=1), side_b=dict(posinf=1, finite=1),
+            joint_counts={'nan/posinf': 1, 'finite/finite': 1},
+            finite_subset_metrics=dict(count=1, max_abs={'value': 2.},
+                                      max_coordinate=dict(tensor='weight', flat_index=1,
+                                                          coordinate=[1])))
+        # Retained code must not replace the installed inspection tool.
+        (self.source / 'inspect_nonfinite.py').write_text('raise RuntimeError("bundle code executed")\n')
+        bundle = self.bundle({'cases': [case]})
+        root, result = replay(bundle, self.output_root())
+        self.assertTrue(result['matched'], result)
+        report = json.loads((root / 'case-00.json').read_text())
+        self.assertIsNone(report['thresholds'])
+        self.assertEqual(report['global']['samples'][0]['flat_index'], 0)
+
+    def test_nonfinite_replay_checks_retained_array_references(self):
+        case = copy.deepcopy(self.case)
+        case['operation'] = 'inspect_nonfinite'
+        manifest = json.loads((self.source / 'left-tensors.json').read_text())
+        manifest['tensors'][0]['shards'][0]['value']['path'] = '../outside.npy'
+        self.write('left-tensors.json', manifest)
+        bundle = self.bundle({'cases': [case]})
+        with self.assertRaisesRegex(ValueError, 'leaves retained inputs'):
+            replay(bundle, self.output_root())
+
     def test_wrong_metric_is_recorded_and_cli_returns_nonzero(self):
         self.case['expected']['global']['max_abs']['value'] = 9.
         bundle = self.bundle()

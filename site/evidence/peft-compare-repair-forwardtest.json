@@ -1,0 +1,332 @@
+{
+  "repair_id": "peft-compare-repair-forwardtest-20261022",
+  "related_repair_id": "peft-0171-lora-svd-double-scaling-backport",
+  "classification": "comparison_to_repair_forwardtest_of_known_historical_defect",
+  "novel_discovery": false,
+  "task": "inference",
+  "environment": {
+    "peft": "0.17.1",
+    "torch": "2.6.0",
+    "numpy": "2.2.6",
+    "device": "CPU",
+    "original_workload_dtype": "float64",
+    "local_regression_dtypes": [
+      "float32",
+      "float64"
+    ]
+  },
+  "agent_context": {
+    "provided": [
+      "precision-repair skill",
+      "comparison report and raw captures",
+      "fixed native workload and fixture",
+      "unmodified dependency source"
+    ],
+    "not_provided": [
+      "prior diagnosis",
+      "proposed patch",
+      "prior case reports or upstream fix"
+    ]
+  },
+  "source": {
+    "source_before": {
+      "peft_version": "0.17.1",
+      "peft_module": "$CASE/original-source/peft/__init__.py",
+      "executed_class": "LoraModel",
+      "class_source": "$CASE/original-source/peft/tuners/lora/model.py",
+      "class_source_sha256": "9eec396e506134e50afa41ff21b2608a3307f8f07207f460506d2da33d7bc2f7",
+      "collector_sha256": "2831cdae54354c199832dcb0059b7ccdde60025cbaae25d746d63009d264d929",
+      "settings_sha256": "cf9b68da9027091d967560cef0f8dc09aa4a00eacac34ff0df149522d3ab441c",
+      "fixture_sha256": "c78c7f99ba0ab2313181009d224115ee9e17f6b2fd2f24faab33fdb00900569f",
+      "initial_state_sha256": "6c73af2d79f7b97414d80e54459c8348dfd009b4e305e251b625c2403b2de85a"
+    },
+    "source_after": {
+      "peft_version": "0.17.1",
+      "peft_module": "$CASE/candidate-source/peft/__init__.py",
+      "executed_class": "LoraModel",
+      "class_source": "$CASE/candidate-source/peft/tuners/lora/model.py",
+      "class_source_sha256": "f832a3fb5866d935eec1fae26b2f16f8cf1df50b8249fad1fb60d23ade9fe033",
+      "collector_sha256": "2831cdae54354c199832dcb0059b7ccdde60025cbaae25d746d63009d264d929",
+      "settings_sha256": "cf9b68da9027091d967560cef0f8dc09aa4a00eacac34ff0df149522d3ab441c",
+      "fixture_sha256": "c78c7f99ba0ab2313181009d224115ee9e17f6b2fd2f24faab33fdb00900569f",
+      "initial_state_sha256": "6c73af2d79f7b97414d80e54459c8348dfd009b4e305e251b625c2403b2de85a"
+    },
+    "candidate_source_changes": [
+      "peft/tuners/lora/model.py"
+    ]
+  },
+  "local_verification": {
+    "scenarios": 26,
+    "before_failures": 19,
+    "before_passes": 7,
+    "after_passes": 26,
+    "scope": "same-state retained fixture plus neighboring shapes/dtypes/scales/weights and cat control"
+  },
+  "original_workload_verification": {
+    "paired_coordinates": 76,
+    "expected_coordinates": 76,
+    "observations": 3,
+    "uncovered_coordinates": 0,
+    "metrics_before": {
+      "basis_forward": {
+        "count": 20,
+        "side_a_norm": {
+          "value": 1.802406282032836,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 2.659034499585506,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 1.1059881898456712,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 0.24730647748068632,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9489429749530212,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0.6887567787917122,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 12,
+        "coordinates": {
+          "boundary": "basis_forward",
+          "invocation": 0,
+          "stage": "inference"
+        },
+        "max_coordinate": [
+          2,
+          2
+        ]
+      },
+      "forward": {
+        "count": 35,
+        "side_a_norm": {
+          "value": 4.354880457922176,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 7.458178391240286,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 3.8947106393389253,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 0.6583262535547427,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9147413428732578,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 2.0363972705233255,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 2,
+        "coordinates": {
+          "boundary": "forward",
+          "invocation": 0,
+          "stage": "inference"
+        },
+        "max_coordinate": [
+          0,
+          2
+        ]
+      },
+      "input_gradient": {
+        "count": 21,
+        "side_a_norm": {
+          "value": 7.591734829718539,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 26.573576445543196,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 20.45356249987911,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 4.4633332565336294,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.8561563436579808,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 11.799886212551122,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 1,
+        "coordinates": {
+          "boundary": "input_gradient",
+          "invocation": 0,
+          "stage": "inference"
+        },
+        "max_coordinate": [
+          0,
+          1
+        ]
+      }
+    },
+    "metrics_after": {
+      "basis_forward": {
+        "count": 20,
+        "side_a_norm": {
+          "value": 1.802406282032836,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 1.8024062820328364,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 4.888843483876898e-16,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 1.093178636130564e-16,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 1.0,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 3.3306690738754696e-16,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 10,
+        "coordinates": {
+          "boundary": "basis_forward",
+          "invocation": 0,
+          "stage": "inference"
+        },
+        "max_coordinate": [
+          2,
+          0
+        ]
+      },
+      "forward": {
+        "count": 35,
+        "side_a_norm": {
+          "value": 4.354880457922176,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 4.354880457922177,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 1.748436044219479e-15,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 2.9553963237855785e-16,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 1.0,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 7.216449660063518e-16,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 0,
+        "coordinates": {
+          "boundary": "forward",
+          "invocation": 0,
+          "stage": "inference"
+        },
+        "max_coordinate": [
+          0,
+          0
+        ]
+      },
+      "input_gradient": {
+        "count": 21,
+        "side_a_norm": {
+          "value": 7.591734829718539,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 7.591734829718543,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 4.8029477814550745e-15,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 1.0480891317827665e-15,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9999999999999999,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 2.220446049250313e-15,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 1,
+        "coordinates": {
+          "boundary": "input_gradient",
+          "invocation": 0,
+          "stage": "inference"
+        },
+        "max_coordinate": [
+          0,
+          1
+        ]
+      }
+    },
+    "contract": "identical",
+    "oracle_arrays": "array-exact",
+    "initial_state": "identical"
+  },
+  "parent_audit": {
+    "protected_files_checked": 181,
+    "changed": [],
+    "retained_report_replay": "exact",
+    "native_baseline_reproduction": "array-exact",
+    "candidate_source_changes": [
+      "peft/tuners/lora/model.py"
+    ]
+  },
+  "portable_replay": {
+    "cases": 4,
+    "matched": true,
+    "archive_sha256": "5b07ecf43a2dd52b7e580e906a8c23427c9434d7fc4a4d7f3ccb8fdcbbaab660",
+    "archive_bytes": 32808
+  },
+  "feedback": {
+    "minor_friction": [
+      "installed-package snapshot layout initially assumed to be src/ layout; resolved by inspecting the provided directory"
+    ],
+    "useful_guidance": [
+      "verify collection before attribution",
+      "distinguish same-state local proof from original-task rerun",
+      "reuse existing captures and metrics"
+    ],
+    "case_owned_audit": "protected files, contract/oracle identity and candidate source changes audited without adding a new public schema"
+  },
+  "limits": [
+    "historical CPU linear LoRA workflow test, not a new defect discovery",
+    "no GPU/NPU or distributed model validation",
+    "other SVD merge algorithms not exercised",
+    "native command wall times include imports and do not establish performance improvement"
+  ]
+}
