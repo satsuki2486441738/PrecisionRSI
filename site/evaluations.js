@@ -35,12 +35,14 @@
   }
 
   function renderCard(record, helpers) {
-    const { node, list, text, paragraph, section, bulletList, publicURL, formatNumber, libraryLabel } = helpers;
+    const { node, list, text, paragraph, section, bulletList, publicURL, formatNumber, libraryLabel,
+      modelLabel = (entry) => entry.model.name,
+      hardwareLabels = (entry) => [...new Set(entry.sides.map((side) => side.hardware))] } = helpers;
     const sideLabel = (id) => record.sides.find((side) => side.id === id).label;
     const unitLabel = (unit) => ({ '1': '无量纲', gradient: '梯度值', parameter: '参数值', arrays: '数组' }[unit] || unit);
-    const card = node('article', 'repair-card evaluation-card');
+    const card = node('details', 'repair-card repair-item evaluation-card evaluation-item');
     card.id = `evaluation-${record.id}`;
-    const header = node('div', 'card-header');
+    const header = node('summary', 'card-header issue-summary evaluation-summary');
     const date = node('time', 'evaluation-date', record.date);
     date.dateTime = record.date;
     const heading = node('div', 'card-heading');
@@ -51,10 +53,17 @@
       record.acceptance == null ? '验收 · 待用户判定' : `验收 · ${text(record.acceptance.status || record.acceptance)}`));
     const link = node('a', 'permalink', '条目链接 ↗');
     link.href = `#${card.id}`;
+    link.addEventListener('click', (event) => {
+      event.stopPropagation();
+      card.open = true;
+      details.open = true;
+    });
     top.append(link, date);
-    heading.append(top, node('h3', '', record.title), node('p', 'card-summary', record.summary));
+    const title = global.EvaluationPresentation?.titleFor(record, modelLabel(record)) || record.title;
+    heading.append(top, node('h3', '', title),
+      node('p', 'card-summary', `${record.comparisons.length} 组比较 · ${record.sides.length} 组配置`));
     const tags = node('div', 'tags');
-    [record.model.name, ...new Set(record.sides.map((side) => side.hardware))].forEach((tag) => tags.append(node('span', '', tag)));
+    [modelLabel(record), ...hardwareLabels(record)].forEach((tag) => tags.append(node('span', '', tag)));
     heading.append(tags);
     header.append(heading);
     const body = node('div', 'card-body');
@@ -159,6 +168,8 @@
     details.append(node('summary', '', '展开配置、最大误差坐标与证据'));
     const grid = node('div', 'detail-grid');
     const conditions = section('01 / 比较条件');
+    paragraph(conditions, '原始记录标题', record.title);
+    paragraph(conditions, '记录模型名称', record.model.name);
     paragraph(conditions, '模型 revision', record.model.revision);
     conditions.append(node('p', 'small-label', '对齐条件'));
     bulletList(conditions, record.common);
@@ -196,7 +207,7 @@
     evidence.append(links);
     grid.append(conditions, environments, maximum, evidence);
     details.append(grid);
-    body.append(selection, panel, details);
+    body.append(node('p', 'card-summary evaluation-intro', record.summary), selection, panel, details);
     card.append(header, body);
     return card;
   }

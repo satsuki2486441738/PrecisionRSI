@@ -266,7 +266,7 @@ function configurePage() {
   }
   $('archive-panel').setAttribute('aria-labelledby', `tab-${activeKind}`);
 }
-function renderEvaluationGroup(group) {
+function renderEvaluationGroup(group, groupIndex) {
   const element = node('section', 'library-group');
   const header = node('div', 'library-group-header');
   const label = node('div');
@@ -274,8 +274,13 @@ function renderEvaluationGroup(group) {
   const total = historyAPI.evaluationCounts(group.records);
   header.append(label, node('span', 'group-count', `${total.experiments} 项评测 · ${total.comparisons} 组比较`));
   element.append(header);
-  group.records.forEach((record) => element.append(globalThis.PrecisionEvaluations.renderCard(record,
-    { node, list, text, paragraph, section, bulletList, publicURL, formatNumber, libraryLabel })));
+  group.records.forEach((record, index) => {
+    const card = globalThis.PrecisionEvaluations.renderCard(record,
+      { node, list, text, paragraph, section, bulletList, publicURL, formatNumber, libraryLabel,
+        modelLabel: historyAPI.evaluationModel, hardwareLabels: historyAPI.evaluationHardware });
+    card.open = groupIndex === 0 && index === 0;
+    element.append(card);
+  });
   return element;
 }
 function render() {
@@ -326,6 +331,7 @@ function followHash() {
     openAncestors(card);
     if (card.tagName === 'DETAILS') card.open = true;
     else if (card.querySelector('details')) card.querySelector('details').open = true;
+    if (card.classList.contains('evaluation-card')) card.querySelector('.details').open = true;
     card.scrollIntoView({ block: 'start' });
   }
 }
@@ -359,8 +365,9 @@ async function load() {
       $('total-count').textContent = totals.experiments;
       $('verification-count').textContent = totals.comparisons;
       $('group-count').textContent = totals.hardware;
-      options = [['library', evaluations.flatMap(historyAPI.evaluationLibraries)], ['model', evaluations.map((r) => r.model.name)],
-        ['hardware', evaluations.flatMap((r) => r.sides.map((s) => s.hardware))]];
+      const facets = historyAPI.evaluationFacets(evaluations);
+      options = [['library', evaluations.flatMap(historyAPI.evaluationLibraries)], ['model', facets.models],
+        ['hardware', facets.hardware]];
     } else {
       catalog = historyAPI.buildCatalog(data);
       repairs = [...data.repairs].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));

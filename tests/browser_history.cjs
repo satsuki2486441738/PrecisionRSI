@@ -7,6 +7,8 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const data = require('../site/data/evaluations.json');
 const repairs = require('../site/data/repairs.json');
+const historyModel = require('../site/history.js');
+const presentationModel = require('../site/evaluation-presentation.js');
 (async () => {
   const server = spawn(process.env.PRECISION_PYTHON || 'python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', path.join(root, 'site')], { stdio: ['ignore', 'pipe', 'pipe'] });
   let browser;
@@ -38,6 +40,30 @@ const repairs = require('../site/data/repairs.json');
     assert.equal(await page.locator('#verification-count').innerText(), String(data.evaluations.reduce((n, r) => n + r.comparisons.length, 0)));
     assert.equal(await page.locator('#tab-evaluations').getAttribute('aria-selected'), 'true');
     assert.equal(await page.locator('#archive-panel').getAttribute('aria-labelledby'), 'tab-evaluations');
+    const facets = historyModel.evaluationFacets(data.evaluations);
+    for (const [id, expected] of [['model', facets.models], ['hardware', facets.hardware]]) {
+      assert.deepEqual(await page.locator(`#${id} option`).evaluateAll((options) => options.slice(1).map((option) => option.value)), expected);
+    }
+    assert.equal(await page.locator('#group-count').innerText(), String(facets.hardware.length));
+    assert.equal(await cards.evaluateAll((items) => items.every((item) => item.tagName === 'DETAILS')), true);
+    assert.equal(await page.locator('.evaluation-item[open]').count(), 1);
+    const firstCard = cards.first();
+    const firstSummary = firstCard.locator(':scope > summary');
+    assert.ok((await firstSummary.evaluate((element) => getComputedStyle(element, '::before').content)).includes('−'));
+    await firstSummary.click();
+    assert.equal(await firstCard.evaluate((element) => element.open), false);
+    assert.equal(await firstCard.locator('.card-body').isVisible(), false);
+    assert.ok((await firstSummary.evaluate((element) => getComputedStyle(element, '::before').content)).includes('+'));
+    await firstSummary.focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await firstCard.evaluate((element) => element.open), true);
+    await page.keyboard.press('Space');
+    assert.equal(await firstCard.evaluate((element) => element.open), false);
+    await page.keyboard.press('Space');
+    assert.equal(await firstCard.evaluate((element) => element.open), true);
+    async function openCard(card) {
+      if (!await card.evaluate((element) => element.open)) await card.locator(':scope > summary').click();
+    }
     await page.selectOption('#library', 'TRL');
     const trlRecords = data.evaluations.filter((r) => r.sides.some((s) => s.libraries.some((lib) => lib.name === 'TRL')));
     assert.equal(await cards.count(), trlRecords.length);
@@ -49,10 +75,18 @@ const repairs = require('../site/data/repairs.json');
     await page.locator('#reset').click();
     assert.equal(await cards.count(), data.evaluations.length);
     await page.selectOption('#hardware', 'Ascend 910C');
-    assert.equal(await cards.count(), data.evaluations.filter((r) => r.sides.some((s) => s.hardware === 'Ascend 910C')).length);
+    assert.equal(await cards.count(), historyModel.filterEvaluations(data.evaluations, {hardware:'Ascend 910C'}).length);
+    await page.locator('#reset').click();
+    await page.selectOption('#hardware', 'CPU');
+    assert.equal(await cards.count(), historyModel.filterEvaluations(data.evaluations, {hardware:'CPU'}).length);
+    const tinyModel = facets.models.find((name) => /tiny qwen3/i.test(name));
+    assert.ok(tinyModel);
+    await page.selectOption('#model', tinyModel);
+    assert.equal(await cards.count(), historyModel.filterEvaluations(data.evaluations, {hardware:'CPU',model:tinyModel}).length);
     await page.locator('#reset').click();
     const restoration = data.evaluations.find((r) => r.id === 'trl-sfttrainer-checkpoint-20261021');
     const card = page.locator('#evaluation-' + restoration.id);
+    await openCard(card);
     for (const comparison of restoration.comparisons) {
       await card.locator('.comparison-picker select').selectOption(comparison.id);
       const values = await card.locator('.evaluation-value').evaluateAll((elements) => elements.map((element) => element.firstChild.textContent));
@@ -63,6 +97,8 @@ const repairs = require('../site/data/repairs.json');
     let chartComparisons = 0, chartMetrics = 0, drawnCharts = 0;
     for (const record of data.evaluations) {
       const current = page.locator('#evaluation-' + record.id);
+      await openCard(current);
+      assert.equal(await current.locator('h3').innerText(), presentationModel.titleFor(record, historyModel.evaluationModel(record)));
       for (const comparison of record.comparisons) {
         await current.locator('.comparison-picker select').selectOption(comparison.id);
         const rendered = await current.locator('.evaluation-metric').evaluateAll((items) => items.map((item) => {
@@ -117,10 +153,12 @@ const repairs = require('../site/data/repairs.json');
         chartComparisons++;
         chartMetrics += rendered.length;
       }
+      await current.locator(':scope > summary').click();
     }
     // Reproduce the reported long JSON/forward-shape display and verify literal text safety.
     const readingRecord = data.evaluations.find((record) => record.id === 'llamacpp-local-qwen2-5-0-5b-instruct-20261019');
     const reading = page.locator('#evaluation-' + readingRecord.id);
+    await openCard(reading);
     await reading.locator('.details > summary').click();
     const firstConfiguration = reading.locator('.evaluation-configuration-side').first();
     assert.equal(await firstConfiguration.evaluate((element) => element.open), true);
@@ -175,7 +213,14 @@ const repairs = require('../site/data/repairs.json');
     assert.deepEqual(JSON.parse(await readFile(await download.path(), 'utf8')), data);
     await page.goto(url + '#evaluation-' + restoration.id, { waitUntil: 'networkidle' });
     await page.waitForSelector('.evaluation-card');
+    assert.equal(await page.locator('#evaluation-' + restoration.id).evaluate((e) => e.open), true);
     assert.equal(await page.locator('#evaluation-' + restoration.id + ' .details').evaluate((e) => e.open), true);
+    const linkedCard = page.locator('#evaluation-' + restoration.id);
+    await linkedCard.locator(':scope > summary').click();
+    assert.equal(await linkedCard.evaluate((e) => e.open), false);
+    await linkedCard.locator('.permalink').click();
+    assert.equal(await linkedCard.evaluate((e) => e.open), true);
+    assert.equal(await linkedCard.locator('.details').evaluate((e) => e.open), true);
     await page.locator('#tab-repairs').click();
     await page.waitForSelector('.verification-card');
     await page.goBack({ waitUntil: 'networkidle' });
@@ -197,12 +242,14 @@ const repairs = require('../site/data/repairs.json');
     await page.waitForSelector('.evaluation-card');
     if (process.env.PRECISION_CHART_SCREENSHOT) {
       const illustration = page.locator('#evaluation-tensorrt-llm-qwen25-05b-20261020');
+      await openCard(illustration);
       await illustration.locator('.comparison-picker select').selectOption('targets');
       await illustration.screenshot({ path: process.env.PRECISION_CHART_SCREENSHOT });
     }
     await page.screenshot({ path: process.env.PRECISION_DESKTOP_SCREENSHOT || '/tmp/precision-evaluations-desktop.png' });
     for (const width of [375, 768]) {
       await page.setViewportSize({ width, height: 950 });
+      await openCard(page.locator('#evaluation-' + readingRecord.id));
       await page.locator('#evaluation-' + readingRecord.id + ' .details').first().evaluate((element) => { element.open = true; });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `Overflow at ${width}px`);
     }
