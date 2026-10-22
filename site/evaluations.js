@@ -49,8 +49,6 @@
     const top = node('div', 'card-topline');
     top.append(node('span', `pill${record.status === 'completed' ? ' validated' : ''}`,
       record.status === 'completed' ? '采集与比较完成' : '部分完成'));
-    top.append(node('span', `pill${record.acceptance == null ? ' pending' : ''}`,
-      record.acceptance == null ? '验收 · 待用户判定' : `验收 · ${text(record.acceptance.status || record.acceptance)}`));
     const link = node('a', 'permalink', '条目链接 ↗');
     link.href = `#${card.id}`;
     link.addEventListener('click', (event) => {

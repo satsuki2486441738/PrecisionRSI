@@ -280,10 +280,8 @@ function configurePage() {
   copy.labels.forEach((value, index) => { $(`stat-label-${index}`).textContent = value; });
   copy.feet.forEach((value, index) => { $(`stat-foot-${index}`).textContent = value; });
   $('task-filter').hidden = false;
-  $('extra-filters').open = activeKind === 'evaluations';
-  $('filters').classList.toggle('evaluation-filters', activeKind === 'evaluations');
+  $('extra-filters').open = false;
   $('filters').setAttribute('aria-label', `筛选${copy.noun}记录`);
-  $('search').placeholder = activeKind === 'evaluations' ? '搜索框架、比较条件或指标…' : '搜索问题、根因或修复…';
   for (const kind of ['repairs', 'evaluations']) {
     $(`tab-${kind}`).setAttribute('aria-selected', String(kind === activeKind));
     $(`tab-${kind}`).tabIndex = kind === activeKind ? 0 : -1;
