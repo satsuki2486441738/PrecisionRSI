@@ -2,11 +2,9 @@
 
 ## Collection
 
-Apply the [training state and stages](sft.md#training-stages) to actor and critic as used. Replay fixed prompt/response IDs, action positions, masks and EOS/truncation. Capture effective old/reference scores, rewards, advantages, returns and values, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
+Select the requested action-score, objective or update observations. Replay fixed prompt/response IDs, action positions, masks and EOS/truncation. For objective comparisons, retain the effective old/reference scores, rewards, advantages, returns and values used by that objective, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
 
-Identify the optimizer step, accumulation window and actor/critic order.
-
-Capture the inputs, configuration and intermediate values used by the native objective, as applicable:
+For training comparisons, apply the requested [training state and stages](sft.md#training-stages) to actor and critic; identify the optimizer step, accumulation window and actor/critic order. Use the relevant objective dependencies below:
 
 | Objective component | State to capture |
 |---|---|
@@ -17,7 +15,7 @@ Capture the inputs, configuration and intermediate values used by the native obj
 
 ## Framework integration
 
-Select the native entrypoint and inspect the installed version's implementation.
+Use the relevant entrypoint below. Inspect the installed implementation when trajectory, objective or capture semantics are unresolved.
 
 | Framework / entrypoint | Inspect in the installed implementation |
 |---|---|

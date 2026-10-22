@@ -6,15 +6,17 @@ Select tools by operation and supported input semantics. The tool library lives 
 
 | Operation | Tool entrypoint | Inputs and outputs |
 |---|---|---|
+| Continue a multi-stage task | [workflow.py](../scripts/workflow.py), CLI / Python `run_workflow`, `inspect_workflow` | Workload plan and workspace → verified stage reuse, bounded execution, dependency invalidation and next skill action |
+| Find reusable prepared resources | [resource_catalog.py](../scripts/resource_catalog.py), CLI / Python `register`, `find` | Declared support properties, resource paths and successful command receipt → content-checked environment/model/adapter/capture lookup |
 | Record a bounded native command | [record_run.py](../scripts/record_run.py), CLI / Python `record_run` | Output root, side/task IDs, timeout and literal argv → fresh UTC run with command metadata and streamed stdout/stderr; POSIX timeout cleans up the owned process group |
-| Check runtime initialization / interfaces | [runtime_probe.py](../scripts/runtime_probe.py), CLI / Python `probe_runtime`, `inspect_runtime` | Ordered imports, symbols, task checks and optional selected files → actual module/distribution identity, file fingerprints and diagnostics in a fresh interpreter or native worker |
+| Check runtime initialization / interfaces | [runtime_probe.py](../scripts/runtime_probe.py), CLI / Python `probe_runtime`, `inspect_runtime`, `runtime_identity` | Ordered imports, symbols, task checks and optional selected files → actual module/distribution identity, selected source fingerprints and diagnostics; stable identity for workflow reuse |
 | Capture fixed-history inference / export scores | [inference_capture.py](../scripts/inference_capture.py), Python `FixedHistory`, `derive_logprobs`, `validate_history`, `validate_generation_scores`, `export_records` | Native full-vocabulary logit row and fixed tokens → declared logprob derivation, history/score-row checks and distribution/target-score records |
 | Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
 | Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
 | Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
 | Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
 | Inspect tensor NaN / Inf | [inspect_nonfinite.py](../scripts/inspect_nonfinite.py), CLI / Python `compare` | Contract and paired tensor manifests → per-side and paired nonfinite counts, bounded logical coordinates and separate finite-subset metrics |
-| Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
+| Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI / Python `compare`, `Stats` | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
 | Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
 | Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |
 | Validate artifacts | [validate_artifacts.py](../scripts/validate_artifacts.py), CLI | Contract and one side's tensor/distribution manifest → validation and coverage |
@@ -32,13 +34,28 @@ python scripts/compare_tensors.py --contract gradients.json --side-a a.json --si
 
 Read the selected interface before collection. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
-Use `--help` for CLI usage. When adapting inputs, extract only the selected module docstring with Python `ast`; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation functions as needed.
+Tool docstrings own artifact fields; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation code when the documented interface is insufficient for the selected integration.
 
 Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and unavailable comparisons. Exit codes: 0=comparison metrics computed successfully, 1=unavailable comparison, 2=CLI/output error. Exit 0 does not establish that a user's accuracy tolerance is met.
 
+## Shared tasks
+
+Reuse the existing workload workspace and evidence across components. Rerun when relevant inputs, runtime identity, scope or required freshness changes; otherwise verify and reuse retained results. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Its [docstring](../scripts/workflow.py) defines the interface.
+
+```sh
+python scripts/workflow.py run --plan task.json --workspace work
+python scripts/workflow.py status --plan task.json --workspace work
+```
+
+Follow `next_action` with its retained artifacts/logs, then run again. Changed inputs invalidate affected stages; `--refresh STAGE` requests an unchanged retry. Task-owned correctness checks can route to repair. The agent supplies missing integration and repair decisions.
+
+Use the resource catalog when prepared environments/adapters need discovery across workloads. Register reusable resources with successful native command receipts. A single task can use its existing paths directly.
+
+The [native Torch example](../examples/workflow_demo.py) demonstrates preparation reuse, a controlled repair and original-workload verification; unchanged replay launches zero native commands.
+
 ## Portable evidence
 
-Pack selected artifacts with `evidence_bundle.py`; its index records original/exported SHA256 and byte counts. Optional literal replacements apply to UTF-8 text while preserving numeric arrays. Keep the replacement file outside the selected directory. Read the module docstring for file-selection, index and size-limit interfaces.
+When portable evidence or replay is requested, use `evidence_bundle.py` to pack selected artifacts. Its index records original/exported SHA256 and byte counts. Optional literal replacements apply to UTF-8 text while preserving numeric arrays; keep the replacement file outside the selected directory. The tool docstring defines file selection and size limits.
 
 ```sh
 python scripts/evidence_bundle.py pack SELECTED_FILES NEW.zip

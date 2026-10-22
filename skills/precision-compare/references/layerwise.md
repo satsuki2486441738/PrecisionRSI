@@ -1,6 +1,6 @@
 # Layerwise comparison
 
-Use after the user confirms investigating internal observations from a model-level comparison. Infer samples, initial boundaries and execution stages from the task and existing comparison; confirm the scope and resource limits with the user. Within that authorization, choose tools, write adapters, run trials and refine sampling autonomously. Ask again only to change the comparison question, exceed resource limits, or resolve a material semantic ambiguity that code inspection and bounded trials cannot settle; provide the evidence and consequences needed to decide.
+Use within a user-confirmed scope for internal observations, including authorization already supplied in a repair request. Choose samples, boundaries, collectors and trials autonomously within that scope and resource budget. Ask when changing the comparison question or resource limit, or when a material semantic choice remains unresolved.
 
 ## Collection
 

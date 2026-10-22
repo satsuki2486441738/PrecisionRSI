@@ -21,6 +21,13 @@ A common state requires equal before values; per-side state records permit
 task-selected different initial representations and retain their differences.
 
 API: compare(contract,side_a,side_b,chunk_size=1048576).
+For already aligned in-memory arrays: stats=Stats(); stats.add(a, b) for each
+paired, nonempty, finite, flattened FP64 chunk; stats.report() returns the same
+scalar metrics. add() appends coordinates; merge(other) appends another reducer.
+max_flat_index refers to that concatenation. Adapters own pairing, coverage,
+dtypes and mapping the flat index back to logical coordinates. This API needs no
+manifest conversion. Use group_metrics.reduce_groups for named aggregates.
+
 Reports contain global/per-tensor L2 error, RMSE, cosine, maximum error, counts,
 norms, events and coordinate findings. An invalid tensor leaves valid per-tensor
 results available while its full aggregate is unavailable. Metrics are diagnostics

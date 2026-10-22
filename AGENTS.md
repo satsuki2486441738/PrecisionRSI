@@ -2,8 +2,9 @@
 
 ## Layout
 
-- Precision-Skills currently contains two installable packages: `precision-compare` and `precision-repair`. Compare owns shared artifact tools; repair reuses its contracts, inputs/state and metrics for original-workload verification.
+- Precision-Skills currently contains three installable packages: `framework-adapt`, `precision-compare` and `precision-repair`. Compare owns shared artifact and task-execution tools. The three components reuse workload state, verified resources, inputs/state and metrics across adaptation, comparison and repair.
 
+- `skills/framework-adapt/` owns native framework deployment and model/backend adaptation. Keep the entrypoint concise; retain environment declarations and framework-specific implementations with their projects and cases. Reuse comparison tools when numerical validation is needed.
 - `skills/precision-repair/` is the installable repair skill. Its entrypoint owns correctness evidence, causal diagnosis, patching and original-workload verification. Reuse comparison tools from `skills/precision-compare/`; keep framework-specific fixes and experiments with their cases.
 - `skills/precision-compare/` is the installable comparison skill. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Optional internal sampling and its msProbe capability summary live in `references/layerwise.md`. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.
 - Maintain matching English `README.md` and Chinese `README.zh-CN.md`. Technical documentation and maintenance instructions use English. Follow the Agent Skills specification.

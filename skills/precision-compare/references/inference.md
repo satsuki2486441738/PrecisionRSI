@@ -16,7 +16,7 @@ Feed the same predetermined continuation while each side evolves its native cach
 
 ## Framework integration
 
-Select the native entrypoint and inspect the installed version's implementation.
+Use the relevant entrypoint below. Inspect the installed implementation when native score semantics or coordinate mappings are unresolved.
 
 Record applicable attention backend, TP, KV and recurrent-state dtypes, graph/cache/chunking and batching settings. Map reordered requests/chunks to absolute prediction positions: prompt token $x_t$ uses position $t-1$; the final prefill row supplies the first output distribution. Account for BOS/templates and initial prompt entries.
 
@@ -32,7 +32,7 @@ Reconstruct vocabulary shards, exclude padding and export the score rows needed 
 | [MindIE-LLM](https://github.com/Ascend/MindIE-LLM) | Service/model backend, available score access and scheduled request/prefill/decode mappings |
 | [llama.cpp](https://github.com/ggml-org/llama.cpp) | GGUF/checkpoint identity, quantization, tokenizer conversion and native context/logit-row mapping |
 
-Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector for fixed-history decode. The [inference capture tool](../scripts/inference_capture.py) saves full-vocabulary logprobs before forcing each fixed token, checks logical prefill/decode histories and exports distribution/target-score records. FP32 remains the default; `logprob_dtype='float64'` explicitly derives logprobs offline from copied native values. Use `validate_generation_scores` to check context/generation row alignment when both outputs are available. `export_records` verifies normalization and target scores against the selected saved rows. The adapter selects request rows, reconstructs vocabulary shards and maps native scheduling events to logical events.
+Resolve score availability at the native execution layer and export the observations required by the selected metrics. Use engine replay or a collector when fixed-history decode is requested. The [inference capture tool](../scripts/inference_capture.py) saves full-vocabulary logprobs before forcing each fixed token, checks logical prefill/decode histories and exports distribution/target-score records. FP32 remains the default; `logprob_dtype='float64'` explicitly derives logprobs offline from copied native values. Use `validate_generation_scores` to check context/generation row alignment when both outputs are available. `export_records` verifies normalization and target scores against the selected saved rows. The adapter selects request rows, reconstructs vocabulary shards and maps native scheduling events to logical events.
 
 ### Other/custom
 

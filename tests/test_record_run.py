@@ -43,6 +43,33 @@ class RecordRunTests(unittest.TestCase):
         self.assertNotIn('environment', result)
         self.assertRegex(folder.name, r'^cpu-test-\d{8}T\d{6}Z$')
 
+    def test_argv_factory_uses_reserved_run_directory(self):
+        folder, result = record_run(self.root / 'runs', 'cpu', 'factory', 5,
+            lambda run: [sys.executable, '-c', 'import sys;open(sys.argv[1],"w").write("native")',
+                         str(run / 'artifact.txt')], cwd=self.root)
+        self.assertEqual(result['status'], 'completed')
+        self.assertEqual((folder / 'artifact.txt').read_text(), 'native')
+        self.assertEqual(result['argv'][-1], str(folder / 'artifact.txt'))
+
+    def test_invalid_factory_retains_failure_without_starting_child(self):
+        with patch('record_run.subprocess.Popen') as launch:
+            folder, result = record_run(self.root / 'runs', 'cpu', 'factory', 5,
+                                        lambda run: [123], cwd=self.root)
+        launch.assert_not_called()
+        self.assertEqual(result['status'], 'launch_failed')
+        self.assertEqual(result['returncode'], 127)
+        self.assertEqual(json.loads((folder / 'command.json').read_text()), result)
+
+    def test_preparation_exception_is_retained_without_launch(self):
+        def prepare(run):
+            raise RuntimeError('cannot prepare arguments')
+        with patch('record_run.subprocess.Popen') as launch:
+            folder, result = record_run(self.root / 'runs', 'cpu', 'factory', 5, prepare)
+        launch.assert_not_called()
+        self.assertEqual(result['status'], 'launch_failed')
+        self.assertEqual(result['error']['type'], 'RuntimeError')
+        self.assertTrue((folder / 'command.json').exists())
+
     def test_nonzero_retains_output_and_exit_code(self):
         folder, result = self.run_child('import sys; print("failure"); sys.exit(7)')
         self.assertEqual((result['status'], result['returncode'], result['child_returncode']), ('failed', 7, 7))

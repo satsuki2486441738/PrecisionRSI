@@ -9,7 +9,7 @@ import unittest
 
 TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(TOOLS))
-from runtime_probe import inspect_runtime, probe_runtime
+from runtime_probe import inspect_runtime, probe_runtime, runtime_identity
 
 
 class RuntimeProbeTests(unittest.TestCase):
@@ -29,6 +29,24 @@ class RuntimeProbeTests(unittest.TestCase):
         info = self.root/'probe_fixture-9.0.dist-info'
         info.mkdir()
         (info/'METADATA').write_text('Metadata-Version: 2.1\nName: probe-fixture\nVersion: 9.0\n')
+
+    def test_stable_identity_excludes_process_noise_but_keeps_source_changes(self):
+        spec = dict(python_paths=[str(self.root)], imports=['probe_fixture'],
+                    sources=[dict(module='probe_fixture')])
+        first, second = probe_runtime(spec), probe_runtime(spec)
+        self.assertNotEqual(first['pid'], second['pid'])
+        self.assertEqual(runtime_identity(first), runtime_identity(second))
+        source = self.root / 'probe_fixture.py'
+        source.write_text(source.read_text() + '\n# changed implementation\n')
+        changed = probe_runtime(spec)
+        self.assertNotEqual(runtime_identity(first), runtime_identity(changed))
+        native = inspect_runtime(dict(python_paths=[str(self.root)], checks=['probe_fixture:initialize']))
+        selected = runtime_identity(native, checks=['probe_fixture:initialize'])
+        self.assertEqual(selected['checks'], native['checks'])
+        with self.assertRaises(ValueError):
+            runtime_identity(dict(status='failed'))
+        with self.assertRaises(ValueError):
+            runtime_identity(native, checks=['absent'])
 
     def test_fresh_process_and_actual_module_separate_from_distribution(self):
         spec = dict(python_paths=[str(self.root)], imports=['probe_fixture'],

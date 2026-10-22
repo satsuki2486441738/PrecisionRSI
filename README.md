@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Agent Skills for numerical precision comparison and repair across devices and execution environments.
+Agent Skills for framework adaptation, numerical precision comparison and repair across devices and execution environments.
 
 ## Use
 
@@ -10,19 +10,20 @@ Choose the skill for the requested task and copy its directory into your client'
 
 | Skill | Task and result |
 |---|---|
+| [Framework Adapt](skills/framework-adapt/SKILL.md) | Deploy or adapt a framework for the target model, hardware and workload; deliver reproducible execution and validation evidence |
 | [Precision Compare](skills/precision-compare/SKILL.md) | Collect and compare numerical results; return metrics, coverage and evidence |
 | [Precision Repair](skills/precision-repair/SKILL.md) | Establish the cause of a numerical defect, patch the implementation and verify the original workload |
 
-Install the two directories side by side to use the linked workflow and shared comparison tools. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
+For end-to-end workloads, install all three packages side by side. Individual tasks can use the selected component; adaptation and repair reuse tools from `precision-compare`. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
 
-Start with comparison to collect metrics and coverage. When repair is requested, carry the contract, per-side manifests/configurations, original inputs/state, source identities, native commands and reports into repair. Establish correctness evidence to identify the responsible behavior, then patch and rerun the original comparison. Each skill can also start from an existing workload or test; collection is reused when its inputs and conditions still match.
+For an end-to-end task, provide the model workload, target execution stacks and resource scope. The agent establishes missing native execution, compares the requested observations and repairs confirmed problems when requested. The three skills share a [workflow and resource catalog](skills/precision-compare/references/comparison.md#shared-tasks): valid preparation and captures are reused, failures identify the next component, and code changes rerun affected verification. Each component also works independently.
 
 For comparison, provide the task and existing artifacts, or the model, data and platform connections needed for collection. The agent prepares the environment, integrates native execution, writes missing collection/comparison code and runs the task. Reusable tools are extended during skill development.
 
 Examples:
 
 - Compare the gradients and stored updates in these two execution manifests.
-- Collect a LoRA SFT step on two execution stacks using the same batch and initial adapter state, then compare it.
+- Run this model's SFT workload on the supplied execution stacks, compare numerical results, fix confirmed correctness problems and verify the original workload.
 
 [SKILL.md](skills/precision-compare/SKILL.md) routes collection and comparison. The three task recipes in `references/` cover inference, SFT (full-parameter / LoRA) and RL: what to capture, where to integrate with native frameworks (including Other/custom), and which metrics to report. `comparison.md` defines coordinate pairing, common metrics and tool usage; distribution metrics are defined in the inference recipe. Training capture stages are defined in SFT and reused by RL.
 
@@ -62,7 +63,7 @@ The [repair history](https://satsuki2486441738.github.io/precision-skills/) reco
 
 ## Tools and development
 
-The skill organizes the task; task adapters integrate native execution; the [tool library](skills/precision-compare/references/comparison.md#tools) provides reusable operations. `scripts/` contains CLI tools, callable Python tools and their supporting modules. Tool docstrings define inputs and outputs; task recipes select capture boundaries and metrics.
+The skills organize one workload; task adapters integrate native execution; the [tool library](skills/precision-compare/references/comparison.md#tools) executes and reuses its stages. `scripts/` contains CLI tools, callable Python tools and their supporting modules. Tool docstrings define inputs and outputs; task recipes select capture boundaries and metrics.
 
 Tools check runtime initialization and imported interfaces, record command runs, capture fixed-history inference distributions, plan internal capture, export and validate artifacts, and compare distributions, tensor observations (including activations), gradients, updates and target scores. Tensor diagnostics also inventory NaN/Inf locations and report finite-subset coverage and metrics separately. msProbe is an optional collection backend; the bundled planner generates bounded L0 selections and estimates tensor payload, while task adapters execute collection. Add missing task integration as needed and extract reusable operations into the tool library during development. Array tools require NumPy; target-score tools use the standard library.
 
@@ -77,6 +78,14 @@ python3 examples/compare_gradients.py
 ```
 
 It runs both forward/backward passes on CPU, then prints losses, gradient-difference metrics and the generated artifact directory.
+
+Run the [native end-to-end example](skills/precision-compare/examples/workflow_demo.py) from the skill directory:
+
+```sh
+python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
+```
+
+It runs a two-step Torch SFT fixture, detects a controlled objective defect, applies its known correction and revalidates the original trajectory while reusing preparation. The final replay launches zero native commands.
 
 Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 

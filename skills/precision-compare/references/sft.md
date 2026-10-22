@@ -2,15 +2,15 @@
 
 ## Collection
 
-Collect every valid target's label, prediction/target position and full-vocabulary-normalized logprob using the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; retain implemented reductions and additional terms.
+Select the requested objective, gradient or update stages and their expected parameter/token coordinates. For target-score comparison, collect labels, prediction/target positions and full-vocabulary-normalized logprobs under the native loss mask, including active EOS. Plain CE uses the global valid-token mean of negative logprobs; native loss retains its implemented reduction and additional terms.
 
 ### Full-parameter finetuning
 
-Collect the complete logical model-parameter inventory, retaining tied-weight mappings and trainable flags. Capture every trainable parameter's gradient and stored update for the requested stages, including absent/present-zero gradients and unchanged updates.
+Declare the logical parameter inventory for the requested scope; full-model requests include all trainable parameters. Retain tied-weight mappings and trainable flags. At each selected stage, include absent/present-zero gradients and unchanged updates in that inventory.
 
 ### LoRA
 
-For adapter training, check initial adapter values, target modules, rank, alpha/scaling, dropout, bias/modules-to-save, dtype, quantization and merged state against the task's common conditions and per-side configuration. Capture every adapter/additional trainable coordinate plus frozen-base identity and unchanged-state checks.
+For adapter training, check initial adapter values, target modules, rank, alpha/scaling, dropout, bias/modules-to-save, dtype, quantization and merged state against the task's common conditions and per-side configuration. Use the requested adapter/additional trainable inventory; retain frozen-base identity and unchanged-state checks.
 
 With zero-B initialization, retain present-zero first-step A gradients/updates and changing B coordinates. Use the usual zero-norm metric rules. Capture merged-weight deltas separately when requested.
 
@@ -29,11 +29,11 @@ Record native parameter/gradient/master storage separately from exported-array a
 
 For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. Capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, and stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates); use the logical inventory exporter and explicit-view comparator from [comparison](comparison.md).
 
-When establishing a stateful-optimizer baseline, collect cold and common-restored steps, including parameters, moments and step counter. Reuse accepted baselines for unchanged paths; repeat affected stages after optimizer, precision, objective, sharding or dependency changes.
+For optimizer-state or checkpoint-continuation comparisons, include the parameters, moments, step counter and scheduler/RNG/data position needed to establish the requested starting state. Capture cold or restored trajectories as requested; reuse unchanged baselines.
 
 ## Framework integration
 
-Select the native entrypoint and inspect the installed version's implementation.
+Use the relevant entrypoint below. Inspect the installed implementation when capture or reduction semantics are unresolved.
 
 | Framework / entrypoint | Inspect in the installed implementation |
 |---|---|
@@ -56,7 +56,8 @@ Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Loca
 
 | Observations | Report |
 |---|---|
-| Targets and objective | Each side's NLL/native loss components and their absolute differences; target-logprob MAE, P99 and maximum |
+| Target scores | Each side's NLL and absolute difference; target-logprob MAE, P99 and maximum |
+| Native objective | Each side's loss components and absolute differences |
 | Requested gradients, postclip gradients and updates | L2 error, RMSE, cosine and maximum absolute error |
 | Coverage | Valid targets, paired parameters/elements, gradient presence and optimizer events; for LoRA, adapter coverage and frozen-base checks |
 

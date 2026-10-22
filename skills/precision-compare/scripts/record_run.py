@@ -4,6 +4,9 @@
 CLI: record_run.py --output-root ROOT --side ID --task TASK --timeout SECONDS
                   [--cwd DIR] -- ARGV...
 API: record_run(output_root, side, task, timeout, argv, cwd=None) -> (Path, dict).
+Python callers may pass argv as a callable(Path) -> literal argv to use the newly
+reserved run directory. Preparation errors retain a launch_failed run without
+starting a child. CLI argv is always literal.
 IDs contain ASCII alphanumeric segments separated by single hyphens. Timeout
 must be finite and positive. Invalid inputs and existing run directories fail
 before launch; existing runs are never reused. The name is
@@ -80,9 +83,12 @@ def record_run(output_root, side, task, timeout, argv, cwd=None):
         raise ValueError('timeout must be finite and positive') from exc
     if not math.isfinite(timeout) or timeout <= 0:
         raise ValueError('timeout must be finite and positive')
-    if (not isinstance(argv, (list, tuple)) or not argv
-            or any(not isinstance(a, str) or '\0' in a for a in argv) or not argv[0]):
-        raise ValueError('argv must be a nonempty sequence of strings without NUL bytes')
+    def validate_argv(value):
+        if (not isinstance(value, (list, tuple)) or not value
+                or any(not isinstance(a, str) or '\0' in a for a in value) or not value[0]):
+            raise ValueError('argv must be a nonempty sequence of strings without NUL bytes')
+        return list(value)
+    prepared = None if callable(argv) else validate_argv(argv)
     directory = Path.cwd() if cwd is None else Path(cwd).resolve()
     if not directory.is_dir():
         raise ValueError('cwd must be an existing directory')
@@ -91,16 +97,20 @@ def record_run(output_root, side, task, timeout, argv, cwd=None):
     root.mkdir(parents=True, exist_ok=True)
     folder = root / f'{side}-{task}-{started.strftime("%Y%m%dT%H%M%SZ")}'
     folder.mkdir(exist_ok=False)
-    record = dict(start=started.isoformat(), end=None, argv=list(argv), cwd=str(directory),
+    record = dict(start=started.isoformat(), end=None, argv=prepared, cwd=str(directory),
                   timeout=timeout, child_pid=None, returncode=None, child_returncode=None,
                   status='running', wall_seconds=None)
     begin = time.monotonic()
     _write_record(folder, record)
     with (folder / 'stdout.bin').open('xb') as stdout, (folder / 'stderr.bin').open('xb') as stderr:
         try:
-            process = subprocess.Popen(argv, cwd=directory, stdout=stdout, stderr=stderr,
+            if prepared is None:
+                prepared = validate_argv(argv(folder))
+                record['argv'] = prepared
+                _write_record(folder, record)
+            process = subprocess.Popen(prepared, cwd=directory, stdout=stdout, stderr=stderr,
                                        start_new_session=os.name == 'posix')
-        except OSError as exc:
+        except Exception as exc:
             record.update(status='launch_failed', returncode=127,
                           error=dict(type=type(exc).__name__, message=str(exc)))
         else:

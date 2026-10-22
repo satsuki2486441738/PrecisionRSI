@@ -62,8 +62,19 @@ def main():
                 raise ValueError(f'invalid metric {key}: {metric}')
         if not all(math.isfinite(value) for value in output['losses'].values()):
             raise ValueError('nonfinite native loss')
+        execution = subprocess.run(
+            [sys.executable, '-I', '-B', str(installed / 'examples/workflow_demo.py'),
+             '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,
+            text=True, check=True, timeout=120)
+        workflow = json.loads(execution.stdout)
+        validate_artifact_directory(workflow['case'], cwd)
+        if (not workflow['routed_to_repair'] or not workflow['preparation_reused']
+                or not workflow['resource_discovered'] or workflow['replay_native_commands'] != 0
+                or workflow['before_max_abs'] <= 1 or workflow['after_max_abs'] > 1e-6):
+            raise ValueError(f'incomplete workflow: {workflow}')
         print(f'Clean installation of {len(folders)} skills: links valid; '
-              'CPU FP32/BF16 captures validated; compared 12 gradient values.')
+              'CPU FP32/BF16 captures validated; compared 12 gradient values; '
+              'native repair workflow verified with zero-command replay.')
 
 
 if __name__ == '__main__':

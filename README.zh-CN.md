@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-让 agent 完成不同硬件与执行环境之间的数值精度比较与修复。
+让 agent 完成不同硬件与执行环境中的框架适配、数值精度比较与修复。
 
 ## 使用
 
@@ -10,19 +10,20 @@
 
 | Skill | 任务与交付 |
 |---|---|
+| [Framework Adapt](skills/framework-adapt/SKILL.md) | 为目标模型、硬件和任务部署或适配框架，交付可复现的执行入口与验证证据 |
 | [Precision Compare](skills/precision-compare/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
 | [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
 
-将两个目录并排安装，即可联动执行并复用比较工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
+端到端任务将三个包并排安装。单项任务可选用对应组件；适配和修复复用 `precision-compare` 的工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
 
-从比较开始，采集指标与覆盖率。用户要求修复时，沿用比较约定、各侧 manifest 与实际配置、原始输入与状态、源码身份、原生执行命令和报告进入修复流程。先用正确性证据判断问题归属，再修补实现并重跑原始比较。各 skill 也可以直接从已有负载或失败测试开始；输入和条件仍匹配的采集结果可直接复用。
+对于端到端任务，提供模型工作负载、目标执行栈和资源范围。agent 补齐原生执行能力，比较指定的数值结果，并在任务包含修复时处理确认的问题。三个 skill 共用[任务执行与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)：复用有效的环境准备和采集，失败时定位下一组件，代码变化后重跑受影响的验证。各组件也可独立使用。
 
 进行比较时，提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
 
 例如：
 
 - 比较两份执行 manifest 中的梯度和实际权重更新。
-- 使用相同 batch 和初始适配器状态，在两个执行栈上采集 LoRA SFT 单步并比较。
+- 在提供的执行栈上运行这个模型的 SFT 负载，比较数值结果，修复确认的正确性问题，再复验原始任务。
 
 [SKILL.md](skills/precision-compare/SKILL.md) 组织采集与比较流程。`references/` 中的三个任务文档覆盖推理、SFT（全参 / LoRA）和 RL，说明采集内容、原生框架接入位置（含 Other/custom）及应报告的指标。`comparison.md` 定义坐标配对、通用指标和工具用法；分布指标在推理文档中定义。训练采集阶段在 SFT 中定义，由 RL 复用。
 
@@ -62,7 +63,7 @@
 
 ## 工具与开发
 
-skill 组织任务，任务适配代码接入原生执行路径，[工具库](skills/precision-compare/references/comparison.md#tools)提供可复用的操作。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。
+三个 skill 共同组织一个工作负载，任务适配器接入原生执行，[工具库](skills/precision-compare/references/comparison.md#tools)执行并复用各阶段。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。
 
 工具负责检查运行环境初始化和实际导入的接口、记录命令执行、采集固定历史的推理分布、规划内部采样、导出和校验产物，以及比较分布、张量观察值（含激活）、梯度、更新和目标评分。张量诊断还可统计 NaN／Inf 及其位置，单独报告双侧有限值的配对覆盖率和差异指标。msProbe 是可选的采集后端；内置规划工具生成有界的 L0 采集范围并估算张量数据量，任务适配代码负责执行采集。缺少的任务接入按需实现，开发阶段再将可复用操作整理进工具库。数组工具依赖 NumPy；目标评分工具使用标准库。
 
@@ -77,6 +78,14 @@ python3 examples/compare_gradients.py
 ```
 
 示例在 CPU 上实际执行两次前向和反向，随后输出 loss、梯度差异指标和产物目录。
+
+在 skill 目录运行[原生端到端示例](skills/precision-compare/examples/workflow_demo.py)：
+
+```sh
+python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
+```
+
+示例执行两步 Torch SFT 负载，检测一个受控的目标函数错误，应用已知修正，再复验原始训练轨迹并复用环境准备。最后一次重放不启动任何原生命令。
 
 仓库组织与测试命令见 [AGENTS.md](AGENTS.md)。
 

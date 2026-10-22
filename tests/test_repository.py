@@ -93,13 +93,13 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertEqual((installed / 'skills/precision-compare/scripts/tool.py').read_text(),
                          'print("tool")\n')
 
-    def test_published_collection_installs_two_linked_skills(self):
+    def test_published_collection_installs_linked_skills(self):
         source = Path(__file__).resolve().parents[1] / 'skills'
         installed = self.root / 'clean-install'
         smoke.install_skills(source, installed / 'skills')
         folders = validator.validate_skills(installed)
         self.assertEqual([p.name for p in folders],
-                         ['precision-compare', 'precision-repair'])
+                         ['framework-adapt', 'precision-compare', 'precision-repair'])
         docs = sorted((installed / 'skills').rglob('*.md'))
         _, errors = validator.validate_links(installed, docs)
         self.assertEqual(errors, [])

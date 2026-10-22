@@ -13,6 +13,12 @@ Module records contain actual __file__/__version__; distribution metadata is
 recorded separately. Reports contain plain JSON values, including in native workers.
 Python paths apply only during inspection.
 
+runtime_identity(report, checks=()) returns a stable identity from a successful
+report: interpreter, host/architecture, imported modules, symbols, distributions
+and selected source fingerprints, plus explicitly selected check results. PID,
+elapsed time and diagnostics stay in the full report. This supports live probes
+whose unchanged identity should permit downstream workflow reuse.
+
 Optional sources=[{"module":"already.imported.module"}, {"path":"/absolute/file"}].
 After checks, fingerprint each selected regular file with resolved path, SHA256
 and byte count; module entries also retain their name and use the loaded module's
@@ -128,6 +134,23 @@ def inspect_runtime(spec):
         sys.path[:] = original_paths
     report['elapsed_seconds'] = time.monotonic() - started
     return json.loads(json.dumps(report, allow_nan=False))
+
+
+def runtime_identity(report, checks=()):
+    """Select reproducible runtime identity fields from a completed native probe."""
+    if not isinstance(report, dict) or report.get('status') != 'completed':
+        raise ValueError('runtime identity requires a completed probe')
+    if (not isinstance(checks, (list, tuple)) or any(not isinstance(k, str) for k in checks)
+            or len(set(checks)) != len(checks)):
+        raise ValueError('checks must contain unique check names')
+    fields = ('executable', 'python', 'architecture', 'host', 'modules', 'symbols',
+              'distributions', 'sources')
+    result = {key: report[key] for key in fields if key in report}
+    if checks:
+        if any(key not in report.get('checks', {}) for key in checks):
+            raise ValueError('selected runtime check is unavailable')
+        result['checks'] = {key: report['checks'][key] for key in checks}
+    return json.loads(json.dumps(result, allow_nan=False))
 
 
 def probe_runtime(spec, executable=None, timeout=60):
