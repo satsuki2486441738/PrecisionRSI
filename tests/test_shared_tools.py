@@ -9,7 +9,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPTS=Path(__file__).resolve().parents[1]/'skills/precision-skill/scripts'
+SCRIPTS=Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts'
 sys.path.insert(0,str(SCRIPTS))
 from score_metrics import reduce_scores
 from compare_target_scores import compare as target_scores

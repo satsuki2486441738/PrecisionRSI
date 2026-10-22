@@ -14,7 +14,7 @@ import zipfile
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
-SCRIPTS = REPO / 'skills/precision-skill/scripts'
+SCRIPTS = REPO / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(SCRIPTS))
 from evidence_bundle import pack
 from replay_bundle import check_subset, replay

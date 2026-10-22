@@ -1,5 +1,5 @@
 ---
-name: precision-skill
+name: precision-compare
 description: Collect and compare numerical results across hardware and software execution stacks for inference, SFT, LoRA, and RL. Use for fixed-input scoring, loss, gradient, or parameter-update comparisons across execution stacks.
 ---
 
@@ -40,3 +40,9 @@ Map collected observations to the [comparison interfaces](references/comparison.
 Use the task's metric selection and [comparison tools and definitions](references/comparison.md). Return actual settings, metric values and aggregations, coverage counts, maximum-error coordinates and artifact paths.
 
 Before switching from model-level comparison to internal layerwise collection, ask the user to confirm the transition, scope and resource limits. After confirmation, autonomously select and integrate collectors, verify sampling and refine within the approved scope and budget using [layerwise comparison](references/layerwise.md), including msProbe capabilities and integration steps.
+
+## Continue into repair or optimization
+
+When repair is requested, pass the comparison contract, per-side manifests and actual configurations, reports with coverage and affected coordinates, and the original inputs/state or their verified artifact locations to [precision-repair](../precision-repair/SKILL.md). Include source/runtime identities and the native collection commands so the symptom can be rerun. First resolve invalid captures, mismatched conditions and adapter errors; a peer difference alone does not establish a library defect.
+
+For an operator accuracy, latency or memory objective, pass the same workload and numerical evidence to [operator-optimize](../operator-optimize/SKILL.md), with the requested objective and constraints. Preserve baseline artifacts and reuse the same comparison definitions for every changed implementation. The default comparison task ends with metrics and coverage; continue when the user's task includes repair or optimization.

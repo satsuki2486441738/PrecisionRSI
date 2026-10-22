@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-skill/scripts'
+TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(TOOLS))
 from runtime_probe import inspect_runtime, probe_runtime
 

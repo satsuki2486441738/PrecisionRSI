@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'skills/precision-skill/scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts'))
 from group_metrics import reduce_groups
 from score_metrics import reduce_scores
 from compare_distributions import summarize

@@ -1,8 +1,8 @@
-# Precision-Skills: Numerical Precision Comparison Across Devices and Environments
+# Precision-Skills: Numerical Comparison, Repair and Operator Optimization
 
 [English](README.md) | 简体中文
 
-让 agent 完成不同执行环境之间的数值精度比较与修复。
+三个 skill，让 agent 完成不同硬件与执行环境之间的数值精度比较、精度修复和算子优化。
 
 ## 使用
 
@@ -10,10 +10,13 @@
 
 | Skill | 任务与交付 |
 |---|---|
-| [Precision Compare](skills/precision-skill/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
+| [Precision Compare](skills/precision-compare/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
 | [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
+| [Operator Optimize](skills/operator-optimize/SKILL.md) | 改善算子数值精度、耗时或显存占用，并回到原始任务复验 |
 
-同时安装两个 skill，可在修复时复用内置采集与比较工具。Precision Repair 也可以从原生失败测试出发，使用任务自身的工具完成修复。
+将三个目录并排安装，即可联动执行并复用比较工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
+
+从比较开始，采集指标与覆盖率。用户要求修复时，沿用比较约定、各侧 manifest 与实际配置、原始输入与状态、源码身份、原生执行命令和报告进入修复流程。先用正确性证据判断问题归属，再修补实现并重跑原始比较。需要改善算子精度或效率时，以同一工作负载和证据进入算子优化，补充耗时与显存测量。各 skill 也可以直接从已有负载或失败测试开始；输入和条件仍匹配的采集结果可直接复用。
 
 进行比较时，提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
 
@@ -22,11 +25,11 @@
 - 比较两份执行 manifest 中的梯度和实际权重更新。
 - 使用相同 batch 和初始适配器状态，在两个执行栈上采集 LoRA SFT 单步并比较。
 
-[SKILL.md](skills/precision-skill/SKILL.md) 组织采集与比较流程。`references/` 中的三个任务文档覆盖推理、SFT（全参 / LoRA）和 RL，说明采集内容、原生框架接入位置（含 Other/custom）及应报告的指标。`comparison.md` 定义坐标配对、通用指标和工具用法；分布指标在推理文档中定义。训练采集阶段在 SFT 中定义，由 RL 复用。
+[SKILL.md](skills/precision-compare/SKILL.md) 组织采集与比较流程。`references/` 中的三个任务文档覆盖推理、SFT（全参 / LoRA）和 RL，说明采集内容、原生框架接入位置（含 Other/custom）及应报告的指标。`comparison.md` 定义坐标配对、通用指标和工具用法；分布指标在推理文档中定义。训练采集阶段在 SFT 中定义，由 RL 复用。
 
 结果包含实际配置、指标值及聚合方式、覆盖数量、最大误差坐标和产物路径。任务决定对等执行配置之间的共同条件及各侧允许存在的差异；比较指标采用对称定义。采集保留原生算子并记录各侧依赖。
 
-需要层间比较时，agent 先确认范围与资源上限，再自主接入采集工具并细化采样。[层间比较指南](skills/precision-skill/references/layerwise.md)包含 msProbe 的能力、接入与试采集步骤，其他执行路径可使用原生 hook。
+需要层间比较时，agent 先确认范围与资源上限，再自主接入采集工具并细化采样。[层间比较指南](skills/precision-compare/references/layerwise.md)包含 msProbe 的能力、接入与试采集步骤，其他执行路径可使用原生 hook。
 
 ## 典型案例
 
@@ -60,15 +63,15 @@
 
 ## 工具与开发
 
-skill 组织任务，任务适配代码接入原生执行路径，[工具库](skills/precision-skill/references/comparison.md#tools)提供可复用的操作。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。
+skill 组织任务，任务适配代码接入原生执行路径，[工具库](skills/precision-compare/references/comparison.md#tools)提供可复用的操作。`scripts/` 包含命令行工具、可通过 Python 调用的工具及内部公共模块。工具 docstring 定义输入输出，任务文档负责选择采集边界和指标。
 
 工具负责检查运行环境初始化和实际导入的接口、记录命令执行、采集固定历史的推理分布、规划内部采样、导出和校验产物，以及比较分布、张量观察值（含激活）、梯度、更新和目标评分。msProbe 是可选的采集后端；内置规划工具生成有界的 L0 采集范围并估算张量数据量，任务适配代码负责执行采集。缺少的任务接入按需实现，开发阶段再将可复用操作整理进工具库。数组工具依赖 NumPy；目标评分工具使用标准库。
 
-[证据工具](skills/precision-skill/references/comparison.md#portable-evidence)为选定产物记录原始/导出哈希，并通过已安装 skill 的命令行工具重放保留的比较。
+[证据工具](skills/precision-compare/references/comparison.md#portable-evidence)为选定产物记录原始/导出哈希，并通过已安装 skill 的命令行工具重放保留的比较。
 
-完整采集任务及 agent 的预期执行过程见[固定历史推理示例](skills/precision-skill/examples/fixed-history-inference.md)，涵盖环境准备、采集接入、校验、比较和交付。
+完整采集任务及 agent 的预期执行过程见[固定历史推理示例](skills/precision-compare/examples/fixed-history-inference.md)，涵盖环境准备、采集接入、校验、比较和交付。
 
-使用[可运行的梯度比较示例](skills/precision-skill/examples/compare_gradients.py)，比较同一小型分类模型、同一 batch 下的 FP32 与 BF16 梯度。在 skill 目录运行，依赖 Torch 和 NumPy：
+使用[可运行的梯度比较示例](skills/precision-compare/examples/compare_gradients.py)，比较同一小型分类模型、同一 batch 下的 FP32 与 BF16 梯度。在 skill 目录运行，依赖 Torch 和 NumPy：
 
 ```sh
 python3 examples/compare_gradients.py

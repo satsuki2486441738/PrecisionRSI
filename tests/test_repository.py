@@ -52,13 +52,13 @@ class RepositoryValidationTests(unittest.TestCase):
         skills.mkdir()
         with self.assertRaisesRegex(ValueError, 'no installable skills'):
             validator.validate_skills(self.root)
-        for name in ('precision-skill', 'precision-repair'):
+        for name in ('precision-compare', 'precision-repair', 'operator-optimize'):
             folder = skills / name
             folder.mkdir()
             (folder / 'SKILL.md').write_text(
                 f'---\nname: {name}\ndescription: Execute the task.\n---\n# Task\n')
         self.assertEqual([path.name for path in validator.validate_skills(self.root)],
-                         ['precision-repair', 'precision-skill'])
+                         ['operator-optimize', 'precision-compare', 'precision-repair'])
         entrypoint = skills / 'precision-repair/SKILL.md'
         entrypoint.write_text('---\nname: wrong-name\ndescription: Repair.\n---\n')
         with self.assertRaisesRegex(ValueError, 'directory mismatch'):
@@ -69,15 +69,15 @@ class RepositoryValidationTests(unittest.TestCase):
 
     def test_clean_install_preserves_companion_links_and_omits_caches(self):
         source = self.root / 'checkout/skills'
-        for name in ('precision-skill', 'precision-repair'):
+        for name in ('precision-compare', 'precision-repair', 'operator-optimize'):
             folder = source / name
             folder.mkdir(parents=True)
             (folder / 'SKILL.md').write_text(
                 f'---\nname: {name}\ndescription: Execute the task.\n---\n# Task\n')
         repair = source / 'precision-repair/SKILL.md'
         with repair.open('a') as stream:
-            stream.write('[tools](../precision-skill/scripts/tool.py)\n')
-        scripts = source / 'precision-skill/scripts'
+            stream.write('[tools](../precision-compare/scripts/tool.py)\n')
+        scripts = source / 'precision-compare/scripts'
         scripts.mkdir()
         (scripts / 'tool.py').write_text('print("tool")\n')
         (scripts / '__pycache__').mkdir()
@@ -85,13 +85,28 @@ class RepositoryValidationTests(unittest.TestCase):
         (source.parent / 'private.txt').write_text('case-specific')
         installed = self.root / 'installed'
         smoke.install_skills(source, installed / 'skills')
-        self.assertEqual(len(validator.validate_skills(installed)), 2)
+        self.assertEqual(len(validator.validate_skills(installed)), 3)
         self.assertEqual(validator.validate_links(installed, [installed / 'skills/precision-repair/SKILL.md']),
                          (1, []))
         self.assertFalse((installed / 'private.txt').exists())
-        self.assertFalse((installed / 'skills/precision-skill/scripts/__pycache__').exists())
-        self.assertEqual((installed / 'skills/precision-skill/scripts/tool.py').read_text(),
+        self.assertFalse((installed / 'skills/precision-compare/scripts/__pycache__').exists())
+        self.assertEqual((installed / 'skills/precision-compare/scripts/tool.py').read_text(),
                          'print("tool")\n')
+
+    def test_published_collection_installs_three_linked_skills(self):
+        source = Path(__file__).resolve().parents[1] / 'skills'
+        installed = self.root / 'clean-install'
+        smoke.install_skills(source, installed / 'skills')
+        folders = validator.validate_skills(installed)
+        self.assertEqual([p.name for p in folders],
+                         ['operator-optimize', 'precision-compare', 'precision-repair'])
+        docs = sorted((installed / 'skills').rglob('*.md'))
+        _, errors = validator.validate_links(installed, docs)
+        self.assertEqual(errors, [])
+        for name in ('operator-optimize', 'precision-repair'):
+            text = (installed / 'skills' / name / 'SKILL.md').read_text()
+            self.assertIn('../precision-compare/references/comparison.md', text)
+        self.assertTrue((installed / 'skills/precision-compare/scripts/replay_bundle.py').is_file())
 
     def test_smoke_artifact_directory_accepts_symlink_spelling(self):
         selected = self.root / 'selected'

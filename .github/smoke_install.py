@@ -39,7 +39,7 @@ def main():
         _, errors = validate_links(root, sorted((root / 'skills').rglob('*.md')))
         if errors:
             raise ValueError('\n'.join(errors))
-        installed = root / 'skills/precision-skill'
+        installed = root / 'skills/precision-compare'
         cwd = root / 'work'
         cwd.mkdir()
         env = {k: v for k, v in os.environ.items() if k not in ('PYTHONPATH', 'PYTHONHOME')}

@@ -13,7 +13,7 @@ from unittest.mock import patch
 import warnings
 import zipfile
 
-TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-skill/scripts'
+TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(TOOLS))
 import evidence_bundle as bundle
 

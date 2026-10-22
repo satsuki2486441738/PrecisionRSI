@@ -10,7 +10,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPT = Path(__file__).resolve().parents[1] / "skills" / "precision-skill" / "scripts" / "compare_scores.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "skills" / "precision-compare" / "scripts" / "compare_scores.py"
 sys.path.insert(0, str(SCRIPT.parent))
 SPEC = importlib.util.spec_from_file_location("compare_scores", SCRIPT)
 CORE = importlib.util.module_from_spec(SPEC)

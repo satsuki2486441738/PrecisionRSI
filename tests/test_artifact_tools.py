@@ -11,7 +11,7 @@ import unittest
 
 import numpy as np
 
-SCRIPTS = Path(__file__).resolve().parents[1] / 'skills/precision-skill/scripts'
+SCRIPTS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(SCRIPTS))
 from artifact_io import Array, ArtifactError, load_json
 from compare_tensors import Stats, compare as tensors

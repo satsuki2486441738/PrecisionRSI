@@ -8,7 +8,7 @@ import tempfile
 import unittest
 import numpy as np
 
-TOOLS = Path(__file__).resolve().parents[1]/'skills/precision-skill/scripts'
+TOOLS = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts'
 sys.path.insert(0, str(TOOLS))
 from inference_capture import (FixedHistory, derive_logprobs, export_records,
                                validate_generation_scores, validate_history)

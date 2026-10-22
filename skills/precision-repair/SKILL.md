@@ -5,15 +5,15 @@ description: Diagnose and fix numerical accuracy defects in model, framework, an
 
 # Precision repair
 
-Reproduce a numerical problem, establish its cause, patch the responsible implementation and verify the original task. Start from an existing comparison, a failing test or a workload description. Prepare environments and task adapters as needed; retain the task's model, data, algorithm and execution requirements.
+Reproduce a numerical problem, establish its cause, patch the responsible implementation and verify the original task. Start from a [precision-compare](../precision-compare/SKILL.md) report, a failing test or a workload description. Prepare environments and task adapters as needed; retain the task's model, data, algorithm and execution requirements.
 
 ## Establish the repair target
 
 Identify the affected execution path, intended computation, correctness evidence, allowed changes, resource budget and acceptance requirements. Infer these from the request, artifacts, tests and source. Ask when a missing choice changes the intended result, permitted implementation or resource limit.
 
-Use the algorithm definition, a trusted implementation, analytical properties or higher-precision recomputation to establish expected behavior. Check that the evidence implements the same masks, reductions, state transitions and boundary semantics. Differences between peer executions identify a question to investigate; determine which behavior is incorrect before choosing what to fix. Route changes that preserve intended semantics and trade numerical error, runtime or memory to operator optimization. Record uncertainty when no available evidence resolves it.
+Use the algorithm definition, a trusted implementation, analytical properties or higher-precision recomputation to establish expected behavior. Check that the evidence implements the same masks, reductions, state transitions and boundary semantics. Differences between peer executions identify a question to investigate; determine which behavior is incorrect before choosing what to fix. Route changes that preserve intended semantics and trade numerical error, runtime or memory to [operator-optimize](../operator-optimize/SKILL.md), carrying the isolated operation, correctness evidence, original workload and measured baseline. Record uncertainty when no available evidence resolves it.
 
-Retain the original inputs, state, source revisions, effective settings and comparison reports. Record reproduction and verification commands, outputs and exit status in fresh runs. For historical defects, identify the affected revision and any upstream fix; label a backport accordingly. Reproduce the symptom through the affected native entrypoint, recording actual devices, imported code and the selected implementation path. Estimate run-to-run variation when execution is nondeterministic. Select a small failing workload that preserves the relevant dtype, shape, layout, execution mode and distributed behavior.
+Reuse the incoming contract, manifests, coverage and affected coordinates. Check artifact identities and replay retained comparisons when available; use native execution to reproduce the actual symptom. Retain the original inputs, state, source revisions, effective settings and comparison reports. Record reproduction and verification commands, outputs and exit status in fresh runs. For historical defects, identify the affected revision and any upstream fix; label a backport accordingly. Reproduce the symptom through the affected native entrypoint, recording actual devices, imported code and the selected implementation path. Estimate run-to-run variation when execution is nondeterministic. Select a small failing workload that preserves the relevant dtype, shape, layout, execution mode and distributed behavior.
 
 ## Locate and test the cause
 
@@ -29,13 +29,13 @@ Work in an isolated checkout of the responsible source. Add a regression that fa
 
 Exercise the failure and nearby valid cases selected by the cause, including dtype, shape, magnitude and layout where relevant. For differentiable or distributed paths, verify the affected backward and collective/state behavior. Reuse the task's acceptance requirements; justify any new local tolerance using the computation, dtype and correctness evidence.
 
-Rerun the original task from the same inputs and initial state with the patch. Compare both original and patched executions against the same correctness evidence, keeping coordinate selection, metrics and aggregation consistent. Report counts and uncovered regions alongside changes in error. Measure relevant runtime and memory costs under comparable conditions when a fix changes execution or precision policy.
+Rerun the original task from the same inputs and initial state with the patch, using [precision-compare](../precision-compare/SKILL.md) collection and metrics. Compare both original and patched executions against the same correctness evidence, keeping coordinate selection, metrics and aggregation consistent. Report counts and uncovered regions alongside changes in error. Measure relevant runtime and memory costs under comparable conditions when a fix changes execution or precision policy.
 
 Conclude against the requested acceptance requirements. If none were specified, report measured changes and remaining uncertainty for user review. If the cause or verification remains unresolved within budget, retain the reproducible workload, attempted changes and next discriminating experiment.
 
 ## Reuse tools and deliver
 
-When installed alongside `precision-skill`, use its [tool index](../precision-skill/references/comparison.md#tools) for runtime checks, collection, artifact validation, numerical metrics and evidence packaging. For internal collection, read the relevant [layerwise integration](../precision-skill/references/layerwise.md). Resolve tools relative to the installed companion package or the task's checkout; load only the required interfaces. Without that package, use native tests and task-owned collection/comparison code for the same repair workflow.
+When installed alongside `precision-compare`, use its [tool index](../precision-compare/references/comparison.md#tools) for runtime checks, collection, artifact validation, numerical metrics and evidence packaging. For internal collection, read the relevant [layerwise integration](../precision-compare/references/layerwise.md). Resolve tools relative to the installed companion package or the task's checkout; load only the required interfaces. Without that package, use native tests and task-owned collection/comparison code for the same repair workflow.
 
 Keep workload-specific collectors, experiments and patches with the case. Extract reusable operations into the existing tool library when their interfaces and regressions support multiple tasks.
 
