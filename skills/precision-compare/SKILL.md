@@ -5,11 +5,11 @@ description: Collect and compare numerical results across hardware and software 
 
 # Precision comparison
 
-Collect and compare numerical observations at corresponding inputs, states and coordinates. Each execution has a side ID and actual hardware/software settings; comparison is symmetric.
+Compare the requested observations at corresponding inputs, states and logical coordinates. Each execution has a side ID and actual configuration; comparison is symmetric. Establish task-selected differences and conditions that must match. Ask when a missing choice changes the comparison's meaning or resource limit.
 
-Identify the differences under study and conditions that must match: model/weights, inputs, algorithm, numerical policy and relevant state. Reuse existing environments, adapters and captures when their identities and coverage match. Use bounded sampling defaults; ask when a missing choice changes the comparison's meaning or resource limit.
+Reuse existing captures when their identities, semantics and coverage match. For named arrays, [array_compare.py](scripts/array_compare.py) provides `compare_arrays(a, b, expected=names)` and an NPZ CLI. It returns exact equality, coverage and bounded findings; `metrics=True` adds error metrics. An independent expected inventory detects observations missing from both sides. Native loaders and explicit name mappings can supply arrays directly.
 
-Read only the relevant collection recipe:
+When new collection is needed, read the relevant recipe:
 
 | Task | Collection and metrics |
 |---|---|
@@ -19,10 +19,10 @@ Read only the relevant collection recipe:
 
 ## Adapt an unfamiliar implementation
 
-Integrate at the native capture boundary, preserving operators and state transitions. Map batching, shards and replicas to logical coordinates. Record native and derived dtypes, computation-affecting capture options and the actual executing runtime/device. Use [framework-adapt](../framework-adapt/SKILL.md) for missing execution support.
+Capture at native boundaries, preserving operators, state transitions, masks and dtype identity. Map batches, shards and replicas to logical coordinates. Use [framework-adapt](../framework-adapt/SKILL.md) for missing execution support.
 
-Select the needed [comparison tools](references/comparison.md#tools) by interface; write missing task adapters. Existing artifacts can be compared directly. Use [shared task tools](references/comparison.md#shared-tasks) for repeated command chains and continuation.
+Use [artifact tools](references/comparison.md#tools) for shard reconstruction, execution-condition validation or remote queries; [shared task tools](references/comparison.md#shared-tasks) support repeated command chains. Write only missing integration.
 
-Before aggregation, check coordinate pairing, masks and expected coverage. Return actual configurations, metric values/definitions, coverage, maximum-error coordinates and reproduction artifacts. Label subsets and unavailable observations; keep large arrays at source or the agreed artifact store.
+Return requested results, actual configurations, paired/missing coverage, difference coordinates and reproduction artifacts. Label subsets and unavailable comparisons. Keep large arrays at source or the agreed store. Apply supplied acceptance requirements; otherwise report differences.
 
-Apply user acceptance requirements when supplied; otherwise report measured differences. Before extending model-level comparison into internal sampling, confirm scope and resources, then follow [layerwise comparison](references/layerwise.md). When repair is requested, continue with [precision-repair](../precision-repair/SKILL.md) using the existing evidence. A peer difference alone does not establish a defect.
+Before internal sampling, confirm scope/resources and follow [layerwise comparison](references/layerwise.md). For requested repairs, pass existing evidence to [precision-repair](../precision-repair/SKILL.md). A peer difference alone does not establish a defect.

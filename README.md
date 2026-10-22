@@ -27,7 +27,9 @@ Examples:
 
 [SKILL.md](skills/precision-compare/SKILL.md) routes collection and comparison. The three task recipes in `references/` cover inference, SFT (full-parameter / LoRA) and RL: what to capture, where to integrate with native frameworks (including Other/custom), and which metrics to report. `comparison.md` defines coordinate pairing, common metrics and tool usage; distribution metrics are defined in the inference recipe. Training capture stages are defined in SFT and reused by RL.
 
-Results contain actual settings, metric values and aggregations, coverage counts, maximum-error coordinates and artifact paths. The task determines common conditions and allowed per-side differences across peer execution setups. Comparison metrics are symmetric. Collection retains native operators and records each side's dependencies.
+Existing corresponding arrays can use [compare_arrays](skills/precision-compare/scripts/array_compare.py) directly, with exact equality, coverage and bounded findings; error metrics are optional. Read collection recipes when new capture is needed, and use artifact interfaces for required mapping or execution validation.
+
+Results contain the requested comparison results, actual settings, coverage counts, difference coordinates and reproduction artifacts. The task determines common conditions and allowed per-side differences across peer execution setups. Comparison metrics are symmetric. Collection retains native operators and records each side's dependencies.
 
 For internal layer comparison, the agent first confirms scope and resource limits, then autonomously integrates collectors and refines sampling. The [layerwise guide](skills/precision-compare/references/layerwise.md) includes msProbe capabilities, integration and trial checks, with native hooks for other execution paths.
 

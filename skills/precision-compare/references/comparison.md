@@ -2,10 +2,28 @@
 
 ## Tools
 
+For already corresponding observations, use [array_compare.py](../scripts/array_compare.py):
+
+```python
+from array_compare import compare_arrays
+report = compare_arrays(side_a_arrays, side_b_arrays, expected=logical_names)
+```
+
+Native loaders supply maps of logical names to arrays. `expected` is the task's independent inventory; omit it to check only the observed union. Different native names/layouts can use an explicit adapter mapping. Preserve the observation's input/state, sampling boundary and dtype identity when mapping. Equal names and shapes alone do not establish correspondence.
+
+```sh
+python scripts/array_compare.py a.npz b.npz --output report.json
+```
+
+The default report contains exact equality, shape/dtype/finite-value checks, counts and bounded findings. `metrics=True` (CLI `--metrics`) adds the existing FP64 tensor metrics. Report generation is independent of file layout and evidence packaging. Exit 0 means a complete comparison; inspect `exact_equal` for its result.
+
+The artifact interfaces below support declared runtime conditions, shard reconstruction and remote observations. Select these capabilities when the task needs them.
+
 Select tools by operation and supported input semantics. The tool library lives in `scripts/`; command-line entrypoints and importable Python functions are both tools. Prepare NumPy for array tools when needed; target-score tools use the standard library.
 
 | Operation | Tool entrypoint | Inputs and outputs |
 |---|---|---|
+| Compare corresponding arrays | [array_compare.py](../scripts/array_compare.py), CLI / Python `compare_arrays` | Named arrays or NPZ pair, optional expected names → exact equality, coverage, bounded findings; optional error metrics |
 | Continue a multi-stage task | [workflow.py](../scripts/workflow.py), CLI / Python `run_workflow`, `inspect_workflow` | Workload plan and workspace → verified stage reuse, bounded execution, dependency invalidation and next skill action |
 | Find reusable prepared resources | [resource_catalog.py](../scripts/resource_catalog.py), CLI / Python `register`, `find` | Declared support properties, resource paths and successful command receipt → content-checked environment/model/adapter/capture lookup |
 | Record a bounded native command | [record_run.py](../scripts/record_run.py), CLI / Python `record_run` | Output root, side/task IDs, timeout and literal argv → fresh UTC run with command metadata and streamed stdout/stderr; POSIX timeout cleans up the owned process group |
@@ -26,13 +44,13 @@ Select tools by operation and supported input semantics. The tool library lives 
 
 Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
 
-Run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU, then validates and compares their gradients (Torch and NumPy required). For a worked collection task, see the [fixed-history inference example](../examples/fixed-history-inference.md).
+For manifest-based tools, run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU, then validates and compares their gradients (Torch and NumPy required). For a worked collection task, see the [fixed-history inference example](../examples/fixed-history-inference.md).
 
 ```sh
 python scripts/compare_tensors.py --contract gradients.json --side-a a.json --side-b b.json --output report.json
 ```
 
-Read the selected interface before collection. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
+When preparing manifests, use the selected interface. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
 Tool docstrings own artifact fields; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation code when the documented interface is insufficient for the selected integration.
 

@@ -19,6 +19,6 @@ Patch the responsible implementation. Add a regression that fails before the fix
 
 Rerun the original workload from the same inputs and initial state using the same correctness evidence and metric definitions. One execution can establish both regression coverage and workload recovery. Use the task's tolerance, or justify a local tolerance from the computation and dtype. Measure runtime/memory when relevant to the requested result or changed numerical policy.
 
-Reuse [comparison tools](../precision-compare/references/comparison.md#tools). Continue existing task state; [shared task tools](../precision-compare/references/comparison.md#shared-tasks) can rerun affected command dependencies. Keep framework-specific fixes with the case.
+Use [compare_arrays](../precision-compare/scripts/array_compare.py) for corresponding captures and [artifact tools](../precision-compare/references/comparison.md#tools) for required reconstruction or execution validation. Continue existing task state; [shared task tools](../precision-compare/references/comparison.md#shared-tasks) can rerun affected command dependencies. Keep framework-specific fixes with the case.
 
 Return the cause, source revision, patch/regression, original-workload before/after metrics, configuration changes and reproduction artifacts. Stop when the cause and recovery are verified; if budget prevents verification, return the unresolved question and next discriminating check.

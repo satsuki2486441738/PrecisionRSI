@@ -30,6 +30,7 @@ def validate_artifact_directory(artifacts, output_root):
     return artifacts
 
 def main():
+    import numpy as np
     from validate import validate_links, validate_skills
     source = Path(__file__).resolve().parents[1] / 'skills'
     with tempfile.TemporaryDirectory(prefix='precision-install-') as directory:
@@ -62,6 +63,19 @@ def main():
                 raise ValueError(f'invalid metric {key}: {metric}')
         if not all(math.isfinite(value) for value in output['losses'].values()):
             raise ValueError('nonfinite native loss')
+        for side in ('fp32', 'bf16'):
+            np.savez(cwd / (side + '.npz'), weight=np.load(artifacts / side / 'gradient.npy', allow_pickle=False))
+        subprocess.run(
+            [sys.executable, '-I', '-B', str(installed / 'scripts/array_compare.py'),
+             str(cwd / 'fp32.npz'), str(cwd / 'bf16.npz'), '--metrics',
+             '--output', str(cwd / 'arrays.json')], cwd=cwd, env=env,
+            capture_output=True, text=True, check=True, timeout=30)
+        arrays = json.loads((cwd / 'arrays.json').read_text())
+        if arrays['coverage']['compared_elements'] != 12:
+            raise ValueError('incomplete direct array comparison')
+        for key in ('side_a_norm', 'side_b_norm', 'error_norm', 'rmse', 'cosine', 'max_abs'):
+            if arrays['metrics'][key] != report['global'][key]:
+                raise ValueError('array/manifest metric mismatch: ' + key)
         execution = subprocess.run(
             [sys.executable, '-I', '-B', str(installed / 'examples/workflow_demo.py'),
              '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,
@@ -73,7 +87,7 @@ def main():
                 or workflow['before_max_abs'] <= 1 or workflow['after_max_abs'] > 1e-6):
             raise ValueError(f'incomplete workflow: {workflow}')
         print(f'Clean installation of {len(folders)} skills: links valid; '
-              'CPU FP32/BF16 captures validated; compared 12 gradient values; '
+              'CPU FP32/BF16 captures validated; array/manifest metrics agree for 12 gradient values; '
               'native repair workflow verified with zero-command replay.')
 
 

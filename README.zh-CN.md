@@ -27,7 +27,9 @@
 
 [SKILL.md](skills/precision-compare/SKILL.md) 组织采集与比较流程。`references/` 中的三个任务文档覆盖推理、SFT（全参 / LoRA）和 RL，说明采集内容、原生框架接入位置（含 Other/custom）及应报告的指标。`comparison.md` 定义坐标配对、通用指标和工具用法；分布指标在推理文档中定义。训练采集阶段在 SFT 中定义，由 RL 复用。
 
-结果包含实际配置、指标值及聚合方式、覆盖数量、最大误差坐标和产物路径。任务决定对等执行配置之间的共同条件及各侧允许存在的差异；比较指标采用对称定义。采集保留原生算子并记录各侧依赖。
+已有对应关系的数组可直接使用 [compare_arrays](skills/precision-compare/scripts/array_compare.py)，输出精确相等、覆盖情况和有界的差异定位；误差指标按需计算。需要新增采集时再读取任务文档，需要映射或执行校验时使用相应 artifact 接口。
+
+结果包含任务要求的比较结果、实际配置、覆盖数量、差异坐标和复现产物。任务决定对等执行配置之间的共同条件及各侧允许存在的差异；比较指标采用对称定义。采集保留原生算子并记录各侧依赖。
 
 需要层间比较时，agent 先确认范围与资源上限，再自主接入采集工具并细化采样。[层间比较指南](skills/precision-compare/references/layerwise.md)包含 msProbe 的能力、接入与试采集步骤，其他执行路径可使用原生 hook。
 
