@@ -35,6 +35,80 @@
 
 .detail-section h6{font-size:12px;margin:0 0 12px}
 
+/* Repair overview cards expose the outcome; diagnostics remain in the disclosure. */
+body[data-archive="repairs"] .hero{padding:23px 0 20px}
+body[data-archive="repairs"] .hero>div{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px 24px}
+body[data-archive="repairs"] h1{font-size:34px;letter-spacing:-.8px}
+body[data-archive="repairs"] .hero .eyebrow,body[data-archive="repairs"] .hero-note{display:none}
+body[data-archive="repairs"] .intro{font-size:12px;margin:0}
+body[data-archive="repairs"] .stats{padding:8px 0;border:0;background:transparent;gap:12px 20px}
+body[data-archive="repairs"] .stats>div{display:flex;flex-direction:row;align-items:baseline;gap:10px;padding:0;border:0}
+body[data-archive="repairs"] .stats strong{font-size:19px}
+body[data-archive="repairs"] .stats .date-stat{font-size:13px;padding-top:0}
+body[data-archive="repairs"] .stat-foot{display:none}
+body[data-archive="repairs"] .archive{padding-top:24px}
+body[data-archive="repairs"] .section-heading{margin-bottom:14px}
+body[data-archive="repairs"] .section-heading h2{font-size:18px}
+body[data-archive="repairs"] .section-heading>.eyebrow,body[data-archive="repairs"] .section-heading .eyebrow{display:none}
+body[data-archive="repairs"] .filters{grid-template-columns:1.8fr .7fr 1fr auto;align-items:end}
+.extra-filters{min-width:0}
+.extra-filters>summary{font-size:11px;color:var(--accent);cursor:pointer;padding:13px 6px;white-space:nowrap}
+.extra-filters[open]{grid-column:1/-1}
+.advanced-filter-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+body[data-archive="evaluations"] .extra-filters,body[data-archive="evaluations"] .advanced-filter-fields{display:contents}
+body[data-archive="evaluations"] .extra-filters>summary{display:none}
+body[data-archive="repairs"] .library-group-header{align-items:center;padding:0 0 14px}
+body[data-archive="repairs"] .library-group-header h3{font-size:20px;margin:0}
+body[data-archive="repairs"] .library-group-header .group-count{padding:0;font-size:11px}
+.repair-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.repair-overview{margin:0;min-width:0}
+.repair-overview[open],.repair-overview:only-child{grid-column:1/-1}
+.repair-overview>.issue-summary{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:22px;min-width:0;height:100%}
+.repair-overview>.issue-summary::before{display:none}
+.repair-metadata{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:11px;line-height:1.7}
+.repair-version{color:var(--ink);font-weight:650;margin-right:auto;overflow-wrap:anywhere}
+.task-tag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:650;white-space:nowrap}
+.task-inference{background:#eaf0fc;color:#426b9c}
+.task-sft{background:#eeeafa;color:#7053a3}
+.task-rl{background:#e7f4ed;color:#287353}
+.shared-training{font-size:10px;color:var(--muted)}
+.overview-title{font-size:19px;line-height:1.5;margin:14px 0 16px;font-weight:650;overflow-wrap:anywhere}
+.repair-result{padding:14px 16px;border-radius:9px;background:#f4f7f8}
+.result-label{font-size:11px;line-height:1.7;margin:0 0 8px;color:var(--muted);overflow-wrap:anywhere}
+.result-values{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);gap:12px;align-items:center}
+.result-pair{min-width:0;display:flex;flex-direction:column;gap:4px}
+.result-pair>span{font-size:10px;color:var(--muted)}
+.result-number{font:600 24px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:#627782;overflow-wrap:anywhere}
+.result-after .result-number{color:var(--accent)}
+.result-arrow{color:#9aabb4;text-align:center;font-size:19px}
+.result-unit{display:block;font-size:10px;line-height:1.6;color:var(--muted);margin-top:5px}
+.overview-scope{font-size:10px;line-height:1.8;color:var(--muted);margin:12px 0;overflow-wrap:anywhere}
+.overview-disclosure{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:13px;margin-top:auto;border-top:1px solid var(--line);font-size:11px;color:var(--accent)}
+.overview-disclosure>span:last-child{color:var(--muted)}
+.overview-disclosure>span:first-child::after{content:'⌄';margin-left:8px}
+.repair-overview[open] .overview-disclosure>span:first-child::after{content:'⌃'}
+.repair-overview>.issue-content{padding:0 22px 8px;border-top:1px solid var(--line);margin:0 22px}
+.repair-overview>.issue-content>p{font-size:13px;line-height:1.9;color:var(--muted);padding-top:16px}
+.repair-overview>.issue-content>.diagnosis{border:0;padding:12px 0 24px}
+.repair-overview[open]>.issue-summary{height:auto}
+@media(max-width:850px){
+  body[data-archive="repairs"] .filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body[data-archive="repairs"] .search-field{grid-column:1/-1}
+  body[data-archive="repairs"] .extra-filters{grid-column:1/-1}
+  body[data-archive="repairs"] .extra-filters>summary{padding:2px 0}
+}
+@media(max-width:650px){
+  .repair-list{grid-template-columns:minmax(0,1fr)}
+  .repair-overview>.issue-summary{padding:18px}
+  .overview-title{font-size:18px}
+  .result-number{font-size:21px;letter-spacing:-.4px}
+  .repair-overview>.issue-content{padding:0 0 6px;margin:0 14px}
+  body[data-archive="repairs"] .library-group-header{display:flex}
+  body[data-archive="repairs"] .stats{padding:0;grid-template-columns:repeat(2,minmax(0,1fr))}
+  body[data-archive="repairs"] .hero{padding:24px 0}
+  body[data-archive="repairs"] h1{font-size:29px}
+}
+
 /* Both archives share navigation, filters and the existing visual language. */
 .history-tabs{display:flex;gap:10px;padding:25px 0 0;border-bottom:1px solid var(--line)}
 .history-tabs button{display:flex;align-items:center;gap:12px;border:0;border-bottom:3px solid transparent;background:transparent;padding:14px 20px;color:var(--muted);font-size:14px;font-weight:600;margin-bottom:-1px}

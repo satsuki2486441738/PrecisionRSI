@@ -139,3 +139,40 @@ class HistoryGroupingTests(unittest.TestCase):
         data = self.data()
         data['repairs'][0]['library_group_id'] = 'conflicting-group'
         self.assertTrue(self.evaluate(data, "(()=>{try{h.buildCatalog(d);return false}catch{return true}})()"))
+
+
+@unittest.skipUnless(shutil.which('node'), 'Node.js is needed for repair presentation regressions')
+class RepairPresentationTests(unittest.TestCase):
+    def evaluate(self, expression):
+        script = "const p=require('./site/repair-presentation.js');const h=require('./site/history.js');const d=require('./site/data/repairs.json');console.log(JSON.stringify(" + expression + "));"
+        return json.loads(subprocess.check_output(['node', '-e', script], cwd=ROOT, text=True))
+
+    def test_every_published_fix_has_workflow_and_version(self):
+        rows = self.evaluate('h.buildCatalog(d).flatMap(g=>g.fixes.map(f=>p.overview(f)))')
+        self.assertTrue(all(row['tasks'] and row['version'] != '版本未记录' for row in rows))
+        self.assertEqual({task for row in rows for task in row['tasks']}, {'inference', 'sft', 'rl'})
+
+    def test_root_result_is_not_replaced_by_later_optimization(self):
+        row = self.evaluate("(()=>{const f=h.buildCatalog(d).flatMap(g=>g.fixes).find(f=>f.records.length>1);return {actual:p.overview(f).metric,original:f.root.validation.metrics[0]}})()")
+        self.assertEqual(row['actual'], row['original'])
+
+    def test_task_filter_preserves_records_and_shared_training(self):
+        for task in ('inference', 'sft', 'rl'):
+            rows = self.evaluate("p.filterTask(h.buildCatalog(d)," + json.dumps(task) + ").flatMap(g=>g.fixes.map(f=>({tasks:p.overview(f).tasks,records:f.records.length})))")
+            self.assertTrue(rows)
+            self.assertTrue(all(task in row['tasks'] and row['records'] for row in rows))
+        shared = self.evaluate("p.overview(h.buildCatalog(d).flatMap(g=>g.fixes).find(f=>f.root.id.includes('radam')))")
+        self.assertEqual(shared['tasks'], ['sft', 'rl'])
+        self.assertTrue(shared['sharedTraining'])
+
+    def test_new_record_metadata_and_unknown_workflow(self):
+        row = self.evaluate("p.overview({root:{id:'new',title:'Fallback',affected_library:'NewLib',environment:{libraries:[{name:'NewLib',version:'1.2'}]},presentation:{title:'New module',tasks:['rl','rl','unknown']},validation:{metrics:[]}}})")
+        self.assertEqual(row['tasks'], ['rl'])
+        self.assertEqual(row['title'], 'New module')
+        self.assertIsNone(row['metric'])
+        unknown = self.evaluate("p.overview({root:{id:'unknown',title:'Unknown'}})")
+        self.assertEqual(unknown['tasks'], [])
+
+    def test_compact_values_keep_zero_and_tiny_distinct(self):
+        values = self.evaluate('[0,8.881784197001252e-16,496,0.026155292987823486].map(p.compactNumber)')
+        self.assertEqual(values, ['0', '8.88e-16', '496', '0.02616'])

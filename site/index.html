@@ -9,6 +9,7 @@
   <title>精度历史 · Precision-Skills</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./history.js" defer></script>
+  <script src="./repair-presentation.js" defer></script>
   <script src="./evaluation-settings.js" defer></script>
   <script src="./evaluation-presentation.js" defer></script>
   <script src="./evaluations.js" defer></script>
@@ -27,7 +28,7 @@
     </nav>
     <div id="archive-panel" role="tabpanel" aria-labelledby="tab-repairs">
     <section class="hero" aria-labelledby="page-title">
-      <div><p class="eyebrow" id="hero-kind">REPAIR HISTORY / 精度工程记录</p><h1 id="page-title">每一次修复，<br><span>都有证据。</span></h1><p class="intro" id="page-intro">从异常到根因，从补丁到验证。跨模型、框架与硬件，<br class="desktop-break">记录可复核的精度修复过程。</p></div>
+      <div><p class="eyebrow" id="hero-kind">REPAIR HISTORY / 精度工程记录</p><h1 id="page-title">精度修复</h1><p class="intro" id="page-intro">按库、版本和任务查看修复结果，展开了解问题与解决方式。</p></div>
       <aside class="hero-note" id="method"><span class="note-index">01 — METHOD</span><p>发现偏差 <span aria-hidden="true">↗</span> 定位根因<br>实施修复 <span aria-hidden="true">↗</span> 原始负载验证</p><span class="note-caption">真实记录 · 修复过程 · 验证证据</span></aside>
     </section>
     <section class="stats" aria-label="档案概览">
@@ -42,8 +43,13 @@
         <div class="search-field"><label for="search">关键词</label><input id="search" type="search" placeholder="搜索问题、根因或修复…" autocomplete="off"></div>
         <div id="task-filter" hidden><label for="task">任务</label><select id="task"><option value="">全部任务</option><option value="inference">推理</option><option value="sft">SFT</option><option value="rl">RL</option></select></div>
         <div><label for="library">涉及的库</label><select id="library"><option value="">全部库</option></select></div>
-        <div><label for="model">模型</label><select id="model"><option value="">全部模型</option></select></div>
-        <div><label for="hardware">硬件</label><select id="hardware"><option value="">全部硬件</option></select></div>
+        <details id="extra-filters" class="extra-filters">
+          <summary>更多筛选</summary>
+          <div class="advanced-filter-fields">
+            <div><label for="model">模型</label><select id="model"><option value="">全部模型</option></select></div>
+            <div><label for="hardware">硬件</label><select id="hardware"><option value="">全部硬件</option></select></div>
+          </div>
+        </details>
       </form>
       <div class="results-meta"><p id="result-count" role="status" aria-live="polite">正在读取修复档案…</p><button class="text-button" id="reset" type="button" hidden>清除筛选</button></div>
       <div id="state" class="state" role="status"><span class="loading-mark" aria-hidden="true"></span><h3>正在加载记录</h3><p>准备修复过程与验证证据。</p></div>
