@@ -80,7 +80,7 @@ function metricGraphic(metric) {
 }
 function renderDiagnosis(record) {
   const diagnosis = node('div', 'diagnosis');
-  [['根因 / CAUSE', record.cause?.summary], ['修复 / REPAIR', record.repair?.summary]].forEach(([label, summary]) => {
+  [['问题原因', record.cause?.summary], ['解决方式', record.repair?.summary]].forEach(([label, summary]) => {
     const block = node('div');
     block.append(node('span', 'small-label', label), node('p', '', text(summary)));
     diagnosis.append(block);
@@ -194,34 +194,56 @@ function renderCard(record) {
   card.append(header, body);
   return card;
 }
-function renderLibraryGroup(group, groupIndex) {
-  const section = node('section', 'library-group');
-  section.id = `library-${group.id}`;
+function renderLibraryGroup(group) {
+  const presentation = globalThis.PrecisionRepairPresentation;
+  const element = node('section', 'library-group');
+  element.id = `library-${group.id}`;
   const header = node('div', 'library-group-header');
-  const label = node('div');
-  label.append(node('p', 'eyebrow', 'LIBRARY GROUP'), node('h3', '', group.title));
-  if (group.description) label.append(node('p', 'group-description', group.description));
   const totals = historyAPI.counts([group]);
-  header.append(label, node('span', 'group-count', `${totals.fixes} 项修复 · ${totals.verifications} 轮验证`));
-  section.append(header);
-  group.fixes.forEach((fix, index) => {
-    const item = node('details', 'repair-item');
+  header.append(node('h3', '', group.title), node('span', 'group-count', `${totals.fixes} 个问题 · ${totals.verifications} 轮验证`));
+  const cards = node('div', 'repair-list');
+  group.fixes.forEach((fix) => {
+    const view = presentation.overview(fix);
+    const item = node('details', 'repair-item repair-overview');
     item.id = `fix-${fix.root.id}`;
-    item.open = groupIndex === 0 && index === 0;
     const summary = node('summary', 'issue-summary');
-    const title = node('div', 'issue-title');
-    title.append(node('h4', '', fix.root.title));
-    const metadata = [fix.root.affected_library ? `缺陷所在：${fix.root.affected_library}` : '', `${fix.records.length} 轮验证`].filter(Boolean);
-    title.append(node('span', '', metadata.join(' · ')));
-    summary.append(title);
-    item.append(summary);
+    const metadata = node('div', 'repair-metadata');
+    metadata.append(node('span', 'repair-version', `${view.library} ${view.version}`));
+    view.tasks.forEach((task) => {
+      const tag = node('span', `task-tag task-${task}`, presentation.labels[task]);
+      tag.dataset.task = task;
+      metadata.append(tag);
+    });
+    if (view.sharedTraining) metadata.append(node('span', 'shared-training', '训练共用'));
+    if (!view.tasks.length) metadata.append(node('span', 'shared-training', '任务未记录'));
+    summary.append(metadata, node('h4', 'overview-title', view.title));
+    const result = node('div', 'repair-result');
+    if (view.metric) {
+      result.append(node('p', 'result-label', view.metric.label));
+      const values = node('div', 'result-values');
+      [view.metric.before, view.metric.after].forEach((value, index) => {
+        const pair = node('div', `result-pair${index ? ' result-after' : ''}`);
+        const number = node('strong', 'result-number', presentation.compactNumber(value));
+        number.title = formatNumber(value);
+        pair.append(node('span', '', index ? '修复后' : '修复前'), number);
+        values.append(pair);
+        if (!index) values.append(node('span', 'result-arrow', '→'));
+      });
+      result.append(values, node('span', 'result-unit', view.metric.unit));
+    } else result.append(node('p', 'result-label', fix.root.validation?.checks?.[0] || '展开查看验证结果'));
+    const scope = node('p', 'overview-scope', [fix.root.model?.name, fix.root.environment?.hardware].filter(Boolean).join(' · '));
+    const disclosure = node('div', 'overview-disclosure');
+    disclosure.append(node('span', '', '问题与修复详情'), node('span', '', `${fix.records.length} 轮验证`));
+    summary.append(result, scope, disclosure);
     const content = node('div', 'issue-content');
-    content.append(renderDiagnosis(fix.root), node('h4', 'verification-heading', '验证历史'));
+    paragraph(content, '问题', fix.root.problem?.summary);
+    content.append(renderDiagnosis(fix.root), node('h4', 'verification-heading', '修复与验证记录'));
     fix.records.forEach((record) => content.append(renderCard(record)));
-    item.append(content);
-    section.append(item);
+    item.append(summary, content);
+    cards.append(item);
   });
-  return section;
+  element.append(header, cards);
+  return element;
 }
 function showState(title, description, retry = false) {
   const state = $('state');
@@ -235,7 +257,7 @@ function showState(title, description, retry = false) {
   }
 }
 const pageCopy = {
-  repairs: { title: ['每一次修复，', '都有证据。'], intro: '从异常到根因，从补丁到验证。跨模型、框架与硬件，记录可复核的精度修复过程。',
+  repairs: { title: ['精度修复', ''], intro: '按库、版本和任务查看修复结果，展开了解问题与解决方式。',
     eyebrow: 'REPAIR HISTORY / 精度工程记录', heading: '按库查看修复', noun: '修复',
     labels: ['独立修复', '验证轮次', '库分组', '数据更新'], feet: ['REPAIRS', 'VERIFICATIONS', 'LIBRARY GROUPS', 'LAST UPDATED'],
     method: ['发现偏差 ↗ 定位根因', '实施修复 ↗ 原始负载验证'], caption: '真实记录 · 修复过程 · 验证证据' },
@@ -248,7 +270,8 @@ function configurePage() {
   const copy = pageCopy[activeKind];
   document.title = `精度${copy.noun}历史 · Precision-Skills`;
   $('hero-kind').textContent = copy.eyebrow;
-  $('page-title').replaceChildren(document.createTextNode(copy.title[0]), node('br'), node('span', '', copy.title[1]));
+  $('page-title').replaceChildren(document.createTextNode(copy.title[0]), ...(copy.title[1] ? [node('br'), node('span', '', copy.title[1])] : []));
+  document.body.dataset.archive = activeKind;
   $('page-intro').textContent = copy.intro;
   const methodText = node('p');
   methodText.append(document.createTextNode(copy.method[0]), node('br'), document.createTextNode(copy.method[1]));
@@ -256,7 +279,8 @@ function configurePage() {
   $('history-title').textContent = copy.heading;
   copy.labels.forEach((value, index) => { $(`stat-label-${index}`).textContent = value; });
   copy.feet.forEach((value, index) => { $(`stat-foot-${index}`).textContent = value; });
-  $('task-filter').hidden = activeKind !== 'evaluations';
+  $('task-filter').hidden = false;
+  $('extra-filters').open = activeKind === 'evaluations';
   $('filters').classList.toggle('evaluation-filters', activeKind === 'evaluations');
   $('filters').setAttribute('aria-label', `筛选${copy.noun}记录`);
   $('search').placeholder = activeKind === 'evaluations' ? '搜索框架、比较条件或指标…' : '搜索问题、根因或修复…';
@@ -294,7 +318,7 @@ function render() {
     $('result-count').textContent = `显示 ${shown.experiments} / ${total.experiments} 项评测 · ${shown.comparisons} / ${total.comparisons} 组比较`;
     visible = filtered.length;
   } else {
-    const filtered = historyAPI.filterCatalog(catalog, filters);
+    const filtered = globalThis.PrecisionRepairPresentation.filterTask(historyAPI.filterCatalog(catalog, filters), filters.task);
     $('history').replaceChildren(...filtered.map(renderLibraryGroup));
     const shown = historyAPI.counts(filtered), total = historyAPI.counts(catalog);
     $('result-count').textContent = `显示 ${shown.groups} 个库分组 · ${shown.fixes} / ${total.fixes} 项修复 · ${shown.verifications} / ${total.verifications} 轮验证`;
