@@ -50,32 +50,78 @@ def main():
         output = json.loads(result.stdout)
         artifacts = validate_artifact_directory(output['artifacts'], cwd)
         report = json.loads((artifacts / 'report.json').read_text())
-        if report['status'] != 'no_thresholds' or report['global']['count'] != 12:
+        capture = json.loads((artifacts / 'capture.json').read_text())
+        if report['status'] != 'completed' or report['coverage']['compared_elements'] != 12:
             raise ValueError(f'incomplete gradient comparison: {report}')
-        for side in ('fp32', 'bf16'):
-            validation = json.loads((artifacts / side / 'validation.json').read_text())
-            environment = json.loads((artifacts / side / 'environment.json').read_text())
-            if validation['status'] != 'validated' or environment['actual']['numerics']['device'] != 'cpu':
+        if set(p.name for p in artifacts.iterdir()) != {'fp32.npz', 'bf16.npz', 'capture.json', 'report.json'}:
+            raise ValueError('unexpected native example artifacts')
+        common = capture['common']
+        if capture['expected'] != ['weight']:
+            raise ValueError('incomplete parameter inventory')
+        for side, dtype in [('fp32', 'torch.float32'), ('bf16', 'torch.bfloat16')]:
+            actual = capture['sides'][side]
+            if (actual['numerics']['device'] != 'cpu' or actual['inputs'] != common['inputs']
+                    or actual['state'] != common['state'] or actual['precision']['gradient'] != dtype):
                 raise ValueError(f'invalid CPU capture for {side}')
         for key in ('side_a_norm', 'side_b_norm', 'error_norm', 'rmse', 'cosine', 'max_abs'):
-            metric = report['global'][key]
+            metric = report['metrics'][key]
             if metric['status'] != 'no_thresholds' or not math.isfinite(metric['value']):
                 raise ValueError(f'invalid metric {key}: {metric}')
         if not all(math.isfinite(value) for value in output['losses'].values()):
             raise ValueError('nonfinite native loss')
-        for side in ('fp32', 'bf16'):
-            np.savez(cwd / (side + '.npz'), weight=np.load(artifacts / side / 'gradient.npy', allow_pickle=False))
+
+        # Maintain manifest validation/parity here, outside the user-facing example.
+        def write(path, value):
+            path.write_text(json.dumps(value, allow_nan=False) + '\n')
+        check_root = cwd / 'manifest-check'
+        check_root.mkdir()
+        sides = {side: dict(precision=actual['precision']) for side, actual in capture['sides'].items()}
+        write(check_root / 'contract.json', dict(schema_version=2, kind='tensors',
+              common=common, side_conditions=sides, thresholds=None, stage='gradients',
+              expected_ranks={side: [0] for side in sides},
+              tensors=[dict(name='weight', shape=[3, 4], present=True)]))
+        for side, actual in capture['sides'].items():
+            folder = check_root / side
+            folder.mkdir()
+            with np.load(artifacts / (side + '.npz'), allow_pickle=False) as values:
+                if (set(values.files) != set(capture['expected']) or values['weight'].shape != (3, 4)
+                        or str(values['weight'].dtype) != actual['precision']['exported_gradient']):
+                    raise ValueError('invalid native array inventory, shape or export dtype')
+                np.save(folder / 'gradient.npy', values['weight'], allow_pickle=False)
+            write(folder / 'environment.json', dict(rank=0, versions=capture['versions'], actual=common | actual))
+            write(folder / 'status.json', dict(rank=0, status='completed'))
+            write(folder / 'manifest.json', dict(schema_version=2, kind='tensors', common=common,
+                  side=side, expected_ranks=[0], stage='gradients',
+                  ranks=[dict(rank=0, environment='environment.json', status='status.json')],
+                  tensors=[dict(name='weight', shape=[3, 4], present=True,
+                                shards=[dict(offset=0, value={'path': 'gradient.npy'})])]))
+        command = """import json,sys
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from compare_tensors import compare
+from validate_artifacts import validate
+root=Path(sys.argv[2]);contract=root/'contract.json'
+for side in ('fp32','bf16'):
+    checked=validate(contract,root/side/'manifest.json')
+    assert checked['status']=='validated',checked
+report=compare(contract,root/'fp32/manifest.json',root/'bf16/manifest.json')
+assert report['status']=='no_thresholds',report
+(root/'report.json').write_text(json.dumps(report,allow_nan=False))
+"""
+        subprocess.run([sys.executable, '-I', '-B', '-c', command,
+                        str(installed / 'scripts'), str(check_root)], cwd=cwd, env=env,
+                       capture_output=True, text=True, check=True, timeout=30)
+        manifest_report = json.loads((check_root / 'report.json').read_text())
+        for key in ('side_a_norm', 'side_b_norm', 'error_norm', 'rmse', 'cosine', 'max_abs'):
+            if report['metrics'][key] != manifest_report['global'][key]:
+                raise ValueError('array/manifest metric mismatch: ' + key)
         subprocess.run(
             [sys.executable, '-I', '-B', str(installed / 'scripts/array_compare.py'),
-             str(cwd / 'fp32.npz'), str(cwd / 'bf16.npz'), '--metrics',
+             str(artifacts / 'fp32.npz'), str(artifacts / 'bf16.npz'), '--metrics',
              '--output', str(cwd / 'arrays.json')], cwd=cwd, env=env,
             capture_output=True, text=True, check=True, timeout=30)
-        arrays = json.loads((cwd / 'arrays.json').read_text())
-        if arrays['coverage']['compared_elements'] != 12:
-            raise ValueError('incomplete direct array comparison')
-        for key in ('side_a_norm', 'side_b_norm', 'error_norm', 'rmse', 'cosine', 'max_abs'):
-            if arrays['metrics'][key] != report['global'][key]:
-                raise ValueError('array/manifest metric mismatch: ' + key)
+        if json.loads((cwd / 'arrays.json').read_text()) != report:
+            raise ValueError('array CLI/API comparison mismatch')
         execution = subprocess.run(
             [sys.executable, '-I', '-B', str(installed / 'examples/workflow_demo.py'),
              '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,

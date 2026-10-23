@@ -79,7 +79,7 @@
 python3 examples/compare_gradients.py
 ```
 
-示例在 CPU 上实际执行两次前向和反向，随后输出 loss、梯度差异指标和产物目录。
+示例在 CPU 上实际执行两次前向和反向，直接比较已对应的梯度数组。每次运行保留两份 NPZ、实际配置和比较报告，随后输出 loss、指标和产物目录。
 
 在 skill 目录运行[原生端到端示例](skills/precision-compare/examples/workflow_demo.py)：
 

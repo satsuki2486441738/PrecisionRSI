@@ -54,7 +54,9 @@ Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Loca
 
 ## Metrics
 
-| Observations | Report |
+Select measures for the requested observations and task criteria. For exact-equivalence checks, report equality, coverage and mismatch coordinates; use the measures below to quantify numerical differences.
+
+| Observations | Available measures |
 |---|---|
 | Target scores | Each side's NLL and absolute difference; target-logprob MAE, P99 and maximum |
 | Native objective | Each side's loss components and absolute differences |

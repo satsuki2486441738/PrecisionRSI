@@ -79,7 +79,7 @@ Compare FP32 and BF16 gradients for the same small classifier and batch with the
 python3 examples/compare_gradients.py
 ```
 
-It runs both forward/backward passes on CPU, then prints losses, gradient-difference metrics and the generated artifact directory.
+It runs both forward/backward passes on CPU and directly compares named gradient arrays. The run retains two NPZ captures, actual configurations and a comparison report, then prints losses, metrics and the artifact directory.
 
 Run the [native end-to-end example](skills/precision-compare/examples/workflow_demo.py) from the skill directory:
 

@@ -40,7 +40,9 @@ Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Loca
 
 ## Metrics
 
-| Observations | Report |
+Select measures for the requested observations and task criteria. For exact-equivalence checks, report equality, coverage and mismatch coordinates; use the measures below to quantify numerical differences.
+
+| Observations | Available measures |
 |---|---|
 | Output distributions | Tail-merged Jensen–Shannon divergence, top-1 agreement, probability RMSE and maximum probability error |
 | Requested target scores | Each side's NLL and absolute NLL difference; logprob MAE, P99 and maximum |

@@ -17,6 +17,8 @@ python scripts/array_compare.py a.npz b.npz --output report.json
 
 The default report contains exact equality, shape/dtype/finite-value checks, counts and bounded findings. `metrics=True` (CLI `--metrics`) adds the existing FP64 tensor metrics. Report generation is independent of file layout and evidence packaging. Exit 0 means a complete comparison; inspect `exact_equal` for its result.
 
+The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU and directly compares named gradient arrays, retaining actual settings (Torch and NumPy required).
+
 The artifact interfaces below support declared runtime conditions, shard reconstruction and remote observations. Select these capabilities when the task needs them.
 
 Select tools by operation and supported input semantics. The tool library lives in `scripts/`; command-line entrypoints and importable Python functions are both tools. Prepare NumPy for array tools when needed; target-score tools use the standard library.
@@ -44,7 +46,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 
 Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
 
-For manifest-based tools, run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU, then validates and compares their gradients (Torch and NumPy required). For a worked collection task, see the [fixed-history inference example](../examples/fixed-history-inference.md).
+For manifest-based tools, run from the skill directory. The score, distribution and tensor comparators share `--contract`, `--side-a`, `--side-b` and `--output`; the validator uses `--manifest` for one side's input. Use fresh output paths. For a worked collection task, see the [fixed-history inference example](../examples/fixed-history-inference.md).
 
 ```sh
 python scripts/compare_tensors.py --contract gradients.json --side-a a.json --side-b b.json --output report.json
