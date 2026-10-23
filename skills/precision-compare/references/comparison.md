@@ -86,7 +86,15 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
-Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
+Start from available environment and launcher declarations; check current allocation and changed runtime conditions together with `runtime_probe`. Keep provider-specific submission and device binding in the environment adapter.
+
+Run a native command through `record_run` to retain complete logs and receive a compact result with failure diagnostics:
+
+```sh
+python scripts/record_run.py --output-root runs --side SIDE --task capture --timeout 300 -- PYTHON COLLECTOR ARGS
+```
+
+Its CLI returns log paths and byte counts; failures include the final 2048 bytes per stream (`--tail-bytes` adjusts this). For scheduled work, the adapter waits for the job's terminal result within its budget and propagates its exit status; a successful submission alone does not establish workload completion. Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
 
 Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take input/output paths and workload settings as parameters; derive inventories, phase boundaries and report labels from settings and computed fields. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 

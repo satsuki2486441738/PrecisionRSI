@@ -146,6 +146,65 @@ class RecordRunTests(unittest.TestCase):
                 launch.assert_not_called()
             self.assertEqual({p.name:p.read_bytes() for p in folder.iterdir()}, original)
 
+    def cli_child(self, task, code, *options):
+        return subprocess.run(
+            [sys.executable, '-B', str(TOOLS/'record_run.py'),
+             '--output-root', str(self.root/'cli'), '--side', 'cpu', '--task', task,
+             '--timeout', '2', *options, '--', sys.executable, '-c', code],
+            capture_output=True, text=True)
+
+    def test_cli_failure_has_bounded_binary_tails_and_complete_logs(self):
+        result = self.cli_child('binary',
+            'import os; os.write(1,b"x"*100000+b"END"); '
+            'os.write(2,b"prefix"+bytes([255])+b"error"); raise SystemExit(7)',
+            '--tail-bytes', '8')
+        self.assertEqual(result.returncode, 7, result.stderr)
+        report = json.loads(result.stdout)
+        for name, expected in [('stdout', b'x'*100000+b'END'),
+                               ('stderr', b'prefix'+bytes([255])+b'error')]:
+            entry = report['logs'][name]
+            self.assertEqual(entry['bytes'], len(expected))
+            self.assertEqual(Path(entry['path']).read_bytes(), expected)
+            self.assertEqual(entry['tail'], expected[-8:].decode('utf-8', errors='replace'))
+            self.assertTrue(entry['truncated'])
+        self.assertLess(len(result.stdout), 2000)
+        self.assertNotIn('logs', json.loads((Path(report['run'])/'command.json').read_text()))
+
+    def test_cli_success_and_disabled_tails_keep_output_in_files(self):
+        for task, exitcode, options in [('success', 0, []), ('disabled', 7, ['--tail-bytes', '0'])]:
+            with self.subTest(task=task):
+                result = self.cli_child(task,
+                    f'import os; os.write(1,b"x"*100000); raise SystemExit({exitcode})', *options)
+                self.assertEqual(result.returncode, exitcode)
+                report = json.loads(result.stdout)
+                self.assertEqual(report['logs']['stdout']['bytes'], 100000)
+                self.assertNotIn('tail', report['logs']['stdout'])
+                self.assertLess(len(result.stdout), 2000)
+
+    def test_cli_timeout_and_launch_failure_diagnostics(self):
+        result = self.cli_child('timeout',
+            'import sys,time; print("waiting", file=sys.stderr, flush=True); time.sleep(30)',
+            '--timeout', '0.5')
+        self.assertEqual(result.returncode, 124, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report['logs']['stderr']['tail'], 'waiting\n')
+        self.assertFalse(report['logs']['stderr']['truncated'])
+        result = subprocess.run(
+            [sys.executable, str(TOOLS/'record_run.py'), '--output-root', str(self.root/'cli'),
+             '--side', 'cpu', '--task', 'absent', '--timeout', '2', '--', str(self.root/'missing')],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 127)
+        report = json.loads(result.stdout)
+        self.assertEqual(report['error']['type'], 'FileNotFoundError')
+        self.assertEqual(report['logs']['stderr']['bytes'], 0)
+        self.assertEqual(report['logs']['stderr']['tail'], '')
+
+    def test_cli_invalid_tail_limit_never_launches(self):
+        result = self.cli_child('invalid', 'open("unexpected", "w").close()', '--tail-bytes', '-1')
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('nonnegative', result.stderr)
+        self.assertFalse((self.root/'cli').exists())
+
     def test_cli_exit_codes_and_invalid_timeout(self):
         command = [sys.executable, '-B', str(TOOLS/'record_run.py'), '--output-root', str(self.root/'cli'),
                    '--side','a','--task','cli','--timeout','2','--']

@@ -2,7 +2,7 @@
 """Record one argv execution in a fresh UTC run directory (standard library only).
 
 CLI: record_run.py --output-root ROOT --side ID --task TASK --timeout SECONDS
-                  [--cwd DIR] -- ARGV...
+                  [--cwd DIR] [--tail-bytes 2048] -- ARGV...
 API: record_run(output_root, side, task, timeout, argv, cwd=None) -> (Path, dict).
 Python callers may pass argv as a callable(Path) -> literal argv to use the newly
 reserved run directory. Preparation errors retain a launch_failed run without
@@ -20,6 +20,13 @@ are retained as supplied. Execution uses no shell. Status is running, completed,
 failed, timed_out, launch_failed, or interrupted. Normal exits retain the child
 exit code; signals become 128 + signal; timeout returns 124, launch failure 127,
 interruption 130. CLI validation/output errors return 2.
+
+CLI stdout is one JSON summary containing run, status, returncode and logs.
+Each logs entry (stdout/stderr) gives path and byte count. Unsuccessful runs
+also include the final --tail-bytes bytes per stream (default 2048, 0 disables),
+decoded as UTF-8 with replacement, and a truncated flag. Launch errors include
+error type/message. Successful output stays in files. The Python API and durable
+command.json retain their existing shape; log tails are read only for the CLI.
 
 POSIX children start a new session; on timeout/interruption, terminate that
 owned process group, wait up to 0.5 seconds for the leader, then kill the group
@@ -132,6 +139,24 @@ def record_run(output_root, side, task, timeout, argv, cwd=None):
     return folder, record
 
 
+def _cli_summary(folder, record, tail_bytes):
+    result = dict(run=str(folder), status=record['status'],
+                  returncode=record['returncode'], logs={})
+    if 'error' in record:
+        result['error'] = record['error']
+    for name in ('stdout', 'stderr'):
+        path = folder / (name + '.bin')
+        with path.open('rb') as stream:
+            size = stream.seek(0, os.SEEK_END)
+            entry = dict(path=str(path), bytes=size)
+            if record['status'] != 'completed' and tail_bytes:
+                stream.seek(max(0, size - tail_bytes))
+                entry.update(tail=stream.read(tail_bytes).decode('utf-8', errors='replace'),
+                             truncated=size > tail_bytes)
+        result['logs'][name] = entry
+    return result
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--output-root', required=True)
@@ -139,8 +164,11 @@ def main(argv=None):
     parser.add_argument('--task', required=True)
     parser.add_argument('--timeout', required=True, type=float)
     parser.add_argument('--cwd')
+    parser.add_argument('--tail-bytes', type=int, default=2048)
     parser.add_argument('command', nargs=argparse.REMAINDER)
     args = parser.parse_args(argv)
+    if args.tail_bytes < 0:
+        parser.error('tail-bytes must be nonnegative')
     # Require the explicit separator so child flags cannot become recorder flags.
     if not args.command or args.command[0] != '--':
         parser.error('supply -- followed by the child argv')
@@ -149,7 +177,7 @@ def main(argv=None):
                                     args.command[1:], args.cwd)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
-    print(json.dumps(dict(run=str(folder), status=record['status'], returncode=record['returncode'])))
+    print(json.dumps(_cli_summary(folder, record, args.tail_bytes)))
     return record['returncode']
 
 
