@@ -9,11 +9,21 @@ loaders can supply mappings directly; names are paired literally. expected is an
 optional independent inventory of names; otherwise the observed union is used,
 which cannot detect omissions shared by both sides. Inputs are not modified.
 
+Report fields: status, exact_equal, coverage, unequal_arrays, unequal_elements,
+incompatible_arrays, nonfinite, findings, findings_omitted. coverage contains
+expected_arrays, side_a_arrays, side_b_arrays, paired_arrays, missing/unexpected
+counts by side, compared_arrays and compared_elements. Findings have name, reason
+and applicable index/values or shape/dtype details. With metrics=True, metrics
+and metrics_unavailable are added; metrics holds norms/errors, max_coordinate
+(name/index), and max_values. Undefined norms retain the existing null/reason rules.
+
 exact_equal requires complete inventory, equal shapes/dtypes, finite values and
 numeric equality in native dtype (signed zeros compare equal, not byte identity).
 Coverage, unequal-element/nonfinite counts and bounded findings are always
-returned. metrics=True additionally uses the existing FP64 Stats reducer for L2,
-RMSE, cosine and maximum-error coordinates. Incomplete/incompatible/nonfinite
+returned. Numeric findings include values={dtype, side_a, side_b}; values are
+exact scalar repr strings, including nonfinite values and large integers.
+metrics=True additionally uses the existing FP64 Stats reducer for L2,
+RMSE, cosine, maximum-error coordinates and max_values in the same representation. Incomplete/incompatible/nonfinite
 inputs have no full aggregate. Integers outside [-2**53,2**53] retain exact
 comparison but no FP64 metrics. Arrays are visited in sorted-name, C-flat order
 using bounded chunks, including noncontiguous arrays. NPZ loading materializes
@@ -45,6 +55,11 @@ def _names(values):
     if any(not isinstance(k, str) or not k for k in names) or len(set(names)) != len(names):
         raise ValueError('logical names must be unique nonempty strings')
     return set(names)
+
+
+def _values(a, b, index):
+    return dict(dtype=str(a.dtype), side_a=repr(a.flat[index].item()),
+                side_b=repr(b.flat[index].item()))
 
 
 def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
@@ -124,7 +139,8 @@ def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
         unequal_arrays += first_unequal is not None
         for reason, index in (('nonfinite', first_bad), ('values', first_unequal)):
             if index is not None:
-                finding(name, reason, index=[int(i) for i in np.unravel_index(index, a.shape)])
+                finding(name, reason, index=[int(i) for i in np.unravel_index(index, a.shape)],
+                        values=_values(a, b, index))
     complete = covered and incompatible == 0
     report = dict(status='completed' if complete else ('incomparable' if incompatible else 'not_covered'),
                   exact_equal=complete and unequal == 0 and not any(nonfinite.values()),
@@ -138,6 +154,7 @@ def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
             for name, shape, size in segments:
                 if index < size:
                     values['max_coordinate'] = dict(name=name, index=[int(i) for i in np.unravel_index(index, shape)])
+                    values['max_values'] = _values(np.asarray(side_a[name]), np.asarray(side_b[name]), index)
                     break
                 index -= size
         report.update(metrics=values, metrics_unavailable=metric_reason)

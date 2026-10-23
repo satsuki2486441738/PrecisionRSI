@@ -5,24 +5,24 @@ description: Collect and compare numerical results across hardware and software 
 
 # Precision comparison
 
-Compare the requested observations at corresponding inputs, states and logical coordinates. Each execution has a side ID and actual configuration; comparison is symmetric. Establish task-selected differences and conditions that must match. Ask when a missing choice changes the comparison's meaning or resource limit.
+Compare requested observations at matching inputs, states and logical coordinates. Each execution has a side ID and actual configuration; comparisons are symmetric. Establish intended differences and matching conditions. Ask when a missing choice changes meaning or resource limits.
 
-Continue from known interfaces and supplied entrypoints/artifacts. Reuse observations with matching identities, semantics and coverage; collect what is missing. For result reviews, reuse reports unless relevant conditions, scope or requested freshness change. For named arrays, [array_compare.py](scripts/array_compare.py) provides `compare_arrays(a, b, expected=names)` and an NPZ CLI. It reports exact equality, coverage and bounded findings; `metrics=True` adds error metrics. An independent expected inventory detects observations missing from both sides. Native loaders supply arrays through explicit name mappings.
+Continue from known interfaces and retained evidence. Reuse observations matching identities, semantics and coverage; collect missing observations. Return retained reports for queries. Audit or rerun affected scope when verification, conditions or freshness require it.
 
-Read the relevant recipe when selecting or extending capture boundaries or metrics:
+## Collect
 
-| Task | Collection and metrics |
+Use native capture interfaces. Select or extend boundaries and metrics with the relevant recipe:
+
+| Task | Recipe |
 |---|---|
 | Inference | [Scores, distributions and cache stages](references/inference.md) |
 | SFT (full / LoRA) | [Objectives, gradients and stored updates](references/sft.md) |
-| RL | [Fixed trajectories, objectives and updates](references/rl.md) |
+| RL | [Trajectories, objectives and updates](references/rl.md) |
 
-## Adapt an unfamiliar implementation
+Preserve native operators, state transitions, masks and dtype identity. Map batches, shards and replicas to logical coordinates. Use [framework-adapt](../framework-adapt/SKILL.md) for missing execution support. Confirm scope/resources before [internal sampling](references/layerwise.md).
 
-Capture at native boundaries, preserving operators, state transitions, masks and dtype identity. Map batches, shards and replicas to logical coordinates. Use [framework-adapt](../framework-adapt/SKILL.md) for missing execution support.
+## Compare and return
 
-Use [artifact tools](references/comparison.md#tools) for shard reconstruction, execution-condition validation or remote queries; [shared task tools](references/comparison.md#shared-tasks) support repeated command chains. Write only missing integration.
+Use [compare_arrays](scripts/array_compare.py) for named observations, [reduce_groups](scripts/group_metrics.py) for requested groups, and [compare_trees](scripts/tree_compare.py) for nested state. Independent task inventories detect shared omissions. Native loaders and mappings belong to adapters. Query unknown interfaces together with [tool_help.py](scripts/tool_help.py): `python scripts/tool_help.py NAME ...`. Inspect implementation for an unresolved integration question. Read the [tool guide](references/comparison.md#tools) for shard reconstruction, runtime evidence checks or remote queries, and [shared tasks](references/comparison.md#shared-tasks) for repeated command chains.
 
-Return requested metrics, actual configurations, paired/missing coverage and difference coordinates with reproduction paths. Identify missing requested observations. Keep large arrays at source or the agreed store. Apply supplied acceptance requirements; otherwise report differences.
-
-Before internal sampling, confirm scope/resources and follow [layerwise comparison](references/layerwise.md). For requested repairs, pass existing evidence to [precision-repair](../precision-repair/SKILL.md). A peer difference alone does not establish a defect.
+Return requested metrics, actual configurations, coverage and reproduction paths; use bounded coordinate examples unless all coordinates are requested. Derive summaries from computed results; identify missing requested observations. Keep large arrays at source or the agreed store. Apply supplied acceptance requirements; otherwise report differences. For requested repairs, pass retained evidence to [precision-repair](../precision-repair/SKILL.md); a peer difference alone does not establish a defect.

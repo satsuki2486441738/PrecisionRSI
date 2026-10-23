@@ -2,6 +2,12 @@
 
 ## Tools
 
+Query selected interfaces without importing their dependencies or reading implementations:
+
+```sh
+python scripts/tool_help.py tree_compare array_compare
+```
+
 For already corresponding observations, use [array_compare.py](../scripts/array_compare.py):
 
 ```python
@@ -18,13 +24,22 @@ report = reduce_groups(logical_names, groups, compare_arrays, side_a_arrays, sid
 
 `groups` maps labels to lists of expected names. Global and group results retain independent coverage; incomplete groups have no aggregate. To quantify differences, pass `lambda a, b: compare_arrays(a, b, metrics=True)` as the reducer. Derive group membership from task coordinates and settings.
 
+For nested state such as model/optimizer/scheduler checkpoints, use the same array arithmetic through [tree_compare.py](../scripts/tree_compare.py):
+
+```python
+from tree_compare import compare_trees
+report = compare_trees(state_a, state_b, leaf_adapter=export_native_leaf)
+```
+
+The adapter converts unsupported framework leaves to NumPy arrays or supported structures, retaining native dtype metadata when export requires conversion. Mapping order is ignored; key/sequence types, metadata and numeric differences remain visible. Select the requested subtrees before comparison. The tool loads no files and imports no execution framework.
+
 Native loaders supply maps of logical names to arrays. `expected` is the task's independent inventory; omit it to check only the observed union. Different native names/layouts can use an explicit adapter mapping. Preserve the observation's input/state, sampling boundary and dtype identity when mapping. Equal names and shapes alone do not establish correspondence.
 
 ```sh
 python scripts/array_compare.py a.npz b.npz --output report.json
 ```
 
-The default report contains exact equality, shape/dtype/finite-value checks, counts and bounded findings. `metrics=True` (CLI `--metrics`) adds the existing FP64 tensor metrics. Report generation is independent of file layout and evidence packaging. Exit 0 means a complete comparison; inspect `exact_equal` for its result.
+The default report contains exact equality, shape/dtype/finite-value checks, counts and bounded findings with native value representations. Error metrics also retain the two values at the maximum-error coordinate. `metrics=True` (CLI `--metrics`) adds the existing FP64 tensor metrics. Report generation is independent of file layout and evidence packaging. Exit 0 means a complete comparison; inspect `exact_equal` for its result.
 
 The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU and directly compares named gradient arrays, retaining actual settings (Torch and NumPy required).
 
@@ -34,6 +49,8 @@ Select tools by operation and supported input semantics. The tool library lives 
 
 | Operation | Tool entrypoint | Inputs and outputs |
 |---|---|---|
+| Inspect tool interfaces | [tool_help.py](../scripts/tool_help.py), CLI | Selected tool names → current module/API docstrings and signatures without imports |
+| Compare nested state | [tree_compare.py](../scripts/tree_compare.py), Python `compare_trees` | Native state trees and optional leaf adapter → typed structure/metadata, numeric comparison and coverage |
 | Compare corresponding arrays | [array_compare.py](../scripts/array_compare.py), CLI / Python `compare_arrays` | Named arrays or NPZ pair, optional expected names → exact equality, coverage, bounded findings; optional error metrics |
 | Continue a multi-stage task | [workflow.py](../scripts/workflow.py), CLI / Python `run_workflow`, `inspect_workflow` | Workload plan and workspace → verified stage reuse, bounded execution, dependency invalidation and next skill action |
 | Find reusable prepared resources | [resource_catalog.py](../scripts/resource_catalog.py), CLI / Python `register`, `find` | Declared support properties, resource paths and successful command receipt → content-checked environment/model/adapter/capture lookup |
@@ -63,7 +80,7 @@ python scripts/compare_tensors.py --contract gradients.json --side-a a.json --si
 
 When preparing manifests, use the selected interface. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
-Use the selected tool's `--help` or API docstring for its interface; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation when that interface leaves an integration question unresolved.
+Distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation when the selected interface leaves an integration question unresolved.
 
 Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and unavailable comparisons. Exit codes: 0=comparison metrics computed successfully, 1=unavailable comparison, 2=CLI/output error. Exit 0 does not establish that a user's accuracy tolerance is met.
 

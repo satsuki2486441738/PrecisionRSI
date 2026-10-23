@@ -50,7 +50,7 @@ Resolve the distributed backend as part of framework integration: FSDP/ZeRO shar
 
 ### Other/custom
 
-Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Locate the framework's effective labels, loss reduction and trainable-parameter storage, then map them to the selected full-parameter or LoRA inventory and training stages.
+Follow [native adaptation](../SKILL.md#collect). Locate the framework's effective labels, loss reduction and trainable-parameter storage, then map them to the selected full-parameter or LoRA inventory and training stages.
 
 ## Metrics
 

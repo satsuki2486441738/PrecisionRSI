@@ -36,7 +36,7 @@ Resolve score availability at the native execution layer and export the observat
 
 ### Other/custom
 
-Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Locate the model or engine's native scoring path, resolve score transforms and map outputs to token/vocabulary coordinates. For cached execution, replay the fixed continuation through its native cache and identify prefill/decode boundaries.
+Follow [native adaptation](../SKILL.md#collect). Locate the model or engine's native scoring path, resolve score transforms and map outputs to token/vocabulary coordinates. For cached execution, replay the fixed continuation through its native cache and identify prefill/decode boundaries.
 
 ## Metrics
 

@@ -66,7 +66,8 @@ class ArrayCompareTests(unittest.TestCase):
         self.assertEqual(r['nonfinite'], {'side_a': 3, 'side_b': 2})
         self.assertEqual(r['unequal_elements'], 3)
         self.assertIsNone(r['metrics'])
-        self.assertIn({'name': 'x', 'reason': 'nonfinite', 'index': [1]}, r['findings'])
+        self.assertIn({'name': 'x', 'reason': 'nonfinite', 'index': [1],
+                       'values': {'dtype': 'float64', 'side_a': 'inf', 'side_b': 'inf'}}, r['findings'])
         json.dumps(r, allow_nan=False)
 
     def test_large_integer_mismatch_survives_fp64_rounding(self):
@@ -105,7 +106,8 @@ class ArrayCompareTests(unittest.TestCase):
         native_b['shard_1'][1] = -5
         logical_b['step/weight'] = np.concatenate([native_b['shard_0'], native_b['shard_1']]).reshape(3, 4)
         report = compare_arrays(logical_a, logical_b)
-        self.assertEqual(report['findings'], [{'name': 'step/weight', 'reason': 'values', 'index': [2, 1]}])
+        self.assertEqual(report['findings'], [{'name': 'step/weight', 'reason': 'values', 'index': [2, 1],
+            'values': {'dtype': 'float64', 'side_a': '9.0', 'side_b': '-5.0'}}])
 
     def test_scalar_and_empty_metrics_keep_coordinate_and_undefined_norms(self):
         r = compare_arrays({'x': np.array(1.)}, {'x': np.array(2.)}, metrics=True)
@@ -129,6 +131,33 @@ class ArrayCompareTests(unittest.TestCase):
         with patch('array_compare.Stats', side_effect=AssertionError('unrequested metric work')):
             r = compare_arrays({'x': np.array([-0.])}, {'x': np.array([0.])})
         self.assertTrue(r['exact_equal'])
+
+    def test_diagnostic_values_are_native_exact_and_json_safe(self):
+        a = {'counter': np.array([2**60], dtype=np.int64),
+             'flag': np.array([True]), 'tiny': np.array([np.nan], dtype=np.float32)}
+        b = {'counter': np.array([2**60+1], dtype=np.int64),
+             'flag': np.array([False]), 'tiny': np.array([np.inf], dtype=np.float32)}
+        report = compare_arrays(a, b)
+        values = {row['name']: row['values'] for row in report['findings']}
+        self.assertEqual(values['counter'], {'dtype': 'int64', 'side_a': str(2**60),
+                                             'side_b': str(2**60+1)})
+        self.assertEqual(values['flag'], {'dtype': 'bool', 'side_a': 'True', 'side_b': 'False'})
+        self.assertEqual(values['tiny'], {'dtype': 'float32', 'side_a': 'nan', 'side_b': 'inf'})
+        json.dumps(report, allow_nan=False)
+
+    def test_first_mismatch_and_maximum_error_keep_their_own_values(self):
+        a = {'x': np.arange(6., dtype=np.float32).reshape(2, 3)[:, ::2]}
+        b = {'x': a['x'].copy()}
+        b['x'][0, 0] += 1; b['x'][1, 1] += 7
+        report = compare_arrays(a, b, metrics=True, chunk_size=1)
+        self.assertEqual(report['findings'][0]['values'],
+                         {'dtype': 'float32', 'side_a': '0.0', 'side_b': '1.0'})
+        self.assertEqual(report['metrics']['max_coordinate'], {'name': 'x', 'index': [1, 1]})
+        self.assertEqual(report['metrics']['max_values'],
+                         {'dtype': 'float32', 'side_a': '5.0', 'side_b': '12.0'})
+        reverse = compare_arrays(b, a, metrics=True)
+        self.assertEqual(reverse['metrics']['max_values']['side_a'], '12.0')
+        self.assertEqual(reverse['metrics']['max_values']['side_b'], '5.0')
 
     def test_invalid_inputs_and_inventories(self):
         for kwargs in ({'expected': ['x', 'x']}, {'expected': 'x'}, {'chunk_size': 0},

@@ -122,6 +122,28 @@ assert report['status']=='no_thresholds',report
             capture_output=True, text=True, check=True, timeout=30)
         if json.loads((cwd / 'arrays.json').read_text()) != report:
             raise ValueError('array CLI/API comparison mismatch')
+        tree_check = """
+import json,sys,numpy as np
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from tree_compare import compare_trees
+root=Path(sys.argv[2])
+with np.load(root/'fp32.npz') as a,np.load(root/'bf16.npz') as b:
+    tree=compare_trees({'gradients':dict(a)},{'gradients':dict(b)},metrics=True)
+direct=json.loads((root/'report.json').read_text())
+assert tree['exact_equal']==direct['exact_equal']
+for key in ('side_a_norm','side_b_norm','error_norm','rmse','cosine','max_abs'):
+    assert tree['numeric']['metrics'][key]==direct['metrics'][key],key
+"""
+        subprocess.run([sys.executable, '-I', '-B', '-c', tree_check,
+                        str(installed / 'scripts'), str(artifacts)], cwd=cwd, env=env,
+                       capture_output=True, text=True, check=True, timeout=30)
+        help_result = subprocess.run(
+            [sys.executable, '-I', '-B', str(installed / 'scripts/tool_help.py'),
+             'tree_compare', 'array_compare'], cwd=cwd, env=env,
+            capture_output=True, text=True, check=True, timeout=30)
+        if 'compare_trees(' not in help_result.stdout or 'compare_arrays(' not in help_result.stdout:
+            raise ValueError('installed tool interface discovery incomplete')
         execution = subprocess.run(
             [sys.executable, '-I', '-B', str(installed / 'examples/workflow_demo.py'),
              '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,
@@ -164,7 +186,7 @@ assert find(catalog,'environment',dict(framework='torch',device='cpu'))==[]
                         str(installed / 'scripts'), workflow['case']], cwd=cwd, env=env,
                        capture_output=True, text=True, check=True, timeout=30)
         print(f'Clean installation of {len(folders)} skills: links valid; '
-              'CPU FP32/BF16 captures validated; array/manifest metrics agree for 12 gradient values; '
+              'CPU FP32/BF16 captures validated; array/tree/manifest metrics agree for 12 gradient values; '
               'native repair workflow verified with zero-command replay.')
 
 

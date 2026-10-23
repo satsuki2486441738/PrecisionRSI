@@ -33,7 +33,7 @@ Record the RL framework, training backend and rollout engine separately. Preserv
 
 ### Other/custom
 
-Follow [native adaptation](../SKILL.md#adapt-an-unfamiliar-implementation). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
+Follow [native adaptation](../SKILL.md#collect). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
 
 ## Metrics
 
