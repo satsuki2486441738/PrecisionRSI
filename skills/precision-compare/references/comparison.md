@@ -54,13 +54,13 @@ python scripts/compare_tensors.py --contract gradients.json --side-a a.json --si
 
 When preparing manifests, use the selected interface. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
-Tool docstrings own artifact fields; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation code when the documented interface is insufficient for the selected integration.
+Use the selected tool's `--help` or API docstring for its interface; distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation when that interface leaves an integration question unresolved.
 
 Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and unavailable comparisons. Exit codes: 0=comparison metrics computed successfully, 1=unavailable comparison, 2=CLI/output error. Exit 0 does not establish that a user's accuracy tolerance is met.
 
 ## Shared tasks
 
-Reuse the existing workload workspace and evidence across components. Rerun when relevant inputs, runtime identity, scope or required freshness changes; otherwise verify and reuse retained results. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
+Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take changing workload settings and output paths as parameters, deriving inventories and phase boundaries from them. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 
 ```sh
 python scripts/workflow.py run --plan task.json --workspace work

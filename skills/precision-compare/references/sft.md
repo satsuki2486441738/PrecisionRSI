@@ -22,14 +22,14 @@ Collect the requested stages:
 |---|---|
 | Objective | Scores, masks, native losses, coefficients and effective denominators |
 | Backward | All present gradients after accumulation, unscale and synchronization; presence inventory |
-| Clipping | Native norm/coefficient and postclip gradients when enabled |
+| Clipping (when selected) | Native norm/coefficient and postclip gradients |
 | Update | Stored before/after parameters, including unchanged coordinates; applied/skipped event |
 
 Record native parameter/gradient/master storage separately from exported-array and offline-reduction dtypes; preserve logical coordinates. Label independent norm diagnostics as full-model or sampled.
 
-For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. Capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, and stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates); use the logical inventory exporter and explicit-view comparator from [comparison](comparison.md).
+For distributed training, resolve parameter/gradient ownership, synchronization and optimizer storage in the selected backend. For the selected stages, capture accumulated, unscaled, synchronized gradients from native storage (for example, Megatron `main_grad`), postclip gradients before optimizer mutation, or stored parameters after mutation and model copy-back. Record master/state dtypes separately. Map captured shards and replicas using the [coordinate rules](comparison.md#coordinates); use the logical inventory exporter and explicit-view comparator from [comparison](comparison.md).
 
-For optimizer-state or checkpoint-continuation comparisons, include the parameters, moments, step counter and scheduler/RNG/data position needed to establish the requested starting state. Capture cold or restored trajectories as requested; reuse unchanged baselines.
+For optimizer-state or checkpoint-continuation comparisons, establish the requested starting state from checkpoint/trajectory evidence: parameters, moments, step counter, scheduler, RNG and data position. Collect missing state at selected boundaries. Compare requested cold/restored trajectories; reuse unchanged baselines.
 
 ## Framework integration
 
