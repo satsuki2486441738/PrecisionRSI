@@ -1,14 +1,16 @@
 """Reduce validated coordinate observations globally and by task-defined groups.
 
 reduce_groups(expected, groups, reducer, *observations) uses only the standard
-library. expected is a nonempty iterable of unique coordinate tuples containing
-strings/integers. groups maps nonempty group names to coordinate iterables;
+library. expected is a nonempty iterable of unique nonempty names (strings) or
+coordinate tuples containing strings/integers. groups maps group names to iterables;
 groups may overlap or be empty. Each observation is a coordinate-to-value mapping
 whose keys belong to expected. Adapters own coordinate meanings, group membership
 and validation of the values (including execution conditions and query digests).
 
-The read-only reducer receives one coordinate-to-value subset per observation.
-Use score_metrics.reduce_scores directly for paired target scores; for validated
+The read-only reducer receives one lazy coordinate-to-value Mapping per observation;
+values are read only when the reducer accesses them, including NPZ array values.
+Use array_compare.compare_arrays directly for named arrays, or
+score_metrics.reduce_scores for paired target scores; for validated
 per-position distribution metrics use a reducer such as
 lambda rows: compare_distributions.summarize(list(rows.values())). The original
 observations determine each aggregate, including percentiles and worst positions.
@@ -30,15 +32,39 @@ def _order(key):
 
 
 def _coordinates(values):
+    if isinstance(values, (str, bytes)):
+        raise ValueError('coordinates must be an iterable of names or tuples')
     result = set()
     for key in values:
-        if (not isinstance(key, tuple) or not key or
-                any(type(part) not in (str, int) for part in key)):
-            raise ValueError('coordinates must be nonempty tuples of strings/integers')
+        if not ((isinstance(key, str) and key) or
+                (isinstance(key, tuple) and key and
+                 all(type(part) in (str, int) for part in key))):
+            raise ValueError('coordinates must be nonempty names or tuples of strings/integers')
         if key in result:
             raise ValueError('duplicate coordinate')
         result.add(key)
     return result
+
+
+class _Subset(Mapping):
+    def __init__(self, source, keys):
+        self._source = source
+        self._keys = tuple(keys)
+        self._selected = frozenset(self._keys)
+
+    def __iter__(self):
+        return iter(self._keys)
+
+    def __len__(self):
+        return len(self._keys)
+
+    def __contains__(self, key):
+        return key in self._selected
+
+    def __getitem__(self, key):
+        if key not in self._selected:
+            raise KeyError(key)
+        return self._source[key]
 
 
 def reduce_groups(expected, groups, reducer, *observations):
@@ -71,10 +97,10 @@ def reduce_groups(expected, groups, reducer, *observations):
         coverage = dict(expected_count=len(keys),
                         observed_counts=[len(keys & source) for source in sources],
                         paired_count=len(keys.intersection(*sources)),
-                        missing=[[list(key) for key in rows] for rows in missing])
+                        missing=[[key if isinstance(key, str) else list(key) for key in rows] for rows in missing])
         if not keys or any(missing):
             return dict(status='not_covered', coverage=coverage, metrics=None)
-        metrics = reducer(*[{key: values[key] for key in ordered} for values in observations])
+        metrics = reducer(*[_Subset(values, ordered) for values in observations])
         return dict(status='completed', coverage=coverage, metrics=metrics)
 
     return {

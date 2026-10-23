@@ -9,6 +9,15 @@ from array_compare import compare_arrays
 report = compare_arrays(side_a_arrays, side_b_arrays, expected=logical_names)
 ```
 
+For task-defined groups of named arrays (for example, layers, steps or metrics), reuse the same reducer:
+
+```python
+from group_metrics import reduce_groups
+report = reduce_groups(logical_names, groups, compare_arrays, side_a_arrays, side_b_arrays)
+```
+
+`groups` maps labels to lists of expected names. Global and group results retain independent coverage; incomplete groups have no aggregate. To quantify differences, pass `lambda a, b: compare_arrays(a, b, metrics=True)` as the reducer. Derive group membership from task coordinates and settings.
+
 Native loaders supply maps of logical names to arrays. `expected` is the task's independent inventory; omit it to check only the observed union. Different native names/layouts can use an explicit adapter mapping. Preserve the observation's input/state, sampling boundary and dtype identity when mapping. Equal names and shapes alone do not establish correspondence.
 
 ```sh
@@ -34,7 +43,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 | Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
 | Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
 | Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
-| Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
+| Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected names/coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
 | Inspect tensor NaN / Inf | [inspect_nonfinite.py](../scripts/inspect_nonfinite.py), CLI / Python `compare` | Contract and paired tensor manifests → per-side and paired nonfinite counts, bounded logical coordinates and separate finite-subset metrics |
 | Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI / Python `compare`, `Stats` | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
 | Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
@@ -60,7 +69,7 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
-Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take changing workload settings and output paths as parameters, deriving inventories and phase boundaries from them. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
+Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take input/output paths and workload settings as parameters; derive inventories, phase boundaries and report labels from settings and computed fields. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 
 ```sh
 python scripts/workflow.py run --plan task.json --workspace work

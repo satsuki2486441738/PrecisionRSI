@@ -2,11 +2,16 @@
 import copy
 import json
 from pathlib import Path
+from collections.abc import Mapping
 import sys
+import tempfile
+
+import numpy as np
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts'))
 from group_metrics import reduce_groups
+from array_compare import compare_arrays
 from score_metrics import reduce_scores
 from compare_distributions import summarize
 
@@ -71,6 +76,94 @@ class GroupMetricsTests(unittest.TestCase):
                             for order in report['global']['metrics']))
         self.assertEqual(report['groups'], {})
 
+    def test_named_npz_groups_reuse_array_metrics_and_keep_element_coordinates(self):
+        a = {'0/loss': np.asarray(1.), '0/update': np.asarray([1., 2., 3.]),
+             '1/loss': np.asarray(2.), '1/update': np.asarray([4., 5., 6.])}
+        b = {key: value.copy() for key, value in a.items()}
+        b['1/update'][2] += 7.
+        expected = list(a)
+        groups = {'loss': ['0/loss', '1/loss'], 'update': ['0/update', '1/update'],
+                  'first_step': ['0/loss', '0/update']}
+        with tempfile.TemporaryDirectory() as directory:
+            paths = [Path(directory)/name for name in ('a.npz', 'b.npz')]
+            np.savez(paths[0], **a); np.savez(paths[1], **b)
+            with np.load(paths[0]) as left, np.load(paths[1]) as right:
+                report = reduce_groups(iter(expected), groups,
+                    lambda x, y: compare_arrays(x, y, metrics=True), left, right)
+        self.assertEqual(report['global']['metrics'], compare_arrays(a, b, metrics=True))
+        self.assertEqual(report['global']['coverage']['paired_count'], 4)
+        self.assertFalse(report['global']['metrics']['exact_equal'])
+        for name, keys in groups.items():
+            self.assertEqual(report['groups'][name]['metrics'], compare_arrays(
+                {key: a[key] for key in keys}, {key: b[key] for key in keys}, metrics=True))
+        self.assertTrue(report['groups']['first_step']['metrics']['exact_equal'])
+        self.assertEqual(report['groups']['update']['metrics']['metrics']['max_coordinate'],
+                         {'name': '1/update', 'index': [2]})
+        json.dumps(report, allow_nan=False)
+
+    def test_names_preserve_missing_inventory_including_shared_omissions(self):
+        expected = ['loss', 'missing/both', 'missing/right']
+        report = reduce_groups(expected, {'present': ['loss'], 'missing': expected[1:],
+                                          'empty': []}, compare_arrays,
+                               {'loss': np.asarray(1.), 'missing/right': np.asarray(2.)},
+                               {'loss': np.asarray(1.)})
+        self.assertEqual(report['global']['coverage']['missing'],
+                         [['missing/both'], ['missing/both', 'missing/right']])
+        self.assertEqual(report['global']['status'], 'not_covered')
+        self.assertIsNone(report['global']['metrics'])
+        self.assertTrue(report['groups']['present']['metrics']['exact_equal'])
+        self.assertIsNone(report['groups']['missing']['metrics'])
+        self.assertEqual(report['groups']['empty']['status'], 'not_covered')
+
+    def test_mixed_names_and_tuples_are_distinct_and_serialize_missing_correctly(self):
+        expected = ['weight', ('weight',)]
+        report = reduce_groups(expected, {}, lambda values: list(values), {'weight': 1})
+        self.assertEqual(report['global']['coverage']['missing'], [[['weight']]])
+        self.assertEqual(report['global']['coverage']['paired_count'], 1)
+        json.dumps(report, allow_nan=False)
+
+    def test_nonfinite_named_group_does_not_hide_other_complete_group(self):
+        values = {'finite': np.asarray([1., 2.]), 'invalid': np.asarray([np.nan])}
+        report = reduce_groups(values, {'finite': ['finite'], 'invalid': ['invalid']},
+                               compare_arrays, values, values)
+        self.assertFalse(report['global']['metrics']['exact_equal'])
+        self.assertTrue(report['groups']['finite']['metrics']['exact_equal'])
+        self.assertFalse(report['groups']['invalid']['metrics']['exact_equal'])
+        self.assertEqual(report['groups']['invalid']['metrics']['nonfinite'],
+                         {'side_a': 1, 'side_b': 1})
+        json.dumps(report, allow_nan=False)
+
+    def test_group_views_are_lazy_read_only_and_restrict_coordinate_access(self):
+        reads = []
+        class Source(Mapping):
+            def __iter__(self):
+                return iter(['a', 'b'])
+            def __len__(self):
+                return 2
+            def __getitem__(self, key):
+                reads.append(key)
+                return {'a': 1, 'b': 2}[key]
+        calls = []
+        def reducer(values):
+            self.assertEqual(len(reads), len(calls))
+            keys = list(values)
+            self.assertEqual(len(values), len(keys))
+            self.assertIn(keys[0], values)
+            with self.assertRaises(KeyError):
+                values['outside']
+            if keys == ['b']:
+                with self.assertRaises(KeyError):
+                    values['a']
+            with self.assertRaises(TypeError):
+                values[keys[0]] = 0
+            calls.append(keys)
+            return values[keys[0]]
+        report = reduce_groups(['b', 'a'], {'second': ['b']}, reducer, Source())
+        self.assertEqual(calls, [['a', 'b'], ['b']])
+        self.assertEqual(reads, ['a', 'b'])
+        self.assertEqual(report['global']['metrics'], 1)
+        self.assertEqual(report['groups']['second']['metrics'], 2)
+
     def test_invalid_coordinates_and_membership_are_not_silently_filtered(self):
         key = ('x', 0)
         cases = [([key, key], {}, {key: 0}),
@@ -78,7 +171,12 @@ class GroupMetricsTests(unittest.TestCase):
                  ([key], {'group': [('x', 1)]}, {key: 0}),
                  ([key], {}, {('x', 1): 0}),
                  ([('x', True)], {}, {('x', True): 0}),
-                 ([], {}, {}), ([key], {'': [key]}, {key: 0})]
+                 ([], {}, {}), ([key], {'': [key]}, {key: 0}),
+                 ('loss', {}, {'loss': 0}), (['loss'], {'g': 'loss'}, {'loss': 0}),
+                 (['loss', 'loss'], {}, {'loss': 0}), ([''], {}, {'': 0}),
+                 (['loss'], {'g': ['loss', 'loss']}, {'loss': 0}),
+                 (['loss'], {'g': ['other']}, {'loss': 0}),
+                 (['loss'], {}, {'other': 0})]
         for expected, groups, observations in cases:
             with self.subTest(expected=expected, groups=groups):
                 with self.assertRaises(ValueError):
