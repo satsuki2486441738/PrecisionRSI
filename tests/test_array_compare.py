@@ -193,6 +193,25 @@ class ArrayCompareTests(unittest.TestCase):
         self.assertEqual(reverse['metrics']['max_values']['side_a'], '12.0')
         self.assertEqual(reverse['metrics']['max_values']['side_b'], '5.0')
 
+    def test_exhaustive_findings_cover_all_coordinates_in_chunk_order(self):
+        a = {'x': np.arange(24., dtype=np.float32).reshape(4, 6)[:, ::2]}
+        b = {'x': a['x'] + 1}
+        for chunk in (1, 5, 100):
+            report = compare_arrays(a, b, max_findings=None, chunk_size=chunk)
+            self.assertEqual(report['unequal_elements'], 12)
+            self.assertEqual(len(report['findings']), 12)
+            self.assertEqual(report['findings_omitted'], 0)
+            for flat, finding in enumerate(report['findings']):
+                self.assertEqual(finding['index'], list(np.unravel_index(flat, (4, 3))))
+                self.assertEqual(finding['values']['side_a'], repr(a['x'].flat[flat].item()))
+                self.assertEqual(finding['values']['side_b'], repr(b['x'].flat[flat].item()))
+        a = {'x': np.array([np.nan, np.inf, 1., 2.])}
+        b = {'x': np.array([np.nan, np.inf, 3., 2.])}
+        report = compare_arrays(a, b, max_findings=None, chunk_size=2)
+        self.assertEqual([row['index'] for row in report['findings']], [[0], [1], [2]])
+        self.assertEqual([row['reason'] for row in report['findings']], ['nonfinite', 'nonfinite', 'values'])
+        json.dumps(report, allow_nan=False)
+
     def test_invalid_inputs_and_inventories(self):
         for kwargs in ({'expected': ['x', 'x']}, {'expected': 'x'}, {'chunk_size': 0},
                        {'metrics': 1}, {'max_findings': -1}):
@@ -201,6 +220,20 @@ class ArrayCompareTests(unittest.TestCase):
         for a in ({'x': np.array(['x'])}, {'': np.ones(1)}, {'x': np.array([1j])}, {}):
             with self.subTest(a=a), self.assertRaises(ValueError):
                 compare_arrays(a, a)
+
+    def test_cli_exhaustive_findings_and_limit_are_explicit(self):
+        script = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts/array_compare.py'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            np.savez(root / 'a.npz', x=np.zeros(12))
+            np.savez(root / 'b.npz', x=np.ones(12))
+            command = [sys.executable, '-B', str(script), str(root / 'a.npz'), str(root / 'b.npz'),
+                       '--output', str(root / 'result.json'), '--all-findings']
+            result = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads((root / 'result.json').read_text())
+            self.assertEqual(len(report['findings']), 12)
+            self.assertEqual(subprocess.run(command + ['--max-findings', '1'], capture_output=True).returncode, 2)
 
     def test_cli_npz_reports_difference_without_treating_it_as_execution_failure(self):
         script = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts/array_compare.py'

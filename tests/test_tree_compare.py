@@ -152,8 +152,18 @@ class TreeCompareTests(unittest.TestCase):
             scanned.append(x.size)
             return original_add(stats, x, y)
         def export(tensor):
-            return dict(native_dtype=str(tensor.dtype), values=original_float(tensor).numpy())
-        expected = compare_trees(a, b, leaf_adapter=export, metrics=True)
+            return original_float(tensor).numpy()
+        def expected_report(a, b):
+            result = compare_trees(a, b, leaf_adapter=export, metrics=True)
+            if result['numeric']:
+                for finding in result['numeric']['findings']:
+                    if 'values' in finding:
+                        finding['values']['dtype'] = 'torch.bfloat16'
+                metrics = result['numeric'].get('metrics') or {}
+                if 'max_values' in metrics:
+                    metrics['max_values']['dtype'] = 'torch.bfloat16'
+            return result
+        expected = expected_report(a, b)
         with tempfile.TemporaryDirectory() as folder:
             paths = [Path(folder) / (name + '.pt') for name in ('a', 'b')]
             for path, state in zip(paths, (a, b)):
@@ -167,7 +177,7 @@ class TreeCompareTests(unittest.TestCase):
             key = section['key']
             peers = [{key: state[key]} if key in state else {} for state in (a, b)]
             self.assertEqual(section['comparison'],
-                             compare_trees(*peers, leaf_adapter=export, metrics=True))
+                             expected_report(*peers))
 
     def test_checkpoint_sections_retain_independent_coverage_and_metric_failures(self):
         try:
@@ -252,6 +262,65 @@ class TreeCompareTests(unittest.TestCase):
             self.assertFalse(report['comparison']['exact_equal'])
             self.assertTrue(report['comparison']['numeric']['exact_equal'])
             self.assertEqual(report['sections'], [])
+
+    def test_checkpoint_exhaustive_cli_retains_original_paths_and_native_values(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest('optional Torch checkpoint loader')
+        import subprocess
+        import tempfile
+        from tree_compare import compare_checkpoints
+        a = {'values': {'native_dtype': 'stored metadata', 'values': torch.zeros(3, 4, dtype=torch.bfloat16)},
+             1: np.array([2**60], dtype=np.int64), '1': np.array([2**60], dtype=np.uint64),
+             'zero': torch.tensor([-0.])}
+        b = copy.deepcopy(a)
+        b['values']['values'] += 1
+        b['values']['native_dtype'] = 'changed metadata'
+        b[1][0] += 1
+        b['1'][0] = 2**60 + 2
+        b['zero'][0] = 0.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, state in (('a.pt', a), ('b.pt', b)):
+                torch.save(state, root / name)
+            script = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts/tree_compare.py'
+            run = subprocess.run([sys.executable, '-B', str(script), str(root / 'a.pt'), str(root / 'b.pt'),
+                                  '--output', str(root / 'result.json'), '--all-findings'],
+                                 capture_output=True, text=True)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            report = json.loads((root / 'result.json').read_text())
+            numeric = report['comparison']['numeric']
+            self.assertEqual(numeric['unequal_elements'], 14)
+            self.assertEqual(len(numeric['findings']), 14)
+            self.assertEqual(numeric['findings_omitted'], 0)
+            self.assertEqual(report['comparison']['metadata']['differences'], 1)
+            self.assertEqual(report['comparison']['metadata']['findings'][0]['path'],
+                             [['key', 'str', 'values'], ['key', 'str', 'native_dtype']])
+            by_path = {}
+            for finding in numeric['findings']:
+                by_path.setdefault(finding['name'], []).append(finding)
+                self.assertEqual(json.loads(finding['name']), finding['path'])
+            raw_path = [['key', 'str', 'values'], ['key', 'str', 'values']]
+            rows = by_path[json.dumps(raw_path, separators=(',', ':'))]
+            self.assertEqual(len(rows), 12)
+            self.assertEqual([row['index'] for row in rows], [[i, j] for i in range(3) for j in range(4)])
+            self.assertEqual(rows[0]['values'], dict(dtype='torch.bfloat16', side_a='0.0', side_b='1.0'))
+            for kind, value in (('int', 2**60+1), ('str', 2**60+2)):
+                row = by_path[json.dumps([['key', kind, '1']], separators=(',', ':'))][0]
+                self.assertEqual(row['values']['side_b'], str(value))
+            sections = {row['key']: row['comparison'] for row in report['sections']}
+            self.assertTrue(sections['zero']['exact_equal'])
+            bounded = compare_checkpoints(root / 'a.pt', root / 'b.pt', max_findings=1)
+            self.assertEqual(len(bounded['comparison']['numeric']['findings']), 1)
+
+    def test_exhaustive_metadata_findings_include_every_changed_leaf(self):
+        a = {str(i): 'old' for i in range(20)}
+        b = {str(i): 'new' for i in range(20)}
+        result = compare_trees(a, b, max_findings=None)
+        self.assertEqual(result['metadata']['differences'], 20)
+        self.assertEqual(len(result['metadata']['findings']), 20)
+        self.assertEqual(result['metadata']['findings_omitted'], 0)
 
     def test_invalid_options_keys_and_array_types_are_explicit(self):
         for kwargs in ({'metrics': 1}, {'max_findings': True}, {'max_findings': -1},

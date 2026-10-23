@@ -2,7 +2,7 @@
 """Compare already corresponding named arrays without artifact conversion (NumPy).
 Call: compare_arrays(a, b, expected=None, metrics=False); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics]
 Input: Corresponding name-to-numeric-array maps, or NPZ files.
-Output: exact_equal, coverage, bounded findings; optional FP64 error metrics.
+Output: exact_equal, coverage, bounded findings; optional FP64 error metrics. --all-findings returns every differing/nonfinite coordinate.
 Requires: NumPy; equality requires matching shapes/dtypes and finite values. expected detects shared omissions.
 
 Details:
@@ -35,11 +35,14 @@ metrics=True additionally uses the existing FP64 Stats reducer for L2,
 RMSE, cosine, maximum-error coordinates and max_values in the same representation. Incomplete/shape-incompatible/nonfinite
 inputs have no full aggregate. Integers outside [-2**53,2**53] retain exact
 comparison but no FP64 metrics. Arrays are visited in sorted-name, C-flat order
-using bounded chunks, including noncontiguous arrays. NPZ loading materializes
+using bounded chunks, including noncontiguous arrays. max_findings=None returns
+every differing or nonfinite element once, with its native values; the default
+retains bounded representative findings. Exhaustive output memory scales with
+the number of findings. NPZ loading materializes
 one named array at a time; use native mappings/memmaps for larger observations.
 
 CLI: array_compare.py A.npz B.npz --output NEW.json [--metrics]
-                     [--expected names.json] [--max-findings 8]
+                     [--expected names.json] [--max-findings 8 | --all-findings]
 The CLI reads NPZ files with allow_pickle=False; no task directory layout is
 assumed. Native Torch/BF16 state needs an adapter preserving its dtype identity.
 Exit 0=complete comparison (including unequal values), 1=incomplete/incompatible,
@@ -106,7 +109,7 @@ class _Comparison:
 
     def finding(self, name, reason, **details):
         self.finding_count += 1
-        if len(self.findings) < self.limit:
+        if self.limit is None or len(self.findings) < self.limit:
             self.findings.append(dict(name=name, reason=reason, **details))
 
     def merge(self, other):
@@ -116,7 +119,8 @@ class _Comparison:
             setattr(self, field, getattr(self, field) + getattr(other, field))
         for side in self.nonfinite:
             self.nonfinite[side] += other.nonfinite[side]
-        self.findings.extend(other.findings[:max(0, self.limit - len(self.findings))])
+        self.findings.extend(other.findings if self.limit is None else
+                             other.findings[:max(0, self.limit - len(self.findings))])
         self.finding_count += other.finding_count
         if other.metric_reason:
             self.metric_reason = other.metric_reason
@@ -169,6 +173,12 @@ def _scan_array(name, a, b, metrics, max_findings, chunk_size):
                 first_bad = start + int(np.argmin(valid))
         different = _different(x, y)
         result.unequal += int(np.count_nonzero(different))
+        if max_findings is None:
+            for offset in np.flatnonzero(different | ~valid):
+                index = start + int(offset)
+                result.finding(name, 'values' if valid[offset] else 'nonfinite',
+                               index=[int(i) for i in np.unravel_index(index, a.shape)],
+                               values=_values(a, b, index))
         if different.any() and first_unequal is None:
             first_unequal = start + int(np.argmax(different))
         if metrics and result.metric_reason is None:
@@ -181,7 +191,7 @@ def _scan_array(name, a, b, metrics, max_findings, chunk_size):
                     result.metric_reason = str(exc)
     result.unequal_arrays = int(first_unequal is not None)
     for reason, index in (('nonfinite', first_bad), ('values', first_unequal)):
-        if index is not None:
+        if max_findings is not None and index is not None:
             result.finding(name, reason, index=[int(i) for i in np.unravel_index(index, a.shape)],
                            values=_values(a, b, index))
     if metrics and result.stats.max_index is not None:
@@ -193,7 +203,8 @@ def _scan_array(name, a, b, metrics, max_findings, chunk_size):
 
 def _compare_partitions(side_a, side_b, expected=None, metrics=False, max_findings=8,
                         chunk_size=1_048_576, partitions=None):
-    if (type(metrics) is not bool or type(max_findings) is not int or max_findings < 0
+    if (type(metrics) is not bool
+            or (max_findings is not None and (type(max_findings) is not int or max_findings < 0))
             or type(chunk_size) is not int or chunk_size < 1):
         raise ValueError('invalid metrics, max_findings or chunk_size')
     if not all(isinstance(side, Mapping) for side in (side_a, side_b)):
@@ -235,7 +246,10 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--expected')
     parser.add_argument('--metrics', action='store_true')
-    parser.add_argument('--max-findings', type=int, default=8)
+    findings = parser.add_mutually_exclusive_group()
+    findings.add_argument('--max-findings', type=int, default=8)
+    findings.add_argument('--all-findings', dest='max_findings', action='store_const', const=None,
+                          help='return every differing/nonfinite coordinate and native values')
     args = parser.parse_args()
     try:
         with ExitStack() as stack:
