@@ -198,15 +198,23 @@ def aggregate(values):
     return {'mean': math.fsum(values) / len(values), 'p99': float(np.quantile(values, .99, method='linear')), 'max': max(values)}
 
 
-def cli(compare, description):
+def cli(compare, description, options=None, argv=None):
+    """Run a paired-artifact CLI; options maps keyword names to argparse settings.
+
+    Option values are forwarded to compare as keywords alongside the contract
+    and two manifest paths.
+    """
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--contract', required=True)
     parser.add_argument('--side-a', required=True)
     parser.add_argument('--side-b', required=True)
     parser.add_argument('--output', required=True)
-    args = parser.parse_args()
+    for name, settings in (options or {}).items():
+        parser.add_argument('--' + name.replace('_', '-'), **settings)
+    args = parser.parse_args(argv)
     try:
-        report = compare(args.contract, args.side_a, args.side_b)
+        report = compare(args.contract, args.side_a, args.side_b,
+                         **{name: getattr(args, name) for name in (options or {})})
         with Path(args.output).open('x') as stream:
             json.dump(report, stream, indent=2, allow_nan=False)
             stream.write('\n')

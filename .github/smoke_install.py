@@ -116,6 +116,24 @@ assert report['status']=='no_thresholds',report
             if report['metrics'][key] != manifest_report['global'][key]:
                 raise ValueError('array/manifest metric mismatch: ' + key)
         subprocess.run(
+            [sys.executable, '-I', '-B', str(installed / 'scripts/compare_tensors.py'),
+             '--contract', str(check_root / 'contract.json'),
+             '--side-a', str(check_root / 'fp32/manifest.json'),
+             '--side-b', str(check_root / 'bf16/manifest.json'),
+             '--mode', 'nonfinite', '--chunk-size', '1', '--max-locations', '0',
+             '--output', str(check_root / 'nonfinite.json')], cwd=cwd, env=env,
+            capture_output=True, text=True, check=True, timeout=30)
+        diagnosis = json.loads((check_root / 'nonfinite.json').read_text())
+        if (diagnosis['status'] != 'no_thresholds' or diagnosis['global']['count'] != 12
+                or diagnosis['global']['paired_finite_count'] != 12
+                or diagnosis['global']['samples']):
+            raise ValueError('installed tensor diagnostic mode lost coverage/sample limits')
+        for key in ('side_a_norm', 'side_b_norm', 'error_norm', 'rmse', 'cosine', 'max_abs'):
+            actual = diagnosis['global']['finite_subset_metrics'][key]['value']
+            expected = manifest_report['global'][key]['value']
+            if not math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12):
+                raise ValueError('installed diagnostic/metric mismatch: ' + key)
+        subprocess.run(
             [sys.executable, '-I', '-B', str(installed / 'scripts/array_compare.py'),
              str(artifacts / 'fp32.npz'), str(artifacts / 'bf16.npz'), '--metrics',
              '--output', str(cwd / 'arrays.json')], cwd=cwd, env=env,

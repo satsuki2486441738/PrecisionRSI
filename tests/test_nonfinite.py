@@ -299,6 +299,68 @@ class NonfiniteTests(unittest.TestCase):
         self.assertEqual(subprocess.run(command, capture_output=True).returncode, 1)
         self.assertEqual(json.loads(output.read_text())['status'], 'incomparable')
 
+    def test_tensor_modes_preserve_nonfinite_coverage_and_default_failure(self):
+        paths = self.paths(*self.pair([np.nan, 1., -np.inf], [np.inf, 3., -np.inf],
+                                    stage='observations'))
+        default = finite_compare(*paths)
+        self.assertEqual(default, finite_compare(*paths, mode='metrics'))
+        self.assertNotEqual(default['status'], 'no_thresholds')
+        for chunk_size in (1, 2, 20):
+            for limit in (0, 1, 20):
+                with self.subTest(chunk_size=chunk_size, limit=limit):
+                    options = dict(chunk_size=chunk_size, max_locations=limit)
+                    result = finite_compare(*paths, mode='nonfinite', **options)
+                    self.assertEqual(result, compare(*paths, **options))
+                    self.assertEqual(result['global']['count'], 3)
+                    self.assertEqual(result['global']['paired_finite_count'], 1)
+                    self.assertEqual(result['global']['finite_subset_metrics']['rmse']['value'], 2.)
+                    self.assertLessEqual(len(result['global']['samples']), limit)
+
+    def test_modes_keep_update_initial_state_semantics_distinct(self):
+        pair = self.pair([0., 0.], [0., 0.], 'updates')
+        for side, before in zip(pair[1:], ([1., 2.], [4., 5.])):
+            side['tensors'][0]['shards'] = [dict(offset=0, before=self.array(before),
+                after=self.array([value + 1. for value in before]))]
+        paths = self.paths(*pair)
+        result = finite_compare(*paths)
+        self.assertEqual(result['status'], 'incomparable')
+        self.assertIn('initial stored parameters differ', result['per_tensor']['weight']['reason'])
+        diagnostics = finite_compare(*paths, mode='nonfinite')
+        self.assertEqual(diagnostics, compare(*paths))
+        self.assertEqual(diagnostics['global']['paired_finite_count'], 2)
+        self.assertEqual(diagnostics['global']['finite_subset_metrics']['rmse']['value'], 0.)
+        with self.assertRaisesRegex(ValueError, 'mode'):
+            finite_compare(*paths, mode='auto')
+
+    def test_unified_tensor_cli_modes_and_compatibility_entrypoint(self):
+        paths = self.paths(*self.pair([np.nan, 1., -np.inf], [np.inf, 3., -np.inf]))
+        common = ['--contract', str(paths[0]), '--side-a', str(paths[1]), '--side-b', str(paths[2])]
+        script = str(SCRIPTS/'compare_tensors.py')
+        output = self.root/'unified.json'
+        command = [sys.executable, '-I', '-B', script, *common, '--mode', 'nonfinite',
+                   '--chunk-size', '1', '--max-locations', '1', '--output', str(output)]
+        run = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        report = json.loads(output.read_text())
+        self.assertEqual(report, compare(*paths, chunk_size=1, max_locations=1))
+        saved = output.read_bytes()
+        self.assertEqual(subprocess.run(command, capture_output=True).returncode, 2)
+        self.assertEqual(output.read_bytes(), saved)
+        for mode, expected_code in [('metrics', 1), ('invalid', 2)]:
+            target = self.root/(mode + '.json')
+            run = subprocess.run([sys.executable, '-I', '-B', script, *common, '--mode', mode,
+                                  '--output', str(target)], capture_output=True, text=True)
+            self.assertEqual(run.returncode, expected_code, run.stderr)
+            if mode == 'metrics':
+                self.assertEqual(json.loads(target.read_text()), finite_compare(*paths))
+            else:
+                self.assertFalse(target.exists())
+        invalid = self.root/'invalid-limit.json'
+        run = subprocess.run([sys.executable, '-I', '-B', script, *common, '--mode', 'nonfinite',
+                              '--max-locations', '-1', '--output', str(invalid)], capture_output=True)
+        self.assertEqual(run.returncode, 1, run.stderr)
+        self.assertEqual(json.loads(invalid.read_text())['status'], 'incomparable')
+
     def test_multiple_tensor_global_scope_and_sample_bound(self):
         pair = self.pair([np.nan, 2], [np.inf, 3])
         for doc in pair:

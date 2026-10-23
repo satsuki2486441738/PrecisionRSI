@@ -20,7 +20,13 @@ delta-only captures use the declared state to identify initial conditions.
 A common state requires equal before values; per-side state records permit
 task-selected different initial representations and retain their differences.
 
-API: compare(contract,side_a,side_b,chunk_size=1048576).
+API: compare(contract,side_a,side_b,chunk_size=1048576,
+             *,mode='metrics',max_locations=20).
+mode=metrics computes full-tensor metrics and checks update initial values.
+mode=nonfinite returns kind=nonfinite_tensors: finite/nan/posinf/neginf counts,
+paired-finite metrics and bounded coordinate samples (max_locations per tensor
+and globally). For updates it inventories stored values/deltas without checking
+initial-value equality.
 For already aligned in-memory arrays: stats=Stats(); stats.add(a, b) for each
 paired, nonempty, finite, flattened FP64 chunk; stats.report() returns the same
 scalar metrics. add() appends coordinates; merge(other) appends another reducer.
@@ -33,12 +39,18 @@ norms, events and coordinate findings. An invalid tensor leaves valid per-tensor
 results available while its full aggregate is unavailable. Metrics are diagnostics
 with thresholds=null. Same-path inputs are labeled self-checks.
 CLI: --contract C --side-a A.json --side-b B.json --output NEW.json
+     [--mode metrics|nonfinite] [--chunk-size 1048576] [--max-locations 20]
+max_locations applies only to nonfinite mode.
 Inputs are peer executions identified by manifest side IDs. Reports use schema 2.
 Exit: 0=diagnostics, 1=unavailable comparison, 2=CLI/output error.
 """
 import math
 from pathlib import Path
 import numpy as np
+
+if __name__ == '__main__':
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
 from artifact_io import (Array, ArtifactError, blocked, blocked_status, canonical, cli, contract,
                          integer, manifest, require, result_value, shape_size, unique)
 
@@ -178,7 +190,7 @@ def inventory(spec):
     return result
 
 
-def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
+def _compare_metrics(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
     report = {'kind': 'tensors', 'schema_version': 2, 'status': 'no_thresholds',
               'self_comparison': Path(side_a_path).resolve() == Path(side_b_path).resolve(),
               'thresholds': None, 'per_tensor': {}}
@@ -258,5 +270,23 @@ def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576):
     return report
 
 
+def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576,
+            *, mode='metrics', max_locations=20):
+    """Compare tensor artifacts using full metrics or nonfinite diagnostics."""
+    require(mode in ('metrics', 'nonfinite'), 'mode must be metrics or nonfinite')
+    if mode == 'nonfinite':
+        from inspect_nonfinite import compare as diagnose
+        return diagnose(contract_path, side_a_path, side_b_path, chunk_size, max_locations)
+    return _compare_metrics(contract_path, side_a_path, side_b_path, chunk_size)
+
+
+def main(argv=None):
+    return cli(compare, __doc__, options={
+        'mode': dict(choices=('metrics', 'nonfinite'), default='metrics'),
+        'chunk_size': dict(type=int, default=1_048_576),
+        'max_locations': dict(type=int, default=20),
+    }, argv=argv)
+
+
 if __name__ == '__main__':
-    raise SystemExit(cli(compare, __doc__))
+    raise SystemExit(main())

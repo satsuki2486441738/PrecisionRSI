@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Diagnose paired tensor artifacts using compare_tensors' existing contracts/readers.
+"""Nonfinite tensor diagnostics, also exposed by compare_tensors --mode nonfinite.
 
 API: compare(contract_path, side_a_path, side_b_path, chunk_size=1048576,
              max_locations=20). CLI: --contract --side-a --side-b --output,
@@ -36,14 +36,11 @@ coverage lists every expected tensor and unexpected manifest entry. Partial
 counts are never presented as full coverage. No thresholds or full-tensor
 correctness verdicts are produced; no framework repair is performed.
 """
-import argparse
-import json
 from pathlib import Path
-import sys
 
 import numpy as np
 
-from artifact_io import (ArtifactError, blocked, blocked_status, contract, integer,
+from artifact_io import (ArtifactError, blocked, blocked_status, cli, contract, integer,
                          manifest, require, shape_size, unique)
 from compare_tensors import Stats, Tensor, inventory
 
@@ -277,22 +274,11 @@ def compare(contract_path, side_a_path, side_b_path, chunk_size=1_048_576, max_l
     return report
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    for option in ('contract', 'side-a', 'side-b', 'output'):
-        parser.add_argument('--' + option, required=True)
-    parser.add_argument('--chunk-size', type=int, default=1_048_576)
-    parser.add_argument('--max-locations', type=int, default=20)
-    args = parser.parse_args()
-    try:
-        report = compare(args.contract, args.side_a, args.side_b, args.chunk_size, args.max_locations)
-        encoded = json.dumps(report, indent=2, allow_nan=False)
-        with Path(args.output).open('x') as stream:
-            stream.write(encoded + '\n')
-    except (OSError, ValueError, TypeError) as exc:
-        print(str(exc), file=sys.stderr)
-        return 2
-    return 0 if report['status'] == 'no_thresholds' else 1
+def main(argv=None):
+    return cli(compare, __doc__, options={
+        'chunk_size': dict(type=int, default=1_048_576),
+        'max_locations': dict(type=int, default=20),
+    }, argv=argv)
 
 
 if __name__ == '__main__':
