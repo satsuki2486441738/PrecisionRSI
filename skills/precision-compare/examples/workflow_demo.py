@@ -18,7 +18,6 @@ import sys
 TOOLS = Path(__file__).resolve().parents[1] / 'scripts'
 sys.path.insert(0, str(TOOLS))
 from workflow import run_workflow
-from resource_catalog import register, find
 
 DRIVER = '''import json,sys
 from pathlib import Path
@@ -124,19 +123,6 @@ def demonstrate(output_root, prepare_only=False):
     before = run_workflow(root / 'task.json', root / 'session')
     write(root / 'before.json', before)
     assert before['next_action']['skill'] == 'precision-repair', before
-    prepared = before['stages'][0]
-    runtime=json.loads(Path(prepared['outputs']['runtime']['path']).read_text())
-    resources=dict(declaration=str(root/'environment.json'), runtime=prepared['outputs']['runtime']['path'],
-                   python=sys.executable)
-    for index, module in enumerate(runtime['modules'].values()):
-        if module['path']:resources['module'+str(index)]=module['path']
-    entry = dict(id='native-torch-cpu', kind='environment',
-                 properties=dict(framework='torch', device='cpu', torch=runtime['modules']['torch']['version']),
-                 paths=resources, evidence=str(Path(prepared['run'])/'command.json'))
-    write(root/'environment-entry.json', entry)
-    catalog=root/'resources/catalog.json'
-    register(catalog, root/'environment-entry.json')
-    assert len(find(catalog, 'environment', dict(framework='torch', device='cpu')))==1
     baseline = Path(before['next_action']['outputs']['metrics']['path'])
     baseline_bytes = baseline.read_bytes()
     (root / 'objective-original.py').write_bytes((root / 'objective.py').read_bytes())
@@ -156,7 +142,7 @@ def demonstrate(output_root, prepare_only=False):
     assert baseline.read_bytes() == baseline_bytes
     result = dict(case=str(root), routed_to_repair=True, before_max_abs=json.loads(baseline_bytes)['max_abs'],
                   after_max_abs=json.loads(Path(after['stages'][-1]['outputs']['metrics']['path']).read_text())['max_abs'],
-                  preparation_reused=True, resource_discovered=True, replay_native_commands=0, attempts=after['attempts'])
+                  preparation_reused=True, replay_native_commands=0, attempts=after['attempts'])
     write(root / 'result.json', result)
     return result
 

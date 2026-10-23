@@ -129,9 +129,40 @@ assert report['status']=='no_thresholds',report
         workflow = json.loads(execution.stdout)
         validate_artifact_directory(workflow['case'], cwd)
         if (not workflow['routed_to_repair'] or not workflow['preparation_reused']
-                or not workflow['resource_discovered'] or workflow['replay_native_commands'] != 0
+                or workflow['replay_native_commands'] != 0
                 or workflow['before_max_abs'] <= 1 or workflow['after_max_abs'] > 1e-6):
             raise ValueError(f'incomplete workflow: {workflow}')
+        # Resource discovery is a cross-workload interface, separate from the demo.
+        catalog_check = """
+import json,sys
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from resource_catalog import register,find
+case=Path(sys.argv[2])
+prepared=json.loads((case/'before.json').read_text())['stages'][0]
+runtime=json.loads(Path(prepared['outputs']['runtime']['path']).read_text())
+root=Path.cwd()/'resource-check'
+root.mkdir()
+declaration=root/'environment.json'
+declaration.write_bytes((case/'environment.json').read_bytes())
+resources=dict(declaration=str(declaration),runtime=prepared['outputs']['runtime']['path'],python=sys.executable)
+for index,module in enumerate(runtime['modules'].values()):
+    if module['path']:resources['module'+str(index)]=module['path']
+entry=root/'entry.json'
+entry.write_text(json.dumps(dict(id='native-torch-cpu',kind='environment',
+    properties=dict(framework='torch',device='cpu'),paths=resources,
+    evidence=str(Path(prepared['run'])/'command.json'))))
+catalog=root/'catalog.json'
+assert register(catalog,entry)['registered']
+assert not register(catalog,entry)['registered']
+found=find(catalog,'environment',dict(framework='torch',device='cpu'))
+assert len(found)==1 and Path(found[0]['paths']['runtime']['path']).is_file()
+declaration.write_text('{}')
+assert find(catalog,'environment',dict(framework='torch',device='cpu'))==[]
+"""
+        subprocess.run([sys.executable, '-I', '-B', '-c', catalog_check,
+                        str(installed / 'scripts'), workflow['case']], cwd=cwd, env=env,
+                       capture_output=True, text=True, check=True, timeout=30)
         print(f'Clean installation of {len(folders)} skills: links valid; '
               'CPU FP32/BF16 captures validated; array/manifest metrics agree for 12 gradient values; '
               'native repair workflow verified with zero-command replay.')
