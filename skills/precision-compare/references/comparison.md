@@ -86,6 +86,8 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
+Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
+
 Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take input/output paths and workload settings as parameters; derive inventories, phase boundaries and report labels from settings and computed fields. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 
 ```sh
