@@ -7,24 +7,29 @@ description: Collect and compare numerical results across hardware and software 
 
 ## Scope
 
-- Assign side IDs; compare symmetrically at matching inputs/state and logical coordinates.
-- Establish intended differences and actual configurations. Ask when missing choices change task meaning or resource limits.
+- Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
 - Reuse observations matching identities, semantics and coverage. Return retained reports for queries; audit/rerun affected scope for verification, changed conditions or freshness.
 
 ## Compare
 
-Start with supplied observations; collect missing ones. Select by input:
+Start with supplied observations; collect missing ones. Use these declarations directly:
 
-| Input | Tool |
-|---|---|
-| Named arrays | [compare_arrays](scripts/array_compare.py) |
-| Requested groups | [reduce_groups](scripts/group_metrics.py) |
-| Nested state | [compare_trees](scripts/tree_compare.py) |
-| Torch checkpoints | `python scripts/tree_compare.py A.pt B.pt --output NEW.json` |
+| Input | Python call | Result |
+|---|---|---|
+| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False)` | `exact_equal`, `coverage`, `findings` |
+| Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, `coverage`, `metadata`, `numeric` |
+| Coordinate groups | `group_metrics.reduce_groups(expected, groups, reducer, *observations)` | `global`, `groups` |
 
-Other formats: loading/leaf adapters. Reuse coverage/counts/findings; traverse for missing requested details. Check any independent task inventory.
+Python imports use `scripts/` on `sys.path` (NumPy required). File CLIs, from the skill directory:
 
-Interfaces: `python scripts/tool_help.py --list` lists tools; API names return batched contracts/signatures ([help](scripts/tool_help.py)). Inspect implementation for unresolved integration questions. Shards/runtime evidence/remote queries → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
+```sh
+python scripts/array_compare.py A.npz B.npz --output NEW.json
+python scripts/tree_compare.py A.pt B.pt --output NEW.json
+```
+
+NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both accept `--metrics`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
+
+Reuse report coverage/findings. Query [tool_help](scripts/tool_help.py) for missing details; `--list` discovers tools. Read source for unresolved integration issues/tool changes. Shards/runtime/remote operations → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
 
 ## Collect
 

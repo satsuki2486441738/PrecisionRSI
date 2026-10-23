@@ -2,7 +2,7 @@
 
 ## Tools
 
-Discover tools without reading source or importing dependencies:
+Use the entrypoint's common tool declarations directly. Query missing details without importing dependencies:
 
 ```sh
 python scripts/tool_help.py --list                  # module + purpose
@@ -35,40 +35,13 @@ Module names return all public interfaces; batch API names to share their module
 | Replay retained comparisons | [replay_bundle.py](../scripts/replay_bundle.py), CLI / Python `replay` | Indexed ZIP and `REPLAY.json` → installed comparator/validator reports and expected-value checks |
 | Plan msProbe module capture | [msprobe_capture.py](../scripts/msprobe_capture.py), Python `plan_modules` | Native module inventory, selected paths and output sizes → L0 configuration, observation selection and payload estimate; execution uses the [layerwise integration](layerwise.md#integrate-and-verify) |
 
-For already corresponding observations, use [array_compare.py](../scripts/array_compare.py):
+Adapters establish semantic correspondence, input/state and dtype identity. Equal names/shapes alone do not establish correspondence. Native mappings avoid file conversion; other formats use task-owned loaders and leaf adapters. A leaf adapter may return `{dtype: native_dtype, values: exported_array}` to retain dtype identity during conversion.
 
-```python
-from array_compare import compare_arrays
-report = compare_arrays(side_a_arrays, side_b_arrays, expected=logical_names)
-```
+Array/tree comparisons require finite, exactly equal numeric values for `exact_equal`; optional metrics use FP64 arithmetic. Findings are bounded examples; counts retain all differences. Check an independent task inventory for omissions shared by both sides. Add traversal only for requested details absent from reports.
 
-For task-defined groups of named arrays (for example, layers, steps or metrics), reuse the same reducer:
+For grouped comparisons, derive groups from task coordinates/settings and pass `compare_arrays` as reducer. Use `lambda a, b: compare_arrays(a, b, metrics=True)` for error metrics. Groups may overlap; incomplete groups have no aggregate, while complete groups remain available.
 
-```python
-from group_metrics import reduce_groups
-report = reduce_groups(logical_names, groups, compare_arrays, side_a_arrays, side_b_arrays)
-```
-
-`groups` maps labels to lists of expected names. Global and group results retain independent coverage; incomplete groups have no aggregate. To quantify differences, pass `lambda a, b: compare_arrays(a, b, metrics=True)` as the reducer. Derive group membership from task coordinates and settings.
-
-For nested state such as model/optimizer/scheduler checkpoints, use the same array arithmetic through [tree_compare.py](../scripts/tree_compare.py):
-
-```python
-from tree_compare import compare_trees
-report = compare_trees(state_a, state_b, leaf_adapter=export_native_leaf)
-```
-
-The adapter converts unsupported framework leaves to NumPy arrays or supported structures, retaining native dtype metadata when export requires conversion. Mapping order is ignored; key/sequence types, metadata and numeric differences remain visible. Select the requested subtrees before comparison. This Python API loads no files and imports no execution framework. For Torch-saved checkpoint files, `python scripts/tree_compare.py A.pt B.pt --output NEW.json` loads CPU state and returns whole-tree and top-level comparisons with input hashes; Torch is optional for this CLI.
-
-Native loaders supply maps of logical names to arrays. `expected` is the task's independent inventory; omit it to check only the observed union. Different native names/layouts can use an explicit adapter mapping. Preserve the observation's input/state, sampling boundary and dtype identity when mapping. Equal names and shapes alone do not establish correspondence.
-
-```sh
-python scripts/array_compare.py a.npz b.npz --output report.json
-```
-
-The default report contains exact equality, shape/dtype/finite-value checks, counts and bounded findings with native value representations. Error metrics also retain the two values at the maximum-error coordinate. `metrics=True` (CLI `--metrics`) adds the existing FP64 tensor metrics. Report generation is independent of file layout and evidence packaging. Exit 0 means a complete comparison; inspect `exact_equal` for its result.
-
-The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU and directly compares named gradient arrays, retaining actual settings (Torch and NumPy required).
+The [gradient example](../examples/compare_gradients.py) directly compares native CPU FP32/BF16 gradients (Torch and NumPy required).
 
 Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
 
