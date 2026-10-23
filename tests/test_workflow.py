@@ -61,6 +61,110 @@ print(kind)
     def run_task(self, refresh=()):
         return run_workflow(self.plan_path, self.workspace, refresh)
 
+    def execution_plan(self, seed):
+        (self.root/'execution-seed.json').write_text(json.dumps(seed))
+        (self.root/'native.py').write_text(
+            'import json,os,sys\nfrom pathlib import Path\n'
+            'assert os.environ["NATIVE_READY"]=="yes", "native environment not ready"\n'
+            'Path(sys.argv[1]).write_text(json.dumps({"ready":True,"path":os.environ["PATH"]}))\n')
+        self.spec['stages'] = [
+            dict(id='adapt', skill='framework-adapt', timeout=5,
+                 inputs=['execution-seed.json'], outputs={'execution':'execution.json'},
+                 argv=[sys.executable,'-c',
+                       'import shutil,sys;shutil.copyfile("execution-seed.json",sys.argv[1])',
+                       '{run}/execution.json']),
+            dict(id='preflight', skill='framework-adapt', timeout=5,
+                 depends_on=['adapt'], inputs=['native.py'],
+                 execution='{artifact:adapt:execution}',
+                 argv=['native.py','{run}/ready.json'], outputs={'ready':'ready.json'},
+                 checks=[dict(output='ready', pointer='/ready', equals=True)]),
+            dict(id='capture', skill='precision-compare', timeout=5,
+                 depends_on=['adapt','preflight'], inputs=['native.py'],
+                 execution='{artifact:adapt:execution}',
+                 argv=['native.py','{run}/capture.json'], outputs={'capture':'capture.json'})]
+        self.save()
+
+    def test_adaptation_execution_artifact_is_shared_by_preflight_and_capture(self):
+        self.execution_plan(dict(argv_prefix=[sys.executable],env={'NATIVE_READY':'yes'},
+                                 path_prepend=[str(self.root)]))
+        result=self.run_task()
+        self.assertEqual(result['status'],'completed')
+        for stage in result['stages'][1:]:
+            command=json.loads((Path(stage['run'])/'command.json').read_text())
+            self.assertEqual(command['argv'][0],sys.executable)
+            self.assertEqual(command['execution']['path'],
+                result['stages'][0]['outputs']['execution']['path'])
+        capture=json.loads(Path(result['stages'][2]['outputs']['capture']['path']).read_text())
+        self.assertTrue(capture['path'].startswith(str(self.root)+os.pathsep))
+        with patch('workflow.record_run',side_effect=AssertionError('unexpected launch')):
+            self.assertEqual(inspect_workflow(self.plan_path,self.workspace)['status'],'completed')
+            replay=self.run_task()
+        self.assertTrue(all(stage['reused'] for stage in replay['stages']))
+
+    def test_wrapped_executable_change_invalidates_cached_capture(self):
+        native=self.root/'native-executable'
+        def version(text):
+            native.write_text('#!'+sys.executable+'\nimport sys\nfrom pathlib import Path\n'
+                'Path(sys.argv[1]).write_text('+repr(text)+')\n')
+            native.chmod(0o755)
+        version('old')
+        (self.root/'execution.json').write_text(json.dumps(dict(argv_prefix=['/usr/bin/env'])))
+        self.spec['stages']=[dict(id='capture',skill='precision-compare',timeout=5,
+            execution='execution.json',argv=[str(native),'{run}/capture.txt'],
+            outputs={'capture':'capture.txt'})]
+        self.save();first=self.run_task();version('new');changed=self.run_task()
+        self.assertFalse(changed['stages'][0]['reused'])
+        self.assertEqual(Path(changed['stages'][0]['outputs']['capture']['path']).read_text(),'new')
+        self.assertEqual(Path(first['stages'][0]['outputs']['capture']['path']).read_text(),'old')
+
+    def test_failed_output_validation_includes_tails_with_native_zero_status(self):
+        (self.root/'factor.json').write_text('2')
+        result=self.run_task()
+        command=result['next_action']['execution']
+        self.assertEqual(command['status'],'completed')
+        self.assertEqual(command['returncode'],0)
+        self.assertIn('compare',command['logs']['stdout']['tail'])
+
+    def test_scheduler_allocation_change_invalidates_native_receipts(self):
+        with patch.dict(os.environ,{'NVIDIA_VISIBLE_DEVICES':'GPU-first'}):
+            first=self.run_task()
+            replay=self.run_task()
+        self.assertTrue(all(s['reused'] for s in replay['stages']))
+        with patch.dict(os.environ,{'NVIDIA_VISIBLE_DEVICES':'GPU-second'}):
+            changed=self.run_task()
+        self.assertEqual(changed['status'],'completed')
+        self.assertFalse(any(s['reused'] for s in changed['stages']))
+        self.assertEqual(changed['attempts'],first['attempts']+3)
+
+    def test_native_preflight_failure_blocks_capture_and_retains_failure(self):
+        self.execution_plan(dict(argv_prefix=[sys.executable],env={'NATIVE_READY':'no'}))
+        failed=self.run_task()
+        self.assertEqual(failed['status'],'needs_action')
+        self.assertEqual(failed['attempts'],2)
+        self.assertEqual(failed['next_action']['stage'],'preflight')
+        stderr=Path(failed['next_action']['stderr']).read_text()
+        self.assertIn('native environment not ready',stderr)
+        self.assertIn('native environment not ready',failed['next_action']['execution']['logs']['stderr']['tail'])
+        with patch('workflow.record_run',side_effect=AssertionError('retrying unchanged failure')):
+            self.assertEqual(self.run_task()['attempts'],2)
+        (self.root/'execution-seed.json').write_text(json.dumps(
+            dict(argv_prefix=[sys.executable],env={'NATIVE_READY':'yes'})))
+        fixed=self.run_task()
+        self.assertEqual(fixed['status'],'completed')
+        self.assertEqual(fixed['attempts'],5)
+        self.assertEqual(Path(failed['next_action']['stderr']).read_text(),stderr)
+
+    def test_execution_file_change_invalidates_only_consumers_and_descendants(self):
+        profile=self.root/'execution.json'
+        profile.write_text(json.dumps(dict(env={'PRECISION_SETTING':'one'})))
+        self.spec['stages'][1]['execution']='execution.json'
+        self.save();first=self.run_task()
+        profile.write_text(json.dumps(dict(env={'PRECISION_SETTING':'two'})))
+        changed=self.run_task()
+        self.assertEqual(changed['status'],'completed')
+        self.assertEqual([s['reused'] for s in changed['stages']],[True,False,False])
+        self.assertEqual(first['stages'][0]['run'],changed['stages'][0]['run'])
+
     def test_adapt_compare_repair_revalidation_and_zero_command_replay(self):
         (self.root / 'factor.json').write_text('2')
         first = self.run_task()

@@ -1,14 +1,26 @@
 #!/usr/bin/env python3
 """Record one argv execution in a fresh UTC run directory (standard library only).
 Call: python scripts/record_run.py --output-root ROOT --side SIDE --task TASK --timeout SECONDS -- ARGV...
-Input: Literal argv, existing cwd and positive timeout; Python argv may be a run-path factory.
+Input: Literal argv, existing cwd, timeout and optional reusable execution JSON.
 Output: Fresh UTC run, command.json, full logs and bounded failure tails; API returns (path, record).
 Requires: Standard library; new run path; timeout terminates the owned process group on POSIX. CLI propagates normalized child status.
 
 Details:
 CLI: record_run.py --output-root ROOT --side ID --task TASK --timeout SECONDS
-                  [--cwd DIR] [--tail-bytes 2048] -- ARGV...
-API: record_run(output_root, side, task, timeout, argv, cwd=None) -> (Path, dict).
+                  [--cwd DIR] [--execution E.json] [--tail-bytes 2048] -- ARGV...
+API: record_run(output_root, side, task, timeout, argv, cwd=None, execution=None) -> (Path, dict).
+Execution JSON: {"argv_prefix":[literal,...], "env":{"NAME":"value", "REMOVE":null},
+"path_prepend":["/environment/bin",...]}; all fields optional, values literal.
+The prefix wraps each command (e.g. an interpreter or task-owned launch adapter).
+Overrides apply to the local child; remote adapters own forwarding them to jobs.
+Paths in path_prepend are absolute. No shell activation or variable expansion.
+Use the same file for a minimal native preflight and capture; workflow can pass
+it between stages and invalidate dependents when its content changes.
+The validated execution profile is retained in run/execution.json with its hash;
+the inherited environment is not copied.
+API: summarize_run(folder, record=None, tail_bytes=2048, include_tails=False) reads
+status/log paths without launching; include_tails also covers output-check failures.
+Existing cwd selects the child directory, independently of the profile location.
 Python callers may pass argv as a callable(Path) -> literal argv to use the newly
 reserved run directory. Preparation errors retain a launch_failed run without
 starting a child. CLI argv is always literal.
@@ -40,8 +52,11 @@ leave the process group are outside this guarantee. Elsewhere only the direct
 child is terminated. Ordinary successful completion does not kill background
 work. Files and command metadata remain in place on failure.
 """
+__all__ = ['record_run', 'summarize_run']
+
 import argparse
 from datetime import datetime, timezone
+import hashlib
 import json
 import math
 import os
@@ -82,7 +97,36 @@ def _terminate(process):
     process.wait()
 
 
-def record_run(output_root, side, task, timeout, argv, cwd=None):
+def load_execution(path=None):
+    """Return a validated literal execution profile and effective child environment."""
+    profile = {} if path is None else json.loads(Path(path).read_text(encoding='utf-8'))
+    if not isinstance(profile, dict) or set(profile) - {'env', 'path_prepend', 'argv_prefix'}:
+        raise ValueError('execution fields: env, path_prepend, argv_prefix')
+    overrides = profile.get('env', {})
+    if not isinstance(overrides, dict) or any(
+            not isinstance(k, str) or not k or '=' in k or '\0' in k
+            or (v is not None and (not isinstance(v, str) or '\0' in v))
+            for k, v in overrides.items()):
+        raise ValueError('execution env must map variable names to strings or null')
+    for field in ('path_prepend', 'argv_prefix'):
+        values = profile.get(field, [])
+        if not isinstance(values, list) or any(not isinstance(v, str) or not v or '\0' in v for v in values):
+            raise ValueError('execution ' + field + ' must contain nonempty strings')
+    if any(not Path(v).is_absolute() or os.pathsep in v for v in profile.get('path_prepend', [])):
+        raise ValueError('execution path_prepend must contain absolute individual paths')
+    environment = dict(os.environ)
+    for key, value in overrides.items():
+        if value is None:
+            environment.pop(key, None)
+        else:
+            environment[key] = value
+    prepend = profile.get('path_prepend', [])
+    if prepend:
+        environment['PATH'] = os.pathsep.join(prepend + ([environment['PATH']] if environment.get('PATH') else []))
+    return profile, environment
+
+
+def record_run(output_root, side, task, timeout, argv, cwd=None, execution=None):
     """Validate, reserve a unique run, and execute literal argv; see module contract."""
     for name, value in [('side', side), ('task', task)]:
         if not isinstance(value, str) or not re.fullmatch(r'[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*', value):
@@ -100,7 +144,9 @@ def record_run(output_root, side, task, timeout, argv, cwd=None):
                 or any(not isinstance(a, str) or '\0' in a for a in value) or not value[0]):
             raise ValueError('argv must be a nonempty sequence of strings without NUL bytes')
         return list(value)
-    prepared = None if callable(argv) else validate_argv(argv)
+    profile, environment = load_execution(execution)
+    prefix = profile.get('argv_prefix', [])
+    prepared = None if callable(argv) else prefix + validate_argv(argv)
     directory = Path.cwd() if cwd is None else Path(cwd).resolve()
     if not directory.is_dir():
         raise ValueError('cwd must be an existing directory')
@@ -112,15 +158,21 @@ def record_run(output_root, side, task, timeout, argv, cwd=None):
     record = dict(start=started.isoformat(), end=None, argv=prepared, cwd=str(directory),
                   timeout=timeout, child_pid=None, returncode=None, child_returncode=None,
                   status='running', wall_seconds=None)
+    if execution is not None:
+        path = Path(execution).resolve()
+        snapshot = folder / 'execution.json'
+        snapshot.write_text(json.dumps(profile, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+        record['execution'] = dict(path=str(path), snapshot=str(snapshot),
+                                   sha256=hashlib.sha256(snapshot.read_bytes()).hexdigest())
     begin = time.monotonic()
     _write_record(folder, record)
     with (folder / 'stdout.bin').open('xb') as stdout, (folder / 'stderr.bin').open('xb') as stderr:
         try:
             if prepared is None:
-                prepared = validate_argv(argv(folder))
+                prepared = prefix + validate_argv(argv(folder))
                 record['argv'] = prepared
                 _write_record(folder, record)
-            process = subprocess.Popen(prepared, cwd=directory, stdout=stdout, stderr=stderr,
+            process = subprocess.Popen(prepared, cwd=directory, env=environment, stdout=stdout, stderr=stderr,
                                        start_new_session=os.name == 'posix')
         except Exception as exc:
             record.update(status='launch_failed', returncode=127,
@@ -144,7 +196,13 @@ def record_run(output_root, side, task, timeout, argv, cwd=None):
     return folder, record
 
 
-def _cli_summary(folder, record, tail_bytes):
+def summarize_run(folder, record=None, tail_bytes=2048, include_tails=False):
+    """Return compact status/log paths and bounded failure tails for an existing run."""
+    folder = Path(folder)
+    if type(tail_bytes) is not int or tail_bytes < 0:
+        raise ValueError("tail_bytes must be nonnegative")
+    if record is None:
+        record = json.loads((folder / "command.json").read_text(encoding="utf-8"))
     result = dict(run=str(folder), status=record['status'],
                   returncode=record['returncode'], logs={})
     if 'error' in record:
@@ -154,7 +212,7 @@ def _cli_summary(folder, record, tail_bytes):
         with path.open('rb') as stream:
             size = stream.seek(0, os.SEEK_END)
             entry = dict(path=str(path), bytes=size)
-            if record['status'] != 'completed' and tail_bytes:
+            if (record['status'] != 'completed' or include_tails) and tail_bytes:
                 stream.seek(max(0, size - tail_bytes))
                 entry.update(tail=stream.read(tail_bytes).decode('utf-8', errors='replace'),
                              truncated=size > tail_bytes)
@@ -169,6 +227,7 @@ def main(argv=None):
     parser.add_argument('--task', required=True)
     parser.add_argument('--timeout', required=True, type=float)
     parser.add_argument('--cwd')
+    parser.add_argument('--execution')
     parser.add_argument('--tail-bytes', type=int, default=2048)
     parser.add_argument('command', nargs=argparse.REMAINDER)
     args = parser.parse_args(argv)
@@ -179,10 +238,10 @@ def main(argv=None):
         parser.error('supply -- followed by the child argv')
     try:
         folder, record = record_run(args.output_root, args.side, args.task, args.timeout,
-                                    args.command[1:], args.cwd)
+                                    args.command[1:], args.cwd, args.execution)
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
-    print(json.dumps(_cli_summary(folder, record, args.tail_bytes)))
+    print(json.dumps(summarize_run(folder, record, args.tail_bytes)))
     return record['returncode']
 
 

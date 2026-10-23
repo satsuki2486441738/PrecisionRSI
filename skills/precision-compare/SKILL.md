@@ -12,7 +12,7 @@ description: Collect and compare numerical results across hardware and software 
 
 ## Compare
 
-Start with supplied observations; collect missing ones. Use these declarations directly:
+Start with supplied observations; collect missing ones. Reuse execution JSON for native preflight/capture via [shared tasks](references/comparison.md#shared-tasks). Use these declarations directly:
 
 | Input | Python call | Result |
 |---|---|---|

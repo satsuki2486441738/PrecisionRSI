@@ -43,6 +43,67 @@ class RecordRunTests(unittest.TestCase):
         self.assertNotIn('environment', result)
         self.assertRegex(folder.name, r'^cpu-test-\d{8}T\d{6}Z$')
 
+    def test_execution_reuses_activation_prefix_and_literal_environment(self):
+        envbin = self.root / 'environment' / 'bin'
+        envbin.mkdir(parents=True)
+        tool = envbin / 'native-tool'
+        tool.write_text('#!' + sys.executable + '\nimport os;print(os.environ["SETTING"])\n')
+        tool.chmod(0o755)
+        profile = self.root / 'execution.json'
+        profile.write_text(json.dumps(dict(argv_prefix=[sys.executable, '-c',
+            'import os,subprocess,sys;assert "REMOVED" not in os.environ;'
+            'raise SystemExit(subprocess.call(sys.argv[1:]))'],
+            env={'SETTING': '$(literal) $HOME', 'REMOVED': None},path_prepend=[str(envbin)])))
+        with patch.dict(os.environ, {'REMOVED': 'inherited'}):
+            for task in ('preflight', 'capture'):
+                folder, result = record_run(self.root/'runs', 'cpu', task, 5,
+                    ['native-tool'], execution=profile)
+                self.assertEqual(result['status'], 'completed', (folder/'stderr.bin').read_text())
+                self.assertEqual((folder/'stdout.bin').read_text(), '$(literal) $HOME\n')
+                self.assertEqual(result['execution']['path'], str(profile.resolve()))
+                self.assertEqual(result['argv'][-1], 'native-tool')
+                self.assertNotIn('env', result)
+
+    def test_execution_snapshot_survives_profile_changes(self):
+        import hashlib
+        profile=self.root/'execution.json'
+        profile.write_text(json.dumps(dict(env={'NATIVE_READY':'original'})))
+        folder,result=record_run(self.root/'runs','cpu','snapshot',2,
+            [sys.executable,'-c','pass'],execution=profile)
+        profile.write_text(json.dumps(dict(env={'NATIVE_READY':'changed'})))
+        snapshot=Path(result['execution']['snapshot'])
+        self.assertEqual(snapshot.parent,folder)
+        self.assertEqual(json.loads(snapshot.read_text())['env']['NATIVE_READY'],'original')
+        self.assertEqual(result['execution']['sha256'],hashlib.sha256(snapshot.read_bytes()).hexdigest())
+
+    def test_execution_cli_and_retained_status_need_no_relaunch(self):
+        from record_run import summarize_run
+        profile=self.root/'execution.json'
+        profile.write_text(json.dumps(dict(argv_prefix=[sys.executable,'-c'],env={'NATIVE':'ready'})))
+        result=subprocess.run([sys.executable,'-B',str(TOOLS/'record_run.py'),
+            '--execution',str(profile),'--output-root',str(self.root/'cli'),
+            '--side','cpu','--task','profile','--timeout','2','--',
+            'import os;print(os.environ["NATIVE"]);raise SystemExit(3)'],capture_output=True,text=True)
+        self.assertEqual(result.returncode,3,result.stderr)
+        reported=json.loads(result.stdout)
+        with patch('record_run.subprocess.Popen',side_effect=AssertionError('unexpected launch')):
+            retained=summarize_run(reported['run'])
+        self.assertEqual(reported,retained)
+        self.assertEqual(retained['logs']['stdout']['tail'],'ready\n')
+
+    def test_invalid_execution_fails_before_launch_or_run_creation(self):
+        profile = self.root/'execution.json'
+        for spec in ({'environ': {}}, {'env': {'BAD=KEY': 'x'}},
+                     {'env': {'X': 2}}, {'path_prepend': ['relative']},
+                     {'argv_prefix': ['']}, {'argv_prefix': 'shell'}):
+            profile.write_text(json.dumps(spec))
+            with self.subTest(spec=spec), patch('record_run.subprocess.Popen') as launch:
+                with self.assertRaises(ValueError):
+                    record_run(self.root/'runs', 'cpu', 'invalid', 2,
+                               [sys.executable, '-c', 'pass'], execution=profile)
+                launch.assert_not_called()
+                self.assertFalse((self.root/'runs').exists())
+
     def test_argv_factory_uses_reserved_run_directory(self):
         folder, result = record_run(self.root / 'runs', 'cpu', 'factory', 5,
             lambda run: [sys.executable, '-c', 'import sys;open(sys.argv[1],"w").write("native")',

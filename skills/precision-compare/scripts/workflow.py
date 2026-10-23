@@ -16,12 +16,17 @@ optional '.'), workload:optional object (model/task/target setups), budget_secon
 stages=[{id, skill:framework-adapt|precision-compare|precision-repair,
 argv:[literal,...], inputs:[file_or_directory,...], outputs:{name:relative_path},
 depends_on:[stage_id,...], timeout:seconds, side:optional 'compare',
-cache:optional true, env_keys:optional [inherited_env_name,...],
+cache:optional true, execution:optional execution_JSON_path, env_keys:optional [inherited_env_name,...],
 checks:optional [{output:name,pointer:'/JSON/pointer',equals:JSON_value}],
 on_check_failure:optional skill}]. Inputs cover source, model/data and runtime
 identity manifests relevant to reuse; remote adapters supply local identity and
 result receipts. Hashing follows declared dependencies, not undeclared changes
 inside remote hosts or installed packages. Select only relevant files/directories.
+
+execution selects record_run's reusable argv_prefix/env/path_prepend profile,
+relative to root or {artifact:STAGE:NAME} from a direct dependency. Run the same
+profile through a task-owned minimal preflight stage before capture. Profile
+content participates in reuse identity; status resolves it without launching.
 
 argv substitutes {run} (fresh stage directory), {root}, and
 {artifact:STAGE:NAME} (a declared dependency output), without shell evaluation.
@@ -57,14 +62,15 @@ import shutil
 import sys
 
 from conditions import canonical, load_json
-from record_run import record_run
+from record_run import load_execution, record_run, summarize_run
 
 SKILLS = {'framework-adapt', 'precision-compare', 'precision-repair'}
 ID = re.compile(r'[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\Z')
 TOKEN = re.compile(r'\{artifact:([^:{}]+):([^:{}]+)\}')
 ENGINE_FILES = tuple(Path(__file__).with_name(name) for name in ('workflow.py', 'record_run.py', 'conditions.py'))
 ENV_KEYS = ('PATH', 'PYTHONPATH', 'PYTHONHOME', 'LD_LIBRARY_PATH', 'DYLD_LIBRARY_PATH',
-            'CUDA_VISIBLE_DEVICES', 'ASCEND_RT_VISIBLE_DEVICES', 'ASCEND_VISIBLE_DEVICES',
+            'CUDA_VISIBLE_DEVICES', 'CUDA_DEVICE_ORDER', 'NVIDIA_VISIBLE_DEVICES',
+            'ASCEND_RT_VISIBLE_DEVICES', 'ASCEND_VISIBLE_DEVICES',
             'ASCEND_HOME_PATH', 'OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS')
 
 
@@ -128,6 +134,8 @@ def _plan(path):
         argv = stage.get('argv')
         _require(isinstance(argv, list) and argv and all(isinstance(x, str) and '\0' not in x for x in argv) and argv[0], 'literal argv required')
         _require(_positive(stage.get('timeout')), 'positive stage timeout required')
+        _require('execution' not in stage or isinstance(stage['execution'], str) and stage['execution'],
+                 'execution must name a profile file')
         for field in ('inputs', 'depends_on', 'env_keys'):
             stage.setdefault(field, [])
             _require(isinstance(stage[field], list) and all(isinstance(x, str) and x for x in stage[field])
@@ -152,7 +160,7 @@ def _plan(path):
         by_id[name] = stage
     for name, stage in by_id.items():
         _require(all(dep in by_id and dep != name for dep in stage['depends_on']), 'unknown/self dependency')
-        for arg in stage['argv']:
+        for arg in stage['argv'] + ([stage['execution']] if 'execution' in stage else []):
             for dep, output in TOKEN.findall(arg):
                 _require(dep in stage['depends_on'] and output in by_id[dep]['outputs'], 'artifact must name a direct dependency output')
     ordered, visiting, visited = [], set(), set()
@@ -214,13 +222,25 @@ def _signature(stage, root, completed, workload):
             _require(actual == value['identity'], 'dependency output changed: ' + name + ':' + key)
             outputs[key] = actual
         deps[name] = dict(key=completed[name]['key'], outputs=outputs)
-    candidate = root / stage['argv'][0]
-    executable = (str(candidate.resolve()) if candidate.is_file() else None) if '/' in stage['argv'][0] else shutil.which(stage['argv'][0])
+    execution = _execution(stage, root, completed)
+    profile, child_env = load_execution(execution)
+    programs = dict(command=stage['argv'][0])
+    if profile.get('argv_prefix'):
+        programs['launcher'] = profile['argv_prefix'][0]
+    executables = {}
+    for name, program in programs.items():
+        program = TOKEN.sub(lambda m: completed[m[1]]['outputs'][m[2]]['path'], program).replace('{root}', str(root))
+        candidate = root / program
+        resolved = (str(candidate) if candidate.is_file() else None) if '/' in program else shutil.which(program, path=child_env.get('PATH', os.defpath))
+        selected = {p.resolve() for p in (candidate, Path(resolved) if resolved else candidate) if p.is_file()}
+        executables[name] = {str(p): fingerprint(p) for p in sorted(selected)}
+    if execution is not None:
+        inputs['execution:' + str(execution)] = fingerprint(execution)
     keys = sorted(set(ENV_KEYS) | set(stage['env_keys']))
-    environment = _digest({k: os.environ.get(k) for k in keys})
+    environment = _digest({k: child_env.get(k) for k in keys})
     return dict(stage=stage, root=str(root), workload=workload, inputs=inputs, dependencies=deps,
                 execution_tools={p.name: fingerprint(p) for p in ENGINE_FILES},
-                executable=fingerprint(executable) if executable else None, environment=environment)
+                executables=executables, environment=environment)
 
 
 def _valid(receipt):
@@ -264,6 +284,14 @@ def _recover(workspace, state):
                          'previous native child may still be running: ' + str(command))
                 receipt.update(run=str(folder), wall_seconds=metadata.get('wall_seconds') or receipt['timeout'])
         receipt.update(status='interrupted', reason='previous runner ended before recording verified outputs')
+
+
+def _execution(stage, root, completed):
+    value = stage.get('execution')
+    if value is None:
+        return None
+    value = TOKEN.sub(lambda m: completed[m[1]]['outputs'][m[2]]['path'], value)
+    return (root / value).resolve()
 
 
 def _argv(stage, root, run, completed):
@@ -318,6 +346,9 @@ def _action(stage, reason, receipt=None):
     if receipt and receipt.get('run'):
         result.update(run=receipt['run'], stdout=str(Path(receipt['run']) / 'stdout.bin'),
                       stderr=str(Path(receipt['run']) / 'stderr.bin'), outputs=receipt.get('outputs', {}))
+        command = Path(receipt['run']) / 'command.json'
+        if command.exists():
+            result['execution'] = summarize_run(receipt['run'], include_tails=True)
     return result
 
 
@@ -355,7 +386,8 @@ def _walk(spec, root, stages, workspace, state, execute, refresh):
         state['history'].append(receipt)
         _save(workspace, state)
         folder, command = record_run(workspace / 'runs', stage['side'], task, timeout,
-                                     lambda run: _argv(stage, root, run, completed), root)
+                                     lambda run: _argv(stage, root, run, completed), root,
+                                     execution=_execution(stage, root, completed))
         receipt.update(run=str(folder), status=command['status'], wall_seconds=command['wall_seconds'],
                        returncode=command['returncode'])
         if command['status'] == 'completed':

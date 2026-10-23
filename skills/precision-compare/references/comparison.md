@@ -28,7 +28,7 @@ Module names return short declarations; API names add current signatures. Script
 | Capture inference | [inference_capture](../scripts/inference_capture.py): `FixedHistory`, `derive_logprobs`, `export_records` | Fixed tokens + native logits → validated histories/scores |
 | Plan internal capture | [msprobe_capture](../scripts/msprobe_capture.py): `plan_modules` | Modules + sizes → bounded L0 plan ([integration](layerwise.md#integrate-and-verify)) |
 | Probe runtime | [runtime_probe](../scripts/runtime_probe.py): `probe_runtime`, `runtime_identity` | Imports, checks, selected sources → runtime evidence/identity |
-| Record execution | [record_run](../scripts/record_run.py) | Literal argv + timeout → run receipt, logs, failure summary |
+| Record execution | [record_run](../scripts/record_run.py): `record_run`, `summarize_run` | Argv + optional execution JSON → native receipt, logs, bounded failure summary |
 | Find prepared resources | [resource_catalog](../scripts/resource_catalog.py): `register`, `find` | Resource identities + successful receipt → verified lookup |
 | Resume workflow | [workflow](../scripts/workflow.py): `run`, `status` | Dependency plan + workspace → reuse/execution/continuation |
 | Package evidence | [evidence_bundle](../scripts/evidence_bundle.py): `pack`, `verify`, `extract` | Selected files / ZIP → indexed portable evidence |
@@ -61,17 +61,23 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
-Start from available environment and launcher declarations; check current allocation and changed runtime conditions together with `runtime_probe`. Keep provider-specific submission and device binding in the environment adapter.
+Reuse one execution JSON across native preflight and capture:
+
+```json
+{"argv_prefix":["/env/bin/python"],"path_prepend":["/env/bin"],"env":{"HF_HUB_OFFLINE":"1"}}
+```
+
+Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Verify the smallest native call using the actual capture configuration before full collection.
 
 Run a native command through `record_run` to retain complete logs and receive a compact result with failure diagnostics:
 
 ```sh
-python scripts/record_run.py --output-root runs --side SIDE --task capture --timeout 300 -- PYTHON COLLECTOR ARGS
+python scripts/record_run.py --execution environment.json --output-root runs --side SIDE --task capture --timeout 300 -- COLLECTOR ARGS
 ```
 
 Its CLI returns log paths and byte counts; failures include the final 2048 bytes per stream (`--tail-bytes` adjusts this). For scheduled work, the adapter waits for the job's terminal result within its budget and propagates its exit status; a successful submission alone does not establish workload completion. Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
 
-Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take input/output paths and workload settings as parameters; derive inventories, phase boundaries and report labels from settings and computed fields. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
+Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take input/output paths and workload settings as parameters; derive inventories, phase boundaries and report labels from settings and computed fields. A stage selects `execution: "environment.json"` or `execution: "{artifact:adapt:execution}"` from a direct dependency. Profile changes invalidate consumers and descendants; failed continuations include bounded native log tails. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 
 ```sh
 python scripts/workflow.py run --plan task.json --workspace work
