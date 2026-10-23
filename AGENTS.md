@@ -2,7 +2,7 @@
 
 ## Layout
 
-- Precision-Skills currently contains three installable packages: `framework-adapt`, `precision-compare` and `precision-repair`. Compare owns shared artifact and task-execution tools. The three components reuse workload state, verified resources, inputs/state and metrics across adaptation, comparison and repair.
+- Precision-Skills currently contains three installable packages: `framework-adapt`, `precision-compare` and `precision-repair`. Compare owns shared artifact and task-execution tools. The three components reuse workload state, verified resources, inputs/state and metrics across adaptation, comparison and repair. `skills/operator-optimize/` is a reserved placeholder with no implementation.
 
 - `skills/framework-adapt/` owns native framework deployment and model/backend adaptation. Keep the entrypoint concise; retain environment declarations and framework-specific implementations with their projects and cases. Reuse comparison tools when numerical validation is needed.
 - `skills/precision-repair/` is the installable repair skill. Its entrypoint owns correctness evidence, causal diagnosis, patching and original-workload verification. Reuse comparison tools from `skills/precision-compare/`; keep framework-specific fixes and experiments with their cases.

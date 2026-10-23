@@ -99,7 +99,7 @@ class RepositoryValidationTests(unittest.TestCase):
         smoke.install_skills(source, installed / 'skills')
         folders = validator.validate_skills(installed)
         self.assertEqual([p.name for p in folders],
-                         ['framework-adapt', 'precision-compare', 'precision-repair'])
+                         ['framework-adapt', 'operator-optimize', 'precision-compare', 'precision-repair'])
         docs = sorted((installed / 'skills').rglob('*.md'))
         _, errors = validator.validate_links(installed, docs)
         self.assertEqual(errors, [])

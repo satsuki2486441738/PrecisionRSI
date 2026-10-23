@@ -13,8 +13,9 @@ Choose the skill for the requested task and copy its directory into your client'
 | [Framework Adapt](skills/framework-adapt/SKILL.md) | Deploy or adapt a framework for the target model, hardware and workload; deliver reproducible execution and validation evidence |
 | [Precision Compare](skills/precision-compare/SKILL.md) | Collect and compare numerical results; return metrics, coverage and evidence |
 | [Precision Repair](skills/precision-repair/SKILL.md) | Establish the cause of a numerical defect, patch the implementation and verify the original workload |
+| [Operator Optimize](skills/operator-optimize/SKILL.md) | Placeholder; not implemented |
 
-For end-to-end workloads, install all three packages side by side. Individual tasks can use the selected component; adaptation and repair reuse tools from `precision-compare`. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
+For end-to-end workloads, install the three implemented packages side by side. Individual tasks can use the selected component; adaptation and repair reuse tools from `precision-compare`. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
 
 For an end-to-end task, provide the model workload, target execution stacks and resource scope. The agent establishes missing native execution, compares the requested observations and repairs confirmed problems when requested. The three skills share a [workflow and resource catalog](skills/precision-compare/references/comparison.md#shared-tasks): valid preparation and captures are reused, failures identify the next component, and code changes rerun affected verification. Each component also works independently.
 

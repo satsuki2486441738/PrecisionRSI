@@ -13,8 +13,9 @@
 | [Framework Adapt](skills/framework-adapt/SKILL.md) | 为目标模型、硬件和任务部署或适配框架，交付可复现的执行入口与验证证据 |
 | [Precision Compare](skills/precision-compare/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
 | [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
+| [Operator Optimize](skills/operator-optimize/SKILL.md) | 占位，尚未实现 |
 
-端到端任务将三个包并排安装。单项任务可选用对应组件；适配和修复复用 `precision-compare` 的工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
+端到端任务将三个已实现的包并排安装。单项任务可选用对应组件；适配和修复复用 `precision-compare` 的工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
 
 对于端到端任务，提供模型工作负载、目标执行栈和资源范围。agent 补齐原生执行能力，比较指定的数值结果，并在任务包含修复时处理确认的问题。三个 skill 共用[任务执行与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)：复用有效的环境准备和采集，失败时定位下一组件，代码变化后重跑受影响的验证。各组件也可独立使用。
 
