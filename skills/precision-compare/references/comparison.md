@@ -31,7 +31,7 @@ Module names return short declarations; API names add current signatures. Script
 | Record execution | [record_run](../scripts/record_run.py): `record_run`, `summarize_run` | Argv + optional execution JSON → native receipt, logs, bounded failure summary |
 | Find prepared resources | [resource_catalog](../scripts/resource_catalog.py): `register`, `find` | Resource identities + successful receipt → verified lookup |
 | Resume workflow | [workflow](../scripts/workflow.py): `run`, `status` | Dependency plan + workspace → reuse/execution/continuation |
-| Package evidence | [evidence_bundle](../scripts/evidence_bundle.py): `pack`, `verify`, `extract` | Selected files / ZIP → indexed portable evidence |
+| Collect / package evidence | [evidence_bundle](../scripts/evidence_bundle.py): `fetch`, `pack`, `verify`, `extract` | Selected remote files → verified local files; optional portable ZIP |
 | Replay evidence | [replay_bundle](../scripts/replay_bundle.py) | Bundle + replay specification → reproduced reports/checks |
 
 Tensor comparison defaults to `mode=metrics`; `mode=nonfinite` selects category counts and paired-finite metrics. `--chunk-size` controls streaming reads; `--max-locations` caps nonfinite coordinate examples.
@@ -76,6 +76,16 @@ python scripts/record_run.py --execution environment.json --output-root runs --s
 ```
 
 Its CLI returns log paths and byte counts; failures include the final 2048 bytes per stream (`--tail-bytes` adjusts this). For scheduled work, the adapter waits for the job's terminal result within its budget and propagates its exit status; a successful submission alone does not establish workload completion. Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
+
+Fetch selected terminal artifacts in one transport per side, retaining their relative paths and hashes. `fetch` uses a temporary transfer archive; its output is the verified files and index. Large arrays remain at source. It fails on size limits rather than silently omitting selected files.
+
+```json
+{"transport":["ssh","HOST","bash -lc 'python3 -I -'"],"source_dir":"/work/native-run","include":["*.json","*/command.json","*/stderr.bin"]}
+```
+
+```sh
+python scripts/evidence_bundle.py fetch fetch.json NEW_SIDE_DIRECTORY
+```
 
 Continue the existing workload workspace across components. Reuse verified evidence unless inputs, runtime identity, scope or requested freshness change. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Adapters take input/output paths and workload settings as parameters; derive inventories, phase boundaries and report labels from settings and computed fields. A stage selects `execution: "environment.json"` or `execution: "{artifact:adapt:execution}"` from a direct dependency. Profile changes invalidate consumers and descendants; failed continuations include bounded native log tails. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 

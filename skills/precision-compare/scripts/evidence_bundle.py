@@ -1,12 +1,35 @@
 #!/usr/bin/env python3
-"""Pack, verify and safely extract indexed evidence ZIPs with the standard library.
-Call: pack(source_dir, bundle_path); verify(bundle_path); extract(bundle_path, output)
-Input: Selected files or an indexed evidence ZIP; optional literal text replacements.
-Output: Portable bundle or verified/extracted receipts with hashes and sizes.
-Requires: Standard library; new destinations, portable relative paths; default expanded-byte cap 16 GiB.
+"""Fetch selected remote artifacts, or pack/verify portable evidence (standard library).
+Call: fetch(transport, source_dir, include, output); pack(source_dir, bundle_path); verify(bundle_path); extract(bundle_path, output)
+Input: Python-stdin transport + selected relative globs, or local files/indexed ZIP.
+Output: Verified files and compact receipts; fetch uses one connection and keeps no ZIP.
+Requires: Standard library; new destinations; fetch defaults 10 MiB/file and 50 MiB total.
 
 Details:
-API: pack(source_dir, bundle_path, replacements=None, *, max_expanded_bytes=...),
+fetch(transport, source_dir, include, output, *, timeout=60,
+max_file_bytes=10*1024**2, max_expanded_bytes=50*1024**2,
+max_transfer_bytes=50*1024**2) -> receipt. transport is literal argv for a
+noninteractive Python process reading stdin, e.g. ["ssh","HOST","python3 -I -"].
+source_dir is a native path on that endpoint; include is a nonempty list of
+relative file globs, e.g. ["*.json", "*/command.json", "*/stderr.bin"].
+Selection must find regular files; oversized selections fail rather than omit
+files. Per-file, expanded and transfer caps are checked before remote transfer.
+Files arrive through a temporary indexed ZIP, verified before output creation.
+The ZIP is removed; output/EXPORT.json retains member hashes and sizes.
+Receipt fields: action=fetch, output, index, file_count, payload_bytes,
+transfer_bytes, archive_sha256, entries_without_indexed_sizes and size_source.
+Receive-side stdout is bounded while streaming; stderr retains its last 2048
+bytes. Errors: OSError/ValueError/BadZipFile, RuntimeError for transport failure,
+subprocess.TimeoutExpired for deadline expiry; failed fetches create no output. Source
+files and large arrays stay in place. Timeout terminates the owned transport;
+fetch does not launch/wait for model jobs. Collect terminal captures; adapters
+own scheduling, required-file coverage and source liveness.
+CLI: evidence_bundle.py fetch REQUEST.json NEW_DIRECTORY; REQUEST fields match
+fetch arguments except output. Complete transport argv is supplied by the caller;
+for remote shells, quote the Python command (e.g. bash -lc 'python3 -I -').
+
+API: pack(source_dir, bundle_path, replacements=None, *, include=None,
+max_file_bytes=None, max_expanded_bytes=...),
 verify(bundle_path, index='EXPORT.json', *, max_expanded_bytes=...), and
 extract(bundle_path, output, index='EXPORT.json', *, max_expanded_bytes=...).
 All return JSON-serializable receipts. Outputs must be new paths; extraction
@@ -35,7 +58,7 @@ receipts disclose their count. Provided hashes/sizes are always validated.
 
 Only regular-file members with unique portable relative POSIX paths are allowed;
 directories, symlinks, traversal and case/Unicode-normalization collisions fail.
-The default expanded-byte cap is 16 GiB, including the index; change it through
+For pack/verify/extract the default expanded-byte cap is 16 GiB, including the index; change it through
 max_expanded_bytes or --max-expanded-bytes. Index JSON is additionally limited
 to 16 MiB. Caps apply both to ZIP metadata and streamed reads. CLI subcommands:
 pack SOURCE NEW.zip [--replacements PAIRS.json], verify BUNDLE [--index FILES.json],
@@ -52,8 +75,10 @@ from pathlib import Path
 import re
 import shutil
 import stat
+import subprocess
 import sys
 import tempfile
+import threading
 import unicodedata
 import zipfile
 
@@ -426,30 +451,68 @@ def _source_files(source):
     return sorted(files)
 
 
-def pack(source_dir, bundle_path, replacements=None, *, max_expanded_bytes=DEFAULT_MAX_EXPANDED_BYTES):
+def _selected_files(source, include, max_file_bytes):
+    if include is None:
+        files = _source_files(source)
+    else:
+        if (not isinstance(include, list) or not include or any(
+                not isinstance(p, str) or not p or '\\' in p or '\0' in p
+                or p.startswith('/') or '..' in p.split('/') for p in include)):
+            raise ValueError('include must contain relative file globs')
+        if source.is_symlink() or not source.is_dir():
+            raise ValueError('source must be a regular directory')
+        selected = {}
+        for pattern in include:
+            for path in source.glob(pattern):
+                if path.is_dir() and not path.is_symlink():
+                    continue
+                for current in (path, *path.parents):
+                    info = current.lstat()
+                    if (stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0)
+                            & getattr(stat, 'FILE_ATTRIBUTE_REPARSE_POINT', 0)):
+                        raise ValueError('selected source links/reparse points are not supported')
+                    if current == source:
+                        break
+                if not stat.S_ISREG(path.lstat().st_mode):
+                    raise ValueError('selected source must contain regular files')
+                selected[path.relative_to(source).as_posix()] = path
+        if not selected:
+            raise ValueError('include selected no files')
+        files = sorted(selected.items())
+        _validate_names([name for name, _ in files] + ['EXPORT.json'])
+    if max_file_bytes is not None:
+        _cap(max_file_bytes)
+        if any(path.stat().st_size > max_file_bytes for _, path in files):
+            raise ValueError('selected file exceeds max_file_bytes')
+    return files
+
+
+def pack(source_dir, bundle_path, replacements=None, *, include=None, max_file_bytes=None,
+         max_expanded_bytes=DEFAULT_MAX_EXPANDED_BYTES):
     """Create a new ZIP and provenance index, applying only explicit text literals."""
     cap = _cap(max_expanded_bytes)
     pairs = _replacement_pairs(replacements)
     source, bundle = _filesystem_path(source_dir), _filesystem_path(bundle_path)
     if bundle.resolve().is_relative_to(source.resolve()):
         raise ValueError('bundle must be outside its source directory')
-    files = _source_files(source)
+    files = _selected_files(source, include, max_file_bytes)
     entries, records = [], {}
     expanded = 0
     with bundle.open('xb') as stream:
         try:
             with zipfile.ZipFile(stream, 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as archive:
                 for name, path in files:
-                    transformed = _transformed(path, pairs, cap - expanded) if pairs and path.suffix.casefold() not in _BINARY_SUFFIXES else None
+                    limit = min(cap - expanded, max_file_bytes) if max_file_bytes is not None else cap - expanded
+                    transformed = _transformed(path, pairs, limit) if pairs and path.suffix.casefold() not in _BINARY_SUFFIXES else None
                     if transformed is None:
                         with path.open('rb') as original, archive.open(name, 'w', force_zip64=True) as destination:
-                            digest, size = _stream(original, destination, limit=cap - expanded)
+                            digest, size = _stream(original, destination, limit=limit)
                         original_hash, original_size, count = digest, size, 0
                     else:
                         exported, original_hash, original_size, digest, size, count = transformed
                         try:
                             with archive.open(name, 'w', force_zip64=True) as destination:
-                                copied_hash, copied_size = _stream(exported, destination, limit=cap - expanded)
+                                copied_hash, copied_size = _stream(exported, destination, limit=limit)
                             if (copied_hash, copied_size) != (digest, size):
                                 raise ValueError('export spool changed')
                         finally:
@@ -472,6 +535,110 @@ def pack(source_dir, bundle_path, replacements=None, *, max_expanded_bytes=DEFAU
         return _receipt('pack', bundle, 'EXPORT.json', records, _archive_digest(stream))
 
 
+def _receive(transport, program, bundle, timeout, cap):
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from record_run import _terminate
+    errors, tail = [], bytearray()
+    with bundle.open('wb') as destination:
+        process = subprocess.Popen(list(transport), stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=os.name == 'posix')
+
+        def write_input():
+            try:
+                with process.stdin as stream:
+                    stream.write(program.encode('utf-8'))
+            except BrokenPipeError:
+                pass
+
+        def receive(stream, output=None):
+            size = 0
+            try:
+                with stream:
+                    while True:
+                        data = os.read(stream.fileno(), min(CHUNK_BYTES, cap + 1) if output else 65536)
+                        if not data:
+                            break
+                        if output is None:
+                            tail.extend(data)
+                            del tail[:-2048]
+                        else:
+                            size += len(data)
+                            if size > cap:
+                                raise ValueError('transfer-byte cap exceeded')
+                            output.write(data)
+            except Exception as exc:
+                errors.append(exc)
+                _terminate(process)
+
+        threads = [threading.Thread(target=write_input, daemon=True),
+                   threading.Thread(target=receive, args=(process.stdout, destination), daemon=True),
+                   threading.Thread(target=receive, args=(process.stderr,), daemon=True)]
+        for thread in threads:
+            thread.start()
+        try:
+            process.wait(timeout=timeout)
+        except BaseException:
+            _terminate(process)
+            raise
+        finally:
+            for thread in threads:
+                thread.join(timeout=.5)
+            if any(thread.is_alive() for thread in threads):
+                _terminate(process)
+                for thread in threads:
+                    thread.join(timeout=.5)
+        if errors:
+            raise errors[0]
+        if any(thread.is_alive() for thread in threads):
+            raise RuntimeError('transport streams did not close')
+        if process.returncode:
+            raise RuntimeError('transport exited ' + str(process.returncode) + ': '
+                               + tail.decode('utf-8', errors='replace'))
+
+
+def fetch(transport, source_dir, include, output, *, timeout=60,
+          max_file_bytes=10 * 1024**2, max_expanded_bytes=50 * 1024**2,
+          max_transfer_bytes=50 * 1024**2):
+    """Collect selected files in one Python-stdin transport, verifying before extraction."""
+    if (not isinstance(transport, (list, tuple)) or not transport or not transport[0]
+            or any(not isinstance(a, str) or '\0' in a for a in transport)):
+        raise ValueError('transport must be literal nonempty argv')
+    if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError('timeout must be finite and positive')
+    for cap in (max_file_bytes, max_expanded_bytes, max_transfer_bytes):
+        _cap(cap)
+    if not isinstance(source_dir, str) or not source_dir or '\0' in source_dir:
+        raise ValueError('source_dir must be a native path string')
+    if not isinstance(include, list) or not include:
+        raise ValueError('include must contain relative file globs')
+    destination = _filesystem_path(output)
+    if os.path.lexists(destination):
+        raise FileExistsError('fetch output already exists: ' + str(_readable_path(output)))
+    spec = dict(source_dir=source_dir, include=include, max_file_bytes=max_file_bytes,
+                max_expanded_bytes=max_expanded_bytes, max_transfer_bytes=max_transfer_bytes)
+    program = '__name__ = "_precision_transfer"\n' + Path(__file__).read_text(encoding='utf-8')
+    program += '\n_spec = ' + repr(spec) + """
+with tempfile.TemporaryDirectory(prefix='precision-fetch-') as _tmp:
+    _bundle = Path(_tmp) / 'transfer.zip'
+    pack(_spec['source_dir'], _bundle, include=_spec['include'],
+         max_file_bytes=_spec['max_file_bytes'], max_expanded_bytes=_spec['max_expanded_bytes'])
+    if _bundle.stat().st_size > _spec['max_transfer_bytes']:
+        raise ValueError('transfer-byte cap exceeded')
+    with _bundle.open('rb') as _source:
+        shutil.copyfileobj(_source, sys.stdout.buffer)
+"""
+    with tempfile.TemporaryDirectory(prefix='precision-fetch-') as tmp:
+        bundle = Path(tmp) / 'transfer.zip'
+        _receive(transport, program, bundle, timeout, max_transfer_bytes)
+        transferred = bundle.stat().st_size
+        if transferred > max_transfer_bytes:
+            raise ValueError('transfer-byte cap exceeded')
+        receipt = extract(bundle, output, max_expanded_bytes=max_expanded_bytes)
+        receipt.pop('bundle')
+        receipt.update(action='fetch', transfer_bytes=transferred)
+        return receipt
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest='action', required=True)
@@ -486,8 +653,16 @@ def main(argv=None):
         if action != 'pack':
             command.add_argument('--index', default='EXPORT.json')
         command.add_argument('--max-expanded-bytes', type=int, default=DEFAULT_MAX_EXPANDED_BYTES)
+    command = commands.add_parser('fetch')
+    command.add_argument('request', type=Path)
+    command.add_argument('output', type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.action == 'fetch':
+            request = _parse_json(_filesystem_path(args.request).read_bytes())
+            receipt = fetch(output=args.output, **request)
+            print(json.dumps(receipt, indent=2, allow_nan=False))
+            return 0
         options = dict(max_expanded_bytes=args.max_expanded_bytes)
         if args.action == 'pack':
             replacements = _parse_json(_filesystem_path(args.replacements).read_bytes()) if args.replacements else None
@@ -498,7 +673,7 @@ def main(argv=None):
             receipt = extract(args.bundle, args.output, args.index, **options)
         print(json.dumps(receipt, indent=2, allow_nan=False))
         return 0
-    except (OSError, ValueError, RuntimeError, zipfile.BadZipFile, NotImplementedError) as exc:
+    except (OSError, ValueError, RuntimeError, TypeError, subprocess.TimeoutExpired, zipfile.BadZipFile, NotImplementedError) as exc:
         print(type(exc).__name__ + ': ' + str(exc), file=sys.stderr)
         return 1
 

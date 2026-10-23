@@ -19,8 +19,9 @@ Start with supplied observations; collect missing ones. Reuse execution JSON for
 | Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False)` | `exact_equal`, `coverage`, `findings` |
 | Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, `coverage`, `metadata`, `numeric` |
 | Coordinate groups | `group_metrics.reduce_groups(expected, groups, reducer, *observations)` | `global`, `groups` |
+| Remote artifacts | `evidence_bundle.fetch(transport, source_dir, include, output)` | Verified local files, hashes, byte counts |
 
-Python imports use `scripts/` on `sys.path` (NumPy required). File CLIs, from the skill directory:
+Python imports use `scripts/` on `sys.path`; array/tree comparisons require NumPy. File CLIs, from the skill directory:
 
 ```sh
 python scripts/array_compare.py A.npz B.npz --output NEW.json
@@ -33,7 +34,7 @@ Reuse report coverage/findings. Query [tool_help](scripts/tool_help.py) for miss
 
 ## Collect
 
-Use native capture; load the relevant recipe.
+Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Load the relevant recipe.
 
 - [Inference](references/inference.md): scores, distributions, cache stages.
 - [SFT, full / LoRA](references/sft.md): objectives, gradients, stored updates.
