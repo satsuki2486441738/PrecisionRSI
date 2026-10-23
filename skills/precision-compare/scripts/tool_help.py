@@ -2,7 +2,8 @@
 """Show tool interfaces without importing frameworks or executing tool modules.
 
 CLI: python scripts/tool_help.py TOOL [TOOL ...]
-Use installed tool names such as array_compare, group_metrics or tree_compare.
+Accept module names (tree_compare) or unique public API names (compare_trees).
+Module names take precedence; ambiguous API names list their owning modules.
 The output contains module/API docstrings and public function/class signatures
 read from the current source. Implementations and private helpers are omitted.
 """
@@ -40,14 +41,30 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('tools', nargs='+', metavar='TOOL')
     args = parser.parse_args(argv)
-    paths = []
+    paths, exports = [], None
     for raw in args.tools:
         name = raw.removesuffix('.py')
         if not name.isidentifier() or name.startswith('_'):
             parser.error('expected an installed tool name: ' + raw)
         path = Path(__file__).with_name(name + '.py')
         if not path.is_file():
-            parser.error('unknown tool: ' + raw)
+            if exports is None:
+                exports = {}
+                try:
+                    for module in sorted(Path(__file__).parent.glob('*.py')):
+                        tree = ast.parse(module.read_text(encoding='utf-8'), filename=str(module))
+                        for node in tree.body:
+                            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                                if not node.name.startswith('_') and node.name != 'main':
+                                    exports.setdefault(node.name, set()).add(module)
+                except (OSError, SyntaxError) as exc:
+                    parser.error(str(exc))
+            matches = sorted(exports.get(name, ()))
+            if not matches:
+                parser.error('unknown tool: ' + raw)
+            if len(matches) != 1:
+                parser.error('ambiguous API ' + name + '; use module: ' + ', '.join(p.stem for p in matches))
+            path = matches[0]
         if path not in paths:
             paths.append(path)
     try:

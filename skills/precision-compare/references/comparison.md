@@ -31,7 +31,7 @@ from tree_compare import compare_trees
 report = compare_trees(state_a, state_b, leaf_adapter=export_native_leaf)
 ```
 
-The adapter converts unsupported framework leaves to NumPy arrays or supported structures, retaining native dtype metadata when export requires conversion. Mapping order is ignored; key/sequence types, metadata and numeric differences remain visible. Select the requested subtrees before comparison. The tool loads no files and imports no execution framework.
+The adapter converts unsupported framework leaves to NumPy arrays or supported structures, retaining native dtype metadata when export requires conversion. Mapping order is ignored; key/sequence types, metadata and numeric differences remain visible. Select the requested subtrees before comparison. This Python API loads no files and imports no execution framework. For Torch-saved checkpoint files, `python scripts/tree_compare.py A.pt B.pt --output NEW.json` loads CPU state and returns whole-tree and top-level comparisons with input hashes; Torch is optional for this CLI.
 
 Native loaders supply maps of logical names to arrays. `expected` is the task's independent inventory; omit it to check only the observed union. Different native names/layouts can use an explicit adapter mapping. Preserve the observation's input/state, sampling boundary and dtype identity when mapping. Equal names and shapes alone do not establish correspondence.
 
@@ -50,7 +50,7 @@ Select tools by operation and supported input semantics. The tool library lives 
 | Operation | Tool entrypoint | Inputs and outputs |
 |---|---|---|
 | Inspect tool interfaces | [tool_help.py](../scripts/tool_help.py), CLI | Selected tool names → current module/API docstrings and signatures without imports |
-| Compare nested state | [tree_compare.py](../scripts/tree_compare.py), Python `compare_trees` | Native state trees and optional leaf adapter → typed structure/metadata, numeric comparison and coverage |
+| Compare nested state | [tree_compare.py](../scripts/tree_compare.py), CLI / Python `compare_trees`, `compare_checkpoints` | State trees with leaf adapter, or Torch checkpoint files → structure, metadata, numeric comparison and coverage |
 | Compare corresponding arrays | [array_compare.py](../scripts/array_compare.py), CLI / Python `compare_arrays` | Named arrays or NPZ pair, optional expected names → exact equality, coverage, bounded findings; optional error metrics |
 | Continue a multi-stage task | [workflow.py](../scripts/workflow.py), CLI / Python `run_workflow`, `inspect_workflow` | Workload plan and workspace → verified stage reuse, bounded execution, dependency invalidation and next skill action |
 | Find reusable prepared resources | [resource_catalog.py](../scripts/resource_catalog.py), CLI / Python `register`, `find` | Declared support properties, resource paths and successful command receipt → content-checked environment/model/adapter/capture lookup |

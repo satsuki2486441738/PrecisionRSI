@@ -134,13 +134,23 @@ direct=json.loads((root/'report.json').read_text())
 assert tree['exact_equal']==direct['exact_equal']
 for key in ('side_a_norm','side_b_norm','error_norm','rmse','cosine','max_abs'):
     assert tree['numeric']['metrics'][key]==direct['metrics'][key],key
+import torch,subprocess
+for name in ('fp32','bf16'):
+    with np.load(root/(name+'.npz')) as values:
+        torch.save({'gradients':{key:torch.from_numpy(values[key]) for key in values}},root/(name+'.pt'))
+subprocess.run([sys.executable,'-I','-B',str(Path(sys.argv[1])/'tree_compare.py'),
+                str(root/'fp32.pt'),str(root/'bf16.pt'),'--output',str(root/'checkpoint.json'),
+                '--metrics'],check=True,capture_output=True,text=True)
+checkpoint=json.loads((root/'checkpoint.json').read_text())
+for key in ('side_a_norm','side_b_norm','error_norm','rmse','cosine','max_abs'):
+    assert checkpoint['comparison']['numeric']['metrics'][key]==direct['metrics'][key],key
 """
         subprocess.run([sys.executable, '-I', '-B', '-c', tree_check,
                         str(installed / 'scripts'), str(artifacts)], cwd=cwd, env=env,
                        capture_output=True, text=True, check=True, timeout=30)
         help_result = subprocess.run(
             [sys.executable, '-I', '-B', str(installed / 'scripts/tool_help.py'),
-             'tree_compare', 'array_compare'], cwd=cwd, env=env,
+             'compare_trees', 'compare_arrays'], cwd=cwd, env=env,
             capture_output=True, text=True, check=True, timeout=30)
         if 'compare_trees(' not in help_result.stdout or 'compare_arrays(' not in help_result.stdout:
             raise ValueError('installed tool interface discovery incomplete')

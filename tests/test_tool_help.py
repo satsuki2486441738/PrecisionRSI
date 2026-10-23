@@ -42,7 +42,7 @@ class Collector:
     def test_cli_batches_deduplicates_and_supports_isolated_python(self):
         script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
         result = subprocess.run([sys.executable, '-I', '-B', str(script), 'tree_compare',
-                                 'array_compare.py', 'tree_compare'], capture_output=True, text=True)
+                                 'compare_arrays', 'array_compare.py', 'compare_trees'], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.count('# tree_compare\n'), 1)
         self.assertEqual(result.stdout.count('# array_compare\n'), 1)
@@ -51,6 +51,38 @@ class Collector:
         self.assertIn('compare_arrays(', result.stdout)
         self.assertNotIn('def _flatten', result.stdout)
         self.assertNotIn('raise ValueError', result.stdout)
+
+    def test_api_lookup_is_static_and_ambiguous_names_require_a_module(self):
+        script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            entry = root/'tool_help.py'
+            entry.write_bytes(script.read_bytes())
+            (root/'native.py').write_text('"""Native interface."""\n'
+                'import dependency_that_is_not_installed\n'
+                'raise RuntimeError("MUST_NOT_EXECUTE")\n'
+                'def capture(value):\n    """Capture values."""\n'
+                'async def collect(value): pass\n'
+                'class Collector: pass\n')
+            def run(*names):
+                return subprocess.run([sys.executable, '-I', '-B', str(entry), *names],
+                                      capture_output=True, text=True)
+            for name in ('capture', 'collect', 'Collector'):
+                result = run(name)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn('# native\n', result.stdout)
+                self.assertNotIn('MUST_NOT_EXECUTE', result.stdout)
+            (root/'second.py').write_text('def capture(value): pass\n')
+            result = run('native', 'capture')
+            self.assertEqual(result.returncode, 2)
+            self.assertEqual(result.stdout, '')
+            self.assertIn('ambiguous API capture', result.stderr)
+            self.assertIn('native, second', result.stderr)
+            self.assertEqual(run('native').returncode, 0)
+            (root/'capture.py').write_text('"""Preferred module."""\n')
+            result = run('capture')
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('Preferred module.', result.stdout)
 
     def test_cli_rejects_unknown_names_and_paths_without_partial_output(self):
         script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'

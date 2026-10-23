@@ -9,7 +9,8 @@ are allowed; cycles and unsupported values raise. Inputs are not modified.
 leaf_adapter converts an unsupported framework object to supported values. It
 can return {"dtype": native_dtype, "values": exported_array} to retain native
 identity when export needs conversion. Loaders, subtree selection and semantic
-alignment belong to the task adapter. No framework import or file loading occurs.
+alignment belong to the task adapter. The Python tree API imports no framework
+and loads no files.
 
 The report has status="completed", exact_equal, coverage, metadata and numeric.
 coverage contains inventory="observed_union", side_a_nodes, side_b_nodes,
@@ -24,12 +25,27 @@ Paths contain typed key/index components, avoiding slash and integer/string key
 collisions. Numeric names encode these paths as JSON; findings and maximum-error
 coordinates also include decoded paths. Metadata and numeric findings are each
 bounded by max_findings; aggregate counts retain all differences.
+
+For trusted Torch-saved state, CLI (optional Torch dependency):
+python scripts/tree_compare.py A.pt B.pt --output NEW.json [--metrics]
+                              [--max-findings 8]
+Loads both states onto CPU. The result contains inputs (paths/SHA-256), runtime
+versions, comparison (the whole tree report) and sections (per top-level key
+reports for mappings). Findings already include typed paths, indices and native
+values; counts cover all supplied state even when examples are bounded.
+No checkpoint field names or training layout are assumed. Other native formats
+use compare_trees with their own loader. Exit 0=comparison completed, including
+differences; 2=invalid input/output. Inspect comparison.exact_equal for equality.
 """
 from collections.abc import Mapping
 import json
 
 import numpy as np
 
+if __name__ == '__main__':
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
 from array_compare import compare_arrays
 
 
@@ -123,3 +139,70 @@ def compare_trees(a, b, *, leaf_adapter=None, metrics=False, max_findings=8):
                                                  side_b=len(names-set(nodes[1])))),
                 metadata=dict(differences=differences, findings=findings,
                               findings_omitted=differences-len(findings)), numeric=numeric)
+
+
+def compare_checkpoints(side_a, side_b, *, metrics=False, max_findings=8):
+    """Load Torch state files on CPU and return whole-tree and top-level reports."""
+    import hashlib
+    from pathlib import Path
+    import torch
+
+    def export(value):
+        if not isinstance(value, torch.Tensor):
+            raise TypeError('unsupported checkpoint leaf: ' + type(value).__name__)
+        tensor = value.detach().cpu()
+        values = tensor.float().numpy() if tensor.dtype == torch.bfloat16 else tensor.numpy()
+        return dict(native_dtype=str(tensor.dtype), values=values)
+
+    def source(path):
+        path = Path(path).resolve()
+        digest = hashlib.sha256()
+        with path.open('rb') as stream:
+            for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b''):
+                digest.update(chunk)
+        return dict(path=str(path), sha256=digest.hexdigest())
+
+    inputs = {side: source(path) for side, path in (('side_a', side_a), ('side_b', side_b))}
+    states = [torch.load(item['path'], map_location='cpu', weights_only=False) for item in inputs.values()]
+    options = dict(leaf_adapter=export, metrics=metrics, max_findings=max_findings)
+    report = compare_trees(*states, **options)
+    sections = []
+    if all(isinstance(state, Mapping) for state in states):
+        for key in sorted(set(states[0]) | set(states[1]), key=lambda key: (type(key).__name__, str(key))):
+            # Wrapping retains single-sided keys without substituting a saved None.
+            peers = [{key: state[key]} if key in state else {} for state in states]
+            sections.append(dict(key=key, key_type=type(key).__name__,
+                                 comparison=compare_trees(*peers, **options)))
+    return dict(inputs=inputs, runtime=dict(torch=torch.__version__, numpy=np.__version__),
+                comparison=report, sections=sections)
+
+
+def main(argv=None):
+    import argparse
+    import pickle
+    from pathlib import Path
+    import sys
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('side_a')
+    parser.add_argument('side_b')
+    parser.add_argument('--output', required=True)
+    parser.add_argument('--metrics', action='store_true')
+    parser.add_argument('--max-findings', type=int, default=8)
+    args = parser.parse_args(argv)
+    try:
+        output = Path(args.output)
+        if output.exists():
+            raise FileExistsError('output already exists: ' + str(output))
+        report = compare_checkpoints(args.side_a, args.side_b, metrics=args.metrics,
+                                     max_findings=args.max_findings)
+        with output.open('x') as stream:
+            json.dump(report, stream, indent=2, allow_nan=False)
+            stream.write('\n')
+        return 0
+    except (ImportError, OSError, ValueError, TypeError, RuntimeError, EOFError, pickle.UnpicklingError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

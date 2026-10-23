@@ -126,6 +126,61 @@ class TreeCompareTests(unittest.TestCase):
         self.assertEqual(report['metadata']['differences'], 1)
         self.assertEqual(report['metadata']['findings_omitted'], 1)
 
+    def test_checkpoint_cli_reuses_tree_reports_and_keeps_native_dtype(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest('optional Torch checkpoint loader')
+        import hashlib
+        import subprocess
+        import tempfile
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a = {'model': torch.tensor([1., 2.], dtype=torch.bfloat16),
+                 'optimizer': {0: {'moment': torch.tensor([.25, .5])}},
+                 'rng': np.arange(4, dtype=np.uint32), 'step': 3, 'empty': {}}
+            b = copy.deepcopy(a);b['optimizer'][0]['moment'][1] += .25
+            b['step'] = 4;b.pop('empty')
+            for name, state in (('a.pt', a), ('b.pt', b)):
+                torch.save(state, root/name)
+            hashes = {name: hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ('a.pt', 'b.pt')}
+            script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tree_compare.py'
+            command = [sys.executable, '-I', '-B', str(script), str(root/'a.pt'),
+                       str(root/'b.pt'), '--output', str(root/'result.json'), '--metrics']
+            run = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            report = json.loads((root/'result.json').read_text())
+            self.assertFalse(report['comparison']['exact_equal'])
+            self.assertEqual(report['comparison']['numeric']['unequal_elements'], 2)
+            sections = {row['key']: row['comparison'] for row in report['sections']}
+            self.assertTrue(sections['model']['exact_equal'])
+            self.assertTrue(sections['rng']['exact_equal'])
+            self.assertFalse(sections['empty']['exact_equal'])
+            self.assertEqual(sections['empty']['coverage']['missing_nodes']['side_b'], 1)
+            finding = sections['optimizer']['numeric']['findings'][0]
+            self.assertEqual(finding['index'], [1])
+            self.assertEqual(finding['values']['side_b'], '0.75')
+            for side, name in (('side_a', 'a.pt'), ('side_b', 'b.pt')):
+                self.assertEqual(report['inputs'][side]['sha256'], hashes[name])
+                self.assertEqual(hashlib.sha256((root/name).read_bytes()).hexdigest(), hashes[name])
+            before = (root/'result.json').read_bytes()
+            again = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(again.returncode, 2)
+            self.assertEqual((root/'result.json').read_bytes(), before)
+            (root/'bad.pt').write_bytes(b'not a checkpoint')
+            invalid = subprocess.run([sys.executable, '-I', '-B', str(script),
+                                     str(root/'bad.pt'), str(root/'b.pt'), '--output',
+                                     str(root/'invalid.json')], capture_output=True, text=True)
+            self.assertEqual(invalid.returncode, 2)
+            self.assertFalse((root/'invalid.json').exists())
+            from tree_compare import compare_checkpoints
+            torch.save(torch.tensor([1., 2.], dtype=torch.float32), root/'b.pt')
+            torch.save(torch.tensor([1., 2.], dtype=torch.bfloat16), root/'a.pt')
+            report = compare_checkpoints(root/'a.pt', root/'b.pt')
+            self.assertFalse(report['comparison']['exact_equal'])
+            self.assertTrue(report['comparison']['numeric']['exact_equal'])
+            self.assertEqual(report['sections'], [])
+
     def test_invalid_options_keys_and_array_types_are_explicit(self):
         for kwargs in ({'metrics': 1}, {'max_findings': True}, {'max_findings': -1},
                        {'leaf_adapter': 1}):
