@@ -34,7 +34,7 @@ Module names return short declarations; API names add current signatures. Script
 | Package evidence | [evidence_bundle](../scripts/evidence_bundle.py): `pack`, `verify`, `extract` | Selected files / ZIP → indexed portable evidence |
 | Replay evidence | [replay_bundle](../scripts/replay_bundle.py) | Bundle + replay specification → reproduced reports/checks |
 
-Tensor comparison defaults to `mode=metrics`; `mode=nonfinite` selects category counts and paired-finite metrics. `--chunk-size` controls streaming reads; `--max-locations` caps nonfinite coordinate examples. [inspect_nonfinite](../scripts/inspect_nonfinite.py) remains a compatible entrypoint for that mode.
+Tensor comparison defaults to `mode=metrics`; `mode=nonfinite` selects category counts and paired-finite metrics. `--chunk-size` controls streaming reads; `--max-locations` caps nonfinite coordinate examples.
 
 
 Adapters establish semantic correspondence, input/state and dtype identity. Equal names/shapes alone do not establish correspondence. Native mappings avoid file conversion; other formats use task-owned loaders and leaf adapters. A leaf adapter may return `{dtype: native_dtype, values: exported_array}` to retain dtype identity during conversion.
@@ -97,7 +97,7 @@ python scripts/evidence_bundle.py extract NEW.zip NEW_DIRECTORY
 python scripts/replay_bundle.py --bundle NEW.zip --output-root runs
 ```
 
-For replay, include `REPLAY.json` with named cases selecting a supported validator/comparator, relative input paths and expected report fields. Preserve side identities and order. Replay uses the installed skill CLIs and retained arrays; expected-value checks establish reproducibility of those metrics. The [replay tool docstring](../scripts/replay_bundle.py) owns case fields and supported operations.
+For replay, include `REPLAY.json` with named cases selecting a supported validator/comparator, relative input paths and expected report fields. Tensor cases may set `mode=metrics|nonfinite`. Preserve side identities and order. Replay uses the installed skill CLIs and retained arrays; expected-value checks establish reproducibility of those metrics. The [replay tool docstring](../scripts/replay_bundle.py) owns case fields and supported operations.
 
 ## Coordinates
 
@@ -130,4 +130,4 @@ Global metrics concatenate coordinates. Retain counts and signal/error norms. Ac
 
 Cosine is undefined when either norm is zero. Represent undefined metrics as null with a reason.
 
-Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability. For tensor NaN or Inf, use `compare_tensors.py --mode nonfinite` with the same contract and manifests. Report anomaly counts and paired finite coverage separately from finite-subset error metrics; matching nonfinite locations do not establish correctness. Query `tool_help.py --full inspect_nonfinite` for detailed capture encodings and diagnostic semantics. Retain the original arrays for repair and evidence replay.
+Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability. For tensor NaN or Inf, use `compare_tensors.py --mode nonfinite` with the same contract and manifests. Report anomaly counts and paired finite coverage separately from finite-subset error metrics; matching nonfinite locations do not establish correctness. Query `tool_help.py --full compare_tensors` for detailed capture encodings and diagnostic semantics. Retain the original arrays for repair and evidence replay.

@@ -1,5 +1,6 @@
 """Nonfinite diagnostics regressions using the public tensor artifact contract."""
 import copy
+from functools import partial
 import json
 from pathlib import Path
 import struct
@@ -14,8 +15,9 @@ import numpy as np
 SCRIPTS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(SCRIPTS))
 from artifact_io import Array
-from compare_tensors import compare as finite_compare
-from inspect_nonfinite import CATEGORIES, compare
+from compare_tensors import CATEGORIES, compare as finite_compare
+
+compare = partial(finite_compare, mode='nonfinite')
 
 
 class NonfiniteTests(unittest.TestCase):
@@ -284,7 +286,7 @@ class NonfiniteTests(unittest.TestCase):
     def test_cli_strict_json_exit_codes_and_output_preservation(self):
         paths = self.paths(*self.pair([np.nan, 1], [np.inf, 2]))
         output = self.root/'report.json'
-        command = [sys.executable, '-B', str(SCRIPTS/'inspect_nonfinite.py'),
+        command = [sys.executable, '-B', str(SCRIPTS/'compare_tensors.py'), '--mode', 'nonfinite',
                    '--contract', str(paths[0]), '--side-a', str(paths[1]), '--side-b', str(paths[2]),
                    '--output', str(output), '--chunk-size', '1', '--max-locations', '1']
         run = subprocess.run(command, capture_output=True, text=True)
@@ -310,11 +312,26 @@ class NonfiniteTests(unittest.TestCase):
                 with self.subTest(chunk_size=chunk_size, limit=limit):
                     options = dict(chunk_size=chunk_size, max_locations=limit)
                     result = finite_compare(*paths, mode='nonfinite', **options)
-                    self.assertEqual(result, compare(*paths, **options))
                     self.assertEqual(result['global']['count'], 3)
                     self.assertEqual(result['global']['paired_finite_count'], 1)
                     self.assertEqual(result['global']['finite_subset_metrics']['rmse']['value'], 2.)
                     self.assertLessEqual(len(result['global']['samples']), limit)
+
+    def test_both_modes_validate_update_events_before_reading_arrays(self):
+        variants = [({'actor': 'applied'}, {'actor': 'inactive'}, 'incomparable'),
+                    ({'actor': 'inactive'}, {'actor': 'inactive'}, 'not_covered'),
+                    ({'actor': 'applied'}, {'other': 'applied'}, 'incomparable'),
+                    ({'actor': 'applied'}, {'actor': 'invalid'}, 'incomparable'),
+                    ({'actor': 'applied'}, {}, 'not_covered')]
+        for a_events, b_events, status in variants:
+            pair = self.pair([1., 2.], [1., 2.], 'updates')
+            pair[1]['events'], pair[2]['events'] = a_events, b_events
+            paths = self.paths(*pair)
+            for mode in ('metrics', 'nonfinite'):
+                with self.subTest(mode=mode, events=(a_events, b_events)):
+                    with patch.object(Array, 'read', side_effect=AssertionError('unexpected array read')):
+                        result = finite_compare(*paths, mode=mode)
+                    self.assertEqual(result['status'], status)
 
     def test_modes_keep_update_initial_state_semantics_distinct(self):
         pair = self.pair([0., 0.], [0., 0.], 'updates')
@@ -326,13 +343,12 @@ class NonfiniteTests(unittest.TestCase):
         self.assertEqual(result['status'], 'incomparable')
         self.assertIn('initial stored parameters differ', result['per_tensor']['weight']['reason'])
         diagnostics = finite_compare(*paths, mode='nonfinite')
-        self.assertEqual(diagnostics, compare(*paths))
         self.assertEqual(diagnostics['global']['paired_finite_count'], 2)
         self.assertEqual(diagnostics['global']['finite_subset_metrics']['rmse']['value'], 0.)
         with self.assertRaisesRegex(ValueError, 'mode'):
             finite_compare(*paths, mode='auto')
 
-    def test_unified_tensor_cli_modes_and_compatibility_entrypoint(self):
+    def test_unified_tensor_cli_modes_and_report_equivalence(self):
         paths = self.paths(*self.pair([np.nan, 1., -np.inf], [np.inf, 3., -np.inf]))
         common = ['--contract', str(paths[0]), '--side-a', str(paths[1]), '--side-b', str(paths[2])]
         script = str(SCRIPTS/'compare_tensors.py')

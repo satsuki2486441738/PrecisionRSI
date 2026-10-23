@@ -31,7 +31,7 @@ import struct
 import sys
 
 import numpy as np
-from conditions import expected_conditions, execution_settings, known
+from conditions import canonical, expected_conditions, execution_settings, known
 
 
 class ArtifactError(ValueError):
@@ -80,10 +80,6 @@ def load_json(path):
         raise ArtifactError(f'missing file: {path}', 'not_covered') from exc
     except json.JSONDecodeError as exc:
         raise ArtifactError(f'invalid JSON: {path}: {exc}') from exc
-
-
-def canonical(value):
-    return json.dumps(value, sort_keys=True, allow_nan=False, separators=(',', ':'))
 
 
 def contract(path, kind):

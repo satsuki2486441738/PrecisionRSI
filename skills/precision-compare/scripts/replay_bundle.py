@@ -14,8 +14,8 @@ for a supported FILES index; an index is an archive member, not an external file
 
 REPLAY.json contains cases:[{name,operation,inputs,expected}]. Names are unique
 nonempty strings. Operations are validate (contract/manifest), compare_tensors,
-compare_distributions, compare_target_scores or inspect_nonfinite
-(contract/side_a/side_b). Inputs
+compare_distributions or compare_target_scores (contract/side_a/side_b).
+Tensor cases may set mode=metrics|nonfinite; other operations have no mode. Inputs
 are relative file paths inside the bundle. Explicit side order is preserved.
 Consumed rank environment/status and array references must also be relative
 and resolve to retained files inside inputs. Parent references such as ../arrays
@@ -47,7 +47,6 @@ from evidence_bundle import DEFAULT_MAX_EXPANDED_BYTES, extract
 OPERATIONS = {
     'validate': ('validate_artifacts.py', ('contract', 'manifest')),
     'compare_tensors': ('compare_tensors.py', ('contract', 'side_a', 'side_b')),
-    'inspect_nonfinite': ('inspect_nonfinite.py', ('contract', 'side_a', 'side_b')),
     'compare_distributions': ('compare_distributions.py', ('contract', 'side_a', 'side_b')),
     'compare_target_scores': ('compare_target_scores.py', ('contract', 'side_a', 'side_b')),
 }
@@ -123,10 +122,17 @@ def replay_cases(inputs):
     cases = document.get('cases')
     if not isinstance(cases, list) or not cases:
         raise ValueError('nonempty replay cases list required')
-    names = set()
+    names, normalized = set(), []
     for case in cases:
-        if not isinstance(case, dict) or set(case) != {'name', 'operation', 'inputs', 'expected'}:
-            raise ValueError('replay case requires name, operation, inputs and expected')
+        required_fields = {'name', 'operation', 'inputs', 'expected'}
+        if (not isinstance(case, dict) or not required_fields <= set(case)
+                or set(case) - required_fields - {'mode'}):
+            raise ValueError('replay case requires name, operation, inputs and expected; optional tensor mode')
+        # Decode archived cases into the current tensor interface in memory.
+        if case['operation'] == 'inspect_nonfinite':
+            if 'mode' in case:
+                raise ValueError('archived nonfinite operation cannot include mode')
+            case = dict(case, operation='compare_tensors', mode='nonfinite')
         name = case['name']
         if not isinstance(name, str) or not name.strip() or name in names:
             raise ValueError('unique nonempty replay case names required')
@@ -134,6 +140,8 @@ def replay_cases(inputs):
         operation = case['operation']
         if not isinstance(operation, str) or operation not in OPERATIONS:
             raise ValueError('unsupported replay operation: ' + repr(operation))
+        if 'mode' in case and (operation != 'compare_tensors' or case['mode'] not in ('metrics', 'nonfinite')):
+            raise ValueError('mode must be metrics or nonfinite for compare_tensors')
         required = OPERATIONS[operation][1]
         if not isinstance(case['inputs'], dict) or set(case['inputs']) != set(required):
             raise ValueError(operation + ' inputs must contain exactly ' + ', '.join(required))
@@ -143,7 +151,8 @@ def replay_cases(inputs):
                 raise ValueError('replay input file missing: ' + case['inputs'][key])
         if not isinstance(case['expected'], dict) or not case['expected']:
             raise ValueError('replay expected must be a nonempty result-subset object')
-    return cases
+        normalized.append(case)
+    return normalized
 
 
 def validate_references(cases, inputs):
@@ -183,7 +192,7 @@ def validate_references(cases, inputs):
             kind = contract.get('kind') if isinstance(contract, dict) else None
             keys = ('manifest',)
         else:
-            kind = {'compare_tensors': 'tensors', 'inspect_nonfinite': 'tensors', 'compare_distributions': 'distributions',
+            kind = {'compare_tensors': 'tensors', 'compare_distributions': 'distributions',
                     'compare_target_scores': 'target-scores'}[operation]
             keys = ('side_a', 'side_b')
         for key in keys:
@@ -213,6 +222,8 @@ def run_case(case, inputs, scripts, output):
     command = [sys.executable, '-B', str(tool_path)]
     for key in keys:
         command.extend(['--' + key.replace('_', '-'), str(safe_path(inputs, case['inputs'][key]))])
+    if 'mode' in case:
+        command.extend(['--mode', case['mode']])
     command.extend(['--output', str(output)])
     completed = subprocess.run(command, cwd=scripts, capture_output=True, text=True,
                                encoding='utf-8', errors='replace', check=False)

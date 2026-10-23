@@ -150,7 +150,7 @@ class ReplayBundleTests(unittest.TestCase):
         np.save(self.source / 'left.npy', np.array([np.nan, 4.]), allow_pickle=False)
         np.save(self.source / 'right.npy', np.array([np.inf, 2.]), allow_pickle=False)
         case = copy.deepcopy(self.case)
-        case.update(name='nonfinite', operation='inspect_nonfinite', expected=dict(
+        case.update(name='nonfinite', operation='compare_tensors', mode='nonfinite', expected=dict(
             kind='nonfinite_tensors', status='no_thresholds'))
         case['expected']['global'] = dict(
             count=2, paired_finite_count=1, paired_finite_fraction=0.5,
@@ -159,24 +159,44 @@ class ReplayBundleTests(unittest.TestCase):
             finite_subset_metrics=dict(count=1, max_abs={'value': 2.},
                                       max_coordinate=dict(tensor='weight', flat_index=1,
                                                           coordinate=[1])))
-        # Retained code must not replace the installed inspection tool.
-        (self.source / 'inspect_nonfinite.py').write_text('raise RuntimeError("bundle code executed")\n')
-        bundle = self.bundle({'cases': [case]})
-        root, result = replay(bundle, self.output_root())
-        self.assertTrue(result['matched'], result)
-        report = json.loads((root / 'case-00.json').read_text())
-        self.assertIsNone(report['thresholds'])
-        self.assertEqual(report['global']['samples'][0]['flat_index'], 0)
+        # Source code retained in a bundle must never replace the installed tool.
+        for name in ('compare_tensors.py', 'inspect_nonfinite.py'):
+            (self.source / name).write_text('raise RuntimeError("bundle code executed")\n')
+        for archived in (False, True):
+            with self.subTest(archived=archived):
+                selected = copy.deepcopy(case)
+                if archived:
+                    selected['operation'] = 'inspect_nonfinite'
+                    selected.pop('mode')
+                bundle = self.bundle({'cases': [selected]})
+                original = bundle.read_bytes()
+                root, result = replay(bundle, self.output_root())
+                self.assertTrue(result['matched'], result)
+                report = json.loads((root / 'case-00.json').read_text())
+                self.assertIsNone(report['thresholds'])
+                self.assertEqual(report['global']['samples'][0]['flat_index'], 0)
+                self.assertEqual(bundle.read_bytes(), original)
 
     def test_nonfinite_replay_checks_retained_array_references(self):
         case = copy.deepcopy(self.case)
-        case['operation'] = 'inspect_nonfinite'
+        case['mode'] = 'nonfinite'
         manifest = json.loads((self.source / 'left-tensors.json').read_text())
         manifest['tensors'][0]['shards'][0]['value']['path'] = '../outside.npy'
         self.write('left-tensors.json', manifest)
         bundle = self.bundle({'cases': [case]})
         with self.assertRaisesRegex(ValueError, 'leaves retained inputs'):
             replay(bundle, self.output_root())
+
+    def test_tensor_mode_validation_precedes_tool_execution(self):
+        for operation, mode in [('compare_tensors', 'auto'), ('compare_tensors', None),
+                                ('compare_tensors', 1), ('compare_distributions', 'nonfinite'),
+                                ('inspect_nonfinite', 'nonfinite')]:
+            with self.subTest(operation=operation, mode=mode):
+                case = dict(self.case, operation=operation, mode=mode)
+                bundle = self.bundle({'cases': [case]})
+                with patch('replay_bundle.run_case', side_effect=AssertionError('unexpected execution')):
+                    with self.assertRaisesRegex(ValueError, 'mode'):
+                        replay(bundle, self.output_root())
 
     def test_wrong_metric_is_recorded_and_cli_returns_nonzero(self):
         self.case['expected']['global']['max_abs']['value'] = 9.
