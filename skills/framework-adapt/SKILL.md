@@ -7,9 +7,9 @@ description: Deploy or adapt an ML execution framework for a specified model, ha
 
 Make the requested framework execute the model workload. Deliver its reusable environment, invocation and required adapter or patch.
 
-Reuse an existing environment and adapter when their source, dependencies and target match. For missing support, check the selected revision's support declarations and closest native example, then identify the model/backend capability to implement. Confirm changes to the requested target or implementation scope.
+Continue from retained receipts and known interfaces. Reuse environments and adapters when their source, dependencies and target match. For missing support, check the selected revision's support declarations and closest native example, then identify the model/backend capability to implement. Confirm changes to the requested target or implementation scope.
 
-Validate the smallest native workload that exercises the missing capability, then run the requested workload. Retain actual device execution, imported package/source identities and effective settings. Preserve native state transitions; make checkpoint conversion and tensor-layout transformations explicit.
+Validate missing support with the smallest native workload that exercises it, then run the requested workload. Retain actual device execution, imported package/source identities and effective settings. Preserve native state transitions; make checkpoint conversion and tensor-layout transformations explicit.
 
 Use retained failures to choose the next change within the resource budget. For implementation changes, add a focused regression and verify the original workload. Keep framework-specific code and reusable environment declarations with the case.
 

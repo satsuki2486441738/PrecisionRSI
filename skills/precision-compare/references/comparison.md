@@ -58,14 +58,16 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
-Reuse the existing workload workspace and evidence across components. Rerun when relevant inputs, runtime identity, scope or required freshness changes; otherwise verify and reuse retained results. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Its [docstring](../scripts/workflow.py) defines the interface.
+Reuse the existing workload workspace and evidence across components. Rerun when relevant inputs, runtime identity, scope or required freshness changes; otherwise verify and reuse retained results. For repeated dependency-linked commands, use a workflow plan declaring relevant inputs, outputs, checks and dependencies. Stage-specific settings belong in stage inputs; changing the shared workload identity invalidates every stage. Its [docstring](../scripts/workflow.py) defines the interface.
 
 ```sh
 python scripts/workflow.py run --plan task.json --workspace work
 python scripts/workflow.py status --plan task.json --workspace work
 ```
 
-Follow `next_action` with its retained artifacts/logs, then run again. Changed inputs invalidate affected stages; `--refresh STAGE` requests an unchanged retry. Task-owned correctness checks can route to repair. The agent supplies missing integration and repair decisions.
+`status` reviews reuse without launching commands. `run` both reuses valid results and executes missing work, so a known command chain needs one invocation. Continue with `next_action` only when execution stops for adaptation or repair.
+
+For result-review requests, return verified retained outputs and their source paths. For fresh measurements, use `--refresh` on the requested capture or comparison stage(s); descendants rerun while valid preparation and unrelated stages remain reusable. Changed inputs invalidate affected stages automatically. Reopen instructions/interfaces when they change or an integration question remains. Task-owned correctness checks can route to repair.
 
 Use the resource catalog when prepared environments/adapters need discovery across workloads. Register reusable resources with successful native command receipts. A single task can use its existing paths directly.
 

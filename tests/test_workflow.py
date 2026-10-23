@@ -105,6 +105,63 @@ print(kind)
         self.assertEqual(result['attempts'], first['attempts'] + 2)
         self.assertTrue(all(Path(s['run']).exists() for s in first['stages']))
 
+    def test_followup_review_change_and_fresh_measurement_preserve_valid_work(self):
+        # A sibling observation is independent of the requested measurement.
+        (self.root / 'sibling.json').write_text('{"observation":7}')
+        self.spec['stages'].append(dict(id='sibling', skill='precision-compare',
+            inputs=['sibling.json'], depends_on=['adapt'], timeout=5,
+            argv=[sys.executable, '-c',
+                  'from pathlib import Path; import sys; Path(sys.argv[1]).write_bytes(Path("sibling.json").read_bytes())',
+                  '{run}/observation.json'], outputs={'observation': 'observation.json'}))
+        self.save()
+        first = self.run_task()
+        self.assertEqual(first['attempts'], 4)
+        originals = {v['path']: Path(v['path']).read_bytes()
+                     for stage in first['stages'] for v in stage['outputs'].values()}
+        state_bytes = (self.workspace / 'state.json').read_bytes()
+        with patch('workflow.record_run', side_effect=AssertionError('unexpected native execution')):
+            review = inspect_workflow(self.plan_path, self.workspace)
+            self.assertEqual((self.workspace / 'state.json').read_bytes(), state_bytes)
+            repeated = self.run_task()
+        for result in (review, repeated):
+            self.assertEqual(result['attempts'], 4)
+            self.assertEqual(result['spent_seconds'], first['spent_seconds'])
+            self.assertTrue(all(stage['reused'] for stage in result['stages']))
+        (self.root / 'data.json').write_text('[2, 4]')
+        changed = self.run_task()
+        self.assertEqual(changed['attempts'], 6)
+        self.assertEqual([stage['reused'] for stage in changed['stages']], [True, False, False, True])
+        fresh = self.run_task(refresh=['collect'])
+        self.assertEqual(fresh['attempts'], 8)
+        self.assertEqual([stage['reused'] for stage in fresh['stages']], [True, False, False, True])
+        self.assertNotEqual(fresh['stages'][1]['run'], changed['stages'][1]['run'])
+        self.assertNotEqual(fresh['stages'][2]['run'], changed['stages'][2]['run'])
+        self.assertEqual(fresh['stages'][0]['run'], first['stages'][0]['run'])
+        self.assertEqual(fresh['stages'][3]['run'], first['stages'][3]['run'])
+        for path, content in originals.items():
+            self.assertEqual(Path(path).read_bytes(), content)
+
+    def test_comparison_implementation_change_reuses_environment_and_captures(self):
+        comparator = self.root / 'comparator.py'
+        comparator.write_bytes((self.root / 'helper.py').read_bytes())
+        self.spec['stages'][2]['argv'][1] = 'comparator.py'
+        self.spec['stages'][2]['inputs'] = ['comparator.py', 'data.json']
+        self.save()
+        first = self.run_task()
+        captures = first['stages'][1]['outputs']['capture']
+        original_bytes = Path(captures['path']).read_bytes()
+        comparator.write_text(comparator.read_text().replace(
+            'out.write_text(json.dumps(result))',
+            'result["comparison_version"]=2;out.write_text(json.dumps(result))'))
+        changed = self.run_task()
+        self.assertEqual(changed['attempts'], first['attempts'] + 1)
+        self.assertEqual([stage['reused'] for stage in changed['stages']], [True, True, False])
+        self.assertEqual(changed['stages'][1]['outputs']['capture'], captures)
+        self.assertEqual(Path(captures['path']).read_bytes(), original_bytes)
+        metrics = json.loads(Path(changed['stages'][2]['outputs']['metrics']['path']).read_text())
+        self.assertTrue(metrics['correct'])
+        self.assertEqual(metrics['comparison_version'], 2)
+
     def test_live_probe_can_repeat_without_repeating_unchanged_downstream_work(self):
         self.spec['stages'][0]['cache'] = False
         self.save()

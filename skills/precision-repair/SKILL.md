@@ -5,11 +5,11 @@ description: Diagnose and fix numerical accuracy defects in model, framework, an
 
 # Precision repair
 
-Fix the numerical problem and verify the original workload. Reuse its inputs/state, runtime identities, captures and reports. Preserve the requested model, data, algorithm and execution semantics; ask when a choice changes the intended result or permitted work.
+Fix the numerical problem and verify the original workload. Continue from its inputs/state, source/runtime identities, captures, reports and known interfaces. Preserve the requested model, data, algorithm and execution semantics; ask when a choice changes the intended result or permitted work.
 
 ## Establish the cause
 
-Reproduce through the affected native path. Distinguish collection/configuration differences from a defect using correctness evidence: intended algorithm, analytical property, trusted implementation or higher-precision recomputation with matching semantics. Report uncertainty when that evidence cannot distinguish a defect from a numerical-policy tradeoff.
+Use a retained matching native reproduction or reproduce through the affected path. Distinguish collection/configuration differences from a defect using correctness evidence: intended algorithm, analytical property, trusted implementation or higher-precision recomputation with matching semantics. Report uncertainty when that evidence cannot distinguish a defect from a numerical-policy tradeoff.
 
 Choose the smallest experiment that resolves the remaining causal question. For propagated training errors, compare the suspected computation at identical inputs/state; see the [training example](examples/causal-replay.md). Use [internal sampling](../precision-compare/references/layerwise.md) within the agreed scope and budget; the repair request may already establish them.
 
