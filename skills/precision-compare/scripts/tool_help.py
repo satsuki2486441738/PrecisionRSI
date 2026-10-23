@@ -14,7 +14,8 @@ Default module queries show that declaration; API queries also include selected
 signatures. --full returns the detailed contract and selected/all interfaces.
 Unsectioned legacy docstrings remain complete, so their constraints stay visible.
 Batch queries share each module contract once. Source bodies/private helpers are
-omitted. Documentation and signatures come from the current AST.
+omitted. Documentation and signatures come from the current AST. Literal __all__ lists
+select published APIs; modules without __all__ use nonprivate declarations.
 """
 import argparse
 import ast
@@ -26,9 +27,20 @@ def _parse(path):
 
 
 def _public(tree):
-    return {node.name: node for node in tree.body
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-            and not node.name.startswith('_') and node.name != 'main'}
+    declarations = {node.name: node for node in tree.body
+                    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                    and not node.name.startswith('_') and node.name != 'main'}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == '__all__' for t in node.targets):
+            try:
+                names = ast.literal_eval(node.value)
+            except (ValueError, TypeError) as exc:
+                raise ValueError('__all__ must be a literal list or tuple of API names') from exc
+            if (not isinstance(names, (list, tuple)) or any(not isinstance(n, str) for n in names)
+                    or len(set(names)) != len(names) or any(n not in declarations for n in names)):
+                raise ValueError('__all__ must name unique locally declared public APIs')
+            return {name: declarations[name] for name in names}
+    return declarations
 
 
 def catalog(directory):

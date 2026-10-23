@@ -107,6 +107,20 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertIn('../precision-compare/references/comparison.md', text)
         self.assertTrue((installed / 'skills/precision-compare/scripts/replay_bundle.py').is_file())
 
+    def test_implemented_packages_install_without_the_reserved_placeholder(self):
+        import shutil
+        source = Path(__file__).resolve().parents[1] / 'skills'
+        selected = self.root / 'selected'
+        for name in ('framework-adapt', 'precision-compare', 'precision-repair'):
+            shutil.copytree(source / name, selected / name)
+        installed = self.root / 'installed'
+        smoke.install_skills(selected, installed / 'skills')
+        self.assertEqual([p.name for p in validator.validate_skills(installed)],
+                         ['framework-adapt', 'precision-compare', 'precision-repair'])
+        _, errors = validator.validate_links(installed, sorted((installed / 'skills').rglob('*.md')))
+        self.assertEqual(errors, [])
+        self.assertFalse((installed / 'skills/operator-optimize').exists())
+
     def test_smoke_artifact_directory_accepts_symlink_spelling(self):
         selected = self.root / 'selected'
         selected.mkdir()

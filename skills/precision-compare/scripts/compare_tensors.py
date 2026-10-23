@@ -79,6 +79,8 @@ coverage lists every expected tensor and unexpected manifest entry. Partial
 counts are never presented as full coverage. No thresholds or full-tensor
 correctness verdicts are produced; no framework repair is performed.
 """
+__all__ = ['compare', 'Stats']
+
 import math
 from pathlib import Path
 import numpy as np

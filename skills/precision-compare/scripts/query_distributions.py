@@ -23,6 +23,8 @@ API: inventory(contract_path, manifest_path), query(contract_path, manifest_path
 peer_inventory), compare(contract_path, query_a, query_b); final two APIs accept
 already-loaded JSON objects. Outputs contain measured conditions and coverage.
 """
+
+__all__ = ['inventory', 'query', 'compare']
 import argparse
 import hashlib
 import json

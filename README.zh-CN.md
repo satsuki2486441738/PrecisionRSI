@@ -6,7 +6,7 @@
 
 ## 使用
 
-根据任务选择 skill，将其目录复制到客户端的 skill 目录：
+将 `framework-adapt`、`precision-compare` 和 `precision-repair` 并排安装到客户端的 skill 目录，执行时按任务调用所需组件：
 
 | Skill | 任务与交付 |
 |---|---|
@@ -15,9 +15,9 @@
 | [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
 | [Operator Optimize](skills/operator-optimize/SKILL.md) | 占位，尚未实现 |
 
-端到端任务将三个已实现的包并排安装。单项任务可选用对应组件；适配和修复复用 `precision-compare` 的工具。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
+三个包共用工具和组件间链接；agent 按任务加载相关 skill 与参考文档。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
 
-对于端到端任务，提供模型工作负载、目标执行栈和资源范围。agent 补齐原生执行能力，比较指定的数值结果，并在任务包含修复时处理确认的问题。三个 skill 共用[任务执行与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)：复用有效的环境准备和采集，失败时定位下一组件，代码变化后重跑受影响的验证。各组件也可独立使用。
+对于端到端任务，提供模型工作负载、目标执行栈和资源范围。agent 补齐原生执行能力，比较指定的数值结果，并在任务包含修复时处理确认的问题。三个 skill 共用[任务执行与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)：复用有效的环境准备和采集，失败时定位下一组件，代码变化后重跑受影响的验证。各组件也可单独承担对应任务。
 
 进行比较时，提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
 

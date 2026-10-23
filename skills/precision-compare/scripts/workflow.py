@@ -43,6 +43,8 @@ Commands use record_run for literal argv, logs, timeout and process-group cleanu
 Existing run bytes are preserved. A process lock prevents concurrent execution.
 After a hard-killed runner, a still-live recorded child blocks duplicate launch.
 """
+
+__all__ = ['run_workflow', 'inspect_workflow']
 import argparse
 from contextlib import contextmanager
 import hashlib

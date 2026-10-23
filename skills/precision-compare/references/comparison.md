@@ -10,7 +10,7 @@ python scripts/tool_help.py compare_trees           # short declaration + signat
 python scripts/tool_help.py --full tree_compare     # detailed contract + interfaces
 ```
 
-Module names return short declarations; API names add current signatures. Script `--help` also uses short declarations. Qualify ambiguous APIs as `module:API`; batch queries share declarations. When building new manifests/plans or integrating capture, query selected tools with `--full` directly for their schemas and constraints.
+Module names return short declarations; API names add current signatures. Script `--help` also uses short declarations. Qualify ambiguous APIs as `module:API`; batch queries share declarations. Modules with `__all__` expose only those APIs. When building new manifests/plans or integrating capture, query selected tools with `--full` directly for their schemas and constraints.
 
 | Operation | Interface | Input → output |
 |---|---|---|
@@ -39,7 +39,7 @@ Tensor comparison defaults to `mode=metrics`; `mode=nonfinite` selects category 
 
 Adapters establish semantic correspondence, input/state and dtype identity. Equal names/shapes alone do not establish correspondence. Native mappings avoid file conversion; other formats use task-owned loaders and leaf adapters. A leaf adapter may return `{dtype: native_dtype, values: exported_array}` to retain dtype identity during conversion.
 
-Array/tree comparisons require finite, exactly equal numeric values for `exact_equal`; optional metrics use FP64 arithmetic. Findings are bounded examples; counts retain all differences. Check an independent task inventory for omissions shared by both sides. Add traversal only for requested details absent from reports.
+Array/tree comparisons require finite, exactly equal numeric values for `exact_equal`; optional metrics use FP64 arithmetic. Same-shape arrays with different dtypes retain dtype findings and support error metrics; `exact_equal` still requires matching dtypes. Findings are bounded examples; counts retain all differences. Check an independent task inventory for omissions shared by both sides. Add traversal only for requested details absent from reports.
 
 For grouped comparisons, derive groups from task coordinates/settings and pass `compare_arrays` as reducer. Use `lambda a, b: compare_arrays(a, b, metrics=True)` for error metrics. Groups may overlap; incomplete groups have no aggregate, while complete groups remain available.
 

@@ -54,7 +54,8 @@ class TreeCompareTests(unittest.TestCase):
                      np.asarray([[1., 2.]], dtype=np.float32)):
             report = compare_trees(np.asarray([1., 2.], dtype=np.float32), peer)
             self.assertFalse(report['exact_equal'])
-            self.assertEqual(report['numeric']['incompatible_arrays'], 1)
+            self.assertEqual(report['numeric']['incompatible_arrays'], int(peer.shape != (2,)))
+            self.assertEqual(report['numeric']['dtype_differences'], int(peer.shape == (2,)))
         report = compare_trees({'x': np.asarray([np.nan, np.inf])},
                                {'x': np.asarray([np.nan, np.inf])}, metrics=True)
         self.assertFalse(report['exact_equal'])
@@ -125,6 +126,77 @@ class TreeCompareTests(unittest.TestCase):
         self.assertEqual(report['numeric']['findings_omitted'], 20)
         self.assertEqual(report['metadata']['differences'], 1)
         self.assertEqual(report['metadata']['findings_omitted'], 1)
+
+    def test_checkpoint_reports_scan_and_convert_each_tensor_once(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest('optional Torch checkpoint loader')
+        import tempfile
+        from unittest.mock import patch
+        from tree_compare import compare_checkpoints
+        from compare_tensors import Stats
+        a = {'model': torch.arange(8, dtype=torch.bfloat16),
+             'optimizer': {0: {'moment': torch.ones(4, dtype=torch.bfloat16)}},
+             'empty': {}, 1: 'typed key', '1': None}
+        b = copy.deepcopy(a)
+        b['optimizer'][0]['moment'][2] += .25
+        b.pop('empty')
+        b['1'] = 'changed'
+        conversions, scanned = [], []
+        original_float, original_add = torch.Tensor.float, Stats.add
+        def converted(tensor, *args, **kwargs):
+            conversions.append(tensor.numel())
+            return original_float(tensor, *args, **kwargs)
+        def added(stats, x, y):
+            scanned.append(x.size)
+            return original_add(stats, x, y)
+        def export(tensor):
+            return dict(native_dtype=str(tensor.dtype), values=original_float(tensor).numpy())
+        expected = compare_trees(a, b, leaf_adapter=export, metrics=True)
+        with tempfile.TemporaryDirectory() as folder:
+            paths = [Path(folder) / (name + '.pt') for name in ('a', 'b')]
+            for path, state in zip(paths, (a, b)):
+                torch.save(state, path)
+            with patch.object(torch.Tensor, 'float', converted), patch.object(Stats, 'add', added):
+                report = compare_checkpoints(*paths, metrics=True)
+        self.assertEqual(sum(conversions), 24)  # 12 elements per side, one conversion.
+        self.assertEqual(sum(scanned), 12)
+        self.assertEqual(report['comparison'], expected)
+        for section in report['sections']:
+            key = section['key']
+            peers = [{key: state[key]} if key in state else {} for state in (a, b)]
+            self.assertEqual(section['comparison'],
+                             compare_trees(*peers, leaf_adapter=export, metrics=True))
+
+    def test_checkpoint_sections_retain_independent_coverage_and_metric_failures(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest('optional Torch checkpoint loader')
+        import tempfile
+        from tree_compare import compare_checkpoints
+        a = {'good': np.array([1., 2.]), 'nonfinite': np.array([np.nan]),
+             'shape': np.ones(2), 'missing': np.ones(1), 'empty': {}}
+        b = {'good': np.array([1., 3.]), 'nonfinite': np.array([np.inf]),
+             'shape': np.ones((1, 2)), 'empty': {}}
+        with tempfile.TemporaryDirectory() as folder:
+            paths = [Path(folder) / (name + '.pt') for name in ('a', 'b')]
+            for path, state in zip(paths, (a, b)):
+                torch.save(state, path)
+            for metrics, limit in ((True, 8), (True, 0), (False, 1)):
+                with self.subTest(metrics=metrics, max_findings=limit):
+                    options = dict(metrics=metrics, max_findings=limit)
+                    report = compare_checkpoints(*paths, **options)
+                    self.assertEqual(report['comparison'], compare_trees(a, b, **options))
+                    for section in report['sections']:
+                        key = section['key']
+                        peers = [{key: state[key]} if key in state else {} for state in (a, b)]
+                        self.assertEqual(section['comparison'], compare_trees(*peers, **options))
+                    if metrics:
+                        sections = {row['key']: row['comparison'] for row in report['sections']}
+                        self.assertEqual(sections['good']['numeric']['metrics']['max_abs']['value'], 1.)
+                        self.assertIsNone(report['comparison']['numeric']['metrics'])
 
     def test_checkpoint_cli_reuses_tree_reports_and_keeps_native_dtype(self):
         try:

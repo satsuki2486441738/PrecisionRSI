@@ -39,6 +39,33 @@ class Collector:
                         'IMPLEMENTATION_BODY', 'PRIVATE_DETAIL', 'CLASS_BODY', '_internal'):
             self.assertNotIn(omitted, text)
 
+    def test_explicit_exports_hide_internal_helpers_without_executing_code(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'native.py'
+            path.write_text('''"""Native tool contract."""
+__all__ = ['compare', 'Stats']
+raise RuntimeError('MUST_NOT_EXECUTE')
+def compare(a, b):
+    """Published operation."""
+class Stats:
+    def add(self, a, b): pass
+class Tensor:
+    def read(self, start, count): pass
+def inventory(spec): pass
+''')
+            text = describe(path, full=True)
+            self.assertIn('compare(a, b)', text)
+            self.assertIn('Stats.add(self, a, b)', text)
+            self.assertNotIn('class Tensor', text)
+            self.assertNotIn('inventory(', text)
+            with self.assertRaisesRegex(ValueError, 'unknown public API'):
+                describe(path, selected=['inventory'])
+            for declaration in ("['missing']", "['compare', 'compare']", "['compare', 1]", "make_exports()"):
+                with self.subTest(declaration=declaration):
+                    path.write_text('__all__ = ' + declaration + '\ndef compare(a, b): pass\n')
+                    with self.assertRaisesRegex(ValueError, '__all__'):
+                        describe(path, full=True)
+
     def test_cli_batches_deduplicates_and_supports_isolated_python(self):
         script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
         result = subprocess.run([sys.executable, '-I', '-B', str(script), 'tree_compare',

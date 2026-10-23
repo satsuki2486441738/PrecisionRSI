@@ -25,6 +25,8 @@ NLL, MAE, linear P99, maximum error/coordinate and complete coverage counts.
 CLI: --contract C --side-a A --side-b B --output NEW.json
 Exit: 0=metrics computed, 1=unavailable comparison, 2=CLI/output error.
 """
+
+__all__ = ['compare']
 import argparse
 import json
 from pathlib import Path

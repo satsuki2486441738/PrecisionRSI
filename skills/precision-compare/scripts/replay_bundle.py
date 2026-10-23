@@ -32,6 +32,8 @@ fresh compare-replay-UTC/inputs, case-NN.json reports and replay.json. CLI:
 [--max-expanded-bytes N]. The default expansion bound is 16 GiB.
 Exit 0=all assertions match, 1=mismatch or invalid inputs/tool execution.
 """
+
+__all__ = ['replay']
 import argparse
 from datetime import datetime, timezone
 import json

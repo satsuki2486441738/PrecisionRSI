@@ -48,15 +48,49 @@ class ArrayCompareTests(unittest.TestCase):
         self.assertEqual(len(r['findings']), 2)
         self.assertEqual(r['findings_omitted'], 9)
 
-    def test_dtype_and_shape_must_match_even_with_identical_flat_values(self):
+    def test_shape_blocks_metrics_while_dtype_differences_remain_observable(self):
         a = {'dtype': np.ones(2, dtype=np.float32), 'shape': np.ones((1, 2)), 'good': np.ones(3)}
         b = {'dtype': np.ones(2, dtype=np.float64), 'shape': np.ones(2), 'good': np.ones(3)}
         r = compare_arrays(a, b, metrics=True)
         self.assertEqual(r['status'], 'incomparable')
         self.assertFalse(r['exact_equal'])
-        self.assertEqual(r['coverage']['compared_elements'], 3)
-        self.assertEqual(r['incompatible_arrays'], 2)
+        self.assertEqual(r['coverage']['compared_elements'], 5)
+        self.assertEqual(r['incompatible_arrays'], 1)
+        self.assertEqual(r['dtype_differences'], 1)
         self.assertIsNone(r['metrics'])
+
+    def test_cross_dtype_metrics_preserve_native_identity_and_error_values(self):
+        a = {'x': np.array([1., 1.001], dtype=np.float32)}
+        b = {'x': np.array([1., 1.001], dtype=np.float16)}
+        for left, right in ((a, b), (b, a)):
+            r = compare_arrays(left, right, metrics=True, chunk_size=1)
+            self.assertEqual(r['status'], 'completed')
+            self.assertFalse(r['exact_equal'])
+            self.assertEqual(r['dtype_differences'], 1)
+            self.assertEqual(r['unequal_elements'], 1)
+            self.assertEqual(r['metrics']['count'], 2)
+            self.assertEqual(r['metrics']['max_abs']['value'],
+                             abs(float(a['x'][1]) - float(b['x'][1])))
+            self.assertEqual(r['metrics']['max_values']['dtype'],
+                             dict(side_a=str(left['x'].dtype), side_b=str(right['x'].dtype)))
+            json.dumps(r, allow_nan=False)
+        equal = compare_arrays({'x': a['x'][:1]}, {'x': b['x'][:1]}, metrics=True)
+        self.assertFalse(equal['exact_equal'])
+        self.assertEqual(equal['unequal_elements'], 0)
+        self.assertEqual(equal['metrics']['max_abs']['value'], 0.)
+
+    def test_cross_dtype_integer_equality_precedes_lossy_metric_conversion(self):
+        pairs = [(np.array([2**60+1], dtype=np.int64), np.array([2**60], dtype=np.uint64)),
+                 (np.array([2**60], dtype=np.float64), np.array([2**60+1], dtype=np.int64))]
+        for a, b in pairs:
+            for x, y in ((a, b), (b, a)):
+                with self.subTest(a=x.dtype, b=y.dtype):
+                    r = compare_arrays({'x': x}, {'x': y}, metrics=True)
+                    self.assertEqual(r['status'], 'completed')
+                    self.assertEqual(r['unequal_elements'], 1)
+                    self.assertFalse(r['exact_equal'])
+                    self.assertIsNone(r['metrics'])
+                    self.assertIn('integer', r['metrics_unavailable'])
 
     def test_nonfinite_values_never_establish_correctness_and_json_stays_finite(self):
         a = {'x': np.array([1., np.inf, np.nan, -np.inf])}

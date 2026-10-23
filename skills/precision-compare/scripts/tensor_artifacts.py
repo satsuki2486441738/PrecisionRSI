@@ -28,6 +28,8 @@ no replica averaging or combined canonical tensor is implied.
 CLI: export --contract C --capture CAPTURE --view optional --output NEW.json
      compare-views --contract C --pairs PAIRS.json --output NEW.json
 """
+
+__all__ = ['export_manifest', 'compare_views']
 import argparse
 import json
 from pathlib import Path

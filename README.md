@@ -6,7 +6,7 @@ Agent Skills for framework adaptation, numerical precision comparison and repair
 
 ## Use
 
-Choose the skill for the requested task and copy its directory into your client's skill directory:
+Install `framework-adapt`, `precision-compare` and `precision-repair` side by side in your client's skill directory. Invoke the component needed for the task:
 
 | Skill | Task and result |
 |---|---|
@@ -15,9 +15,9 @@ Choose the skill for the requested task and copy its directory into your client'
 | [Precision Repair](skills/precision-repair/SKILL.md) | Establish the cause of a numerical defect, patch the implementation and verify the original workload |
 | [Operator Optimize](skills/operator-optimize/SKILL.md) | Placeholder; not implemented |
 
-For end-to-end workloads, install the three implemented packages side by side. Individual tasks can use the selected component; adaptation and repair reuse tools from `precision-compare`. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
+The packages share tools and companion links; agents load the relevant skill and references for each task. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
 
-For an end-to-end task, provide the model workload, target execution stacks and resource scope. The agent establishes missing native execution, compares the requested observations and repairs confirmed problems when requested. The three skills share a [workflow and resource catalog](skills/precision-compare/references/comparison.md#shared-tasks): valid preparation and captures are reused, failures identify the next component, and code changes rerun affected verification. Each component also works independently.
+For an end-to-end task, provide the model workload, target execution stacks and resource scope. The agent establishes missing native execution, compares the requested observations and repairs confirmed problems when requested. The three skills share a [workflow and resource catalog](skills/precision-compare/references/comparison.md#shared-tasks): valid preparation and captures are reused, failures identify the next component, and code changes rerun affected verification. Each component can also be invoked for its own task.
 
 For comparison, provide the task and existing artifacts, or the model, data and platform connections needed for collection. The agent prepares the environment, integrates native execution, writes missing collection/comparison code and runs the task. Reusable tools are extended during skill development.
 
