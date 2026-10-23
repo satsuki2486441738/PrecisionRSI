@@ -2,11 +2,38 @@
 
 ## Tools
 
-Query selected interfaces without importing their dependencies or reading implementations:
+Discover tools without reading source or importing dependencies:
 
 ```sh
-python scripts/tool_help.py tree_compare array_compare
+python scripts/tool_help.py --list                  # module + purpose
+python scripts/tool_help.py compare_trees           # contract + selected API
+python scripts/tool_help.py compare_tensors:compare # qualify ambiguous APIs
 ```
+
+Module names return all public interfaces; batch API names to share their module contracts. Use the operation index below to select tools; load details only for the required operation.
+
+| Operation | Tool entrypoint | Inputs and outputs |
+|---|---|---|
+| Inspect tool interfaces | [tool_help.py](../scripts/tool_help.py), CLI | No arguments / `--list` → module purposes; API/module names → current contracts and selected signatures without imports |
+| Compare nested state | [tree_compare.py](../scripts/tree_compare.py), CLI / Python `compare_trees`, `compare_checkpoints` | State trees with leaf adapter, or Torch checkpoint files → structure, metadata, numeric comparison and coverage |
+| Compare corresponding arrays | [array_compare.py](../scripts/array_compare.py), CLI / Python `compare_arrays` | Named arrays or NPZ pair, optional expected names → exact equality, coverage, bounded findings; optional error metrics |
+| Continue a multi-stage task | [workflow.py](../scripts/workflow.py), CLI / Python `run_workflow`, `inspect_workflow` | Workload plan and workspace → verified stage reuse, bounded execution, dependency invalidation and next skill action |
+| Find reusable prepared resources | [resource_catalog.py](../scripts/resource_catalog.py), CLI / Python `register`, `find` | Declared support properties, resource paths and successful command receipt → content-checked environment/model/adapter/capture lookup |
+| Record a bounded native command | [record_run.py](../scripts/record_run.py), CLI / Python `record_run` | Output root, side/task IDs, timeout and literal argv → fresh UTC run with command metadata and streamed stdout/stderr; POSIX timeout cleans up the owned process group |
+| Check runtime initialization / interfaces | [runtime_probe.py](../scripts/runtime_probe.py), CLI / Python `probe_runtime`, `inspect_runtime`, `runtime_identity` | Ordered imports, symbols, task checks and optional selected files → actual module/distribution identity, selected source fingerprints and diagnostics; stable identity for workflow reuse |
+| Capture fixed-history inference / export scores | [inference_capture.py](../scripts/inference_capture.py), Python `FixedHistory`, `derive_logprobs`, `validate_history`, `validate_generation_scores`, `export_records` | Native full-vocabulary logit row and fixed tokens → declared logprob derivation, history/score-row checks and distribution/target-score records |
+| Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
+| Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
+| Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
+| Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected names/coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
+| Inspect tensor NaN / Inf | [inspect_nonfinite.py](../scripts/inspect_nonfinite.py), CLI / Python `compare` | Contract and paired tensor manifests → per-side and paired nonfinite counts, bounded logical coordinates and separate finite-subset metrics |
+| Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI / Python `compare`, `Stats` | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
+| Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
+| Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |
+| Validate artifacts | [validate_artifacts.py](../scripts/validate_artifacts.py), CLI | Contract and one side's tensor/distribution manifest → validation and coverage |
+| Package / verify / extract evidence | [evidence_bundle.py](../scripts/evidence_bundle.py), CLI / Python `pack`, `verify`, `extract` | Selected files and optional literal text replacements → indexed source/export hashes and verified extraction |
+| Replay retained comparisons | [replay_bundle.py](../scripts/replay_bundle.py), CLI / Python `replay` | Indexed ZIP and `REPLAY.json` → installed comparator/validator reports and expected-value checks |
+| Plan msProbe module capture | [msprobe_capture.py](../scripts/msprobe_capture.py), Python `plan_modules` | Native module inventory, selected paths and output sizes → L0 configuration, observation selection and payload estimate; execution uses the [layerwise integration](layerwise.md#integrate-and-verify) |
 
 For already corresponding observations, use [array_compare.py](../scripts/array_compare.py):
 
@@ -42,33 +69,6 @@ python scripts/array_compare.py a.npz b.npz --output report.json
 The default report contains exact equality, shape/dtype/finite-value checks, counts and bounded findings with native value representations. Error metrics also retain the two values at the maximum-error coordinate. `metrics=True` (CLI `--metrics`) adds the existing FP64 tensor metrics. Report generation is independent of file layout and evidence packaging. Exit 0 means a complete comparison; inspect `exact_equal` for its result.
 
 The [gradient comparison example](../examples/compare_gradients.py) runs native FP32/BF16 backward passes on CPU and directly compares named gradient arrays, retaining actual settings (Torch and NumPy required).
-
-The artifact interfaces below support declared runtime conditions, shard reconstruction and remote observations. Select these capabilities when the task needs them.
-
-Select tools by operation and supported input semantics. The tool library lives in `scripts/`; command-line entrypoints and importable Python functions are both tools. Prepare NumPy for array tools when needed; target-score tools use the standard library.
-
-| Operation | Tool entrypoint | Inputs and outputs |
-|---|---|---|
-| Inspect tool interfaces | [tool_help.py](../scripts/tool_help.py), CLI | Selected tool names → current module/API docstrings and signatures without imports |
-| Compare nested state | [tree_compare.py](../scripts/tree_compare.py), CLI / Python `compare_trees`, `compare_checkpoints` | State trees with leaf adapter, or Torch checkpoint files → structure, metadata, numeric comparison and coverage |
-| Compare corresponding arrays | [array_compare.py](../scripts/array_compare.py), CLI / Python `compare_arrays` | Named arrays or NPZ pair, optional expected names → exact equality, coverage, bounded findings; optional error metrics |
-| Continue a multi-stage task | [workflow.py](../scripts/workflow.py), CLI / Python `run_workflow`, `inspect_workflow` | Workload plan and workspace → verified stage reuse, bounded execution, dependency invalidation and next skill action |
-| Find reusable prepared resources | [resource_catalog.py](../scripts/resource_catalog.py), CLI / Python `register`, `find` | Declared support properties, resource paths and successful command receipt → content-checked environment/model/adapter/capture lookup |
-| Record a bounded native command | [record_run.py](../scripts/record_run.py), CLI / Python `record_run` | Output root, side/task IDs, timeout and literal argv → fresh UTC run with command metadata and streamed stdout/stderr; POSIX timeout cleans up the owned process group |
-| Check runtime initialization / interfaces | [runtime_probe.py](../scripts/runtime_probe.py), CLI / Python `probe_runtime`, `inspect_runtime`, `runtime_identity` | Ordered imports, symbols, task checks and optional selected files → actual module/distribution identity, selected source fingerprints and diagnostics; stable identity for workflow reuse |
-| Capture fixed-history inference / export scores | [inference_capture.py](../scripts/inference_capture.py), Python `FixedHistory`, `derive_logprobs`, `validate_history`, `validate_generation_scores`, `export_records` | Native full-vocabulary logit row and fixed tokens → declared logprob derivation, history/score-row checks and distribution/target-score records |
-| Compare target/action scores | [compare_target_scores.py](../scripts/compare_target_scores.py), CLI | Contract and paired score records → target-score metrics, including EOS and cached execution |
-| Compare full distributions | [compare_distributions.py](../scripts/compare_distributions.py), CLI | Contract and paired manifests → top-100 union/tail metrics |
-| Compare distributions across hosts | [query_distributions.py](../scripts/query_distributions.py), CLI / Python | Source manifests → inventories and union queries → comparison; full arrays stay at source |
-| Aggregate coordinate groups | [group_metrics.py](../scripts/group_metrics.py), Python `reduce_groups` | Expected names/coordinates, named groups, an existing reducer and observation maps → global/per-group metrics and coverage |
-| Inspect tensor NaN / Inf | [inspect_nonfinite.py](../scripts/inspect_nonfinite.py), CLI / Python `compare` | Contract and paired tensor manifests → per-side and paired nonfinite counts, bounded logical coordinates and separate finite-subset metrics |
-| Compare tensors | [compare_tensors.py](../scripts/compare_tensors.py), CLI / Python `compare`, `Stats` | Contract and paired manifests → observation, gradient, postclip-gradient or stored-update metrics |
-| Export logical tensors / compare replica views | [tensor_artifacts.py](../scripts/tensor_artifacts.py), CLI / Python | Per-rank inventories → logical manifests; explicit view pairs → comparisons |
-| Compare assistant-body scores | [compare_scores.py](../scripts/compare_scores.py), CLI | Single-turn cache-off score artifacts with execution evidence → metrics |
-| Validate artifacts | [validate_artifacts.py](../scripts/validate_artifacts.py), CLI | Contract and one side's tensor/distribution manifest → validation and coverage |
-| Package / verify / extract evidence | [evidence_bundle.py](../scripts/evidence_bundle.py), CLI / Python `pack`, `verify`, `extract` | Selected files and optional literal text replacements → indexed source/export hashes and verified extraction |
-| Replay retained comparisons | [replay_bundle.py](../scripts/replay_bundle.py), CLI / Python `replay` | Indexed ZIP and `REPLAY.json` → installed comparator/validator reports and expected-value checks |
-| Plan msProbe module capture | [msprobe_capture.py](../scripts/msprobe_capture.py), Python `plan_modules` | Native module inventory, selected paths and output sizes → L0 configuration, observation selection and payload estimate; execution uses the [layerwise integration](layerwise.md#integrate-and-verify) |
 
 Supporting modules provide [artifact readers](../scripts/artifact_io.py), [execution-condition checks](../scripts/conditions.py) and [target-score arithmetic](../scripts/score_metrics.py). Reuse them inside tools and task adapters; their module docstrings own the interfaces. Task adapters own native masks, logical mappings, losses and objective reductions.
 

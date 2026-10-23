@@ -84,6 +84,63 @@ class Collector:
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('Preferred module.', result.stdout)
 
+    def test_catalog_and_selected_apis_are_static_and_work_after_copy(self):
+        script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            entry = root/'tool_help.py'
+            entry.write_bytes(script.read_bytes())
+            (root/'native.py').write_text('''"""Capture native rows.
+
+Inputs must share positions; returns scores.
+"""
+import dependency_that_is_not_installed
+raise RuntimeError("MUST_NOT_EXECUTE")
+def capture(value, *, dtype='float32'):
+    """Collect one native row."""
+    return "IMPLEMENTATION"
+def unrelated(value):
+    """UNREQUESTED_INTERFACE"""
+async def collect(value): pass
+class Collector:
+    def capture(self, value): pass
+''')
+            (root/'second.py').write_text('"""Other collector."""\ndef capture(other): pass\n')
+            (root/'_private.py').write_text('"""PRIVATE_MODULE"""\n')
+            def run(*names):
+                return subprocess.run([sys.executable, '-I', '-B', str(entry), *names],
+                                      capture_output=True, text=True)
+            result = run('--list')
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout, run().stdout)
+            self.assertIn('| native | Capture native rows. |', result.stdout)
+            self.assertIn('| second | Other collector. |', result.stdout)
+            for omitted in ('Inputs must share', 'MUST_NOT_EXECUTE', 'PRIVATE_MODULE',
+                            'UNREQUESTED_INTERFACE', 'IMPLEMENTATION'):
+                self.assertNotIn(omitted, result.stdout)
+            result = run('native:capture', 'native:collect', 'native:capture')
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout.count('# native\n'), 1)
+            self.assertEqual(result.stdout.count("capture(value, *, dtype='float32')"), 1)
+            self.assertIn('collect(value)', result.stdout)
+            self.assertIn('Inputs must share positions; returns scores.', result.stdout)
+            self.assertNotIn('UNREQUESTED_INTERFACE', result.stdout)
+            self.assertNotIn('class Collector', result.stdout)
+            self.assertNotIn('IMPLEMENTATION', result.stdout)
+            for names in [('native:capture', 'native'), ('native', 'native:capture')]:
+                self.assertIn('UNREQUESTED_INTERFACE', run(*names).stdout)
+            self.assertIn('Collector.capture(self, value)', run('Collector').stdout)
+            self.assertNotIn('UNREQUESTED_INTERFACE', run('Collector').stdout)
+            result = run('collect')
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('collect(value)', result.stdout)
+            self.assertNotIn('UNREQUESTED_INTERFACE', result.stdout)
+            for names in [('--list', 'native'), ('native:missing',), ('missing:capture',),
+                          ('native:_private',), ('native:capture:extra',)]:
+                result = run(*names)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertEqual(result.stdout, '')
+
     def test_cli_rejects_unknown_names_and_paths_without_partial_output(self):
         script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
         for name in ('not_a_tool', '../array_compare', '/tmp/array_compare', '_private'):

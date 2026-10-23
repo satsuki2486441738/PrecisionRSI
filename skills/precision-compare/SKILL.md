@@ -24,7 +24,7 @@ Start with supplied observations; collect missing ones. Select by input:
 
 Other formats: loading/leaf adapters. Reuse coverage/counts/findings; traverse for missing requested details. Check any independent task inventory.
 
-Query selected interfaces together: `python scripts/tool_help.py compare_trees compare_arrays` ([help](scripts/tool_help.py)). Read implementation for unresolved integration questions. Shards/runtime evidence/remote queries → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
+Interfaces: `python scripts/tool_help.py --list` lists tools; API names return batched contracts/signatures ([help](scripts/tool_help.py)). Inspect implementation for unresolved integration questions. Shards/runtime evidence/remote queries → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
 
 ## Collect
 
