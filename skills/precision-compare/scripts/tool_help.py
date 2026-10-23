@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """Discover tool interfaces without imports or module execution (standard library).
+Call: python scripts/tool_help.py --list; python scripts/tool_help.py [--full] TOOL [TOOL ...]
+Input: Module names, unique API names or module:API selectors.
+Output: Compact declarations/signatures; --full expands detailed contracts.
+Requires: Standard library; AST-only inspection, no tool imports or execution.
 
-CLI: python scripts/tool_help.py [--list | TOOL [TOOL ...]]
+Details:
+CLI: python scripts/tool_help.py [--full] TOOL [TOOL ...], or --list.
 No arguments or --list: compact module/purpose catalog.
 TOOL: module name, unique public API name, or module:API for ambiguous names.
-Module names take precedence. API queries return the owning module's contract
-and only the selected declarations; module queries return all public interfaces.
+Module names take precedence. A module's declaration precedes its Details section.
+Default module queries show that declaration; API queries also include selected
+signatures. --full returns the detailed contract and selected/all interfaces.
+Unsectioned legacy docstrings remain complete, so their constraints stay visible.
 Batch queries share each module contract once. Source bodies/private helpers are
-omitted. Contracts, signatures and catalog summaries come from the current AST;
-no separate registry or execution-framework dependency is required.
+omitted. Documentation and signatures come from the current AST.
 """
 import argparse
 import ast
@@ -37,8 +43,12 @@ def catalog(directory):
     return '\n'.join(lines) + '\n'
 
 
-def describe(path, selected=None):
-    """Extract a module contract and all or selected public declarations statically."""
+def _documentation(doc, full):
+    return doc if full else doc.partition('\n\nDetails:\n')[0]
+
+
+def describe(path, selected=None, full=False):
+    """Read a declaration or full contract; selected APIs include live signatures."""
     path = Path(path)
     tree = _parse(path)
     declarations = _public(tree)
@@ -46,13 +56,16 @@ def describe(path, selected=None):
         missing = set(selected) - declarations.keys()
         if missing:
             raise ValueError('unknown public API: ' + ', '.join(sorted(missing)))
-    lines = ['# ' + path.stem, ast.get_docstring(tree) or '']
+    doc = ast.get_docstring(tree) or ''
+    lines = ['# ' + path.stem, _documentation(doc, full)]
+    if selected is None and not full and '\n\nDetails:\n' in doc:
+        return '\n'.join(lines).rstrip() + '\n'
 
     def function(node, prefix=''):
         signature = prefix + node.name + '(' + ast.unparse(node.args) + ')'
         if node.returns is not None:
             signature += ' -> ' + ast.unparse(node.returns)
-        lines.extend(['\n' + signature, ast.get_docstring(node) or ''])
+        lines.extend(['\n' + signature, _documentation(ast.get_docstring(node) or '', full)])
 
     for name, node in declarations.items():
         if selected is not None and name not in selected:
@@ -60,7 +73,7 @@ def describe(path, selected=None):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             function(node)
         else:
-            lines.extend(['\nclass ' + node.name, ast.get_docstring(node) or ''])
+            lines.extend(['\nclass ' + node.name, _documentation(ast.get_docstring(node) or '', full)])
             for method in node.body:
                 if isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     if not method.name.startswith('_') or method.name == '__init__':
@@ -69,12 +82,16 @@ def describe(path, selected=None):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--list', action='store_true', help='list module purposes only')
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--list', action='store_true', help='list module purposes only')
+    modes.add_argument('--full', action='store_true', help='include detailed contracts and interfaces')
     parser.add_argument('tools', nargs='*', metavar='TOOL')
     args = parser.parse_args(argv)
     if args.list and args.tools:
         parser.error('use --list without tool names')
+    if args.full and not args.tools:
+        parser.error('--full requires tool names')
     directory = Path(__file__).parent
     requests, exports = {}, None
     try:
@@ -111,7 +128,7 @@ def main(argv=None):
                 requests[path] = selected
             elif requests[path] is not None:
                 requests[path] = list(dict.fromkeys(requests[path] + selected))
-        text = '\n'.join(describe(path, selected) for path, selected in requests.items())
+        text = '\n'.join(describe(path, selected, full=args.full) for path, selected in requests.items())
     except (OSError, SyntaxError, ValueError) as exc:
         parser.error(str(exc))
     print(text, end='')

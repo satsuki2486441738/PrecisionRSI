@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Compare next-token distributions using artifact schemas 1/2.
+Call: compare(C, A, B); CLI: python scripts/compare_distributions.py --contract C --side-a A --side-b B --output NEW.json
+Input: Distribution contract and two manifests with fixed histories and score rows.
+Output: Top-100 union/tail JS, probability errors, top-1 agreement and coverage.
+Requires: NumPy; vocab >= 100; normalized FP32/FP64 natural logprobs; -inf means zero; explicit row for multirow arrays.
 
+Details:
 Contract extras: vocab_size>=100; normalization_tolerance>0;
 renormalization=none|full_vocabulary_fp64;
 positions=[{sample:str,position:int,history:[token_id,...]}], with

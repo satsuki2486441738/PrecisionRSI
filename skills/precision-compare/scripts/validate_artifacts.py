@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Validate one execution side's artifact inventory and values.
+Call: validate(C, M); CLI: python scripts/validate_artifacts.py --contract C --manifest M --output NEW.json
+Input: One tensor/distribution contract and one execution-side manifest.
+Output: status=validated, item/coordinate coverage or explicit invalid/unavailable diagnostics.
+Requires: NumPy; checks rank evidence, logical coordinates and values; distribution -inf denotes zero probability.
 
+Details:
 Uses the tensor/distribution schemas in artifact_io.py, compare_tensors.py and
 compare_distributions.py. Reads each required array and checks coordinates,
 ranks, shapes, dtypes and numerical values. Returns status=validated for complete
@@ -65,7 +70,7 @@ def validate(contract_path, manifest_path, chunk_size=1_048_576):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--contract', required=True)
     parser.add_argument('--manifest', required=True)
     parser.add_argument('--output', required=True)

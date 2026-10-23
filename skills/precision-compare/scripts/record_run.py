@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Record one argv execution in a fresh UTC run directory (standard library only).
+Call: python scripts/record_run.py --output-root ROOT --side SIDE --task TASK --timeout SECONDS -- ARGV...
+Input: Literal argv, existing cwd and positive timeout; Python argv may be a run-path factory.
+Output: Fresh UTC run, command.json, full logs and bounded failure tails; API returns (path, record).
+Requires: Standard library; new run path; timeout terminates the owned process group on POSIX. CLI propagates normalized child status.
 
+Details:
 CLI: record_run.py --output-root ROOT --side ID --task TASK --timeout SECONDS
                   [--cwd DIR] [--tail-bytes 2048] -- ARGV...
 API: record_run(output_root, side, task, timeout, argv, cwd=None) -> (Path, dict).
@@ -158,7 +163,7 @@ def _cli_summary(folder, record, tail_bytes):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--output-root', required=True)
     parser.add_argument('--side', required=True)
     parser.add_argument('--task', required=True)

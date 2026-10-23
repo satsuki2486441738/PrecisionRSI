@@ -1,5 +1,10 @@
 """Compare nested native state without prescribing a checkpoint format (NumPy).
+Call: compare_trees(a, b, leaf_adapter=None, metrics=False); CLI: python scripts/tree_compare.py A.pt B.pt --output NEW.json [--metrics]
+Input: Nested mappings/sequences with numeric/text leaves, or trusted Torch checkpoint files.
+Output: Equality, structural/metadata differences and numeric coverage/findings; checkpoints add hashes and sections.
+Requires: NumPy; leaf adapters retain native dtype. Checkpoints require Torch and load on CPU; numeric equality requires finite leaves.
 
+Details:
 compare_trees(a, b, *, leaf_adapter=None, metrics=False, max_findings=8)
 accepts mappings with Python str/int keys, lists, tuples, real NumPy arrays and
 scalars, Python numbers, text and None. Mapping order is ignored; key types,
@@ -182,7 +187,7 @@ def main(argv=None):
     import pickle
     from pathlib import Path
     import sys
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('side_a')
     parser.add_argument('side_b')
     parser.add_argument('--output', required=True)

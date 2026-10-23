@@ -44,6 +44,18 @@ def main():
         cwd = root / 'work'
         cwd.mkdir()
         env = {k: v for k, v in os.environ.items() if k not in ('PYTHONPATH', 'PYTHONHOME')}
+        help_command = [sys.executable, '-I', '-S', '-B', str(installed / 'scripts/tool_help.py')]
+        short = subprocess.run(help_command + ['compare_arrays'], cwd=cwd, env=env,
+                               capture_output=True, text=True, check=True, timeout=30).stdout
+        full = subprocess.run(help_command + ['--full', 'compare_arrays'], cwd=cwd, env=env,
+                              capture_output=True, text=True, check=True, timeout=30).stdout
+        if 'Details:' in short or 'Details:' not in full or len(short) >= len(full):
+            raise ValueError('installed tool discovery lost short/full separation')
+        cli_help = subprocess.run(
+            [sys.executable, '-I', '-B', str(installed / 'scripts/compare_tensors.py'), '--help'],
+            cwd=cwd, env=env, capture_output=True, text=True, check=True, timeout=30).stdout
+        if 'Details:' in cli_help or '--mode' not in cli_help:
+            raise ValueError('installed tensor CLI help lost short declaration or mode flags')
         result = subprocess.run([sys.executable, '-I', '-B', str(installed / 'examples/compare_gradients.py'),
                                  '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,
                                 text=True, check=True, timeout=120)

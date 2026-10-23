@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Compare distributions across hosts without moving full vocabulary arrays.
+Call: inventory(contract, manifest); query(contract, manifest, peer_inventory); compare(contract, query_a, query_b)
+Input: Source manifests, peer inventories and bound union-query responses.
+Output: Distribution metrics from small exchanged queries; full arrays stay at source.
+Requires: NumPy; each phase validates histories, source identities and top-100 union/tail coverage.
 
+Details:
 Uses the distribution contract/manifests in artifact_io.py. Three commands:
  inventory --contract C --manifest M --output NEW.json
  query --contract C --manifest M --peer-inventory I --output NEW.json
@@ -147,7 +152,7 @@ def compare(contract_path,query_a,query_b):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__)
+    parser=argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command',choices=('inventory','query','compare'))
     parser.add_argument('--contract',required=True)
     for name in ('manifest','peer-inventory','side-a','side-b'):parser.add_argument('--'+name)

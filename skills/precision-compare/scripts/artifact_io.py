@@ -1,5 +1,10 @@
 """Artifact schema 1 and bounded-memory NumPy/safetensors readers.
+Call: contract(path, kind); manifest(path, spec); Array(base, descriptor)
+Input: Tensor/distribution schema 1/2 JSON and NumPy/safetensors descriptors.
+Output: Validated records, logical array metadata and bounded numeric reads.
+Requires: NumPy; paths resolve from their containing manifest; shards cover logical coordinates.
 
+Details:
 Contract fields: schema_version=1|2, kind=tensors|distributions, thresholds=null,
 common plus optional side_conditions (see conditions.py) provide model, inputs,
 numerics and scope; training tensors also require state;
@@ -204,7 +209,7 @@ def cli(compare, description, options=None, argv=None):
     Option values are forwarded to compare as keywords alongside the contract
     and two manifest paths.
     """
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=description.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--contract', required=True)
     parser.add_argument('--side-a', required=True)
     parser.add_argument('--side-b', required=True)

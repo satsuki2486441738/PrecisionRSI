@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Export logical tensor shards and compare explicit replica views.
+Call: export_manifest(contract, capture, view=None); compare_views(contract, pairs, base=".")
+Input: Per-rank capture inventories or explicit replica-view pairs.
+Output: Logical tensor manifest or per-view comparisons.
+Requires: NumPy; complete logical shards, declared ranks and explicit view selection; native padding is adapter-owned.
 
+Details:
 export_manifest(contract_path,capture_path,view=None) returns a portable manifest.
 Capture JSON: side, common, expected_ranks, stage, optional events and
 ranks:[{rank,environment:JSON_path,status:JSON_path,inventory:JSON_path}].
@@ -117,7 +122,7 @@ def compare_views(contract_path,pairs,base=Path('.')):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__)
+    parser=argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command',choices=('export','compare-views'))
     parser.add_argument('--contract',required=True)
     parser.add_argument('--capture');parser.add_argument('--view');parser.add_argument('--pairs')

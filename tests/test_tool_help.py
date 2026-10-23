@@ -141,6 +141,81 @@ class Collector:
                 self.assertEqual(result.returncode, 2, result.stderr)
                 self.assertEqual(result.stdout, '')
 
+    def test_declarations_default_and_full_contracts_are_distinct_and_static(self):
+        script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            entry = root/'tool_help.py'
+            entry.write_bytes(script.read_bytes())
+            (root/'native.py').write_text('''"""Capture selected rows.
+Call: capture(values)
+Input: finite rows at matching positions.
+Output: scores and coverage.
+Requires: native runtime; preserve dtype.
+
+Details:
+SCHEMA_DETAIL: rows=[{position:int, values:array}].
+"""
+import dependency_that_is_not_installed
+raise RuntimeError("MUST_NOT_EXECUTE")
+def capture(values, *, dtype='float32'):
+    """Capture matching observations.
+
+Details:
+METHOD_DETAIL: native dtype must be recorded.
+"""
+    return "IMPLEMENTATION"
+def helper(value):
+    """SIBLING_INTERFACE"""
+''')
+            def run(*names):
+                return subprocess.run([sys.executable, '-I', '-B', str(entry), *names],
+                                      capture_output=True, text=True)
+            short = run('native')
+            self.assertEqual(short.returncode, 0, short.stderr)
+            self.assertIn('Input: finite rows at matching positions.', short.stdout)
+            self.assertNotIn('SCHEMA_DETAIL', short.stdout)
+            self.assertNotIn('SIBLING_INTERFACE', short.stdout)
+            selected = run('capture')
+            self.assertEqual(selected.returncode, 0, selected.stderr)
+            self.assertIn("capture(values, *, dtype='float32')", selected.stdout)
+            self.assertIn('Capture matching observations.', selected.stdout)
+            self.assertNotIn('SCHEMA_DETAIL', selected.stdout)
+            self.assertNotIn('METHOD_DETAIL', selected.stdout)
+            expanded = run('--full', 'capture')
+            self.assertEqual(expanded.returncode, 0, expanded.stderr)
+            self.assertIn('SCHEMA_DETAIL', expanded.stdout)
+            self.assertIn('METHOD_DETAIL', expanded.stdout)
+            self.assertNotIn('SIBLING_INTERFACE', expanded.stdout)
+            batch = run('--full', 'native', 'capture', 'native')
+            self.assertEqual(batch.returncode, 0, batch.stderr)
+            self.assertEqual(batch.stdout.count('# native\n'), 1)
+            self.assertIn('SIBLING_INTERFACE', batch.stdout)
+            self.assertIn('SCHEMA_DETAIL', batch.stdout)
+            self.assertGreater(len(batch.stdout), len(short.stdout))
+            for text in (short.stdout, selected.stdout, expanded.stdout, batch.stdout):
+                self.assertNotIn('MUST_NOT_EXECUTE', text)
+                self.assertNotIn('IMPLEMENTATION', text)
+            for names in [('--full',), ('--list', '--full'), ('--full', 'native', 'missing')]:
+                result = run(*names)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertEqual(result.stdout, '')
+
+    def test_direct_cli_help_retains_flags_without_expanding_contracts(self):
+        scripts = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts'
+        result = subprocess.run([sys.executable, '-I', '-S', '-B', str(scripts/'record_run.py'),
+                                 '--help'], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('--timeout', result.stdout)
+        self.assertIn('--tail-bytes', result.stdout)
+        self.assertIn('Input:', result.stdout)
+        self.assertIn('Output:', result.stdout)
+        self.assertNotIn('Details:', result.stdout)
+        full = subprocess.run([sys.executable, '-I', '-S', '-B', str(scripts/'tool_help.py'),
+                               '--full', 'record_run'], capture_output=True, text=True)
+        self.assertEqual(full.returncode, 0, full.stderr)
+        self.assertIn('Details:', full.stdout)
+
     def test_cli_rejects_unknown_names_and_paths_without_partial_output(self):
         script = Path(__file__).resolve().parents[1]/'skills/precision-compare/scripts/tool_help.py'
         for name in ('not_a_tool', '../array_compare', '/tmp/array_compare', '_private'):

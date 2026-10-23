@@ -1,5 +1,10 @@
 """Shared execution-condition checks; standard library.
+Call: expected_conditions(spec, side); check_actual(spec, side, actual); execution_settings(spec, data, base)
+Input: Common/per-side conditions, expected ranks and actual runtime records.
+Output: Checked expected settings or status-bearing ConditionError.
+Requires: Standard library; common/per-side fields are disjoint; JSON comparison preserves numeric/boolean types.
 
+Details:
 Contracts contain common:{field:value}, expected_ranks:{side_id:[rank,...]}, and
 optional side_conditions:{side_id:{field:value}}. A field belongs either to
 common or to each side's conditions, never both. Nested objects are field values.

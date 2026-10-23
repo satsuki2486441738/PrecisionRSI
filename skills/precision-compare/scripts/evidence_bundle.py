@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Pack, verify and safely extract indexed evidence ZIPs with the standard library.
+Call: pack(source_dir, bundle_path); verify(bundle_path); extract(bundle_path, output)
+Input: Selected files or an indexed evidence ZIP; optional literal text replacements.
+Output: Portable bundle or verified/extracted receipts with hashes and sizes.
+Requires: Standard library; new destinations, portable relative paths; default expanded-byte cap 16 GiB.
 
+Details:
 API: pack(source_dir, bundle_path, replacements=None, *, max_expanded_bytes=...),
 verify(bundle_path, index='EXPORT.json', *, max_expanded_bytes=...), and
 extract(bundle_path, output, index='EXPORT.json', *, max_expanded_bytes=...).
@@ -468,7 +473,7 @@ def pack(source_dir, bundle_path, replacements=None, *, max_expanded_bytes=DEFAU
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest='action', required=True)
     for action in ('pack', 'verify', 'extract'):
         command = commands.add_parser(action)

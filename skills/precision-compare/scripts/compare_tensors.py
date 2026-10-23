@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Compare logical observations, gradients or stored updates using artifact schemas 1/2.
+Call: compare(C, A, B, mode="metrics"); CLI: python scripts/compare_tensors.py --contract C --side-a A --side-b B --output NEW.json [--mode nonfinite]
+Input: Tensor contract and paired manifests: observations, gradients, postclip-gradients or updates.
+Output: Global/per-tensor metrics; nonfinite mode returns category counts, sampled locations and finite-subset metrics.
+Requires: NumPy; metrics mode checks common-state initial values; nonfinite metrics cover only paired finite coordinates.
 
+Details:
 Contract extras: stage=observations|gradients|postclip-gradients|updates,
 tensors=[{name,shape,present}] listing logical tensors once.
 Observations require present=true and coordinates:{...} on each contract/manifest

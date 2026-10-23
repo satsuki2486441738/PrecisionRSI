@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Compare cache-off full-forward target scores using schema 2 or 3 and the standard library.
+Call: compare(C, A, B); CLI: python scripts/compare_scores.py --contract C --side-a A --side-b B --output NEW.json
+Input: Schema 2/3 contract and manifests with inputs, observations, summaries and runtime evidence.
+Output: NLL, logprob errors, coverage and execution-condition checks.
+Requires: Standard library; cache-off full forward; assistant-body nonspecial targets. Exit 0 means metrics computed.
 
+Details:
 API: compare(contract_path,side_a_manifest_path,side_b_manifest_path).
 Resolve every path relative to its containing JSON.
 
@@ -627,7 +632,7 @@ def compare(contract, side_a, side_b):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     for name in ("contract", "side_a", "side_b", "output"):
         parser.add_argument("--" + name.replace("_", "-"), type=Path, required=True)
     args = parser.parse_args(argv)

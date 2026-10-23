@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Check selected runtime imports and interfaces in the executing environment.
+Call: probe_runtime(spec, executable=None, timeout=60); inspect_runtime(spec); runtime_identity(report)
+Input: Ordered imports, symbols, task-owned checks and selected source files.
+Output: Actual runtime/import identities, check results and bounded diagnostics.
+Requires: Standard library; native dependencies in the selected interpreter; device execution checks are task-owned.
 
+Details:
 inspect_runtime(spec) runs inside a native worker. probe_runtime(spec,
 executable=None, timeout=60) performs the same check in a fresh interpreter and
 returns its report plus a bounded diagnostic log. The caller selects the worker
@@ -199,7 +204,7 @@ def main():
         report = inspect_runtime(json.load(sys.stdin))
         Path(sys.argv[2]).write_text(json.dumps(report, indent=2, allow_nan=False) + '\n', encoding='utf-8')
         return 0 if report['status'] == 'completed' else 1
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--spec', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--python')

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Compare task-selected target logprobs; standard library, no dialogue policy.
+Call: compare(C, A, B); CLI: python scripts/compare_target_scores.py --contract C --side-a A --side-b B --output NEW.json
+Input: Target-score contract and paired records indexed by sample, position and token.
+Output: Target-weighted NLL, MAE/P99/max logprob error and coverage.
+Requires: Standard library; finite natural logprobs <= 0, exact target inventory and completed rank evidence; EOS allowed.
 
+Details:
 Contract: schema_version=1, kind=target-scores, thresholds=null,
 common + optional side_conditions provide model/inputs/numerics/scope (see
 conditions.py), expected_ranks={side:[rank,...]},
@@ -85,7 +90,7 @@ def compare(contract_path, side_a_path, side_b_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     for name in ('contract','side-a','side-b','output'):
         parser.add_argument('--'+name, required=True)
     args = parser.parse_args()

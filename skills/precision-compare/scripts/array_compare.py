@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Compare already corresponding named arrays without artifact conversion (NumPy).
+Call: compare_arrays(a, b, expected=None, metrics=False); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics]
+Input: Corresponding name-to-numeric-array maps, or NPZ files.
+Output: exact_equal, coverage, bounded findings; optional FP64 error metrics.
+Requires: NumPy; equality requires matching shapes/dtypes and finite values. expected detects shared omissions.
 
+Details:
 API: compare_arrays(side_a, side_b, expected=None, metrics=False,
                     max_findings=8, chunk_size=1048576) -> JSON-ready report.
 Sides map unique logical names to real numeric arrays/scalars. Adapters establish
@@ -162,7 +167,7 @@ def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('side_a')
     parser.add_argument('side_b')
     parser.add_argument('--output', required=True)

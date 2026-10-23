@@ -1,5 +1,10 @@
 """Plan bounded msProbe L0 forward capture without importing Torch or msProbe.
+Call: plan_modules(model, module_paths, output_bytes, dump_path, max_tensor_bytes=None)
+Input: Native module inventory, selected module paths and output byte estimates.
+Output: config, observations, tensor_bytes for a bounded msProbe L0 plan.
+Requires: Standard library; one invocation/module/step/rank; payload includes direct parameters. Verify capture counts/sizes in a trial.
 
+Details:
 API: plan_modules(model, module_paths, output_bytes, dump_path, rank=0, step=0,
                   max_tensor_bytes=None) -> {config, observations, tensor_bytes}.
 model provides named_modules(); modules provide parameters(recurse=False).

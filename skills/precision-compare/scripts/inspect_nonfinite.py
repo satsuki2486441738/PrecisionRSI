@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Nonfinite tensor diagnostics, also exposed by compare_tensors --mode nonfinite.
+Call: compare(C, A, B, max_locations=20); CLI: python scripts/compare_tensors.py --mode nonfinite --contract C --side-a A --side-b B --output NEW.json
+Input: Tensor contract and paired manifests; same inputs as compare_tensors.
+Output: Per-side/joint nonfinite counts, bounded coordinates and paired-finite metrics.
+Requires: NumPy; max_locations caps examples per tensor and globally; partial coverage blocks full aggregates.
 
+Details:
 API: compare(contract_path, side_a_path, side_b_path, chunk_size=1048576,
              max_locations=20). CLI: --contract --side-a --side-b --output,
 with optional --chunk-size and --max-locations. Output is strict finite JSON;

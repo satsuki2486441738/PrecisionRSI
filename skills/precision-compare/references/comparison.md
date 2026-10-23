@@ -6,15 +6,15 @@ Use the entrypoint's common tool declarations directly. Query missing details wi
 
 ```sh
 python scripts/tool_help.py --list                  # module + purpose
-python scripts/tool_help.py compare_trees           # contract + selected API
-python scripts/tool_help.py compare_tensors:compare # qualify ambiguous APIs
+python scripts/tool_help.py compare_trees           # short declaration + signature
+python scripts/tool_help.py --full tree_compare     # detailed contract + interfaces
 ```
 
-Module names return all public interfaces; batch API names to share their module contracts. Use the operation index below to select tools; load details only for the required operation.
+Module names return short declarations; API names add current signatures. Script `--help` also uses short declarations. Qualify ambiguous APIs as `module:API`; batch queries share declarations. When building new manifests/plans or integrating capture, query selected tools with `--full` directly for their schemas and constraints.
 
 | Operation | Interface | Input → output |
 |---|---|---|
-| Discover interfaces | [tool_help](../scripts/tool_help.py): `--list` or API names | Names → purposes, contracts/signatures |
+| Discover interfaces | [tool_help](../scripts/tool_help.py): `--list` or API names | Names → short declarations/signatures; `--full` → detailed contracts |
 | Compare arrays | [array_compare](../scripts/array_compare.py): `compare_arrays` | Named arrays / NPZ → equality, coverage, optional metrics |
 | Compare state | [tree_compare](../scripts/tree_compare.py): `compare_trees`, `compare_checkpoints` | Nested state / Torch files → structure, metadata, numeric differences |
 | Group results | [group_metrics](../scripts/group_metrics.py): `reduce_groups` | Coordinates, groups, reducer → global/per-group results |
@@ -130,4 +130,4 @@ Global metrics concatenate coordinates. Retain counts and signal/error norms. Ac
 
 Cosine is undefined when either norm is zero. Represent undefined metrics as null with a reason.
 
-Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability. For tensor NaN or Inf, use `compare_tensors.py --mode nonfinite` with the same contract and manifests. Report anomaly counts and paired finite coverage separately from finite-subset error metrics; matching nonfinite locations do not establish correctness. Query `tool_help.py inspect_nonfinite` for detailed capture encodings and diagnostic semantics. Retain the original arrays for repair and evidence replay.
+Use finite target scores/tensors; distribution logprobs permit `-inf` for zero probability. For tensor NaN or Inf, use `compare_tensors.py --mode nonfinite` with the same contract and manifests. Report anomaly counts and paired finite coverage separately from finite-subset error metrics; matching nonfinite locations do not establish correctness. Query `tool_help.py --full inspect_nonfinite` for detailed capture encodings and diagnostic semantics. Retain the original arrays for repair and evidence replay.

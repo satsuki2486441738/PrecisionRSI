@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Register and find verified reusable environments, models, adapters or captures.
+Call: register(catalog_path, entry_path); find(catalog_path, kind=None, properties=None, limit=5)
+Input: Resource declarations, selected identity files and successful command receipts.
+Output: Append-only registrations or bounded, content-verified matching resources.
+Requires: Standard library/POSIX; local identity checks do not establish remote liveness; use native probes when needed.
 
+Details:
 API: register(catalog_path, entry_path) -> receipt; find(catalog_path, kind=None,
 properties=None, limit=5) -> current matching resources. Standard library, POSIX.
 CLI: resource_catalog.py register --catalog C --entry E.json
@@ -120,7 +125,7 @@ def find(catalog_path, kind=None, properties=None, limit=5):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command', choices=('register', 'find'))
     parser.add_argument('--catalog', required=True)
     parser.add_argument('--entry')

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Run and resume dependency-linked adaptation/comparison/repair commands (POSIX, stdlib).
+Call: run_workflow(plan_path, workspace, refresh=()); inspect_workflow(plan_path, workspace)
+Input: Dependency plan with source/runtime inputs, outputs, checks and cumulative budget.
+Output: Verified reuse/execution receipts, artifact paths and next_action.
+Requires: Standard library/POSIX; status launches nothing; unchanged failures are retained; --refresh reruns selected stages and descendants.
 
+Details:
 API: run_workflow(plan_path, workspace, refresh=()) or inspect_workflow(plan_path,
 workspace) -> compact continuation report. CLI: workflow.py run|status --plan P
 --workspace W [--refresh STAGE ...]. Exit 0=all declared stages completed,
@@ -394,7 +399,7 @@ def inspect_workflow(plan_path, workspace):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command', choices=('run', 'status'))
     parser.add_argument('--plan', required=True)
     parser.add_argument('--workspace', required=True)

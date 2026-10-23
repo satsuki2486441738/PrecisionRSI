@@ -1,5 +1,10 @@
 """Reduce validated coordinate observations globally and by task-defined groups.
+Call: reduce_groups(expected, groups, reducer, *observations)
+Input: Independent coordinates, group-to-coordinate maps, a reducer and observation maps.
+Output: global and groups reports with independent coverage/metrics.
+Requires: Standard library; coordinates must belong to expected; groups may overlap; incomplete groups have no aggregate.
 
+Details:
 reduce_groups(expected, groups, reducer, *observations) uses only the standard
 library. expected is a nonempty iterable of unique nonempty names (strings) or
 coordinate tuples containing strings/integers. groups maps group names to iterables;

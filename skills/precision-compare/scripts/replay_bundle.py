@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Replay retained artifacts with installed or explicitly selected skill tools.
+Call: replay(bundle, output_root); CLI: python scripts/replay_bundle.py --bundle ZIP --output-root ROOT
+Input: Indexed bundle containing REPLAY.json and retained comparison inputs.
+Output: Fresh UTC run, per-case reports and replay checks; CLI exit 0 when all checks match.
+Requires: Standard library; comparator dependencies at execution; verified in-bundle references; new outputs; default expansion cap 16 GiB.
 
+Details:
 API: replay(bundle, output_root=Path('runs'), scripts=None, index='EXPORT.json',
             *, max_expanded_bytes=DEFAULT_MAX_EXPANDED_BYTES)
 returns (new_run_path, result). evidence_bundle.extract verifies the ZIP index,
@@ -252,7 +257,7 @@ def replay(bundle, output_root=Path('runs'), scripts=None, index='EXPORT.json',
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--bundle', type=Path, required=True)
     parser.add_argument('--output-root', type=Path, default=Path('runs'))
     parser.add_argument('--scripts', type=Path, default=Path(__file__).resolve().parent)

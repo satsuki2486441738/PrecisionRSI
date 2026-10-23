@@ -1,5 +1,10 @@
 """Fixed-history inference capture and export (NumPy; Torch tensor for capture).
+Call: FixedHistory(sample, prompt, continuation).capture_and_force(logits, prefix); derive_logprobs(logits); export_records(records, base)
+Input: Fixed tokens and native full-vocabulary logits before score processors.
+Output: History/score records, logprobs and validated distribution/target exports.
+Requires: NumPy; Torch for capture. Capture forces the next token in place; native FP32 and offline FP64 derivations are distinct.
 
+Details:
 FixedHistory(sample, prompt, continuation, logprob_dtype='float32').capture_and_force(logits, prefix,
 rank=0, boundary='before_constraint') takes one full-vocabulary 1-D native Torch
 logit row. It saves FP32 natural-log softmax before forcing the next fixed token
