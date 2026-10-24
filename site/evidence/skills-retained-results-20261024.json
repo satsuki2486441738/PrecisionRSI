@@ -1,0 +1,1351 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "retained_results_and_requested_configuration_scope",
+  "run": "compare-reuse-20261024T092043Z",
+  "source_revision": "abc1f625cb5f8132d0aca8e26e3f3d25d8d007bc",
+  "input_sha256": {
+    "train.py": "d601007fbdacad4c3ec6024bf8a65677f69ec4f20de42ca81d2ede31f7b1232a",
+    "settings.json": "c09c3c2b494ae3b38e33c6bfd074e4b82d2f295b1cf50c9e5fabaa85716965f1",
+    "batches.pt": "958a0492e64a06b8206408111b23b6a060c8aa967ffe7ff7822f419a2cc4a880"
+  },
+  "context": {
+    "model": "gpt-6.1-sol",
+    "effort": "medium"
+  },
+  "summary": {
+    "a": {
+      "seconds": 219.988,
+      "standard_usd_estimate": 0.22319360000000002,
+      "requests": 14,
+      "tool_calls": 11,
+      "tokens": {
+        "input_tokens": 1326815,
+        "cached_input_tokens": 1312256,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 6285,
+        "total_tokens": 1333100,
+        "uncached_input_tokens": 14559
+      },
+      "first_request_usd": 0.0112872,
+      "post_initial_request_usd": 0.21190640000000002
+    },
+    "b": {
+      "seconds": 394.994,
+      "standard_usd_estimate": 0.4943844,
+      "requests": 23,
+      "tool_calls": 20,
+      "tokens": {
+        "input_tokens": 2132566,
+        "cached_input_tokens": 2037504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 10051,
+        "total_tokens": 2142617,
+        "uncached_input_tokens": 95062
+      },
+      "first_request_usd": 0.1626232,
+      "post_initial_request_usd": 0.3317612
+    },
+    "a_followups": {
+      "seconds": 81.92699999999999,
+      "standard_usd_estimate": 0.09121080000000001,
+      "requests": 6,
+      "tool_calls": 4,
+      "tokens": {
+        "input_tokens": 599669,
+        "cached_input_tokens": 594688,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2178,
+        "total_tokens": 601847,
+        "uncached_input_tokens": 4981
+      }
+    },
+    "b_followups": {
+      "seconds": 131.305,
+      "standard_usd_estimate": 0.1296404,
+      "requests": 8,
+      "tool_calls": 6,
+      "tokens": {
+        "input_tokens": 798592,
+        "cached_input_tokens": 790144,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3373,
+        "total_tokens": 801965,
+        "uncached_input_tokens": 8448
+      }
+    },
+    "phases": {
+      "a": [
+        {
+          "phase": "cold",
+          "start": "2026-10-24T09:20:57.123Z",
+          "end": "2026-10-24T09:23:15.184Z",
+          "seconds": 138.061,
+          "tokens": {
+            "input_tokens": 727146,
+            "cached_input_tokens": 717568,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 4107,
+            "total_tokens": 731253,
+            "uncached_input_tokens": 9578
+          },
+          "requests": 8,
+          "tool_calls": 7,
+          "standard_usd_estimate": 0.1319828,
+          "first_request_usd": 0.0112872,
+          "subsequent_requests_usd": 0.12069560000000001
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-24T09:23:46.957Z",
+          "end": "2026-10-24T09:24:22.031Z",
+          "seconds": 35.074,
+          "tokens": {
+            "input_tokens": 194985,
+            "cached_input_tokens": 194176,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1187,
+            "total_tokens": 196172,
+            "uncached_input_tokens": 809
+          },
+          "requests": 2,
+          "tool_calls": 1,
+          "standard_usd_estimate": 0.0329056,
+          "first_request_usd": 0.018792,
+          "subsequent_requests_usd": 0.0141136
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-24T09:24:52.756Z",
+          "end": "2026-10-24T09:25:39.609Z",
+          "seconds": 46.853,
+          "tokens": {
+            "input_tokens": 404684,
+            "cached_input_tokens": 400512,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 991,
+            "total_tokens": 405675,
+            "uncached_input_tokens": 4172
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0583052,
+          "first_request_usd": 0.012102400000000001,
+          "subsequent_requests_usd": 0.0462028
+        }
+      ],
+      "b": [
+        {
+          "phase": "cold",
+          "start": "2026-10-22T13:44:05.400Z",
+          "end": "2026-10-22T13:48:29.089Z",
+          "seconds": 263.689,
+          "tokens": {
+            "input_tokens": 1333974,
+            "cached_input_tokens": 1247360,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6678,
+            "total_tokens": 1340652,
+            "uncached_input_tokens": 86614
+          },
+          "requests": 15,
+          "tool_calls": 14,
+          "standard_usd_estimate": 0.364744,
+          "first_request_usd": 0.1626232,
+          "subsequent_requests_usd": 0.20212080000000002
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-22T13:49:06.699Z",
+          "end": "2026-10-22T13:50:07.349Z",
+          "seconds": 60.65,
+          "tokens": {
+            "input_tokens": 389087,
+            "cached_input_tokens": 384896,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1654,
+            "total_tokens": 390741,
+            "uncached_input_tokens": 4191
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0634116,
+          "first_request_usd": 0.011773599999999999,
+          "subsequent_requests_usd": 0.051638
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-22T13:51:23.428Z",
+          "end": "2026-10-22T13:52:34.083Z",
+          "seconds": 70.655,
+          "tokens": {
+            "input_tokens": 409505,
+            "cached_input_tokens": 405248,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1719,
+            "total_tokens": 411224,
+            "uncached_input_tokens": 4257
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0662288,
+          "first_request_usd": 0.0120736,
+          "subsequent_requests_usd": 0.0541552
+        }
+      ]
+    },
+    "A_reduction_vs_B_percent": {
+      "seconds": 44.30598945806772,
+      "standard_usd_estimate": 54.854238928250965,
+      "requests": 39.13043478260869,
+      "tool_calls": 44.99999999999999
+    },
+    "A_followup_reduction_vs_B_percent": {
+      "seconds": 37.605574806747654,
+      "standard_usd_estimate": 29.64322849975778,
+      "requests": 25.0,
+      "tool_calls": 33.333333333333336
+    },
+    "trajectory_outputs_by_phase": {
+      "cold": 6,
+      "repeat": 0,
+      "changed": 2
+    }
+  },
+  "previous_iteration_summary": {
+    "a": {
+      "seconds": 349.038,
+      "standard_usd_estimate": 0.3466612,
+      "requests": 19,
+      "tool_calls": 16,
+      "tokens": {
+        "input_tokens": 1985104,
+        "cached_input_tokens": 1958272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 9717,
+        "total_tokens": 1994821,
+        "uncached_input_tokens": 26832
+      },
+      "first_request_usd": 0.011015200000000001,
+      "post_initial_request_usd": 0.335646
+    },
+    "b": {
+      "seconds": 394.994,
+      "standard_usd_estimate": 0.4943844,
+      "requests": 23,
+      "tool_calls": 20,
+      "tokens": {
+        "input_tokens": 2132566,
+        "cached_input_tokens": 2037504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 10051,
+        "total_tokens": 2142617,
+        "uncached_input_tokens": 95062
+      },
+      "first_request_usd": 0.1626232,
+      "post_initial_request_usd": 0.3317612
+    },
+    "a_followups": {
+      "seconds": 148.54700000000003,
+      "standard_usd_estimate": 0.1418036,
+      "requests": 8,
+      "tool_calls": 6,
+      "tokens": {
+        "input_tokens": 902049,
+        "cached_input_tokens": 894976,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3816,
+        "total_tokens": 905865,
+        "uncached_input_tokens": 7073
+      }
+    },
+    "b_followups": {
+      "seconds": 131.305,
+      "standard_usd_estimate": 0.1296404,
+      "requests": 8,
+      "tool_calls": 6,
+      "tokens": {
+        "input_tokens": 798592,
+        "cached_input_tokens": 790144,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3373,
+        "total_tokens": 801965,
+        "uncached_input_tokens": 8448
+      }
+    },
+    "phases": {
+      "a": [
+        {
+          "phase": "cold",
+          "start": "2026-10-24T09:05:29.460Z",
+          "end": "2026-10-24T09:08:49.951Z",
+          "seconds": 200.491,
+          "tokens": {
+            "input_tokens": 1083055,
+            "cached_input_tokens": 1063296,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 5901,
+            "total_tokens": 1088956,
+            "uncached_input_tokens": 19759
+          },
+          "requests": 11,
+          "tool_calls": 10,
+          "standard_usd_estimate": 0.20485760000000003,
+          "first_request_usd": 0.011015200000000001,
+          "subsequent_requests_usd": 0.19384240000000003
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-24T09:09:10.865Z",
+          "end": "2026-10-24T09:10:21.863Z",
+          "seconds": 70.998,
+          "tokens": {
+            "input_tokens": 329287,
+            "cached_input_tokens": 327680,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2303,
+            "total_tokens": 331590,
+            "uncached_input_tokens": 1607
+          },
+          "requests": 3,
+          "tool_calls": 2,
+          "standard_usd_estimate": 0.059011999999999995,
+          "first_request_usd": 0.021966,
+          "subsequent_requests_usd": 0.037045999999999996
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-24T09:10:41.782Z",
+          "end": "2026-10-24T09:11:59.331Z",
+          "seconds": 77.549,
+          "tokens": {
+            "input_tokens": 572762,
+            "cached_input_tokens": 567296,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1513,
+            "total_tokens": 574275,
+            "uncached_input_tokens": 5466
+          },
+          "requests": 5,
+          "tool_calls": 4,
+          "standard_usd_estimate": 0.0827916,
+          "first_request_usd": 0.013456800000000001,
+          "subsequent_requests_usd": 0.0693348
+        }
+      ],
+      "b": [
+        {
+          "phase": "cold",
+          "start": "2026-10-22T13:44:05.400Z",
+          "end": "2026-10-22T13:48:29.089Z",
+          "seconds": 263.689,
+          "tokens": {
+            "input_tokens": 1333974,
+            "cached_input_tokens": 1247360,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6678,
+            "total_tokens": 1340652,
+            "uncached_input_tokens": 86614
+          },
+          "requests": 15,
+          "tool_calls": 14,
+          "standard_usd_estimate": 0.364744,
+          "first_request_usd": 0.1626232,
+          "subsequent_requests_usd": 0.20212080000000002
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-22T13:49:06.699Z",
+          "end": "2026-10-22T13:50:07.349Z",
+          "seconds": 60.65,
+          "tokens": {
+            "input_tokens": 389087,
+            "cached_input_tokens": 384896,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1654,
+            "total_tokens": 390741,
+            "uncached_input_tokens": 4191
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0634116,
+          "first_request_usd": 0.011773599999999999,
+          "subsequent_requests_usd": 0.051638
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-22T13:51:23.428Z",
+          "end": "2026-10-22T13:52:34.083Z",
+          "seconds": 70.655,
+          "tokens": {
+            "input_tokens": 409505,
+            "cached_input_tokens": 405248,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1719,
+            "total_tokens": 411224,
+            "uncached_input_tokens": 4257
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0662288,
+          "first_request_usd": 0.0120736,
+          "subsequent_requests_usd": 0.0541552
+        }
+      ]
+    },
+    "A_reduction_vs_B_percent": {
+      "seconds": 11.634607107956075,
+      "standard_usd_estimate": 29.88023084870801,
+      "requests": 17.391304347826086,
+      "tool_calls": 19.999999999999996
+    },
+    "A_followup_reduction_vs_B_percent": {
+      "seconds": -13.13125928182477,
+      "standard_usd_estimate": -9.382260468187397,
+      "requests": 0.0,
+      "tool_calls": 0.0
+    },
+    "trajectory_outputs_by_phase": {
+      "cold": 14,
+      "repeat": 0,
+      "changed": 6
+    }
+  },
+  "behavior": {
+    "cold": {
+      "new_durable_trajectory_files": [
+        "runs/compare-sft-before-20261024T092150Z/continuous/trajectory.npz",
+        "runs/compare-sft-before-20261024T092150Z/resumed/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092219Z/continuous/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092219Z/resumed/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092237Z/continuous/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092237Z/resumed/trajectory.npz"
+      ],
+      "new_files": [
+        "batches.pt",
+        "runs/compare-sft-before-20261024T092150Z/comparison.json",
+        "runs/compare-sft-before-20261024T092150Z/continuous/checkpoint.pt",
+        "runs/compare-sft-before-20261024T092150Z/continuous/metrics.json",
+        "runs/compare-sft-before-20261024T092150Z/continuous/trajectory.npz",
+        "runs/compare-sft-before-20261024T092150Z/identity.json",
+        "runs/compare-sft-before-20261024T092150Z/resumed/checkpoint.pt",
+        "runs/compare-sft-before-20261024T092150Z/resumed/metrics.json",
+        "runs/compare-sft-before-20261024T092150Z/resumed/trajectory.npz",
+        "runs/compare-sft-before-20261024T092150Z/train.original.py",
+        "runs/compare-sft-verify-20261024T092219Z/comparison.json",
+        "runs/compare-sft-verify-20261024T092219Z/continuous/checkpoint.pt",
+        "runs/compare-sft-verify-20261024T092219Z/continuous/metrics.json",
+        "runs/compare-sft-verify-20261024T092219Z/continuous/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092219Z/identity.json",
+        "runs/compare-sft-verify-20261024T092219Z/resumed/checkpoint.pt",
+        "runs/compare-sft-verify-20261024T092219Z/resumed/metrics.json",
+        "runs/compare-sft-verify-20261024T092219Z/resumed/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092237Z/comparison.json",
+        "runs/compare-sft-verify-20261024T092237Z/continuous/checkpoint.pt",
+        "runs/compare-sft-verify-20261024T092237Z/continuous/metrics.json",
+        "runs/compare-sft-verify-20261024T092237Z/continuous/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092237Z/identity.json",
+        "runs/compare-sft-verify-20261024T092237Z/resumed/checkpoint.pt",
+        "runs/compare-sft-verify-20261024T092237Z/resumed/metrics.json",
+        "runs/compare-sft-verify-20261024T092237Z/resumed/trajectory.npz",
+        "settings.json",
+        "test_resume.py",
+        "train.py"
+      ],
+      "changed_existing_files": [],
+      "core_inputs_changed": null,
+      "calls": [
+        {
+          "timestamp": "2026-10-24T09:21:08.345Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*.py' -g '*.json' -g '*.md' -g '*.yaml' -g '*.yml' -g '*.toml' -g '!**/.venv/**' -g '!**/runs/**' -g '!**/models/**' -g '!**/data/**' | head -100",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 5000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:21:18.517Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "ls -la; cat skills/framework-adapt/SKILL.md skills/precision-repair/SKILL.md skills/precision-compare/SKILL.md; cat settings.json; cat train.py",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 18000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:21:31.574Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "cat skills/precision-compare/references/sft.md; .venv/bin/python skills/precision-compare/scripts/tool_help.py compare_arrays; git status --short; .venv/bin/python -c 'import torch,transformers,numpy; print({\"torch\":torch.__version__,\"transformers\":transformers.__version__,\"numpy\":numpy.__version__,\"device\":\"cpu\",\"dtype\":str(torch.get_default_dtype())})'; git rev-parse HEAD",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 7500,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:21:50.874Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "mkdir -p runs; .venv/bin/python - <<'PY'\nfrom datetime import datetime, timezone\nfrom pathlib import Path\nimport shutil, subprocess, hashlib, json, sys\nroot=Path('runs')/('compare-sft-before-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ'))\nroot.mkdir()\nshutil.copyfile('train.py',root/'train.original.py')\n(root/'identity.json').write_text(json.dumps({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'sha256':{p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in ['train.py','settings.json','batches.pt']}},indent=2)+'\\n')\nprint(root,flush=True)\nfor mode in ['continuous','resumed']:\n subprocess.run([sys.executable,'train.py','--mode',mode,'--output',str(root/mode)],check=True)\nsubprocess.run([sys.executable,'skills/precision-compare/scripts/array_compare.py',str(root/'continuous/trajectory.npz'),str(root/'resumed/trajectory.npz'),'--output',str(root/'comparison.json'),'--metrics'],check=True)\nprint((root/'comparison.json').read_text()[:12000])\nPY",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 5000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:22:17.803Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "cat > test_resume.py <<'PY'\n\"\"\"Exercise the original CPU SFT CLI and require complete, exact continuation.\"\"\"\nimport hashlib\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport unittest\nfrom datetime import datetime, timezone\n\nimport numpy as np\nimport torch\nimport transformers\n\nROOT = Path(__file__).resolve().parent\nsys.path.insert(0, str(ROOT / 'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\n\n\nclass CheckpointContinuationTest(unittest.TestCase):\n    def test_original_workload(self):\n        settings = json.loads((ROOT / 'settings.json').read_text())\n        run = ROOT / 'runs' / ('compare-sft-verify-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ'))\n        run.mkdir(parents=True, exist_ok=False)\n        identity = {\n            'python': sys.version,\n            'torch': torch.__version__,\n            'transformers': transformers.__version__,\n            'numpy': np.__version__,\n            'device': 'cpu', 'dtype': 'float32', 'settings': settings,\n            'sha256': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()\n                       for name in ('train.py', 'settings.json', 'batches.pt')},\n        }\n        (run / 'identity.json').write_text(json.dumps(identity, indent=2) + '\\n')\n        for mode in ('continuous', 'resumed'):\n            subprocess.run([sys.executable, str(ROOT / 'train.py'), '--mode', mode,\n                            '--output', str(run / mode)], cwd=ROOT, check=True)\n        checkpoint = torch.load(run / 'continuous/checkpoint.pt', weights_only=False)\n        # GPT2 ties lm_head to wte; named_parameters intentionally emits it once.\n        state = checkpoint['model']\n        self.assertTrue(torch.equal(state['lm_head.weight'], state['transformer.wte.weight']))\n        parameters = set(state) - {'lm_head.weight'}\n        groups = {kind: [] for kind in ('loss', 'lr', 'gradient', 'parameter', 'update', 'optimizer')}\n        for step in range(settings['steps']):\n            for kind in ('loss', 'lr'):\n                groups[kind].append(f'{step}/{kind}')\n            for name in sorted(parameters):\n                for kind in ('gradient', 'parameter', 'update'):\n                    groups[kind].append(f'{step}/{kind}/{name}')\n                for field in ('exp_avg', 'exp_avg_sq', 'step'):\n                    groups['optimizer'].append(f'{step}/optimizer/{name}/{field}')\n        expected = [name for names in groups.values() for name in names]\n        with np.load(run / 'continuous/trajectory.npz') as a, np.load(run / 'resumed/trajectory.npz') as b:\n            result = compare_arrays(a, b, expected=expected, metrics=True, groups=groups)\n        (run / 'comparison.json').write_text(json.dumps(result, indent=2) + '\\n')\n        print('Evidence:', run, flush=True)\n        print(json.dumps({key: result[key] for key in ('exact_equal', 'coverage', 'unequal_arrays')}, indent=2))\n        self.assertTrue(result['exact_equal'], f\"Continuation diverged; see {run / 'comparison.json'}\")\n        self.assertEqual(json.loads((run / 'continuous/metrics.json').read_text()),\n                         json.loads((run / 'resumed/metrics.json').read_text()))\n\n\nif __name__ == '__main__':\n    unittest.main(verbosity=2)\nPY\n.venv/bin/python -B -m unittest test_resume -v",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 4000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:22:36.833Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python - <<'PY'\nfrom pathlib import Path\np=Path('train.py')\ns=p.read_text().replace(\"            seed(settings['seed'])\\n\",'')\ns=s.replace(\"            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\", \"            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n            # Scheduler construction initializes LR; restore optimizer afterwards.\\n            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler.load_state_dict(saved['scheduler'])\\n            # Restore RNG last: rebuilding the model consumes random numbers.\\n            torch.set_rng_state(saved['torch_rng'])\\n            np.random.set_state(saved['numpy_rng'])\\n            random.setstate(saved['python_rng'])\\n            assert saved['step'] == step, 'Checkpoint and data position must match'\")\np.write_text(s)\nPY\n.venv/bin/python -B -m unittest test_resume -v\n git diff --check\n git diff -- train.py",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 4500,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:22:59.158Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nimport sys,json,hashlib,numpy as np\nsys.path.insert(0,'skills/precision-compare/scripts')\nfrom array_compare import compare_arrays\nbefore=Path('runs/compare-sft-before-20261024T092150Z')\nafter=Path('runs/compare-sft-verify-20261024T092237Z')\nr=json.loads((after/'comparison.json').read_text())\nfor name,g in r['groups'].items():\n print(name,json.dumps({'exact_equal':g['exact_equal'],'arrays':g['coverage']['compared_arrays'],'elements':g['coverage']['compared_elements'],'max_abs':g['metrics']['max_abs']['value']}))\nwith np.load(before/'continuous/trajectory.npz') as a,np.load(after/'continuous/trajectory.npz') as b:\n baseline=compare_arrays(a,b,metrics=True)\nassert baseline['exact_equal']\nprint('Unchanged continuous baseline:',baseline['exact_equal'])\nidentity=json.loads((before/'identity.json').read_text())\nfor p in ('settings.json','batches.pt'):\n assert hashlib.sha256(Path(p).read_bytes()).hexdigest()==identity['sha256'][p]\n print('Unchanged input:',p)\nassert hashlib.sha256((before/'train.original.py').read_bytes()).hexdigest()==identity['sha256']['train.py']\nprint('Original source preserved and verified')\nprint('LR:',[x['lr'] for x in json.loads((after/'resumed/metrics.json').read_text())])\nPY\n git status --short\n git diff --check",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 2500,
+            "yield_time_ms": 10000
+          }
+        }
+      ],
+      "wait_yields": []
+    },
+    "repeat": {
+      "new_durable_trajectory_files": [],
+      "new_files": [],
+      "changed_existing_files": [],
+      "core_inputs_changed": {
+        "train.py": false,
+        "settings.json": false,
+        "batches.pt": false
+      },
+      "calls": [
+        {
+          "timestamp": "2026-10-24T09:24:09.249Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nimport hashlib, json, sys\nimport torch, transformers, numpy as np\nroot=Path.cwd()\nrun=root/'runs/compare-sft-verify-20261024T092237Z'\nidentity=json.loads((run/'identity.json').read_text())\nchecks={name:hashlib.sha256((root/name).read_bytes()).hexdigest()==digest for name,digest in identity['sha256'].items()}\nchecks.update({name:current==identity[name] for name,current in [('python',sys.version),('torch',torch.__version__),('transformers',transformers.__version__),('numpy',np.__version__)]})\nchecks['settings']=json.loads((root/'settings.json').read_text())==identity['settings']\nprint('IDENTITY',json.dumps(checks,ensure_ascii=False))\nassert all(checks.values()), 'Conditions changed; new execution required'\nresult=json.loads((run/'comparison.json').read_text())\nassert result['exact_equal'] and result['unequal_arrays']==0\nfor mode in ('continuous','resumed'):\n for filename in ('trajectory.npz','checkpoint.pt','metrics.json'):\n  assert (run/mode/filename).is_file()\nwith np.load(run/'continuous/trajectory.npz') as a, np.load(run/'resumed/trajectory.npz') as b:\n assert len(a.files)==len(b.files)==result['coverage']['paired_arrays']\nassert json.loads((run/'continuous/metrics.json').read_text())==json.loads((run/'resumed/metrics.json').read_text())\nprint('COVERAGE',json.dumps(result['coverage']))\nfor name,group in result['groups'].items():\n assert group['exact_equal'] and group['unequal_arrays']==0\n print('GROUP',name,json.dumps({'arrays':group['coverage']['compared_arrays'],'elements':group['coverage']['compared_elements'],'exact_equal':group['exact_equal'],'max_abs':group['metrics']['max_abs']['value']}))\nprint('EVIDENCE',run)\nprint('CONFIG',json.dumps({'settings':identity['settings'],'torch':identity['torch'],'transformers':identity['transformers'],'device':identity['device'],'dtype':identity['dtype']}))\nPY",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 3000,
+            "yield_time_ms": 10000
+          }
+        }
+      ],
+      "wait_yields": []
+    },
+    "changed": {
+      "new_durable_trajectory_files": [
+        "runs/compare-sft-verify-20261024T092512Z/continuous/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092512Z/resumed/trajectory.npz"
+      ],
+      "new_files": [
+        "runs/compare-sft-verify-20261024T092512Z/comparison.json",
+        "runs/compare-sft-verify-20261024T092512Z/continuous/checkpoint.pt",
+        "runs/compare-sft-verify-20261024T092512Z/continuous/metrics.json",
+        "runs/compare-sft-verify-20261024T092512Z/continuous/trajectory.npz",
+        "runs/compare-sft-verify-20261024T092512Z/identity.json",
+        "runs/compare-sft-verify-20261024T092512Z/resumed/checkpoint.pt",
+        "runs/compare-sft-verify-20261024T092512Z/resumed/metrics.json",
+        "runs/compare-sft-verify-20261024T092512Z/resumed/trajectory.npz"
+      ],
+      "changed_existing_files": [
+        "settings.json"
+      ],
+      "core_inputs_changed": {
+        "train.py": false,
+        "settings.json": true,
+        "batches.pt": false
+      },
+      "calls": [
+        {
+          "timestamp": "2026-10-24T09:25:01.602Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "cat settings.json; git diff -- train.py; cat test_resume.py; cat skills/precision-compare/SKILL.md skills/precision-repair/SKILL.md; git status --short",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 6500,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:25:10.961Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B -m unittest test_resume -v",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 3000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:25:26.267Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nimport hashlib,json\nfrom pathlib import Path\nrun=Path('runs/compare-sft-verify-20261024T092512Z')\ni=json.loads((run/'identity.json').read_text())\nassert i['settings']['seed']==211 and i['settings']['cut']==4\nfor name,digest in i['sha256'].items():\n assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==digest, name\nr=json.loads((run/'comparison.json').read_text())\nprint('configuration:',json.dumps(i['settings']))\nprint('runtime:',i['torch'],i['transformers'],i['device'],i['dtype'])\nfor name,g in r['groups'].items():\n assert g['exact_equal']\n print(name,'arrays=',g['coverage']['compared_arrays'],'elements=',g['coverage']['compared_elements'],'max_abs=',g['metrics']['max_abs']['value'])\nprint('input/source hashes verified')\nPY\n git diff --check",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r",
+            "max_output_tokens": 2000,
+            "yield_time_ms": 10000
+          }
+        }
+      ],
+      "wait_yields": []
+    }
+  },
+  "task_messages": [
+    {
+      "timestamp": "2026-10-24T09:20:57.906Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "# AGENTS.md instructions for /Users/xcx/Documents/ChatGPT/precision-skill\n\n<INSTRUCTIONS>\n# Repository maintenance\n\n## Layout\n\n- Precision-Skills currently contains three installable packages: `framework-adapt`, `precision-compare` and `precision-repair`. Compare owns shared artifact and task-execution tools. Load components on demand; reuse workload execution, verified resources, inputs/state, collectors and results. `skills/operator-optimize/` is a reserved placeholder with no implementation.\n\n- `skills/framework-adapt/` owns native framework deployment and model/backend adaptation. Keep the entrypoint concise; retain environment declarations and framework-specific implementations with their projects and cases. Reuse comparison tools when numerical validation is needed.\n- `skills/precision-repair/` is the installable repair skill. Its entrypoint owns correctness evidence, causal diagnosis, patching and original-workload verification. Reuse comparison tools from `skills/precision-compare/`; keep framework-specific fixes and experiments with their cases.\n- `skills/precision-compare/` is the installable comparison skill. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Optional internal sampling and its msProbe capability summary live in `references/layerwise.md`. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.\n- Maintain matching English `README.md` and Chinese `README.zh-CN.md`. Technical documentation and maintenance instructions use English. Follow the Agent Skills specification.\n- `skills/precision-compare/examples/` contains concise runnable artifact examples. Extract task-independent operations into composable tools with explicit interfaces and meaningful regressions; keep task-specific settings in adapters and environments.\n- `tests/` contains public tool regressions. Artifact tools require NumPy; the target-score comparator uses the standard library.\n- Private `projects/<project>/environments/` owns reusable environment declarations. Cases own configuration, collectors, tests and execution artifacts. Keep case-specific code there; extract shared code when reused.\n- Keep current guides focused on task semantics and tool usage. Work logs and `runs/` own dated decisions, one-off execution failures and results; resolve tool defects in code and regressions.\n\n`site/` hosts the GitHub Pages evaluation and repair histories. Append evaluations to `site/data/evaluations.json` with peer configurations, comparison scope, measured metrics, coverage and immutable evidence. Keep repair experiments in `site/data/repairs.json` with their existing library/fix/verification hierarchy. Preserve recorded IDs, measurements and evidence; keep full execution artifacts in private cases. Run `python -B .github/validate_history.py` for history changes.\n\n## Changes\n\nConfirm the approach before editing and change at most three files per batch. For a bug fix, reproduce the behavior temporarily, add a meaningful regression and remove the temporary reproducer. Preserve permanent tests.\n\nCreate new runs exclusively as `<side>-<task>-<UTC YYYYmmddTHHMMSSZ>`, using the task's side ID or `compare`. Keep model/data/environment resources in place and preserve historical run bytes and paths. Use a new run for later validation. For undated migrations, use `<side>-<task>-migrated-<UTC migration timestamp>` and retain the path mapping.\n\nFor skill/no-skill benchmark iterations, reuse a verified no-skill baseline while the task and model/runtime conditions remain comparable; rerun only the skill arm. Keep baseline artifacts outside evaluator inputs, record the reused baseline identity, and retain raw usage for consistent repricing.\n\n## Validation\n\nInstall maintenance dependencies with `python -m pip install -r .github/requirements.txt`. Run `python -B -m unittest discover -s tests -v` and `python -B .github/validate.py` from the repository root. With Torch installed, run `python -B .github/smoke_install.py` to verify clean skill installations, companion links and the CPU gradient example. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.\n\n</INSTRUCTIONS>"
+        },
+        {
+          "type": "input_text",
+          "text": "<environment_context>\n  <cwd>/Users/xcx/Documents/ChatGPT/precision-skill</cwd>\n  <shell>zsh</shell>\n  <current_date>2026-10-24</current_date>\n  <timezone>Asia/Shanghai</timezone>\n  <filesystem><workspace_roots><root>/Users/xcx/Documents/ChatGPT/precision-skill</root><root>/Users/xcx/.codex/visualizations/2026/10/21/01a15cf2-e239-7d43-8ab9-3a6f139b162b</root></workspace_roots><permission_profile type=\"disabled\"><file_system type=\"unrestricted\" /></permission_profile></filesystem>\n</environment_context>"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T09:20:57.916Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "在 /var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-v8io7u7r 完成这项任务：适配运行现有 Torch/Transformers CPU FP32 的 GPT2 多步 SFT，比较连续训练与 checkpoint 恢复训练，修复导致两者不一致的问题，使所有已采集的 loss、学习率、梯度、参数、更新量和优化器状态一致，并验证原始工作负载。\n可用 skills（按需使用）：该目录 skills/framework-adapt、skills/precision-compare、skills/precision-repair。解释器是工作目录内 .venv/bin/python。保留模型、数据、算法与原始证据，只修改本工作目录，单次任务预算 8 分钟。不读取其他实验目录、历史报告或会话日志。"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T09:23:46.988Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "请在当前工作目录再次完成相同任务：比较连续 SFT 与 checkpoint 恢复 SFT，确认全部采集项一致。可用 skills 同前，预算 8 分钟。"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T09:24:52.782Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "settings.json 已更新为 seed=211、cut=4。请完成这组配置下的相同任务：比较连续 SFT 与 checkpoint 恢复 SFT，修复不一致并确认全部采集项一致。可用 skills 同前，预算 8 分钟。"
+        }
+      ]
+    }
+  ],
+  "raw_usage": [
+    {
+      "timestamp": "2026-10-24T09:21:08.501Z",
+      "response_id": "resp_056efa6db6b71d46016adc787d07d087d0aa484973b3e9a4f6",
+      "usage": {
+        "input_tokens": 84683,
+        "cached_input_tokens": 84352,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 219,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 84902
+      },
+      "standard_usd_estimate": 0.0112872
+    },
+    {
+      "timestamp": "2026-10-24T09:21:18.634Z",
+      "response_id": "resp_056efa6db6b71d46016adc7888b3b087d0845b60db45f0787a",
+      "usage": {
+        "input_tokens": 85366,
+        "cached_input_tokens": 84736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 102,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 85468
+      },
+      "standard_usd_estimate": 0.0107536
+    },
+    {
+      "timestamp": "2026-10-24T09:21:31.939Z",
+      "response_id": "resp_056efa6db6b71d46016adc78914a2087d0b45da6cee95118c8",
+      "usage": {
+        "input_tokens": 88699,
+        "cached_input_tokens": 85248,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 319,
+        "reasoning_output_tokens": 53,
+        "total_tokens": 89018
+      },
+      "standard_usd_estimate": 0.018616800000000003
+    },
+    {
+      "timestamp": "2026-10-24T09:21:50.985Z",
+      "response_id": "resp_056efa6db6b71d46016adc78a0e04487d083a79e37246786e1",
+      "usage": {
+        "input_tokens": 90464,
+        "cached_input_tokens": 88832,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 603,
+        "reasoning_output_tokens": 248,
+        "total_tokens": 91067
+      },
+      "standard_usd_estimate": 0.0181772
+    },
+    {
+      "timestamp": "2026-10-24T09:22:18.172Z",
+      "response_id": "resp_056efa6db6b71d46016adc78b5d30087d0b29680549a5ccd69",
+      "usage": {
+        "input_tokens": 92431,
+        "cached_input_tokens": 90880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1147,
+        "reasoning_output_tokens": 229,
+        "total_tokens": 93578
+      },
+      "standard_usd_estimate": 0.02366
+    },
+    {
+      "timestamp": "2026-10-24T09:22:36.983Z",
+      "response_id": "resp_056efa6db6b71d46016adc78d217e887d0a8096eef07651502",
+      "usage": {
+        "input_tokens": 94087,
+        "cached_input_tokens": 93440,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 515,
+        "reasoning_output_tokens": 66,
+        "total_tokens": 94602
+      },
+      "standard_usd_estimate": 0.015788
+    },
+    {
+      "timestamp": "2026-10-24T09:22:59.306Z",
+      "response_id": "resp_056efa6db6b71d46016adc78e73ba487d08c65afffc59a8d70",
+      "usage": {
+        "input_tokens": 95235,
+        "cached_input_tokens": 94464,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 622,
+        "reasoning_output_tokens": 189,
+        "total_tokens": 95857
+      },
+      "standard_usd_estimate": 0.0172084
+    },
+    {
+      "timestamp": "2026-10-24T09:23:15.178Z",
+      "response_id": "resp_056efa6db6b71d46016adc78f69c9087d089b4b557fd68754a",
+      "usage": {
+        "input_tokens": 96181,
+        "cached_input_tokens": 95616,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 580,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 96761
+      },
+      "standard_usd_estimate": 0.016491600000000002
+    },
+    {
+      "timestamp": "2026-10-24T09:24:09.387Z",
+      "response_id": "resp_056efa6db6b71d46016adc79299b8487d0822b4233c582ccc5",
+      "usage": {
+        "input_tokens": 96809,
+        "cached_input_tokens": 96640,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 879,
+        "reasoning_output_tokens": 246,
+        "total_tokens": 97688
+      },
+      "standard_usd_estimate": 0.018792
+    },
+    {
+      "timestamp": "2026-10-24T09:24:22.026Z",
+      "response_id": "resp_056efa6db6b71d46016adc793daa0487d0b7d6f87a52e59b7c",
+      "usage": {
+        "input_tokens": 98176,
+        "cached_input_tokens": 97536,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 308,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 98484
+      },
+      "standard_usd_estimate": 0.0141136
+    },
+    {
+      "timestamp": "2026-10-24T09:25:02.184Z",
+      "response_id": "resp_056efa6db6b71d46016adc7967e6ac87d0a7c8b2899529798b",
+      "usage": {
+        "input_tokens": 98550,
+        "cached_input_tokens": 98304,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 178,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 98728
+      },
+      "standard_usd_estimate": 0.012102400000000001
+    },
+    {
+      "timestamp": "2026-10-24T09:25:11.087Z",
+      "response_id": "resp_056efa6db6b71d46016adc797146f887d0a125d179a1e3129a",
+      "usage": {
+        "input_tokens": 101597,
+        "cached_input_tokens": 98560,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 84,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 101681
+      },
+      "standard_usd_estimate": 0.01677
+    },
+    {
+      "timestamp": "2026-10-24T09:25:26.980Z",
+      "response_id": "resp_056efa6db6b71d46016adc797ed03c87d089e51fb5f5948182",
+      "usage": {
+        "input_tokens": 102007,
+        "cached_input_tokens": 101504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 312,
+        "reasoning_output_tokens": 14,
+        "total_tokens": 102319
+      },
+      "standard_usd_estimate": 0.014276400000000002
+    },
+    {
+      "timestamp": "2026-10-24T09:25:39.605Z",
+      "response_id": "resp_056efa6db6b71d46016adc798a0fc487d0a1a372a30ba820f9",
+      "usage": {
+        "input_tokens": 102530,
+        "cached_input_tokens": 102144,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 417,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 102947
+      },
+      "standard_usd_estimate": 0.015156400000000002
+    }
+  ],
+  "session_sha256": "95fc6c239d615b38709d22953e18eecdc5abde08465f721d76cf9f612475520a",
+  "baseline": {
+    "id": "integrated-checkpoint-noskills-20261022T134338Z",
+    "measurement_sha256": "f835346334e4e763322ca351f7400972bbe84ca80aa497f81068358252a0da94",
+    "raw_usage": [
+      {
+        "timestamp": "2026-10-22T13:44:19.305Z",
+        "response_id": "resp_012a005df4be64e2016ada1329a33487d099500e5ce02e285c",
+        "usage": {
+          "input_tokens": 83998,
+          "cached_input_tokens": 3712,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 168,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84166
+        },
+        "standard_usd_estimate": 0.1626232
+      },
+      {
+        "timestamp": "2026-10-22T13:44:28.061Z",
+        "response_id": "resp_012a005df4be64e2016ada1335cab887d0964f2e0f14f1d6c6",
+        "usage": {
+          "input_tokens": 84241,
+          "cached_input_tokens": 83968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 64,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84305
+        },
+        "standard_usd_estimate": 0.0095828
+      },
+      {
+        "timestamp": "2026-10-22T13:44:47.456Z",
+        "response_id": "resp_012a005df4be64e2016ada133f00e887d0b916c9f5c4b95a76",
+        "usage": {
+          "input_tokens": 85458,
+          "cached_input_tokens": 84096,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 533,
+          "reasoning_output_tokens": 31,
+          "total_tokens": 85991
+        },
+        "standard_usd_estimate": 0.016463600000000002
+      },
+      {
+        "timestamp": "2026-10-22T13:45:03.856Z",
+        "response_id": "resp_012a005df4be64e2016ada1353083487d08cd0ec9830862361",
+        "usage": {
+          "input_tokens": 86036,
+          "cached_input_tokens": 85760,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 261,
+          "reasoning_output_tokens": 222,
+          "total_tokens": 86297
+        },
+        "standard_usd_estimate": 0.011738
+      },
+      {
+        "timestamp": "2026-10-22T13:45:24.631Z",
+        "response_id": "resp_012a005df4be64e2016ada1362fb3087d09813c72b0941d5a1",
+        "usage": {
+          "input_tokens": 86838,
+          "cached_input_tokens": 86144,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 503,
+          "reasoning_output_tokens": 189,
+          "total_tokens": 87341
+        },
+        "standard_usd_estimate": 0.0150324
+      },
+      {
+        "timestamp": "2026-10-22T13:45:57.311Z",
+        "response_id": "resp_012a005df4be64e2016ada137751c487d08163d2d46d8e78eb",
+        "usage": {
+          "input_tokens": 87387,
+          "cached_input_tokens": 87168,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1500,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 88887
+        },
+        "standard_usd_estimate": 0.0241548
+      },
+      {
+        "timestamp": "2026-10-22T13:46:08.960Z",
+        "response_id": "resp_012a005df4be64e2016ada1397f55087d09d489b0bbadaaf3a",
+        "usage": {
+          "input_tokens": 88933,
+          "cached_input_tokens": 88704,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 184,
+          "reasoning_output_tokens": 29,
+          "total_tokens": 89117
+        },
+        "standard_usd_estimate": 0.011168399999999998
+      },
+      {
+        "timestamp": "2026-10-22T13:46:20.224Z",
+        "response_id": "resp_012a005df4be64e2016ada13a3d99c87d0b4bd673850721fc7",
+        "usage": {
+          "input_tokens": 89793,
+          "cached_input_tokens": 88960,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 139,
+          "reasoning_output_tokens": 11,
+          "total_tokens": 89932
+        },
+        "standard_usd_estimate": 0.011952
+      },
+      {
+        "timestamp": "2026-10-22T13:46:39.161Z",
+        "response_id": "resp_012a005df4be64e2016ada13b0805487d0b0e48fc6858371a2",
+        "usage": {
+          "input_tokens": 89978,
+          "cached_input_tokens": 89728,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 554,
+          "reasoning_output_tokens": 107,
+          "total_tokens": 90532
+        },
+        "standard_usd_estimate": 0.015012800000000001
+      },
+      {
+        "timestamp": "2026-10-22T13:46:50.174Z",
+        "response_id": "resp_012a005df4be64e2016ada13c2a0a087d08ca195381a1d8e9d",
+        "usage": {
+          "input_tokens": 90580,
+          "cached_input_tokens": 90368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 90617
+        },
+        "standard_usd_estimate": 0.009830800000000002
+      },
+      {
+        "timestamp": "2026-10-22T13:47:00.358Z",
+        "response_id": "resp_012a005df4be64e2016ada13cc78b487d0846a1ab49e8eb5ef",
+        "usage": {
+          "input_tokens": 90784,
+          "cached_input_tokens": 90496,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 90821
+        },
+        "standard_usd_estimate": 0.0099956
+      },
+      {
+        "timestamp": "2026-10-22T13:47:25.450Z",
+        "response_id": "resp_012a005df4be64e2016ada13da853087d096b6ccf94c9829ea",
+        "usage": {
+          "input_tokens": 91225,
+          "cached_input_tokens": 90624,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 668,
+          "reasoning_output_tokens": 137,
+          "total_tokens": 91893
+        },
+        "standard_usd_estimate": 0.0169444
+      },
+      {
+        "timestamp": "2026-10-22T13:47:39.120Z",
+        "response_id": "resp_012a005df4be64e2016ada13f0bf0487d09eb6b747e44ea2cb",
+        "usage": {
+          "input_tokens": 91941,
+          "cached_input_tokens": 91776,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 223,
+          "reasoning_output_tokens": 61,
+          "total_tokens": 92164
+        },
+        "standard_usd_estimate": 0.0117376
+      },
+      {
+        "timestamp": "2026-10-22T13:48:13.343Z",
+        "response_id": "resp_012a005df4be64e2016ada13fd4cac87d09245ce974e316c5c",
+        "usage": {
+          "input_tokens": 92672,
+          "cached_input_tokens": 92032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1372,
+          "reasoning_output_tokens": 182,
+          "total_tokens": 94044
+        },
+        "standard_usd_estimate": 0.0242032
+      },
+      {
+        "timestamp": "2026-10-22T13:48:29.082Z",
+        "response_id": "resp_012a005df4be64e2016ada1420201487d0b544918ead99ad93",
+        "usage": {
+          "input_tokens": 94110,
+          "cached_input_tokens": 93824,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 435,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 94545
+        },
+        "standard_usd_estimate": 0.0143044
+      },
+      {
+        "timestamp": "2026-10-22T13:49:17.709Z",
+        "response_id": "resp_012a005df4be64e2016ada14560f4087d096e54416467f63bc",
+        "usage": {
+          "input_tokens": 94601,
+          "cached_input_tokens": 94336,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 181,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 94782
+        },
+        "standard_usd_estimate": 0.011773599999999999
+      },
+      {
+        "timestamp": "2026-10-22T13:49:43.619Z",
+        "response_id": "resp_012a005df4be64e2016ada14605e6487d0b86837527ee7a173",
+        "usage": {
+          "input_tokens": 97098,
+          "cached_input_tokens": 94592,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1042,
+          "reasoning_output_tokens": 95,
+          "total_tokens": 98140
+        },
+        "standard_usd_estimate": 0.024891200000000002
+      },
+      {
+        "timestamp": "2026-10-22T13:49:53.663Z",
+        "response_id": "resp_012a005df4be64e2016ada147af18487d0999fc34abaaa29e9",
+        "usage": {
+          "input_tokens": 98188,
+          "cached_input_tokens": 97920,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 50,
+          "reasoning_output_tokens": 11,
+          "total_tokens": 98238
+        },
+        "standard_usd_estimate": 0.010828
+      },
+      {
+        "timestamp": "2026-10-22T13:50:07.344Z",
+        "response_id": "resp_012a005df4be64e2016ada1483ef0487d08576fa7384012df8",
+        "usage": {
+          "input_tokens": 99200,
+          "cached_input_tokens": 98048,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 381,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 99581
+        },
+        "standard_usd_estimate": 0.0159188
+      },
+      {
+        "timestamp": "2026-10-22T13:51:36.227Z",
+        "response_id": "resp_012a005df4be64e2016ada14de3f0887d08a45b65e962e563d",
+        "usage": {
+          "input_tokens": 99655,
+          "cached_input_tokens": 99456,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 173,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 99828
+        },
+        "standard_usd_estimate": 0.0120736
+      },
+      {
+        "timestamp": "2026-10-22T13:52:06.846Z",
+        "response_id": "resp_012a005df4be64e2016ada14ed454c87d0acd314d7cb883a94",
+        "usage": {
+          "input_tokens": 102143,
+          "cached_input_tokens": 99584,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1066,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 103209
+        },
+        "standard_usd_estimate": 0.0257364
+      },
+      {
+        "timestamp": "2026-10-22T13:52:18.917Z",
+        "response_id": "resp_012a005df4be64e2016ada150ac1a487d0b904cda47121c280",
+        "usage": {
+          "input_tokens": 103255,
+          "cached_input_tokens": 103040,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 55,
+          "reasoning_output_tokens": 16,
+          "total_tokens": 103310
+        },
+        "standard_usd_estimate": 0.011284
+      },
+      {
+        "timestamp": "2026-10-22T13:52:34.076Z",
+        "response_id": "resp_012a005df4be64e2016ada15156df087d0a686535fa994b41c",
+        "usage": {
+          "input_tokens": 104452,
+          "cached_input_tokens": 103168,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 425,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 104877
+        },
+        "standard_usd_estimate": 0.017134800000000002
+      }
+    ],
+    "phases": [
+      {
+        "phase": "cold",
+        "start": "2026-10-22T13:44:05.400Z",
+        "end": "2026-10-22T13:48:29.089Z",
+        "seconds": 263.689,
+        "tokens": {
+          "input_tokens": 1333974,
+          "cached_input_tokens": 1247360,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 6678,
+          "total_tokens": 1340652,
+          "uncached_input_tokens": 86614
+        },
+        "requests": 15,
+        "tool_calls": 14,
+        "standard_usd_estimate": 0.364744,
+        "first_request_usd": 0.1626232,
+        "subsequent_requests_usd": 0.20212080000000002
+      },
+      {
+        "phase": "repeat",
+        "start": "2026-10-22T13:49:06.699Z",
+        "end": "2026-10-22T13:50:07.349Z",
+        "seconds": 60.65,
+        "tokens": {
+          "input_tokens": 389087,
+          "cached_input_tokens": 384896,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1654,
+          "total_tokens": 390741,
+          "uncached_input_tokens": 4191
+        },
+        "requests": 4,
+        "tool_calls": 3,
+        "standard_usd_estimate": 0.0634116,
+        "first_request_usd": 0.011773599999999999,
+        "subsequent_requests_usd": 0.051638
+      },
+      {
+        "phase": "changed",
+        "start": "2026-10-22T13:51:23.428Z",
+        "end": "2026-10-22T13:52:34.083Z",
+        "seconds": 70.655,
+        "tokens": {
+          "input_tokens": 409505,
+          "cached_input_tokens": 405248,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1719,
+          "total_tokens": 411224,
+          "uncached_input_tokens": 4257
+        },
+        "requests": 4,
+        "tool_calls": 3,
+        "standard_usd_estimate": 0.0662288,
+        "first_request_usd": 0.0120736,
+        "subsequent_requests_usd": 0.0541552
+      }
+    ],
+    "session_sha256": "7d622719b6dff4dac3b87f3aec3094a311dceda066f57d2ea50c95f4ebcb87ca"
+  },
+  "verification": {
+    "cold": {
+      "all_pass": true,
+      "variants": [
+        {
+          "settings": {
+            "seed": 927,
+            "lr": 0.003,
+            "steps": 8,
+            "cut": 3,
+            "accumulation": 2
+          },
+          "arrays": 1360,
+          "elements": 648248,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        },
+        {
+          "settings": {
+            "seed": 38,
+            "lr": 0.001,
+            "steps": 6,
+            "cut": 1,
+            "accumulation": 1
+          },
+          "arrays": 1020,
+          "elements": 486180,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        },
+        {
+          "settings": {
+            "seed": 519,
+            "lr": 0.004,
+            "steps": 9,
+            "cut": 5,
+            "accumulation": 3
+          },
+          "arrays": 1530,
+          "elements": 729288,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        }
+      ],
+      "verification_run": "compare-coldverification-20261024T092645Z"
+    },
+    "changed": {
+      "all_pass": true,
+      "variants": [
+        {
+          "settings": {
+            "seed": 211,
+            "lr": 0.003,
+            "steps": 8,
+            "cut": 4,
+            "accumulation": 2
+          },
+          "arrays": 1360,
+          "elements": 648248,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        }
+      ],
+      "verification_run": "compare-changedverification-20261024T092645Z"
+    },
+    "delivery": {
+      "cold": {
+        "status": "new captures match independent original-workload reference",
+        "new_matching_trajectories": [
+          "runs/compare-sft-before-20261024T092150Z/continuous/trajectory.npz",
+          "runs/compare-sft-verify-20261024T092219Z/continuous/trajectory.npz",
+          "runs/compare-sft-verify-20261024T092237Z/continuous/trajectory.npz",
+          "runs/compare-sft-verify-20261024T092237Z/resumed/trajectory.npz"
+        ],
+        "new_durable_trajectories": 6,
+        "expected_arrays": 1360,
+        "expected_elements": 648248
+      },
+      "repeat": {
+        "status": "reused unchanged verified captures",
+        "new_matching_trajectories": [],
+        "new_durable_trajectories": 0,
+        "expected_arrays": 1360,
+        "expected_elements": 648248
+      },
+      "changed": {
+        "status": "new captures match independent original-workload reference",
+        "new_matching_trajectories": [
+          "runs/compare-sft-verify-20261024T092512Z/continuous/trajectory.npz",
+          "runs/compare-sft-verify-20261024T092512Z/resumed/trajectory.npz"
+        ],
+        "new_durable_trajectories": 2,
+        "expected_arrays": 1360,
+        "expected_elements": 648248
+      }
+    }
+  },
+  "skill_integrity": {
+    "unchanged": true,
+    "files": 34,
+    "snapshot_sha256": "f9bd4693169c48572d8d49188d88a4e93edeaa9a65ff9651a29443cb48665841"
+  },
+  "changes": [
+    "Extend runtime_probe with save_identity and CLI identity checks returning retained results only when all declared file identities match.",
+    "Configuration-only followups validate requested settings; expand regression cases for implementation changes or uncovered failure mechanisms."
+  ],
+  "limits": [
+    "Fresh gpt-6.1-sol / medium agent per trial; each retains context across three direct tasks. No instructions to reuse supplied in evaluator prompts; only skill version differs between A trials.",
+    "Same original train.py/settings.json/batches.pt and CPU Python dependencies as frozen no-skill B. No B agent rerun.",
+    "Three phases: initial native checkpoint repair; identical request with unchanged files; seed=211/cut=4 followup. This is prepared CPU execution, not from-zero framework deployment or accelerator adaptation.",
+    "Time is the sum of active task-start/task-complete windows; parent delay between followups excluded. Source inspection, adapters, training, tests, waits and delivery counted; parent preparation/independent verification excluded.",
+    "Original continuous trajectories preserved. All three agents pass original settings and two heldout variants, plus changed seed/cut; delivered requested captures checked against independent original-workload references.",
+    "Durable trajectory file counts measure retained outputs, not every model invocation; tests may use temporary directories. Repeat/table has zero new files and no training/regression command.",
+    "The previous trials remain unchanged in skills-continuous-reuse-20261024.json. One fresh trial for this revision; historical B is reused. Strategy, cache and service latency vary.",
+    "Report raw first-request, post-initial and follow-up costs separately. Lower overall cost is not sufficient evidence of a skill efficiency gain."
+  ],
+  "pricing": "Retained common Standard snapshot: $2/M ordinary input, $0.10/M cached input, $2.50/M cache-write input, $10/M output; request long-context multipliers applied. Estimates, not account billing.",
+  "phase_snapshot_sha256": {
+    "cold": "b405f1c660e753a0eda9c5f29daac65ba6a22668d71695318739a98233642ce1",
+    "repeat": "b405f1c660e753a0eda9c5f29daac65ba6a22668d71695318739a98233642ce1",
+    "changed": "57ebbe6f1578dee52df517104c485b1600fbe8000885aafd4ac36341ffbc4408"
+  },
+  "observations": {
+    "identity_snapshot_api_used": false,
+    "repeat_new_files": 0,
+    "repeat_tool_calls": 1,
+    "persistent_trajectories_by_phase": [
+      6,
+      0,
+      2
+    ],
+    "changed_configuration_extra_cases": false,
+    "changed_phase_reread_skill_entries": true,
+    "tool_implementation_source_reads": false,
+    "interpretation": "Observed scope and call reductions; the new save_identity API was not adopted, so no measured gain is attributed to it. A single trial cannot separate wording effects from model strategy/cache/latency variability."
+  },
+  "maintenance_validation": {
+    "unit_tests_passed": 389,
+    "runtime_probe_tests_passed": 21,
+    "clean_install_smoke": "passed"
+  }
+}
