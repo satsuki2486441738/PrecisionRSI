@@ -1,0 +1,881 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "explicit_tool_policy_microtest",
+  "source_revision": "67adb102e5bf0a1e22ed86766afb03a0a7b6d4bb",
+  "old_revision": "f69fb9ccb080a20e150639aaab355a4654a28b05",
+  "cases": {
+    "old": {
+      "source_revision": "f69fb9ccb080a20e150639aaab355a4654a28b05",
+      "summary": {
+        "context": {
+          "model": "gpt-6.1-sol",
+          "effort": "medium"
+        },
+        "elapsed_seconds": 183.76,
+        "requests": 10,
+        "total_tool_calls": 9,
+        "tokens": {
+          "input_tokens": 902507,
+          "cached_input_tokens": 890752,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4289,
+          "total_tokens": 906796,
+          "uncached_input_tokens": 11755
+        },
+        "standard_usd_estimate": 0.15547519999999998,
+        "fetch_calls": 4
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": {
+          "inputs_skills_and_source_bytes_unchanged": true,
+          "all_global_and_three_group_metrics_coordinates_coverage": true,
+          "eight_source_files_exact_and_arrays_not_transferred": true,
+          "four_target_tool_use_requirements_satisfied": true
+        },
+        "comparison": {
+          "global": {
+            "status": "completed",
+            "coverage": {
+              "expected_count": 10,
+              "observed_counts": [
+                10,
+                10
+              ],
+              "paired_count": 10,
+              "missing": [
+                [],
+                []
+              ],
+              "observed_fractions": [
+                1.0,
+                1.0
+              ],
+              "paired_fraction": 1.0
+            },
+            "metrics": {
+              "target_count": 10,
+              "side_a_nll_nat_per_token": 2.18,
+              "side_b_nll_nat_per_token": 2.1494999999999997,
+              "nll_abs_diff_nat_per_token": 0.030500000000000416,
+              "mae_nat": 0.10550000000000001,
+              "p99_nat": 0.38200000000000034,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "max_abs_nat": 0.40000000000000036,
+              "max_coordinate": [
+                "sample-c",
+                2,
+                206
+              ],
+              "max_coordinate_fields": {
+                "sample_id": "sample-c",
+                "target_position": 2,
+                "token_id": 206,
+                "prediction_position": 1
+              }
+            }
+          },
+          "groups": {
+            "sample-a": {
+              "status": "completed",
+              "coverage": {
+                "expected_count": 2,
+                "observed_counts": [
+                  2,
+                  2
+                ],
+                "paired_count": 2,
+                "missing": [
+                  [],
+                  []
+                ],
+                "observed_fractions": [
+                  1.0,
+                  1.0
+                ],
+                "paired_fraction": 1.0
+              },
+              "metrics": {
+                "target_count": 2,
+                "side_a_nll_nat_per_token": 1.85,
+                "side_b_nll_nat_per_token": 1.8249999999999997,
+                "nll_abs_diff_nat_per_token": 0.025000000000000355,
+                "mae_nat": 0.07499999999999996,
+                "p99_nat": 0.09950000000000009,
+                "p99_method": "global linear h=0.99*(N-1)",
+                "max_abs_nat": 0.10000000000000009,
+                "max_coordinate": [
+                  "sample-a",
+                  1,
+                  200
+                ],
+                "max_coordinate_fields": {
+                  "sample_id": "sample-a",
+                  "target_position": 1,
+                  "token_id": 200,
+                  "prediction_position": 0
+                }
+              }
+            },
+            "sample-b": {
+              "status": "completed",
+              "coverage": {
+                "expected_count": 3,
+                "observed_counts": [
+                  3,
+                  3
+                ],
+                "paired_count": 3,
+                "missing": [
+                  [],
+                  []
+                ],
+                "observed_fractions": [
+                  1.0,
+                  1.0
+                ],
+                "paired_fraction": 1.0
+              },
+              "metrics": {
+                "target_count": 3,
+                "side_a_nll_nat_per_token": 2.6666666666666665,
+                "side_b_nll_nat_per_token": 2.7099999999999995,
+                "nll_abs_diff_nat_per_token": 0.043333333333333,
+                "mae_nat": 0.09000000000000008,
+                "p99_nat": 0.19739999999999996,
+                "p99_method": "global linear h=0.99*(N-1)",
+                "max_abs_nat": 0.19999999999999996,
+                "max_coordinate": [
+                  "sample-b",
+                  1,
+                  202
+                ],
+                "max_coordinate_fields": {
+                  "sample_id": "sample-b",
+                  "target_position": 1,
+                  "token_id": 202,
+                  "prediction_position": 0
+                }
+              }
+            },
+            "sample-c": {
+              "status": "completed",
+              "coverage": {
+                "expected_count": 5,
+                "observed_counts": [
+                  5,
+                  5
+                ],
+                "paired_count": 5,
+                "missing": [
+                  [],
+                  []
+                ],
+                "observed_fractions": [
+                  1.0,
+                  1.0
+                ],
+                "paired_fraction": 1.0
+              },
+              "metrics": {
+                "target_count": 5,
+                "side_a_nll_nat_per_token": 2.02,
+                "side_b_nll_nat_per_token": 1.943,
+                "nll_abs_diff_nat_per_token": 0.07699999999999996,
+                "mae_nat": 0.12700000000000003,
+                "p99_nat": 0.3884000000000003,
+                "p99_method": "global linear h=0.99*(N-1)",
+                "max_abs_nat": 0.40000000000000036,
+                "max_coordinate": [
+                  "sample-c",
+                  2,
+                  206
+                ],
+                "max_coordinate_fields": {
+                  "sample_id": "sample-c",
+                  "target_position": 2,
+                  "token_id": 206,
+                  "prediction_position": 1
+                }
+              }
+            }
+          }
+        },
+        "behavior": {
+          "tool_implementation_source_reads": 0,
+          "custom_download_reimplementation": false,
+          "manual_NLL_P99_implementation": false,
+          "extra_markdown_or_bundle": false,
+          "fetch_calls": 4,
+          "primary_result_files": 1,
+          "duplicate_integrity_recheck": true
+        },
+        "report_relative_path": "compare-target-logprob-20261024T061725Z/comparison.json",
+        "report_sha256": "17d3fe4e08496edb620e362b1b0775f82ae4715a4978262eefa04c41cd828c50",
+        "fetched_bytes": 3756
+      },
+      "raw_usage": [
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d05bb7887d0bc097462a9b910de",
+          "usage": {
+            "input_tokens": 84710,
+            "cached_input_tokens": 83328,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 137,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 84847
+          },
+          "standard_usd_estimate": 0.0124668,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d4269a487d0a75c9358319774d8",
+          "usage": {
+            "input_tokens": 85867,
+            "cached_input_tokens": 84608,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 76,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 85943
+          },
+          "standard_usd_estimate": 0.0117388,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d4ad41c87d0a0c369280182a3cb",
+          "usage": {
+            "input_tokens": 86817,
+            "cached_input_tokens": 85760,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 201,
+            "reasoning_output_tokens": 9,
+            "total_tokens": 87018
+          },
+          "standard_usd_estimate": 0.0127,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d54970c87d0a17226d1b06411d3",
+          "usage": {
+            "input_tokens": 87473,
+            "cached_input_tokens": 86784,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 123,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 87596
+          },
+          "standard_usd_estimate": 0.0112864,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d5ec72887d084565721e2e83d73",
+          "usage": {
+            "input_tokens": 89974,
+            "cached_input_tokens": 87424,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 299,
+            "reasoning_output_tokens": 17,
+            "total_tokens": 90273
+          },
+          "standard_usd_estimate": 0.0168324,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d69180887d0a9c69c03c9715f73",
+          "usage": {
+            "input_tokens": 90476,
+            "cached_input_tokens": 90112,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 522,
+            "reasoning_output_tokens": 183,
+            "total_tokens": 90998
+          },
+          "standard_usd_estimate": 0.014959199999999999,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d78af4887d0a7db0afa1670aa96",
+          "usage": {
+            "input_tokens": 93020,
+            "cached_input_tokens": 90880,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 130,
+            "reasoning_output_tokens": 23,
+            "total_tokens": 93150
+          },
+          "standard_usd_estimate": 0.014668,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d81431c87d09afb554cf2942024",
+          "usage": {
+            "input_tokens": 93235,
+            "cached_input_tokens": 92928,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 199,
+            "reasoning_output_tokens": 17,
+            "total_tokens": 93434
+          },
+          "standard_usd_estimate": 0.0118968,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4d8b360887d0a82b227494da95a2",
+          "usage": {
+            "input_tokens": 93825,
+            "cached_input_tokens": 93312,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1972,
+            "reasoning_output_tokens": 42,
+            "total_tokens": 95797
+          },
+          "standard_usd_estimate": 0.030077200000000002,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_04a48d931ff23a9a016adc4dae34fc87d0b8a24bb01fe62b5c",
+          "usage": {
+            "input_tokens": 97110,
+            "cached_input_tokens": 95616,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 630,
+            "reasoning_output_tokens": 28,
+            "total_tokens": 97740
+          },
+          "standard_usd_estimate": 0.0188496,
+          "long_context": false
+        }
+      ],
+      "task_messages": [
+        "在 <TASK_DIR> 完成以下任务：取回 resources.json 两个端点已经完成的推理采集文件，依据 inputs.json 的全部目标位置比较双方的原始 target logprob。输出机器可读的总体及分样本双方 NLL、NLL 绝对差、logprob MAE/P99/最大绝对误差及坐标、覆盖率、实际配置和原始证据路径。只取回本次需要的小型 JSON 与日志，完整数组保留在源端。资源和预算见 resources.json；不重新运行模型，不做精度验收判断。本地新增文件仅写在本任务目录；采集源只通过声明的 transport 读取，不修改源文件。不读取仓库历史、其他实验目录或会话日志，不委派其他 agent。可用 skills 见 skills.json。"
+      ],
+      "session_sha256": "2e85f39e7b74c1f9fcc93ff1c82c28471afe5d440a4fb11776a000665031251a",
+      "skill_snapshot": {
+        "skills/precision-compare/SKILL.md": "74e301559d1fcdb531f7c9602fd414d7f3d1103075e7c8f9822fa7edc678b6bf",
+        "skills/precision-compare/examples/compare_gradients.py": "6a1190a246585e6d6a10dbf627e6ffcf671223d3e9e89c6fa5b4886fe393ccfd",
+        "skills/precision-compare/examples/fixed-history-inference.md": "3cec49d3ea584d592fa7d3d3a8a22559b1c00b321790406329da76c22be6bbbe",
+        "skills/precision-compare/examples/workflow_demo.py": "ec524592b8a1e835e62eddd2f5e28d64a7d981ecb516cdeaa5296724d88f739c",
+        "skills/precision-compare/references/comparison.md": "5eb3ddfc40fa346d024e82d0a6680e1f9d59052b291221fd1b13636e1988773f",
+        "skills/precision-compare/references/inference.md": "5d59a892eb5a43187abd1f50609d18e2dfb994fb8ff3f0c19c040be0c60f7af7",
+        "skills/precision-compare/references/layerwise.md": "663e5d6ed5a50b33458a0bd9e97fd26ba3eb0435932a23d79be46ac1b98f4c33",
+        "skills/precision-compare/references/rl.md": "a1efcdf3ccf399b5fd0fb8165be9073b9b96b16d533cdcc2bf4bbbae8e4a5f0b",
+        "skills/precision-compare/references/sft.md": "e062ba9923972dfde635785f4a0fc7ae5a81a76176b885ee30fba56bfd5aa4b5",
+        "skills/precision-compare/scripts/array_compare.py": "7cdce7c0f0d0319fb4a5fd7ad7644660da9bfafce0990b5db0af34186a9dd775",
+        "skills/precision-compare/scripts/artifact_io.py": "b71683274609d2d6676ebdc23eb529f4f153ebbac764c34e726618b2d6730ae3",
+        "skills/precision-compare/scripts/compare_distributions.py": "889a8a74a668dfd2008e2f12c875383ebbedd6d0cee80a36c620bd4622303c05",
+        "skills/precision-compare/scripts/compare_scores.py": "3f9dcac9379fb5dee3b0738e40125778e19475e2797dbfd61a423e1d9c5eacec",
+        "skills/precision-compare/scripts/compare_target_scores.py": "4e2c9be43ae3a0303f4841f8a089485bbd9aac708060e1dfcf0a2672fe44fb8e",
+        "skills/precision-compare/scripts/compare_tensors.py": "3167c9c623b59e6ef1974c50f6e772099682f0a66a56c6ba411c911c2aba872b",
+        "skills/precision-compare/scripts/conditions.py": "a1ea105eb02e81e7aae4ec1589ead27e17489be981fde58116f86a0e8c4c7800",
+        "skills/precision-compare/scripts/evidence_bundle.py": "1cedbc448a75677de908d3a91f1152649f592d1efbae9e17d118121c20bb6e12",
+        "skills/precision-compare/scripts/group_metrics.py": "6dd6583c23266dc1f649d37c94d312653d5d9af0195e4c1083bd074f4424b160",
+        "skills/precision-compare/scripts/inference_capture.py": "0a9c98cfc4ce7d5538ae923c0042c2cbc02d190c631d59864572a3a8f5453cc0",
+        "skills/precision-compare/scripts/msprobe_capture.py": "8d7e9c46816fe7356dee7ae7d55e642a800cb623941d087a3c100fa321e9aaeb",
+        "skills/precision-compare/scripts/query_distributions.py": "2b114bd117c5eb0a4a7d0fb2b087b963c18eb6a0b6a4543f9ae2d4a62ec57686",
+        "skills/precision-compare/scripts/record_run.py": "8fe98559514afaf8091adffa673735082bda715f89d42e92658e7a21aef8cf4f",
+        "skills/precision-compare/scripts/replay_bundle.py": "50a69951a3b21614da70b448a25075ef6bad32ad7ccb520530b99b2766ec8a1f",
+        "skills/precision-compare/scripts/resource_catalog.py": "63bd8a863f840171f13ee7ef8a03852aa8a21d3e589967974ca3e6e2b568cc11",
+        "skills/precision-compare/scripts/runtime_probe.py": "7b1cf36895a43a5310d8175ba78e4dc057e97d31465bd6cbea2f29ca12f8e1fb",
+        "skills/precision-compare/scripts/score_metrics.py": "79ac7b718e683354ffe61bdf71f0a333938cd9d31612d51086317630f966a450",
+        "skills/precision-compare/scripts/tensor_artifacts.py": "de70a8e04e532da3f512559ffd3f62ecf45ce8910d23225f2f1653eb6ccde22e",
+        "skills/precision-compare/scripts/tool_help.py": "f55b5d088759959fc067d7e9bc6e1d3ffa89c494bf9e41d6ab92b460f7769c09",
+        "skills/precision-compare/scripts/tree_compare.py": "be32e472604fce40b19d3fe4690646a60203e55a190717f9cd77a3935881d824",
+        "skills/precision-compare/scripts/validate_artifacts.py": "766a8ae2c7ebaa0df4008c4d7f78ebee67e3f6e1e84cfbdf0fc8293a83abe061",
+        "skills/precision-compare/scripts/workflow.py": "67588d82d350c6921b7a93b3075f1786906bdfcd468693c09ce8731a53d6d0ea"
+      }
+    },
+    "new": {
+      "source_revision": "67adb102e5bf0a1e22ed86766afb03a0a7b6d4bb",
+      "summary": {
+        "context": {
+          "model": "gpt-6.1-sol",
+          "effort": "medium"
+        },
+        "elapsed_seconds": 162.245,
+        "requests": 11,
+        "total_tool_calls": 10,
+        "tokens": {
+          "input_tokens": 995067,
+          "cached_input_tokens": 983680,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4626,
+          "total_tokens": 999693,
+          "uncached_input_tokens": 11387
+        },
+        "standard_usd_estimate": 0.16740200000000002,
+        "fetch_calls": 2
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": {
+          "inputs_skills_and_source_bytes_unchanged": true,
+          "all_global_and_three_group_metrics_coordinates_coverage": true,
+          "eight_source_files_exact_and_arrays_not_transferred": true,
+          "four_target_tool_use_requirements_satisfied": true
+        },
+        "comparison": {
+          "global": {
+            "status": "completed",
+            "coverage": {
+              "expected_count": 10,
+              "observed_counts": [
+                10,
+                10
+              ],
+              "paired_count": 10,
+              "missing": [
+                [],
+                []
+              ]
+            },
+            "metrics": {
+              "target_count": 10,
+              "side_a_nll_nat_per_token": 2.18,
+              "side_b_nll_nat_per_token": 2.1494999999999997,
+              "nll_abs_diff_nat_per_token": 0.030500000000000416,
+              "mae_nat": 0.10550000000000001,
+              "p99_nat": 0.38200000000000034,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "max_abs_nat": 0.40000000000000036,
+              "max_coordinate": [
+                "sample-c",
+                2,
+                206
+              ]
+            }
+          },
+          "groups": {
+            "sample-a": {
+              "status": "completed",
+              "coverage": {
+                "expected_count": 2,
+                "observed_counts": [
+                  2,
+                  2
+                ],
+                "paired_count": 2,
+                "missing": [
+                  [],
+                  []
+                ]
+              },
+              "metrics": {
+                "target_count": 2,
+                "side_a_nll_nat_per_token": 1.85,
+                "side_b_nll_nat_per_token": 1.8249999999999997,
+                "nll_abs_diff_nat_per_token": 0.025000000000000355,
+                "mae_nat": 0.07499999999999996,
+                "p99_nat": 0.09950000000000009,
+                "p99_method": "global linear h=0.99*(N-1)",
+                "max_abs_nat": 0.10000000000000009,
+                "max_coordinate": [
+                  "sample-a",
+                  1,
+                  200
+                ]
+              }
+            },
+            "sample-b": {
+              "status": "completed",
+              "coverage": {
+                "expected_count": 3,
+                "observed_counts": [
+                  3,
+                  3
+                ],
+                "paired_count": 3,
+                "missing": [
+                  [],
+                  []
+                ]
+              },
+              "metrics": {
+                "target_count": 3,
+                "side_a_nll_nat_per_token": 2.6666666666666665,
+                "side_b_nll_nat_per_token": 2.7099999999999995,
+                "nll_abs_diff_nat_per_token": 0.043333333333333,
+                "mae_nat": 0.09000000000000008,
+                "p99_nat": 0.19739999999999996,
+                "p99_method": "global linear h=0.99*(N-1)",
+                "max_abs_nat": 0.19999999999999996,
+                "max_coordinate": [
+                  "sample-b",
+                  1,
+                  202
+                ]
+              }
+            },
+            "sample-c": {
+              "status": "completed",
+              "coverage": {
+                "expected_count": 5,
+                "observed_counts": [
+                  5,
+                  5
+                ],
+                "paired_count": 5,
+                "missing": [
+                  [],
+                  []
+                ]
+              },
+              "metrics": {
+                "target_count": 5,
+                "side_a_nll_nat_per_token": 2.02,
+                "side_b_nll_nat_per_token": 1.943,
+                "nll_abs_diff_nat_per_token": 0.07699999999999996,
+                "mae_nat": 0.12700000000000003,
+                "p99_nat": 0.3884000000000003,
+                "p99_method": "global linear h=0.99*(N-1)",
+                "max_abs_nat": 0.40000000000000036,
+                "max_coordinate": [
+                  "sample-c",
+                  2,
+                  206
+                ]
+              }
+            }
+          }
+        },
+        "behavior": {
+          "tool_implementation_source_reads": 0,
+          "custom_download_reimplementation": false,
+          "manual_NLL_P99_implementation": false,
+          "extra_markdown_or_bundle": false,
+          "fetch_calls": 2,
+          "primary_result_files": 1,
+          "duplicate_integrity_recheck": true
+        },
+        "report_relative_path": "comparison.json",
+        "report_sha256": "fe5df6237f9f314a3785728943960f8ed32fd4d6d90b1eeb0c570b6b704a56c7",
+        "fetched_bytes": 3756
+      },
+      "raw_usage": [
+        {
+          "response_id": "resp_006fb697b0181221016adc4d14f89887d0b0f038fb1aa9e033",
+          "usage": {
+            "input_tokens": 84709,
+            "cached_input_tokens": 83328,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 251,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 84960
+          },
+          "standard_usd_estimate": 0.013604800000000002,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d1f6a4c87d0a15cc83ae6fe8624",
+          "usage": {
+            "input_tokens": 85948,
+            "cached_input_tokens": 84736,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 75,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 86023
+          },
+          "standard_usd_estimate": 0.011647600000000001,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d2e6f9087d0beae2f600bd5fa32",
+          "usage": {
+            "input_tokens": 86987,
+            "cached_input_tokens": 85888,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 196,
+            "reasoning_output_tokens": 11,
+            "total_tokens": 87183
+          },
+          "standard_usd_estimate": 0.0127468,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d39b58887d0b43e813c1e093286",
+          "usage": {
+            "input_tokens": 87637,
+            "cached_input_tokens": 87040,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 118,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 87755
+          },
+          "standard_usd_estimate": 0.011078000000000001,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d41d04887d080afa75f11c91114",
+          "usage": {
+            "input_tokens": 89460,
+            "cached_input_tokens": 87552,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 294,
+            "reasoning_output_tokens": 38,
+            "total_tokens": 89754
+          },
+          "standard_usd_estimate": 0.015511200000000001,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d4d435887d0b55c67ebf2464bb0",
+          "usage": {
+            "input_tokens": 89990,
+            "cached_input_tokens": 89600,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 303,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 90293
+          },
+          "standard_usd_estimate": 0.01277,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d5b941487d09fb5b063fb053f08",
+          "usage": {
+            "input_tokens": 91865,
+            "cached_input_tokens": 90112,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 131,
+            "reasoning_output_tokens": 45,
+            "total_tokens": 91996
+          },
+          "standard_usd_estimate": 0.013827200000000001,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d6840dc87d08d9dc6782922496c",
+          "usage": {
+            "input_tokens": 92717,
+            "cached_input_tokens": 91776,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1256,
+            "reasoning_output_tokens": 44,
+            "total_tokens": 93973
+          },
+          "standard_usd_estimate": 0.0236196,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d831fd087d081af28f6527c6d9c",
+          "usage": {
+            "input_tokens": 94042,
+            "cached_input_tokens": 93824,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 247,
+            "reasoning_output_tokens": 39,
+            "total_tokens": 94289
+          },
+          "standard_usd_estimate": 0.0122884,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4d8d2b4087d08b573980870725f2",
+          "usage": {
+            "input_tokens": 94756,
+            "cached_input_tokens": 94080,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1187,
+            "reasoning_output_tokens": 10,
+            "total_tokens": 95943
+          },
+          "standard_usd_estimate": 0.02263,
+          "long_context": false
+        },
+        {
+          "response_id": "resp_006fb697b0181221016adc4da7a9c487d0839f348896fb8bb1",
+          "usage": {
+            "input_tokens": 96956,
+            "cached_input_tokens": 95744,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 568,
+            "reasoning_output_tokens": 0,
+            "total_tokens": 97524
+          },
+          "standard_usd_estimate": 0.0176784,
+          "long_context": false
+        }
+      ],
+      "task_messages": [
+        "在 <TASK_DIR> 完成以下任务：取回 resources.json 两个端点已经完成的推理采集文件，依据 inputs.json 的全部目标位置比较双方的原始 target logprob。输出机器可读的总体及分样本双方 NLL、NLL 绝对差、logprob MAE/P99/最大绝对误差及坐标、覆盖率、实际配置和原始证据路径。只取回本次需要的小型 JSON 与日志，完整数组保留在源端。资源和预算见 resources.json；不重新运行模型，不做精度验收判断。本地新增文件仅写在本任务目录；采集源只通过声明的 transport 读取，不修改源文件。不读取仓库历史、其他实验目录或会话日志，不委派其他 agent。可用 skills 见 skills.json。"
+      ],
+      "session_sha256": "a2a37fd9324916256984eaf192d63abd853be292b17551dd637176a30ae0d58f",
+      "skill_snapshot": {
+        "skills/precision-compare/SKILL.md": "f9832201059f5a61d941311acf4044d371b81bd72663ac502352017358b11779",
+        "skills/precision-compare/examples/compare_gradients.py": "6a1190a246585e6d6a10dbf627e6ffcf671223d3e9e89c6fa5b4886fe393ccfd",
+        "skills/precision-compare/examples/fixed-history-inference.md": "3cec49d3ea584d592fa7d3d3a8a22559b1c00b321790406329da76c22be6bbbe",
+        "skills/precision-compare/examples/workflow_demo.py": "ec524592b8a1e835e62eddd2f5e28d64a7d981ecb516cdeaa5296724d88f739c",
+        "skills/precision-compare/references/comparison.md": "1df1cdb99f5ae30c85d6e86b70e2c41abc495b4b89242a66e90c818a90288f22",
+        "skills/precision-compare/references/inference.md": "5d59a892eb5a43187abd1f50609d18e2dfb994fb8ff3f0c19c040be0c60f7af7",
+        "skills/precision-compare/references/layerwise.md": "663e5d6ed5a50b33458a0bd9e97fd26ba3eb0435932a23d79be46ac1b98f4c33",
+        "skills/precision-compare/references/rl.md": "a1efcdf3ccf399b5fd0fb8165be9073b9b96b16d533cdcc2bf4bbbae8e4a5f0b",
+        "skills/precision-compare/references/sft.md": "e062ba9923972dfde635785f4a0fc7ae5a81a76176b885ee30fba56bfd5aa4b5",
+        "skills/precision-compare/scripts/array_compare.py": "7cdce7c0f0d0319fb4a5fd7ad7644660da9bfafce0990b5db0af34186a9dd775",
+        "skills/precision-compare/scripts/artifact_io.py": "b71683274609d2d6676ebdc23eb529f4f153ebbac764c34e726618b2d6730ae3",
+        "skills/precision-compare/scripts/compare_distributions.py": "889a8a74a668dfd2008e2f12c875383ebbedd6d0cee80a36c620bd4622303c05",
+        "skills/precision-compare/scripts/compare_scores.py": "3f9dcac9379fb5dee3b0738e40125778e19475e2797dbfd61a423e1d9c5eacec",
+        "skills/precision-compare/scripts/compare_target_scores.py": "4e2c9be43ae3a0303f4841f8a089485bbd9aac708060e1dfcf0a2672fe44fb8e",
+        "skills/precision-compare/scripts/compare_tensors.py": "3167c9c623b59e6ef1974c50f6e772099682f0a66a56c6ba411c911c2aba872b",
+        "skills/precision-compare/scripts/conditions.py": "a1ea105eb02e81e7aae4ec1589ead27e17489be981fde58116f86a0e8c4c7800",
+        "skills/precision-compare/scripts/evidence_bundle.py": "1cedbc448a75677de908d3a91f1152649f592d1efbae9e17d118121c20bb6e12",
+        "skills/precision-compare/scripts/group_metrics.py": "6dd6583c23266dc1f649d37c94d312653d5d9af0195e4c1083bd074f4424b160",
+        "skills/precision-compare/scripts/inference_capture.py": "0a9c98cfc4ce7d5538ae923c0042c2cbc02d190c631d59864572a3a8f5453cc0",
+        "skills/precision-compare/scripts/msprobe_capture.py": "8d7e9c46816fe7356dee7ae7d55e642a800cb623941d087a3c100fa321e9aaeb",
+        "skills/precision-compare/scripts/query_distributions.py": "2b114bd117c5eb0a4a7d0fb2b087b963c18eb6a0b6a4543f9ae2d4a62ec57686",
+        "skills/precision-compare/scripts/record_run.py": "8fe98559514afaf8091adffa673735082bda715f89d42e92658e7a21aef8cf4f",
+        "skills/precision-compare/scripts/replay_bundle.py": "50a69951a3b21614da70b448a25075ef6bad32ad7ccb520530b99b2766ec8a1f",
+        "skills/precision-compare/scripts/resource_catalog.py": "63bd8a863f840171f13ee7ef8a03852aa8a21d3e589967974ca3e6e2b568cc11",
+        "skills/precision-compare/scripts/runtime_probe.py": "7b1cf36895a43a5310d8175ba78e4dc057e97d31465bd6cbea2f29ca12f8e1fb",
+        "skills/precision-compare/scripts/score_metrics.py": "79ac7b718e683354ffe61bdf71f0a333938cd9d31612d51086317630f966a450",
+        "skills/precision-compare/scripts/tensor_artifacts.py": "de70a8e04e532da3f512559ffd3f62ecf45ce8910d23225f2f1653eb6ccde22e",
+        "skills/precision-compare/scripts/tool_help.py": "f55b5d088759959fc067d7e9bc6e1d3ffa89c494bf9e41d6ab92b460f7769c09",
+        "skills/precision-compare/scripts/tree_compare.py": "be32e472604fce40b19d3fe4690646a60203e55a190717f9cd77a3935881d824",
+        "skills/precision-compare/scripts/validate_artifacts.py": "766a8ae2c7ebaa0df4008c4d7f78ebee67e3f6e1e84cfbdf0fc8293a83abe061",
+        "skills/precision-compare/scripts/workflow.py": "67588d82d350c6921b7a93b3075f1786906bdfcd468693c09ce8731a53d6d0ea"
+      }
+    }
+  },
+  "oracle": {
+    "global": {
+      "target_count": 10,
+      "side_a_nll_nat_per_token": 2.18,
+      "side_b_nll_nat_per_token": 2.1494999999999997,
+      "nll_abs_diff_nat_per_token": 0.030500000000000416,
+      "mae_nat": 0.10550000000000001,
+      "p99_nat": 0.38200000000000034,
+      "max_abs_nat": 0.40000000000000036,
+      "max_coordinates": [
+        [
+          "sample-c",
+          2,
+          206
+        ]
+      ]
+    },
+    "groups": {
+      "sample-a": {
+        "target_count": 2,
+        "side_a_nll_nat_per_token": 1.85,
+        "side_b_nll_nat_per_token": 1.8249999999999997,
+        "nll_abs_diff_nat_per_token": 0.025000000000000355,
+        "mae_nat": 0.07499999999999996,
+        "p99_nat": 0.09950000000000009,
+        "max_abs_nat": 0.10000000000000009,
+        "max_coordinates": [
+          [
+            "sample-a",
+            1,
+            200
+          ]
+        ]
+      },
+      "sample-b": {
+        "target_count": 3,
+        "side_a_nll_nat_per_token": 2.6666666666666665,
+        "side_b_nll_nat_per_token": 2.7099999999999995,
+        "nll_abs_diff_nat_per_token": 0.043333333333333,
+        "mae_nat": 0.09000000000000008,
+        "p99_nat": 0.19739999999999996,
+        "max_abs_nat": 0.19999999999999996,
+        "max_coordinates": [
+          [
+            "sample-b",
+            1,
+            202
+          ]
+        ]
+      },
+      "sample-c": {
+        "target_count": 5,
+        "side_a_nll_nat_per_token": 2.02,
+        "side_b_nll_nat_per_token": 1.943,
+        "nll_abs_diff_nat_per_token": 0.07699999999999996,
+        "mae_nat": 0.12700000000000003,
+        "p99_nat": 0.3884000000000003,
+        "max_abs_nat": 0.40000000000000036,
+        "max_coordinates": [
+          [
+            "sample-c",
+            2,
+            206
+          ]
+        ]
+      }
+    },
+    "expected_coordinates": [
+      [
+        "sample-a",
+        1,
+        200
+      ],
+      [
+        "sample-a",
+        2,
+        201
+      ],
+      [
+        "sample-b",
+        1,
+        202
+      ],
+      [
+        "sample-b",
+        2,
+        203
+      ],
+      [
+        "sample-b",
+        3,
+        204
+      ],
+      [
+        "sample-c",
+        1,
+        205
+      ],
+      [
+        "sample-c",
+        2,
+        206
+      ],
+      [
+        "sample-c",
+        3,
+        207
+      ],
+      [
+        "sample-c",
+        4,
+        208
+      ],
+      [
+        "sample-c",
+        5,
+        209
+      ]
+    ],
+    "method": "Independent evaluator arithmetic; no skill imports; verifier/oracle withheld from task agents."
+  },
+  "notes": [
+    "Both arms satisfy the four target behaviors; this trial does not establish a new-policy advantage.",
+    "Both rehashed local files already verified by fetch. This remaining duplicate work is separate from manual metric reimplementation.",
+    "Fixture input_sha256 was a parsed JSON digest with unstated serialization, not raw file bytes. Both agents resolved the ambiguity; extra work is included.",
+    "Old fetched capture/completion batches separately (four calls); new fetched each endpoint once (two calls).",
+    "Small local existing-capture task; no model capture, real SSH, scheduling failure or unfamiliar framework.",
+    "Single observations with concurrent agents, uncontrolled cache/model latency; costs are retained-snapshot estimates, not account billing."
+  ],
+  "limits": [
+    "Synthetic existing captures over local Python-stdin endpoints; not SSH or new model capture.",
+    "Both arms use skills; compares the entrypoint policy revision, not skills versus no skills.",
+    "Same data, runtime, direct requirements and agent model/effort; fresh agents, independent task directories.",
+    "Single observation per arm; cache and model latency uncontrolled.",
+    "Parent preparation and withheld independent verification excluded; all agent calls and retries included."
+  ],
+  "pricing": "Retained Standard snapshot for both arms: input $2/M, cached $0.10/M, cache-write $2.50/M, output $10/M; long-input multipliers apply per response. Estimates, not account billing.",
+  "fixture_issue": {
+    "field": "configuration.input_sha256",
+    "issue": "Canonical json.dumps(parsed_inputs, sort_keys=True) digest was supplied without identifying the serialization; raw input file bytes have a different digest. Both agents independently resolved it.",
+    "effect": "Additional identity investigation/one failed comparison preparation; included in all measurements.",
+    "future_generator_fix": "Use SHA256 of the exact serialized inputs.json bytes; no changes to retained trial inputs."
+  }
+}
