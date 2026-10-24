@@ -18,6 +18,7 @@ Start with supplied observations; collect missing ones. Reuse execution JSON for
 |---|---|---|
 | Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False)` | `exact_equal`, `coverage`, `findings` |
 | Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, `coverage`, `metadata`, `numeric` |
+| Coordinate → natural-logprob maps | `score_metrics.reduce_scores(a, b)` | NLL, NLL difference, MAE/P99/max and coordinate |
 | Coordinate groups | `group_metrics.reduce_groups(expected, groups, reducer, *observations)` | `global`, `groups` |
 | Remote artifacts | `evidence_bundle.fetch(transport, source_dir, include, output)` | Verified local files, hashes, byte counts |
 

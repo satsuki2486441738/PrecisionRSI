@@ -67,7 +67,7 @@ Reuse one execution JSON across native preflight and capture:
 {"argv_prefix":["/env/bin/python"],"path_prepend":["/env/bin"],"env":{"HF_HUB_OFFLINE":"1"}}
 ```
 
-Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Reuse a matching successful preflight; otherwise verify the smallest native call with the capture configuration before full collection.
+Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Prepared environments expose their verified launch command and terminal receipt; reuse them instead of rediscovering submission. Reuse prepared model identity receipts while the resource identity matches; refresh affected identity checks when it changes. Reuse a matching successful preflight; otherwise verify the smallest native call with the capture configuration before full collection.
 
 Run a native command through `record_run` to retain complete logs and receive a compact result with failure diagnostics:
 

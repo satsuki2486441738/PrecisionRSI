@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Record one argv execution in a fresh UTC run directory (standard library only).
-Call: python scripts/record_run.py --output-root ROOT --side SIDE --task TASK --timeout SECONDS -- ARGV...
-Input: Literal argv, existing cwd, timeout and optional reusable execution JSON.
+Call: record_run(output_root, side, task, timeout, argv, cwd=None, execution=None) -> (Path, dict)
+CLI: python scripts/record_run.py --output-root ROOT --side SIDE --task TASK --timeout SECONDS -- ARGV...
+Input: Literal argv or callable(Path) -> argv; execution is an optional JSON file path.
+Example: record_run("runs", "peer", "capture", 300, ["capture.py"], execution=Path("env.json"))
 Output: Fresh UTC run, command.json, full logs and bounded failure tails; API returns (path, record).
 Requires: Standard library; new run path; timeout terminates the owned process group on POSIX. CLI propagates normalized child status.
 
