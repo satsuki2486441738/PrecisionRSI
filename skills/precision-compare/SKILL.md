@@ -8,7 +8,13 @@ description: Collect and compare numerical results across hardware and software 
 ## Scope
 
 - Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
-- Follow-ups: unchanged inputs/state, source/runtime and scope → return existing results and evidence; changed conditions → recompute affected scope; explicit fresh-execution request → collect anew. Enter only for missing collection or comparison.
+- Initially, collect or compare only missing scope. Route follow-ups by the requested action (default: reuse completed evidence):
+
+| Request | Action |
+|---|---|
+| Repeat / confirm a completed task; inputs/state, source/runtime and scope unchanged | Return prior metrics, coverage and paths as reused; skip training/inference and regression reruns. |
+| Conditions or requested scope changed | Recompute affected scope; retain unaffected checks. |
+| Explicitly rerun training/inference or obtain new measurements | Execute fresh captures for the requested scope. |
 
 ## Tool use
 
