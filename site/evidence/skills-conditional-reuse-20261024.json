@@ -1,0 +1,1525 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "conditional_diagnosis_and_interface_reuse",
+  "run": "compare-reuse-20261024T090518Z",
+  "source_revision": "efec5c20515457085dc5363219bec9248ac40db3",
+  "input_sha256": {
+    "train.py": "d601007fbdacad4c3ec6024bf8a65677f69ec4f20de42ca81d2ede31f7b1232a",
+    "settings.json": "c09c3c2b494ae3b38e33c6bfd074e4b82d2f295b1cf50c9e5fabaa85716965f1",
+    "batches.pt": "958a0492e64a06b8206408111b23b6a060c8aa967ffe7ff7822f419a2cc4a880"
+  },
+  "context": {
+    "model": "gpt-6.1-sol",
+    "effort": "medium"
+  },
+  "summary": {
+    "a": {
+      "seconds": 349.038,
+      "standard_usd_estimate": 0.3466612,
+      "requests": 19,
+      "tool_calls": 16,
+      "tokens": {
+        "input_tokens": 1985104,
+        "cached_input_tokens": 1958272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 9717,
+        "total_tokens": 1994821,
+        "uncached_input_tokens": 26832
+      },
+      "first_request_usd": 0.011015200000000001,
+      "post_initial_request_usd": 0.335646
+    },
+    "b": {
+      "seconds": 394.994,
+      "standard_usd_estimate": 0.4943844,
+      "requests": 23,
+      "tool_calls": 20,
+      "tokens": {
+        "input_tokens": 2132566,
+        "cached_input_tokens": 2037504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 10051,
+        "total_tokens": 2142617,
+        "uncached_input_tokens": 95062
+      },
+      "first_request_usd": 0.1626232,
+      "post_initial_request_usd": 0.3317612
+    },
+    "a_followups": {
+      "seconds": 148.54700000000003,
+      "standard_usd_estimate": 0.1418036,
+      "requests": 8,
+      "tool_calls": 6,
+      "tokens": {
+        "input_tokens": 902049,
+        "cached_input_tokens": 894976,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3816,
+        "total_tokens": 905865,
+        "uncached_input_tokens": 7073
+      }
+    },
+    "b_followups": {
+      "seconds": 131.305,
+      "standard_usd_estimate": 0.1296404,
+      "requests": 8,
+      "tool_calls": 6,
+      "tokens": {
+        "input_tokens": 798592,
+        "cached_input_tokens": 790144,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3373,
+        "total_tokens": 801965,
+        "uncached_input_tokens": 8448
+      }
+    },
+    "phases": {
+      "a": [
+        {
+          "phase": "cold",
+          "start": "2026-10-24T09:05:29.460Z",
+          "end": "2026-10-24T09:08:49.951Z",
+          "seconds": 200.491,
+          "tokens": {
+            "input_tokens": 1083055,
+            "cached_input_tokens": 1063296,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 5901,
+            "total_tokens": 1088956,
+            "uncached_input_tokens": 19759
+          },
+          "requests": 11,
+          "tool_calls": 10,
+          "standard_usd_estimate": 0.20485760000000003,
+          "first_request_usd": 0.011015200000000001,
+          "subsequent_requests_usd": 0.19384240000000003
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-24T09:09:10.865Z",
+          "end": "2026-10-24T09:10:21.863Z",
+          "seconds": 70.998,
+          "tokens": {
+            "input_tokens": 329287,
+            "cached_input_tokens": 327680,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2303,
+            "total_tokens": 331590,
+            "uncached_input_tokens": 1607
+          },
+          "requests": 3,
+          "tool_calls": 2,
+          "standard_usd_estimate": 0.059011999999999995,
+          "first_request_usd": 0.021966,
+          "subsequent_requests_usd": 0.037045999999999996
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-24T09:10:41.782Z",
+          "end": "2026-10-24T09:11:59.331Z",
+          "seconds": 77.549,
+          "tokens": {
+            "input_tokens": 572762,
+            "cached_input_tokens": 567296,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1513,
+            "total_tokens": 574275,
+            "uncached_input_tokens": 5466
+          },
+          "requests": 5,
+          "tool_calls": 4,
+          "standard_usd_estimate": 0.0827916,
+          "first_request_usd": 0.013456800000000001,
+          "subsequent_requests_usd": 0.0693348
+        }
+      ],
+      "b": [
+        {
+          "phase": "cold",
+          "start": "2026-10-22T13:44:05.400Z",
+          "end": "2026-10-22T13:48:29.089Z",
+          "seconds": 263.689,
+          "tokens": {
+            "input_tokens": 1333974,
+            "cached_input_tokens": 1247360,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6678,
+            "total_tokens": 1340652,
+            "uncached_input_tokens": 86614
+          },
+          "requests": 15,
+          "tool_calls": 14,
+          "standard_usd_estimate": 0.364744,
+          "first_request_usd": 0.1626232,
+          "subsequent_requests_usd": 0.20212080000000002
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-22T13:49:06.699Z",
+          "end": "2026-10-22T13:50:07.349Z",
+          "seconds": 60.65,
+          "tokens": {
+            "input_tokens": 389087,
+            "cached_input_tokens": 384896,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1654,
+            "total_tokens": 390741,
+            "uncached_input_tokens": 4191
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0634116,
+          "first_request_usd": 0.011773599999999999,
+          "subsequent_requests_usd": 0.051638
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-22T13:51:23.428Z",
+          "end": "2026-10-22T13:52:34.083Z",
+          "seconds": 70.655,
+          "tokens": {
+            "input_tokens": 409505,
+            "cached_input_tokens": 405248,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1719,
+            "total_tokens": 411224,
+            "uncached_input_tokens": 4257
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0662288,
+          "first_request_usd": 0.0120736,
+          "subsequent_requests_usd": 0.0541552
+        }
+      ]
+    },
+    "A_reduction_vs_B_percent": {
+      "seconds": 11.634607107956075,
+      "standard_usd_estimate": 29.88023084870801,
+      "requests": 17.391304347826086,
+      "tool_calls": 19.999999999999996
+    },
+    "A_followup_reduction_vs_B_percent": {
+      "seconds": -13.13125928182477,
+      "standard_usd_estimate": -9.382260468187397,
+      "requests": 0.0,
+      "tool_calls": 0.0
+    },
+    "trajectory_outputs_by_phase": {
+      "cold": 14,
+      "repeat": 0,
+      "changed": 6
+    }
+  },
+  "previous_table_summary": {
+    "a": {
+      "seconds": 260.141,
+      "standard_usd_estimate": 0.320104,
+      "requests": 16,
+      "tool_calls": 13,
+      "tokens": {
+        "input_tokens": 1603106,
+        "cached_input_tokens": 1553920,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 6634,
+        "total_tokens": 1609740,
+        "uncached_input_tokens": 49186
+      },
+      "first_request_usd": 0.012898800000000002,
+      "post_initial_request_usd": 0.3072052
+    },
+    "b": {
+      "seconds": 394.994,
+      "standard_usd_estimate": 0.4943844,
+      "requests": 23,
+      "tool_calls": 20,
+      "tokens": {
+        "input_tokens": 2132566,
+        "cached_input_tokens": 2037504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 10051,
+        "total_tokens": 2142617,
+        "uncached_input_tokens": 95062
+      },
+      "first_request_usd": 0.1626232,
+      "post_initial_request_usd": 0.3317612
+    },
+    "a_followups": {
+      "seconds": 78.38900000000001,
+      "standard_usd_estimate": 0.1458332,
+      "requests": 6,
+      "tool_calls": 4,
+      "tokens": {
+        "input_tokens": 649350,
+        "cached_input_tokens": 617472,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2033,
+        "total_tokens": 651383,
+        "uncached_input_tokens": 31878
+      }
+    },
+    "b_followups": {
+      "seconds": 131.305,
+      "standard_usd_estimate": 0.1296404,
+      "requests": 8,
+      "tool_calls": 6,
+      "tokens": {
+        "input_tokens": 798592,
+        "cached_input_tokens": 790144,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3373,
+        "total_tokens": 801965,
+        "uncached_input_tokens": 8448
+      }
+    },
+    "phases": {
+      "a": [
+        {
+          "phase": "cold",
+          "start": "2026-10-24T08:41:11.866Z",
+          "end": "2026-10-24T08:44:13.618Z",
+          "seconds": 181.752,
+          "tokens": {
+            "input_tokens": 953756,
+            "cached_input_tokens": 936448,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 4601,
+            "total_tokens": 958357,
+            "uncached_input_tokens": 17308
+          },
+          "requests": 10,
+          "tool_calls": 9,
+          "standard_usd_estimate": 0.1742708,
+          "first_request_usd": 0.012898800000000002,
+          "subsequent_requests_usd": 0.16137200000000002
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-24T08:46:26.068Z",
+          "end": "2026-10-24T08:47:06.735Z",
+          "seconds": 40.667,
+          "tokens": {
+            "input_tokens": 317086,
+            "cached_input_tokens": 313728,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1294,
+            "total_tokens": 318380,
+            "uncached_input_tokens": 3358
+          },
+          "requests": 3,
+          "tool_calls": 2,
+          "standard_usd_estimate": 0.0510288,
+          "first_request_usd": 0.0135764,
+          "subsequent_requests_usd": 0.0374524
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-24T08:48:21.232Z",
+          "end": "2026-10-24T08:48:58.954Z",
+          "seconds": 37.722,
+          "tokens": {
+            "input_tokens": 332264,
+            "cached_input_tokens": 303744,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 739,
+            "total_tokens": 333003,
+            "uncached_input_tokens": 28520
+          },
+          "requests": 3,
+          "tool_calls": 2,
+          "standard_usd_estimate": 0.0948044,
+          "first_request_usd": 0.013264,
+          "subsequent_requests_usd": 0.0815404
+        }
+      ],
+      "b": [
+        {
+          "phase": "cold",
+          "start": "2026-10-22T13:44:05.400Z",
+          "end": "2026-10-22T13:48:29.089Z",
+          "seconds": 263.689,
+          "tokens": {
+            "input_tokens": 1333974,
+            "cached_input_tokens": 1247360,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6678,
+            "total_tokens": 1340652,
+            "uncached_input_tokens": 86614
+          },
+          "requests": 15,
+          "tool_calls": 14,
+          "standard_usd_estimate": 0.364744,
+          "first_request_usd": 0.1626232,
+          "subsequent_requests_usd": 0.20212080000000002
+        },
+        {
+          "phase": "repeat",
+          "start": "2026-10-22T13:49:06.699Z",
+          "end": "2026-10-22T13:50:07.349Z",
+          "seconds": 60.65,
+          "tokens": {
+            "input_tokens": 389087,
+            "cached_input_tokens": 384896,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1654,
+            "total_tokens": 390741,
+            "uncached_input_tokens": 4191
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0634116,
+          "first_request_usd": 0.011773599999999999,
+          "subsequent_requests_usd": 0.051638
+        },
+        {
+          "phase": "changed",
+          "start": "2026-10-22T13:51:23.428Z",
+          "end": "2026-10-22T13:52:34.083Z",
+          "seconds": 70.655,
+          "tokens": {
+            "input_tokens": 409505,
+            "cached_input_tokens": 405248,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1719,
+            "total_tokens": 411224,
+            "uncached_input_tokens": 4257
+          },
+          "requests": 4,
+          "tool_calls": 3,
+          "standard_usd_estimate": 0.0662288,
+          "first_request_usd": 0.0120736,
+          "subsequent_requests_usd": 0.0541552
+        }
+      ]
+    },
+    "A_reduction_vs_B_percent": {
+      "seconds": 34.1405185901558,
+      "standard_usd_estimate": 35.25200228809808,
+      "requests": 30.434782608695656,
+      "tool_calls": 35.0
+    },
+    "A_followup_reduction_vs_B_percent": {
+      "seconds": 40.300064734777806,
+      "standard_usd_estimate": -12.49055078509478,
+      "requests": 25.0,
+      "tool_calls": 33.333333333333336
+    },
+    "trajectory_outputs_by_phase": {
+      "cold": 10,
+      "repeat": 0,
+      "changed": 2
+    }
+  },
+  "behavior": {
+    "cold": {
+      "new_durable_trajectory_files": [
+        "runs/compare-regression-20261024T090658Z/continuous-cut1-20261024T090658Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/continuous-cut7-20261024T090704Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/continuous-original-20261024T090707Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/resumed-cut1-20261024T090658Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/resumed-cut7-20261024T090704Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/resumed-original-20261024T090707Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/continuous-cut1-20261024T090733Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/continuous-cut7-20261024T090737Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/continuous-original-20261024T090740Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/resumed-cut1-20261024T090733Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/resumed-cut7-20261024T090737Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/resumed-original-20261024T090740Z/trajectory.npz",
+        "runs/continuous-sft-20261024T090604Z/trajectory.npz",
+        "runs/resumed-sft-20261024T090604Z/trajectory.npz"
+      ],
+      "new_files": [
+        "batches.pt",
+        "runs/compare-baseline-20261024T090604Z/comparison.json",
+        "runs/compare-reference-20261024T090831Z/comparison.json",
+        "runs/compare-regression-20261024T090658Z/continuous-cut1-20261024T090658Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090658Z/continuous-cut1-20261024T090658Z/metrics.json",
+        "runs/compare-regression-20261024T090658Z/continuous-cut1-20261024T090658Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/continuous-cut7-20261024T090704Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090658Z/continuous-cut7-20261024T090704Z/metrics.json",
+        "runs/compare-regression-20261024T090658Z/continuous-cut7-20261024T090704Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/continuous-original-20261024T090707Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090658Z/continuous-original-20261024T090707Z/metrics.json",
+        "runs/compare-regression-20261024T090658Z/continuous-original-20261024T090707Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/cut1-comparison.json",
+        "runs/compare-regression-20261024T090658Z/cut1-settings.json",
+        "runs/compare-regression-20261024T090658Z/cut7-comparison.json",
+        "runs/compare-regression-20261024T090658Z/cut7-settings.json",
+        "runs/compare-regression-20261024T090658Z/original-comparison.json",
+        "runs/compare-regression-20261024T090658Z/original-settings.json",
+        "runs/compare-regression-20261024T090658Z/resumed-cut1-20261024T090658Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090658Z/resumed-cut1-20261024T090658Z/metrics.json",
+        "runs/compare-regression-20261024T090658Z/resumed-cut1-20261024T090658Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/resumed-cut7-20261024T090704Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090658Z/resumed-cut7-20261024T090704Z/metrics.json",
+        "runs/compare-regression-20261024T090658Z/resumed-cut7-20261024T090704Z/trajectory.npz",
+        "runs/compare-regression-20261024T090658Z/resumed-original-20261024T090707Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090658Z/resumed-original-20261024T090707Z/metrics.json",
+        "runs/compare-regression-20261024T090658Z/resumed-original-20261024T090707Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/continuous-cut1-20261024T090733Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090733Z/continuous-cut1-20261024T090733Z/metrics.json",
+        "runs/compare-regression-20261024T090733Z/continuous-cut1-20261024T090733Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/continuous-cut7-20261024T090737Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090733Z/continuous-cut7-20261024T090737Z/metrics.json",
+        "runs/compare-regression-20261024T090733Z/continuous-cut7-20261024T090737Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/continuous-original-20261024T090740Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090733Z/continuous-original-20261024T090740Z/metrics.json",
+        "runs/compare-regression-20261024T090733Z/continuous-original-20261024T090740Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/cut1-comparison.json",
+        "runs/compare-regression-20261024T090733Z/cut1-settings.json",
+        "runs/compare-regression-20261024T090733Z/cut7-comparison.json",
+        "runs/compare-regression-20261024T090733Z/cut7-settings.json",
+        "runs/compare-regression-20261024T090733Z/original-comparison.json",
+        "runs/compare-regression-20261024T090733Z/original-settings.json",
+        "runs/compare-regression-20261024T090733Z/resumed-cut1-20261024T090733Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090733Z/resumed-cut1-20261024T090733Z/metrics.json",
+        "runs/compare-regression-20261024T090733Z/resumed-cut1-20261024T090733Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/resumed-cut7-20261024T090737Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090733Z/resumed-cut7-20261024T090737Z/metrics.json",
+        "runs/compare-regression-20261024T090733Z/resumed-cut7-20261024T090737Z/trajectory.npz",
+        "runs/compare-regression-20261024T090733Z/resumed-original-20261024T090740Z/checkpoint.pt",
+        "runs/compare-regression-20261024T090733Z/resumed-original-20261024T090740Z/metrics.json",
+        "runs/compare-regression-20261024T090733Z/resumed-original-20261024T090740Z/trajectory.npz",
+        "runs/compare-regression-green-20261024T090732Z/command.json",
+        "runs/compare-regression-green-20261024T090732Z/stderr.bin",
+        "runs/compare-regression-green-20261024T090732Z/stdout.bin",
+        "runs/compare-regression-red-20261024T090657Z/command.json",
+        "runs/compare-regression-red-20261024T090657Z/stderr.bin",
+        "runs/compare-regression-red-20261024T090657Z/stdout.bin",
+        "runs/continuous-sft-20261024T090604Z/checkpoint.pt",
+        "runs/continuous-sft-20261024T090604Z/metrics.json",
+        "runs/continuous-sft-20261024T090604Z/trajectory.npz",
+        "runs/resumed-sft-20261024T090604Z/checkpoint.pt",
+        "runs/resumed-sft-20261024T090604Z/metrics.json",
+        "runs/resumed-sft-20261024T090604Z/trajectory.npz",
+        "settings.json",
+        "test_resume.py",
+        "train.py"
+      ],
+      "changed_existing_files": [],
+      "core_inputs_changed": null,
+      "calls": [
+        {
+          "timestamp": "2026-10-24T09:05:42.592Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "pwd && rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*.py' -g '*.json' -g '*.yaml' -g '*.sh' -g 'README*' -g '*.toml' | head -160",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 6000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:05:51.690Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "ls -la && cat settings.json && cat train.py && cat skills/precision-repair/SKILL.md && cat skills/framework-adapt/SKILL.md && cat skills/precision-compare/SKILL.md",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 14000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:06:04.284Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "cat skills/precision-compare/references/sft.md && cat skills/precision-compare/references/comparison.md && .venv/bin/python skills/precision-compare/scripts/tool_help.py array_compare && git status --short && .venv/bin/python - <<'PY'\nfrom concurrent.futures import ThreadPoolExecutor\nfrom datetime import datetime, timezone\nfrom pathlib import Path\nimport subprocess, json, hashlib\nstamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\nroot=Path('runs'); root.mkdir(exist_ok=True)\npaths={side:str(root/f'{side}-sft-{stamp}') for side in ('continuous','resumed')}\ndef run(item):\n side,path=item\n p=subprocess.run(['.venv/bin/python','train.py','--mode',side,'--output',path],capture_output=True,text=True)\n print(json.dumps({'side':side,'path':path,'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr}))\nwith ThreadPoolExecutor(max_workers=2) as pool: list(pool.map(run,paths.items()))\nprint(json.dumps({'baseline':paths}))\nPY",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 10000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:06:25.966Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python - <<'PY'\nimport sys,json\nsys.path.insert(0,'skills/precision-compare/scripts')\nfrom array_compare import compare_arrays\nfrom pathlib import Path\nimport numpy as np\nbase=Path('runs/continuous-sft-20261024T090604Z/trajectory.npz'); resumed=Path('runs/resumed-sft-20261024T090604Z/trajectory.npz')\nwith np.load(base) as a, np.load(resumed) as b:\n groups={k:[n for n in a.files if n.split('/')[1]==k] for k in ('loss','lr','gradient','parameter','update','optimizer')}\n report=compare_arrays(a,b,metrics=True,groups=groups)\n print(json.dumps(report,indent=2)[:18000])\n out=Path('runs/compare-baseline-20261024T090604Z');out.mkdir();(out/'comparison.json').write_text(json.dumps(report,indent=2)+'\\n')\n print('Loss/LR:',[(s,json.loads((Path('runs')/f'{s}-sft-20261024T090604Z'/'metrics.json').read_text())) for s in ('continuous','resumed')])\nPY\n.venv/bin/python skills/precision-compare/scripts/tool_help.py --full record_run",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 7000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:06:57.818Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "cat > test_resume.py <<'PY'\n\"\"\"Checkpoint continuation must preserve the full native SFT trajectory.\n\nRun with .venv/bin/python -B -m unittest test_resume -v.\nEach invocation retains fresh workload artifacts and comparator evidence in runs/.\n\"\"\"\nimport json\nfrom datetime import datetime, timezone\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport unittest\n\nimport numpy as np\nimport torch\n\nROOT = Path(__file__).resolve().parent\nsys.path.insert(0, str(ROOT / 'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\n\n\nclass ResumeTrajectoryTest(unittest.TestCase):\n    @classmethod\n    def setUpClass(cls):\n        stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\n        cls.evidence = ROOT / 'runs' / f'compare-regression-{stamp}'\n        cls.evidence.mkdir(parents=True, exist_ok=False)\n        print(f'Regression evidence: {cls.evidence}', flush=True)\n\n    def check_trajectory(self, task, overrides=None):\n        settings = json.loads((ROOT / 'settings.json').read_text())\n        settings.update(overrides or {})\n        settings_path = self.evidence / f'{task}-settings.json'\n        settings_path.write_text(json.dumps(settings, indent=2) + '\\n')\n        stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\n        paths = {}\n        for side in ('continuous', 'resumed'):\n            paths[side] = self.evidence / f'{side}-{task}-{stamp}'\n            command = [sys.executable, '-B', str(ROOT / 'train.py'), '--mode', side,\n                       '--output', str(paths[side])]\n            # Exercise the unchanged default settings path for the original workload.\n            if overrides:\n                command += ['--settings', str(settings_path)]\n            result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True,\n                                    timeout=45)\n            self.assertEqual(result.returncode, 0, result.stderr)\n        checkpoint = torch.load(paths['continuous'] / 'checkpoint.pt',\n                                map_location='cpu', weights_only=False)\n        self.assertEqual(checkpoint['step'], settings['cut'])\n        # GPT2 ties the language-model head to the token embedding; named_parameters\n        # exports that storage once. Derive full expected coverage from model state.\n        parameters = set(checkpoint['model']) - {'lm_head.weight'}\n        self.assertTrue(torch.equal(checkpoint['model']['lm_head.weight'],\n                                    checkpoint['model']['transformer.wte.weight']))\n        expected = []\n        for step in range(settings['steps']):\n            expected += [f'{step}/loss', f'{step}/lr']\n            for name in parameters:\n                expected += [f'{step}/{kind}/{name}' for kind in\n                             ('gradient', 'parameter', 'update')]\n                expected += [f'{step}/optimizer/{name}/{field}' for field in\n                             ('exp_avg', 'exp_avg_sq', 'step')]\n        groups = {kind: [name for name in expected if name.split('/')[1] == kind]\n                  for kind in ('loss', 'lr', 'gradient', 'parameter', 'update', 'optimizer')}\n        with np.load(paths['continuous'] / 'trajectory.npz') as a, \\\n                np.load(paths['resumed'] / 'trajectory.npz') as b:\n            report = compare_arrays(a, b, expected=expected, metrics=True, groups=groups)\n            (self.evidence / f'{task}-comparison.json').write_text(\n                json.dumps(report, indent=2) + '\\n')\n            self.assertEqual(a['0/loss'].shape, (settings['accumulation'],))\n            self.assertEqual(a['0/parameter/transformer.wte.weight'].dtype, np.float32)\n        self.assertTrue(report['exact_equal'],\n                        f\"{task}: {report['unequal_arrays']} unequal arrays; \"\n                        f\"evidence: {self.evidence / (task + '-comparison.json')}\")\n        self.assertEqual((paths['continuous'] / 'metrics.json').read_bytes(),\n                         (paths['resumed'] / 'metrics.json').read_bytes())\n\n    def test_original_workload(self):\n        self.check_trajectory('original')\n\n    def test_nearby_checkpoint_boundaries(self):\n        for cut, accumulation in ((1, 1), (7, 3)):\n            with self.subTest(cut=cut, accumulation=accumulation):\n                self.check_trajectory(f'cut{cut}', {'cut': cut, 'accumulation': accumulation})\n\n\nif __name__ == '__main__':\n    unittest.main()\nPY\n.venv/bin/python -B skills/precision-compare/scripts/record_run.py --output-root runs --side compare --task regression-red --timeout 150 -- .venv/bin/python -B -m unittest test_resume -v",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 3000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:07:15.510Z",
+          "name": "write_stdin",
+          "arguments": {
+            "session_id": 77339,
+            "chars": "",
+            "yield_time_ms": 10000,
+            "max_output_tokens": 3000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:07:32.573Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python - <<'PY'\nfrom pathlib import Path\np=Path('train.py')\ns=p.read_text()\ns=s.replace(\"            seed(settings['seed'])\\n\", '')\ns=s.replace(\"            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n\", \"            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n            # Scheduler construction performs an initial step and changes the LR.\\n            # Restore it before the optimizer so the checkpoint's applied LR wins.\\n            scheduler.load_state_dict(saved['scheduler'])\\n            optimizer.load_state_dict(saved['optimizer'])\\n            # Model construction consumes RNG; restore only after reconstruction.\\n            torch.set_rng_state(saved['torch_rng'])\\n            np.random.set_state(saved['numpy_rng'])\\n            random.setstate(saved['python_rng'])\\n\")\np.write_text(s)\nPY\n.venv/bin/python -B skills/precision-compare/scripts/record_run.py --output-root runs --side compare --task regression-green --timeout 150 -- .venv/bin/python -B -m unittest test_resume -v",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 3000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:07:51.935Z",
+          "name": "write_stdin",
+          "arguments": {
+            "session_id": 66997,
+            "chars": "",
+            "yield_time_ms": 10000,
+            "max_output_tokens": 3000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:08:13.863Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nfrom datetime import datetime,timezone\nimport sys,json,hashlib,subprocess\nimport torch,transformers,numpy as np\nsys.path.insert(0,'skills/precision-compare/scripts')\nfrom array_compare import compare_arrays\nred=Path('runs/compare-regression-20261024T090658Z')\ngreen=Path('runs/compare-regression-20261024T090734Z')\n# Locate the exact evidence directory recorded by the completed green receipt.\nreceipt=Path('runs/compare-regression-green-20261024T090732Z')\ngreen=Path((receipt/'stdout.bin').read_text().strip().split('Regression evidence: ',1)[1])\nprint('GREEN_EVIDENCE',green)\nold=json.loads((red/'original-comparison.json').read_text());new=json.loads((green/'original-comparison.json').read_text())\nfor kind in new['groups']:\n a,b=old['groups'][kind],new['groups'][kind]\n print(json.dumps({'kind':kind,'arrays':b['coverage']['paired_arrays'],'elements':b['coverage']['compared_elements'],'before_max_abs':a['metrics']['max_abs']['value'],'after_max_abs':b['metrics']['max_abs']['value'],'exact_equal':b['exact_equal']}))\nfor task in ('original','cut1','cut7'):\n r=json.loads((green/f'{task}-comparison.json').read_text())\n print('CHECK',task,r['exact_equal'],r['coverage'])\ncontinuous=next(green.glob('continuous-original-*/trajectory.npz'))\nr=compare_arrays('runs/continuous-sft-20261024T090604Z/trajectory.npz',continuous,metrics=True)\nassert r['exact_equal'],r\nstamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\nout=Path('runs')/f'compare-reference-{stamp}';out.mkdir()\n(out/'comparison.json').write_text(json.dumps(r,indent=2)+'\\n')\nprint('REFERENCE_UNCHANGED',out,r['exact_equal'])\nprint('VERSIONS',{'python':sys.version,'torch':torch.__version__,'transformers':transformers.__version__,'numpy':np.__version__})\nprint('REVISION',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())\nfor name in ('settings.json','batches.pt'):\n data=Path(name).read_bytes()\n original=subprocess.check_output(['git','show',f'HEAD:{name}'])\n assert data==original,name\n print('UNCHANGED',name,hashlib.sha256(data).hexdigest())\nprint((receipt/'stderr.bin').read_text())\nPY\ngit diff --check\ngit diff --stat\ngit diff -- train.py\ngit status --short",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 4000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:08:29.628Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nfrom datetime import datetime,timezone\nimport sys,json,hashlib,subprocess\nimport torch,transformers,numpy as np\nsys.path.insert(0,'skills/precision-compare/scripts')\nfrom array_compare import compare_arrays\nreceipt=Path('runs/compare-regression-green-20261024T090732Z')\ngreen=Path((receipt/'stdout.bin').read_text().strip().split('Regression evidence: ',1)[1])\ncontinuous=next(green.glob('continuous-original-*/trajectory.npz'))\nwith np.load('runs/continuous-sft-20261024T090604Z/trajectory.npz') as a, np.load(continuous) as b:\n r=compare_arrays(a,b,metrics=True)\nassert r['exact_equal'],r\nstamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\nout=Path('runs')/f'compare-reference-{stamp}';out.mkdir()\n(out/'comparison.json').write_text(json.dumps(r,indent=2)+'\\n')\nprint('REFERENCE_UNCHANGED',out,r['exact_equal'])\nprint('VERSIONS',{'python':sys.version.split()[0],'torch':torch.__version__,'transformers':transformers.__version__,'numpy':np.__version__})\nprint('REVISION',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())\nfor name in ('settings.json','batches.pt'):\n data=Path(name).read_bytes()\n original=subprocess.check_output(['git','show',f'HEAD:{name}'])\n assert data==original,name\n print('UNCHANGED',name,hashlib.sha256(data).hexdigest())\nprint((receipt/'stderr.bin').read_text())\nPY",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 2000,
+            "yield_time_ms": 10000
+          }
+        }
+      ],
+      "wait_yields": [
+        10000,
+        10000
+      ]
+    },
+    "repeat": {
+      "new_durable_trajectory_files": [],
+      "new_files": [],
+      "changed_existing_files": [],
+      "core_inputs_changed": {
+        "train.py": false,
+        "settings.json": false,
+        "batches.pt": false
+      },
+      "calls": [
+        {
+          "timestamp": "2026-10-24T09:09:33.591Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nimport hashlib, json, subprocess, sys\nimport torch, transformers, numpy as np\nroot=Path.cwd()\noriginal=subprocess.check_output(['git','show','HEAD:train.py'],text=True)\nexpected=original.replace(\"            seed(settings['seed'])\\n\", '')\nexpected=expected.replace(\"            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n\", \"            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n            # Scheduler construction performs an initial step and changes the LR.\\n            # Restore it before the optimizer so the checkpoint's applied LR wins.\\n            scheduler.load_state_dict(saved['scheduler'])\\n            optimizer.load_state_dict(saved['optimizer'])\\n            # Model construction consumes RNG; restore only after reconstruction.\\n            torch.set_rng_state(saved['torch_rng'])\\n            np.random.set_state(saved['numpy_rng'])\\n            random.setstate(saved['python_rng'])\\n\")\nassert (root/'train.py').read_text()==expected, 'Workload source changed'\nfor name, digest in {'settings.json':'c09c3c2b494ae3b38e33c6bfd074e4b82d2f295b1cf50c9e5fabaa85716965f1','batches.pt':'958a0492e64a06b8206408111b23b6a060c8aa967ffe7ff7822f419a2cc4a880'}.items():\n assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest, f'{name} changed'\nversions={'python':sys.version.split()[0],'torch':torch.__version__,'transformers':transformers.__version__,'numpy':np.__version__}\nassert versions=={'python':'3.12.14','torch':'2.6.0','transformers':'4.53.3','numpy':'2.2.6'},versions\nreceipt=root/'runs/compare-regression-green-20261024T090732Z'\ncommand=json.loads((receipt/'command.json').read_text())\nassert command['status']=='completed' and command['returncode']==0\nfolder=Path((receipt/'stdout.bin').read_text().strip().split('Regression evidence: ',1)[1])\nfor task in ('original','cut1','cut7'):\n report=json.loads((folder/f'{task}-comparison.json').read_text())\n assert report['exact_equal'] and report['unequal_arrays']==0 and report['unequal_elements']==0\n print(json.dumps({'case':task,'exact_equal':report['exact_equal'],'coverage':report['coverage'],'groups':{name:{'exact_equal':group['exact_equal'],'max_abs':group['metrics']['max_abs']['value']} for name,group in report['groups'].items()}))\nreference=root/'runs/compare-reference-20261024T090831Z/comparison.json'\nassert json.loads(reference.read_text())['exact_equal']\nprint(json.dumps({'identity':'unchanged','versions':versions,'settings':json.loads((root/'settings.json').read_text()),'source_sha256':hashlib.sha256((root/'train.py').read_bytes()).hexdigest(),'evidence':str(folder),'verification':'reused completed checks; no training rerun'}))\nPY",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 3000,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:09:53.809Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nimport hashlib, json, subprocess, sys\nimport torch, transformers, numpy as np\nroot=Path.cwd()\noriginal=subprocess.check_output(['git','show','HEAD:train.py'],text=True)\nexpected=original.replace(\"            seed(settings['seed'])\\n\", '')\nexpected=expected.replace(\"            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n\", \"            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n            # Scheduler construction performs an initial step and changes the LR.\\n            # Restore it before the optimizer so the checkpoint's applied LR wins.\\n            scheduler.load_state_dict(saved['scheduler'])\\n            optimizer.load_state_dict(saved['optimizer'])\\n            # Model construction consumes RNG; restore only after reconstruction.\\n            torch.set_rng_state(saved['torch_rng'])\\n            np.random.set_state(saved['numpy_rng'])\\n            random.setstate(saved['python_rng'])\\n\")\nassert (root/'train.py').read_text()==expected, 'Workload source changed'\nfor name, digest in {'settings.json':'c09c3c2b494ae3b38e33c6bfd074e4b82d2f295b1cf50c9e5fabaa85716965f1','batches.pt':'958a0492e64a06b8206408111b23b6a060c8aa967ffe7ff7822f419a2cc4a880'}.items():\n assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest, f'{name} changed'\nversions={'python':sys.version.split()[0],'torch':torch.__version__,'transformers':transformers.__version__,'numpy':np.__version__}\nassert versions=={'python':'3.12.14','torch':'2.6.0','transformers':'4.53.3','numpy':'2.2.6'},versions\nreceipt=root/'runs/compare-regression-green-20261024T090732Z'\ncommand=json.loads((receipt/'command.json').read_text())\nassert command['status']=='completed' and command['returncode']==0\nfolder=Path((receipt/'stdout.bin').read_text().strip().split('Regression evidence: ',1)[1])\nfor task in ('original','cut1','cut7'):\n report=json.loads((folder/f'{task}-comparison.json').read_text())\n assert report['exact_equal'] and report['unequal_arrays']==0 and report['unequal_elements']==0\n groups={name:{'exact_equal':group['exact_equal'],'max_abs':group['metrics']['max_abs']['value']} for name,group in report['groups'].items()}\n print(json.dumps({'case':task,'exact_equal':report['exact_equal'],'coverage':report['coverage'],'groups':groups}))\nreference=root/'runs/compare-reference-20261024T090831Z/comparison.json'\nassert json.loads(reference.read_text())['exact_equal']\nprint(json.dumps({'identity':'unchanged','versions':versions,'settings':json.loads((root/'settings.json').read_text()),'source_sha256':hashlib.sha256((root/'train.py').read_bytes()).hexdigest(),'evidence':str(folder),'verification':'reused completed checks; no training rerun'}))\nPY",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 3000,
+            "yield_time_ms": 10000
+          }
+        }
+      ],
+      "wait_yields": []
+    },
+    "changed": {
+      "new_durable_trajectory_files": [
+        "runs/compare-regression-20261024T091105Z/continuous-cut1-20261024T091105Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/continuous-cut7-20261024T091109Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/continuous-original-20261024T091113Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/resumed-cut1-20261024T091105Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/resumed-cut7-20261024T091109Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/resumed-original-20261024T091113Z/trajectory.npz"
+      ],
+      "new_files": [
+        "runs/compare-regression-20261024T091105Z/continuous-cut1-20261024T091105Z/checkpoint.pt",
+        "runs/compare-regression-20261024T091105Z/continuous-cut1-20261024T091105Z/metrics.json",
+        "runs/compare-regression-20261024T091105Z/continuous-cut1-20261024T091105Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/continuous-cut7-20261024T091109Z/checkpoint.pt",
+        "runs/compare-regression-20261024T091105Z/continuous-cut7-20261024T091109Z/metrics.json",
+        "runs/compare-regression-20261024T091105Z/continuous-cut7-20261024T091109Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/continuous-original-20261024T091113Z/checkpoint.pt",
+        "runs/compare-regression-20261024T091105Z/continuous-original-20261024T091113Z/metrics.json",
+        "runs/compare-regression-20261024T091105Z/continuous-original-20261024T091113Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/cut1-comparison.json",
+        "runs/compare-regression-20261024T091105Z/cut1-settings.json",
+        "runs/compare-regression-20261024T091105Z/cut7-comparison.json",
+        "runs/compare-regression-20261024T091105Z/cut7-settings.json",
+        "runs/compare-regression-20261024T091105Z/original-comparison.json",
+        "runs/compare-regression-20261024T091105Z/original-settings.json",
+        "runs/compare-regression-20261024T091105Z/resumed-cut1-20261024T091105Z/checkpoint.pt",
+        "runs/compare-regression-20261024T091105Z/resumed-cut1-20261024T091105Z/metrics.json",
+        "runs/compare-regression-20261024T091105Z/resumed-cut1-20261024T091105Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/resumed-cut7-20261024T091109Z/checkpoint.pt",
+        "runs/compare-regression-20261024T091105Z/resumed-cut7-20261024T091109Z/metrics.json",
+        "runs/compare-regression-20261024T091105Z/resumed-cut7-20261024T091109Z/trajectory.npz",
+        "runs/compare-regression-20261024T091105Z/resumed-original-20261024T091113Z/checkpoint.pt",
+        "runs/compare-regression-20261024T091105Z/resumed-original-20261024T091113Z/metrics.json",
+        "runs/compare-regression-20261024T091105Z/resumed-original-20261024T091113Z/trajectory.npz",
+        "runs/compare-sft-seed211-cut4-20261024T091104Z/command.json",
+        "runs/compare-sft-seed211-cut4-20261024T091104Z/stderr.bin",
+        "runs/compare-sft-seed211-cut4-20261024T091104Z/stdout.bin"
+      ],
+      "changed_existing_files": [
+        "settings.json"
+      ],
+      "core_inputs_changed": {
+        "train.py": false,
+        "settings.json": true,
+        "batches.pt": false
+      },
+      "calls": [
+        {
+          "timestamp": "2026-10-24T09:10:51.111Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": "pwd && cat settings.json && cat train.py && cat test_resume.py && git status --short && .venv/bin/python skills/precision-compare/scripts/tool_help.py record_run compare_arrays",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "yield_time_ms": 10000,
+            "max_output_tokens": 6500
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:11:04.849Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B skills/precision-compare/scripts/record_run.py --output-root runs --side compare --task sft-seed211-cut4 --timeout 150 -- .venv/bin/python -B -m unittest test_resume -v",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 2500,
+            "yield_time_ms": 10000
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:11:24.890Z",
+          "name": "write_stdin",
+          "arguments": {
+            "session_id": 19135,
+            "chars": "",
+            "yield_time_ms": 10000,
+            "max_output_tokens": 2500
+          }
+        },
+        {
+          "timestamp": "2026-10-24T09:11:41.640Z",
+          "name": "exec_command",
+          "arguments": {
+            "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\nimport hashlib,json,sys\nimport torch,transformers,numpy as np\nreceipt=Path('runs/compare-sft-seed211-cut4-20261024T091104Z')\nfolder=Path((receipt/'stdout.bin').read_text().strip().split('Regression evidence: ',1)[1])\nprint('EVIDENCE',folder)\nsettings=json.loads(Path('settings.json').read_text())\nassert settings['seed']==211 and settings['cut']==4\nassert json.loads((folder/'original-settings.json').read_text())==settings\nfor task in ('original','cut1','cut7'):\n report=json.loads((folder/f'{task}-comparison.json').read_text())\n assert report['exact_equal'] and report['unequal_arrays']==0 and report['unequal_elements']==0\n assert all(v==0 for side in report['coverage']['missing'].values() for v in [side])\n print(json.dumps({'task':task,'coverage':report['coverage'],'dtype_differences':report['dtype_differences'],'nonfinite':report['nonfinite'],'groups':{name:{'arrays':g['coverage']['paired_arrays'],'elements':g['coverage']['compared_elements'],'exact_equal':g['exact_equal'],'max_abs':g['metrics']['max_abs']['value']} for name,g in report['groups'].items()}}))\nfor side in ('continuous','resumed'):\n p=next(folder.glob(f'{side}-original-*'))\n checkpoint=torch.load(p/'checkpoint.pt',map_location='cpu',weights_only=False)\n assert checkpoint['step']==4\n assert all(t.device.type=='cpu' and t.dtype==torch.float32 for t in checkpoint['model'].values())\n print(side, p, 'checkpoint_step',checkpoint['step'],'metrics',json.loads((p/'metrics.json').read_text()))\nassert hashlib.sha256(Path('batches.pt').read_bytes()).hexdigest()=='958a0492e64a06b8206408111b23b6a060c8aa967ffe7ff7822f419a2cc4a880'\nassert hashlib.sha256(Path('train.py').read_bytes()).hexdigest()=='90aae0851d021dda798e65ae42e76483118ce2fb3a726e5691a46c947c94406a'\nprint('Versions',sys.version.split()[0],torch.__version__,transformers.__version__,np.__version__)\nprint((receipt/'stderr.bin').read_text())\nPY\ngit diff --check",
+            "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o",
+            "max_output_tokens": 3500,
+            "yield_time_ms": 10000
+          }
+        }
+      ],
+      "wait_yields": [
+        10000
+      ]
+    }
+  },
+  "task_messages": [
+    {
+      "timestamp": "2026-10-24T09:05:30.525Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "# AGENTS.md instructions for /Users/xcx/Documents/ChatGPT/precision-skill\n\n<INSTRUCTIONS>\n# Repository maintenance\n\n## Layout\n\n- Precision-Skills currently contains three installable packages: `framework-adapt`, `precision-compare` and `precision-repair`. Compare owns shared artifact and task-execution tools. Load components on demand; reuse workload execution, verified resources, inputs/state, collectors and results. `skills/operator-optimize/` is a reserved placeholder with no implementation.\n\n- `skills/framework-adapt/` owns native framework deployment and model/backend adaptation. Keep the entrypoint concise; retain environment declarations and framework-specific implementations with their projects and cases. Reuse comparison tools when numerical validation is needed.\n- `skills/precision-repair/` is the installable repair skill. Its entrypoint owns correctness evidence, causal diagnosis, patching and original-workload verification. Reuse comparison tools from `skills/precision-compare/`; keep framework-specific fixes and experiments with their cases.\n- `skills/precision-compare/` is the installable comparison skill. Keep routing and common collection steps in `SKILL.md`, the three task recipes and `comparison.md` in `references/`, and artifact interfaces in script docstrings. Optional internal sampling and its msProbe capability summary live in `references/layerwise.md`. Task recipes own capture requirements, framework integration and metric selection. Define shared training stages in SFT, distribution metrics in inference, and common coordinate/metric/tool rules in `comparison.md`.\n- Maintain matching English `README.md` and Chinese `README.zh-CN.md`. Technical documentation and maintenance instructions use English. Follow the Agent Skills specification.\n- `skills/precision-compare/examples/` contains concise runnable artifact examples. Extract task-independent operations into composable tools with explicit interfaces and meaningful regressions; keep task-specific settings in adapters and environments.\n- `tests/` contains public tool regressions. Artifact tools require NumPy; the target-score comparator uses the standard library.\n- Private `projects/<project>/environments/` owns reusable environment declarations. Cases own configuration, collectors, tests and execution artifacts. Keep case-specific code there; extract shared code when reused.\n- Keep current guides focused on task semantics and tool usage. Work logs and `runs/` own dated decisions, one-off execution failures and results; resolve tool defects in code and regressions.\n\n`site/` hosts the GitHub Pages evaluation and repair histories. Append evaluations to `site/data/evaluations.json` with peer configurations, comparison scope, measured metrics, coverage and immutable evidence. Keep repair experiments in `site/data/repairs.json` with their existing library/fix/verification hierarchy. Preserve recorded IDs, measurements and evidence; keep full execution artifacts in private cases. Run `python -B .github/validate_history.py` for history changes.\n\n## Changes\n\nConfirm the approach before editing and change at most three files per batch. For a bug fix, reproduce the behavior temporarily, add a meaningful regression and remove the temporary reproducer. Preserve permanent tests.\n\nCreate new runs exclusively as `<side>-<task>-<UTC YYYYmmddTHHMMSSZ>`, using the task's side ID or `compare`. Keep model/data/environment resources in place and preserve historical run bytes and paths. Use a new run for later validation. For undated migrations, use `<side>-<task>-migrated-<UTC migration timestamp>` and retain the path mapping.\n\nFor skill/no-skill benchmark iterations, reuse a verified no-skill baseline while the task and model/runtime conditions remain comparable; rerun only the skill arm. Keep baseline artifacts outside evaluator inputs, record the reused baseline identity, and retain raw usage for consistent repricing.\n\n## Validation\n\nInstall maintenance dependencies with `python -m pip install -r .github/requirements.txt`. Run `python -B -m unittest discover -s tests -v` and `python -B .github/validate.py` from the repository root. With Torch installed, run `python -B .github/smoke_install.py` to verify clean skill installations, companion links and the CPU gradient example. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.\n\n</INSTRUCTIONS>"
+        },
+        {
+          "type": "input_text",
+          "text": "<environment_context>\n  <cwd>/Users/xcx/Documents/ChatGPT/precision-skill</cwd>\n  <shell>zsh</shell>\n  <current_date>2026-10-24</current_date>\n  <timezone>Asia/Shanghai</timezone>\n  <filesystem><workspace_roots><root>/Users/xcx/Documents/ChatGPT/precision-skill</root><root>/Users/xcx/.codex/visualizations/2026/10/21/01a15cf2-e239-7d43-8ab9-3a6f139b162b</root></workspace_roots><permission_profile type=\"disabled\"><file_system type=\"unrestricted\" /></permission_profile></filesystem>\n</environment_context>"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T09:05:30.532Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "在 /var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-reuse-t0grtc9o 完成这项任务：适配运行现有 Torch/Transformers CPU FP32 的 GPT2 多步 SFT，比较连续训练与 checkpoint 恢复训练，修复导致两者不一致的问题，使所有已采集的 loss、学习率、梯度、参数、更新量和优化器状态一致，并验证原始工作负载。\n可用 skills（按需使用）：该目录 skills/framework-adapt、skills/precision-compare、skills/precision-repair。解释器是工作目录内 .venv/bin/python。保留模型、数据、算法与原始证据，只修改本工作目录，单次任务预算 8 分钟。不读取其他实验目录、历史报告或会话日志。"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T09:09:10.895Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "请在当前工作目录再次完成相同任务：比较连续 SFT 与 checkpoint 恢复 SFT，确认全部采集项一致。可用 skills 同前，预算 8 分钟。"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T09:10:41.837Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "settings.json 已更新为 seed=211、cut=4。请完成这组配置下的相同任务：比较连续 SFT 与 checkpoint 恢复 SFT，修复不一致并确认全部采集项一致。可用 skills 同前，预算 8 分钟。"
+        }
+      ]
+    }
+  ],
+  "raw_usage": [
+    {
+      "timestamp": "2026-10-24T09:05:42.710Z",
+      "response_id": "resp_0eca4a7f82753058016adc74dfdfa487d099c42997276aaede",
+      "usage": {
+        "input_tokens": 84682,
+        "cached_input_tokens": 84352,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 192,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 84874
+      },
+      "standard_usd_estimate": 0.011015200000000001
+    },
+    {
+      "timestamp": "2026-10-24T09:05:51.824Z",
+      "response_id": "resp_0eca4a7f82753058016adc74e9b20c87d08fea319759ac2308",
+      "usage": {
+        "input_tokens": 85251,
+        "cached_input_tokens": 84736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 105,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 85356
+      },
+      "standard_usd_estimate": 0.010553600000000002
+    },
+    {
+      "timestamp": "2026-10-24T09:06:04.443Z",
+      "response_id": "resp_0eca4a7f82753058016adc74f2c5c087d0846e62e5728879f1",
+      "usage": {
+        "input_tokens": 88530,
+        "cached_input_tokens": 85120,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 438,
+        "reasoning_output_tokens": 19,
+        "total_tokens": 88968
+      },
+      "standard_usd_estimate": 0.019712
+    },
+    {
+      "timestamp": "2026-10-24T09:06:26.448Z",
+      "response_id": "resp_0eca4a7f82753058016adc7502775c87d09de4ec4961ec01c4",
+      "usage": {
+        "input_tokens": 93692,
+        "cached_input_tokens": 88832,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 655,
+        "reasoning_output_tokens": 302,
+        "total_tokens": 94347
+      },
+      "standard_usd_estimate": 0.0251532
+    },
+    {
+      "timestamp": "2026-10-24T09:06:57.987Z",
+      "response_id": "resp_0eca4a7f82753058016adc75159af487d0b5fa196120e2dcde",
+      "usage": {
+        "input_tokens": 101070,
+        "cached_input_tokens": 94208,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1660,
+        "reasoning_output_tokens": 311,
+        "total_tokens": 102730
+      },
+      "standard_usd_estimate": 0.039744800000000004
+    },
+    {
+      "timestamp": "2026-10-24T09:07:15.601Z",
+      "response_id": "resp_0eca4a7f82753058016adc753ef61087d0818a0af73c477e9a",
+      "usage": {
+        "input_tokens": 102777,
+        "cached_input_tokens": 102528,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 102814
+      },
+      "standard_usd_estimate": 0.011120800000000002
+    },
+    {
+      "timestamp": "2026-10-24T09:07:32.690Z",
+      "response_id": "resp_0eca4a7f82753058016adc7546c2a487d09e190b9ff66ac8ec",
+      "usage": {
+        "input_tokens": 103728,
+        "cached_input_tokens": 102656,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 553,
+        "reasoning_output_tokens": 199,
+        "total_tokens": 104281
+      },
+      "standard_usd_estimate": 0.0179396
+    },
+    {
+      "timestamp": "2026-10-24T09:07:51.979Z",
+      "response_id": "resp_0eca4a7f82753058016adc7561d9d887d095722da3a3701abc",
+      "usage": {
+        "input_tokens": 104330,
+        "cached_input_tokens": 104064,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 104367
+      },
+      "standard_usd_estimate": 0.011308400000000001
+    },
+    {
+      "timestamp": "2026-10-24T09:08:14.038Z",
+      "response_id": "resp_0eca4a7f82753058016adc756b425887d0af05159bd94c450a",
+      "usage": {
+        "input_tokens": 104619,
+        "cached_input_tokens": 104192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 972,
+        "reasoning_output_tokens": 158,
+        "total_tokens": 105591
+      },
+      "standard_usd_estimate": 0.0209932
+    },
+    {
+      "timestamp": "2026-10-24T09:08:29.745Z",
+      "response_id": "resp_0eca4a7f82753058016adc758270b487d08bd0124a7cffaaff",
+      "usage": {
+        "input_tokens": 106805,
+        "cached_input_tokens": 105472,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 491,
+        "reasoning_output_tokens": 20,
+        "total_tokens": 107296
+      },
+      "standard_usd_estimate": 0.018123200000000003
+    },
+    {
+      "timestamp": "2026-10-24T09:08:49.937Z",
+      "response_id": "resp_0eca4a7f82753058016adc75922cf887d0878c77d11a8ca2ef",
+      "usage": {
+        "input_tokens": 107571,
+        "cached_input_tokens": 107136,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 761,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 108332
+      },
+      "standard_usd_estimate": 0.0191936
+    },
+    {
+      "timestamp": "2026-10-24T09:09:33.758Z",
+      "response_id": "resp_0eca4a7f82753058016adc75ba1db087d0b308374cfcfdbe3a",
+      "usage": {
+        "input_tokens": 108380,
+        "cached_input_tokens": 108160,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1071,
+        "reasoning_output_tokens": 174,
+        "total_tokens": 109451
+      },
+      "standard_usd_estimate": 0.021966
+    },
+    {
+      "timestamp": "2026-10-24T09:09:54.017Z",
+      "response_id": "resp_0eca4a7f82753058016adc75d0f9b887d0bac48e5b86e04cc6",
+      "usage": {
+        "input_tokens": 109585,
+        "cached_input_tokens": 109312,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 853,
+        "reasoning_output_tokens": 11,
+        "total_tokens": 110438
+      },
+      "standard_usd_estimate": 0.0200072
+    },
+    {
+      "timestamp": "2026-10-24T09:10:21.842Z",
+      "response_id": "resp_0eca4a7f82753058016adc75e7276087d0aa47b2da3df8fca0",
+      "usage": {
+        "input_tokens": 111322,
+        "cached_input_tokens": 110208,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 379,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 111701
+      },
+      "standard_usd_estimate": 0.0170388
+    },
+    {
+      "timestamp": "2026-10-24T09:10:53.755Z",
+      "response_id": "resp_0eca4a7f82753058016adc7614d16487d0a99b1af3085782aa",
+      "usage": {
+        "input_tokens": 111767,
+        "cached_input_tokens": 111488,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 175,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 111942
+      },
+      "standard_usd_estimate": 0.013456800000000001
+    },
+    {
+      "timestamp": "2026-10-24T09:11:05.407Z",
+      "response_id": "resp_0eca4a7f82753058016adc7620acbc87d0b937422db66dbc3d",
+      "usage": {
+        "input_tokens": 114353,
+        "cached_input_tokens": 111744,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 167,
+        "reasoning_output_tokens": 44,
+        "total_tokens": 114520
+      },
+      "standard_usd_estimate": 0.018062400000000003
+    },
+    {
+      "timestamp": "2026-10-24T09:11:24.984Z",
+      "response_id": "resp_0eca4a7f82753058016adc7635e45887d08aebe6bb55be3125",
+      "usage": {
+        "input_tokens": 114567,
+        "cached_input_tokens": 114304,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 114604
+      },
+      "standard_usd_estimate": 0.012326400000000001
+    },
+    {
+      "timestamp": "2026-10-24T09:11:43.259Z",
+      "response_id": "resp_0eca4a7f82753058016adc7640902887d085ae29b00311e150",
+      "usage": {
+        "input_tokens": 114868,
+        "cached_input_tokens": 114432,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 630,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 115498
+      },
+      "standard_usd_estimate": 0.0186152
+    },
+    {
+      "timestamp": "2026-10-24T09:11:59.319Z",
+      "response_id": "resp_0eca4a7f82753058016adc7653437c87d09c8973b63a654d18",
+      "usage": {
+        "input_tokens": 117207,
+        "cached_input_tokens": 115328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 504,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 117711
+      },
+      "standard_usd_estimate": 0.0203308
+    }
+  ],
+  "session_sha256": "b3f5272b1f456c4509bd4bd1cf421e89c726e9eb4d232de0245565ad2453e37a",
+  "baseline": {
+    "id": "integrated-checkpoint-noskills-20261022T134338Z",
+    "measurement_sha256": "f835346334e4e763322ca351f7400972bbe84ca80aa497f81068358252a0da94",
+    "raw_usage": [
+      {
+        "timestamp": "2026-10-22T13:44:19.305Z",
+        "response_id": "resp_012a005df4be64e2016ada1329a33487d099500e5ce02e285c",
+        "usage": {
+          "input_tokens": 83998,
+          "cached_input_tokens": 3712,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 168,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84166
+        },
+        "standard_usd_estimate": 0.1626232
+      },
+      {
+        "timestamp": "2026-10-22T13:44:28.061Z",
+        "response_id": "resp_012a005df4be64e2016ada1335cab887d0964f2e0f14f1d6c6",
+        "usage": {
+          "input_tokens": 84241,
+          "cached_input_tokens": 83968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 64,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84305
+        },
+        "standard_usd_estimate": 0.0095828
+      },
+      {
+        "timestamp": "2026-10-22T13:44:47.456Z",
+        "response_id": "resp_012a005df4be64e2016ada133f00e887d0b916c9f5c4b95a76",
+        "usage": {
+          "input_tokens": 85458,
+          "cached_input_tokens": 84096,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 533,
+          "reasoning_output_tokens": 31,
+          "total_tokens": 85991
+        },
+        "standard_usd_estimate": 0.016463600000000002
+      },
+      {
+        "timestamp": "2026-10-22T13:45:03.856Z",
+        "response_id": "resp_012a005df4be64e2016ada1353083487d08cd0ec9830862361",
+        "usage": {
+          "input_tokens": 86036,
+          "cached_input_tokens": 85760,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 261,
+          "reasoning_output_tokens": 222,
+          "total_tokens": 86297
+        },
+        "standard_usd_estimate": 0.011738
+      },
+      {
+        "timestamp": "2026-10-22T13:45:24.631Z",
+        "response_id": "resp_012a005df4be64e2016ada1362fb3087d09813c72b0941d5a1",
+        "usage": {
+          "input_tokens": 86838,
+          "cached_input_tokens": 86144,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 503,
+          "reasoning_output_tokens": 189,
+          "total_tokens": 87341
+        },
+        "standard_usd_estimate": 0.0150324
+      },
+      {
+        "timestamp": "2026-10-22T13:45:57.311Z",
+        "response_id": "resp_012a005df4be64e2016ada137751c487d08163d2d46d8e78eb",
+        "usage": {
+          "input_tokens": 87387,
+          "cached_input_tokens": 87168,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1500,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 88887
+        },
+        "standard_usd_estimate": 0.0241548
+      },
+      {
+        "timestamp": "2026-10-22T13:46:08.960Z",
+        "response_id": "resp_012a005df4be64e2016ada1397f55087d09d489b0bbadaaf3a",
+        "usage": {
+          "input_tokens": 88933,
+          "cached_input_tokens": 88704,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 184,
+          "reasoning_output_tokens": 29,
+          "total_tokens": 89117
+        },
+        "standard_usd_estimate": 0.011168399999999998
+      },
+      {
+        "timestamp": "2026-10-22T13:46:20.224Z",
+        "response_id": "resp_012a005df4be64e2016ada13a3d99c87d0b4bd673850721fc7",
+        "usage": {
+          "input_tokens": 89793,
+          "cached_input_tokens": 88960,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 139,
+          "reasoning_output_tokens": 11,
+          "total_tokens": 89932
+        },
+        "standard_usd_estimate": 0.011952
+      },
+      {
+        "timestamp": "2026-10-22T13:46:39.161Z",
+        "response_id": "resp_012a005df4be64e2016ada13b0805487d0b0e48fc6858371a2",
+        "usage": {
+          "input_tokens": 89978,
+          "cached_input_tokens": 89728,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 554,
+          "reasoning_output_tokens": 107,
+          "total_tokens": 90532
+        },
+        "standard_usd_estimate": 0.015012800000000001
+      },
+      {
+        "timestamp": "2026-10-22T13:46:50.174Z",
+        "response_id": "resp_012a005df4be64e2016ada13c2a0a087d08ca195381a1d8e9d",
+        "usage": {
+          "input_tokens": 90580,
+          "cached_input_tokens": 90368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 90617
+        },
+        "standard_usd_estimate": 0.009830800000000002
+      },
+      {
+        "timestamp": "2026-10-22T13:47:00.358Z",
+        "response_id": "resp_012a005df4be64e2016ada13cc78b487d0846a1ab49e8eb5ef",
+        "usage": {
+          "input_tokens": 90784,
+          "cached_input_tokens": 90496,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 90821
+        },
+        "standard_usd_estimate": 0.0099956
+      },
+      {
+        "timestamp": "2026-10-22T13:47:25.450Z",
+        "response_id": "resp_012a005df4be64e2016ada13da853087d096b6ccf94c9829ea",
+        "usage": {
+          "input_tokens": 91225,
+          "cached_input_tokens": 90624,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 668,
+          "reasoning_output_tokens": 137,
+          "total_tokens": 91893
+        },
+        "standard_usd_estimate": 0.0169444
+      },
+      {
+        "timestamp": "2026-10-22T13:47:39.120Z",
+        "response_id": "resp_012a005df4be64e2016ada13f0bf0487d09eb6b747e44ea2cb",
+        "usage": {
+          "input_tokens": 91941,
+          "cached_input_tokens": 91776,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 223,
+          "reasoning_output_tokens": 61,
+          "total_tokens": 92164
+        },
+        "standard_usd_estimate": 0.0117376
+      },
+      {
+        "timestamp": "2026-10-22T13:48:13.343Z",
+        "response_id": "resp_012a005df4be64e2016ada13fd4cac87d09245ce974e316c5c",
+        "usage": {
+          "input_tokens": 92672,
+          "cached_input_tokens": 92032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1372,
+          "reasoning_output_tokens": 182,
+          "total_tokens": 94044
+        },
+        "standard_usd_estimate": 0.0242032
+      },
+      {
+        "timestamp": "2026-10-22T13:48:29.082Z",
+        "response_id": "resp_012a005df4be64e2016ada1420201487d0b544918ead99ad93",
+        "usage": {
+          "input_tokens": 94110,
+          "cached_input_tokens": 93824,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 435,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 94545
+        },
+        "standard_usd_estimate": 0.0143044
+      },
+      {
+        "timestamp": "2026-10-22T13:49:17.709Z",
+        "response_id": "resp_012a005df4be64e2016ada14560f4087d096e54416467f63bc",
+        "usage": {
+          "input_tokens": 94601,
+          "cached_input_tokens": 94336,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 181,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 94782
+        },
+        "standard_usd_estimate": 0.011773599999999999
+      },
+      {
+        "timestamp": "2026-10-22T13:49:43.619Z",
+        "response_id": "resp_012a005df4be64e2016ada14605e6487d0b86837527ee7a173",
+        "usage": {
+          "input_tokens": 97098,
+          "cached_input_tokens": 94592,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1042,
+          "reasoning_output_tokens": 95,
+          "total_tokens": 98140
+        },
+        "standard_usd_estimate": 0.024891200000000002
+      },
+      {
+        "timestamp": "2026-10-22T13:49:53.663Z",
+        "response_id": "resp_012a005df4be64e2016ada147af18487d0999fc34abaaa29e9",
+        "usage": {
+          "input_tokens": 98188,
+          "cached_input_tokens": 97920,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 50,
+          "reasoning_output_tokens": 11,
+          "total_tokens": 98238
+        },
+        "standard_usd_estimate": 0.010828
+      },
+      {
+        "timestamp": "2026-10-22T13:50:07.344Z",
+        "response_id": "resp_012a005df4be64e2016ada1483ef0487d08576fa7384012df8",
+        "usage": {
+          "input_tokens": 99200,
+          "cached_input_tokens": 98048,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 381,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 99581
+        },
+        "standard_usd_estimate": 0.0159188
+      },
+      {
+        "timestamp": "2026-10-22T13:51:36.227Z",
+        "response_id": "resp_012a005df4be64e2016ada14de3f0887d08a45b65e962e563d",
+        "usage": {
+          "input_tokens": 99655,
+          "cached_input_tokens": 99456,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 173,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 99828
+        },
+        "standard_usd_estimate": 0.0120736
+      },
+      {
+        "timestamp": "2026-10-22T13:52:06.846Z",
+        "response_id": "resp_012a005df4be64e2016ada14ed454c87d0acd314d7cb883a94",
+        "usage": {
+          "input_tokens": 102143,
+          "cached_input_tokens": 99584,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1066,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 103209
+        },
+        "standard_usd_estimate": 0.0257364
+      },
+      {
+        "timestamp": "2026-10-22T13:52:18.917Z",
+        "response_id": "resp_012a005df4be64e2016ada150ac1a487d0b904cda47121c280",
+        "usage": {
+          "input_tokens": 103255,
+          "cached_input_tokens": 103040,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 55,
+          "reasoning_output_tokens": 16,
+          "total_tokens": 103310
+        },
+        "standard_usd_estimate": 0.011284
+      },
+      {
+        "timestamp": "2026-10-22T13:52:34.076Z",
+        "response_id": "resp_012a005df4be64e2016ada15156df087d0a686535fa994b41c",
+        "usage": {
+          "input_tokens": 104452,
+          "cached_input_tokens": 103168,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 425,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 104877
+        },
+        "standard_usd_estimate": 0.017134800000000002
+      }
+    ],
+    "phases": [
+      {
+        "phase": "cold",
+        "start": "2026-10-22T13:44:05.400Z",
+        "end": "2026-10-22T13:48:29.089Z",
+        "seconds": 263.689,
+        "tokens": {
+          "input_tokens": 1333974,
+          "cached_input_tokens": 1247360,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 6678,
+          "total_tokens": 1340652,
+          "uncached_input_tokens": 86614
+        },
+        "requests": 15,
+        "tool_calls": 14,
+        "standard_usd_estimate": 0.364744,
+        "first_request_usd": 0.1626232,
+        "subsequent_requests_usd": 0.20212080000000002
+      },
+      {
+        "phase": "repeat",
+        "start": "2026-10-22T13:49:06.699Z",
+        "end": "2026-10-22T13:50:07.349Z",
+        "seconds": 60.65,
+        "tokens": {
+          "input_tokens": 389087,
+          "cached_input_tokens": 384896,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1654,
+          "total_tokens": 390741,
+          "uncached_input_tokens": 4191
+        },
+        "requests": 4,
+        "tool_calls": 3,
+        "standard_usd_estimate": 0.0634116,
+        "first_request_usd": 0.011773599999999999,
+        "subsequent_requests_usd": 0.051638
+      },
+      {
+        "phase": "changed",
+        "start": "2026-10-22T13:51:23.428Z",
+        "end": "2026-10-22T13:52:34.083Z",
+        "seconds": 70.655,
+        "tokens": {
+          "input_tokens": 409505,
+          "cached_input_tokens": 405248,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1719,
+          "total_tokens": 411224,
+          "uncached_input_tokens": 4257
+        },
+        "requests": 4,
+        "tool_calls": 3,
+        "standard_usd_estimate": 0.0662288,
+        "first_request_usd": 0.0120736,
+        "subsequent_requests_usd": 0.0541552
+      }
+    ],
+    "session_sha256": "7d622719b6dff4dac3b87f3aec3094a311dceda066f57d2ea50c95f4ebcb87ca"
+  },
+  "verification": {
+    "cold": {
+      "all_pass": true,
+      "variants": [
+        {
+          "settings": {
+            "seed": 927,
+            "lr": 0.003,
+            "steps": 8,
+            "cut": 3,
+            "accumulation": 2
+          },
+          "arrays": 1360,
+          "elements": 648248,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        },
+        {
+          "settings": {
+            "seed": 38,
+            "lr": 0.001,
+            "steps": 6,
+            "cut": 1,
+            "accumulation": 1
+          },
+          "arrays": 1020,
+          "elements": 486180,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        },
+        {
+          "settings": {
+            "seed": 519,
+            "lr": 0.004,
+            "steps": 9,
+            "cut": 5,
+            "accumulation": 3
+          },
+          "arrays": 1530,
+          "elements": 729288,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        }
+      ],
+      "verification_run": "compare-coldverification-20261024T091233Z"
+    },
+    "changed": {
+      "all_pass": true,
+      "variants": [
+        {
+          "settings": {
+            "seed": 211,
+            "lr": 0.003,
+            "steps": 8,
+            "cut": 4,
+            "accumulation": 2
+          },
+          "arrays": 1360,
+          "elements": 648248,
+          "coverage_exact": true,
+          "original_continuous_unchanged": true,
+          "resumed_exact": true,
+          "finite": true
+        }
+      ],
+      "verification_run": "compare-changedverification-20261024T091233Z"
+    },
+    "delivery": {
+      "cold": {
+        "status": "new captures match independent original-workload reference",
+        "new_matching_trajectories": [
+          "runs/compare-regression-20261024T090658Z/continuous-original-20261024T090707Z/trajectory.npz",
+          "runs/compare-regression-20261024T090733Z/continuous-original-20261024T090740Z/trajectory.npz",
+          "runs/compare-regression-20261024T090733Z/resumed-original-20261024T090740Z/trajectory.npz",
+          "runs/continuous-sft-20261024T090604Z/trajectory.npz"
+        ],
+        "new_durable_trajectories": 14,
+        "expected_arrays": 1360,
+        "expected_elements": 648248
+      },
+      "repeat": {
+        "status": "reused unchanged verified captures",
+        "new_matching_trajectories": [],
+        "new_durable_trajectories": 0,
+        "expected_arrays": 1360,
+        "expected_elements": 648248
+      },
+      "changed": {
+        "status": "new captures match independent original-workload reference",
+        "new_matching_trajectories": [
+          "runs/compare-regression-20261024T091105Z/continuous-original-20261024T091113Z/trajectory.npz",
+          "runs/compare-regression-20261024T091105Z/resumed-original-20261024T091113Z/trajectory.npz"
+        ],
+        "new_durable_trajectories": 6,
+        "expected_arrays": 1360,
+        "expected_elements": 648248
+      }
+    }
+  },
+  "skill_integrity": {
+    "unchanged": true,
+    "files": 34,
+    "snapshot_sha256": "56f9c270b627c69e8ffe6d2e7a2b4be94d874a047c4e88e3f1d5fdeb1ef62370"
+  },
+  "changes": [
+    "Reuse loaded instructions/interfaces and batch identity checks with existing-result reads.",
+    "Use reproduction, responsible implementation and red/green verification for causality; add discriminating experiments only when ambiguity remains."
+  ],
+  "limits": [
+    "Fresh gpt-6.1-sol / medium agent per trial; each retains context across three direct tasks. No instructions to reuse supplied in evaluator prompts; only skill version differs between A trials.",
+    "Same original train.py/settings.json/batches.pt and CPU Python dependencies as frozen no-skill B. No B agent rerun.",
+    "Three phases: initial native checkpoint repair; identical request with unchanged files; seed=211/cut=4 followup. This is prepared CPU execution, not from-zero framework deployment or accelerator adaptation.",
+    "Time is the sum of active task-start/task-complete windows; parent delay between followups excluded. Source inspection, adapters, training, tests, waits and delivery counted; parent preparation/independent verification excluded.",
+    "Original continuous trajectories preserved. All three agents pass original settings and two heldout variants, plus changed seed/cut; delivered requested captures checked against independent original-workload references.",
+    "Durable trajectory file counts measure retained outputs, not every model invocation; tests may use temporary directories. Repeat/table has zero new files and no training/regression command.",
+    "The previous trials remain unchanged in skills-continuous-reuse-20261024.json. One fresh trial for this revision; historical B is reused. Strategy, cache and service latency vary.",
+    "Report raw first-request, post-initial and follow-up costs separately. Lower overall cost is not sufficient evidence of a skill efficiency gain."
+  ],
+  "pricing": "Retained common Standard snapshot: $2/M ordinary input, $0.10/M cached input, $2.50/M cache-write input, $10/M output; request long-context multipliers applied. Estimates, not account billing.",
+  "phase_snapshot_sha256": {
+    "cold": "3873364a0ceb0d91483926f5d2c3a73ba9eb9bde047e1de5d5876865eddaaa37",
+    "repeat": "3873364a0ceb0d91483926f5d2c3a73ba9eb9bde047e1de5d5876865eddaaa37",
+    "changed": "2a785166b91b5b455c63500d91d8533dcb1c45f681a1ed68a31099f6a586f81e"
+  },
+  "maintenance_validation": {
+    "unit_tests_passed": 386,
+    "clean_install_smoke": "passed",
+    "skill_metadata_and_local_links": "passed",
+    "history_validation": "16 repair verification records and 93 evaluations"
+  }
+}
