@@ -9,7 +9,7 @@ description: Deploy or adapt an ML framework for a specified model, hardware and
 
 - Reuse environments, adapters and receipts matching source, dependencies and target.
 - Missing support: inspect the selected revision's support declarations and closest native example; implement the required model/backend integration.
-- Validate a minimal native call with the capture configuration, then the original workload; retry within budget.
+- Reuse a matching successful preflight; otherwise check a minimal native call with the capture configuration. Verify the original workload; retry within budget.
 - Preserve native state transitions; record checkpoint conversions and tensor-layout changes. Confirm changes to target or implementation scope.
 - Patches need a focused regression and original-workload verification. Keep implementations and environment declarations with the case.
 
@@ -19,4 +19,4 @@ Pass the execution JSON (`argv_prefix`, `env`, `path_prepend`), inputs/state and
 
 ## Return
 
-Support/gaps, effective settings, device execution, imported source/dependency identities, runnable command and validation artifacts.
+Return support/gaps, effective settings, device execution, source/dependency identities, runnable command and existing evidence paths once workload checks pass. Recheck only changed or unresolved scope; packaging and extra reports require a request.

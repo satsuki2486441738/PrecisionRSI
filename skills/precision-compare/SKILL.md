@@ -8,7 +8,7 @@ description: Collect and compare numerical results across hardware and software 
 ## Scope
 
 - Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
-- Reuse observations matching identities, semantics and coverage. Return retained reports for queries; audit/rerun affected scope for verification, changed conditions or freshness.
+- Reuse observations and completed checks matching identities, semantics and coverage. Refresh only changed scope or requested fresh measurements.
 
 ## Compare
 
@@ -44,5 +44,6 @@ Preserve native operators, state transitions, masks and dtype identity; map batc
 
 ## Return
 
-- Metrics, actual configurations, coverage/gaps and reproduction paths; all coordinates when requested. Large arrays stay at source/agreed storage.
+- Reuse tool checks; check missing completion/coverage requirements once, then return metrics, actual configurations, gaps and existing artifact paths. Large arrays stay at source/agreed storage.
+- Recheck affected scope after changes, failed checks or unresolved findings. Package, replay offline or write extra reports only when requested.
 - Apply supplied acceptance criteria; otherwise report differences. Requested [repair](../precision-repair/SKILL.md) reuses evidence; differences alone do not establish defects.

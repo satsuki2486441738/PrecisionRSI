@@ -24,5 +24,6 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 ## Return
 
-- Cause, source revision, patch/regression, original-workload before/after metrics, configuration changes and reproduction artifacts.
-- Finish after verified cause/recovery; if budget prevents verification, return the unresolved question and next discriminating check.
+- Cause, source revision, patch/regression, original-workload before/after metrics, configuration changes and existing evidence paths.
+- Finish after regression and original-workload checks pass; reuse results. Repeat only changed, failed or unresolved checks. Package, replay offline or write extra reports only when requested.
+- If budget prevents verification, return the unresolved question and next discriminating check.

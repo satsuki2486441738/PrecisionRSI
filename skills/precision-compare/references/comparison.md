@@ -67,7 +67,7 @@ Reuse one execution JSON across native preflight and capture:
 {"argv_prefix":["/env/bin/python"],"path_prepend":["/env/bin"],"env":{"HF_HUB_OFFLINE":"1"}}
 ```
 
-Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Verify the smallest native call using the actual capture configuration before full collection.
+Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Reuse a matching successful preflight; otherwise verify the smallest native call with the capture configuration before full collection.
 
 Run a native command through `record_run` to retain complete logs and receive a compact result with failure diagnostics:
 
@@ -104,7 +104,7 @@ The [native Torch example](../examples/workflow_demo.py) demonstrates preparatio
 
 ## Portable evidence
 
-When portable evidence or replay is requested, use `evidence_bundle.py` to pack selected artifacts. Its index records original/exported SHA256 and byte counts. Optional literal replacements apply to UTF-8 text while preserving numeric arrays; keep the replacement file outside the selected directory. The tool docstring defines file selection and size limits.
+For requested portable evidence or replay, use `evidence_bundle.py` to pack selected artifacts; ordinary delivery uses existing artifact paths. Its index records original/exported SHA256 and byte counts. Optional literal replacements apply to UTF-8 text while preserving numeric arrays; keep the replacement file outside the selected directory. The tool docstring defines file selection and size limits.
 
 ```sh
 python scripts/evidence_bundle.py pack SELECTED_FILES NEW.zip
