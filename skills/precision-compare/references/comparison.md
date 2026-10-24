@@ -27,7 +27,7 @@ Module names return short declarations; API names add current signatures. Script
 | Export / compare tensor views | [tensor_artifacts](../scripts/tensor_artifacts.py): `export`, `compare-views` | Rank inventories / view pairs → logical manifests / comparisons |
 | Capture inference | [inference_capture](../scripts/inference_capture.py): `FixedHistory`, `derive_logprobs`, `export_records` | Fixed tokens + native logits → validated histories/scores |
 | Plan internal capture | [msprobe_capture](../scripts/msprobe_capture.py): `plan_modules` | Modules + sizes → bounded L0 plan ([integration](layerwise.md#integrate-and-verify)) |
-| Probe runtime | [runtime_probe](../scripts/runtime_probe.py): `probe_runtime`, `runtime_identity` | Imports, checks, selected sources → runtime evidence/identity |
+| Probe runtime | [runtime_probe](../scripts/runtime_probe.py): `probe_runtime`, `runtime_identity`, `check_identity` | Imports or file-backed identity checks → runtime evidence / compact check receipt |
 | Record execution | [record_run](../scripts/record_run.py): `record_run`, `summarize_run` | Argv + optional execution JSON → native receipt, logs, bounded failure summary |
 | Find prepared resources | [resource_catalog](../scripts/resource_catalog.py): `register`, `find` | Resource identities + successful receipt → verified lookup |
 | Resume workflow | [workflow](../scripts/workflow.py): `run`, `status` | Dependency plan + workspace → reuse/execution/continuation |
@@ -61,7 +61,7 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
-Reuse one execution JSON across native preflight and capture:
+Keep full execution options and identity manifests in files consumed by adapters; expose their paths and compact check receipts to the agent. `runtime_probe.check_identity(manifest_path)` checks selected file hashes or retained metadata without returning the inventory. Reuse one execution JSON across native preflight and capture:
 
 ```json
 {"argv_prefix":["/env/bin/python"],"path_prepend":["/env/bin"],"env":{"HF_HUB_OFFLINE":"1"}}

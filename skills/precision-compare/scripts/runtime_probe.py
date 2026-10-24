@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""Check selected runtime imports and interfaces in the executing environment.
-Call: probe_runtime(spec, executable=None, timeout=60); inspect_runtime(spec); runtime_identity(report)
-Input: Ordered imports, symbols, task-owned checks and selected source files.
-Output: Actual runtime/import identities, check results and bounded diagnostics.
+"""Check selected runtime interfaces and file-backed resource identities.
+Call: probe_runtime(spec, executable=None, timeout=60); inspect_runtime(spec); runtime_identity(report); check_identity(manifest_path)
+Input: Ordered runtime checks or a file-backed identity manifest.
+Output: Runtime identities/diagnostics or compact file-check status and counts.
 Requires: Standard library; native dependencies in the selected interpreter; device execution checks are task-owned.
 
 Details:
+check_identity(manifest_path) reads a file-backed {files:[...]} manifest and returns
+{status, manifest_sha256, checked_files, checks:{sha256:N,metadata:N}}, or a failed
+receipt with bounded error details. Each entry has absolute path and mode:
+sha256 (default) requires sha256; metadata requires bytes and mtime_ns, with
+optional inode/ctime_ns. Metadata checks reuse a trusted earlier content identity;
+they do not rehash file contents. SHA256 entries may also declare bytes. Files must
+stay unchanged during their selected check. The receipt omits the file inventory;
+require status=completed before using the resource. No manifest code is executed.
+
 inspect_runtime(spec) runs inside a native worker. probe_runtime(spec,
 executable=None, timeout=60) performs the same check in a fresh interpreter and
 returns its report plus a bounded diagnostic log. The caller selects the worker
@@ -96,6 +105,55 @@ def _source_fingerprint(selection):
     if 'module' in selection:
         record['module'] = name
     return record
+
+
+def check_identity(manifest_path):
+    """Check selected file identities from a manifest; return counts without its contents."""
+    report = dict(status='completed', checked_files=0, checks=dict(sha256=0, metadata=0))
+    try:
+        data = Path(manifest_path).read_bytes()
+        report['manifest_sha256'] = hashlib.sha256(data).hexdigest()
+        spec = json.loads(data)
+        files = spec.get('files') if isinstance(spec, dict) else None
+        if not isinstance(files, list) or not files:
+            raise ValueError('nonempty files list required')
+        for entry in files:
+            if not isinstance(entry, dict) or not isinstance(entry.get('path'), str) or not Path(entry['path']).is_absolute():
+                raise ValueError('each identity needs an absolute file path')
+            mode = entry.get('mode', 'sha256')
+            if mode not in ('sha256', 'metadata'):
+                raise ValueError('identity mode must be sha256 or metadata')
+            if mode == 'sha256':
+                expected = entry.get('sha256')
+                if not isinstance(expected, str) or len(expected) != 64 or any(c not in '0123456789abcdef' for c in expected):
+                    raise ValueError('SHA256 identity needs a lowercase hexadecimal digest')
+            else:
+                if any(type(entry.get(k)) is not int or entry[k] < 0 for k in ('bytes', 'mtime_ns')):
+                    raise ValueError('metadata identity needs bytes and mtime_ns')
+            if any(k in entry and (type(entry[k]) is not int or entry[k] < 0) for k in ('bytes', 'inode', 'ctime_ns')):
+                raise ValueError('identity metadata must be nonnegative integers')
+        for entry in files:
+            mode = entry.get('mode', 'sha256')
+            path = Path(entry['path']).resolve(strict=True)
+            if not path.is_file():
+                raise ValueError('identity path must be a regular file: ' + str(path))
+            before = path.stat()
+            if mode == 'sha256':
+                actual = _source_fingerprint({'path': str(path)})
+                if actual['sha256'] != entry['sha256']:
+                    raise ValueError('SHA256 mismatch: ' + str(path))
+            values = dict(bytes=before.st_size, mtime_ns=before.st_mtime_ns,
+                          inode=before.st_ino, ctime_ns=before.st_ctime_ns)
+            for key in ('bytes', 'mtime_ns', 'inode', 'ctime_ns'):
+                if key in entry and entry[key] != values[key]:
+                    raise ValueError(key + ' mismatch: ' + str(path))
+            if _file_stamp(before) != _file_stamp(path.stat()):
+                raise RuntimeError('identity file changed during check: ' + str(path))
+            report['checks'][mode] += 1
+            report['checked_files'] += 1
+    except (OSError, ValueError, TypeError, RuntimeError) as exc:
+        report.update(status='failed', error=dict(type=type(exc).__name__, message=str(exc)[-2048:]))
+    return report
 
 
 def inspect_runtime(spec):

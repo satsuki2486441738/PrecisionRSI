@@ -9,7 +9,7 @@ import unittest
 
 TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(TOOLS))
-from runtime_probe import inspect_runtime, probe_runtime, runtime_identity
+from runtime_probe import inspect_runtime, probe_runtime, runtime_identity, check_identity
 
 
 class RuntimeProbeTests(unittest.TestCase):
@@ -29,6 +29,53 @@ class RuntimeProbeTests(unittest.TestCase):
         info = self.root/'probe_fixture-9.0.dist-info'
         info.mkdir()
         (info/'METADATA').write_text('Metadata-Version: 2.1\nName: probe-fixture\nVersion: 9.0\n')
+
+    def test_file_identity_receipt_reads_only_selected_hash_inputs(self):
+        from unittest.mock import patch
+        source = self.root/'config.json'; source.write_text('{}')
+        large = self.root/'weights.bin'
+        with large.open('wb') as stream:
+            stream.seek(1024**3); stream.write(b'x')
+        st = large.stat(); manifest = self.root/'identity.json'
+        manifest.write_text(json.dumps({'files':[
+            {'path':str(source),'sha256':hashlib.sha256(b'{}').hexdigest()},
+            {'path':str(large),'mode':'metadata','bytes':st.st_size,'mtime_ns':st.st_mtime_ns,'inode':st.st_ino}]}))
+        from runtime_probe import _source_fingerprint
+        with patch('runtime_probe._source_fingerprint', wraps=_source_fingerprint) as hashed:
+            result = check_identity(manifest)
+        self.assertEqual(result['status'],'completed',result)
+        self.assertEqual(result['checks'],{'sha256':1,'metadata':1})
+        self.assertEqual(result['checked_files'],2)
+        self.assertEqual(hashed.call_count,1)
+        self.assertEqual(hashed.call_args.args[0]['path'],str(source.resolve()))
+        self.assertNotIn(str(large),json.dumps(result))
+
+    def test_identity_detects_hash_and_metadata_changes(self):
+        source=self.root/'state.bin'; source.write_bytes(b'abc'); st=source.stat()
+        manifest=self.root/'identity.json'
+        cases=[{'path':str(source),'sha256':hashlib.sha256(b'abc').hexdigest()},
+               {'path':str(source),'mode':'metadata','bytes':st.st_size,'mtime_ns':st.st_mtime_ns}]
+        source.write_bytes(b'abcd')
+        for entry in cases:
+            with self.subTest(mode=entry.get('mode')):
+                manifest.write_text(json.dumps({'files':[entry]}))
+                result=check_identity(manifest)
+                self.assertEqual(result['status'],'failed',result)
+                self.assertEqual(result['checked_files'],0)
+        source.unlink()
+        self.assertEqual(check_identity(manifest)['status'],'failed')
+
+    def test_invalid_identity_manifest_never_claims_completion(self):
+        manifest=self.root/'identity.json'
+        invalid=[{}, {'files':[]}, {'files':[{'path':'relative','sha256':'a'*64}]},
+                 {'files':[{'path':str(self.root),'sha256':'bad'}]},
+                 {'files':[{'path':str(self.root),'mode':'metadata','bytes':True,'mtime_ns':0}]}]
+        for spec in invalid:
+            with self.subTest(spec=spec):
+                manifest.write_text(json.dumps(spec))
+                result=check_identity(manifest)
+                self.assertEqual(result['status'],'failed',result)
+                self.assertEqual(result['checked_files'],0)
 
     def test_stable_identity_excludes_process_noise_but_keeps_source_changes(self):
         spec = dict(python_paths=[str(self.root)], imports=['probe_fixture'],
