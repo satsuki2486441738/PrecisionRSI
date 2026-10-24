@@ -57510,6 +57510,293 @@
         "prefix": "site/evidence/skills-demand-native-ab-20261024.json",
         "replay_cases": 140
       }
+    },
+    {
+      "id": "skills-interface-native-prefill-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B（接口）：prefill 采集比较",
+      "framework": {
+        "name": "Skills A/B（接口）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "直接声明下载与分组比较接口后的新 agent 实测。原生分数和分组指标独立复核通过；复用了分组比较，仍自写下载，且一次 GPU 外层调度失败触发重试。总用时与费用较上一轮上升。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 按需 skills",
+          "hardware": "H200 / Ascend 910C",
+          "libraries": [
+            {
+              "name": "Agent",
+              "version": "gpt-6.1-sol"
+            }
+          ],
+          "settings": {
+            "reasoning_effort": "medium",
+            "source_revision": "e2593d606045753fa935b691401c1944752f5ce6",
+            "baseline_id": "native-prefill-noskills-20261024T011154Z"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无 skills 历史基线",
+          "hardware": "H200 / Ascend 910C",
+          "libraries": [
+            {
+              "name": "Agent",
+              "version": "gpt-6.1-sol"
+            }
+          ],
+          "settings": {
+            "reasoning_effort": "medium",
+            "source_revision": "historical baseline",
+            "baseline_id": "native-prefill-noskills-20261024T011154Z"
+          }
+        },
+        {
+          "id": "gpu",
+          "label": "GPU",
+          "hardware": "NVIDIA H200（运行时标识 H20Z）",
+          "libraries": [
+            {
+              "name": "vLLM",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "model": "Qwen/Qwen3.5-9B-Base",
+            "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "collector_sha256": "49c4d69c56a19a60c98cd428823390b592907d862fbf930ef3f1dc5ab4b5770e",
+            "semantics": "target_position p (zero based input index) predicted by row p-1; natural log; full vocabulary FP32 log_softmax; no score processors",
+            "execution_max_context": 128,
+            "batch_size": 1,
+            "quantization": null,
+            "seed": 0,
+            "python": "3.12.13",
+            "torch": "2.10.0+cu128",
+            "framework": "vllm",
+            "framework_version": "0.19.1",
+            "device_name": "NVIDIA H20Z",
+            "device_count": 1,
+            "requested_options": {
+              "dtype": "bfloat16",
+              "quantization": null,
+              "tensor_parallel_size": 1,
+              "pipeline_parallel_size": 1,
+              "max_model_len": 128,
+              "enforce_eager": true,
+              "compilation_config": 0,
+              "enable_prefix_caching": false,
+              "enable_chunked_prefill": false,
+              "max_num_seqs": 1,
+              "max_num_batched_tokens": 128,
+              "gpu_memory_utilization": 0.75,
+              "skip_tokenizer_init": true,
+              "trust_remote_code": false,
+              "seed": 0,
+              "logprobs_mode": "raw_logprobs",
+              "limit_mm_per_prompt": {
+                "image": 0,
+                "video": 0
+              },
+              "generation_config": "vllm"
+            }
+          }
+        },
+        {
+          "id": "npu",
+          "label": "NPU",
+          "hardware": "Ascend 910C（Ascend910_9382）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            }
+          ],
+          "settings": {
+            "model": "Qwen/Qwen3.5-9B-Base",
+            "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "collector_sha256": "49c4d69c56a19a60c98cd428823390b592907d862fbf930ef3f1dc5ab4b5770e",
+            "semantics": "target_position p (zero based input index) predicted by row p-1; natural log; full vocabulary FP32 log_softmax; no score processors",
+            "execution_max_context": 128,
+            "batch_size": 1,
+            "quantization": null,
+            "seed": 0,
+            "python": "3.12.13",
+            "torch": "2.9.0+cpu",
+            "framework": "transformers",
+            "framework_version": "5.3.0",
+            "torch_npu": "2.9.0.post2",
+            "device_name": "Ascend910_9382",
+            "device_count": 1,
+            "parameter_dtypes": [
+              "torch.bfloat16"
+            ],
+            "attention_implementation": "eager",
+            "use_cache": true
+          }
+        }
+      ],
+      "common": [
+        "BF16、无量化、单设备、eager、最大上下文128；固定四份输入，长度24/24/48/48。",
+        "完整词表248320归一化的 FP32 原始 logprob；位置 p 由 p−1 行预测，排除采样与惩罚变换。",
+        "A/B agent 均为 gpt-6.1-sol / medium；新 A 不接收旧采集器、分数或隐藏验证器。"
+      ],
+      "differences": [
+        "A 按需使用 skills；B 复用已独立验证的历史无 skill 基线。",
+        "两侧比较变量为硬件及其整套软件实现；实际版本分别记录。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "任务首条事件至交付，包含 agent 全部阅读、编码、执行、重试和额外自测；排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": -103.52500000000003,
+              "side_values": {
+                "a": 486.383,
+                "b": 589.908
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.03885240000000012,
+              "side_values": {
+                "a": 0.7883279999999999,
+                "b": 0.8271804
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": -10,
+              "side_values": {
+                "a": 28,
+                "b": 38
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": -899111,
+              "side_values": {
+                "a": 3397812,
+                "b": 4296923
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 38555,
+              "side_values": {
+                "a": 157044,
+                "b": 118489
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "native-scores",
+          "title": "双端原生评分差异",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "140个固定目标位置；NLL为各侧负平均 logprob，P99按全体差值线性插值。",
+          "metrics": [
+            {
+              "id": "nll",
+              "label": "NLL 绝对差",
+              "unit": "nats/token",
+              "value": 0.0029403345925462787,
+              "side_values": {
+                "gpu": 12.983606467928205,
+                "npu": 12.980666133335658
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE",
+              "unit": "nats",
+              "value": 0.02059140205383301
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99 绝对误差",
+              "unit": "nats",
+              "value": 0.07268386840820296
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "nats",
+              "value": 0.08256149291992188,
+              "coordinate": {
+                "sample": "sample-1",
+                "position": 1,
+                "token": 8763
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标位置",
+              "observed": 140,
+              "expected": 140,
+              "unit": "positions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "同一直接任务与已准备资源，仅重跑 A；B 为已独立验证的历史无 skill 基线。",
+        "首个 GPU 原生采集完成，但外层调度失败；诊断、二次运行与全部工具调用均计入总成本。没有扣除重试的假设性结果。",
+        "本轮 NPU use_cache=True，上一轮为 False；各输入独立 prefill，全部目标分数一致，但实际配置并非完全相同。",
+        "复用了 reduce_groups + reduce_scores；仍读取工具源码、自写下载及额外报告，补做算术和数组核验。",
+        "上一轮 A：398.309秒、0.4876716美元、21次工具调用；本轮486.383秒、0.788328美元、28次。此次接口改动没有证明进一步提效。",
+        "单次测试，缓存命中、历史并发与调度事件未控制，无法单独归因于 skill 文本。",
+        "费用沿用相同 Standard 价格快照估算，不代表账户账单；父级准备与隐藏独立验证不计入 agent 用量。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、原生分数、独立核验、配置差异与重试记录",
+          "url": "evidence/skills-interface-native-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "8006c495930f754a84e648a2d79b36c0abc58509",
+        "prefix": "site/evidence/skills-interface-native-ab-20261024.json",
+        "replay_cases": 140
+      }
     }
   ]
 }
