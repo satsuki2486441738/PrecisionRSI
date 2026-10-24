@@ -19,7 +19,7 @@ description: Diagnose and repair numerical defects in model, framework or operat
 Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
 
 - Patch the responsible implementation; keep framework-specific fixes with the case.
-- Extend existing checks for missing causal or nearby-case coverage; the regression must fail before the fix and pass after.
+- Use the smallest regression covering the defect: fail before the fix, pass after. Extend cases for distinct failure mechanisms.
 - Verify through the original entrypoint and collectors at identical inputs/initial state. A regression invoking that workload can also provide its before/after metrics.
 - Use task tolerance or justify one from computation/dtype. Measure runtime/memory when relevant.
 - Existing captures: `compare_arrays` / `compare_trees`; follow comparison's [tool-use requirements](../precision-compare/SKILL.md#tool-use). Missing interface details: `python ../precision-compare/scripts/tool_help.py TOOL` from this skill. Missing collection/comparison → [compare](../precision-compare/SKILL.md); reconstruction/execution or repeated commands → [shared tools](../precision-compare/references/comparison.md#tools).
@@ -27,5 +27,5 @@ Execution tools own waiting, timeouts and terminal receipts. Use completion noti
 ## Return
 
 - Cause, source revision, patch/regression, original-workload before/after metrics, configuration changes and existing evidence paths.
-- Finish after regression and original-workload checks pass. Repeated confirmation of an unchanged completed task returns prior metrics and paths as reused, without running workloads or regressions. Run regressions/workloads for changed or failed scope, or an explicit request to re-execute them. Packaging, offline replay and extra reports require a request.
+- Finish after regression and original-workload checks pass. Follow comparison’s [request routing](../precision-compare/SKILL.md#scope) for subsequent tasks; reuse unchanged evidence and validate requested configuration changes. Packaging, offline replay and extra reports require a request.
 - If budget prevents verification, return the unresolved question and next discriminating check.

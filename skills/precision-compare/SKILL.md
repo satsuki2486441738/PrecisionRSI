@@ -13,7 +13,7 @@ description: Collect and compare numerical results across hardware and software 
 | Request | Action |
 |---|---|
 | Repeat / confirm a completed task; inputs/state, source/runtime and scope unchanged | Return prior metrics, coverage and paths as reused; skip training/inference and regression reruns. |
-| Conditions or requested scope changed | Recompute affected scope; retain unaffected checks. |
+| Conditions or requested scope changed | Recompute affected scope. Configuration-only changes: validate requested settings; expand regressions for changed implementations or uncovered failures. |
 | Explicitly rerun training/inference or obtain new measurements | Execute fresh captures for the requested scope. |
 
 ## Tool use
@@ -51,6 +51,8 @@ python scripts/evidence_bundle.py fetch REQUEST.json NEW_SIDE_DIRECTORY
 NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both comparators accept `--metrics` and `--all-findings`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
 
 Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch verifies selected files. Reuse its receipt and `EXPORT.json` hashes/sizes for unchanged files; large arrays stay at source.
+
+Repeated result review: `runtime_probe.save_identity(paths, NEW_MANIFEST, results=None)` retains verified file identities and results. Include relevant source/config/data/runtime identities and evidence files. `python scripts/runtime_probe.py --identity MANIFEST` checks them and returns saved results without rerunning.
 
 [tool_help](scripts/tool_help.py): `--list` for discovery, `--full` for schemas. Shards/runtime/repeated commands → [shared tools](references/comparison.md#tools).
 
