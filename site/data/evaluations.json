@@ -56463,6 +56463,1053 @@
         "prefix": "site/evidence/torch-native-multitask-20261024",
         "replay_cases": 1
       }
+    },
+    {
+      "id": "skills-demand-cache-20261024",
+      "date": "2026-10-24",
+      "title": "按需 Skills A/B：推理缓存修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B（按需）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny Transformer",
+        "revision": "41f0a2087da87900abad0fcca2559e35218fa50c"
+      },
+      "summary": "新 agent 按需进入组件，复用冻结的无 skill 基线；独立隐藏验证全部通过。保留成本与用时未改善的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float32",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "skills_loaded": true,
+            "skill_entry": "on demand"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float32",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "skills_loaded": false,
+            "reused_baseline": "cache-noskills-20261024T032830Z"
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "推理包含 prefill and cached decode。",
+        "初始夹具与模型/runtime 条件匹配；当前和历史 agent 均有仓库维护指令，但维护文本已有变化。"
+      ],
+      "differences": [
+        "A 仅获得可用 skills 目录并按需使用；B 为同任务、同 agent 模型与 effort 的历史无 skill 基线。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": 66.46699999999998,
+              "side_values": {
+                "a": 243.271,
+                "b": 176.804
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.015181600000000017,
+              "side_values": {
+                "a": 0.18748160000000003,
+                "b": 0.1723
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 1,
+              "side_values": {
+                "a": 11,
+                "b": 10
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": 111210,
+              "side_values": {
+                "a": 1094600,
+                "b": 983390
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 3742,
+              "side_values": {
+                "a": 9978,
+                "b": 6236
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 9.5367431640625e-07,
+                "b": 9.5367431640625e-07
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 12,
+              "expected": 12,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人工注入的 CPU benchmark 缺陷，不是上游库新发现。",
+        "仅重跑 A；B 为已独立验证的冻结历史基线。单次测试，缓存、历史并发和模型延迟未控制，不能归因为单一文本改动。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "本轮 A 采用串行执行；父级准备与独立验证不计入 agent 用时与费用。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、直接任务提示、独立验证与基线来源",
+          "url": "evidence/skills-demand-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "06296945bb0397350fab26fd6682d984234a1b44",
+        "prefix": "site/evidence/skills-demand-ab-20261024.json",
+        "replay_cases": 12
+      }
+    },
+    {
+      "id": "skills-demand-sft-20261024",
+      "date": "2026-10-24",
+      "title": "按需 Skills A/B：SFT 梯度累积修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B（按需）"
+      },
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny token classifier",
+        "revision": "41f0a2087da87900abad0fcca2559e35218fa50c"
+      },
+      "summary": "新 agent 按需进入组件，复用冻结的无 skill 基线；独立隐藏验证全部通过。保留成本与用时未改善的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "training": "full-parameter",
+            "skills_loaded": true,
+            "skill_entry": "on demand"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "training": "full-parameter",
+            "skills_loaded": false,
+            "reused_baseline": "sft-noskills-20261024T032830Z"
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "训练目标与优化器不变；验证原负载与相邻输入。",
+        "初始夹具与模型/runtime 条件匹配；当前和历史 agent 均有仓库维护指令，但维护文本已有变化。"
+      ],
+      "differences": [
+        "A 仅获得可用 skills 目录并按需使用；B 为同任务、同 agent 模型与 effort 的历史无 skill 基线。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": 47.137,
+              "side_values": {
+                "a": 254.517,
+                "b": 207.38
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.09388839999999998,
+              "side_values": {
+                "a": 0.2631576,
+                "b": 0.1692692
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 8,
+              "side_values": {
+                "a": 16,
+                "b": 8
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": 807273,
+              "side_values": {
+                "a": 1621702,
+                "b": 814429
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 14008,
+              "side_values": {
+                "a": 20252,
+                "b": 6244
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 8.881784197001252e-16,
+                "b": 8.881784197001252e-16
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 8,
+              "expected": 8,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人工注入的 CPU benchmark 缺陷，不是上游库新发现。",
+        "仅重跑 A；B 为已独立验证的冻结历史基线。单次测试，缓存、历史并发和模型延迟未控制，不能归因为单一文本改动。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "本轮 A 采用串行执行；父级准备与独立验证不计入 agent 用时与费用。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、直接任务提示、独立验证与基线来源",
+          "url": "evidence/skills-demand-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "06296945bb0397350fab26fd6682d984234a1b44",
+        "prefix": "site/evidence/skills-demand-ab-20261024.json",
+        "replay_cases": 8
+      }
+    },
+    {
+      "id": "skills-demand-rl-20261024",
+      "date": "2026-10-24",
+      "title": "按需 Skills A/B：PPO 轨迹掩码修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B（按需）"
+      },
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny PPO policy",
+        "revision": "41f0a2087da87900abad0fcca2559e35218fa50c"
+      },
+      "summary": "新 agent 按需进入组件，复用冻结的无 skill 基线；独立隐藏验证全部通过。保留成本与用时未改善的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "algorithm": "PPO",
+            "skills_loaded": true,
+            "skill_entry": "on demand"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "algorithm": "PPO",
+            "skills_loaded": false,
+            "reused_baseline": "rl-noskills-20261024T032830Z"
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "训练目标与优化器不变；验证原负载与相邻输入。",
+        "初始夹具与模型/runtime 条件匹配；当前和历史 agent 均有仓库维护指令，但维护文本已有变化。"
+      ],
+      "differences": [
+        "A 仅获得可用 skills 目录并按需使用；B 为同任务、同 agent 模型与 effort 的历史无 skill 基线。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": 74.66299999999998,
+              "side_values": {
+                "a": 256.65,
+                "b": 181.987
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.23292199999999996,
+              "side_values": {
+                "a": 0.3881764,
+                "b": 0.15525440000000001
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 5,
+              "side_values": {
+                "a": 13,
+                "b": 8
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": 466397,
+              "side_values": {
+                "a": 1279557,
+                "b": 813160
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 93729,
+              "side_values": {
+                "a": 101089,
+                "b": 7360
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0,
+              "side_values": {
+                "a": 0,
+                "b": 0
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 28,
+              "expected": 28,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人工注入的 CPU benchmark 缺陷，不是上游库新发现。",
+        "仅重跑 A；B 为已独立验证的冻结历史基线。单次测试，缓存、历史并发和模型延迟未控制，不能归因为单一文本改动。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "本轮 A 采用串行执行；父级准备与独立验证不计入 agent 用时与费用。",
+        "A 一次请求的缓存命中很低，产生 87957 个未缓存输入 token；成本变化不全部来自 skill 文本。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、直接任务提示、独立验证与基线来源",
+          "url": "evidence/skills-demand-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "06296945bb0397350fab26fd6682d984234a1b44",
+        "prefix": "site/evidence/skills-demand-ab-20261024.json",
+        "replay_cases": 28
+      }
+    },
+    {
+      "id": "skills-wait-sft-20261024",
+      "date": "2026-10-24",
+      "title": "接口简化复测：SFT 梯度累积修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B（接口复测）"
+      },
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny token classifier",
+        "revision": "533ee9ce8033bee6de987d05416d2cc68968e039"
+      },
+      "summary": "新 agent 按需进入组件，复用冻结的无 skill 基线；独立隐藏验证全部通过。保留成本与用时未改善的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "training": "full-parameter",
+            "skills_loaded": true,
+            "skill_entry": "on demand"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "training": "full-parameter",
+            "skills_loaded": false,
+            "reused_baseline": "sft-noskills-20261024T032830Z"
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "训练目标与优化器不变；验证原负载与相邻输入。",
+        "初始夹具与模型/runtime 条件匹配；当前和历史 agent 均有仓库维护指令，但维护文本已有变化。"
+      ],
+      "differences": [
+        "A 仅获得可用 skills 目录并按需使用；B 为同任务、同 agent 模型与 effort 的历史无 skill 基线。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": -46.321,
+              "side_values": {
+                "a": 161.059,
+                "b": 207.38
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.014650400000000008,
+              "side_values": {
+                "a": 0.1546188,
+                "b": 0.1692692
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 1,
+              "side_values": {
+                "a": 9,
+                "b": 8
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": 89062,
+              "side_values": {
+                "a": 903491,
+                "b": 814429
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 2754,
+              "side_values": {
+                "a": 8998,
+                "b": 6244
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 8.881784197001252e-16,
+                "b": 8.881784197001252e-16
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 8,
+              "expected": 8,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人工注入的 CPU benchmark 缺陷，不是上游库新发现。",
+        "仅重跑 A；B 为已独立验证的冻结历史基线。单次测试，缓存、历史并发和模型延迟未控制，不能归因为单一文本改动。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "本轮 A 采用串行执行；父级准备与独立验证不计入 agent 用时与费用。",
+        "补齐比较器返回字段，未再读取比较器实现；仍有两次一秒轮询，且回归组织方式也变化，不能单独归因于等待提示。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、直接任务提示、独立验证与基线来源",
+          "url": "evidence/skills-wait-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "06296945bb0397350fab26fd6682d984234a1b44",
+        "prefix": "site/evidence/skills-wait-ab-20261024.json",
+        "replay_cases": 8
+      }
+    },
+    {
+      "id": "skills-demand-native-prefill-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B（双端）：prefill 采集比较",
+      "framework": {
+        "name": "Skills A/B（双端）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "新 agent 完成 GPU/vLLM 与 NPU/Transformers 原生采集、配对和比较；覆盖 140/140，双方全部 280 个目标分数与保留的无 skill 基线完全相同。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 按需 skills",
+          "hardware": "H200 / Ascend 910C",
+          "libraries": [
+            {
+              "name": "Agent",
+              "version": "gpt-6.1-sol"
+            }
+          ],
+          "settings": {
+            "reasoning_effort": "medium",
+            "source_revision": "533ee9ce8033bee6de987d05416d2cc68968e039",
+            "baseline_id": "native-prefill-noskills-20261024T011154Z"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无 skills 历史基线",
+          "hardware": "H200 / Ascend 910C",
+          "libraries": [
+            {
+              "name": "Agent",
+              "version": "gpt-6.1-sol"
+            }
+          ],
+          "settings": {
+            "reasoning_effort": "medium",
+            "source_revision": "historical baseline",
+            "baseline_id": "native-prefill-noskills-20261024T011154Z"
+          }
+        },
+        {
+          "id": "gpu",
+          "label": "GPU",
+          "hardware": "NVIDIA H200（运行时标识 H20Z）",
+          "libraries": [
+            {
+              "name": "vLLM",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "versions": {
+              "torch": "2.10.0",
+              "transformers": "5.5.4",
+              "vllm": "0.19.1"
+            },
+            "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "config_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+            "inputs_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "collector_sha256": "092f3dd34e5802e465bf7d808003117b2c77b0224b733f4ee0be61679954583e",
+            "score_dtype": "torch.float32",
+            "normalization": "full vocabulary log_softmax; natural logarithm",
+            "max_context": 128,
+            "batch_size": 1,
+            "quantization": null,
+            "graphs": false,
+            "input_policy": "exact input_ids, no template/BOS insertion",
+            "target_policy": "input position p predicted by row p-1"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "NPU",
+          "hardware": "Ascend 910C（Ascend910_9382）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            }
+          ],
+          "settings": {
+            "versions": {
+              "torch": "2.9.0",
+              "transformers": "5.3.0",
+              "torch_npu": "2.9.0.post2"
+            },
+            "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "config_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+            "inputs_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "collector_sha256": "092f3dd34e5802e465bf7d808003117b2c77b0224b733f4ee0be61679954583e",
+            "score_dtype": "torch.float32",
+            "normalization": "full vocabulary log_softmax; natural logarithm",
+            "max_context": 128,
+            "batch_size": 1,
+            "quantization": null,
+            "graphs": false,
+            "input_policy": "exact input_ids, no template/BOS insertion",
+            "target_policy": "input position p predicted by row p-1"
+          }
+        }
+      ],
+      "common": [
+        "BF16、无量化、单设备、eager、最大上下文128；固定四份输入，长度24/24/48/48。",
+        "完整词表248320归一化的 FP32 原始 logprob；位置 p 由 p−1 行预测，排除采样与惩罚变换。",
+        "A/B agent 均为 gpt-6.1-sol / medium；新 A 不接收旧采集器、分数或隐藏验证器。"
+      ],
+      "differences": [
+        "A 按需使用 skills；B 复用已独立验证的历史无 skill 基线。",
+        "两侧比较变量为硬件及其整套软件实现；实际版本分别记录。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "任务首条事件至交付，包含 agent 全部阅读、编码、执行、重试和额外自测；排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": -191.599,
+              "side_values": {
+                "a": 398.309,
+                "b": 589.908
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.33950880000000017,
+              "side_values": {
+                "a": 0.48767159999999987,
+                "b": 0.8271804
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": -17,
+              "side_values": {
+                "a": 21,
+                "b": 38
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": -1939048,
+              "side_values": {
+                "a": 2357875,
+                "b": 4296923
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": -48773,
+              "side_values": {
+                "a": 69716,
+                "b": 118489
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "native-scores",
+          "title": "双端原生评分差异",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "140个固定目标位置；NLL为各侧负平均 logprob，P99按全体差值线性插值。",
+          "metrics": [
+            {
+              "id": "nll",
+              "label": "NLL 绝对差",
+              "unit": "nats/token",
+              "value": 0.0029403345925462787,
+              "side_values": {
+                "gpu": 12.983606467928205,
+                "npu": 12.980666133335658
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE",
+              "unit": "nats",
+              "value": 0.02059140205383301
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99 绝对误差",
+              "unit": "nats",
+              "value": 0.07268386840820296
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "nats",
+              "value": 0.08256149291992188,
+              "coordinate": {
+                "sample": "sample-1",
+                "position": 1,
+                "token": 8763
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标位置",
+              "observed": 140,
+              "expected": 140,
+              "unit": "positions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Only A rerun with fresh agent, same model/effort and task; frozen historical B reused.",
+        "Verified runtime/model/launch declarations provided; parent preparation excluded. Reuse advantage and preparation amortization not measured.",
+        "Shared repository maintenance instructions; optional skills catalog replaces compulsory loading.",
+        "Single observation per iteration; cache and historical background concurrency uncontrolled.",
+        "Native scores freshly collected, not supplied from previous runs.",
+        "Agent still wrote its own fetch helper and an extra Markdown report and repeated arithmetic.",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "较上一版 A：用时332.697→398.309秒，估算费用0.5442596→0.4876716美元，工具调用15→21；速度没有继续改善。"
+      ],
+      "evidence": [
+        {
+          "label": "原生分数、逐请求用量、独立核验与配置",
+          "url": "evidence/skills-demand-native-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "06296945bb0397350fab26fd6682d984234a1b44",
+        "prefix": "site/evidence/skills-demand-native-ab-20261024.json",
+        "replay_cases": 140
+      }
     }
   ]
 }
