@@ -1,0 +1,719 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "case": {
+    "case_id": "transformers-530-qwen35-pretraining-token-normalization",
+    "classification": "installed upstream v5.3.0 defect repair, not a historical backport",
+    "before": {
+      "arm": "before",
+      "recovered_from_existing_terminal_artifacts": true,
+      "source_log": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/pretrained-training-repair-20261024T141838Z/runs/npu-before-20261024T142437Z/stdout.bin",
+      "loss": 2.571202278137207,
+      "oracle_loss": 2.021854519844055,
+      "loss_absolute_error": 0.5493477582931519,
+      "loss_relative_error": 0.27170488920019964,
+      "trainer_denominator": null,
+      "valid_next_token_targets": 35,
+      "checks": {
+        "token_mean_loss": false,
+        "gradient_relative_l2": false
+      },
+      "serialization_failure": "loading_info contains sets; original native output arrays/comparison completed before JSON failure",
+      "peak_npu_memory": "unavailable in original terminal artifact; not reconstructed"
+    },
+    "after": {
+      "arm": "after",
+      "classification": "defect in installed upstream Transformers v5.3.0; no historical bug injection",
+      "loss": 2.021854519844055,
+      "oracle_loss": 2.021854519844055,
+      "loss_absolute_error": 0,
+      "loss_ratio": 1,
+      "trainer_denominator": 35,
+      "valid_next_token_targets": 35,
+      "checks": {
+        "target_count": true,
+        "loss_mean": true,
+        "gradient_layer31": true,
+        "gradient_head": true
+      },
+      "passed": true,
+      "texts": [
+        "The Earth orbits the Sun.",
+        "Water freezes at zero degrees Celsius under standard atmospheric pressure. The freezing point changes with pressure and dissolved substances, while the boiling point also depends on atmospheric conditions."
+      ],
+      "input_ids": [
+        [
+          [
+            760,
+            8964,
+            82191,
+            279,
+            7806,
+            13
+          ]
+        ],
+        [
+          [
+            27336,
+            90162,
+            506,
+            6942,
+            11995,
+            59275,
+            1172,
+            5129,
+            42900,
+            7035,
+            13,
+            561,
+            40818,
+            1406,
+            4203,
+            440,
+            7035,
+            321,
+            53798,
+            30999,
+            11,
+            1345,
+            279,
+            48161,
+            1406,
+            1048,
+            13402,
+            383,
+            42900,
+            4530,
+            13
+          ]
+        ]
+      ],
+      "dtype": "torch.bfloat16",
+      "parameters_loaded": 9409813744,
+      "num_hidden_layers": 32,
+      "loading_info": {
+        "missing_keys": [],
+        "unexpected_keys": [],
+        "mismatched_keys": [],
+        "error_msgs": []
+      },
+      "model_accepts_loss_kwargs": true,
+      "gradient_parameter": "model.language_model.layers.31.mlp.down_proj.weight",
+      "gradient_head_rows": [
+        11,
+        13,
+        279,
+        321,
+        383,
+        440,
+        506,
+        561,
+        760,
+        1048,
+        1172,
+        1345,
+        1406,
+        4203,
+        4530,
+        5129,
+        6942,
+        7035,
+        7806,
+        8964,
+        11995,
+        13402,
+        27336,
+        30999,
+        40818,
+        42900,
+        48161,
+        53798,
+        59275,
+        82191,
+        90162
+      ],
+      "optimizer_steps": 0,
+      "scope": "full text-model backward with native Trainer.training_step; unused vision tower loaded; no optimizer update verification",
+      "oracle_backward": "same Accelerator.backward as native Trainer, independent CE objective",
+      "accelerator_gradient_accumulation_steps": 2,
+      "wall_seconds": 13.981982450000942,
+      "peak_npu_allocated_bytes": 42891059200,
+      "versions": {
+        "torch": "2.9.0",
+        "torch-npu": "2.9.0.post2",
+        "transformers": "5.3.0",
+        "accelerate": "1.14.0"
+      },
+      "trainer_source": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/pretrained-training-repair-20261024T141838Z/vendor/transformers/trainer.py",
+      "trainer_sha256": "8f21c43d8a5fb40d6c6b1f5a180ab80432519aabfb353cd279e0304a2fe2c51e",
+      "device": "Ascend910_9382",
+      "visible_devices": "12"
+    },
+    "before_gradient_metrics": {
+      "count": 50458624,
+      "side_a_norm": {
+        "value": 13.607038328803084,
+        "status": "no_thresholds"
+      },
+      "side_b_norm": {
+        "value": 8.08702064311247,
+        "status": "no_thresholds"
+      },
+      "error_norm": {
+        "value": 9.956697922364665,
+        "status": "no_thresholds"
+      },
+      "rmse": {
+        "value": 0.0014016759753236539,
+        "status": "no_thresholds"
+      },
+      "cosine": {
+        "value": 0.6879998693373885,
+        "status": "no_thresholds"
+      },
+      "max_abs": {
+        "value": 1.076171875,
+        "status": "no_thresholds"
+      },
+      "max_flat_index": 121797,
+      "max_coordinate": {
+        "name": "head_targets",
+        "index": [
+          29,
+          3013
+        ]
+      },
+      "max_values": {
+        "dtype": "float32",
+        "side_a": "-1.5078125",
+        "side_b": "-0.431640625"
+      }
+    },
+    "after_gradient_metrics": {
+      "count": 50458624,
+      "side_a_norm": {
+        "value": 8.08702064311247,
+        "status": "no_thresholds"
+      },
+      "side_b_norm": {
+        "value": 8.08702064311247,
+        "status": "no_thresholds"
+      },
+      "error_norm": {
+        "value": 0,
+        "status": "no_thresholds"
+      },
+      "rmse": {
+        "value": 0,
+        "status": "no_thresholds"
+      },
+      "cosine": {
+        "value": 0.9999999999999998,
+        "status": "no_thresholds"
+      },
+      "max_abs": {
+        "value": 0,
+        "status": "no_thresholds"
+      },
+      "max_flat_index": 0,
+      "max_coordinate": {
+        "name": "head_targets",
+        "index": [
+          0,
+          0
+        ]
+      },
+      "max_values": {
+        "dtype": "float32",
+        "side_a": "-0.012939453125",
+        "side_b": "-0.012939453125"
+      }
+    },
+    "native_attempts": 4,
+    "before_run": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/pretrained-training-repair-20261024T141838Z/runs/npu-before-20261024T142437Z",
+    "after_run": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/pretrained-training-repair-20261024T141838Z/runs/npu-after-20261024T143005Z",
+    "red_green": true,
+    "verification_scope": "real pretrained full checkpoint, native Trainer.training_step forward/backward; no optimizer step or long training convergence claim"
+  },
+  "independent_audit": {
+    "status": "passed",
+    "scope": "Independent NumPy audit of all saved gradient coordinates and terminal loss values; original and final oracle gradients exactly match. No model rerun.",
+    "phases": {
+      "before": {
+        "count": 50458624,
+        "error_norm": 9.956697922364665,
+        "max_abs": 1.076171875,
+        "cosine": 0.6879998693373887,
+        "exact_equal": false,
+        "loss": 2.571202278137207,
+        "oracle_loss": 2.021854519844055
+      },
+      "after": {
+        "count": 50458624,
+        "error_norm": 0,
+        "max_abs": 0,
+        "cosine": 1,
+        "exact_equal": true,
+        "loss": 2.021854519844055,
+        "oracle_loss": 2.021854519844055
+      }
+    }
+  },
+  "worker": {
+    "agent_id": "01a16e47-c7bd-7c70-86ba-ee8198a9c14d",
+    "fork_context": false,
+    "provided": "Direct task, precision-repair skill and resource declarations; no diagnosis or patch supplied."
+  },
+  "provenance": {
+    "model_repository": "Qwen/Qwen3.5-9B-Base",
+    "model_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+    "files": {
+      "config.json": {
+        "bytes": 3126,
+        "actual": "273ce437e01baf96a07cd9eb3d5f48bac8d7c657",
+        "expected": "273ce437e01baf96a07cd9eb3d5f48bac8d7c657",
+        "matched": true
+      },
+      "merges.txt": {
+        "bytes": 3353259,
+        "actual": "a494e019ca1502219fd0128658b979e5f05ae8e8",
+        "expected": "a494e019ca1502219fd0128658b979e5f05ae8e8",
+        "matched": true
+      },
+      "model.safetensors-00001-of-00004.safetensors": {
+        "bytes": 5276436216,
+        "actual": "862bf7bba8a50145d19d0ae463931fae515284024736592a73a336bc4dfa54ee",
+        "expected": "862bf7bba8a50145d19d0ae463931fae515284024736592a73a336bc4dfa54ee",
+        "matched": true
+      },
+      "model.safetensors-00002-of-00004.safetensors": {
+        "bytes": 5335161576,
+        "actual": "bace8e115e11ca93c22f0352a60d2fb0c76ac6d7d1c2993c143b7ad2b6c8868c",
+        "expected": "bace8e115e11ca93c22f0352a60d2fb0c76ac6d7d1c2993c143b7ad2b6c8868c",
+        "matched": true
+      },
+      "model.safetensors-00003-of-00004.safetensors": {
+        "bytes": 5368717376,
+        "actual": "63a021ac0011cbfc66166e77103327a8b45dee95832e36551f6b4c3337448959",
+        "expected": "63a021ac0011cbfc66166e77103327a8b45dee95832e36551f6b4c3337448959",
+        "matched": true
+      },
+      "model.safetensors-00004-of-00004.safetensors": {
+        "bytes": 3325995704,
+        "actual": "1a643bbed669266917b5058b5d3f660c03233599249ff7d8fd083decfe662ae0",
+        "expected": "1a643bbed669266917b5058b5d3f660c03233599249ff7d8fd083decfe662ae0",
+        "matched": true
+      },
+      "model.safetensors.index.json": {
+        "bytes": 79657,
+        "actual": "b46f5c8684a87aaf30cc7e226584e3de9a7f1d0a",
+        "expected": "b46f5c8684a87aaf30cc7e226584e3de9a7f1d0a",
+        "matched": true
+      },
+      "preprocessor_config.json": {
+        "bytes": 390,
+        "actual": "2ea84a437d448ff71b08df68fdd949d5cc4ebb64",
+        "expected": "2ea84a437d448ff71b08df68fdd949d5cc4ebb64",
+        "matched": true
+      },
+      "tokenizer.json": {
+        "bytes": 12807196,
+        "actual": "fe000e3ed39ed12b8d2481d527d44f93c65d37e87645d2dcc80d1bf9d50d2927",
+        "expected": "fe000e3ed39ed12b8d2481d527d44f93c65d37e87645d2dcc80d1bf9d50d2927",
+        "matched": true
+      },
+      "tokenizer_config.json": {
+        "bytes": 16713,
+        "actual": "ae8d254e44c51d0cb0907bcb221f18efca829d3e",
+        "expected": "ae8d254e44c51d0cb0907bcb221f18efca829d3e",
+        "matched": true
+      },
+      "video_preprocessor_config.json": {
+        "bytes": 386,
+        "actual": "37900b3ff9295e1aa7e211378466356b52e64e55",
+        "expected": "37900b3ff9295e1aa7e211378466356b52e64e55",
+        "matched": true
+      },
+      "vocab.json": {
+        "bytes": 6722759,
+        "actual": "0aa0ce0658d60ac4a5d609f4eadb0e8e43514176",
+        "expected": "0aa0ce0658d60ac4a5d609f4eadb0e8e43514176",
+        "matched": true
+      }
+    },
+    "indexed_tensors": 775,
+    "parameters_in_checkpoint": 9653104368,
+    "source_url": "https://raw.githubusercontent.com/huggingface/transformers/v5.3.0/src/transformers/trainer.py",
+    "installed_trainer_sha256": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+    "patched_trainer_sha256": "8f21c43d8a5fb40d6c6b1f5a180ab80432519aabfb353cd279e0304a2fe2c51e",
+    "model_source_url": "https://raw.githubusercontent.com/huggingface/transformers/v5.3.0/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+    "installed_model_sha256": "0e7410f5251e5c324a5628c5340ee3551f7a6a505ce398569fcc3b5f3ac07f7a",
+    "patched_model_sha256": "55faa7bbe47ae8f677a262d6bc2807290af8518fd6c9ffb3f49e3282c2f3f200"
+  },
+  "source_revision": {
+    "source": "https://api.github.com/repos/huggingface/transformers/git/ref/tags/v5.3.0",
+    "response": {
+      "ref": "refs/tags/v5.3.0",
+      "node_id": "MDM6UmVmMTU1MjIwNjQxOnJlZnMvdGFncy92NS4zLjA=",
+      "url": "https://api.github.com/repos/huggingface/transformers/git/refs/tags/v5.3.0",
+      "object": {
+        "sha": "aad13b87ed59f2afcfaebc985f403301887a35fc",
+        "type": "commit",
+        "url": "https://api.github.com/repos/huggingface/transformers/git/commits/aad13b87ed59f2afcfaebc985f403301887a35fc"
+      }
+    }
+  },
+  "cpu_regression": {
+    "before": {
+      "patched": false,
+      "tests": [
+        {
+          "name": "causal_unmasked",
+          "actual": 4,
+          "expected": 3,
+          "passed": false
+        },
+        {
+          "name": "causal_ignored_prefix",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "causal_padding",
+          "actual": 3,
+          "expected": 2,
+          "passed": false
+        },
+        {
+          "name": "causal_shift_labels",
+          "actual": 3,
+          "expected": 2,
+          "passed": false
+        },
+        {
+          "name": "masked_lm_unchanged",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "custom_loss_unchanged",
+          "actual": 3,
+          "expected": 3,
+          "passed": true
+        },
+        {
+          "name": "smoother_unchanged",
+          "actual": 3,
+          "expected": 3,
+          "passed": true
+        },
+        {
+          "name": "accumulated_unequal",
+          "actual": 8,
+          "expected": 6,
+          "passed": false
+        }
+      ],
+      "passed": false
+    },
+    "after": {
+      "patched": true,
+      "tests": [
+        {
+          "name": "causal_unmasked",
+          "actual": 3,
+          "expected": 3,
+          "passed": true
+        },
+        {
+          "name": "causal_ignored_prefix",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "causal_padding",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "causal_shift_labels",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "masked_lm_unchanged",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "custom_loss_unchanged",
+          "actual": 3,
+          "expected": 3,
+          "passed": true
+        },
+        {
+          "name": "smoother_unchanged",
+          "actual": 3,
+          "expected": 3,
+          "passed": true
+        },
+        {
+          "name": "accumulated_unequal",
+          "actual": 6,
+          "expected": 6,
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  },
+  "transfer_index": {
+    "schema_version": 1,
+    "files": [
+      {
+        "path": "cann-version.txt",
+        "original_sha256": "213944a68efee7a1b6f7a677039deb1ec853ec3b4e1f243931102910bd6795e4",
+        "exported_sha256": "213944a68efee7a1b6f7a677039deb1ec853ec3b4e1f243931102910bd6795e4",
+        "original_bytes": 425,
+        "exported_bytes": 425,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "cpu-after.json",
+        "original_sha256": "e1c2353b459a7012b9fc3b54c42e5209e3cc801ba2fe0c4717bcc188e307aec8",
+        "exported_sha256": "e1c2353b459a7012b9fc3b54c42e5209e3cc801ba2fe0c4717bcc188e307aec8",
+        "original_bytes": 939,
+        "exported_bytes": 939,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "cpu-before.json",
+        "original_sha256": "5f47b4e60c6f3c642d98a405df2761c46998c24178c72c2bb8d67698c569021f",
+        "exported_sha256": "5f47b4e60c6f3c642d98a405df2761c46998c24178c72c2bb8d67698c569021f",
+        "original_bytes": 945,
+        "exported_bytes": 945,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "device-after.txt",
+        "original_sha256": "488f233b6de94f10ad7776efe99c159d7d12d90eb7c7a1cbf657dc56617137cf",
+        "exported_sha256": "488f233b6de94f10ad7776efe99c159d7d12d90eb7c7a1cbf657dc56617137cf",
+        "original_bytes": 7821,
+        "exported_bytes": 7821,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "preparation.json",
+        "original_sha256": "230141dd21a555b849da7f58e63806448b11b0ee8857fe740bb275f75b19aad9",
+        "exported_sha256": "230141dd21a555b849da7f58e63806448b11b0ee8857fe740bb275f75b19aad9",
+        "original_bytes": 3619,
+        "exported_bytes": 3619,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "recovered-before.json",
+        "original_sha256": "d6c060dfcc7849cc9b6f062eae3566d9b8e93796fae80bddc1170eac180153f3",
+        "exported_sha256": "d6c060dfcc7849cc9b6f062eae3566d9b8e93796fae80bddc1170eac180153f3",
+        "original_bytes": 830,
+        "exported_bytes": 830,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-after-20261024T143005Z/artifacts/gradient-comparison.json",
+        "original_sha256": "e9744d6f38a2011857f615e98c51b6c33cf44d458e5c8d7529a61a0a7c74b5b8",
+        "exported_sha256": "e9744d6f38a2011857f615e98c51b6c33cf44d458e5c8d7529a61a0a7c74b5b8",
+        "original_bytes": 1385,
+        "exported_bytes": 1385,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-after-20261024T143005Z/artifacts/result.json",
+        "original_sha256": "938a8dbe824249f4684e512e745a95872e3d06fbf04a765fb1abff5c1ee60031",
+        "exported_sha256": "938a8dbe824249f4684e512e745a95872e3d06fbf04a765fb1abff5c1ee60031",
+        "original_bytes": 2853,
+        "exported_bytes": 2853,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-after-20261024T143005Z/command.json",
+        "original_sha256": "d0a6e5b85a0c19eba1ece545e7b1541e6e069d91503be202b4ad76c05e99acac",
+        "exported_sha256": "d0a6e5b85a0c19eba1ece545e7b1541e6e069d91503be202b4ad76c05e99acac",
+        "original_bytes": 1906,
+        "exported_bytes": 1906,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-after-20261024T143005Z/device-before.txt",
+        "original_sha256": "7268fc088ce1c4b153be18a9faed2715aa35ef985b7891d9d9b280ea092be765",
+        "exported_sha256": "7268fc088ce1c4b153be18a9faed2715aa35ef985b7891d9d9b280ea092be765",
+        "original_bytes": 7821,
+        "exported_bytes": 7821,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-after-20261024T143005Z/stderr.bin",
+        "original_sha256": "133fd339868c39a02710798bae22fef552928790b53aefaa5e967eef2e75b6c5",
+        "exported_sha256": "133fd339868c39a02710798bae22fef552928790b53aefaa5e967eef2e75b6c5",
+        "original_bytes": 2017,
+        "exported_bytes": 2017,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-after-20261024T143005Z/stdout.bin",
+        "original_sha256": "f61f7378f6ae8f5aab29e0a0834199494879f2c413c61c5ce5fbd12da4cb02a0",
+        "exported_sha256": "f61f7378f6ae8f5aab29e0a0834199494879f2c413c61c5ce5fbd12da4cb02a0",
+        "original_bytes": 2415,
+        "exported_bytes": 2415,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142035Z/command.json",
+        "original_sha256": "04b060e99e6c998c3d888c96bd74072281c67a534b0517edea1b13c50563c811",
+        "exported_sha256": "04b060e99e6c998c3d888c96bd74072281c67a534b0517edea1b13c50563c811",
+        "original_bytes": 1736,
+        "exported_bytes": 1736,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142035Z/device-before.txt",
+        "original_sha256": "fba40fa9bf25e78dd9b616e273e3b7c8d5b9927d1361f6eb0a9fbd4508d80a94",
+        "exported_sha256": "fba40fa9bf25e78dd9b616e273e3b7c8d5b9927d1361f6eb0a9fbd4508d80a94",
+        "original_bytes": 7821,
+        "exported_bytes": 7821,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142035Z/stderr.bin",
+        "original_sha256": "f05ce48fb1c583f2e768e3e0d5afb7388e2591b6ed2ee44ed06b292374c18a8e",
+        "exported_sha256": "f05ce48fb1c583f2e768e3e0d5afb7388e2591b6ed2ee44ed06b292374c18a8e",
+        "original_bytes": 3627,
+        "exported_bytes": 3627,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142035Z/stdout.bin",
+        "original_sha256": "e214d1a2a9550ac0ce1b112173f1afc926f83b4480debce73cdab68662ff3575",
+        "exported_sha256": "e214d1a2a9550ac0ce1b112173f1afc926f83b4480debce73cdab68662ff3575",
+        "original_bytes": 112,
+        "exported_bytes": 112,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142110Z/command.json",
+        "original_sha256": "e4c3aabefe4faad2808e32661b41350084223d6f35af754a8463a507242e9b16",
+        "exported_sha256": "e4c3aabefe4faad2808e32661b41350084223d6f35af754a8463a507242e9b16",
+        "original_bytes": 1906,
+        "exported_bytes": 1906,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142110Z/device-before.txt",
+        "original_sha256": "1e2b44d582dc31283ed8e28464f81d489da9b8b6d5eaf5a208a98d063e14eb6f",
+        "exported_sha256": "1e2b44d582dc31283ed8e28464f81d489da9b8b6d5eaf5a208a98d063e14eb6f",
+        "original_bytes": 7821,
+        "exported_bytes": 7821,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142110Z/stderr.bin",
+        "original_sha256": "46ff378d5b83f6d36d601d2c9b1d4f0b5ad4f9c3f792f1fdbe43d2eb56d32140",
+        "exported_sha256": "46ff378d5b83f6d36d601d2c9b1d4f0b5ad4f9c3f792f1fdbe43d2eb56d32140",
+        "original_bytes": 1890,
+        "exported_bytes": 1890,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142110Z/stdout.bin",
+        "original_sha256": "9a755f2bc065bdfd080b8f7d3f93aa304ba75d3e7faf17227698258088603cfe",
+        "exported_sha256": "9a755f2bc065bdfd080b8f7d3f93aa304ba75d3e7faf17227698258088603cfe",
+        "original_bytes": 11,
+        "exported_bytes": 11,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142437Z/artifacts/gradient-comparison.json",
+        "original_sha256": "16112e6b1b18e977faa72ea444db7ab41bf38453f6a793e3f9ef2bced7e1b2fe",
+        "exported_sha256": "16112e6b1b18e977faa72ea444db7ab41bf38453f6a793e3f9ef2bced7e1b2fe",
+        "original_bytes": 1939,
+        "exported_bytes": 1939,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142437Z/command.json",
+        "original_sha256": "2aa31bf9d79c72bf65b45e6a327d7ae84563c5f5d2daeecaa3c448a3768fac75",
+        "exported_sha256": "2aa31bf9d79c72bf65b45e6a327d7ae84563c5f5d2daeecaa3c448a3768fac75",
+        "original_bytes": 1905,
+        "exported_bytes": 1905,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142437Z/device-before.txt",
+        "original_sha256": "0a316718eb635f225af3492bdcf3705fd301d9e1db191f3748d7bc176b5dd9d3",
+        "exported_sha256": "0a316718eb635f225af3492bdcf3705fd301d9e1db191f3748d7bc176b5dd9d3",
+        "original_bytes": 7821,
+        "exported_bytes": 7821,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142437Z/stderr.bin",
+        "original_sha256": "fbb7ae5a4a8f036e6c2e38c20293de8ed56a2fa16f48060ff5482a7f2add7c00",
+        "exported_sha256": "fbb7ae5a4a8f036e6c2e38c20293de8ed56a2fa16f48060ff5482a7f2add7c00",
+        "original_bytes": 3297,
+        "exported_bytes": 3297,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "runs/npu-before-20261024T142437Z/stdout.bin",
+        "original_sha256": "c8ff8f48337bc65e05f432e02c53906face232278d566af8de7c66a215fcddf0",
+        "exported_sha256": "c8ff8f48337bc65e05f432e02c53906face232278d566af8de7c66a215fcddf0",
+        "original_bytes": 274,
+        "exported_bytes": 274,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "summary.json",
+        "original_sha256": "1ef43d0076093953b3d34ab58df4588fc141abc7ccca68773904a7743b75fa12",
+        "exported_sha256": "1ef43d0076093953b3d34ab58df4588fc141abc7ccca68773904a7743b75fa12",
+        "original_bytes": 6489,
+        "exported_bytes": 6489,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "trainer-target-count.patch",
+        "original_sha256": "a2e58a0ee92f4abc9d43511ab1ad02467b447f7c9a928db55e1e3203df2bd605",
+        "exported_sha256": "a2e58a0ee92f4abc9d43511ab1ad02467b447f7c9a928db55e1e3203df2bd605",
+        "original_bytes": 2234,
+        "exported_bytes": 2234,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "upstream-revision.json",
+        "original_sha256": "0af45c94541ae2cde5a452f6a3b2f9c85b72d04d95ad764d652e3260aee0e832",
+        "exported_sha256": "0af45c94541ae2cde5a452f6a3b2f9c85b72d04d95ad764d652e3260aee0e832",
+        "original_bytes": 520,
+        "exported_bytes": 520,
+        "literal_replacement_count": 0
+      },
+      {
+        "path": "upstream-trainer.py",
+        "original_sha256": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+        "exported_sha256": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+        "original_bytes": 215309,
+        "exported_bytes": 215309,
+        "literal_replacement_count": 0
+      }
+    ]
+  },
+  "sources": {
+    "collector": "\"\"\"Full pretrained 9B native Trainer backward and independent CE oracle regression.\n\nBefore and after use identical model, text, dtype, microbatches and initial weights.\nNo optimizer step: this regression isolates the pretraining objective and gradients.\n\"\"\"\nimport argparse, hashlib, importlib.metadata, inspect, json, os, pathlib, time\np=argparse.ArgumentParser();p.add_argument('--arm',choices=['before','after'],required=True);p.add_argument('--output',required=True);a=p.parse_args()\nROOT=pathlib.Path(__file__).resolve().parent\nif a.arm=='after':\n    import sys\n    sys.path.insert(0,str(ROOT/'vendor'))\nimport torch, torch_npu\nimport numpy as np\nfrom transformers import AutoTokenizer, Qwen3_5ForConditionalGeneration, Trainer, TrainingArguments\nOUT=pathlib.Path(a.output);OUT.mkdir()\nstart=time.monotonic();torch.manual_seed(17);torch.npu.set_device(0)\nMODEL='/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/models/qwen35-base-68c46c4-precision-20261012T141602Z'\ntokenizer=AutoTokenizer.from_pretrained(MODEL,local_files_only=True)\ntexts=['The Earth orbits the Sun.', 'Water freezes at zero degrees Celsius under standard atmospheric pressure. The freezing point changes with pressure and dissolved substances, while the boiling point also depends on atmospheric conditions.']\nbatches=[]\nfor text in texts:\n    ids=tokenizer(text,return_tensors='pt',add_special_tokens=False)['input_ids']\n    batches.append({'input_ids':ids,'attention_mask':torch.ones_like(ids),'labels':ids.clone()})\nprint('LOAD_MODEL',flush=True)\nmodel,loading=Qwen3_5ForConditionalGeneration.from_pretrained(MODEL,torch_dtype=torch.bfloat16,local_files_only=True,attn_implementation='eager',output_loading_info=True)\nassert not loading['missing_keys'] and not loading['unexpected_keys'] and not loading['mismatched_keys'],loading\nmodel.to('npu:0'); model.config.use_cache=False\nargs=TrainingArguments(output_dir=str(OUT/'trainer'),per_device_train_batch_size=1,gradient_accumulation_steps=2,report_to=[],save_strategy='no',logging_strategy='no',bf16=False,fp16=False,disable_tqdm=True,optim='sgd',seed=17)\ntrainer=Trainer(model=model,args=args)\ntrainer.current_gradient_accumulation_steps=2\nassert trainer.model_accepts_loss_kwargs == (a.arm=='after')\nbatch_samples,denom=trainer.get_batch_samples(iter(batches),2,args.device)\nvalid=sum(int(b['labels'][...,1:].ne(-100).sum()) for b in batches)\nprint('DENOM',(int(denom) if denom is not None else None),'VALID',valid,'lengths',[b['input_ids'].shape[-1] for b in batches],flush=True)\n# Capture an entire small native parameter gradient, plus selected output-head rows.\nnames=dict(model.named_parameters())\nsmall_name=next(n for n in names if n.endswith('layers.31.mlp.down_proj.weight'))\n# Whole selected matrix remains remote; local export is only a summary.\nhead_name=next(n for n in names if n.endswith('lm_head.weight'))\nrow_ids=torch.unique(torch.cat([b['labels'].flatten() for b in batches])).to('npu:0')\ndef capture(tag):\n    torch.npu.synchronize()\n    grad=names[small_name].grad.detach().float().cpu().numpy()\n    head=names[head_name].grad.detach().index_select(0,row_ids).float().cpu().numpy()\n    np.save(OUT/(tag+'-layer31-down-grad.npy'),grad)\n    np.save(OUT/(tag+'-head-target-grad.npy'),head)\n    return {'layer31_down':grad,'head_targets':head}\nmodel.zero_grad(set_to_none=True)\nlosses=[]\nfor b in batch_samples:\n    loss=trainer.training_step(model,{k:v.clone() for k,v in b.items()},num_items_in_batch=denom)\n    losses.append(float(loss));print('TRAIN_MICRO',losses[-1],flush=True)\nobserved=capture('trainer')\nmodel.zero_grad(set_to_none=True)\nreference_losses=[]\nfor b in batches:\n    inputs={k:v.to(args.device) for k,v in b.items() if k!='labels'}\n    logits=model(**inputs,use_cache=False).logits.float()\n    target=b['labels'][...,1:].to(args.device)\n    loss=torch.nn.functional.cross_entropy(logits[...,:-1,:].contiguous().view(-1,logits.shape[-1]),target.reshape(-1),reduction='sum')/valid\n    reference_losses.append(float(loss.detach()));trainer.accelerator.backward(loss);del logits,loss\n    print('ORACLE_MICRO',reference_losses[-1],flush=True)\nreference=capture('oracle')\n# Compare through shared artifact arithmetic, not a private metrics implementation.\nimport sys\nsys.path.insert(0,str(ROOT.parents[3]/'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\ncomparison=compare_arrays(observed,reference,metrics=True)\n(OUT/'gradient-comparison.json').write_text(json.dumps(comparison,indent=2))\nloss_observed=sum(losses);loss_reference=sum(reference_losses)\nchecks={'target_count':(int(denom) if denom is not None else None)==valid,'loss_mean':abs(loss_observed-loss_reference)<2e-5,'gradient_layer31':bool(np.allclose(observed['layer31_down'],reference['layer31_down'],rtol=.02,atol=1e-6)),'gradient_head':bool(np.allclose(observed['head_targets'],reference['head_targets'],rtol=.02,atol=1e-6))}\nresult={'arm':a.arm,'classification':'defect in installed upstream Transformers v5.3.0; no historical bug injection','loss':loss_observed,'oracle_loss':loss_reference,'loss_absolute_error':abs(loss_observed-loss_reference),'loss_ratio':loss_observed/loss_reference,'trainer_denominator':(int(denom) if denom is not None else None),'valid_next_token_targets':valid,'checks':checks,'passed':all(checks.values()),'texts':texts,'input_ids':[b['input_ids'].tolist() for b in batches],'dtype':str(next(model.parameters()).dtype),'parameters_loaded':sum(x.numel() for x in model.parameters()),'num_hidden_layers':model.config.text_config.num_hidden_layers,'loading_info':{k:sorted(v) if isinstance(v,set) else v for k,v in loading.items()},'model_accepts_loss_kwargs':trainer.model_accepts_loss_kwargs,'gradient_parameter':small_name,'gradient_head_rows':row_ids.cpu().tolist(),'optimizer_steps':0,'scope':'full text-model backward with native Trainer.training_step; unused vision tower loaded; no optimizer update verification','oracle_backward':'same Accelerator.backward as native Trainer, independent CE objective','accelerator_gradient_accumulation_steps':trainer.accelerator.gradient_accumulation_steps,'wall_seconds':time.monotonic()-start,'peak_npu_allocated_bytes':torch.npu.max_memory_allocated(),'versions':{n:importlib.metadata.version(n) for n in ['torch','torch-npu','transformers','accelerate']},'trainer_source':inspect.getfile(Trainer),'trainer_sha256':hashlib.sha256(pathlib.Path(inspect.getfile(Trainer)).read_bytes()).hexdigest(),'device':torch.npu.get_device_name(0),'visible_devices':os.environ.get('ASCEND_RT_VISIBLE_DEVICES')}\n(OUT/'result.json').write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)\nassert result['passed'], 'Native pretraining target-count/loss/gradient regression failed'\n",
+    "regression": "\"\"\"CPU structural regressions against the actual Trainer counting implementation.\nNo model initialization or synthesized defect; tensor fixtures cover label alignment.\n\"\"\"\nimport argparse, json, pathlib, sys, types\np=argparse.ArgumentParser();p.add_argument('--patched',action='store_true');a=p.parse_args()\nROOT=pathlib.Path(__file__).resolve().parent\nif a.patched:sys.path.insert(0,str(ROOT/'vendor'))\nimport torch\nfrom transformers import Trainer\n\ndef ForCausalLMLoss():pass\ndef ForMaskedLMLoss():pass\n\ndef trainer(loss=ForCausalLMLoss, custom=None, smoother=None):\n    return types.SimpleNamespace(model=types.SimpleNamespace(loss_function=loss),compute_loss_func=custom,label_smoother=smoother,model_accepts_loss_kwargs=True,args=types.SimpleNamespace(average_tokens_across_devices=False,n_gpu=0),accelerator=types.SimpleNamespace(parallelism_config=None))\n\nfixtures=[\n ('causal_unmasked',trainer(),[{'labels':torch.tensor([[3,4,5,6]])}],3),\n ('causal_ignored_prefix',trainer(),[{'labels':torch.tensor([[-100,-100,5,6]])}],2),\n ('causal_padding',trainer(),[{'labels':torch.tensor([[3,4,5,-100,-100]])}],2),\n ('causal_shift_labels',trainer(),[{'labels':torch.tensor([[3,4,5]]),'shift_labels':torch.tensor([[4,5,-100]])}],2),\n ('masked_lm_unchanged',trainer(ForMaskedLMLoss),[{'labels':torch.tensor([[3,4,-100]])}],2),\n ('custom_loss_unchanged',trainer(custom=lambda:None),[{'labels':torch.tensor([[3,4,5]])}],3),\n ('smoother_unchanged',trainer(smoother=object()),[{'labels':torch.tensor([[3,4,5]])}],3),\n ('accumulated_unequal',trainer(),[{'labels':torch.tensor([[3,4,5]])},{'labels':torch.tensor([[3,4,5,6,7]])}],6),\n]\nresults=[]\nfor name,t,batches,expected in fixtures:\n    actual=int(Trainer._get_num_items_in_batch(t,batches,torch.device('cpu')))\n    results.append({'name':name,'actual':actual,'expected':expected,'passed':actual==expected})\nprint(json.dumps({'patched':a.patched,'tests':results,'passed':all(r['passed'] for r in results)},indent=2))\nsys.exit(0 if all(r['passed'] for r in results) else 1)\n",
+    "independent_audit": "\nimport json,math,re\nfrom pathlib import Path\nimport numpy as np\nroot=Path('/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/pretrained-training-repair-20261024T141838Z');summary=json.loads((root/'summary.json').read_text());paths={k:Path(summary[k+'_run']) for k in ['before','after']};report={}\nfor phase,p in paths.items():\n ss=dd=xx=yy=xy=0.;count=0;maximum=0.;equal=True\n for name in ['layer31-down-grad','head-target-grad']:\n  a=np.load(p/'artifacts'/('trainer-'+name+'.npy'),mmap_mode='r').reshape(-1);b=np.load(p/'artifacts'/('oracle-'+name+'.npy'),mmap_mode='r').reshape(-1);assert a.shape==b.shape;count+=a.size\n  for offset in range(0,a.size,1000000):\n   x=np.asarray(a[offset:offset+1000000],dtype=np.float64);y=np.asarray(b[offset:offset+1000000],dtype=np.float64);assert np.isfinite(x).all() and np.isfinite(y).all();e=x-y;dd+=float(np.sum(e*e));xx+=float(np.sum(x*x));yy+=float(np.sum(y*y));xy+=float(np.sum(x*y));maximum=max(maximum,float(np.abs(e).max()));equal=equal and np.array_equal(x,y)\n  if phase=='after':\n   base=np.load(paths['before']/'artifacts'/('oracle-'+name+'.npy'),mmap_mode='r').reshape(-1);assert np.array_equal(base,b),'oracle changed'\n metrics=summary[phase+'_gradient_metrics'];assert count==metrics['count']==50458624;norm=math.sqrt(dd);assert math.isclose(norm,metrics['error_norm']['value'],rel_tol=1e-12,abs_tol=1e-12);assert maximum==metrics['max_abs']['value']\n cosine=xy/math.sqrt(xx*yy);assert math.isclose(cosine,metrics['cosine']['value'],rel_tol=1e-12,abs_tol=1e-12)\n text=(p/'stdout.bin').read_text();observed=math.fsum(map(float,re.findall(r'^TRAIN_MICRO (\\S+)',text,re.M)));oracle=math.fsum(map(float,re.findall(r'^ORACLE_MICRO (\\S+)',text,re.M)));assert observed==summary[phase]['loss'] and oracle==summary[phase]['oracle_loss'];report[phase]={'count':count,'error_norm':norm,'max_abs':maximum,'cosine':cosine,'exact_equal':equal,'loss':observed,'oracle_loss':oracle}\nassert report['before']['error_norm']>0 and report['after']['exact_equal'];assert summary['after']['valid_next_token_targets']==35\nfor phase in ['before','after']:\n tests=json.loads((root/('cpu-'+phase+'.json')).read_text());assert tests['passed']==(phase=='after')\nprint(json.dumps({'status':'passed','scope':'Independent NumPy audit of all saved gradient coordinates and terminal loss values; original and final oracle gradients exactly match. No model rerun.','phases':report},indent=2))\n"
+  },
+  "scope": "Native Trainer.training_step objectives and selected gradients with common Accelerator scaling; optimizer updates and absolute gradient scaling are not certified."
+}

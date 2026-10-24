@@ -1,0 +1,25 @@
+--- a/peft/tuners/lora/model.py
++++ b/peft/tuners/lora/model.py
+@@ -728,6 +728,7 @@
+             self.peft_config[adapters[0]],
+             r=new_rank,
+             lora_alpha=new_rank,
++            lora_bias=any(self.peft_config[adapter].lora_bias for adapter in adapters),
+             target_modules=new_target_modules,
+             alpha_pattern={},
+             rank_pattern={},
+@@ -797,6 +798,14 @@
+                     target_lora_A.data, target_lora_B.data = self._generalized_task_arithmetic_weighted_adapter(
+                         combination_type, adapters, weights, target, density, majority_sign_method
+                     )
++
++                if target.lora_bias[adapter_name]:
++                    # Bias contributes independently of the A/B factorization (upstream #3844).
++                    new_bias = torch.zeros_like(target.lora_B[adapter_name].weight[:, 0])
++                    for adapter, weight in zip(adapters, weights):
++                        if adapter in target.lora_B and target.lora_bias[adapter]:
++                            new_bias += weight * target.scaling[adapter] * target.lora_B[adapter].bias.data
++                    target.lora_B[adapter_name].bias.data = new_bias
+ 
+     def _svd_generalized_task_arithmetic_weighted_adapter(
+         self,

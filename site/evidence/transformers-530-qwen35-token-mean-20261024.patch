@@ -1,0 +1,44 @@
+--- a/src/transformers/trainer.py
++++ b/src/transformers/trainer.py
+@@ -2133,7 +2133,18 @@
+         if count_num_items_in_batch:
+             # For now we don't support object detection
+             try:
+-                num_items_in_batch = sum((batch["labels"].ne(-100)).sum() for batch in batch_samples)
++                # Causal LM drops the first label when aligning next-token targets.
++                # Count those same targets; preserve unshifted objectives.
++                causal_lm = (self.compute_loss_func is None and self.label_smoother is None and getattr(getattr(self.model, "loss_function", None), "__name__", "") == "ForCausalLMLoss")
++                def count_targets(batch):
++                    if causal_lm and "shift_labels" in batch:
++                        labels = batch["shift_labels"]
++                    else:
++                        labels = batch["labels"]
++                        if causal_lm:
++                            labels = labels[..., 1:]
++                    return labels.ne(-100).sum()
++                num_items_in_batch = sum(count_targets(batch) for batch in batch_samples)
+             except (TypeError, AttributeError):
+                 pass
+ 
+--- a/src/transformers/models/qwen3_5/modeling_qwen3_5.py
++++ b/src/transformers/models/qwen3_5/modeling_qwen3_5.py
+@@ -1907,8 +1907,8 @@
+ class Qwen3_5ForConditionalGeneration(Qwen3_5PreTrainedModel, GenerationMixin):
+     _checkpoint_conversion_mapping = {}
+     _tied_weights_keys = {"lm_head.weight": "model.language_model.embed_tokens.weight"}
+-    # Reference: fix gemma3 grad acc #37208
+-    accepts_loss_kwargs = False
++    # Forward the accumulation-window token denominator to the causal loss.
++    accepts_loss_kwargs = True
+     config: Qwen3_5Config
+ 
+     def __init__(self, config):
+@@ -2044,7 +2044,7 @@
+ 
+         loss = None
+         if labels is not None:
+-            loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size)
++            loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size, num_items_in_batch=kwargs.get("num_items_in_batch"))
+ 
+         return Qwen3_5CausalLMOutputWithPast(
+             loss=loss,

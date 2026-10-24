@@ -1,0 +1,11 @@
+--- a/torch/optim/asgd.py
++++ b/torch/optim/asgd.py
+@@ -386,7 +386,7 @@
+ 
+             for i in range(len(grouped_mus)):
+                 new_eta = _to_tensor(
+-                    lr / (1 + lambd * lr * step ** alpha), device=device
++                    lr / ((1 + lambd * lr * step) ** alpha), device=device
+                 )
+                 new_etas.append(new_eta)
+                 new_mu = _to_tensor(1 / max(1, step - t0), device=device)

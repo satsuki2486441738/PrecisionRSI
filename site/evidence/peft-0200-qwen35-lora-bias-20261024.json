@@ -1,0 +1,1585 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "case": {
+    "status": "validated",
+    "classification": "known_upstream_bias_omission_reproduced_in_declared_runtime_with_additional_mixed_dtype_backport_correction",
+    "model": {
+      "class": "Qwen3_5ForConditionalGeneration",
+      "parameters": 9409813744,
+      "config": {
+        "vision_config": {
+          "return_dict": true,
+          "output_hidden_states": false,
+          "dtype": "bfloat16",
+          "chunk_size_feed_forward": 0,
+          "is_encoder_decoder": false,
+          "architectures": null,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "problem_type": null,
+          "_name_or_path": "",
+          "deepstack_visual_indexes": [],
+          "model_type": "qwen3_5",
+          "depth": 27,
+          "hidden_size": 1152,
+          "hidden_act": "gelu_pytorch_tanh",
+          "intermediate_size": 4304,
+          "num_heads": 16,
+          "in_channels": 3,
+          "patch_size": 16,
+          "spatial_merge_size": 2,
+          "temporal_patch_size": 2,
+          "out_hidden_size": 4096,
+          "num_position_embeddings": 2304,
+          "initializer_range": 0.02,
+          "output_attentions": false
+        },
+        "text_config": {
+          "pad_token_id": null,
+          "bos_token_id": null,
+          "eos_token_id": 248044,
+          "tie_word_embeddings": false,
+          "vocab_size": 248320,
+          "max_position_embeddings": 262144,
+          "hidden_size": 4096,
+          "intermediate_size": 12288,
+          "num_hidden_layers": 32,
+          "num_attention_heads": 16,
+          "num_key_value_heads": 4,
+          "hidden_act": "silu",
+          "initializer_range": 0.02,
+          "rms_norm_eps": 0.000001,
+          "use_cache": true,
+          "attention_bias": false,
+          "attention_dropout": 0,
+          "head_dim": 256,
+          "rope_parameters": {
+            "mrope_interleaved": true,
+            "mrope_section": [
+              11,
+              11,
+              10
+            ],
+            "rope_type": "default",
+            "rope_theta": 10000000,
+            "partial_rotary_factor": 0.25
+          },
+          "layer_types": [
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention",
+            "linear_attention",
+            "linear_attention",
+            "linear_attention",
+            "full_attention"
+          ],
+          "linear_conv_kernel_dim": 4,
+          "linear_key_head_dim": 128,
+          "linear_value_head_dim": 128,
+          "linear_num_key_heads": 16,
+          "linear_num_value_heads": 32,
+          "return_dict": true,
+          "output_hidden_states": false,
+          "dtype": "bfloat16",
+          "chunk_size_feed_forward": 0,
+          "is_encoder_decoder": false,
+          "architectures": null,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "problem_type": null,
+          "_name_or_path": "",
+          "attn_output_gate": true,
+          "full_attention_interval": 4,
+          "mlp_only_layers": [],
+          "model_type": "qwen3_5_text",
+          "mtp_num_hidden_layers": 1,
+          "mtp_use_dedicated_embeddings": false,
+          "mamba_ssm_dtype": "float32",
+          "partial_rotary_factor": 0.25,
+          "output_attentions": false
+        },
+        "image_token_id": 248056,
+        "video_token_id": 248057,
+        "vision_start_token_id": 248053,
+        "vision_end_token_id": 248054,
+        "tie_word_embeddings": false,
+        "return_dict": true,
+        "output_hidden_states": false,
+        "dtype": "bfloat16",
+        "chunk_size_feed_forward": 0,
+        "is_encoder_decoder": false,
+        "architectures": [
+          "Qwen3_5ForConditionalGeneration"
+        ],
+        "id2label": {
+          "0": "LABEL_0",
+          "1": "LABEL_1"
+        },
+        "label2id": {
+          "LABEL_0": 0,
+          "LABEL_1": 1
+        },
+        "problem_type": null,
+        "_name_or_path": "/home/jovyan/projects/precision-resources/models/qwen35-base-68c46c4-20261013T084744Z",
+        "transformers_version": "5.3.0",
+        "model_type": "qwen3_5",
+        "output_attentions": false
+      },
+      "parameter_devices": [
+        "cuda:0"
+      ]
+    },
+    "environment": {
+      "torch": "2.9.0+cu126",
+      "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+      "transformers": "5.3.0",
+      "peft": "0.20.0",
+      "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:27:28) [GCC 14.4.0]",
+      "device": "NVIDIA H20Z",
+      "visible_devices": "0",
+      "device_count": 1,
+      "installed_lora_source": "/home/jovyan/projects/precision-skills/projects/torch-gpu-npu/environments/gpu/torch-2.9.0-cu126-peft-0.20.0/.pixi/envs/default/lib/python3.12/site-packages/peft/tuners/lora/model.py",
+      "installed_source_sha256": "bce383b627ccc546d8298569094fb62cd25154354881938ada038c2cc6bf403f",
+      "candidate_source_sha256": "2751e30a547045150a9cac4036fa7435b04556a062433bbba53200f446de67ab",
+      "patched": true,
+      "candidate_source": "candidate_model_fp32.py",
+      "workload_source_sha256": "64afcb56ceb290bf65c314acc4aa161d1524e267eda7d9ff7d63878add972d17",
+      "test_source_sha256": "4cd31a33044ba7043d3fbd98d92aff14d08caf1555217d1424907054d6e5b165",
+      "model": "/home/jovyan/projects/precision-resources/models/qwen35-base-68c46c4-20261013T084744Z",
+      "model_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+      "config_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05"
+    },
+    "configuration": {
+      "model": "/home/jovyan/projects/precision-resources/models/qwen35-base-68c46c4-20261013T084744Z",
+      "model_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+      "comparison_scripts": "/home/jovyan/projects/precision-skills/skills/precision-compare/scripts",
+      "seed": 20261024,
+      "rank": 8,
+      "alpha": 8,
+      "target_modules": ".*layers\\.31\\.mlp\\.down_proj",
+      "steps": 3,
+      "learning_rate": 0.02,
+      "atol": 0.000001,
+      "training_texts": [
+        "Question: What causes the seasons on Earth?\nAnswer: Earth's axis is tilted relative to its orbit around the Sun. As Earth moves along its orbit, each hemisphere receives a different angle and duration of sunlight. This annual cycle produces the seasons.",
+        "Question: Why does water boil at a lower temperature on a mountain?\nAnswer: Atmospheric pressure decreases with altitude. Water boils when its vapor pressure equals the surrounding pressure, so lower external pressure allows boiling at a lower temperature."
+      ],
+      "evaluation_texts": [
+        "The seasons follow an annual cycle because Earth's axis is tilted. During summer, a hemisphere receives more direct sunlight and longer days. During winter, the same hemisphere receives less direct sunlight and shorter days.",
+        "At high altitude, air pressure is lower than at sea level. As a result, water reaches its boiling point at a lower temperature. Cooking food in boiling water can therefore take longer in the mountains."
+      ],
+      "composition_dtype_policy": "Native PEFT _cast_adapter_dtype(identity, True) on both unpatched and patched paths; FP32 adapter parameters, BF16 base."
+    },
+    "source": {
+      "pull": {
+        "html_url": "https://github.com/huggingface/peft/pull/3844",
+        "title": "FIX add_weighted_adapter for lora_bias, DoRA and KaSA",
+        "merged_at": "2026-10-20T17:13:34Z",
+        "merge_commit_sha": "1c1ad3bc16655aad3dd395cc1a5d23a5f73c3600"
+      },
+      "files": [
+        {
+          "sha": "3af7909d378e29b4933c751203dd593a50a1bdf4",
+          "filename": "src/peft/tuners/lora/model.py",
+          "status": "modified",
+          "additions": 30,
+          "deletions": 1,
+          "changes": 31,
+          "blob_url": "https://github.com/huggingface/peft/blob/5c386fe9878d16ddd04380dd06106ab7b3dbb503/src%2Fpeft%2Ftuners%2Flora%2Fmodel.py",
+          "raw_url": "https://github.com/huggingface/peft/raw/5c386fe9878d16ddd04380dd06106ab7b3dbb503/src%2Fpeft%2Ftuners%2Flora%2Fmodel.py",
+          "contents_url": "https://api.github.com/repos/huggingface/peft/contents/src%2Fpeft%2Ftuners%2Flora%2Fmodel.py?ref=5c386fe9878d16ddd04380dd06106ab7b3dbb503",
+          "patch": "@@ -63,7 +63,7 @@\n from .gptq import dispatch_gptq\n from .hqq import dispatch_hqq\n from .inc import dispatch_inc\n-from .layer import LoraLayer, MultiheadAttention, ParamWrapper, _ConvNd, dispatch_default\n+from .layer import Embedding, LoraLayer, MultiheadAttention, ParamWrapper, _ConvNd, dispatch_default\n from .te import dispatch_transformer_engine\n from .torchao import dispatch_torchao\n from .tp_layer import dispatch_megatron\n@@ -720,6 +720,26 @@ def _check_add_weighted_adapter(\n                 raise ValueError(\n                     f\"add_weighted_adapter does not support targeting nn.Parameter (problematic adapter '{adapter}')\"\n                 )\n+            if self.peft_config[adapter].use_dora:\n+                raise ValueError(f\"add_weighted_adapter does not support DoRA (problematic adapter '{adapter}')\")\n+            if self.peft_config[adapter].kasa_config is not None:\n+                raise ValueError(f\"add_weighted_adapter does not support KaSA (problematic adapter '{adapter}')\")\n+\n+        # the combined adapter needs lora_bias as soon as one source has it, but an embedding rejects it outright\n+        bias_adapters = [adapter for adapter in adapters if self.peft_config[adapter].lora_bias]\n+        if bias_adapters:\n+            embedding_modules = [module for module in self.modules() if isinstance(module, Embedding)]\n+            embedding_adapters = [\n+                adapter\n+                for adapter in adapters\n+                if any(adapter in module.lora_embedding_A for module in embedding_modules)\n+            ]\n+            if embedding_adapters:\n+                raise ValueError(\n+                    f\"add_weighted_adapter does not support lora_bias combined with nn.Embedding targeting: adapters \"\n+                    f\"{bias_adapters} use lora_bias=True while adapters {embedding_adapters} target an nn.Embedding, \"\n+                    f\"which does not support a bias. Leave either group out of the call.\"\n+                )\n \n         # If more than one of the adapters targets the same module with modules_to_save, raise an error, as these\n         # modules cannot be merged. First, find the ModulesToSaveWrapper instances in the model, then check if they\n@@ -868,6 +888,7 @@ def add_weighted_adapter(\n             r=new_rank,\n             lora_alpha=new_rank,\n             use_rslora=False,\n+            lora_bias=any(self.peft_config[adapter].lora_bias for adapter in adapters),\n             target_modules=new_target_modules,\n             alpha_pattern={},\n             rank_pattern={},\n@@ -938,6 +959,14 @@ def add_weighted_adapter(\n                         combination_type, adapters, weights, target, density, majority_sign_method\n                     )\n \n+                if target.lora_bias[adapter_name]:\n+                    # the bias adds to the output independently of the lora_A/lora_B factorization\n+                    new_bias = torch.zeros_like(target.lora_B[adapter_name].bias)\n+                    for adapter, weight in zip(adapters, weights):\n+                        if adapter in target.lora_B and target.lora_bias[adapter]:\n+                            new_bias += weight * target.scaling[adapter] * target.lora_B[adapter].bias.data\n+                    target.lora_B[adapter_name].bias.data = new_bias\n+\n     def _svd_generalized_task_arithmetic_weighted_adapter(\n         self,\n         combination_type,"
+        },
+        {
+          "sha": "4f6aac4ab7a926b50353b221733f8a6a09215732",
+          "filename": "tests/test_custom_models.py",
+          "status": "modified",
+          "additions": 93,
+          "deletions": 25,
+          "changes": 118,
+          "blob_url": "https://github.com/huggingface/peft/blob/5c386fe9878d16ddd04380dd06106ab7b3dbb503/tests%2Ftest_custom_models.py",
+          "raw_url": "https://github.com/huggingface/peft/raw/5c386fe9878d16ddd04380dd06106ab7b3dbb503/tests%2Ftest_custom_models.py",
+          "contents_url": "https://api.github.com/repos/huggingface/peft/contents/tests%2Ftest_custom_models.py?ref=5c386fe9878d16ddd04380dd06106ab7b3dbb503",
+          "patch": "@@ -4510,11 +4510,8 @@ def test_multiple_adapters_seq_cls_mixed_modules_to_save_merging_adapters(self):\n         with pytest.raises(ValueError, match=msg):\n             model.add_weighted_adapter([\"default\", \"other\"], weights=[1.0, 1.0], adapter_name=\"merged\")\n \n-    @pytest.mark.parametrize(\n-        \"config_cls\", [IA3Config, BeftConfig, LoHaConfig, LoKrConfig, LoraConfig, HRAConfig, MissConfig]\n-    )\n-    def test_add_weighted_adapter_cat_with_rank_pattern(self, config_cls):\n-        # Fixes a bug described in #2512, which resulted from the rank_pattern not being taken into account\n+    def test_add_weighted_adapter_cat_with_rank_pattern(self):\n+        # Tests against a bug described in #2512, which resulted from the rank_pattern not being taken into account.\n         config0 = LoraConfig(target_modules=[\"lin0\", \"lin1\"], r=8, rank_pattern={\"lin0\": 2})\n         config1 = LoraConfig(target_modules=[\"lin0\", \"lin1\"], r=8, rank_pattern={\"lin0\": 16})\n         model = MLP()\n@@ -4545,26 +4542,6 @@ def test_add_weighted_adapter_negative_weight_negates_adapter(self):\n                 dw_negative = module.get_delta_weight(\"merged_negative\")\n                 assert torch.allclose(dw_adapter1, -dw_negative, atol=1e-6)\n \n-    def test_add_weighted_adapter_with_rslora_identity_single_adapter(self):\n-        # See #3449\n-        # Combining a single adapter with weight 1.0 must reproduce that adapter exactly. Previously, when the source\n-        # adapter used use_rslora=True, the flag was inherited by the combined adapter's config, whose lora_alpha is\n-        # chosen so that scaling == lora_alpha / r == 1. With rslora, the scaling became\n-        # lora_alpha / sqrt(r) = sqrt(r) != 1 instead, so the combined adapter was sqrt(r) times overscaled.\n-        # (With a single source adapter, add_weighted_adapter always resolves combination_type to \"linear\".)\n-        torch.manual_seed(42)\n-        model = MLP()\n-        config = LoraConfig(r=4, target_modules=[\"lin0\"], init_lora_weights=False, use_rslora=True)\n-        model = get_peft_model(model, config, adapter_name=\"adapter1\")\n-\n-        model.add_weighted_adapter(adapters=[\"adapter1\"], weights=[1.0], adapter_name=\"merged\")\n-\n-        for module in model.modules():\n-            if isinstance(module, lora.LoraLayer):\n-                dw_adapter1 = module.get_delta_weight(\"adapter1\")\n-                dw_merged = module.get_delta_weight(\"merged\")\n-                assert torch.allclose(dw_adapter1, dw_merged, atol=1e-5)\n-\n     @pytest.mark.parametrize(\"combination_type\", [\"linear\", \"cat\"])\n     def test_add_weighted_adapter_with_rslora_identity_two_adapters(self, combination_type):\n         # See #3449\n@@ -5250,6 +5227,97 @@ def test_pvera_no_generator_seed_means_no_generator(self):\n \n         assert model.base_model.model.lin0.pvera_generator[\"default\"] is None\n \n+    @pytest.mark.parametrize(\n+        \"model_cls, module_name\",\n+        [(MLP, \"lin0\"), (ModelConv2D, \"conv2d\")],\n+    )\n+    @pytest.mark.parametrize(\"extra_kwargs\", [{\"lora_bias\": True}, {\"use_rslora\": True}])\n+    def test_add_weighted_adapter_with_extra_parameters_identity(self, model_cls, module_name, extra_kwargs):\n+        # See #3761 and #3449. Combining a single adapter with weight 1.0 has to reproduce that adapter. The bias of\n+        # lora_B contributes bias * scaling to the output and was never combined, and with use_rslora the combined\n+        # adapter inherited the flag and ended up scaled by sqrt(r) rather than 1.\n+        # (With a single source adapter, add_weighted_adapter always resolves combination_type to \"linear\".)\n+        torch.manual_seed(0)\n+\n+        model = model_cls().to(self.torch_device).eval()\n+        X = self.prepare_inputs_for_testing()\n+        config = LoraConfig(r=8, lora_alpha=16, target_modules=[module_name], init_lora_weights=False, **extra_kwargs)\n+        peft_model = get_peft_model(model, config, adapter_name=\"source\").eval()\n+\n+        peft_model.set_adapter(\"source\")\n+        source_output = peft_model(**X)\n+\n+        peft_model.add_weighted_adapter(adapters=[\"source\"], weights=[1.0], adapter_name=\"combined\")\n+        peft_model.set_adapter(\"combined\")\n+        assert torch.allclose(peft_model(**X), source_output, atol=1e-4)\n+\n+    @pytest.mark.parametrize(\n+        \"extra_kwargs\",\n+        [{\"use_dora\": True}, {\"kasa_config\": KasaConfig(), \"r\": 4}],\n+    )\n+    def test_add_weighted_adapter_rejects_variants_with_extra_state(self, extra_kwargs):\n+        # See #3761\n+        # DoRA and KaSA learn state besides lora_A and lora_B, the magnitude vector and lora_diag. There is no\n+        # defined way to combine it, and add_weighted_adapter never did, so the result silently differed from its\n+        # sources. The check is on the config, so one model type is enough.\n+        torch.manual_seed(0)\n+\n+        model = MLP().to(self.torch_device)\n+        config = LoraConfig(target_modules=[\"lin0\"], init_lora_weights=False, **extra_kwargs)\n+        peft_model = get_peft_model(model, config, adapter_name=\"source\")\n+\n+        with pytest.raises(ValueError, match=\"add_weighted_adapter does not support\"):\n+            peft_model.add_weighted_adapter(adapters=[\"source\"], weights=[1.0], adapter_name=\"combined\")\n+\n+    def test_add_weighted_adapter_rejects_lora_bias_with_embedding(self):\n+        # See #3761. The combined adapter needs lora_bias whenever a source has it, but an embedding rejects\n+        # lora_bias, so the two cannot be combined and the conflict is reported instead of dropping the bias.\n+        torch.manual_seed(0)\n+\n+        model = ModelEmbConv1D().to(self.torch_device)\n+        emb_config = LoraConfig(target_modules=[\"emb\"], init_lora_weights=False)\n+        bias_config = LoraConfig(target_modules=[\"lin0\"], init_lora_weights=False, lora_bias=True)\n+        peft_model = get_peft_model(model, emb_config, adapter_name=\"emb0\")\n+        peft_model.add_adapter(\"bias0\", bias_config)\n+        peft_model.add_adapter(\"emb1\", emb_config)\n+        peft_model.add_adapter(\"bias1\", bias_config)\n+\n+        msg = (\n+            \"add_weighted_adapter does not support lora_bias combined with nn.Embedding targeting: adapters \"\n+            \"['bias0', 'bias1'] use lora_bias=True while adapters ['emb0', 'emb1'] target an nn.Embedding\"\n+        )\n+        with pytest.raises(ValueError, match=re.escape(msg)):\n+            peft_model.add_weighted_adapter(\n+                adapters=[\"emb0\", \"bias0\", \"emb1\", \"bias1\"], weights=[1.0] * 4, adapter_name=\"combined\"\n+            )\n+\n+    @pytest.mark.parametrize(\"lora_bias\", [False, True])\n+    @pytest.mark.parametrize(\"num_adapters\", [2, 3])\n+    def test_add_weighted_adapter_cat_matches_merging_the_sources(self, num_adapters, lora_bias):\n+        # See #3761. combination_type=\"cat\" concatenates the sources along the rank dimension, so lora_B @ lora_A\n+        # comes out as the sum of the individual deltas and the combined adapter has to match the sources merged\n+        # into the base weights one after the other. The other combination types only approximate that sum.\n+        torch.manual_seed(0)\n+\n+        X = self.prepare_inputs_for_testing()\n+        adapters = [f\"source{i}\" for i in range(num_adapters)]\n+        config = LoraConfig(r=8, lora_alpha=16, target_modules=[\"lin0\"], init_lora_weights=False, lora_bias=lora_bias)\n+        peft_model = get_peft_model(MLP().to(self.torch_device), config, adapter_name=adapters[0])\n+        for adapter in adapters[1:]:\n+            peft_model.add_adapter(adapter, config)\n+        peft_model.eval()\n+\n+        merged_model = copy.deepcopy(peft_model)\n+        merged_model.base_model.set_adapter(adapters)\n+        merged_model.base_model.merge_adapter(adapter_names=adapters)\n+        merged_output = merged_model(**X)\n+\n+        peft_model.add_weighted_adapter(\n+            adapters=adapters, weights=[1.0] * num_adapters, adapter_name=\"combined\", combination_type=\"cat\"\n+        )\n+        peft_model.set_adapter(\"combined\")\n+        assert torch.allclose(peft_model(**X), merged_output, atol=1e-4, rtol=1e-4)\n+\n \n class TestMultiRankAdapter:\n     \"\"\"Tests related to multirank LoRA adapters\"\"\""
+        }
+      ],
+      "installed_source": "/home/jovyan/projects/precision-skills/projects/torch-gpu-npu/environments/gpu/torch-2.9.0-cu126-peft-0.20.0/.pixi/envs/default/lib/python3.12/site-packages/peft/tuners/lora/model.py",
+      "original_sha256": "bce383b627ccc546d8298569094fb62cd25154354881938ada038c2cc6bf403f",
+      "release_tag": {
+        "ref": "refs/tags/v0.20.0",
+        "node_id": "REF_kwDOIf9iDLFyZWZzL3RhZ3MvdjAuMjAuMA",
+        "url": "https://api.github.com/repos/huggingface/peft/git/refs/tags/v0.20.0",
+        "object": {
+          "sha": "dcb81da6ad92be5a9f4e07795c09d55cf35a19d1",
+          "type": "tag",
+          "url": "https://api.github.com/repos/huggingface/peft/git/tags/dcb81da6ad92be5a9f4e07795c09d55cf35a19d1"
+        }
+      },
+      "release_commit": {
+        "sha": "a5526d27a9d47d1e8264d5e1b1f96c0fdc79464e",
+        "type": "commit",
+        "url": "https://api.github.com/repos/huggingface/peft/git/commits/a5526d27a9d47d1e8264d5e1b1f96c0fdc79464e"
+      },
+      "installed_matches_release_source": true,
+      "release_source_sha256": "bce383b627ccc546d8298569094fb62cd25154354881938ada038c2cc6bf403f"
+    },
+    "final_candidate": {
+      "path": "candidate_model_fp32.py",
+      "sha256": "2751e30a547045150a9cac4036fa7435b04556a062433bbba53200f446de67ab",
+      "patch": "repair-fp32.patch",
+      "installation": "In-process replacement of add_weighted_adapter compiled from case-local isolated source; installed package files remain unchanged."
+    },
+    "metrics": {
+      "unpatched": {
+        "reference_nll": 5.032561350294436,
+        "combined_nll": 4.9542036083711976,
+        "nll_abs_diff": 0.07835774192323886,
+        "target_logprob_mae": 0.08365431764963059,
+        "target_logprob_p99": 0.29342043876647955,
+        "target_logprob_max_abs": 0.3007497787475586,
+        "logits_max_abs": 0.3125,
+        "logits_rmse": 0.050435489338336505,
+        "bias_max_abs_error": 0.06009722501039505
+      },
+      "upstream_bias_only_candidate_FAILED": {
+        "reference_nll": 5.032561350294436,
+        "combined_nll": 5.033338227300332,
+        "nll_abs_diff": 0.000776877005895571,
+        "target_logprob_mae": 0.001339839580349433,
+        "target_logprob_p99": 0.030906224250793722,
+        "target_logprob_max_abs": 0.08206510543823242,
+        "logits_max_abs": 0.125,
+        "logits_rmse": 0.0020864817975525503,
+        "bias_max_abs_error": 0.00012194737792015076
+      },
+      "final_fp32_candidate_PASSED": {
+        "reference_nll": 5.032561350294436,
+        "combined_nll": 5.032561350294436,
+        "nll_abs_diff": 0,
+        "target_logprob_mae": 0,
+        "target_logprob_p99": 0,
+        "target_logprob_max_abs": 0,
+        "logits_max_abs": 0,
+        "logits_rmse": 0,
+        "bias_max_abs_error": 0
+      }
+    },
+    "coverage": {
+      "expected_arrays": 2,
+      "side_a_arrays": 2,
+      "side_b_arrays": 2,
+      "paired_arrays": 2,
+      "missing": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "unexpected": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "compared_arrays": 2,
+      "compared_elements": 19865600
+    },
+    "target_count": 78,
+    "reference_outputs_across_native_jobs": {
+      "status": "completed",
+      "exact_equal": true,
+      "coverage": {
+        "expected_arrays": 2,
+        "side_a_arrays": 2,
+        "side_b_arrays": 2,
+        "paired_arrays": 2,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 2,
+        "compared_elements": 19865600
+      },
+      "unequal_arrays": 0,
+      "unequal_elements": 0,
+      "incompatible_arrays": 0,
+      "dtype_differences": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "findings": [],
+      "findings_omitted": 0,
+      "metrics": {
+        "count": 19865600,
+        "side_a_norm": {
+          "value": 12213.703972625271,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 12213.703972625271,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 0,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 0,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 1,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 0,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 0,
+        "max_coordinate": {
+          "name": "sample0",
+          "index": [
+            0,
+            0,
+            0
+          ]
+        },
+        "max_values": {
+          "dtype": "float32",
+          "side_a": "-8.0",
+          "side_b": "-8.0"
+        }
+      },
+      "metrics_unavailable": null
+    },
+    "adapter_checkpoint": {
+      "reused_adapter": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/adapter",
+      "sha256": "389428e2e5d9e9e0cb91542a1397984a468def91f04a39ed007e838c2140237c"
+    },
+    "sft_history": {
+      "history": [
+        {
+          "step": 0,
+          "loss": 1.444872498512268,
+          "tokens": [
+            [
+              14162,
+              25,
+              3437,
+              10814,
+              279,
+              15127,
+              383,
+              8964,
+              30,
+              198,
+              15666,
+              25,
+              8964,
+              579,
+              7772,
+              369,
+              82951,
+              8410,
+              310,
+              1141,
+              25659,
+              2094,
+              279,
+              7806,
+              13,
+              1577,
+              8964,
+              10480,
+              3055,
+              1141,
+              25659,
+              11,
+              1754,
+              66344,
+              20539,
+              264,
+              2086,
+              8937,
+              321,
+              7836,
+              314,
+              37728,
+              13,
+              1061,
+              9483,
+              10458,
+              18082,
+              279,
+              15127,
+              13
+            ]
+          ],
+          "valid_targets": 49,
+          "gradient_norms": {
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_A.default.weight": 0,
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_B.default.weight": 0.0914606973528862,
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_B.default.bias": 0.042991045862436295
+          }
+        },
+        {
+          "step": 1,
+          "loss": 1.1305598020553589,
+          "tokens": [
+            [
+              14162,
+              25,
+              8169,
+              1503,
+              2919,
+              42244,
+              506,
+              264,
+              4570,
+              9039,
+              383,
+              264,
+              15822,
+              30,
+              198,
+              15666,
+              25,
+              83508,
+              7035,
+              40664,
+              440,
+              34669,
+              13,
+              9664,
+              85895,
+              948,
+              1141,
+              36405,
+              7035,
+              16327,
+              279,
+              14170,
+              7035,
+              11,
+              748,
+              4570,
+              8976,
+              7035,
+              5954,
+              48161,
+              506,
+              264,
+              4570,
+              9039,
+              13
+            ]
+          ],
+          "valid_targets": 44,
+          "gradient_norms": {
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_A.default.weight": 1.1104416847229004,
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_B.default.weight": 0.06614950299263,
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_B.default.bias": 0.0358307920396328
+          }
+        },
+        {
+          "step": 2,
+          "loss": 14.234268188476562,
+          "tokens": [
+            [
+              14162,
+              25,
+              3437,
+              10814,
+              279,
+              15127,
+              383,
+              8964,
+              30,
+              198,
+              15666,
+              25,
+              8964,
+              579,
+              7772,
+              369,
+              82951,
+              8410,
+              310,
+              1141,
+              25659,
+              2094,
+              279,
+              7806,
+              13,
+              1577,
+              8964,
+              10480,
+              3055,
+              1141,
+              25659,
+              11,
+              1754,
+              66344,
+              20539,
+              264,
+              2086,
+              8937,
+              321,
+              7836,
+              314,
+              37728,
+              13,
+              1061,
+              9483,
+              10458,
+              18082,
+              279,
+              15127,
+              13
+            ]
+          ],
+          "valid_targets": 49,
+          "gradient_norms": {
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_A.default.weight": 28.959367752075195,
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_B.default.weight": 17.912307739257812,
+            "base_model.model.model.language_model.layers.31.mlp.down_proj.lora_B.default.bias": 0.3277394771575928
+          }
+        }
+      ],
+      "adapter_sha256": "389428e2e5d9e9e0cb91542a1397984a468def91f04a39ed007e838c2140237c"
+    },
+    "regressions": {
+      "unpatched": {
+        "trained_bias_nonzero": true,
+        "factor_A_identical": true,
+        "factor_B_identical": true,
+        "bias_identity": false,
+        "same_layer_inputs": true,
+        "layer_output_max_abs": 0.25,
+        "full_model_logits_max_abs": 0.3125,
+        "full_model_logits_close": false,
+        "layer_outputs_close": false,
+        "passed": false
+      },
+      "upstream_bias_only": {
+        "trained_bias_nonzero": true,
+        "factor_A_identical": true,
+        "factor_B_identical": true,
+        "bias_identity": false,
+        "same_layer_inputs": true,
+        "layer_output_max_abs": 0.0625,
+        "full_model_logits_max_abs": 0.125,
+        "full_model_logits_close": false,
+        "layer_outputs_close": false,
+        "passed": false
+      },
+      "final": {
+        "trained_bias_nonzero": true,
+        "factor_A_identical": true,
+        "factor_B_identical": true,
+        "bias_identity": true,
+        "same_layer_inputs": true,
+        "layer_output_max_abs": 0,
+        "full_model_logits_max_abs": 0,
+        "full_model_logits_close": true,
+        "layer_outputs_close": true,
+        "passed": true
+      }
+    },
+    "budget": {
+      "original_maximum_native_jobs": 4,
+      "authorized_maximum_native_jobs": 6,
+      "authorized_wall_seconds": 3600,
+      "user_extension": "本轮不是 A/B 开销基准。为完成真实模型案例，允许在原资源限制之外再追加最多 2 次单卡原生作业（总上限6次），每次仍不超过15分钟；总墙钟预算可延长到60分钟。保留既有失败运行和证据，继续自主定位并完成原任务验证。请不要把未通过的候选标为已修复。",
+      "native_jobs_used": 5,
+      "maximum_devices_per_native_job": 1,
+      "native_seconds_per_job_limit": 900,
+      "native_jobs": [
+        {
+          "ordinal": 1,
+          "task": "before",
+          "remote_run": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-before-20261024T142452Z/native/gpu-bias-before-20261024T142508Z",
+          "returncode": 1,
+          "status": "failed",
+          "wall_seconds": 24.401507560163736,
+          "job": {
+            "name": "slurm-profile-slurm-9npxw",
+            "namespace": "user-satsuki2486441738",
+            "status": "failed"
+          }
+        },
+        {
+          "ordinal": 2,
+          "task": "reproduce",
+          "remote_run": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z",
+          "returncode": 1,
+          "status": "failed",
+          "wall_seconds": 24.15140475705266,
+          "job": {
+            "name": "slurm-profile-slurm-9dxgl",
+            "namespace": "user-satsuki2486441738",
+            "status": "failed"
+          }
+        },
+        {
+          "ordinal": 3,
+          "task": "red",
+          "remote_run": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z",
+          "returncode": 1,
+          "status": "failed",
+          "wall_seconds": 25.002603095024824,
+          "job": {
+            "name": "slurm-profile-slurm-zzlvr",
+            "namespace": "user-satsuki2486441738",
+            "status": "failed"
+          }
+        },
+        {
+          "ordinal": 4,
+          "task": "green",
+          "remote_run": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z",
+          "returncode": 1,
+          "status": "failed",
+          "wall_seconds": 24.15297430381179,
+          "job": {
+            "name": "slurm-profile-slurm-dpd54",
+            "namespace": "user-satsuki2486441738",
+            "status": "failed"
+          }
+        },
+        {
+          "ordinal": 5,
+          "task": "fp32",
+          "remote_run": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-fp32-20261024T143422Z/native/gpu-bias-fp32-20261024T143435Z",
+          "returncode": 0,
+          "status": "completed",
+          "wall_seconds": 25.26592920999974,
+          "job": {
+            "name": "slurm-profile-slurm-nnw77",
+            "namespace": "user-satsuki2486441738",
+            "status": "completed"
+          }
+        }
+      ],
+      "offline_comparison": "compare-reference-identity is an artifact-only NumPy comparison; no model execution or GPU allocation."
+    },
+    "evidence": {
+      "before": "evidence/runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z",
+      "failed_upstream_candidate": "evidence/runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z",
+      "final": "evidence-fp32/native/gpu-bias-fp32-20261024T143435Z",
+      "reference_identity": "evidence-reference/reference-identity.json",
+      "transfer_indexes": [
+        "evidence/EXPORT.json",
+        "evidence-fp32/EXPORT.json",
+        "evidence-reference/EXPORT.json"
+      ],
+      "verified_transfer_payload_bytes": 373433,
+      "verified_transfer_wire_bytes": 115886,
+      "remote_work_root": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z"
+    },
+    "limitations": [
+      "Two fixed text passages, 78 target tokens; unmerged single-adapter identity with alpha/r=1.",
+      "Vision submodel loaded but visual input path not exercised. Generation/cache, SVD, multiple-source combinations, quantization and distributed training not validated.",
+      "Three-step SFT creates a genuinely trained adapter fixture; convergence or task-quality improvement is not claimed.",
+      "Current upstream runtime was not executed; the declared PEFT 0.20.0 source exactly matches its release source."
+    ],
+    "reusable_improvements": [
+      "Record adapter dtype identities before and after composition. Build bias accumulation from the actual composed weight dtype: later autocast cannot recover BF16-rounded values.",
+      "Treat hf_device_map as optional runtime metadata; use actual parameter devices. A mandatory access caused the first instrumentation failure.",
+      "No shared skill/tool defect was established; execution receipts and comparison tools retained the failures and produced the final metrics correctly."
+    ]
+  },
+  "independent_audit": {
+    "status": "passed",
+    "scope": "Independent NumPy full-logit and FP64 target-score checks; reference arrays identical across all three native jobs. No model rerun.",
+    "phases": {
+      "before": {
+        "logits_count": 19865600,
+        "targets": 78,
+        "logits_max_abs": 0.3125,
+        "logits_rmse": 0.05043548933832637,
+        "independent_fp64_nll": [
+          5.032561890968548,
+          4.954204168884418
+        ],
+        "independent_fp64_mae": 0.08365431272330326,
+        "independent_fp64_p99": 0.29342021090839593
+      },
+      "failed_candidate": {
+        "logits_count": 19865600,
+        "targets": 78,
+        "logits_max_abs": 0.125,
+        "logits_rmse": 0.0020864817975525503,
+        "independent_fp64_nll": [
+          5.032561890968548,
+          5.033338772650071
+        ],
+        "independent_fp64_mae": 0.0013398767952693081,
+        "independent_fp64_p99": 0.030906761180272732
+      },
+      "final": {
+        "logits_count": 19865600,
+        "targets": 78,
+        "logits_max_abs": 0,
+        "logits_rmse": 0,
+        "independent_fp64_nll": [
+          5.032561890968548,
+          5.032561890968548
+        ],
+        "independent_fp64_mae": 0,
+        "independent_fp64_p99": 0
+      }
+    }
+  },
+  "worker": {
+    "agent_id": "01a16e47-86c7-77e0-8f12-58de0fa5740f",
+    "fork_context": false,
+    "provided": "Direct task, precision-repair skill and resource declarations; no diagnosis or patch supplied.",
+    "followup": "Resource-only extension from 4 to 6 native jobs; 5 used."
+  },
+  "sources": {
+    "workload": "\"\"\"Full pretrained Qwen3.5 SFT adapter creation and weighted-adapter inference regression.\nUsage: workload.py --output {run} [--adapter PREVIOUS_RUN/adapter] [--patched]\nAll model tensors stay in the native run. No base checkpoint/config edits.\n\"\"\"\nimport argparse, ast, hashlib, importlib.metadata, json, os, platform, sys, time\nfrom pathlib import Path\np=argparse.ArgumentParser(); p.add_argument('--output',required=True);p.add_argument('--adapter');p.add_argument('--patched',action='store_true');p.add_argument('--candidate-source',default='candidate_model.py');a=p.parse_args()\nroot=Path(__file__).resolve().parent; out=Path(a.output);out.mkdir(parents=True,exist_ok=True)\ncfg=json.loads((root/'workload.json').read_text()); started=time.monotonic()\ndef write(name,obj): (out/name).write_text(json.dumps(obj,indent=2,allow_nan=False)+'\\n')\ndef sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()\nimport torch\nimport numpy as np\nimport transformers, peft\nfrom transformers import AutoModelForImageTextToText, AutoTokenizer\nfrom peft import LoraConfig, PeftModel, get_peft_model\nfrom peft.tuners.lora import model as lm\nsys.path.insert(0,cfg['comparison_scripts'])\nfrom array_compare import compare_arrays\nfrom score_metrics import reduce_scores\nfrom test_regression import check_regression\nif a.patched:\n    source=ast.parse((root/a.candidate_source).read_text())\n    cls=next(x for x in source.body if isinstance(x,ast.ClassDef) and x.name=='LoraModel')\n    method=next(x for x in cls.body if isinstance(x,ast.FunctionDef) and x.name=='add_weighted_adapter')\n    namespace=dict(vars(lm));exec(compile(ast.fix_missing_locations(ast.Module(body=[method],type_ignores=[])),str(root/a.candidate_source),'exec'),namespace)\n    lm.LoraModel.add_weighted_adapter=namespace['add_weighted_adapter']\nidentity={'torch':torch.__version__,'torch_git':torch.version.git_version,'transformers':transformers.__version__,'peft':peft.__version__,'python':sys.version,'device':torch.cuda.get_device_name(),'visible_devices':os.environ.get('CUDA_VISIBLE_DEVICES'),'device_count':torch.cuda.device_count(),'installed_lora_source':lm.__file__,'installed_source_sha256':sha(lm.__file__),'candidate_source_sha256':sha(root/a.candidate_source),'patched':a.patched,'candidate_source':a.candidate_source,'workload_source_sha256':sha(__file__),'test_source_sha256':sha(root/'test_regression.py'),'model':cfg['model'],'model_revision':cfg['model_revision'],'config_sha256':sha(Path(cfg['model'])/'config.json')}\nwrite('identity.json',identity);print(json.dumps(identity),flush=True)\nassert torch.cuda.device_count()==1\ntorch.manual_seed(cfg['seed']);torch.cuda.manual_seed_all(cfg['seed']);torch.backends.cuda.matmul.allow_tf32=False\nprint('Loading complete pretrained model',flush=True)\nbase=AutoModelForImageTextToText.from_pretrained(cfg['model'],dtype=torch.bfloat16,device_map={'':'cuda:0'},attn_implementation='eager',local_files_only=True)\ntokenizer=AutoTokenizer.from_pretrained(cfg['model'],local_files_only=True)\nwrite('model-loading.json',{'class':type(base).__name__,'parameters':sum(x.numel() for x in base.parameters()),'config':base.config.to_dict(),'parameter_devices':sorted({str(v.device) for v in base.parameters()})})\nprint('Loaded full model',flush=True)\nif a.adapter:\n    model=PeftModel.from_pretrained(base,a.adapter,is_trainable=False,local_files_only=True)\n    training={'reused_adapter':a.adapter,'sha256':sha(Path(a.adapter)/'adapter_model.safetensors')}\nelse:\n    lc=LoraConfig(task_type='CAUSAL_LM',r=cfg['rank'],lora_alpha=cfg['alpha'],target_modules=cfg['target_modules'],lora_dropout=0.0,lora_bias=True,bias='none')\n    model=get_peft_model(base,lc)\n    params=[(n,v) for n,v in model.named_parameters() if v.requires_grad]\n    write('trainable.json',{'parameters':[{ 'name':n,'shape':list(v.shape),'dtype':str(v.dtype),'numel':v.numel()} for n,v in params]})\n    opt=torch.optim.AdamW([v for n,v in params],lr=cfg['learning_rate'],weight_decay=0.0)\n    model.train();history=[]\n    for step in range(cfg['steps']):\n        text=cfg['training_texts'][step%len(cfg['training_texts'])]\n        batch=tokenizer(text,return_tensors='pt').to('cuda');labels=batch['input_ids'].clone()\n        opt.zero_grad(set_to_none=True)\n        result=model(**batch,labels=labels,use_cache=False);loss=result.loss;loss.backward()\n        gradients={n:v.grad.detach().cpu() for n,v in params if v.grad is not None}\n        assert len(gradients)==len(params) and all(torch.isfinite(v).all() for v in gradients.values())\n        history.append({'step':step,'loss':float(loss),'tokens':batch['input_ids'].tolist(),'valid_targets':int(labels.numel()-1),'gradient_norms':{n:float(v.float().norm()) for n,v in gradients.items()}})\n        opt.step();print('SFT',history[-1]['step'],history[-1]['loss'],flush=True)\n    torch.save(gradients,out/'last-gradients.pt')\n    model.save_pretrained(out/'adapter',safe_serialization=True)\n    training={'history':history,'adapter_sha256':sha(out/'adapter'/'adapter_model.safetensors')}\nwrite('training.json',training)\nmodel.eval()\nlayer=next(m for m in model.modules() if isinstance(m,peft.tuners.lora.layer.Linear))\nassert len([m for m in model.modules() if isinstance(m,peft.tuners.lora.layer.Linear)])==1\nbias=layer.lora_B['default'].bias.detach().clone()\nassert float(bias.abs().max())>0.001, 'Adapter must have an actually learned nonzero bias'\nprint('Trained bias max',float(bias.abs().max()),flush=True)\n@torch.no_grad()\ndef capture(adapter):\n    model.set_adapter(adapter);model.eval();logits=[];scores={};tokens=[];losses=[];layer_inputs=[];layer_outputs=[]\n    def hook(mod,args,result):layer_inputs.append(args[0].detach().cpu());layer_outputs.append(result.detach().cpu())\n    h=layer.register_forward_hook(hook)\n    try:\n        for i,text in enumerate(cfg['evaluation_texts']):\n            batch=tokenizer(text,return_tensors='pt').to('cuda');ids=batch['input_ids'];r=model(**batch,labels=ids,use_cache=False)\n            z=r.logits.float();lp=z[:,:-1].log_softmax(-1).gather(-1,ids[:,1:,None]).squeeze(-1)\n            for j,v in enumerate(lp[0].tolist()):scores[(i,j+1,int(ids[0,j+1]))]=v\n            logits.append(z.cpu().numpy());tokens.append(ids.cpu().tolist());losses.append(float(r.loss))\n    finally:h.remove()\n    return logits,scores,tokens,losses,layer_inputs,layer_outputs\nreference=capture('default');print('Reference inference complete',flush=True)\nmodel.add_weighted_adapter(['default'],[1.0],adapter_name='identity',combination_type='linear')\nwrite('composition-dtypes.json',{'before_cast':{n:str(v.dtype) for n,v in layer.named_parameters()}})\nmodel.base_model._cast_adapter_dtype(adapter_name='identity',autocast_adapter_dtype=True)\ncombined=capture('identity');print('Combined inference complete',flush=True)\nassert reference[2]==combined[2]\nnp.savez(out/'reference-logits.npz',**{f'sample{i}':z for i,z in enumerate(reference[0])})\nnp.savez(out/'combined-logits.npz',**{f'sample{i}':z for i,z in enumerate(combined[0])})\narr=compare_arrays({f'sample{i}':z for i,z in enumerate(reference[0])},{f'sample{i}':z for i,z in enumerate(combined[0])},expected=['sample0','sample1'],metrics=True)\nmetrics={'logits':arr,'target_scores':reduce_scores(reference[1],combined[1]),'reference_native_losses':reference[3],'combined_native_losses':combined[3],'tokens':reference[2], 'bias_max_abs':float(bias.abs().max()),'bias_composition_max_abs':float((layer.lora_B['identity'].bias-bias).abs().max()),'parameter_dtypes':{n:str(v.dtype) for n,v in layer.named_parameters()},'elapsed_seconds':time.monotonic()-started,'peak_cuda_bytes':torch.cuda.max_memory_allocated()}\nwrite('metrics.json',metrics)\ntorch.save({'reference_inputs':reference[4],'reference_outputs':reference[5],'combined_inputs':combined[4],'combined_outputs':combined[5],'adapter_state':{k:v.detach().cpu() for k,v in layer.state_dict().items() if 'lora_' in k}},out/'regression-tensors.pt')\nchecks=check_regression(layer,reference,combined,cfg['atol']);write('regression.json',checks)\nprint(json.dumps({'metrics':metrics['target_scores'],'logits_max_abs':arr['metrics']['max_abs'],'regression':checks,'elapsed':metrics['elapsed_seconds']}),flush=True)\nassert checks['passed'], 'Weighted-adapter identity regression failed'\n",
+    "regression": "\"\"\"Permanent real-workload regression; trained full-model observations are the fixture.\"\"\"\ndef check_regression(layer, reference, combined, atol):\n    import torch\n    checks={}\n    checks['trained_bias_nonzero']=float(layer.lora_B['default'].bias.abs().max())>0.001\n    checks['factor_A_identical']=torch.equal(layer.lora_A['default'].weight,layer.lora_A['identity'].weight)\n    checks['factor_B_identical']=torch.equal(layer.lora_B['default'].weight,layer.lora_B['identity'].weight)\n    checks['bias_identity']=torch.equal(layer.lora_B['default'].bias,layer.lora_B['identity'].bias)\n    checks['same_layer_inputs']=all(torch.equal(x,y) for x,y in zip(reference[4],combined[4]))\n    checks['layer_output_max_abs']=max(float((x.float()-y.float()).abs().max()) for x,y in zip(reference[5],combined[5]))\n    checks['full_model_logits_max_abs']=max(float(abs(x-y).max()) for x,y in zip(reference[0],combined[0]))\n    checks['full_model_logits_close']=checks['full_model_logits_max_abs']<=atol\n    checks['layer_outputs_close']=checks['layer_output_max_abs']<=atol\n    checks['passed']=all(checks[k] for k in ['trained_bias_nonzero','factor_A_identical','factor_B_identical','bias_identity','same_layer_inputs','full_model_logits_close','layer_outputs_close'])\n    return checks\n",
+    "independent_audit": "\nimport json,math,hashlib\nfrom pathlib import Path\nimport numpy as np\npaths={'before': '/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z', 'failed_candidate': '/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z', 'final': '/home/jovyan/projects/precision-skills/projects/precision-repair/cases/pretrained-adapter-repair-20261024T141838Z/runs/gpu-bias-fp32-20261024T143422Z/native/gpu-bias-fp32-20261024T143435Z'}\nresult={};reference=None\nfor phase,root in paths.items():\n root=Path(root);raw=json.loads((root/'metrics.json').read_text());ref=np.load(root/'reference-logits.npz');actual=np.load(root/'combined-logits.npz');assert set(ref.files)==set(actual.files);count=0;sq=0.;maximum=0.;scores=[[],[]]\n for sample,name in enumerate(sorted(ref.files)):\n  x,y=ref[name],actual[name];assert x.shape==y.shape and np.isfinite(x).all() and np.isfinite(y).all();count+=x.size\n  e=x.astype(np.float64)-y.astype(np.float64);sq+=float(np.sum(e*e,dtype=np.float64));maximum=max(maximum,float(np.abs(e).max()))\n  ids=raw['tokens'][sample][0];assert x.shape[1]==len(ids)\n  for side,values in enumerate([x,y]):\n   z=values[0,:-1].astype(np.float64);top=z.max(axis=1);logz=top+np.log(np.exp(z-top[:,None]).sum(axis=1,dtype=np.float64));scores[side].extend((z[np.arange(len(ids)-1),np.asarray(ids[1:])]-logz).tolist())\n if reference is None:reference={k:ref[k].copy() for k in ref.files}\n else:assert all(np.array_equal(reference[k],ref[k]) for k in ref.files),'reference changed across native jobs'\n errors=sorted(abs(a-b) for a,b in zip(*scores));h=.99*(len(errors)-1);p99=errors[math.floor(h)]+(h-math.floor(h))*(errors[math.ceil(h)]-errors[math.floor(h)]);nll=[-math.fsum(a)/len(a) for a in scores];rmse=math.sqrt(sq/count)\n assert count==19865600 and len(errors)==78;assert maximum==raw['logits']['metrics']['max_abs']['value'];assert math.isclose(rmse,raw['logits']['metrics']['rmse']['value'],rel_tol=1e-12,abs_tol=1e-15)\n native=raw['target_scores'];assert abs(nll[0]-native['side_a_nll_nat_per_token'])<3e-6 and abs(nll[1]-native['side_b_nll_nat_per_token'])<3e-6\n assert abs(math.fsum(errors)/len(errors)-native['mae_nat'])<3e-6 and abs(p99-native['p99_nat'])<3e-6\n result[phase]={'logits_count':count,'targets':len(errors),'logits_max_abs':maximum,'logits_rmse':rmse,'independent_fp64_nll':nll,'independent_fp64_mae':math.fsum(errors)/len(errors),'independent_fp64_p99':p99}\nassert result['before']['logits_max_abs']>0 and result['failed_candidate']['logits_max_abs']>0 and result['final']['logits_max_abs']==0\nprint(json.dumps({'status':'passed','scope':'Independent NumPy full-logit and FP64 target-score checks; reference arrays identical across all three native jobs. No model rerun.','phases':result},indent=2))\n"
+  },
+  "transfer_indexes": {
+    "evidence": {
+      "schema_version": 1,
+      "files": [
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/cleanup.json",
+          "original_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "exported_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "original_bytes": 38,
+          "exported_bytes": 38,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/identity-check.json",
+          "original_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "exported_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "original_bytes": 193,
+          "exported_bytes": 193,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/job-terminal.json",
+          "original_sha256": "21fb464d25bc9e07dd16e9ad7ec0919db1712df74064f0642045e98738ae10e9",
+          "exported_sha256": "21fb464d25bc9e07dd16e9ad7ec0919db1712df74064f0642045e98738ae10e9",
+          "original_bytes": 8156,
+          "exported_bytes": 8156,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/native/gpu-bias-before-20261024T142508Z/command.json",
+          "original_sha256": "f74116166608f5e542a6ab814c3dfd0ecc34407ab09537d684203c74ab31b7c6",
+          "exported_sha256": "f74116166608f5e542a6ab814c3dfd0ecc34407ab09537d684203c74ab31b7c6",
+          "original_bytes": 1617,
+          "exported_bytes": 1617,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/native/gpu-bias-before-20261024T142508Z/execution.json",
+          "original_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "exported_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "original_bytes": 2656,
+          "exported_bytes": 2656,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/native/gpu-bias-before-20261024T142508Z/identity.json",
+          "original_sha256": "f76766f8777bb672996353c6d18413f1c4074aef89f1ac38ac4c8c44f504bb5c",
+          "exported_sha256": "f76766f8777bb672996353c6d18413f1c4074aef89f1ac38ac4c8c44f504bb5c",
+          "original_bytes": 981,
+          "exported_bytes": 981,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/native/gpu-bias-before-20261024T142508Z/stderr.bin",
+          "original_sha256": "cbc6e73d7bfe59a7e41b7740d4fea6d2ab79faaa6d6bd2f4637a5d00d2fb39b8",
+          "exported_sha256": "cbc6e73d7bfe59a7e41b7740d4fea6d2ab79faaa6d6bd2f4637a5d00d2fb39b8",
+          "original_bytes": 5147,
+          "exported_bytes": 5147,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/native/gpu-bias-before-20261024T142508Z/stdout.bin",
+          "original_sha256": "dea677988d35586e7b6e6c89dd8265b2dd135b9371f5a71f59d91a0d965b56e0",
+          "exported_sha256": "dea677988d35586e7b6e6c89dd8265b2dd135b9371f5a71f59d91a0d965b56e0",
+          "original_bytes": 1175,
+          "exported_bytes": 1175,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/pods-terminal.json",
+          "original_sha256": "98d348d7afbbf04123479594765be3e31549f59c78f5d8a3bf1f15255fa01247",
+          "exported_sha256": "98d348d7afbbf04123479594765be3e31549f59c78f5d8a3bf1f15255fa01247",
+          "original_bytes": 15047,
+          "exported_bytes": 15047,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/request.json",
+          "original_sha256": "77dfe2c54e0563708affe01d020490bf3ea5a3005759edb75d3b0b48096300a3",
+          "exported_sha256": "77dfe2c54e0563708affe01d020490bf3ea5a3005759edb75d3b0b48096300a3",
+          "original_bytes": 810,
+          "exported_bytes": 810,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/scheduler.stderr",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/scheduler.stdout",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/submission.json",
+          "original_sha256": "3fcf79f635238f6ca4b40fb0957d00be6121a9882705e1b8a38236ae22534543",
+          "exported_sha256": "3fcf79f635238f6ca4b40fb0957d00be6121a9882705e1b8a38236ae22534543",
+          "original_bytes": 15876,
+          "exported_bytes": 15876,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/submitted-job.json",
+          "original_sha256": "3828dd36abf9a2a0980251b515785ffb6463c79f2d2a10cffedfbae24b6900ec",
+          "exported_sha256": "3828dd36abf9a2a0980251b515785ffb6463c79f2d2a10cffedfbae24b6900ec",
+          "original_bytes": 6949,
+          "exported_bytes": 6949,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-before-20261024T142452Z/terminal.json",
+          "original_sha256": "a6404c6d6272b87393581294a998a63d1be5e54a4c736f6a8e407de401f68985",
+          "exported_sha256": "a6404c6d6272b87393581294a998a63d1be5e54a4c736f6a8e407de401f68985",
+          "original_bytes": 4916,
+          "exported_bytes": 4916,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/cleanup.json",
+          "original_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "exported_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "original_bytes": 38,
+          "exported_bytes": 38,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/identity-check.json",
+          "original_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "exported_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "original_bytes": 193,
+          "exported_bytes": 193,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/job-terminal.json",
+          "original_sha256": "fb8616bfdbb52648238f24c25270229c6d01de8a339328ab004c66932e6ea818",
+          "exported_sha256": "fb8616bfdbb52648238f24c25270229c6d01de8a339328ab004c66932e6ea818",
+          "original_bytes": 8155,
+          "exported_bytes": 8155,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/command.json",
+          "original_sha256": "094605910660813db5942b8faed6ed7adb31d4a7e7a6d5523090eced8d1101c3",
+          "exported_sha256": "094605910660813db5942b8faed6ed7adb31d4a7e7a6d5523090eced8d1101c3",
+          "original_bytes": 1859,
+          "exported_bytes": 1859,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/composition-dtypes.json",
+          "original_sha256": "013ad073167d0c9a058ffafe1c034ce09fd5dda842087b9af231f6c11f1acd23",
+          "exported_sha256": "013ad073167d0c9a058ffafe1c034ce09fd5dda842087b9af231f6c11f1acd23",
+          "original_bytes": 345,
+          "exported_bytes": 345,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/execution.json",
+          "original_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "exported_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "original_bytes": 2656,
+          "exported_bytes": 2656,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/identity.json",
+          "original_sha256": "1a0066a7d936a9fda547a882f7b4d6763bc77d894d2c50088aba6939f7e0737e",
+          "exported_sha256": "1a0066a7d936a9fda547a882f7b4d6763bc77d894d2c50088aba6939f7e0737e",
+          "original_bytes": 980,
+          "exported_bytes": 980,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/metrics.json",
+          "original_sha256": "9713cad4a72288ebc13e36ec4caa5f99a495d6d5d22abd37fb92a7636609e24e",
+          "exported_sha256": "9713cad4a72288ebc13e36ec4caa5f99a495d6d5d22abd37fb92a7636609e24e",
+          "original_bytes": 4397,
+          "exported_bytes": 4397,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/model-loading.json",
+          "original_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "exported_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "original_bytes": 4402,
+          "exported_bytes": 4402,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/regression.json",
+          "original_sha256": "6c567a8326d2b10babcd0b4928d38b36ed3e44c59866adad62c16b707bc7b465",
+          "exported_sha256": "6c567a8326d2b10babcd0b4928d38b36ed3e44c59866adad62c16b707bc7b465",
+          "original_bytes": 309,
+          "exported_bytes": 309,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/stderr.bin",
+          "original_sha256": "afd933edaca2378932ad39e7204ac23626d6123d4becd2b7a8d8bd43f6063732",
+          "exported_sha256": "afd933edaca2378932ad39e7204ac23626d6123d4becd2b7a8d8bd43f6063732",
+          "original_bytes": 5478,
+          "exported_bytes": 5478,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/stdout.bin",
+          "original_sha256": "c80c48c77468abfd6d24ef945ab9b761f6769895238479bd4d6fcfc6a7780e4f",
+          "exported_sha256": "c80c48c77468abfd6d24ef945ab9b761f6769895238479bd4d6fcfc6a7780e4f",
+          "original_bytes": 2038,
+          "exported_bytes": 2038,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/native/gpu-bias-green-20261024T143034Z/training.json",
+          "original_sha256": "e0da424e81706d1ee60920e9b3eefcf8302fb7361c60b33eb6edaf2c3ad11abd",
+          "exported_sha256": "e0da424e81706d1ee60920e9b3eefcf8302fb7361c60b33eb6edaf2c3ad11abd",
+          "original_bytes": 312,
+          "exported_bytes": 312,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/pods-terminal.json",
+          "original_sha256": "7a1cf188b8d632b31392989fd787cb5405a7186e2fe24e9168d4a6b01dce13fc",
+          "exported_sha256": "7a1cf188b8d632b31392989fd787cb5405a7186e2fe24e9168d4a6b01dce13fc",
+          "original_bytes": 15047,
+          "exported_bytes": 15047,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/request.json",
+          "original_sha256": "81a147be404a9f786682d29d7564f7328ed9224dc2d867fccb2b5bdc582aa5ab",
+          "exported_sha256": "81a147be404a9f786682d29d7564f7328ed9224dc2d867fccb2b5bdc582aa5ab",
+          "original_bytes": 1055,
+          "exported_bytes": 1055,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/scheduler.stderr",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/scheduler.stdout",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/submission.json",
+          "original_sha256": "24a4207b0e29262ab2b902922ce94e0d16b17594c3f278142ebdf51a33c2f6c1",
+          "exported_sha256": "24a4207b0e29262ab2b902922ce94e0d16b17594c3f278142ebdf51a33c2f6c1",
+          "original_bytes": 15868,
+          "exported_bytes": 15868,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/submitted-job.json",
+          "original_sha256": "7cbe35080922731d19d20b03b9ceb935b2d2d85b2aa057a658099ef12467e8d7",
+          "exported_sha256": "7cbe35080922731d19d20b03b9ceb935b2d2d85b2aa057a658099ef12467e8d7",
+          "original_bytes": 6948,
+          "exported_bytes": 6948,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-green-20261024T143020Z/terminal.json",
+          "original_sha256": "54b399faefca8eafdc4ce4d8827c5876bb2c843114e00b8c737a2fd98530856e",
+          "exported_sha256": "54b399faefca8eafdc4ce4d8827c5876bb2c843114e00b8c737a2fd98530856e",
+          "original_bytes": 5683,
+          "exported_bytes": 5683,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/cleanup.json",
+          "original_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "exported_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "original_bytes": 38,
+          "exported_bytes": 38,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/identity-check.json",
+          "original_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "exported_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "original_bytes": 193,
+          "exported_bytes": 193,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/job-terminal.json",
+          "original_sha256": "36037598eb31b81e8d7388aecd2811c8f9e9961cf95a336d110913c00f60bbb9",
+          "exported_sha256": "36037598eb31b81e8d7388aecd2811c8f9e9961cf95a336d110913c00f60bbb9",
+          "original_bytes": 8153,
+          "exported_bytes": 8153,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/command.json",
+          "original_sha256": "95a384882cdee2ef2bcf34211d7aea1e9a76110fde0a85d933d17efc5fa65ae5",
+          "exported_sha256": "95a384882cdee2ef2bcf34211d7aea1e9a76110fde0a85d933d17efc5fa65ae5",
+          "original_bytes": 1835,
+          "exported_bytes": 1835,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/composition-dtypes.json",
+          "original_sha256": "013ad073167d0c9a058ffafe1c034ce09fd5dda842087b9af231f6c11f1acd23",
+          "exported_sha256": "013ad073167d0c9a058ffafe1c034ce09fd5dda842087b9af231f6c11f1acd23",
+          "original_bytes": 345,
+          "exported_bytes": 345,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/execution.json",
+          "original_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "exported_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "original_bytes": 2656,
+          "exported_bytes": 2656,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/identity.json",
+          "original_sha256": "d3cccb622a962b9e1604d88c279ce0dde8093f349c703c2d9489688af42462fa",
+          "exported_sha256": "d3cccb622a962b9e1604d88c279ce0dde8093f349c703c2d9489688af42462fa",
+          "original_bytes": 981,
+          "exported_bytes": 981,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/metrics.json",
+          "original_sha256": "d8c689c468d395b3a0973f6c1fec287ba73ee1dbf52b8b689ae427140ba58317",
+          "exported_sha256": "d8c689c468d395b3a0973f6c1fec287ba73ee1dbf52b8b689ae427140ba58317",
+          "original_bytes": 4387,
+          "exported_bytes": 4387,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/model-loading.json",
+          "original_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "exported_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "original_bytes": 4402,
+          "exported_bytes": 4402,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/regression.json",
+          "original_sha256": "48c3551b0ac416cf5e05bf3220ee3bf6433a406e279ffc678dac3b6c96af342f",
+          "exported_sha256": "48c3551b0ac416cf5e05bf3220ee3bf6433a406e279ffc678dac3b6c96af342f",
+          "original_bytes": 308,
+          "exported_bytes": 308,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/stderr.bin",
+          "original_sha256": "5b13a635ef68c0567a664a0685dd7ecbccfe4a78891f216b77f32daba9017160",
+          "exported_sha256": "5b13a635ef68c0567a664a0685dd7ecbccfe4a78891f216b77f32daba9017160",
+          "original_bytes": 5873,
+          "exported_bytes": 5873,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/stdout.bin",
+          "original_sha256": "e5980641d90a8cb2d36b3bb44ab2de53461ccb2b5988dfadff3ace72abaa26b8",
+          "exported_sha256": "e5980641d90a8cb2d36b3bb44ab2de53461ccb2b5988dfadff3ace72abaa26b8",
+          "original_bytes": 2037,
+          "exported_bytes": 2037,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/native/gpu-bias-red-20261024T142908Z/training.json",
+          "original_sha256": "e0da424e81706d1ee60920e9b3eefcf8302fb7361c60b33eb6edaf2c3ad11abd",
+          "exported_sha256": "e0da424e81706d1ee60920e9b3eefcf8302fb7361c60b33eb6edaf2c3ad11abd",
+          "original_bytes": 312,
+          "exported_bytes": 312,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/pods-terminal.json",
+          "original_sha256": "a7c9a62a5bb590d245cd45e3a72293e01ec968bfe3570b8cd3cae3f1fc953d15",
+          "exported_sha256": "a7c9a62a5bb590d245cd45e3a72293e01ec968bfe3570b8cd3cae3f1fc953d15",
+          "original_bytes": 15047,
+          "exported_bytes": 15047,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/request.json",
+          "original_sha256": "e828c5ed8b509fb38e67418d14b6132d932c40b491e93adf6c2ebdd9a8d5eeaf",
+          "exported_sha256": "e828c5ed8b509fb38e67418d14b6132d932c40b491e93adf6c2ebdd9a8d5eeaf",
+          "original_bytes": 1034,
+          "exported_bytes": 1034,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/scheduler.stderr",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/scheduler.stdout",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/submission.json",
+          "original_sha256": "b1004ea1eb7645513c6cb35370bff2d16c86cc4d532a754628dcea099af54aa5",
+          "exported_sha256": "b1004ea1eb7645513c6cb35370bff2d16c86cc4d532a754628dcea099af54aa5",
+          "original_bytes": 15852,
+          "exported_bytes": 15852,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/submitted-job.json",
+          "original_sha256": "65a23d55a4f5629c774eb49247ec799f26b05c774527e1070adc1b9db95f0d1e",
+          "exported_sha256": "65a23d55a4f5629c774eb49247ec799f26b05c774527e1070adc1b9db95f0d1e",
+          "original_bytes": 6946,
+          "exported_bytes": 6946,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-red-20261024T142856Z/terminal.json",
+          "original_sha256": "805446e721075fcc3df1f73b01478adaa4946df540fd4c2bf0fc4ec3defc1ddf",
+          "exported_sha256": "805446e721075fcc3df1f73b01478adaa4946df540fd4c2bf0fc4ec3defc1ddf",
+          "original_bytes": 5676,
+          "exported_bytes": 5676,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/cleanup.json",
+          "original_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "exported_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "original_bytes": 38,
+          "exported_bytes": 38,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/identity-check.json",
+          "original_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "exported_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "original_bytes": 193,
+          "exported_bytes": 193,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/job-terminal.json",
+          "original_sha256": "c7cdf639517c17db44c6fe98282b71c2685e1c1f205b8ce0d8977ba9f1aa7b80",
+          "exported_sha256": "c7cdf639517c17db44c6fe98282b71c2685e1c1f205b8ce0d8977ba9f1aa7b80",
+          "original_bytes": 8159,
+          "exported_bytes": 8159,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/adapter/adapter_config.json",
+          "original_sha256": "6ccffdf4d13d3ad73520189ba667b97c4b3da6a749df31587928d0dfc4383e90",
+          "exported_sha256": "6ccffdf4d13d3ad73520189ba667b97c4b3da6a749df31587928d0dfc4383e90",
+          "original_bytes": 1138,
+          "exported_bytes": 1138,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/command.json",
+          "original_sha256": "3c262c203d6b944169fe9f82494686acd3846941377299bd549a4155d644a5a5",
+          "exported_sha256": "3c262c203d6b944169fe9f82494686acd3846941377299bd549a4155d644a5a5",
+          "original_bytes": 1628,
+          "exported_bytes": 1628,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/execution.json",
+          "original_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "exported_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "original_bytes": 2656,
+          "exported_bytes": 2656,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/identity.json",
+          "original_sha256": "3383a746bd8ba9c4684ce815e0b6f00d1b8f405b1744bf77297eb7173d2ad544",
+          "exported_sha256": "3383a746bd8ba9c4684ce815e0b6f00d1b8f405b1744bf77297eb7173d2ad544",
+          "original_bytes": 981,
+          "exported_bytes": 981,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/model-loading.json",
+          "original_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "exported_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "original_bytes": 4402,
+          "exported_bytes": 4402,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/stderr.bin",
+          "original_sha256": "350ba4d11b641d09692e00efa831e2a2fdf2ae380ed7b4d988150c9e2e2d9132",
+          "exported_sha256": "350ba4d11b641d09692e00efa831e2a2fdf2ae380ed7b4d988150c9e2e2d9132",
+          "original_bytes": 15640,
+          "exported_bytes": 15640,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/stdout.bin",
+          "original_sha256": "c4140291599ac905edf5b1b3664921ee2b1ea0e3742b48236dac5616f0503269",
+          "exported_sha256": "c4140291599ac905edf5b1b3664921ee2b1ea0e3742b48236dac5616f0503269",
+          "original_bytes": 1333,
+          "exported_bytes": 1333,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/trainable.json",
+          "original_sha256": "733e3bed2d9dc70bf1f538f22476fa0cfaa9a3d3c23652722fa19c4457a3f0a6",
+          "exported_sha256": "733e3bed2d9dc70bf1f538f22476fa0cfaa9a3d3c23652722fa19c4457a3f0a6",
+          "original_bytes": 663,
+          "exported_bytes": 663,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/native/gpu-bias-reproduce-20261024T142628Z/training.json",
+          "original_sha256": "dfffbb66d3b51392c52ba89437e38c8238cb3b8963e0b98244bf8c3ad3d37fad",
+          "exported_sha256": "dfffbb66d3b51392c52ba89437e38c8238cb3b8963e0b98244bf8c3ad3d37fad",
+          "original_bytes": 3920,
+          "exported_bytes": 3920,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/pods-terminal.json",
+          "original_sha256": "25f9869f9e6a096d2668ce981905fc80d36f179a66a80a70194dcf190c58b7e2",
+          "exported_sha256": "25f9869f9e6a096d2668ce981905fc80d36f179a66a80a70194dcf190c58b7e2",
+          "original_bytes": 15047,
+          "exported_bytes": 15047,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/request.json",
+          "original_sha256": "0d6ce993ec5ae820b31683fbbe40617368224314e0181fbe2e45fdea3ba8efb6",
+          "exported_sha256": "0d6ce993ec5ae820b31683fbbe40617368224314e0181fbe2e45fdea3ba8efb6",
+          "original_bytes": 816,
+          "exported_bytes": 816,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/scheduler.stderr",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/scheduler.stdout",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/submission.json",
+          "original_sha256": "c94bb5722ac49a9be0be896b89328db2b7e6d8c4fc3179d1d6b8479a3e73aa23",
+          "exported_sha256": "c94bb5722ac49a9be0be896b89328db2b7e6d8c4fc3179d1d6b8479a3e73aa23",
+          "original_bytes": 15900,
+          "exported_bytes": 15900,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/submitted-job.json",
+          "original_sha256": "ea98812ab7fe1d5316f2fc7b9cd32b5903fbc4deb697d4e871c77f549e128c68",
+          "exported_sha256": "ea98812ab7fe1d5316f2fc7b9cd32b5903fbc4deb697d4e871c77f549e128c68",
+          "original_bytes": 6952,
+          "exported_bytes": 6952,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "runs/gpu-bias-reproduce-20261024T142617Z/terminal.json",
+          "original_sha256": "fbb47a8753205e5ca4656a4577a85885e29123400b893897142e25d11f11b38a",
+          "exported_sha256": "fbb47a8753205e5ca4656a4577a85885e29123400b893897142e25d11f11b38a",
+          "original_bytes": 4823,
+          "exported_bytes": 4823,
+          "literal_replacement_count": 0
+        }
+      ]
+    },
+    "evidence-fp32": {
+      "schema_version": 1,
+      "files": [
+        {
+          "path": "cleanup.json",
+          "original_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "exported_sha256": "7360349271ebf1e1e28906b56fe6aef84dea6791cc2fab8a915f3991059e66d4",
+          "original_bytes": 38,
+          "exported_bytes": 38,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "identity-check.json",
+          "original_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "exported_sha256": "dbd99daab3564b28d6e1264dbb71caad01d0a35fd35bfadf5899407ede9c2f1f",
+          "original_bytes": 193,
+          "exported_bytes": 193,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "job-terminal.json",
+          "original_sha256": "aa8cf94ad41af9185765e6e67ad0138c8ab95e3b4789f4765803ab8124b39ee8",
+          "exported_sha256": "aa8cf94ad41af9185765e6e67ad0138c8ab95e3b4789f4765803ab8124b39ee8",
+          "original_bytes": 8231,
+          "exported_bytes": 8231,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/command.json",
+          "original_sha256": "fd6abb121a47b39a891397e3165527d2afa2014568e7a5ba8addd9da8e99b8dd",
+          "exported_sha256": "fd6abb121a47b39a891397e3165527d2afa2014568e7a5ba8addd9da8e99b8dd",
+          "original_bytes": 1915,
+          "exported_bytes": 1915,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/composition-dtypes.json",
+          "original_sha256": "6ebc9d3cbc549ccc04c7355dc9933b8d3cd272ecae46ed84ae25214d86635015",
+          "exported_sha256": "6ebc9d3cbc549ccc04c7355dc9933b8d3cd272ecae46ed84ae25214d86635015",
+          "original_bytes": 344,
+          "exported_bytes": 344,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/execution.json",
+          "original_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "exported_sha256": "5808e2ec87c01b8fb259733577646f3ed27cd4d934708968468c2bc96c4fa14b",
+          "original_bytes": 2656,
+          "exported_bytes": 2656,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/identity.json",
+          "original_sha256": "a5aafd0a747edf6382545ee7381f18c6e0f5f66794bc0c97202beafdc74962d5",
+          "exported_sha256": "a5aafd0a747edf6382545ee7381f18c6e0f5f66794bc0c97202beafdc74962d5",
+          "original_bytes": 1217,
+          "exported_bytes": 1217,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/metrics.json",
+          "original_sha256": "5f64a09e5847fea112d8373a1319df6fe8481fd2d8682e7964f988d95499f1c9",
+          "exported_sha256": "5f64a09e5847fea112d8373a1319df6fe8481fd2d8682e7964f988d95499f1c9",
+          "original_bytes": 3713,
+          "exported_bytes": 3713,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/model-loading.json",
+          "original_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "exported_sha256": "c295e7784cd87b54237282e55f7b37f9804530d66cbd3570c6b8d8c8ad537865",
+          "original_bytes": 4402,
+          "exported_bytes": 4402,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/regression.json",
+          "original_sha256": "c01a085dc7f6e16ec76a075387e0cc50dda5d559e10c4a907dd03eae6ae306de",
+          "exported_sha256": "c01a085dc7f6e16ec76a075387e0cc50dda5d559e10c4a907dd03eae6ae306de",
+          "original_bytes": 300,
+          "exported_bytes": 300,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/stderr.bin",
+          "original_sha256": "3da1827e97ddcfb77eafac0370291fa69bce3878b35445ec28aff26e8f75fdcf",
+          "exported_sha256": "3da1827e97ddcfb77eafac0370291fa69bce3878b35445ec28aff26e8f75fdcf",
+          "original_bytes": 5347,
+          "exported_bytes": 5347,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/stdout.bin",
+          "original_sha256": "8f9ec0b52e7a35ac8d6f5d419dd4f1fbd0c4670cf607cb05078c818e7cb2943c",
+          "exported_sha256": "8f9ec0b52e7a35ac8d6f5d419dd4f1fbd0c4670cf607cb05078c818e7cb2943c",
+          "original_bytes": 2194,
+          "exported_bytes": 2194,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "native/gpu-bias-fp32-20261024T143435Z/training.json",
+          "original_sha256": "e0da424e81706d1ee60920e9b3eefcf8302fb7361c60b33eb6edaf2c3ad11abd",
+          "exported_sha256": "e0da424e81706d1ee60920e9b3eefcf8302fb7361c60b33eb6edaf2c3ad11abd",
+          "original_bytes": 312,
+          "exported_bytes": 312,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "pods-terminal.json",
+          "original_sha256": "693f7fb6be4d28b347ac9a58bb4e8042b171bc1e20ae44cae59c6ace67b6037b",
+          "exported_sha256": "693f7fb6be4d28b347ac9a58bb4e8042b171bc1e20ae44cae59c6ace67b6037b",
+          "original_bytes": 15098,
+          "exported_bytes": 15098,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "request.json",
+          "original_sha256": "be3d0b2a57e3cdf836e49226e1f0de4f03abf06447482fc45222f4842f29f7ec",
+          "exported_sha256": "be3d0b2a57e3cdf836e49226e1f0de4f03abf06447482fc45222f4842f29f7ec",
+          "original_bytes": 1110,
+          "exported_bytes": 1110,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "scheduler.stderr",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "scheduler.stdout",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "submission.json",
+          "original_sha256": "3dc5a312b4963eda5b5f9f326b37670441d72e89ec3414e1bbf5ca2caf2939c2",
+          "exported_sha256": "3dc5a312b4963eda5b5f9f326b37670441d72e89ec3414e1bbf5ca2caf2939c2",
+          "original_bytes": 15860,
+          "exported_bytes": 15860,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "submitted-job.json",
+          "original_sha256": "af009d36b6c8b8870685b0afb1b11665e027edf07017829951d145281654d71e",
+          "exported_sha256": "af009d36b6c8b8870685b0afb1b11665e027edf07017829951d145281654d71e",
+          "original_bytes": 6947,
+          "exported_bytes": 6947,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "terminal.json",
+          "original_sha256": "664abf28ed5519a6928fa2e0fdb7f1ac1ca293720878ef05ca36b90956d1d854",
+          "exported_sha256": "664abf28ed5519a6928fa2e0fdb7f1ac1ca293720878ef05ca36b90956d1d854",
+          "original_bytes": 1213,
+          "exported_bytes": 1213,
+          "literal_replacement_count": 0
+        }
+      ]
+    },
+    "evidence-reference": {
+      "schema_version": 1,
+      "files": [
+        {
+          "path": "command.json",
+          "original_sha256": "57a2d72344641b02ff68aac0224949c3f0fef2fc918d61d251a7ab7bf38a70d6",
+          "exported_sha256": "57a2d72344641b02ff68aac0224949c3f0fef2fc918d61d251a7ab7bf38a70d6",
+          "original_bytes": 1296,
+          "exported_bytes": 1296,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "reference-identity.json",
+          "original_sha256": "c525daf860ed36fba332ac121dfdec8378016a20a6a3faa089757464236ad98f",
+          "exported_sha256": "c525daf860ed36fba332ac121dfdec8378016a20a6a3faa089757464236ad98f",
+          "original_bytes": 1359,
+          "exported_bytes": 1359,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "stderr.bin",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        },
+        {
+          "path": "stdout.bin",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_bytes": 0,
+          "exported_bytes": 0,
+          "literal_replacement_count": 0
+        }
+      ]
+    }
+  }
+}
