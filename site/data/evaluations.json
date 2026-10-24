@@ -58494,6 +58494,230 @@
         "prefix": "site/evidence/skills-original-native-retest-20261024.json",
         "replay_cases": 140
       }
+    },
+    {
+      "id": "skills-single-checkpoint-retest-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B（单端）：checkpoint 恢复修复复测",
+      "framework": {
+        "name": "Skills A/B（单端恢复修复）"
+      },
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny GPT2, CPU FP32",
+        "revision": "original controlled fixture, sha256 recorded in evidence"
+      },
+      "summary": "复用原始 checkpoint 缺陷、数据和环境，仅重跑当前 A，保留已验证无 skill B。两组均通过四组独立配置；A 更快但费用更高，未取得速度与成本双重优势。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.53.3"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU FP32",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "training": "full-parameter",
+            "skills_loaded": true,
+            "source_revision": "2013ce8532eacccb88bfd36125e1333cbf584265"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.53.3"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU FP32",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "training": "full-parameter",
+            "skills_loaded": false,
+            "reused_baseline": "compare-sft-ablation-20261022T081949Z/b"
+          }
+        }
+      ],
+      "common": [
+        "同一原始 train.py、batches.pt、settings.json；CPU FP32、Torch 2.6.0、Transformers 4.53.3。",
+        "默认8步、checkpoint在第3步、梯度累积2次；模型、算法和训练状态语义保持。",
+        "新A和保留B均为gpt-6.1-sol / medium；隐藏验证器不提供给执行agent。"
+      ],
+      "differences": [
+        "A按需使用当前skills；B复用2026-10-22已验证的无skill基线。",
+        "历史B可访问当时的独立工具；当前A使用配套工具。共享系统上下文和缓存不完全受控。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": -54.230999999999995,
+              "side_values": {
+                "a": 169.401,
+                "b": 223.632
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.04323840000000001,
+              "side_values": {
+                "a": 0.20718160000000002,
+                "b": 0.1639432
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 2,
+              "side_values": {
+                "a": 13,
+                "b": 11
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总token差（A − B）",
+              "unit": "tokens",
+              "value": 253784,
+              "side_values": {
+                "a": 1336730,
+                "b": 1082946
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 6430,
+              "side_values": {
+                "a": 17138,
+                "b": 10708
+              }
+            },
+            {
+              "id": "first-cost",
+              "label": "首请求估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.0026356,
+              "side_values": {
+                "a": 0.012642800000000001,
+                "b": 0.0100072
+              }
+            },
+            {
+              "id": "later-cost",
+              "label": "后续请求估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.040602799999999994,
+              "side_values": {
+                "a": 0.1945388,
+                "b": 0.15393600000000002
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "四组独立seed/cut/steps/accumulation配置；每个原始连续训练轨迹与修复后的连续、恢复轨迹逐项对比。所有loss/lr/梯度/参数/更新/Adam状态精确一致。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "恢复与原始连续轨迹最大残差",
+              "unit": "absolute",
+              "value": 0,
+              "side_values": {
+                "a": 0,
+                "b": 0
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立配置",
+              "observed": 4,
+              "expected": 4,
+              "unit": "configurations per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "A：169.401秒、0.2071816美元、13次工具调用；B：223.632秒、0.1639432美元、11次调用。",
+        "A用时少24.25%，估算费用高26.37%；不把更快表述为全面效率优势。",
+        "首请求费用A=0.0126428、B=0.0100072美元；后续A=0.1945388、B=0.153936美元，费用差主要在后续。",
+        "A使用共享record_run/array_compare，未读取工具实现；仍有4次一秒等待，且进行了scheduler-only/rng-only消融。",
+        "四组隐藏验证全部精确一致；默认1360个数组、648248个元素；原始连续训练轨迹保持不变。",
+        "人工注入CPU集成缺陷，不是上游库缺陷或加速卡成功率研究。",
+        "仅一次新A与历史B；模型延迟、缓存、公共前缀不完全受控；准备与独立验证不计入。",
+        "费用沿用证据中统一Standard快照估算，不代表账单。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、直接任务提示、补丁执行记录及四组独立验证",
+          "url": "evidence/skills-single-checkpoint-retest-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "dbdbcf961ced4813685a893bf1c65e2032ecd106",
+        "prefix": "site/evidence/skills-single-checkpoint-retest-20261024.json",
+        "replay_cases": 4
+      }
     }
   ]
 }
