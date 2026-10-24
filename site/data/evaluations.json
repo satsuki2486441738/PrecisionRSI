@@ -61977,6 +61977,637 @@
         "prefix": "site/evidence/skills-novel-scenarios-20261024.json",
         "replay_cases": 2
       }
+    },
+    {
+      "id": "skills-native-sglangtf-initial-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：SGLang / Transformers · 首次原生接入",
+      "framework": {
+        "name": "Skills A/B（SGLang / Transformers）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "独立验证通过；本次A用时减少22.1%，估算费用减少21.5%。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · skills",
+          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "libraries": [
+            {
+              "name": "SGLang",
+              "version": "0.5.10"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "Torch",
+              "version": "2.9.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills": true,
+            "source_revision": "e154dfa00706e8d1e43c3f26c9b0e2bd7da15195",
+            "baseline_id": "sglangtf-b-initial-20261024T131007Z",
+            "model_dtype": "BF16",
+            "transformers_attention": "eager",
+            "transformers_cache": false,
+            "sglang_attention": "fa3",
+            "sglang_linear_attention": "triton",
+            "sglang_ssm_dtype": "bfloat16",
+            "transformers_ssm_dtype": "float32",
+            "single_device": true
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无skills（冻结基线）",
+          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "libraries": [
+            {
+              "name": "SGLang",
+              "version": "0.5.10"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "Torch",
+              "version": "2.9.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills": false,
+            "source_revision": "no skills",
+            "baseline_id": "sglangtf-b-initial-20261024T131007Z",
+            "model_dtype": "BF16",
+            "transformers_attention": "eager",
+            "transformers_cache": false,
+            "sglang_attention": "fa3",
+            "sglang_linear_attention": "triton",
+            "sglang_ssm_dtype": "bfloat16",
+            "transformers_ssm_dtype": "float32",
+            "single_device": true
+          }
+        }
+      ],
+      "common": [
+        "同一预装环境、模型、固定token IDs、BF16权重及FP32全词表分数；保留两库原生算子。",
+        "新agent无任务历史，gpt-6.1-sol / medium；仅直接任务要求，不提供collector、对齐适配器或独立验证器。",
+        "B两阶段先执行，A随后执行；每组追加任务沿用同一agent上下文。"
+      ],
+      "differences": [
+        "A可按需使用skills；B不读取或调用skills。",
+        "A运行顺序在后，可能受益于共享编译缓存；保留原生执行时间，未将全部加速归因于skill。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "完整任务开销",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "首次原生接入，从任务启动至最终交付；计入错误、重试、等待和所有验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -147.56999999999994,
+              "side_values": {
+                "a": 519.148,
+                "b": 666.718
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.14935639999999994,
+              "side_values": {
+                "a": 0.5464616,
+                "b": 0.6958179999999999
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用差（A − B）",
+              "unit": "calls",
+              "value": -8,
+              "side_values": {
+                "a": 34,
+                "b": 42
+              }
+            },
+            {
+              "id": "requests",
+              "label": "请求数差（A − B）",
+              "unit": "requests",
+              "value": -8,
+              "side_values": {
+                "a": 35,
+                "b": 43
+              }
+            },
+            {
+              "id": "first",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": 0.0001460000000000003,
+              "side_values": {
+                "a": 0.0106432,
+                "b": 0.0104972
+              }
+            },
+            {
+              "id": "later",
+              "label": "后续请求费用差（A − B）",
+              "unit": "USD",
+              "value": -0.14950239999999992,
+              "side_values": {
+                "a": 0.5358184,
+                "b": 0.6853208
+              }
+            },
+            {
+              "id": "uncached-input-tokens",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 341,
+              "side_values": {
+                "a": 35636,
+                "b": 35295
+              }
+            },
+            {
+              "id": "cached-input-tokens",
+              "label": "缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": -861184,
+              "side_values": {
+                "a": 3668096,
+                "b": 4529280
+              }
+            },
+            {
+              "id": "output-tokens",
+              "label": "输出差（A − B）",
+              "unit": "tokens",
+              "value": -6392,
+              "side_values": {
+                "a": 10838,
+                "b": 17230
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立核验任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "initial-correctness",
+          "title": "初始数值核验",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "70个目标，逐样本NLL、全局NLL、MAE、线性P99及最大差坐标独立复算；原生分数另由独立采集器验证。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "两库 NLL 绝对差（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.0019612176077714594,
+                "b": 0.0019612176077714594
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.020265116010393415,
+                "b": 0.020265116010393415
+              }
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.0682018852233887,
+                "b": 0.0682018852233887
+              }
+            },
+            {
+              "id": "max-abs",
+              "label": "目标 logprob 最大差（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.07504940032958984,
+                "b": 0.07504940032958984
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 70,
+              "expected": 70,
+              "unit": "targets"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "已有安装环境与原生调度入口，不是从零安装依赖。",
+        "两组均从相同的长TMPDIR配置开始，均自行修复启动路径后完成；没有修复模型库。",
+        "A首轮仍读取共享工具源码并进行短轮询；如实保留这些开销。",
+        "两组新增阶段均复用初始证据；新增原生执行每库各一次。",
+        "B逐轮生成报告并复核完整文件清单；A调用共享指标与证据工具。",
+        "费用按保留的统一Standard快照估算，非账单；逐请求原始usage可重定价。",
+        "单次观测；不推断其他任务或稳定成功率。",
+        "B追加阶段有315.479秒的工具返回至下一调用间隔，无法区分模型计算和服务延迟；完整计入耗时，不将全部速度差归因于skill。"
+      ],
+      "evidence": [
+        {
+          "label": "任务、逐请求用量、调用轨迹、分阶段指标、原生回执与独立核验",
+          "url": "evidence/skills-native-sglang-transformers-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dcc38e860506bc6114c00c31005d5ec08cae052",
+        "prefix": "site/evidence/skills-native-sglang-transformers-20261024.json",
+        "replay_cases": 4
+      }
+    },
+    {
+      "id": "skills-native-sglangtf-extra-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：SGLang / Transformers · 新增输入与合并复用",
+      "framework": {
+        "name": "Skills A/B（SGLang / Transformers）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "独立验证通过；本次A用时减少63.3%，估算费用减少36.1%。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · skills",
+          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "libraries": [
+            {
+              "name": "SGLang",
+              "version": "0.5.10"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "Torch",
+              "version": "2.9.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills": true,
+            "source_revision": "e154dfa00706e8d1e43c3f26c9b0e2bd7da15195",
+            "baseline_id": "sglangtf-b-extra-20261024T131007Z",
+            "model_dtype": "BF16",
+            "transformers_attention": "eager",
+            "transformers_cache": false,
+            "sglang_attention": "fa3",
+            "sglang_linear_attention": "triton",
+            "sglang_ssm_dtype": "bfloat16",
+            "transformers_ssm_dtype": "float32",
+            "single_device": true
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无skills（冻结基线）",
+          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "libraries": [
+            {
+              "name": "SGLang",
+              "version": "0.5.10"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.3.0"
+            },
+            {
+              "name": "Torch",
+              "version": "2.9.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills": false,
+            "source_revision": "no skills",
+            "baseline_id": "sglangtf-b-extra-20261024T131007Z",
+            "model_dtype": "BF16",
+            "transformers_attention": "eager",
+            "transformers_cache": false,
+            "sglang_attention": "fa3",
+            "sglang_linear_attention": "triton",
+            "sglang_ssm_dtype": "bfloat16",
+            "transformers_ssm_dtype": "float32",
+            "single_device": true
+          }
+        }
+      ],
+      "common": [
+        "同一预装环境、模型、固定token IDs、BF16权重及FP32全词表分数；保留两库原生算子。",
+        "新agent无任务历史，gpt-6.1-sol / medium；仅直接任务要求，不提供collector、对齐适配器或独立验证器。",
+        "B两阶段先执行，A随后执行；每组追加任务沿用同一agent上下文。"
+      ],
+      "differences": [
+        "A可按需使用skills；B不读取或调用skills。",
+        "A运行顺序在后，可能受益于共享编译缓存；保留原生执行时间，未将全部加速归因于skill。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "完整任务开销",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "新增输入与合并复用，从任务启动至最终交付；计入错误、重试、等待和所有验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -452.51300000000003,
+              "side_values": {
+                "a": 261.951,
+                "b": 714.464
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.16426120000000005,
+              "side_values": {
+                "a": 0.2909472,
+                "b": 0.45520840000000007
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用差（A − B）",
+              "unit": "calls",
+              "value": -5,
+              "side_values": {
+                "a": 14,
+                "b": 19
+              }
+            },
+            {
+              "id": "requests",
+              "label": "请求数差（A − B）",
+              "unit": "requests",
+              "value": -5,
+              "side_values": {
+                "a": 15,
+                "b": 20
+              }
+            },
+            {
+              "id": "first",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": -0.00014720000000000184,
+              "side_values": {
+                "a": 0.0144976,
+                "b": 0.014644800000000001
+              }
+            },
+            {
+              "id": "later",
+              "label": "后续请求费用差（A − B）",
+              "unit": "USD",
+              "value": -0.16411400000000004,
+              "side_values": {
+                "a": 0.2764496,
+                "b": 0.44056360000000006
+              }
+            },
+            {
+              "id": "uncached-input-tokens",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": -5391,
+              "side_values": {
+                "a": 11683,
+                "b": 17074
+              }
+            },
+            {
+              "id": "cached-input-tokens",
+              "label": "缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": -846592,
+              "side_values": {
+                "a": 1987712,
+                "b": 2834304
+              }
+            },
+            {
+              "id": "output-tokens",
+              "label": "输出差（A − B）",
+              "unit": "tokens",
+              "value": -6882,
+              "side_values": {
+                "a": 6881,
+                "b": 13763
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立核验任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "extra-correctness",
+          "title": "新增数值核验",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "102个目标，逐样本NLL、全局NLL、MAE、线性P99及最大差坐标独立复算；原生分数另由独立采集器验证。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "两库 NLL 绝对差（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.001205230168267235,
+                "b": 0.001205230168267235
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.03405863806313159,
+                "b": 0.03405863806313159
+              }
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.22338059186935388,
+                "b": 0.22338059186935388
+              }
+            },
+            {
+              "id": "max-abs",
+              "label": "目标 logprob 最大差（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.2312932014465332,
+                "b": 0.2312932014465332
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 102,
+              "expected": 102,
+              "unit": "targets"
+            }
+          ]
+        },
+        {
+          "id": "combined-correctness",
+          "title": "合并数值核验",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "172个目标，逐样本NLL、全局NLL、MAE、线性P99及最大差坐标独立复算；原生分数另由独立采集器验证。",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "两库 NLL 绝对差（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 8.344043826014058e-05,
+                "b": 8.344043826014058e-05
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标 logprob MAE（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.028444995367249776,
+                "b": 0.028444995367249776
+              }
+            },
+            {
+              "id": "p99",
+              "label": "目标 logprob P99（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.17139525651931703,
+                "b": 0.17139525651931703
+              }
+            },
+            {
+              "id": "max-abs",
+              "label": "目标 logprob 最大差（A − B）",
+              "unit": "nat",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.2312932014465332,
+                "b": 0.2312932014465332
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 172,
+              "expected": 172,
+              "unit": "targets"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "已有安装环境与原生调度入口，不是从零安装依赖。",
+        "两组均从相同的长TMPDIR配置开始，均自行修复启动路径后完成；没有修复模型库。",
+        "A首轮仍读取共享工具源码并进行短轮询；如实保留这些开销。",
+        "两组新增阶段均复用初始证据；新增原生执行每库各一次。",
+        "B逐轮生成报告并复核完整文件清单；A调用共享指标与证据工具。",
+        "费用按保留的统一Standard快照估算，非账单；逐请求原始usage可重定价。",
+        "单次观测；不推断其他任务或稳定成功率。",
+        "B追加阶段有315.479秒的工具返回至下一调用间隔，无法区分模型计算和服务延迟；完整计入耗时，不将全部速度差归因于skill。"
+      ],
+      "evidence": [
+        {
+          "label": "任务、逐请求用量、调用轨迹、分阶段指标、原生回执与独立核验",
+          "url": "evidence/skills-native-sglang-transformers-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dcc38e860506bc6114c00c31005d5ec08cae052",
+        "prefix": "site/evidence/skills-native-sglang-transformers-20261024.json",
+        "replay_cases": 4
+      }
     }
   ]
 }
