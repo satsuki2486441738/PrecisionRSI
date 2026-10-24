@@ -22,9 +22,9 @@ Follow these requirements for the bundled tools:
 
 | Operation | Required path |
 |---|---|
-| Interface details | Use declarations or `tool_help TOOL` / `--full`. Read tool source only for tool edits, observed tool failures or requested audits. |
+| Interface details | Reuse loaded instructions/interfaces; read only missing details via declarations or `tool_help TOOL` / `--full`. Read source for tool edits, observed failures or requested audits. |
 | Supported work | Call the declared tool. Write adapters for uncovered semantics; identify an unsupported requirement before replacing a tool. |
-| Results and checks | Reuse returned metrics, coverage and integrity receipts. Recheck only affected inputs/artifacts after changes, observed inconsistencies or requested audits. |
+| Results and checks | Batch identity checks and existing-result reads. Reuse metrics, coverage and integrity receipts; recheck affected scope after changes, inconsistencies or requested audits. |
 | Delivery | Return existing results, configurations and evidence paths. Create extra report files, bundles or offline replay only on request. |
 
 ## Compare

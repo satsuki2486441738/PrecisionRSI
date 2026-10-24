@@ -11,7 +11,7 @@ description: Diagnose and repair numerical defects in model, framework or operat
 - Preserve model, data, algorithm and execution semantics. Ask when a choice changes intended results or permitted work.
 - Use an existing native reproduction, or reproduce only the missing evidence through the affected path.
 - Distinguish collection/configuration differences from defects. Reuse a trusted native reference/check; supply missing correctness evidence from the intended algorithm, an analytical property or matching higher-precision computation.
-- Resolve causality with a small experiment; replay propagated training errors at identical inputs/state ([example](examples/causal-replay.md)). [Internal sampling](../precision-compare/references/layerwise.md) requires agreed scope/budget; reuse existing authorization.
+- Establish causality from the reproduction, responsible code and red/green verification. Add a discriminating experiment only when causality remains ambiguous; replay propagated errors at identical inputs/state ([example](examples/causal-replay.md)). [Internal sampling](../precision-compare/references/layerwise.md) requires agreed scope/budget; reuse existing authorization.
 - Report uncertainty when evidence cannot distinguish defects from numerical-policy tradeoffs.
 
 ## Patch and verify
