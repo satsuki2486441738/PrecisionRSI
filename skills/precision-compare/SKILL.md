@@ -8,11 +8,11 @@ description: Collect and compare numerical results across hardware and software 
 ## Scope
 
 - Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
-- Reuse observations and completed checks matching identities, semantics and coverage. Refresh only changed scope or requested fresh measurements.
+- Enter for missing collection or comparison. Reuse workload checks, observations and results matching identities, semantics and coverage. Refresh changed scope or requested fresh measurements.
 
 ## Compare
 
-Reuse workload checks and observations; collect or compare only missing scope. Reuse execution JSON for native preflight/capture via [shared tasks](references/comparison.md#shared-tasks). Use these declarations directly:
+Use these tools directly for missing comparisons. Native preflight/capture can reuse execution JSON via [shared tasks](references/comparison.md#shared-tasks):
 
 | Input | Python call | Result |
 |---|---|---|

@@ -7,9 +7,9 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 ## Diagnose
 
-- Reuse matching inputs/state, source/runtime identities, captures, reports and interfaces.
+- Enter for requested diagnosis or repair. Reuse the workload execution, inputs/state, source/runtime identities, collectors, captures and completed checks.
 - Preserve model, data, algorithm and execution semantics. Ask when a choice changes intended results or permitted work.
-- Reuse a matching native reproduction, or reproduce through the affected path.
+- Use an existing native reproduction, or reproduce only the missing evidence through the affected path.
 - Distinguish collection/configuration differences from defects. Correctness evidence: intended algorithm, analytical property, trusted implementation or higher-precision recomputation with matching semantics.
 - Resolve causality with a small experiment; replay propagated training errors at identical inputs/state ([example](examples/causal-replay.md)). [Internal sampling](../precision-compare/references/layerwise.md) requires agreed scope/budget; reuse existing authorization.
 - Report uncertainty when evidence cannot distinguish defects from numerical-policy tradeoffs.
@@ -18,9 +18,9 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 - Patch the responsible implementation; keep framework-specific fixes with the case.
 - Regression: fail before the fix; independently check intended behavior and relevant nearby cases.
-- Rerun the original workload with identical inputs/initial state, correctness evidence and metrics. Combine regression/recovery runs when possible.
+- Verify the patch through the existing workload entrypoint and collectors, with identical inputs/initial state, correctness evidence and metrics. Combine regression/recovery runs when possible.
 - Use task tolerance or justify one from computation/dtype. Measure runtime/memory when relevant.
-- Corresponding captures → [array comparison](../precision-compare/scripts/array_compare.py); reconstruction/execution validation → [artifact tools](../precision-compare/references/comparison.md#tools); dependency reruns → [shared tasks](../precision-compare/references/comparison.md#shared-tasks).
+- Existing captures → [array tool](../precision-compare/scripts/array_compare.py); reconstruction/execution checks → [artifact tools](../precision-compare/references/comparison.md#tools); missing collection/comparison → [compare](../precision-compare/SKILL.md); repeated commands → [shared tasks](../precision-compare/references/comparison.md#shared-tasks).
 
 ## Return
 

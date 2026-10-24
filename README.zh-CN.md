@@ -6,20 +6,18 @@
 
 ## 使用
 
-将 `framework-adapt`、`precision-compare` 和 `precision-repair` 并排安装到客户端的 skill 目录，执行时按任务调用所需组件：
+将 `framework-adapt`、`precision-compare` 和 `precision-repair` 并排安装到客户端的 skill 目录，执行时根据下一项缺失能力加载组件：
 
-| Skill | 任务与交付 |
+| Skill | 进入条件与交付 |
 |---|---|
-| [Framework Adapt](skills/framework-adapt/SKILL.md) | 为目标模型、硬件和任务部署或适配框架，交付可复现的执行入口与验证证据 |
-| [Precision Compare](skills/precision-compare/SKILL.md) | 采集与比较数值结果，输出指标、覆盖率和证据 |
-| [Precision Repair](skills/precision-repair/SKILL.md) | 确定数值问题的原因、修复实现，并回到原始任务复验 |
+| [Framework Adapt](skills/framework-adapt/SKILL.md) | 缺少原生执行能力时，部署或适配目标负载并验证执行 |
+| [Precision Compare](skills/precision-compare/SKILL.md) | 缺少采集或比较结果时，输出数值指标、覆盖率和证据 |
+| [Precision Repair](skills/precision-repair/SKILL.md) | 任务要求诊断或修复时，建立正确性证据、修复确认的缺陷并复验原始负载 |
 | [Operator Optimize](skills/operator-optimize/SKILL.md) | 占位，尚未实现 |
 
-三个包共用工具和组件间链接；agent 按任务加载相关 skill 与参考文档。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
+从已有的执行命令、输入／状态、采集器和结果开始，只为缺失的工作加载相应组件与参考文档；共享工具可直接调用，无需加载所属 skill。`precision-compare` 是原 `precision-skill` 比较包的新名称，更新时替换原安装目录。
 
-对于端到端任务，提供模型工作负载、目标执行栈和资源范围。agent 补齐原生执行能力，比较指定的数值结果，并在任务包含修复时处理确认的问题。三个 skill 共用[任务执行与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)：复用有效的环境准备和采集，失败时定位下一组件，代码变化后重跑受影响的验证。各组件也可单独承担对应任务。
-
-进行比较时，提供任务和已有产物，或采集所需的模型、数据与平台连接方式。agent 负责准备环境、接入原生执行路径、编写缺少的采集与比较代码并运行任务。在 skill 开发阶段，将可复用的实现整理进工具库。
+提供期望结果、工作负载或已有产物、目标执行栈和资源范围。需要其他能力时，在同一工作目录继续，跨组件复用执行入口、输入／状态、采集器和结果。[执行工具与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)支持复用命令链。修复由任务选择；代码变化后复验受影响的范围。
 
 例如：
 

@@ -6,20 +6,18 @@ Agent Skills for framework adaptation, numerical precision comparison and repair
 
 ## Use
 
-Install `framework-adapt`, `precision-compare` and `precision-repair` side by side in your client's skill directory. Invoke the component needed for the task:
+Install `framework-adapt`, `precision-compare` and `precision-repair` side by side in your client's skill directory. Load a component for the next missing capability:
 
-| Skill | Task and result |
+| Skill | When to enter and result |
 |---|---|
-| [Framework Adapt](skills/framework-adapt/SKILL.md) | Deploy or adapt a framework for the target model, hardware and workload; deliver reproducible execution and validation evidence |
-| [Precision Compare](skills/precision-compare/SKILL.md) | Collect and compare numerical results; return metrics, coverage and evidence |
-| [Precision Repair](skills/precision-repair/SKILL.md) | Establish the cause of a numerical defect, patch the implementation and verify the original workload |
+| [Framework Adapt](skills/framework-adapt/SKILL.md) | Native execution is missing: deploy or adapt the target workload and verify execution |
+| [Precision Compare](skills/precision-compare/SKILL.md) | Collection or comparison is missing: return numerical metrics, coverage and evidence |
+| [Precision Repair](skills/precision-repair/SKILL.md) | Diagnosis or repair is requested: establish correctness evidence, patch confirmed defects and verify the original workload |
 | [Operator Optimize](skills/operator-optimize/SKILL.md) | Placeholder; not implemented |
 
-The packages share tools and companion links; agents load the relevant skill and references for each task. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
+Start from existing workload commands, inputs/state, collectors and results. Load only the component and references needed for missing work; shared tools can be called directly without loading their owning skill. `precision-compare` is the renamed comparison package previously called `precision-skill`; replace the old installed directory when updating.
 
-For an end-to-end task, provide the model workload, target execution stacks and resource scope. The agent establishes missing native execution, compares the requested observations and repairs confirmed problems when requested. The three skills share a [workflow and resource catalog](skills/precision-compare/references/comparison.md#shared-tasks): valid preparation and captures are reused, failures identify the next component, and code changes rerun affected verification. Each component can also be invoked for its own task.
-
-For comparison, provide the task and existing artifacts, or the model, data and platform connections needed for collection. The agent prepares the environment, integrates native execution, writes missing collection/comparison code and runs the task. Reusable tools are extended during skill development.
+Provide the requested outcome, workload or existing artifacts, target execution stacks and resource scope. Continue in the same workspace as additional capabilities become necessary; reuse execution, inputs/state, collectors and results across components. [Execution tools and the resource catalog](skills/precision-compare/references/comparison.md#shared-tasks) support reusable command chains. Repair remains task-selected; code changes rerun affected verification.
 
 Examples:
 
