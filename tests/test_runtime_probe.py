@@ -9,7 +9,7 @@ import unittest
 
 TOOLS = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts'
 sys.path.insert(0, str(TOOLS))
-from runtime_probe import inspect_runtime, probe_runtime, runtime_identity, check_identity
+from runtime_probe import inspect_runtime, probe_runtime, runtime_identity, check_identity, save_identity
 
 
 class RuntimeProbeTests(unittest.TestCase):
@@ -29,6 +29,61 @@ class RuntimeProbeTests(unittest.TestCase):
         info = self.root/'probe_fixture-9.0.dist-info'
         info.mkdir()
         (info/'METADATA').write_text('Metadata-Version: 2.1\nName: probe-fixture\nVersion: 9.0\n')
+
+    def test_saved_evidence_reuse_and_dependency_invalidation(self):
+        from unittest.mock import patch
+        source = self.root/'source.py'; source.write_text('pass')
+        config = self.root/'settings.json'; config.write_text('{"seed": 1}')
+        evidence = self.root/'comparison.json'; evidence.write_text('{"exact_equal": true}')
+        manifest = self.root/'identity.json'
+        results = {'exact_equal': True, 'coverage': {'compared_arrays': 7}, 'path': str(evidence)}
+        saved = save_identity([source, config, evidence, source], manifest, results)
+        self.assertEqual(saved['saved_files'], 3)
+        before = {p: p.read_bytes() for p in self.root.iterdir() if p.is_file()}
+        with patch('runtime_probe.probe_runtime', side_effect=AssertionError('unexpected native probe')):
+            receipt = check_identity(manifest)
+        self.assertEqual(receipt['status'], 'completed')
+        self.assertEqual(receipt['results'], results)
+        self.assertEqual(before, {p: p.read_bytes() for p in before})
+        cli = subprocess.run([sys.executable, '-B', str(TOOLS/'runtime_probe.py'),
+                              '--identity', str(manifest)], capture_output=True, text=True)
+        self.assertEqual(cli.returncode, 0, cli.stderr)
+        self.assertEqual(json.loads(cli.stdout), receipt)
+        for dependency in [source, config, evidence]:
+            original = dependency.read_bytes()
+            dependency.write_bytes(original + b'changed')
+            failed = check_identity(manifest)
+            self.assertEqual(failed['status'], 'failed')
+            self.assertNotIn('results', failed)
+            dependency.write_bytes(original)
+        evidence.unlink()
+        self.assertEqual(check_identity(manifest)['status'], 'failed')
+        cli = subprocess.run([sys.executable, '-B', str(TOOLS/'runtime_probe.py'),
+                              '--identity', str(manifest)], capture_output=True, text=True)
+        self.assertEqual(cli.returncode, 1)
+        self.assertNotIn('results', json.loads(cli.stdout))
+
+    def test_saved_identity_preserves_history_and_tracks_symlink_selection(self):
+        source = self.root/'source'; source.write_text('first')
+        other = self.root/'other'; other.write_text('second')
+        link = self.root/'selected'; link.symlink_to(source)
+        manifest = self.root/'identity.json'
+        save_identity([link], manifest)
+        retained = manifest.read_bytes()
+        with self.assertRaises(FileExistsError):
+            save_identity([source], manifest)
+        self.assertEqual(manifest.read_bytes(), retained)
+        link.unlink(); link.symlink_to(other)
+        self.assertEqual(check_identity(manifest)['status'], 'failed')
+
+    def test_invalid_snapshot_never_creates_a_manifest(self):
+        source = self.root/'source'; source.write_text('content')
+        target = self.root/'identity.json'
+        for paths, results in [([], {}), ([source], []), ([source], {'value': float('nan')}),
+                               ([self.root], {}), ([target], {})]:
+            with self.subTest(paths=paths, results=results), self.assertRaises((ValueError, OSError)):
+                save_identity(paths, target, results)
+            self.assertFalse(target.exists())
 
     def test_file_identity_receipt_reads_only_selected_hash_inputs(self):
         from unittest.mock import patch
@@ -69,7 +124,9 @@ class RuntimeProbeTests(unittest.TestCase):
         manifest=self.root/'identity.json'
         invalid=[{}, {'files':[]}, {'files':[{'path':'relative','sha256':'a'*64}]},
                  {'files':[{'path':str(self.root),'sha256':'bad'}]},
-                 {'files':[{'path':str(self.root),'mode':'metadata','bytes':True,'mtime_ns':0}]}]
+                 {'files':[{'path':str(self.root),'mode':'metadata','bytes':True,'mtime_ns':0}]},
+                 {'files':[{'path':str(self.root/'probe_fixture.py'),'sha256':'0'*64}], 'results':[]},
+                 {'files':[{'path':str(self.root/'probe_fixture.py'),'sha256':'0'*64}], 'results':{'x':float('nan')}}]
         for spec in invalid:
             with self.subTest(spec=spec):
                 manifest.write_text(json.dumps(spec))

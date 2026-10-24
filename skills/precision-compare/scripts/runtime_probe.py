@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
 """Check selected runtime interfaces and file-backed resource identities.
-Call: probe_runtime(spec, executable=None, timeout=60); inspect_runtime(spec); runtime_identity(report); check_identity(manifest_path)
+Call: probe_runtime(spec, executable=None, timeout=60); inspect_runtime(spec); runtime_identity(report); save_identity(paths, manifest_path, results=None); check_identity(manifest_path)
 Input: Ordered runtime checks or a file-backed identity manifest.
 Output: Runtime identities/diagnostics or compact file-check status and counts.
 Requires: Standard library; native dependencies in the selected interpreter; device execution checks are task-owned.
 
 Details:
-check_identity(manifest_path) reads a file-backed {files:[...]} manifest and returns
+save_identity(paths, manifest_path, results=None) writes a new SHA256 manifest
+for selected files using the existing source fingerprinting. Paths may be relative
+to cwd. Include relevant source/config/data/runtime identities and evidence files;
+results is an optional JSON object containing completed task results. Select small
+identity receipts for large resources. The caller establishes that the selected
+files and results belong to the verified workload. Existing manifests are preserved.
+
+check_identity(manifest_path) reads a file-backed {files:[...], results?:{...}} manifest and returns
 {status, manifest_sha256, checked_files, checks:{sha256:N,metadata:N}}, or a failed
 receipt with bounded error details. Each entry has absolute path and mode:
 sha256 (default) requires sha256; metadata requires bytes and mtime_ns, with
 optional inode/ctime_ns. Metadata checks reuse a trusted earlier content identity;
 they do not rehash file contents. SHA256 entries may also declare bytes. Files must
 stay unchanged during their selected check. The receipt omits the file inventory;
-require status=completed before using the resource. No manifest code is executed.
+require status=completed before using the resource. Saved results are returned only
+after all identities pass, without executing or recomputing them. No manifest code
+is executed. CLI: --identity MANIFEST prints this receipt without creating files.
 
 inspect_runtime(spec) runs inside a native worker. probe_runtime(spec,
 executable=None, timeout=60) performs the same check in a fresh interpreter and
@@ -107,8 +116,27 @@ def _source_fingerprint(selection):
     return record
 
 
+def save_identity(paths, manifest_path, results=None):
+    """Snapshot selected file identities and optional completed results in a new manifest."""
+    if not isinstance(paths, (list, tuple)) or not paths:
+        raise ValueError('nonempty file path list required')
+    target = Path(manifest_path).absolute()
+    selected = sorted({str(Path(path).absolute()) for path in paths})
+    if any(Path(path).resolve() == target.resolve() for path in selected):
+        raise ValueError('identity manifest cannot include itself')
+    spec = dict(files=[dict(_source_fingerprint({'path': path}), path=path) for path in selected])
+    if results is not None:
+        if not isinstance(results, dict):
+            raise ValueError('results must be a JSON object')
+        spec['results'] = results
+    data = json.dumps(spec, indent=2, allow_nan=False) + '\n'
+    with target.open('x', encoding='utf-8') as stream:
+        stream.write(data)
+    return dict(status='completed', manifest=str(target), saved_files=len(selected))
+
+
 def check_identity(manifest_path):
-    """Check selected file identities from a manifest; return counts without its contents."""
+    """Check selected file identities and return counts plus saved results on success."""
     report = dict(status='completed', checked_files=0, checks=dict(sha256=0, metadata=0))
     try:
         data = Path(manifest_path).read_bytes()
@@ -117,6 +145,10 @@ def check_identity(manifest_path):
         files = spec.get('files') if isinstance(spec, dict) else None
         if not isinstance(files, list) or not files:
             raise ValueError('nonempty files list required')
+        if 'results' in spec:
+            if not isinstance(spec['results'], dict):
+                raise ValueError('results must be a JSON object')
+            json.dumps(spec['results'], allow_nan=False)
         for entry in files:
             if not isinstance(entry, dict) or not isinstance(entry.get('path'), str) or not Path(entry['path']).is_absolute():
                 raise ValueError('each identity needs an absolute file path')
@@ -151,6 +183,8 @@ def check_identity(manifest_path):
                 raise RuntimeError('identity file changed during check: ' + str(path))
             report['checks'][mode] += 1
             report['checked_files'] += 1
+        if 'results' in spec:
+            report['results'] = spec['results']
     except (OSError, ValueError, TypeError, RuntimeError) as exc:
         report.update(status='failed', error=dict(type=type(exc).__name__, message=str(exc)[-2048:]))
     return report
@@ -263,11 +297,21 @@ def main():
         Path(sys.argv[2]).write_text(json.dumps(report, indent=2, allow_nan=False) + '\n', encoding='utf-8')
         return 0 if report['status'] == 'completed' else 1
     parser = argparse.ArgumentParser(description=__doc__.partition('\n\nDetails:\n')[0], formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--spec', type=Path, required=True)
-    parser.add_argument('--output', type=Path, required=True)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--spec', type=Path)
+    mode.add_argument('--identity', type=Path)
+    parser.add_argument('--output', type=Path)
     parser.add_argument('--python')
     parser.add_argument('--timeout', type=float, default=60)
     args = parser.parse_args()
+    if args.identity is not None:
+        if args.output is not None or args.python is not None:
+            parser.error('--output and --python apply to --spec')
+        result = check_identity(args.identity)
+        print(json.dumps(result, allow_nan=False))
+        return 0 if result['status'] == 'completed' else 1
+    if args.output is None:
+        parser.error('--spec requires --output')
     try:
         if args.output.exists():
             raise FileExistsError(args.output)
