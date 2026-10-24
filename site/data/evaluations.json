@@ -61136,6 +61136,847 @@
         "prefix": "site/evidence/skills-retained-results-20261024.json",
         "replay_cases": 2
       }
+    },
+    {
+      "id": "skills-novel-ddp-a-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：CPU/Gloo 不均匀 token SFT",
+      "framework": {
+        "name": "Skills A/B（Gloo DDP）"
+      },
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny token classifier, CPU FP64",
+        "revision": "source sha256 f4a973bdc31b628ccf02d061b3cc07f5ef234f15fb4072ec8380b2afe06f22bd"
+      },
+      "summary": "真实两进程Gloo完成不等有效token的SFT修复；两组均独立验证正确，本次A用时少25.6%、估算费用少20.5%。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · skills",
+          "hardware": "CPU / macOS arm64 / two local Gloo processes",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "8693eaafd328bae2c1b7d58c1f971999a1477d5b",
+            "skills": true,
+            "baseline_id": null
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无skills（冻结基线）",
+          "hardware": "CPU / macOS arm64 / two local Gloo processes",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "no skills",
+            "skills": false,
+            "baseline_id": "ddp-b-initial-20261024T093644Z"
+          }
+        }
+      ],
+      "common": [
+        "A/B原始源码与数据SHA256相同；同一Python 3.12.14、Torch 2.6.0、NumPy 2.2.6环境。",
+        "新agent无任务历史上下文，gpt-6.1-sol / medium；只给直接任务要求。",
+        "耗时包含任务启动到交付；所有工具调用、错误、重试和验证均计入。父级准备与独立验证不计入。"
+      ],
+      "differences": [
+        "A按需使用skills；B无skills。B只运行一次，独立验证后冻结；原版和迭代A均与同一B比较。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "任务开销",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "完整任务，包含交付；首请求和后续费用分别保留。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -59.829999999999984,
+              "side_values": {
+                "a": 173.578,
+                "b": 233.408
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.04136039999999999,
+              "side_values": {
+                "a": 0.1607084,
+                "b": 0.2020688
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用差（A − B）",
+              "unit": "calls",
+              "value": -3,
+              "side_values": {
+                "a": 8,
+                "b": 11
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 5453,
+              "side_values": {
+                "a": 12949,
+                "b": 7496
+              }
+            },
+            {
+              "id": "first",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": -4.4000000000000636e-05,
+              "side_values": {
+                "a": 0.0108292,
+                "b": 0.010873200000000001
+              }
+            },
+            {
+              "id": "later",
+              "label": "首请求后费用差（A − B）",
+              "unit": "USD",
+              "value": -0.0413164,
+              "side_values": {
+                "a": 0.1498792,
+                "b": 0.1911956
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立核验任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "原始工作负载验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "保留原始single轨迹，比较4步loss、梯度、参数、更新和AdamW状态；额外检查零有效token的rank。仅原始请求项进入共同覆盖率。",
+          "metrics": [
+            {
+              "id": "residual",
+              "label": "修复后最大绝对差（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 4.440892098500626e-16,
+                "b": 4.440892098500626e-16
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧原始请求数组",
+              "observed": 76,
+              "expected": 76,
+              "unit": "arrays per arm"
+            },
+            {
+              "label": "每侧独立配置",
+              "observed": 2,
+              "expected": 2,
+              "unit": "configurations per arm"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "这是任务自定义循环的受控归约缺陷，不是PyTorch库缺陷；实际使用两进程Gloo，未代表加速卡部署。",
+        "B额外采集更新前参数及另一个rank；共同正确性只比较原始76个数组、6916个元素，额外工作仍计入其实际成本。",
+        "A用时173.578秒，费用0.1607084美元，8次工具调用；B为233.408秒、0.2020688美元、11次。",
+        "费用使用统一保留的Standard定价快照估算，非账单；原始用量保留以供一致重定价。",
+        "单次观测，策略/缓存/延迟未控制；不据此推断稳定成功率或所有场景的优势。"
+      ],
+      "evidence": [
+        {
+          "label": "原始任务、逐请求用量、完整调用轨迹、独立验证和迭代结果",
+          "url": "evidence/skills-novel-scenarios-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "60049228976b2a4d6da558622cad9033f4f4a09b",
+        "prefix": "site/evidence/skills-novel-scenarios-20261024.json",
+        "replay_cases": 2
+      }
+    },
+    {
+      "id": "skills-novel-shards-a-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：异构分片与非有限值 · 原版",
+      "framework": {
+        "name": "Skills A/B（异构推理产物）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "deterministic forward-observation collector fixture",
+        "revision": "source sha256 27f6d144ef167c80d8429c666c1dea9a8dc0ad0e7810a5749fc2969b85da4d08"
+      },
+      "summary": "异构布局、缺失和非有限值均识别正确；本次A略快但费用高于冻结B，保留未取得成本优势的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · skills",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "8693eaafd328bae2c1b7d58c1f971999a1477d5b",
+            "skills": true,
+            "baseline_id": null
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无skills（冻结基线）",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "no skills",
+            "skills": false,
+            "baseline_id": "shards-b-initial-20261024T093644Z"
+          }
+        }
+      ],
+      "common": [
+        "A/B原始源码与数据SHA256相同；同一Python 3.12.14、Torch 2.6.0、NumPy 2.2.6环境。",
+        "新agent无任务历史上下文，gpt-6.1-sol / medium；只给直接任务要求。",
+        "耗时包含任务启动到交付；所有工具调用、错误、重试和验证均计入。父级准备与独立验证不计入。"
+      ],
+      "differences": [
+        "A按需使用skills；B无skills。B只运行一次，独立验证后冻结；原版和迭代A均与同一B比较。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "任务开销",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "完整任务，包含交付；首请求和后续费用分别保留。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -10.687000000000012,
+              "side_values": {
+                "a": 134.416,
+                "b": 145.103
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.009866399999999997,
+              "side_values": {
+                "a": 0.139568,
+                "b": 0.1297016
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用差（A − B）",
+              "unit": "calls",
+              "value": 0,
+              "side_values": {
+                "a": 6,
+                "b": 6
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 5732,
+              "side_values": {
+                "a": 12329,
+                "b": 6597
+              }
+            },
+            {
+              "id": "first",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": 0.00012599999999999938,
+              "side_values": {
+                "a": 0.0112092,
+                "b": 0.011083200000000001
+              }
+            },
+            {
+              "id": "later",
+              "label": "首请求后费用差（A − B）",
+              "unit": "USD",
+              "value": 0.009740399999999996,
+              "side_values": {
+                "a": 0.1283588,
+                "b": 0.1186184
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立核验任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "逻辑坐标与有限子集",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "两侧格式/分片/顺序不同；14个期望位置、13个配对位置，1处NaN/+Inf差异；全部5个全局/样本范围均独立复核。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "有限子集最大绝对误差（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.25,
+                "b": 0.25
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑位置",
+              "observed": 13,
+              "expected": 14,
+              "unit": "vectors"
+            },
+            {
+              "label": "双侧有限元素",
+              "observed": 77,
+              "expected": 84,
+              "unit": "elements"
+            },
+            {
+              "label": "复核范围",
+              "observed": 5,
+              "expected": 5,
+              "unit": "global and samples"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "这是确定性推理采集布局夹具，不是预训练模型推理或真实库缺陷；不修改采集器与数据。",
+        "覆盖率包括缺失向量，指标只对明确标注的成对有限子集计算，不将其解释为整体一致。",
+        "A用时134.416秒，费用0.1395680美元，6次工具调用；B为145.103秒、0.1297016美元、6次。",
+        "费用使用统一保留的Standard定价快照估算，非账单；原始用量保留以供一致重定价。",
+        "单次观测，策略/缓存/延迟未控制；不据此推断稳定成功率或所有场景的优势。",
+        "适配器行数：154；该值仅记录维护体量，不代替实测费用。",
+        "原版A将完整比较和有限子集比较拆成两次，并手写分类/位置统计；略快但费用高于B，保留该未改善结果。"
+      ],
+      "evidence": [
+        {
+          "label": "原始任务、逐请求用量、完整调用轨迹、独立验证和迭代结果",
+          "url": "evidence/skills-novel-scenarios-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "60049228976b2a4d6da558622cad9033f4f4a09b",
+        "prefix": "site/evidence/skills-novel-scenarios-20261024.json",
+        "replay_cases": 2
+      }
+    },
+    {
+      "id": "skills-novel-shards-a1-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：异构分片与非有限值 · 通用模式",
+      "framework": {
+        "name": "Skills A/B（异构推理产物）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "deterministic forward-observation collector fixture",
+        "revision": "source sha256 27f6d144ef167c80d8429c666c1dea9a8dc0ad0e7810a5749fc2969b85da4d08"
+      },
+      "summary": "异构布局、缺失和非有限值均识别正确；本次A略快但费用高于冻结B，保留未取得成本优势的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · skills",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "2454dbdee6011cf47218a34a0c5aee44fd8967ce",
+            "skills": true,
+            "baseline_id": null
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无skills（冻结基线）",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "no skills",
+            "skills": false,
+            "baseline_id": "shards-b-initial-20261024T093644Z"
+          }
+        }
+      ],
+      "common": [
+        "A/B原始源码与数据SHA256相同；同一Python 3.12.14、Torch 2.6.0、NumPy 2.2.6环境。",
+        "新agent无任务历史上下文，gpt-6.1-sol / medium；只给直接任务要求。",
+        "耗时包含任务启动到交付；所有工具调用、错误、重试和验证均计入。父级准备与独立验证不计入。"
+      ],
+      "differences": [
+        "A按需使用skills；B无skills。B只运行一次，独立验证后冻结；原版和迭代A均与同一B比较。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "任务开销",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "完整任务，包含交付；首请求和后续费用分别保留。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -16.286,
+              "side_values": {
+                "a": 128.817,
+                "b": 145.103
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.02158360000000001,
+              "side_values": {
+                "a": 0.1512852,
+                "b": 0.1297016
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用差（A − B）",
+              "unit": "calls",
+              "value": 1,
+              "side_values": {
+                "a": 7,
+                "b": 6
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 8212,
+              "side_values": {
+                "a": 14809,
+                "b": 6597
+              }
+            },
+            {
+              "id": "first",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": -0.000392,
+              "side_values": {
+                "a": 0.010691200000000001,
+                "b": 0.011083200000000001
+              }
+            },
+            {
+              "id": "later",
+              "label": "首请求后费用差（A − B）",
+              "unit": "USD",
+              "value": 0.021975599999999998,
+              "side_values": {
+                "a": 0.140594,
+                "b": 0.1186184
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立核验任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "逻辑坐标与有限子集",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "两侧格式/分片/顺序不同；14个期望位置、13个配对位置，1处NaN/+Inf差异；全部5个全局/样本范围均独立复核。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "有限子集最大绝对误差（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.25,
+                "b": 0.25
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑位置",
+              "observed": 13,
+              "expected": 14,
+              "unit": "vectors"
+            },
+            {
+              "label": "双侧有限元素",
+              "observed": 77,
+              "expected": 84,
+              "unit": "elements"
+            },
+            {
+              "label": "复核范围",
+              "observed": 5,
+              "expected": 5,
+              "unit": "global and samples"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "这是确定性推理采集布局夹具，不是预训练模型推理或真实库缺陷；不修改采集器与数据。",
+        "覆盖率包括缺失向量，指标只对明确标注的成对有限子集计算，不将其解释为整体一致。",
+        "A用时128.817秒，费用0.1512852美元，7次工具调用；B为145.103秒、0.1297016美元、6次。",
+        "费用使用统一保留的Standard定价快照估算，非账单；原始用量保留以供一致重定价。",
+        "单次观测，策略/缓存/延迟未控制；不据此推断稳定成功率或所有场景的优势。",
+        "适配器行数：120；该值仅记录维护体量，不代替实测费用。",
+        "已采用nonfinite模式，完整/有限子集比较从两次变一次；仍另做NumPy指标重算。用时下降但费用高于原版A和B。"
+      ],
+      "evidence": [
+        {
+          "label": "原始任务、逐请求用量、完整调用轨迹、独立验证和迭代结果",
+          "url": "evidence/skills-novel-scenarios-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "60049228976b2a4d6da558622cad9033f4f4a09b",
+        "prefix": "site/evidence/skills-novel-scenarios-20261024.json",
+        "replay_cases": 2
+      }
+    },
+    {
+      "id": "skills-novel-shards-a2-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：异构分片与非有限值 · 接口精简",
+      "framework": {
+        "name": "Skills A/B（异构推理产物）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "deterministic forward-observation collector fixture",
+        "revision": "source sha256 27f6d144ef167c80d8429c666c1dea9a8dc0ad0e7810a5749fc2969b85da4d08"
+      },
+      "summary": "异构布局、缺失和非有限值均识别正确；本次A略快但费用高于冻结B，保留未取得成本优势的结果。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · skills",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "0e5e90f590d4d6574d33386cd449c7df3426a76a",
+            "skills": true,
+            "baseline_id": null
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无skills（冻结基线）",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "source_revision": "no skills",
+            "skills": false,
+            "baseline_id": "shards-b-initial-20261024T093644Z"
+          }
+        }
+      ],
+      "common": [
+        "A/B原始源码与数据SHA256相同；同一Python 3.12.14、Torch 2.6.0、NumPy 2.2.6环境。",
+        "新agent无任务历史上下文，gpt-6.1-sol / medium；只给直接任务要求。",
+        "耗时包含任务启动到交付；所有工具调用、错误、重试和验证均计入。父级准备与独立验证不计入。"
+      ],
+      "differences": [
+        "A按需使用skills；B无skills。B只运行一次，独立验证后冻结；原版和迭代A均与同一B比较。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "任务开销",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "完整任务，包含交付；首请求和后续费用分别保留。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -9.051000000000016,
+              "side_values": {
+                "a": 136.052,
+                "b": 145.103
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.019984400000000013,
+              "side_values": {
+                "a": 0.149686,
+                "b": 0.1297016
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用差（A − B）",
+              "unit": "calls",
+              "value": 1,
+              "side_values": {
+                "a": 7,
+                "b": 6
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 8457,
+              "side_values": {
+                "a": 15054,
+                "b": 6597
+              }
+            },
+            {
+              "id": "first",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": -0.00011199999999999925,
+              "side_values": {
+                "a": 0.010971200000000002,
+                "b": 0.011083200000000001
+              }
+            },
+            {
+              "id": "later",
+              "label": "首请求后费用差（A − B）",
+              "unit": "USD",
+              "value": 0.0200964,
+              "side_values": {
+                "a": 0.1387148,
+                "b": 0.1186184
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立核验任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "逻辑坐标与有限子集",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "两侧格式/分片/顺序不同；14个期望位置、13个配对位置，1处NaN/+Inf差异；全部5个全局/样本范围均独立复核。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "有限子集最大绝对误差（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 0.25,
+                "b": 0.25
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "已配对逻辑位置",
+              "observed": 13,
+              "expected": 14,
+              "unit": "vectors"
+            },
+            {
+              "label": "双侧有限元素",
+              "observed": 77,
+              "expected": 84,
+              "unit": "elements"
+            },
+            {
+              "label": "复核范围",
+              "observed": 5,
+              "expected": 5,
+              "unit": "global and samples"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "这是确定性推理采集布局夹具，不是预训练模型推理或真实库缺陷；不修改采集器与数据。",
+        "覆盖率包括缺失向量，指标只对明确标注的成对有限子集计算，不将其解释为整体一致。",
+        "A用时136.052秒，费用0.1496860美元，7次工具调用；B为145.103秒、0.1297016美元、6次。",
+        "费用使用统一保留的Standard定价快照估算，非账单；原始用量保留以供一致重定价。",
+        "单次观测，策略/缓存/延迟未控制；不据此推断稳定成功率或所有场景的优势。",
+        "适配器行数：123；该值仅记录维护体量，不代替实测费用。",
+        "已采用nonfinite模式和save_identity；未再独立重算指标。仍读取完整的多个工具接口，费用没有低于B。",
+        "上一轮通用模式A为128.817秒、0.1512852美元；本轮为136.052秒、0.1496860美元。两轮都保留，未宣称稳定改善。"
+      ],
+      "evidence": [
+        {
+          "label": "原始任务、逐请求用量、完整调用轨迹、独立验证和迭代结果",
+          "url": "evidence/skills-novel-scenarios-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "60049228976b2a4d6da558622cad9033f4f4a09b",
+        "prefix": "site/evidence/skills-novel-scenarios-20261024.json",
+        "replay_cases": 2
+      }
     }
   ]
 }
