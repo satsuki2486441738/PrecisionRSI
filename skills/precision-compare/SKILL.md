@@ -31,7 +31,7 @@ python scripts/tree_compare.py A.pt B.pt --output NEW.json
 
 NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both accept `--metrics`; `--all-findings` returns every differing coordinate and native value. Checkpoint paths use original state keys/indices. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
 
-Read resource declarations and tool summaries; full configuration/identity files are code inputs. Reuse report coverage/findings. Query [tool_help](scripts/tool_help.py) for missing details (`--full` for schemas); `--list` discovers tools. Read source for unresolved integration issues/tool changes. Shards/runtime/remote operations → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
+Use existing checks when they cover the request; otherwise use shared comparators and `groups` for requested stage summaries. Full configuration/identity files are code inputs; reuse report coverage/findings. Query [tool_help](scripts/tool_help.py) for missing details (`--full` for schemas); `--list` discovers tools. Read source for unresolved integration issues/tool changes. Shards/runtime/remote operations → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
 
 ## Collect
 

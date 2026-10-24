@@ -10,17 +10,17 @@ description: Diagnose and repair numerical defects in model, framework or operat
 - Enter for requested diagnosis or repair. Reuse the workload execution, inputs/state, source/runtime identities, collectors, captures and completed checks.
 - Preserve model, data, algorithm and execution semantics. Ask when a choice changes intended results or permitted work.
 - Use an existing native reproduction, or reproduce only the missing evidence through the affected path.
-- Distinguish collection/configuration differences from defects. Correctness evidence: intended algorithm, analytical property, trusted implementation or higher-precision recomputation with matching semantics.
+- Distinguish collection/configuration differences from defects. Reuse a trusted native reference/check; supply missing correctness evidence from the intended algorithm, an analytical property or matching higher-precision computation.
 - Resolve causality with a small experiment; replay propagated training errors at identical inputs/state ([example](examples/causal-replay.md)). [Internal sampling](../precision-compare/references/layerwise.md) requires agreed scope/budget; reuse existing authorization.
 - Report uncertainty when evidence cannot distinguish defects from numerical-policy tradeoffs.
 
 ## Patch and verify
 
 - Patch the responsible implementation; keep framework-specific fixes with the case.
-- Regression: fail before the fix; independently check intended behavior and relevant nearby cases.
-- Verify the patch through the existing workload entrypoint and collectors, with identical inputs/initial state, correctness evidence and metrics. Combine regression/recovery runs when possible.
+- Extend existing checks for missing causal or nearby-case coverage; the regression must fail before the fix and pass after.
+- Verify through the original entrypoint and collectors at identical inputs/initial state. A regression invoking that workload can also provide its before/after metrics.
 - Use task tolerance or justify one from computation/dtype. Measure runtime/memory when relevant.
-- Existing captures → [array tool](../precision-compare/scripts/array_compare.py); reconstruction/execution checks → [artifact tools](../precision-compare/references/comparison.md#tools); missing collection/comparison → [compare](../precision-compare/SKILL.md); repeated commands → [shared tasks](../precision-compare/references/comparison.md#shared-tasks).
+- Existing captures: `compare_arrays` / `compare_trees`. Missing interface details: `python ../precision-compare/scripts/tool_help.py TOOL` from this skill. Missing collection/comparison → [compare](../precision-compare/SKILL.md); reconstruction/execution or repeated commands → [shared tools](../precision-compare/references/comparison.md#tools).
 
 ## Return
 
