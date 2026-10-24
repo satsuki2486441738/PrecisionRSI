@@ -1,0 +1,585 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "verified_integrity_reuse_microtest",
+  "source_revision": "0322b014047ba047e3cdcc86373254644c14c11b",
+  "summary": {
+    "context": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "elapsed_seconds": 122.833,
+    "requests": 8,
+    "total_tool_calls": 7,
+    "tokens": {
+      "input_tokens": 726379,
+      "cached_input_tokens": 634368,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4061,
+      "total_tokens": 730440,
+      "uncached_input_tokens": 92011
+    },
+    "standard_usd_estimate": 0.2880688,
+    "fetch_calls": 2
+  },
+  "verification": {
+    "status": "PASS",
+    "checks": {
+      "inputs_skills_source_files_unchanged": true,
+      "global_three_groups_metrics_coordinates_and_coverage": true,
+      "eight_files_byte_exact_arrays_retained_at_source": true,
+      "corrected_raw_input_digest_matches": true,
+      "successful_fetch_receipts_reused_in_result": true
+    },
+    "behavior": {
+      "tool_implementation_source_reads": 0,
+      "custom_download_reimplementation": false,
+      "manual_NLL_P99_implementation": false,
+      "extra_markdown_or_bundle": false,
+      "fetch_calls": 2,
+      "duplicate_downloaded_file_hash_scans": 0,
+      "duplicate_downloaded_file_size_scans": 0,
+      "input_identity_hash_allowed": true,
+      "task_semantic_checks_retained": true,
+      "review": "Reviewed executed commands and generated adapter source. The only agent-side SHA256 operations concern local inputs.json, not fetched artifacts."
+    },
+    "comparison": {
+      "global": {
+        "status": "completed",
+        "coverage": {
+          "expected_count": 10,
+          "observed_counts": [
+            10,
+            10
+          ],
+          "paired_count": 10,
+          "missing": [
+            [],
+            []
+          ],
+          "paired_fraction": 1.0,
+          "side_fractions": {
+            "left": 1.0,
+            "right": 1.0
+          }
+        },
+        "metrics": {
+          "target_count": 10,
+          "side_a_nll_nat_per_token": 2.18,
+          "side_b_nll_nat_per_token": 2.1494999999999997,
+          "nll_abs_diff_nat_per_token": 0.030500000000000416,
+          "mae_nat": 0.10550000000000001,
+          "p99_nat": 0.38200000000000034,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 0.40000000000000036,
+          "max_coordinate": [
+            "sample-c",
+            2,
+            206
+          ],
+          "left_nll_nat_per_token": 2.18,
+          "right_nll_nat_per_token": 2.1494999999999997,
+          "max_coordinate_named": {
+            "sample_id": "sample-c",
+            "target_position": 2,
+            "prediction_position": 1,
+            "token_id": 206
+          }
+        }
+      },
+      "groups": {
+        "sample-a": {
+          "status": "completed",
+          "coverage": {
+            "expected_count": 2,
+            "observed_counts": [
+              2,
+              2
+            ],
+            "paired_count": 2,
+            "missing": [
+              [],
+              []
+            ],
+            "paired_fraction": 1.0,
+            "side_fractions": {
+              "left": 1.0,
+              "right": 1.0
+            }
+          },
+          "metrics": {
+            "target_count": 2,
+            "side_a_nll_nat_per_token": 1.85,
+            "side_b_nll_nat_per_token": 1.8249999999999997,
+            "nll_abs_diff_nat_per_token": 0.025000000000000355,
+            "mae_nat": 0.07499999999999996,
+            "p99_nat": 0.09950000000000009,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 0.10000000000000009,
+            "max_coordinate": [
+              "sample-a",
+              1,
+              200
+            ],
+            "left_nll_nat_per_token": 1.85,
+            "right_nll_nat_per_token": 1.8249999999999997,
+            "max_coordinate_named": {
+              "sample_id": "sample-a",
+              "target_position": 1,
+              "prediction_position": 0,
+              "token_id": 200
+            }
+          }
+        },
+        "sample-b": {
+          "status": "completed",
+          "coverage": {
+            "expected_count": 3,
+            "observed_counts": [
+              3,
+              3
+            ],
+            "paired_count": 3,
+            "missing": [
+              [],
+              []
+            ],
+            "paired_fraction": 1.0,
+            "side_fractions": {
+              "left": 1.0,
+              "right": 1.0
+            }
+          },
+          "metrics": {
+            "target_count": 3,
+            "side_a_nll_nat_per_token": 2.6666666666666665,
+            "side_b_nll_nat_per_token": 2.7099999999999995,
+            "nll_abs_diff_nat_per_token": 0.043333333333333,
+            "mae_nat": 0.09000000000000008,
+            "p99_nat": 0.19739999999999996,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 0.19999999999999996,
+            "max_coordinate": [
+              "sample-b",
+              1,
+              202
+            ],
+            "left_nll_nat_per_token": 2.6666666666666665,
+            "right_nll_nat_per_token": 2.7099999999999995,
+            "max_coordinate_named": {
+              "sample_id": "sample-b",
+              "target_position": 1,
+              "prediction_position": 0,
+              "token_id": 202
+            }
+          }
+        },
+        "sample-c": {
+          "status": "completed",
+          "coverage": {
+            "expected_count": 5,
+            "observed_counts": [
+              5,
+              5
+            ],
+            "paired_count": 5,
+            "missing": [
+              [],
+              []
+            ],
+            "paired_fraction": 1.0,
+            "side_fractions": {
+              "left": 1.0,
+              "right": 1.0
+            }
+          },
+          "metrics": {
+            "target_count": 5,
+            "side_a_nll_nat_per_token": 2.02,
+            "side_b_nll_nat_per_token": 1.943,
+            "nll_abs_diff_nat_per_token": 0.07699999999999996,
+            "mae_nat": 0.12700000000000003,
+            "p99_nat": 0.3884000000000003,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 0.40000000000000036,
+            "max_coordinate": [
+              "sample-c",
+              2,
+              206
+            ],
+            "left_nll_nat_per_token": 2.02,
+            "right_nll_nat_per_token": 1.943,
+            "max_coordinate_named": {
+              "sample_id": "sample-c",
+              "target_position": 2,
+              "prediction_position": 1,
+              "token_id": 206
+            }
+          }
+        }
+      }
+    },
+    "report_relative_path": "compare-target-logprob-20261024T063508Z/comparison.json",
+    "report_sha256": "47f6e68a55f46aba9a57281823669a96b0fa4e33b9f2b3350dfae5c0593f8d2c",
+    "fetched_bytes": 3756
+  },
+  "task_messages": [
+    "在 <TASK_DIR> 完成以下任务：取回 resources.json 两个端点已经完成的推理采集文件，依据 inputs.json 的全部目标位置比较双方的原始 target logprob。输出机器可读的总体及分样本双方 NLL、NLL 绝对差、logprob MAE/P99/最大绝对误差及坐标、覆盖率、实际配置和原始证据路径。只取回本次需要的小型 JSON 与日志，完整数组保留在源端。资源和预算见 resources.json；不重新运行模型，不做精度验收判断。本地新增文件仅写在本任务目录；采集源只通过声明的 transport 读取，不修改源文件。不读取仓库历史、其他实验目录或会话日志，不委派其他 agent。可用 skills 见 skills.json。"
+  ],
+  "raw_usage": [
+    {
+      "response_id": "resp_032b0e554a387732016adc5168476c87d0af24d713948a3a24",
+      "usage": {
+        "input_tokens": 84706,
+        "cached_input_tokens": 3712,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 159,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 84865
+      },
+      "standard_usd_estimate": 0.16394920000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc5172612887d084e636e8be867140",
+      "usage": {
+        "input_tokens": 85870,
+        "cached_input_tokens": 84736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 72,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 85942
+      },
+      "standard_usd_estimate": 0.0114616,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc517a683c87d0933372204eefe602",
+      "usage": {
+        "input_tokens": 86926,
+        "cached_input_tokens": 85760,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 238,
+        "reasoning_output_tokens": 11,
+        "total_tokens": 87164
+      },
+      "standard_usd_estimate": 0.013288,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc5184bd3c87d0acd3753739273779",
+      "usage": {
+        "input_tokens": 91096,
+        "cached_input_tokens": 87040,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 273,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 91369
+      },
+      "standard_usd_estimate": 0.019546,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc5192ab2487d09c34df18abd629d3",
+      "usage": {
+        "input_tokens": 91969,
+        "cached_input_tokens": 91136,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 378,
+        "reasoning_output_tokens": 26,
+        "total_tokens": 92347
+      },
+      "standard_usd_estimate": 0.0145596,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc519fd5c487d0b03c2c612a8a6d05",
+      "usage": {
+        "input_tokens": 93690,
+        "cached_input_tokens": 92160,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 211,
+        "reasoning_output_tokens": 69,
+        "total_tokens": 93901
+      },
+      "standard_usd_estimate": 0.014386,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc51ad468087d080c8a98cfecfbbc9",
+      "usage": {
+        "input_tokens": 94331,
+        "cached_input_tokens": 93696,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1997,
+        "reasoning_output_tokens": 17,
+        "total_tokens": 96328
+      },
+      "standard_usd_estimate": 0.0306096,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032b0e554a387732016adc51d118cc87d0b819673e0aaf1482",
+      "usage": {
+        "input_tokens": 97791,
+        "cached_input_tokens": 96128,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 733,
+        "reasoning_output_tokens": 44,
+        "total_tokens": 98524
+      },
+      "standard_usd_estimate": 0.0202688,
+      "long_context": false
+    }
+  ],
+  "session_sha256": "75366bb0ffbfb73b08705ca1e45775c6c451c8bd2709e7c256d653c8b2df4476",
+  "skill_snapshot": {
+    "skills/precision-compare/SKILL.md": "655c9fd02d51d762e08add6d8b797b1b73c50656b6d6d71dd70956121745b2aa",
+    "skills/precision-compare/examples/compare_gradients.py": "6a1190a246585e6d6a10dbf627e6ffcf671223d3e9e89c6fa5b4886fe393ccfd",
+    "skills/precision-compare/examples/fixed-history-inference.md": "3cec49d3ea584d592fa7d3d3a8a22559b1c00b321790406329da76c22be6bbbe",
+    "skills/precision-compare/examples/workflow_demo.py": "ec524592b8a1e835e62eddd2f5e28d64a7d981ecb516cdeaa5296724d88f739c",
+    "skills/precision-compare/references/comparison.md": "4de8dbce73b7a651bdaffe648ad7218f138280984af5c501853226848ed88671",
+    "skills/precision-compare/references/inference.md": "5d59a892eb5a43187abd1f50609d18e2dfb994fb8ff3f0c19c040be0c60f7af7",
+    "skills/precision-compare/references/layerwise.md": "663e5d6ed5a50b33458a0bd9e97fd26ba3eb0435932a23d79be46ac1b98f4c33",
+    "skills/precision-compare/references/rl.md": "a1efcdf3ccf399b5fd0fb8165be9073b9b96b16d533cdcc2bf4bbbae8e4a5f0b",
+    "skills/precision-compare/references/sft.md": "e062ba9923972dfde635785f4a0fc7ae5a81a76176b885ee30fba56bfd5aa4b5",
+    "skills/precision-compare/scripts/array_compare.py": "7cdce7c0f0d0319fb4a5fd7ad7644660da9bfafce0990b5db0af34186a9dd775",
+    "skills/precision-compare/scripts/artifact_io.py": "b71683274609d2d6676ebdc23eb529f4f153ebbac764c34e726618b2d6730ae3",
+    "skills/precision-compare/scripts/compare_distributions.py": "889a8a74a668dfd2008e2f12c875383ebbedd6d0cee80a36c620bd4622303c05",
+    "skills/precision-compare/scripts/compare_scores.py": "3f9dcac9379fb5dee3b0738e40125778e19475e2797dbfd61a423e1d9c5eacec",
+    "skills/precision-compare/scripts/compare_target_scores.py": "4e2c9be43ae3a0303f4841f8a089485bbd9aac708060e1dfcf0a2672fe44fb8e",
+    "skills/precision-compare/scripts/compare_tensors.py": "3167c9c623b59e6ef1974c50f6e772099682f0a66a56c6ba411c911c2aba872b",
+    "skills/precision-compare/scripts/conditions.py": "a1ea105eb02e81e7aae4ec1589ead27e17489be981fde58116f86a0e8c4c7800",
+    "skills/precision-compare/scripts/evidence_bundle.py": "b3b448b15bfec0ea359e898913525798f3333461eb2d4ee3296e2c9ced969703",
+    "skills/precision-compare/scripts/group_metrics.py": "6dd6583c23266dc1f649d37c94d312653d5d9af0195e4c1083bd074f4424b160",
+    "skills/precision-compare/scripts/inference_capture.py": "0a9c98cfc4ce7d5538ae923c0042c2cbc02d190c631d59864572a3a8f5453cc0",
+    "skills/precision-compare/scripts/msprobe_capture.py": "8d7e9c46816fe7356dee7ae7d55e642a800cb623941d087a3c100fa321e9aaeb",
+    "skills/precision-compare/scripts/query_distributions.py": "2b114bd117c5eb0a4a7d0fb2b087b963c18eb6a0b6a4543f9ae2d4a62ec57686",
+    "skills/precision-compare/scripts/record_run.py": "8fe98559514afaf8091adffa673735082bda715f89d42e92658e7a21aef8cf4f",
+    "skills/precision-compare/scripts/replay_bundle.py": "50a69951a3b21614da70b448a25075ef6bad32ad7ccb520530b99b2766ec8a1f",
+    "skills/precision-compare/scripts/resource_catalog.py": "63bd8a863f840171f13ee7ef8a03852aa8a21d3e589967974ca3e6e2b568cc11",
+    "skills/precision-compare/scripts/runtime_probe.py": "7b1cf36895a43a5310d8175ba78e4dc057e97d31465bd6cbea2f29ca12f8e1fb",
+    "skills/precision-compare/scripts/score_metrics.py": "79ac7b718e683354ffe61bdf71f0a333938cd9d31612d51086317630f966a450",
+    "skills/precision-compare/scripts/tensor_artifacts.py": "de70a8e04e532da3f512559ffd3f62ecf45ce8910d23225f2f1653eb6ccde22e",
+    "skills/precision-compare/scripts/tool_help.py": "f55b5d088759959fc067d7e9bc6e1d3ffa89c494bf9e41d6ab92b460f7769c09",
+    "skills/precision-compare/scripts/tree_compare.py": "be32e472604fce40b19d3fe4690646a60203e55a190717f9cd77a3935881d824",
+    "skills/precision-compare/scripts/validate_artifacts.py": "766a8ae2c7ebaa0df4008c4d7f78ebee67e3f6e1e84cfbdf0fc8293a83abe061",
+    "skills/precision-compare/scripts/workflow.py": "67588d82d350c6921b7a93b3075f1786906bdfcd468693c09ce8731a53d6d0ea"
+  },
+  "inputs": {
+    "samples": [
+      {
+        "id": "sample-a",
+        "input_ids": [
+          101,
+          200,
+          201
+        ],
+        "target_positions": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "sample-b",
+        "input_ids": [
+          101,
+          202,
+          203,
+          204
+        ],
+        "target_positions": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "id": "sample-c",
+        "input_ids": [
+          101,
+          205,
+          206,
+          207,
+          208,
+          209
+        ],
+        "target_positions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "model": "synthetic target-score fixture",
+    "units": "natural logarithm",
+    "capture": "completed fixed-input prefill"
+  },
+  "source_observations": {
+    "left": {
+      "status": "completed",
+      "records": [
+        {
+          "sample_id": "sample-a",
+          "target_position": 1,
+          "prediction_position": 0,
+          "token_id": 200,
+          "logprob": -1.2
+        },
+        {
+          "sample_id": "sample-a",
+          "target_position": 2,
+          "prediction_position": 1,
+          "token_id": 201,
+          "logprob": -2.5
+        },
+        {
+          "sample_id": "sample-b",
+          "target_position": 1,
+          "prediction_position": 0,
+          "token_id": 202,
+          "logprob": -0.7
+        },
+        {
+          "sample_id": "sample-b",
+          "target_position": 2,
+          "prediction_position": 1,
+          "token_id": 203,
+          "logprob": -3.2
+        },
+        {
+          "sample_id": "sample-b",
+          "target_position": 3,
+          "prediction_position": 2,
+          "token_id": 204,
+          "logprob": -4.1
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 1,
+          "prediction_position": 0,
+          "token_id": 205,
+          "logprob": -0.8
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 2,
+          "prediction_position": 1,
+          "token_id": 206,
+          "logprob": -5.0
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 3,
+          "prediction_position": 2,
+          "token_id": 207,
+          "logprob": -0.4
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 4,
+          "prediction_position": 3,
+          "token_id": 208,
+          "logprob": -2.2
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 5,
+          "prediction_position": 4,
+          "token_id": 209,
+          "logprob": -1.7
+        }
+      ]
+    },
+    "right": {
+      "status": "completed",
+      "records": [
+        {
+          "sample_id": "sample-a",
+          "target_position": 1,
+          "prediction_position": 0,
+          "token_id": 200,
+          "logprob": -1.0999999999999999
+        },
+        {
+          "sample_id": "sample-a",
+          "target_position": 2,
+          "prediction_position": 1,
+          "token_id": 201,
+          "logprob": -2.55
+        },
+        {
+          "sample_id": "sample-b",
+          "target_position": 1,
+          "prediction_position": 0,
+          "token_id": 202,
+          "logprob": -0.8999999999999999
+        },
+        {
+          "sample_id": "sample-b",
+          "target_position": 2,
+          "prediction_position": 1,
+          "token_id": 203,
+          "logprob": -3.2
+        },
+        {
+          "sample_id": "sample-b",
+          "target_position": 3,
+          "prediction_position": 2,
+          "token_id": 204,
+          "logprob": -4.029999999999999
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 1,
+          "prediction_position": 0,
+          "token_id": 205,
+          "logprob": -0.8300000000000001
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 2,
+          "prediction_position": 1,
+          "token_id": 206,
+          "logprob": -4.6
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 3,
+          "prediction_position": 2,
+          "token_id": 207,
+          "logprob": -0.49
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 4,
+          "prediction_position": 3,
+          "token_id": 208,
+          "logprob": -2.0900000000000003
+        },
+        {
+          "sample_id": "sample-c",
+          "target_position": 5,
+          "prediction_position": 4,
+          "token_id": 209,
+          "logprob": -1.7049999999999998
+        }
+      ]
+    }
+  },
+  "changes": [
+    "Reuse metrics, coverage and integrity receipts; recheck only affected scope after changes, inconsistencies or requested audits.",
+    "Use fetch receipt and EXPORT.json for unchanged files; keep uncovered input identities and token semantics in adapters."
+  ],
+  "notes": [
+    "Fresh gpt-6.1-sol / medium agent, direct task requirements; independent verifier not supplied to agent.",
+    "One synthetic existing-capture task over local Python-stdin endpoints, not real SSH or native model capture.",
+    "Corrected fixture raw input digest removes prior serialization ambiguity; task data/metadata conditions changed, so no direct cost comparison with previous probe.",
+    "All agent calls included. Parent preparation and independent verification excluded. Single observation with uncontrolled cache and model latency.",
+    "No downloaded-file hash or size rescans in executed adapter. Local inputs.json SHA256 remains a necessary uncovered identity check.",
+    "Two fetch calls retained and passed through in the result; all 10 target positions/three groups independently verified."
+  ],
+  "pricing": "Retained Standard snapshot: input $2/M, cached $0.10/M, cache-write $2.50/M, output $10/M, with per-response long-input multipliers. Estimate, not account billing."
+}
