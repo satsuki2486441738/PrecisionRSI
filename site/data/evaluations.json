@@ -59059,6 +59059,374 @@
         "prefix": "site/evidence/skills-single-library-ab-20261024.json",
         "replay_cases": 140
       }
+    },
+    {
+      "id": "skills-single-library-clear-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B（单端跨库）：明确平台身份后复测",
+      "framework": {
+        "name": "Skills A/B（单端跨库复测）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "任务开始前明确H200集群与NVIDIA H20Z运行时名称关系，新A无干预独立完成，两库首次采集成功。复用冻结B，280个原生分数逐项相同；A用时少31.08%、估算费用少30.30%。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills（命名明确）",
+          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.5.4"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills_loaded": true,
+            "independent_completion": true,
+            "initial_input_and_resource_interfaces": "same, with arm-owned work roots",
+            "source_revision": "5c1446e7f658eec48f4930ade3a49a4205d020bf"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 不使用 skills（冻结基线）",
+          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.5.4"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills_loaded": false,
+            "independent_completion": true,
+            "initial_input_and_resource_interfaces": "same, with arm-owned work roots",
+            "source_revision": "no skills",
+            "reused_baseline": "single-platform-prefill-noskills-20261024T072527Z"
+          }
+        },
+        {
+          "id": "vllm",
+          "label": "vLLM / CUDA",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6b2c3397-47a1-5813-00f6-76891faf74f5, pci_bus_id=99, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "libraries": [
+            {
+              "name": "vllm",
+              "version": "0.19.1"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            }
+          ],
+          "settings": {
+            "versions": {
+              "torch": "2.10.0",
+              "transformers": "5.5.4",
+              "vllm": "0.19.1"
+            },
+            "cuda": "12.8",
+            "device_name": "NVIDIA H20Z",
+            "platform_identity": {
+              "user_confirmed_platform": "NVIDIA H200 cluster",
+              "runtime_reported_name": "NVIDIA H20Z",
+              "platform_authorization": "The user has explicitly confirmed that the declared cluster is the intended H200 platform despite the runtime name NVIDIA H20Z. Use the declared resource and record its actual runtime-reported name."
+            },
+            "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "conditions": {
+              "weights": "unquantized BF16",
+              "devices": 1,
+              "max_context": 128,
+              "requests": "one independent sequence per call",
+              "target": "input_ids[p] predicted by row p-1, p>=1",
+              "normalization": "full vocabulary FP32 natural log_softmax",
+              "score_processors": false
+            }
+          }
+        },
+        {
+          "id": "transformers",
+          "label": "Transformers / CUDA",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6bddf4bf-04fc-d8b9-1d3b-6d6bbb977dbc, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "libraries": [
+            {
+              "name": "transformers",
+              "version": "5.5.4"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            }
+          ],
+          "settings": {
+            "versions": {
+              "torch": "2.10.0",
+              "transformers": "5.5.4",
+              "vllm": "0.19.1"
+            },
+            "cuda": "12.8",
+            "device_name": "NVIDIA H20Z",
+            "platform_identity": {
+              "user_confirmed_platform": "NVIDIA H200 cluster",
+              "runtime_reported_name": "NVIDIA H20Z",
+              "platform_authorization": "The user has explicitly confirmed that the declared cluster is the intended H200 platform despite the runtime name NVIDIA H20Z. Use the declared resource and record its actual runtime-reported name."
+            },
+            "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "conditions": {
+              "weights": "unquantized BF16",
+              "devices": 1,
+              "max_context": 128,
+              "requests": "one independent sequence per call",
+              "target": "input_ids[p] predicted by row p-1, p>=1",
+              "normalization": "full vocabulary FP32 natural log_softmax",
+              "score_processors": false
+            },
+            "parameter_dtypes": {
+              "torch.bfloat16": 760
+            },
+            "model_class": "Qwen3_5ForConditionalGeneration",
+            "training": false,
+            "use_cache": false,
+            "attention_implementations": {
+              "root": "eager",
+              "text": "eager",
+              "vision": "eager"
+            }
+          }
+        }
+      ],
+      "common": [
+        "与冻结B相同数值任务、模型revision、输入SHA256、原生软件资源和初始重试预算。",
+        "BF16未量化Qwen3.5-9B-Base，单GPU、独立prefill、完整248320词表FP32原始logprob；4份输入140个目标位置。",
+        "A/B均为gpt-6.1-sol / medium；新A只接收直接任务、资源声明和可用skills，无旧代码、分数、失败提示或隐藏验证器。"
+      ],
+      "differences": [
+        "A首次提示、task.json和resources.json均明确：用户确认的平台为H200，运行时名称为NVIDIA H20Z；B为此前已独立完成的历史无skill基线。",
+        "本轮只重跑A，无事实补充或预算扩展；之前失败及经补充的A完整保留在原评测。",
+        "当前skills/工具没有针对本轮修改；共享准备资源不计入A/B开销，缓存、队列和设备分配不完全受控。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "相同数值任务的用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "首次任务至交付，包含阅读、编码、原生执行、等待、取回和交付；排除父级准备和独立核验。A无干预完成，B复用历史基线。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": -139.71999999999997,
+              "side_values": {
+                "a": 309.793,
+                "b": 449.513
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.1478988000000001,
+              "side_values": {
+                "a": 0.3402563999999999,
+                "b": 0.4881552
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": -15,
+              "side_values": {
+                "a": 17,
+                "b": 32
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总token差（A − B）",
+              "unit": "tokens",
+              "value": -1454731,
+              "side_values": {
+                "a": 1878405,
+                "b": 3333136
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 9952,
+              "side_values": {
+                "a": 35127,
+                "b": 25175
+              }
+            },
+            {
+              "id": "first-cost",
+              "label": "首请求估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.002023600000000002,
+              "side_values": {
+                "a": 0.0108452,
+                "b": 0.012868800000000001
+              }
+            },
+            {
+              "id": "later-cost",
+              "label": "后续请求估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.1458752000000001,
+              "side_values": {
+                "a": 0.3294111999999999,
+                "b": 0.4752864
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "最终完成并独立核验的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "independent-completion",
+          "title": "独立完成情况",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "两侧均在各自初始任务和预算内独立完成；本轮A没有追加提示或额度。",
+          "metrics": [
+            {
+              "id": "completed",
+              "label": "独立完成（A − B）",
+              "unit": "arms",
+              "value": 0,
+              "side_values": {
+                "a": 1,
+                "b": 1
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立完成的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "native-scores",
+          "title": "单平台两库目标分数差异",
+          "side_ids": [
+            "vllm",
+            "transformers"
+          ],
+          "scope": "本轮两库均首次原生采集成功；全部280个原始分数与冻结B逐项相同，140/140位置配对，所有全局与样本分组指标经独立重算核验。",
+          "metrics": [
+            {
+              "id": "nll",
+              "label": "NLL绝对差",
+              "unit": "nats/token",
+              "value": 0.0025719915117523584,
+              "side_values": {
+                "vllm": 12.983606467928205,
+                "transformers": 12.981034476416452
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nats",
+              "value": 0.020085389273507254
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99绝对误差",
+              "unit": "nats",
+              "value": 0.09084028244018526
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "nats",
+              "value": 0.10869693756103516,
+              "coordinate": {
+                "sample": "sample-4",
+                "position": 14,
+                "token": 11640
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标位置",
+              "observed": 140,
+              "expected": 140,
+              "unit": "positions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "A：309.793秒、0.3402564美元、17次工具调用；B：449.513秒、0.4881552美元、32次调用。",
+        "A用时少31.08%、估算费用少30.30%、调用少46.88%；首请求费用A=0.0108452、B=0.0128688美元，收益主要在后续请求。",
+        "A总token=1878405，B=3333136；但未缓存输入A=35127，高于B=25175，不把各类token都表述为下降。",
+        "A使用共享fetch、reduce_groups和reduce_scores；未读配套工具实现，未生成额外Markdown报告。",
+        "仍有7次一秒等待；本轮成功不代表等待说明已可靠执行。",
+        "没有针对上轮配置序列化错误给予提示，新的agent自行实现采集器；两库首次成功，无重试或预算扩展。",
+        "平台命名关系同时保存到可复用环境资源声明，未增加通用skill正文。",
+        "与历史B的资源元数据说明、缓存、排队和服务延迟仍有差异；单次观测，不能单独归因于命名说明或推广到所有单端任务。",
+        "价格沿用统一Standard快照估算，不代表实际账单。"
+      ],
+      "evidence": [
+        {
+          "label": "直接任务、原始用量、实际配置、280个分数及独立验证",
+          "url": "evidence/skills-single-library-clear-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "596ade135cf0dba2a7c5f50677b93e16f5557b35",
+        "prefix": "site/evidence/skills-single-library-clear-20261024.json",
+        "replay_cases": 140
+      }
     }
   ]
 }
