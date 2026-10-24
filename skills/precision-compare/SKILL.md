@@ -10,6 +10,17 @@ description: Collect and compare numerical results across hardware and software 
 - Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
 - Enter for missing collection or comparison. Reuse workload checks, observations and results matching identities, semantics and coverage. Refresh changed scope or requested fresh measurements.
 
+## Tool use
+
+Follow these requirements for the bundled tools:
+
+| Operation | Required path |
+|---|---|
+| Interface details | Use declarations or `tool_help TOOL` / `--full`. Read tool source only for tool edits, observed tool failures or requested audits. |
+| Supported work | Call the declared tool. Write adapters for uncovered semantics; identify an unsupported requirement before replacing a tool. |
+| Metrics and coverage | Use returned values. Recompute only for requested audits or observed inconsistencies. |
+| Delivery | Return existing results, configurations and evidence paths. Create extra report files, bundles or offline replay only on request. |
+
 ## Compare
 
 Reuse workload checks covering the request. Missing comparisons: import from `scripts/` (arrays/trees require NumPy):
@@ -35,7 +46,7 @@ NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch requir
 
 Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch returns verified files, hashes, sizes and a local index; large arrays stay at source.
 
-Query [tool_help](scripts/tool_help.py) for missing fields/signatures (`--full` for schemas, `--list` for discovery). Read source for unresolved integration issues/tool changes. Shards/runtime/repeated commands → [shared tools](references/comparison.md#tools).
+[tool_help](scripts/tool_help.py): `--list` for discovery, `--full` for schemas. Shards/runtime/repeated commands → [shared tools](references/comparison.md#tools).
 
 ## Collect
 
@@ -51,6 +62,6 @@ Preserve native operators, state transitions, masks and dtype identity; map batc
 
 ## Return
 
-- Return completed tool results, actual configurations, gaps and existing artifact paths. Add only uncovered task checks; recompute tool arithmetic for requested audits or suspected tool defects. Large arrays stay at source/agreed storage.
-- Recheck affected scope after changes, failed checks or unresolved findings. Package, replay offline or write extra reports only when requested.
+- Return completed tool results, actual configurations, gaps and existing artifact paths. Add only uncovered task checks; large arrays stay at source/agreed storage.
+- Recheck affected scope after changes, failed checks or unresolved findings.
 - Apply supplied acceptance criteria; otherwise report differences. Requested [repair](../precision-repair/SKILL.md) reuses evidence; differences alone do not establish defects.

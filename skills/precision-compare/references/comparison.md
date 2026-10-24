@@ -2,7 +2,7 @@
 
 ## Tools
 
-Use the entrypoint's common tool declarations directly. Query missing details without importing dependencies:
+Follow the entrypoint's [tool-use requirements](../SKILL.md#tool-use). Query missing interface details without importing dependencies:
 
 ```sh
 python scripts/tool_help.py --list                  # module + purpose
@@ -55,7 +55,7 @@ python scripts/compare_tensors.py --contract gradients.json --side-a a.json --si
 
 When preparing manifests, use the selected interface. Distribution matrix rows belong inside each `scores` descriptor, e.g. `scores: {path: rows.npy, row: 3}`; multirow arrays require an explicit row. Put equal conditions in `common` and task-selected differences in `side_conditions`; each rank records its actual settings and imported versions. [Condition checks](../scripts/conditions.py) compare these against the contract-owned rank inventory. For task-selected different initial parameter representations, declare per-side `state`; common `state` retains exact before-value checks. Implement missing task-specific integration and reuse the shared arithmetic.
 
-Distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Inspect implementation when the selected interface leaves an integration question unresolved.
+Distribution/tensor schemas share [artifact_io.py](../scripts/artifact_io.py). Query `tool_help.py --full artifact_io` for integration contracts; tool source inspection follows the entrypoint requirements.
 
 Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and unavailable comparisons. Exit codes: 0=comparison metrics computed successfully, 1=unavailable comparison, 2=CLI/output error. Exit 0 does not establish that a user's accuracy tolerance is met.
 

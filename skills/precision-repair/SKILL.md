@@ -22,7 +22,7 @@ Use available 10–30 s completion waits for noninteractive commands.
 - Extend existing checks for missing causal or nearby-case coverage; the regression must fail before the fix and pass after.
 - Verify through the original entrypoint and collectors at identical inputs/initial state. A regression invoking that workload can also provide its before/after metrics.
 - Use task tolerance or justify one from computation/dtype. Measure runtime/memory when relevant.
-- Existing captures: `compare_arrays` / `compare_trees`. Missing interface details: `python ../precision-compare/scripts/tool_help.py TOOL` from this skill. Missing collection/comparison → [compare](../precision-compare/SKILL.md); reconstruction/execution or repeated commands → [shared tools](../precision-compare/references/comparison.md#tools).
+- Existing captures: `compare_arrays` / `compare_trees`; follow comparison's [tool-use requirements](../precision-compare/SKILL.md#tool-use). Missing interface details: `python ../precision-compare/scripts/tool_help.py TOOL` from this skill. Missing collection/comparison → [compare](../precision-compare/SKILL.md); reconstruction/execution or repeated commands → [shared tools](../precision-compare/references/comparison.md#tools).
 
 ## Return
 
