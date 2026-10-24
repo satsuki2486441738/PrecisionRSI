@@ -57797,6 +57797,246 @@
         "prefix": "site/evidence/skills-interface-native-ab-20261024.json",
         "replay_cases": 140
       }
+    },
+    {
+      "id": "skills-tool-policy-microtest-20261024",
+      "date": "2026-10-24",
+      "title": "Skills 规则小测：已有采集取回与比较",
+      "framework": {
+        "name": "Skills 规则小测"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "synthetic target-score fixture",
+        "revision": "fixture-v1"
+      },
+      "summary": "新旧规则下的两个无上下文 agent 均通过独立核验，也均满足四项目标行为。新版减少下载批次，但多一次总工具调用，费用未下降；本轮不构成新规则的提效证据。",
+      "sides": [
+        {
+          "id": "new",
+          "label": "新版明确规则",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "Python",
+              "version": "3.12.14"
+            }
+          ],
+          "settings": {
+            "synthetic": true,
+            "execution": "local Python-stdin endpoints, existing captures",
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skill_revision": "67adb102e5bf0a1e22ed86766afb03a0a7b6d4bb"
+          }
+        },
+        {
+          "id": "old",
+          "label": "旧版规则",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "Python",
+              "version": "3.12.14"
+            }
+          ],
+          "settings": {
+            "synthetic": true,
+            "execution": "local Python-stdin endpoints, existing captures",
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skill_revision": "f69fb9ccb080a20e150639aaab355a4654a28b05"
+          }
+        }
+      ],
+      "common": [
+        "相同10个目标位置、三个不等长分组（2/3/5）、端点文件与直接任务要求。",
+        "两侧均使用 skill；仅规则版本不同，非有／无 skill 基线比较。",
+        "原始采集为合成数据；本地独立 Python-stdin 进程模拟端点，不运行模型或真实 SSH。",
+        "统一 gpt-6.1-sol / medium；新 agent，不继承对话；隐藏独立验证器不提供给执行 agent。"
+      ],
+      "differences": [
+        "新版要求接口优先、复用工具、直接使用指标和按需交付；旧版为此前入口文本。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "新旧规则用时与费用",
+          "side_ids": [
+            "new",
+            "old"
+          ],
+          "scope": "从任务首条事件到交付；包括摘要编码歧义导致的排查；父级准备和独立核验不计入。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（新 − 旧）",
+              "unit": "s",
+              "value": -21.514999999999986,
+              "side_values": {
+                "new": 162.245,
+                "old": 183.76
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（新 − 旧）",
+              "unit": "USD",
+              "value": 0.011926800000000043,
+              "side_values": {
+                "new": 0.16740200000000002,
+                "old": 0.15547519999999998
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（新 − 旧）",
+              "unit": "calls",
+              "value": 1,
+              "side_values": {
+                "new": 10,
+                "old": 9
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（新 − 旧）",
+              "unit": "tokens",
+              "value": 92897,
+              "side_values": {
+                "new": 999693,
+                "old": 906796
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（新 − 旧）",
+              "unit": "tokens",
+              "value": -368,
+              "side_values": {
+                "new": 11387,
+                "old": 11755
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立核验的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "title": "实际工具使用",
+          "side_ids": [
+            "new",
+            "old"
+          ],
+          "scope": "核查执行命令与任务适配代码；不以文件名判断是否重写工具。两侧均使用共享 fetch、reduce_groups、reduce_scores。",
+          "metrics": [
+            {
+              "id": "fetch-calls",
+              "label": "下载调用数差（新 − 旧）",
+              "unit": "calls",
+              "value": -2,
+              "side_values": {
+                "new": 2,
+                "old": 4
+              }
+            },
+            {
+              "id": "source-reads",
+              "label": "工具实现源码读取数差（新 − 旧）",
+              "unit": "reads",
+              "value": 0,
+              "side_values": {
+                "new": 0,
+                "old": 0
+              }
+            },
+            {
+              "id": "manual-metrics",
+              "label": "自行实现 NLL/P99 次数差（新 − 旧）",
+              "unit": "implementations",
+              "value": 0,
+              "side_values": {
+                "new": 0,
+                "old": 0
+              }
+            },
+            {
+              "id": "extra-reports",
+              "label": "额外 Markdown/打包数差（新 − 旧）",
+              "unit": "files",
+              "value": 0,
+              "side_values": {
+                "new": 0,
+                "old": 0
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧取回并校验的小文件",
+              "observed": 8,
+              "expected": 8,
+              "unit": "files per arm"
+            }
+          ]
+        },
+        {
+          "id": "numerical",
+          "title": "独立数值复核",
+          "side_ids": [
+            "new",
+            "old"
+          ],
+          "scope": "独立公式检查全局及三个分组的双方 NLL、NLL差、MAE、P99、最大误差坐标和覆盖率；全部通过。",
+          "metrics": [
+            {
+              "id": "pass",
+              "label": "正确完成数差（新 − 旧）",
+              "unit": "arms",
+              "value": 0,
+              "side_values": {
+                "new": 1,
+                "old": 1
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧预期目标位置",
+              "observed": 10,
+              "expected": 10,
+              "unit": "positions per arm"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "两侧四项目标行为均符合；不能从本次单样本断言新规则改变了行为。",
+        "两侧仍重复核验已由 fetch 验证的文件哈希，这项冗余尚未消除。",
+        "夹具 input_sha256 采用规范化 JSON 摘要却未声明编码，引起双方额外核对；全部开销保留。后续生成器已改为精确输入文件字节摘要，本次输入与结果保持原样。",
+        "单次并行测试，缓存和模型延迟未控制；不据此声称稳定速度、费用或成功率优势。",
+        "估算费用使用保留的统一 Standard 价格快照，不代表账户账单。"
+      ],
+      "evidence": [
+        {
+          "label": "原始用量、任务提示、独立验证和行为核查",
+          "url": "evidence/skills-tool-policy-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "aee0125eeb139f30b2bac594eddfa863c9fa9e96",
+        "prefix": "site/evidence/skills-tool-policy-20261024.json",
+        "replay_cases": 10
+      }
     }
   ]
 }
