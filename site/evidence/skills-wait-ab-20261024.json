@@ -1,0 +1,454 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "targeted_sft_interface_wait_retest",
+  "source_revision": "533ee9ce8033bee6de987d05416d2cc68968e039",
+  "summary": {
+    "a": {
+      "agent_id": "01a16c55-a8e7-78c0-9757-a0020c9c9da0",
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "completed": true,
+      "elapsed_seconds": 161.059,
+      "requests": 10,
+      "total_tool_calls": 9,
+      "tokens": {
+        "input_tokens": 898726,
+        "cached_input_tokens": 889728,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4765,
+        "total_tokens": 903491,
+        "uncached_input_tokens": 8998
+      },
+      "standard_usd_estimate": 0.1546188
+    },
+    "b": {
+      "agent_id": "01a16bea-713d-7771-b488-d38af8e1400f",
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "completed": true,
+      "elapsed_seconds": 207.38,
+      "requests": 9,
+      "total_tool_calls": 8,
+      "tokens": {
+        "input_tokens": 806756,
+        "cached_input_tokens": 800512,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7673,
+        "total_tokens": 814429,
+        "uncached_input_tokens": 6244
+      },
+      "standard_usd_estimate": 0.1692692
+    },
+    "previous_a": {
+      "agent_id": "01a16bee-84eb-7c63-b83b-0d8211d12917",
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "completed": true,
+      "elapsed_seconds": 508.776,
+      "requests": 12,
+      "total_tool_calls": 11,
+      "tokens": {
+        "input_tokens": 1139624,
+        "cached_input_tokens": 1123328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 6369,
+        "total_tokens": 1145993,
+        "uncached_input_tokens": 16296
+      },
+      "standard_usd_estimate": 0.20861480000000002
+    },
+    "baseline_id": "sft-noskills-20261024T032830Z",
+    "A_reduction_vs_B_percent": {
+      "elapsed_seconds": 22.336290867007424,
+      "standard_usd_estimate": 8.655089053413146,
+      "total_tool_calls": -12.5
+    },
+    "A_change_vs_previous_percent": {
+      "elapsed_seconds": -68.34382911143608,
+      "standard_usd_estimate": -25.88311088187416,
+      "total_tool_calls": -18.181818181818176
+    },
+    "source_revision": "533ee9ce8033bee6de987d05416d2cc68968e039"
+  },
+  "previous_on_demand_a": {
+    "agent_id": "01a16c48-cf3d-7332-988f-749df07010ee",
+    "context": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "completed": true,
+    "elapsed_seconds": 254.517,
+    "requests": 17,
+    "total_tool_calls": 16,
+    "tokens": {
+      "input_tokens": 1615388,
+      "cached_input_tokens": 1595136,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 6314,
+      "total_tokens": 1621702,
+      "uncached_input_tokens": 20252
+    },
+    "standard_usd_estimate": 0.2631576
+  },
+  "verification": {
+    "passed": true,
+    "result": {
+      "preserved": {
+        "reference_step": true,
+        "model": true,
+        "dataset": true,
+        "optimizer": true
+      },
+      "cases": [
+        {
+          "case": "original",
+          "chunks": 1,
+          "supervised_tokens_per_microbatch": [
+            21
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 2.7755575615628914e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 2.7755575615628914e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "original",
+          "chunks": 2,
+          "supervised_tokens_per_microbatch": [
+            8,
+            13
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 2.7755575615628914e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 4.163336342344337e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "original",
+          "chunks": 3,
+          "supervised_tokens_per_microbatch": [
+            6,
+            8,
+            7
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 2.7755575615628914e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 4.440892098500626e-16,
+            "grads": 5.551115123125783e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "original",
+          "chunks": 6,
+          "supervised_tokens_per_microbatch": [
+            1,
+            5,
+            2,
+            6,
+            3,
+            4
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 2.7755575615628914e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 5.551115123125783e-17,
+            "updates": 1.3877787807814457e-17,
+            "parameters": 1.3877787807814457e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "nearby",
+          "chunks": 1,
+          "supervised_tokens_per_microbatch": [
+            21
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 2.7755575615628914e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 2.7755575615628914e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "nearby",
+          "chunks": 2,
+          "supervised_tokens_per_microbatch": [
+            12,
+            9
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 2.7755575615628914e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 2.7755575615628914e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "nearby",
+          "chunks": 3,
+          "supervised_tokens_per_microbatch": [
+            8,
+            5,
+            8
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 2.7755575615628914e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 5.551115123125783e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "pass": true
+        },
+        {
+          "case": "nearby",
+          "chunks": 6,
+          "supervised_tokens_per_microbatch": [
+            6,
+            2,
+            4,
+            1,
+            5,
+            3
+          ],
+          "ignored_tokens": 15,
+          "reference_vs_oracle_max_abs": {
+            "loss": 8.881784197001252e-16,
+            "grads": 2.7755575615628914e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "accumulated_vs_oracle_max_abs": {
+            "loss": 0.0,
+            "grads": 5.551115123125783e-17,
+            "updates": 2.7755575615628914e-17,
+            "parameters": 2.7755575615628914e-17
+          },
+          "pass": true
+        }
+      ],
+      "all_pass": true
+    }
+  },
+  "initial_sha256": {
+    "workload.json": "baec9f6722e8910cd7172ce13a0eded26cdb338007b53901b083b54983202ac5",
+    "native_sft.py": "ca1c2f2d958fe38e9a9e8e4004be0d7469ed2a71231511a349911e55b0e7e379",
+    "capture.py": "4d92b09126d7015679d5b757317027eb6e52513e375f959be53a53fba1d68545"
+  },
+  "task_messages": [
+    "在 {TASK_DIR} 完成这份 SFT 工作负载的精度检查与修复。比较完整有效 batch 与梯度累积的 loss、梯度和参数更新，修复差异并验证原任务及相邻输入。保留原模型、数据、优化器、token objective 和 reference_step，实现可运行，并留下修复前后指标与回归测试。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录工作；不得读取历史、其他实验目录或会话日志；不委派其他 agent。完成后直接返回结果和现有证据路径。可用 skills 见任务目录的 skills.json，按需使用；仓库中只可读取该目录列出的 skill 包。"
+  ],
+  "raw_usage": [
+    {
+      "response_id": "resp_0598c642df488659016adc3ee709c487d084a7fc292e70ffc7",
+      "usage": {
+        "input_tokens": 84723,
+        "cached_input_tokens": 83328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 144,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 84867
+      },
+      "standard_usd_estimate": 0.0125628,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3ef46bd087d0a0ca71ef681eee39",
+      "usage": {
+        "input_tokens": 84970,
+        "cached_input_tokens": 84736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 76,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 85046
+      },
+      "standard_usd_estimate": 0.009701600000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f06a5ac87d0bdcd772a478db4d2",
+      "usage": {
+        "input_tokens": 86419,
+        "cached_input_tokens": 84864,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 71,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 86490
+      },
+      "standard_usd_estimate": 0.0123064,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f105c8087d0a1e55438a488a6ce",
+      "usage": {
+        "input_tokens": 87818,
+        "cached_input_tokens": 86272,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 305,
+        "reasoning_output_tokens": 50,
+        "total_tokens": 88123
+      },
+      "standard_usd_estimate": 0.014769200000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f1b69a487d08e36747b604a3f5c",
+      "usage": {
+        "input_tokens": 89447,
+        "cached_input_tokens": 87936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2014,
+        "reasoning_output_tokens": 159,
+        "total_tokens": 91461
+      },
+      "standard_usd_estimate": 0.0319556,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f3f6bfc87d0884f87af48bdb6ae",
+      "usage": {
+        "input_tokens": 91507,
+        "cached_input_tokens": 91264,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 7,
+        "total_tokens": 91553
+      },
+      "standard_usd_estimate": 0.0100724,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f46fcec87d0a3599bcf01754cd0",
+      "usage": {
+        "input_tokens": 92294,
+        "cached_input_tokens": 91392,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 674,
+        "reasoning_output_tokens": 238,
+        "total_tokens": 92968
+      },
+      "standard_usd_estimate": 0.0176832,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f58cacc87d0a1efaf12dd62e439",
+      "usage": {
+        "input_tokens": 93015,
+        "cached_input_tokens": 92800,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 69,
+        "reasoning_output_tokens": 30,
+        "total_tokens": 93084
+      },
+      "standard_usd_estimate": 0.0104,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f61c32087d0bcccb0c11a8703ef",
+      "usage": {
+        "input_tokens": 93844,
+        "cached_input_tokens": 92928,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 503,
+        "reasoning_output_tokens": 55,
+        "total_tokens": 94347
+      },
+      "standard_usd_estimate": 0.0161548,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0598c642df488659016adc3f75de0887d094a57dd34b80b74b",
+      "usage": {
+        "input_tokens": 94689,
+        "cached_input_tokens": 94208,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 863,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 95552
+      },
+      "standard_usd_estimate": 0.019012800000000003,
+      "long_context": false
+    }
+  ],
+  "session_sha256": "fffdc793dcb11333f845d8fc2bfe5850c0c120e8855f133d3bbcd4173c7b099e",
+  "changes": [
+    "Declared literal score dictionary keys and array metric field paths in short tool interfaces.",
+    "Promoted existing 10–30 s completion-wait guidance to independently loaded component entrypoints."
+  ],
+  "observations": [
+    "No comparison-tool implementation read was found in this trial.",
+    "Two 1 s write_stdin calls remain; the wait guidance was not followed consistently.",
+    "Different task-local collection/regression organization also changed work; these effects are not isolated."
+  ],
+  "limits": [
+    "One targeted A run against a verified historical B and earlier A runs; same fixture, model/effort and runtime.",
+    "No expected solution or historical code supplied; source hashes and baseline usage hashes retained.",
+    "Wall time and cache behavior are not controlled; pricing uses the same retained snapshot as other trials.",
+    "Earlier, less efficient A outcomes are retained in separate evidence."
+  ]
+}
