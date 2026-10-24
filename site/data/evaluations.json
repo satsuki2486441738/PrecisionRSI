@@ -58718,6 +58718,347 @@
         "prefix": "site/evidence/skills-single-checkpoint-retest-20261024.json",
         "replay_cases": 4
       }
+    },
+    {
+      "id": "skills-single-library-ab-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B（单端跨库）：vLLM ↔ Transformers",
+      "framework": {
+        "name": "Skills A/B（单端跨库）"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "summary": "同一GPU平台原生采集与比较。B独立完成，A因硬件名称检查停止，经事实补充后又遇到自写配置序列化错误，增加一次额度后完成。最终280个原生分数逐项相同；A累计更慢、更贵，且非无干预完成。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills（经补充完成）",
+          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.5.4"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills_loaded": true,
+            "independent_completion": false,
+            "initial_input_and_resource_interfaces": "same, with arm-owned work roots",
+            "source_revision": "2013ce8532eacccb88bfd36125e1333cbf584265"
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 不使用 skills（独立完成）",
+          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.5.4"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.19.1"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "skills_loaded": false,
+            "independent_completion": true,
+            "initial_input_and_resource_interfaces": "same, with arm-owned work roots",
+            "source_revision": "no skills"
+          }
+        },
+        {
+          "id": "vllm",
+          "label": "vLLM / CUDA",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6bddf4bf-04fc-d8b9-1d3b-6d6bbb977dbc, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "libraries": [
+            {
+              "name": "vllm",
+              "version": "0.19.1"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            }
+          ],
+          "settings": {
+            "library": "vllm",
+            "cuda": "12.8",
+            "cuda_visible_devices": "4",
+            "actual_model_class": [
+              "Qwen3_5ForConditionalGeneration"
+            ],
+            "actual_dtype": "torch.bfloat16",
+            "quantization": null,
+            "vocabulary_size": 248320,
+            "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "model_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "started_unix": 1792826964.5470629,
+            "ended_unix": 1792826992.2060063
+          }
+        },
+        {
+          "id": "transformers",
+          "label": "Transformers / CUDA",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=2068e7a5-3eb9-d319-7dc5-b51d72b57c3a, pci_bus_id=171, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "libraries": [
+            {
+              "name": "transformers",
+              "version": "5.5.4"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.10.0"
+            }
+          ],
+          "settings": {
+            "library": "transformers",
+            "cuda": "12.8",
+            "cuda_visible_devices": "6",
+            "actual_model_class": "Qwen3_5ForConditionalGeneration",
+            "parameter_dtypes": [
+              "torch.bfloat16"
+            ],
+            "use_cache": false,
+            "actual_attention": "eager",
+            "vocabulary_size": 248320,
+            "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+            "model_revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+            "logits_dtype": "torch.bfloat16",
+            "logprob_dtype": "torch.float32",
+            "started_unix": 1792826878.0245867,
+            "ended_unix": 1792826891.2749555
+          }
+        }
+      ],
+      "common": [
+        "同一H200集群，运行时设备名NVIDIA H20Z；同规格卡可由队列分配为不同UUID。",
+        "同一Qwen3.5-9B-Base revision、固定4份输入、140个目标位置、BF16未量化checkpoint。",
+        "单GPU、上下文上限128、独立prefill；完整248320词表FP32原始logprob，p−1行预测input_ids[p]。",
+        "两个新gpt-6.1-sol / medium agent，B后A串行执行；相同预备launcher、资源声明与初始数值要求。"
+      ],
+      "differences": [
+        "A按需使用skills，B没有skills或配套工具；本次B首次执行，完成后冻结供后续复用。",
+        "测试资源卡漏写了用户已确认的H200/H20Z命名关系。A因此停止；父级补充该事实并增加每库一次额度。",
+        "A的vLLM采集器随后因运行时配置深拷贝失败；自行修复后，父级再允许vLLM一次采集。",
+        "A累计7次原生尝试，B为2次；所有失败、后续请求及补充间隔计入A。不能视作无干预、完全匹配的成功用时比较。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "累计用时与费用（A含事实补充及额度扩展）",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "首任务至最终交付，含失败、重试、补充间隔与全部后续请求；排除父级准备和独立核验。A经补充完成，此比值不作为受控无干预skill效果。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "累计用时差（A − B）",
+              "unit": "s",
+              "value": 475.10600000000005,
+              "side_values": {
+                "a": 924.619,
+                "b": 449.513
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.24092360000000002,
+              "side_values": {
+                "a": 0.7290788,
+                "b": 0.4881552
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 5,
+              "side_values": {
+                "a": 37,
+                "b": 32
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总token差（A − B）",
+              "unit": "tokens",
+              "value": 1340449,
+              "side_values": {
+                "a": 4673585,
+                "b": 3333136
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 16777,
+              "side_values": {
+                "a": 41952,
+                "b": 25175
+              }
+            },
+            {
+              "id": "first-cost",
+              "label": "首请求估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.0022856000000000005,
+              "side_values": {
+                "a": 0.010583200000000001,
+                "b": 0.012868800000000001
+              }
+            },
+            {
+              "id": "later-cost",
+              "label": "后续请求估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.24320920000000001,
+              "side_values": {
+                "a": 0.7184956,
+                "b": 0.4752864
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "最终完成并独立核验的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "independent-completion",
+          "title": "初始任务下独立完成情况",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "A首次交付无分数，0/140；B首次交付完整140/140。任务卡缺失用户已确认的平台命名信息，后续补充单独记录。",
+          "metrics": [
+            {
+              "id": "completed",
+              "label": "独立完成（A − B）",
+              "unit": "arms",
+              "value": -1,
+              "side_values": {
+                "a": 0,
+                "b": 1
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "独立完成的执行",
+              "observed": 1,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "native-scores",
+          "title": "单平台两库目标分数差异",
+          "side_ids": [
+            "vllm",
+            "transformers"
+          ],
+          "scope": "最终两组原生分数逐项相同。以下为140个目标位置的完整词表归一化FP32原始logprob指标，全部样本分组在证据中独立核验。",
+          "metrics": [
+            {
+              "id": "nll",
+              "label": "NLL绝对差",
+              "unit": "nats/token",
+              "value": 0.0025719915117523584,
+              "side_values": {
+                "vllm": 12.983606467928205,
+                "transformers": 12.981034476416452
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nats",
+              "value": 0.020085389273507254
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99绝对误差",
+              "unit": "nats",
+              "value": 0.09084028244018526
+            },
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "nats",
+              "value": 0.10869693756103516,
+              "coordinate": {
+                "sample": "sample-4",
+                "position": 14,
+                "token": 11640
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标位置",
+              "observed": 140,
+              "expected": 140,
+              "unit": "positions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "A：924.619秒、0.7290788美元、37次调用；B：449.513秒、0.4881552美元、32次调用。",
+        "A累计用时约2.06倍、估算费用约1.49倍。保留失败及事实补充，不筛掉失败阶段后重算。",
+        "A初始335.282秒、0.3283256美元后停止；四次原生尝试均在模型加载前因名称检查失败。",
+        "A随后完成Transformers，vLLM因自写dataclass配置深拷贝错误停止；修复和回归由agent独立编写，父级仅增加重试额度。",
+        "A使用共享fetch/分组指标，未读工具实现，也未生成额外Markdown报告；仍有18次一秒等待。B有15次一秒等待，并自写比较、额外复核和交付清单。",
+        "资源身份清单、输入revision及完整词表语义核验通过；A/B的280个原生分数逐项相同，所有全局/分组指标独立重算一致。",
+        "硬件别名遗漏属于测试夹具信息缺口；配置深拷贝错误属于agent采集器，不是上游库精度缺陷。",
+        "A/B执行顺序、缓存、物理设备分配和模型延迟未控制；A有两次父级补充，不推断总体成功率或单变量因果。",
+        "费用沿用证据中统一Standard快照估算，不代表账户账单。"
+      ],
+      "evidence": [
+        {
+          "label": "失败阶段、补充事实、完整用量、原生分数与独立验证",
+          "url": "evidence/skills-single-library-ab-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "b26d9673435d1437abfac6be1c169f17881212b5",
+        "prefix": "site/evidence/skills-single-library-ab-20261024.json",
+        "replay_cases": 140
+      }
     }
   ]
 }
