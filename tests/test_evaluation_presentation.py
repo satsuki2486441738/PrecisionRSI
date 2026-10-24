@@ -114,6 +114,20 @@ class EvaluationPresentationTests(unittest.TestCase):
         self.assertEqual(names[2], 'AnotherEngine · CPU 缓存推理 · 模型')
         self.assertEqual(names[3], '评测 · 实验 · 模型')
 
+    def test_cross_library_benchmark_names_keep_libraries_and_phase_once(self):
+        names = self.evaluate("""[
+          'skills-native-sglangtf-initial-20261024',
+          'skills-native-sglangtf-extra-20261024'
+        ].map(id=>titleFor(byId(id),'Qwen3.5-9B-Base'))""")
+        self.assertNotEqual(names[0], names[1])
+        for name in names:
+            self.assertLessEqual(len(name), 65)
+            for label in ('Skills A/B', 'SGLang', 'Transformers'):
+                self.assertEqual(name.count(label), 1)
+            self.assertTrue(name.endswith(' · Qwen3.5-9B-Base'))
+        self.assertIn('首次', names[0])
+        self.assertIn('合并复用', names[1])
+
     def test_browser_global_and_commonjs_expose_the_same_api(self):
         result = self.evaluate("""(() => {
           const fs=require('fs'),vm=require('vm'),context={};
