@@ -12,26 +12,30 @@ description: Collect and compare numerical results across hardware and software 
 
 ## Compare
 
-Use these tools directly for missing comparisons. Native preflight/capture can reuse execution JSON via [shared tasks](references/comparison.md#shared-tasks):
+Reuse workload checks covering the request. Missing comparisons: import from `scripts/` (arrays/trees require NumPy):
 
 | Input | Python call | Result |
 |---|---|---|
-| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False, groups=None)` | `exact_equal`, `coverage`, `findings`, optional groups |
-| Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, `coverage`, `metadata`, `numeric` |
-| Coordinate → natural-logprob maps | `score_metrics.reduce_scores(a, b)` | NLL, NLL difference, MAE/P99/max and coordinate |
-| Coordinate groups | `group_metrics.reduce_groups(expected, groups, reducer, *observations)` | `global`, `groups` |
-| Remote artifacts | `evidence_bundle.fetch(transport, source_dir, include, output)` | Verified local files, hashes, byte counts |
+| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False, groups=None)` | `exact_equal`, coverage, findings, optional groups |
+| Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, coverage, metadata, numeric |
+| Coordinate → natural-logprob maps | `score_metrics.reduce_scores(a, b)` | Both NLLs, NLL difference, MAE/P99/max and coordinate |
+| Global + grouped target scores | `group_metrics.reduce_groups(expected, groups, score_metrics.reduce_scores, a, b)` | `global` and `groups[name]`, each with status, coverage, metrics |
 
-Python imports use `scripts/` on `sys.path`; array/tree comparisons require NumPy. File CLIs, from the skill directory:
+`expected`: task coordinate inventory; `groups`: label → coordinate subset. Arrays use their own `groups`. Adapters establish identities, masks, shifts and logical coordinates; tools supply arithmetic and coverage.
+
+File CLIs, from the skill directory:
 
 ```sh
 python scripts/array_compare.py A.npz B.npz --output NEW.json
 python scripts/tree_compare.py A.pt B.pt --output NEW.json
+python scripts/evidence_bundle.py fetch REQUEST.json NEW_SIDE_DIRECTORY
 ```
 
-NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both accept `--metrics`; `--all-findings` returns every differing coordinate and native value. Checkpoint paths use original state keys/indices. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
+NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both comparators accept `--metrics` and `--all-findings`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
 
-Use existing checks when they cover the request; otherwise use shared comparators and `groups` for requested stage summaries. Full configuration/identity files are code inputs; reuse report coverage/findings. Query [tool_help](scripts/tool_help.py) for missing details (`--full` for schemas); `--list` discovers tools. Read source for unresolved integration issues/tool changes. Shards/runtime/remote operations → [tools](references/comparison.md#tools); repeated commands → [shared tasks](references/comparison.md#shared-tasks).
+Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch returns verified files, hashes, sizes and a local index; large arrays stay at source.
+
+Query [tool_help](scripts/tool_help.py) for missing fields/signatures (`--full` for schemas, `--list` for discovery). Read source for unresolved integration issues/tool changes. Shards/runtime/repeated commands → [shared tools](references/comparison.md#tools).
 
 ## Collect
 

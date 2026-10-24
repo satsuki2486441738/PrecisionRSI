@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Fetch selected remote artifacts, or pack/verify portable evidence (standard library).
-Call: fetch(transport, source_dir, include, output); pack(source_dir, bundle_path); verify(bundle_path); extract(bundle_path, output)
-Input: Python-stdin transport + selected relative globs, or local files/indexed ZIP.
-Output: Verified files and compact receipts; fetch uses one connection and keeps no ZIP.
-Requires: Standard library; new destinations; fetch defaults 10 MiB/file and 50 MiB total.
+Call: fetch(transport, source_dir, include, output); CLI: evidence_bundle.py fetch REQUEST.json NEW_DIRECTORY
+Input: REQUEST={"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}.
+Output: Verified local files + EXPORT.json index; receipt includes output, file_count, payload_bytes, transfer_bytes.
+Requires: Standard library and endpoint Python-stdin command; new output; defaults 10 MiB/file and 50 MiB total.
+Other operations: pack(source_dir, bundle_path), verify(bundle_path), extract(bundle_path, output) for requested portable evidence.
 
 Details:
 fetch(transport, source_dir, include, output, *, timeout=60,

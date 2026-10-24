@@ -1,7 +1,9 @@
 """Reduce validated coordinate observations globally and by task-defined groups.
 Call: reduce_groups(expected, groups, reducer, *observations)
 Input: Independent coordinates, group-to-coordinate maps, a reducer and observation maps.
-Output: global and groups reports with independent coverage/metrics.
+Output: {global: result, groups: {name: result}}; result={status, coverage, metrics}.
+coverage={expected_count, observed_counts, paired_count, missing}; incomplete groups have metrics=null.
+Example: reduce_groups(expected, groups, score_metrics.reduce_scores, a, b) computes global/grouped NLL and errors.
 Requires: Standard library; coordinates must belong to expected; groups may overlap; incomplete groups have no aggregate.
 
 Details:
