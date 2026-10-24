@@ -265,6 +265,213 @@ class ArrayCompareTests(unittest.TestCase):
                 compare_arrays(a, a, groups=groups)
         self.assertEqual(compare_arrays(a, a, groups={})['groups'], {})
 
+    def assert_subset_oracle(self, report, a, b, names):
+        pairs = [(a[k].ravel(), b[k].ravel()) for k in sorted(names)
+                 if k in a and k in b and a[k].shape == b[k].shape]
+        count = sum(x.size for x, _ in pairs)
+        x = np.concatenate([x[np.isfinite(x) & np.isfinite(y)] for x, y in pairs])
+        y = np.concatenate([y[np.isfinite(x) & np.isfinite(y)] for x, y in pairs])
+        self.assertEqual(report['paired_finite_count'], x.size)
+        self.assertEqual(report['paired_finite_fraction'], x.size / count if count else None)
+        for side, arrays in (('side_a', a), ('side_b', b)):
+            values = np.concatenate([arrays[k].ravel() for k in sorted(names) if k in arrays])
+            self.assertEqual(report['counts'][side], dict(
+                finite=int(np.isfinite(values).sum()), nan=int(np.isnan(values).sum()),
+                posinf=int(np.isposinf(values).sum()), neginf=int(np.isneginf(values).sum())))
+        metrics = report['finite_subset_metrics']
+        self.assertIsNone(report['finite_subset_metrics_unavailable'])
+        self.assertEqual(metrics['count'], x.size)
+        for metric, value in dict(side_a_norm=np.linalg.norm(x), side_b_norm=np.linalg.norm(y),
+                                  error_norm=np.linalg.norm(y - x), rmse=np.sqrt(np.mean((y - x)**2)),
+                                  max_abs=np.max(np.abs(y - x)),
+                                  cosine=np.dot(x, y) / (np.linalg.norm(x) * np.linalg.norm(y))).items():
+            self.assertAlmostEqual(metrics[metric]['value'], value)
+        self.assertNotIn('max_flat_index', metrics)
+
+    def test_nonfinite_missing_and_groups_match_independent_numpy_oracle(self):
+        a = {'x': np.array([1., np.nan, np.inf, -np.inf, 5., 6.]),
+             'y': np.array([2., 4.]), 'left': np.array([np.nan, np.inf, 7.]),
+             'unexpected': np.array([np.nan])}
+        b = {'x': np.array([2., 3., -np.inf, 4., np.nan, 9.]),
+             'y': np.array([3., 8.]), 'right': np.array([-np.inf, 8.])}
+        names = ['x', 'y', 'left', 'right', 'absent']
+        groups = {'mixed': ['x', 'left', 'absent'], 'overlap': ['x', 'y'],
+                  'missing': ['left', 'right']}
+        report = compare_arrays(a, b, expected=names, groups=groups, mode='nonfinite',
+                                metrics=True, chunk_size=2, max_findings=None)
+        self.assertEqual(report['status'], 'not_covered')
+        self.assertFalse(report['exact_equal'])
+        self.assertEqual(report['coverage']['missing'], dict(side_a=2, side_b=2))
+        self.assertEqual(report['coverage']['unexpected'], dict(side_a=1, side_b=0))
+        self.assertEqual(report['coverage']['compared_elements'], 8)
+        self.assertEqual(report['nonfinite'], dict(side_a=5, side_b=3))
+        self.assertIsNone(report['metrics'])
+        self.assert_subset_oracle(report, a, b, names)
+        for group in ('mixed', 'overlap'):
+            self.assert_subset_oracle(report['groups'][group], a, b, groups[group])
+        for group, selected in groups.items():
+            self.assertEqual(report['groups'][group], compare_arrays(
+                {k: a[k] for k in selected if k in a}, {k: b[k] for k in selected if k in b},
+                expected=selected, metrics=True, mode='nonfinite', chunk_size=2, max_findings=None))
+        self.assertEqual(report['finite_subset_metrics']['max_coordinate'], dict(name='y', index=[1]))
+        json.dumps(report, allow_nan=False)
+
+    def test_nonfinite_one_sided_anomalies_have_native_positions_and_limits(self):
+        a = {'left': np.array([[1., np.nan], [np.inf, -np.inf]], dtype=np.float32)}
+        b = {'right': np.asarray(np.nan)}
+        report = compare_arrays(a, b, mode='nonfinite', max_findings=None, chunk_size=1)
+        anomalies = [f for f in report['findings'] if f['reason'] == 'nonfinite']
+        self.assertEqual([(f['name'], f['side'], f['index']) for f in anomalies],
+                         [('left', 'side_a', [0, 1]), ('left', 'side_a', [1, 0]),
+                          ('left', 'side_a', [1, 1]), ('right', 'side_b', [])])
+        self.assertEqual(anomalies[0]['values'], dict(dtype='float32', side_a='nan', side_b=None))
+        self.assertEqual(anomalies[-1]['values'], dict(dtype='float64', side_a=None, side_b='nan'))
+        self.assertEqual(report['counts'], dict(side_a=dict(finite=1, nan=1, posinf=1, neginf=1),
+                                               side_b=dict(finite=0, nan=1, posinf=0, neginf=0)))
+        self.assertFalse(report['exact_equal'])
+        self.assertIsNone(report['paired_finite_fraction'])
+        self.assertEqual(report['finite_subset_metrics']['count'], 0)
+        for limit, omitted in ((0, 4), (3, 1), (8, 0)):
+            bounded = compare_arrays(a, b, mode='nonfinite', max_findings=limit, chunk_size=2)
+            self.assertEqual(bounded['findings_omitted'], omitted)
+            self.assertEqual(bounded['counts'], report['counts'])
+            self.assertLessEqual(len(bounded['findings']), limit)
+        json.dumps(report, allow_nan=False)
+
+    def test_nonfinite_maximum_keeps_original_coordinate_across_chunks(self):
+        a = {'a': np.array([np.nan, 1.]),
+             'z': np.arange(24., dtype=np.float32).reshape(4, 6)[:, ::2]}
+        b = {k: v.copy() for k, v in a.items()}
+        a['z'][0, 0] = np.nan
+        b['z'][1, 0] = np.inf
+        b['z'][2, 1] += 20
+        b['z'][3, 0] += 20  # First original coordinate wins a tied maximum.
+        for chunk in (1, 2, 5, 100):
+            report = compare_arrays(a, b, mode='nonfinite', chunk_size=chunk,
+                                    groups={'weights': ['z']})
+            for result in (report, report['groups']['weights']):
+                metrics = result['finite_subset_metrics']
+                self.assertEqual(metrics['max_coordinate'], dict(name='z', index=[2, 1]))
+                self.assertEqual(metrics['max_values'], dict(dtype='float32', side_a='14.0', side_b='34.0'))
+            self.assert_subset_oracle(report, a, b, a)
+        scalar = compare_arrays({'x': np.array(1)}, {'x': np.array(2)}, mode='nonfinite')
+        self.assertEqual(scalar['finite_subset_metrics']['max_coordinate'], dict(name='x', index=[]))
+
+    def test_nonfinite_zero_finite_coordinates_and_empty_arrays(self):
+        for x, y in ((np.array([np.nan, np.inf]), np.array([1., -np.inf])),
+                     (np.zeros(0), np.zeros(0))):
+            report = compare_arrays({'x': x}, {'x': y}, mode='nonfinite', metrics=True)
+            self.assertEqual(report['paired_finite_count'], 0)
+            self.assertEqual(report['paired_finite_fraction'], 0. if x.size else None)
+            self.assertEqual(report['finite_subset_metrics'],
+                             dict(count=0, status='not_covered', reason='no present tensor coordinates'))
+            self.assertIsNone(report['finite_subset_metrics_unavailable'])
+            self.assertEqual(report['exact_equal'], not x.size)
+            json.dumps(report, allow_nan=False)
+
+    def test_nonfinite_shape_and_dtype_semantics_and_unpaired_validation(self):
+        a = {'dtype': np.array([1., np.nan], dtype=np.float32),
+             'shape': np.array([[np.inf, 2.]]), 'good': np.array([1., 3.])}
+        b = {'dtype': np.array([2., 4.]), 'shape': np.array([-np.inf, np.nan, 3.]),
+             'good': np.array([2., 5.])}
+        report = compare_arrays(a, b, mode='nonfinite', metrics=True, max_findings=None,
+                                groups={'shape': ['shape'], 'dtype': ['dtype']}, chunk_size=1)
+        self.assertEqual(report['status'], 'incomparable')
+        self.assertFalse(report['exact_equal'])
+        self.assertEqual(report['dtype_differences'], 1)
+        self.assertEqual(report['incompatible_arrays'], 1)
+        self.assertEqual(report['coverage']['compared_elements'], 4)
+        self.assertIsNone(report['metrics'])
+        self.assert_subset_oracle(report, a, b, a)
+        self.assertEqual([(f['side'], f['index']) for f in report['findings']
+                          if f['name'] == 'shape' and f['reason'] == 'nonfinite'],
+                         [('side_a', [0, 0]), ('side_b', [0]), ('side_b', [1])])
+        self.assertIsNone(report['groups']['shape']['paired_finite_fraction'])
+        self.assertFalse(report['groups']['dtype']['exact_equal'])
+        self.assertEqual(report['groups']['dtype']['finite_subset_metrics']['count'], 1)
+        for value in (np.array(['bad']), np.array([1j])):
+            with self.assertRaisesRegex(ValueError, 'real numeric arrays'):
+                compare_arrays({'x': value}, {}, mode='nonfinite')
+
+    def test_nonfinite_preserves_integer_precision_and_overflow_limits(self):
+        for x, y, reason in ((np.array([2**60+1], dtype=np.int64),
+                              np.array([2**60], dtype=np.uint64), 'integer'),
+                             (np.array([1e308]), np.array([-1e308]), 'nonfinite')):
+            report = compare_arrays({'x': x}, {'x': y}, mode='nonfinite', metrics=True)
+            self.assertFalse(report['exact_equal'])
+            self.assertEqual(report['unequal_elements'], 1)
+            self.assertEqual(report['paired_finite_count'], 1)
+            self.assertIsNone(report['finite_subset_metrics'])
+            self.assertIn(reason, report['finite_subset_metrics_unavailable'])
+            self.assertIsNone(report['metrics'])
+            self.assertEqual(report['findings'][-1]['values']['side_a'], repr(x[0].item()))
+            json.dumps(report, allow_nan=False)
+        x = {'x': np.array([-2**53, 2**53], dtype=np.int64)}
+        report = compare_arrays(x, x, mode='nonfinite')
+        self.assertTrue(report['exact_equal'])
+        self.assertEqual(report['finite_subset_metrics']['count'], 2)
+
+    def test_nonfinite_groups_reuse_native_loads_and_chunk_scans(self):
+        from collections.abc import Mapping
+        from collections import Counter
+        class ReadOnce(Mapping):
+            def __init__(self, values):
+                self.values, self.reads = values, Counter()
+            def __iter__(self):
+                return iter(self.values)
+            def __len__(self):
+                return len(self.values)
+            def __getitem__(self, key):
+                self.reads[key] += 1
+                if self.reads[key] > 1:
+                    raise AssertionError('array loaded twice: ' + key)
+                return self.values[key]
+        a = ReadOnce({'x': np.array([1., np.nan, np.inf]), 'left': np.array([np.nan])})
+        b = ReadOnce({'x': np.array([2., 3., np.inf])})
+        from array_compare import _Comparison
+        with patch.object(_Comparison, 'observe', autospec=True, side_effect=_Comparison.observe) as observe:
+            compare_arrays(a, b, mode='nonfinite', groups={'one': ['x'], 'two': ['x', 'left']}, chunk_size=2)
+        self.assertEqual(dict(a.reads), dict(x=1, left=1))
+        self.assertEqual(dict(b.reads), dict(x=1))
+        self.assertEqual(observe.call_count, 5)  # Two chunks per paired side; one unpaired chunk.
+
+    def test_nonfinite_cli_and_default_schema_compatibility(self):
+        a, b = {'x': np.array([1., np.nan])}, {'x': np.array([2., np.inf])}
+        for metrics in (False, True):
+            default = compare_arrays(a, b, metrics=metrics)
+            self.assertEqual(default, compare_arrays(a, b, metrics=metrics, mode='metrics'))
+            expected_keys = {'status', 'exact_equal', 'coverage', 'unequal_arrays', 'unequal_elements',
+                             'incompatible_arrays', 'dtype_differences', 'nonfinite', 'findings', 'findings_omitted'}
+            self.assertEqual(set(default), expected_keys | ({'metrics', 'metrics_unavailable'} if metrics else set()))
+        finite = {'x': np.array([True, False]), 'y': np.array([1., 3.])}
+        full = compare_arrays(finite, finite, metrics=True)
+        diagnostic = compare_arrays(finite, finite, metrics=True, mode='nonfinite')
+        self.assertEqual({k: diagnostic[k] for k in full}, full)
+        self.assertEqual(diagnostic['finite_subset_metrics'],
+                         {k: v for k, v in full['metrics'].items() if k != 'max_flat_index'})
+        self.assertTrue(diagnostic['exact_equal'])
+        for mode in ('unknown', '', None):
+            with self.assertRaisesRegex(ValueError, 'mode must be'):
+                compare_arrays(a, b, mode=mode)
+        script = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts/array_compare.py'
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            np.savez(root/'a.npz', **a); np.savez(root/'b.npz', **b)
+            (root/'groups.json').write_text('{"g": ["x"]}')
+            (root/'expected.json').write_text('["x", "absent"]')
+            argv = [sys.executable, '-I', '-B', str(script), str(root/'a.npz'), str(root/'b.npz'),
+                    '--mode', 'nonfinite', '--all-findings', '--groups', str(root/'groups.json'),
+                    '--expected', str(root/'expected.json'), '--output', str(root/'report.json')]
+            process = subprocess.run(argv, capture_output=True, text=True)
+            self.assertEqual(process.returncode, 1, process.stderr)
+            report = json.loads((root/'report.json').read_text())
+            self.assertEqual(report, compare_arrays(a, b, expected=['x', 'absent'],
+                             groups={'g': ['x']}, mode='nonfinite', max_findings=None))
+            self.assertNotIn('metrics', report)
+            self.assertEqual(report['finite_subset_metrics']['count'], 1)
+            argv[argv.index('nonfinite')] = 'unknown'
+            self.assertEqual(subprocess.run(argv, capture_output=True).returncode, 2)
+
     def test_cli_groups_use_the_same_reports(self):
         script = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts/array_compare.py'
         with tempfile.TemporaryDirectory() as folder:

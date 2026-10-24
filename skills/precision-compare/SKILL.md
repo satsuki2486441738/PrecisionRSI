@@ -33,12 +33,12 @@ Reuse workload checks covering the request. Missing comparisons: import from `sc
 
 | Input | Python call | Result |
 |---|---|---|
-| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False, groups=None)` | `exact_equal`, coverage, findings, optional groups |
+| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False, groups=None, mode='metrics')` | Equality, coverage, groups; `mode=nonfinite`: categories + paired-finite metrics |
 | Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, coverage, metadata, numeric |
 | Coordinate → natural-logprob maps | `score_metrics.reduce_scores(a, b)` | Both NLLs, NLL difference, MAE/P99/max and coordinate |
 | Global + grouped target scores | `group_metrics.reduce_groups(expected, groups, score_metrics.reduce_scores, a, b)` | `global` and `groups[name]`, each with status, coverage, metrics |
 
-`expected`: task coordinate inventory; `groups`: label → coordinate subset. Arrays use their own `groups`. Adapters establish identities, masks, shifts and logical coordinates; tools supply arithmetic and coverage.
+`expected`: task coordinate inventory; `groups`: label → coordinate subset. Arrays use their own `groups`; `mode=nonfinite` reports the finite subset while retaining missing/nonfinite findings and original coordinates. Adapters establish identities, masks, shifts and logical coordinates; tools supply arithmetic and coverage.
 
 File CLIs, from the skill directory:
 
@@ -48,7 +48,7 @@ python scripts/tree_compare.py A.pt B.pt --output NEW.json
 python scripts/evidence_bundle.py fetch REQUEST.json NEW_SIDE_DIRECTORY
 ```
 
-NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both comparators accept `--metrics` and `--all-findings`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
+NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both comparators accept `--metrics` and `--all-findings`; arrays also accept `--mode nonfinite`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
 
 Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch verifies selected files. Reuse its receipt and `EXPORT.json` hashes/sizes for unchanged files; large arrays stay at source.
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Compare already corresponding named arrays without artifact conversion (NumPy).
-Call: compare_arrays(a, b, expected=None, metrics=False, groups=None); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics]
+Call: compare_arrays(a, b, expected=None, metrics=False, groups=None, mode='metrics'); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics] [--mode nonfinite]
 Input: Corresponding name-to-numeric-array maps, or NPZ files.
-Output: exact_equal, coverage, findings; optional metrics and groups[name] with the same report shape.
+Output: exact_equal, coverage, findings; optional metrics/groups; mode=nonfinite adds counts and finite_subset_metrics.
 Metrics: metrics.{max_abs,rmse,cosine,error_norm}.value and metrics.max_coordinate; unavailable metrics are null. --all-findings returns every differing/nonfinite coordinate.
 Requires: NumPy; equality requires matching shapes/dtypes and finite values. expected detects shared omissions.
 
 Details:
 API: compare_arrays(side_a, side_b, expected=None, metrics=False,
-                    max_findings=8, chunk_size=1048576, *, groups=None) -> JSON-ready report.
+                    max_findings=8, chunk_size=1048576, *, groups=None, mode='metrics') -> JSON-ready report.
 Sides map unique logical names to real numeric arrays/scalars. Adapters establish
 observation semantics, inputs/state, masks and logical correspondence. Native
 loaders can supply mappings directly; names are paired literally. expected is an
@@ -30,6 +30,25 @@ and applicable index/values or shape/dtype details. With metrics=True, metrics
 and metrics_unavailable are added; metrics holds norms/errors, max_coordinate
 (name/index), and max_values. Undefined norms retain the existing null/reason rules.
 
+mode='metrics' (default) preserves the existing report. mode='nonfinite' adds
+counts={side_a: {finite, nan, posinf, neginf}, side_b: {...}} over all present
+expected arrays, including unpaired and shape-incompatible arrays (unexpected
+arrays are excluded). Existing nonfinite totals include these anomalies too.
+paired_finite_count counts coordinates finite on both sides of same-shape pairs;
+paired_finite_fraction divides it by coverage.compared_elements, or is null when
+there are no compatible paired coordinates. Missing/incompatible arrays do not
+enter this denominator. finite_subset_metrics uses Stats on only those finite
+pairs, even with incomplete inventory; finite_subset_metrics_unavailable is null
+or the arithmetic/FP64 precision failure reason. No finite pairs returns Stats'
+count=0/status=not_covered report. Subset metrics omit the compressed
+max_flat_index; max_coordinate (logical name/original C-order index) and native
+max_values identify the original maximum, with the first coordinate winning ties.
+These fields also appear in groups and require no metrics=True/--metrics.
+Requesting metrics=True still adds full metrics, unavailable for incomplete,
+shape-incompatible or nonfinite inputs. Nonfinite findings on unpaired or
+shape-incompatible arrays include side, that side's index and native values
+(with null for the counterpart). Findings retain the bounded/exhaustive policy.
+
 exact_equal requires complete inventory, equal shapes/dtypes, finite values and
 numeric equality (signed zeros compare equal, not byte identity). Different dtypes
 are recorded and prevent exact_equal, but same-shape real arrays still receive
@@ -49,7 +68,7 @@ retains bounded representative findings. Exhaustive output memory scales with
 the number of findings. NPZ loading materializes
 one named array at a time; use native mappings/memmaps for larger observations.
 
-CLI: array_compare.py A.npz B.npz --output NEW.json [--metrics]
+CLI: array_compare.py A.npz B.npz --output NEW.json [--metrics] [--mode metrics|nonfinite]
                      [--expected names.json] [--groups groups.json] [--max-findings 8 | --all-findings]
 The CLI reads NPZ files with allow_pickle=False; no task directory layout is
 assumed. Native Torch/BF16 state needs an adapter preserving its dtype identity.
@@ -94,7 +113,7 @@ def _different(a, b):
 
 class _Comparison:
     """Merge per-array reductions without rereading values or retaining arrays."""
-    def __init__(self, names, keys, metrics, max_findings):
+    def __init__(self, names, keys, metrics, max_findings, diagnostic=False):
         missing = [names - k for k in keys]
         extra = [k - names for k in keys]
         self.covered = not any(missing + extra)
@@ -109,7 +128,12 @@ class _Comparison:
                 self.finding(name, 'missing', side=side)
             for name in sorted(unexpected):
                 self.finding(name, 'unexpected', side=side)
-        self.stats = Stats() if metrics else None
+        self.metrics, self.diagnostic = metrics, diagnostic
+        self.stats = Stats() if metrics or diagnostic else None
+        self.counts = {side: dict(finite=0, nan=0, posinf=0, neginf=0)
+                       for side in ('side_a', 'side_b')} if diagnostic else None
+        self.paired_finite_count = 0
+        self.subset_reason = None
         self.metric_reason = None if self.covered else 'incomplete inventory'
         self.incompatible = self.dtype_differences = self.unequal = self.unequal_arrays = 0
         self.nonfinite = dict(side_a=0, side_b=0)
@@ -120,6 +144,19 @@ class _Comparison:
         if self.limit is None or len(self.findings) < self.limit:
             self.findings.append(dict(name=name, reason=reason, **details))
 
+    def observe(self, side, values):
+        finite = np.isfinite(values)
+        count = int(np.count_nonzero(finite))
+        self.nonfinite[side] += values.size - count
+        if self.diagnostic:
+            counts = self.counts[side]
+            for kind, value in zip(('finite', 'nan', 'posinf', 'neginf'),
+                                   (count, np.count_nonzero(np.isnan(values)),
+                                    np.count_nonzero(np.isposinf(values)),
+                                    np.count_nonzero(np.isneginf(values)))):
+                counts[kind] += int(value)
+        return finite
+
     def merge(self, other):
         for field in ('compared_arrays', 'compared_elements'):
             self.coverage[field] += other.coverage[field]
@@ -127,6 +164,12 @@ class _Comparison:
             setattr(self, field, getattr(self, field) + getattr(other, field))
         for side in self.nonfinite:
             self.nonfinite[side] += other.nonfinite[side]
+            if self.diagnostic:
+                for kind in self.counts[side]:
+                    self.counts[side][kind] += other.counts[side][kind]
+        self.paired_finite_count += other.paired_finite_count
+        if other.subset_reason:
+            self.subset_reason = other.subset_reason
         self.findings.extend(other.findings if self.limit is None else
                              other.findings[:max(0, self.limit - len(self.findings))])
         self.finding_count += other.finding_count
@@ -147,34 +190,65 @@ class _Comparison:
                       nonfinite=self.nonfinite, findings=self.findings,
                       findings_omitted=self.finding_count - len(self.findings))
         if self.stats is not None:
-            values = self.stats.report() if self.metric_reason is None else None
+            reason = self.subset_reason or self.metric_reason
+            values = self.stats.report() if (self.subset_reason is None and
+                                            (self.diagnostic or reason is None)) else None
             if values and self.max_coordinate is not None:
                 values.update(max_coordinate=dict(self.max_coordinate), max_values=dict(self.max_values))
-            result.update(metrics=values, metrics_unavailable=self.metric_reason)
+            if self.metrics:
+                result.update(metrics=values if reason is None else None, metrics_unavailable=reason)
+            if self.diagnostic:
+                subset = dict(values) if values is not None else None
+                if subset is not None:
+                    subset.pop('max_flat_index', None)
+                count = self.coverage['compared_elements']
+                result.update(counts=self.counts, paired_finite_count=self.paired_finite_count,
+                              paired_finite_fraction=self.paired_finite_count / count if count else None,
+                              finite_subset_metrics=subset, finite_subset_metrics_unavailable=self.subset_reason)
         return result
 
 
-def _scan_array(name, a, b, metrics, max_findings, chunk_size):
-    result = _Comparison({name}, ({name}, {name}), metrics, max_findings)
-    if a.dtype.kind not in 'biuf' or b.dtype.kind not in 'biuf':
+def _scan_array(name, a, b, metrics, max_findings, chunk_size, diagnostic=False):
+    result = _Comparison({name}, ({name}, {name}), metrics, max_findings, diagnostic)
+    arrays = (a, b)
+    if any(v is not None and v.dtype.kind not in 'biuf' for v in arrays):
         raise ValueError('real numeric arrays required: ' + name)
-    if a.shape != b.shape:
+    paired = a is not None and b is not None and a.shape == b.shape
+    if a is not None and b is not None and a.shape != b.shape:
         result.incompatible = 1
         result.finding(name, 'shape_or_dtype', side_a_shape=list(a.shape), side_b_shape=list(b.shape),
                        side_a_dtype=str(a.dtype), side_b_dtype=str(b.dtype))
         result.metric_reason = 'incompatible arrays'
-        return result
-    if a.dtype != b.dtype:
+        if not diagnostic:
+            return result
+    if paired and a.dtype != b.dtype:
         result.dtype_differences = 1
         result.finding(name, 'dtype', side_a_dtype=str(a.dtype), side_b_dtype=str(b.dtype))
-    result.coverage.update(compared_arrays=1, compared_elements=a.size)
+    if paired:
+        result.coverage.update(compared_arrays=1, compared_elements=a.size)
     first_bad = first_unequal = None
-    for start in range(0, a.size, chunk_size):
-        x, y = a.flat[start:start + chunk_size], b.flat[start:start + chunk_size]
-        finite = [np.isfinite(v) for v in (x, y)]
-        for side, valid in zip(result.nonfinite, finite):
-            result.nonfinite[side] += int(valid.size - np.count_nonzero(valid))
+    side_bad = set()
+    for start in range(0, max(v.size for v in arrays if v is not None), chunk_size):
+        chunks = [v.flat[start:start + chunk_size] if v is not None else None for v in arrays]
+        finite = [result.observe(side, v) if v is not None else None
+                  for side, v in zip(result.nonfinite, chunks)]
+        if not paired:
+            for side, array, chunk, valid in zip(result.nonfinite, arrays, chunks, finite):
+                if valid is None or valid.all():
+                    continue
+                offsets = np.flatnonzero(~valid) if max_findings is None else (
+                    [] if side in side_bad else [int(np.argmin(valid))])
+                for offset in offsets:
+                    index = start + int(offset)
+                    values = dict.fromkeys(('side_a', 'side_b'))
+                    values.update(dtype=str(array.dtype), **{side: repr(chunk[offset].item())})
+                    result.finding(name, 'nonfinite', side=side,
+                                   index=[int(i) for i in np.unravel_index(index, array.shape)], values=values)
+                side_bad.add(side)
+            continue
+        x, y = chunks
         valid = finite[0] & finite[1]
+        result.paired_finite_count += int(np.count_nonzero(valid))
         if not valid.all():
             result.metric_reason = 'nonfinite arrays'
             if first_bad is None:
@@ -189,28 +263,36 @@ def _scan_array(name, a, b, metrics, max_findings, chunk_size):
                                values=_values(a, b, index))
         if different.any() and first_unequal is None:
             first_unequal = start + int(np.argmax(different))
-        if metrics and result.metric_reason is None:
-            if any(v.dtype.kind in 'iu' and (int(v.min()) < -2**53 or int(v.max()) > 2**53) for v in (x, y)):
-                result.metric_reason = 'integer magnitude exceeds exact FP64 range'
+        error_field = 'subset_reason' if diagnostic else 'metric_reason'
+        if result.stats is not None and getattr(result, error_field) is None and valid.any():
+            offsets = np.flatnonzero(valid) if diagnostic else None
+            pair = (x[valid], y[valid]) if diagnostic else (x, y)
+            if any(v.dtype.kind in 'iu' and (int(v.min()) < -2**53 or int(v.max()) > 2**53) for v in pair):
+                setattr(result, error_field, 'integer magnitude exceeds exact FP64 range')
             else:
                 try:
-                    result.stats.add(x.astype(np.float64), y.astype(np.float64))
+                    previous_count, previous_max = result.stats.count, result.stats.max_index
+                    result.stats.add(*(v.astype(np.float64) for v in pair))
+                    if result.stats.max_index != previous_max:
+                        offset = result.stats.max_index - previous_count
+                        index = start + (int(offsets[offset]) if diagnostic else offset)
+                        result.max_coordinate = dict(name=name, index=[int(i) for i in np.unravel_index(index, a.shape)])
+                        result.max_values = _values(a, b, index)
                 except ValueError as exc:
-                    result.metric_reason = str(exc)
+                    setattr(result, error_field, str(exc))
     result.unequal_arrays = int(first_unequal is not None)
     for reason, index in (('nonfinite', first_bad), ('values', first_unequal)):
         if max_findings is not None and index is not None:
             result.finding(name, reason, index=[int(i) for i in np.unravel_index(index, a.shape)],
                            values=_values(a, b, index))
-    if metrics and result.stats.max_index is not None:
-        index = result.stats.max_index
-        result.max_coordinate = dict(name=name, index=[int(i) for i in np.unravel_index(index, a.shape)])
-        result.max_values = _values(a, b, index)
     return result
 
 
 def _compare_partitions(side_a, side_b, expected=None, metrics=False, max_findings=8,
-                        chunk_size=1_048_576, partitions=None):
+                        chunk_size=1_048_576, partitions=None, mode='metrics'):
+    if mode not in ('metrics', 'nonfinite'):
+        raise ValueError('mode must be metrics or nonfinite')
+    diagnostic = mode == 'nonfinite'
     if (type(metrics) is not bool
             or (max_findings is not None and (type(max_findings) is not int or max_findings < 0))
             or type(chunk_size) is not int or chunk_size < 1):
@@ -223,18 +305,20 @@ def _compare_partitions(side_a, side_b, expected=None, metrics=False, max_findin
     names = keys[0] | keys[1] if expected is None else _names(expected)
     if not names:
         raise ValueError('nonempty expected or observed inventory required')
-    total = _Comparison(names, keys, metrics, max_findings)
+    total = _Comparison(names, keys, metrics, max_findings, diagnostic)
     groups, owners = {}, {}
     for group, selected in (partitions or {}).items():
         selected = set(selected)
-        groups[group] = _Comparison(selected, [k & selected for k in keys], metrics, max_findings)
+        groups[group] = _Comparison(selected, [k & selected for k in keys], metrics, max_findings, diagnostic)
         for name in selected:
             if name not in names:
                 raise ValueError('groups must contain expected names')
             owners.setdefault(name, []).append(group)
-    for name in sorted(names & keys[0] & keys[1]):
-        a, b = (np.asarray(side[name]) for side in (side_a, side_b))
-        part = _scan_array(name, a, b, metrics, max_findings, chunk_size)
+    present = (keys[0] | keys[1]) if diagnostic else (keys[0] & keys[1])
+    for name in sorted(names & present):
+        a, b = (np.asarray(side[name]) if name in key else None
+                for side, key in zip((side_a, side_b), keys))
+        part = _scan_array(name, a, b, metrics, max_findings, chunk_size, diagnostic)
         total.merge(part)
         for group in owners.get(name, ()):
             groups[group].merge(part)
@@ -242,8 +326,13 @@ def _compare_partitions(side_a, side_b, expected=None, metrics=False, max_findin
 
 
 def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
-                   chunk_size=1_048_576, *, groups=None):
-    """Compare named arrays once; optional explicit groups reuse their reductions."""
+                   chunk_size=1_048_576, *, groups=None, mode='metrics'):
+    """Compare named arrays once, reusing reductions for explicit groups.
+
+    mode='metrics' retains the default schema; mode='nonfinite' always computes
+    per-side category counts and metrics over compatible paired finite elements.
+    See the module docstring for coverage, findings and subset field semantics.
+    """
     if groups is not None:
         if not isinstance(groups, Mapping):
             raise ValueError('groups must map names to nonempty array inventories')
@@ -257,7 +346,7 @@ def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
     else:
         selected = None
     result, reports = _compare_partitions(side_a, side_b, expected, metrics,
-                                          max_findings, chunk_size, selected)
+                                          max_findings, chunk_size, selected, mode)
     if groups is not None:
         result['groups'] = reports
     return result
@@ -271,6 +360,7 @@ def main():
     parser.add_argument('--expected')
     parser.add_argument('--groups', help='JSON mapping group names to array-name inventories')
     parser.add_argument('--metrics', action='store_true')
+    parser.add_argument('--mode', choices=('metrics', 'nonfinite'), default='metrics')
     findings = parser.add_mutually_exclusive_group()
     findings.add_argument('--max-findings', type=int, default=8)
     findings.add_argument('--all-findings', dest='max_findings', action='store_const', const=None,
@@ -281,7 +371,7 @@ def main():
             sides = [stack.enter_context(np.load(p, allow_pickle=False)) for p in (args.side_a, args.side_b)]
             expected = load_json(args.expected) if args.expected else None
             result = compare_arrays(*sides, expected=expected, metrics=args.metrics,
-                                    max_findings=args.max_findings,
+                                    max_findings=args.max_findings, mode=args.mode,
                                     groups=load_json(args.groups) if args.groups else None)
         with Path(args.output).open('x') as stream:
             json.dump(result, stream, indent=2, allow_nan=False)
