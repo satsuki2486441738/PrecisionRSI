@@ -7,7 +7,7 @@ description: Establish native execution when a requested model, framework or har
 
 ## Execute
 
-Use available 10–30 s completion waits for noninteractive commands.
+Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
 
 - Enter for missing native execution. Reuse environments, adapters and receipts matching source, dependencies and target.
 - Missing support: inspect the selected revision's support declarations and closest native example; implement the required model/backend integration.

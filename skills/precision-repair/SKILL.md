@@ -16,7 +16,7 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 ## Patch and verify
 
-Use available 10–30 s completion waits for noninteractive commands.
+Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
 
 - Patch the responsible implementation; keep framework-specific fixes with the case.
 - Extend existing checks for missing causal or nearby-case coverage; the regression must fail before the fix and pass after.

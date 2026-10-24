@@ -50,7 +50,7 @@ Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/n
 
 ## Collect
 
-Use available 10–30 s completion waits for noninteractive commands.
+Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
 
 Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Use task recipes for unresolved capture semantics or framework integration.
 
