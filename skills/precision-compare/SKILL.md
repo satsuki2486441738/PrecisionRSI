@@ -12,11 +12,11 @@ description: Collect and compare numerical results across hardware and software 
 
 ## Compare
 
-Start with supplied observations; collect missing ones. Reuse execution JSON for native preflight/capture via [shared tasks](references/comparison.md#shared-tasks). Use these declarations directly:
+Reuse workload checks and observations; collect or compare only missing scope. Reuse execution JSON for native preflight/capture via [shared tasks](references/comparison.md#shared-tasks). Use these declarations directly:
 
 | Input | Python call | Result |
 |---|---|---|
-| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False)` | `exact_equal`, `coverage`, `findings` |
+| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False, groups=None)` | `exact_equal`, `coverage`, `findings`, optional groups |
 | Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, `coverage`, `metadata`, `numeric` |
 | Coordinate → natural-logprob maps | `score_metrics.reduce_scores(a, b)` | NLL, NLL difference, MAE/P99/max and coordinate |
 | Coordinate groups | `group_metrics.reduce_groups(expected, groups, reducer, *observations)` | `global`, `groups` |
@@ -35,7 +35,7 @@ Read resource declarations and tool summaries; full configuration/identity files
 
 ## Collect
 
-Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Load the relevant recipe.
+Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Use task recipes for unresolved capture semantics or framework integration.
 
 - [Inference](references/inference.md): scores, distributions, cache stages.
 - [SFT, full / LoRA](references/sft.md): objectives, gradients, stored updates.

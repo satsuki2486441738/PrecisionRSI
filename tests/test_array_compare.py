@@ -212,6 +212,74 @@ class ArrayCompareTests(unittest.TestCase):
         self.assertEqual([row['reason'] for row in report['findings']], ['nonfinite', 'nonfinite', 'values'])
         json.dumps(report, allow_nan=False)
 
+    def test_groups_share_one_scan_and_match_direct_comparisons(self):
+        from collections.abc import Mapping
+        from collections import Counter
+        class ReadOnce(Mapping):
+            def __init__(self, values):
+                self.values, self.reads = values, Counter()
+            def __iter__(self):
+                return iter(self.values)
+            def __len__(self):
+                return len(self.values)
+            def __getitem__(self, key):
+                self.reads[key] += 1
+                if self.reads[key] > 1:
+                    raise AssertionError('array loaded twice: ' + key)
+                return self.values[key]
+        values = {'a': np.arange(12).reshape(3, 4)[:, ::2],
+                  'b': np.asarray(2.), 'c': np.arange(3.)}
+        other = {k: v + 1 for k, v in values.items()}
+        a, b = ReadOnce(values), ReadOnce(other)
+        groups = {'gradients': ['a', 'b'], 'overlap': ['b', 'c'], 'single': ['a']}
+        report = compare_arrays(a, b, groups=groups, metrics=True, chunk_size=2)
+        self.assertEqual(dict(a.reads), dict.fromkeys(values, 1))
+        self.assertEqual(dict(b.reads), dict.fromkeys(values, 1))
+        for group, names in groups.items():
+            expected = compare_arrays({k: values[k] for k in names},
+                                      {k: other[k] for k in names}, metrics=True, chunk_size=2)
+            self.assertEqual(report['groups'][group], expected)
+        direct = compare_arrays(values, other, metrics=True, chunk_size=2)
+        self.assertEqual({k: v for k, v in report.items() if k != 'groups'}, direct)
+
+    def test_groups_keep_local_coverage_and_invalid_values(self):
+        a = {'good': np.array([1.]), 'bad': np.array([np.nan]), 'shape': np.ones(2)}
+        b = {'good': np.array([1.]), 'bad': np.array([np.nan]), 'shape': np.ones(3)}
+        report = compare_arrays(a, b, expected=['good', 'bad', 'shape', 'absent'],
+                                groups={k: [k] for k in ('good', 'bad', 'shape', 'absent')},
+                                metrics=True)
+        self.assertTrue(report['groups']['good']['exact_equal'])
+        self.assertFalse(report['groups']['bad']['exact_equal'])
+        self.assertIsNone(report['groups']['bad']['metrics'])
+        self.assertEqual(report['groups']['shape']['status'], 'incomparable')
+        self.assertEqual(report['groups']['absent']['status'], 'not_covered')
+        self.assertEqual(report['groups']['absent']['coverage']['missing'],
+                         dict(side_a=1, side_b=1))
+        json.dumps(report, allow_nan=False)
+
+    def test_groups_reject_invalid_memberships(self):
+        a = {'x': np.ones(1)}
+        for groups in ([], {'': ['x']}, {'g': []}, {'g': 'x'},
+                       {'g': ['x', 'x']}, {'g': ['unknown']}, {1: ['x']}):
+            with self.subTest(groups=groups), self.assertRaises(ValueError):
+                compare_arrays(a, a, groups=groups)
+        self.assertEqual(compare_arrays(a, a, groups={})['groups'], {})
+
+    def test_cli_groups_use_the_same_reports(self):
+        script = Path(__file__).resolve().parents[1] / 'skills/precision-compare/scripts/array_compare.py'
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            a, b = {'x': np.array([1., 2.])}, {'x': np.array([1., 3.])}
+            np.savez(root/'a.npz', **a); np.savez(root/'b.npz', **b)
+            (root/'groups.json').write_text('{"step": ["x"]}')
+            p = subprocess.run([sys.executable, '-I', '-B', str(script),
+                                str(root/'a.npz'), str(root/'b.npz'), '--metrics',
+                                '--groups', str(root/'groups.json'), '--output', str(root/'r.json')],
+                               capture_output=True, text=True)
+            self.assertEqual(p.returncode, 0, p.stderr)
+            self.assertEqual(json.loads((root/'r.json').read_text()),
+                             compare_arrays(a, b, metrics=True, groups={'step': ['x']}))
+
     def test_invalid_inputs_and_inventories(self):
         for kwargs in ({'expected': ['x', 'x']}, {'expected': 'x'}, {'chunk_size': 0},
                        {'metrics': 1}, {'max_findings': -1}):

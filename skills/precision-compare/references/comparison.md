@@ -41,7 +41,7 @@ Adapters establish semantic correspondence, input/state and dtype identity. Equa
 
 Array/tree comparisons require finite, exactly equal numeric values for `exact_equal`; optional metrics use FP64 arithmetic. Same-shape arrays with different dtypes retain dtype findings and support error metrics; `exact_equal` still requires matching dtypes. Findings are bounded examples; counts retain all differences. For every coordinate/value, use `--all-findings` or Python `max_findings=None`; checkpoint findings retain original state paths and native dtypes. Check an independent task inventory for omissions shared by both sides. Add traversal only for requested details absent from reports.
 
-For grouped comparisons, derive groups from task coordinates/settings and pass `compare_arrays` as reducer. Use `lambda a, b: compare_arrays(a, b, metrics=True)` for error metrics. Groups may overlap; incomplete groups have no aggregate, while complete groups remain available.
+For named arrays, pass `groups={name: array_names}` to `compare_arrays` (CLI: `--groups groups.json`): global and group reports reuse one scan. For other coordinate reducers, use `group_metrics.reduce_groups`. Groups may overlap; missing observations remain explicit and complete groups retain their metrics.
 
 The [gradient example](../examples/compare_gradients.py) directly compares native CPU FP32/BF16 gradients (Torch and NumPy required).
 

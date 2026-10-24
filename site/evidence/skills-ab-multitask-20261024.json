@@ -1,0 +1,2422 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "source_revision": "b8e053c39ddeb9311a741059272e0e728b2e2397",
+  "skill_versions": "Frozen before the grouped-array tool change; no claim that the new tool reduced these measured agent costs.",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "cases": {
+    "cache": {
+      "kind": "injected_synthetic_fixture",
+      "initial_sources": {
+        "run_workload.py": "\"\"\"Original serving-style workload: left-padded prefill followed by cached chunks.\"\"\"\nimport argparse, json, torch\nfrom workload import TinyTransformer\n\ndef run():\n    model = TinyTransformer()\n    ids = torch.tensor([[0,0,4,8,15,16,23,42], [0,3,7,11,19,2,9,5]])\n    mask = torch.tensor([[0,0,1,1,1,1,1,1], [0,1,1,1,1,1,1,1]])\n    cache = None; pieces=[]; errors=[]; offset=0\n    with torch.inference_mode():\n        for size in [5,1,2]:\n            end=offset+size\n            reference=model.full(ids[:,:end], mask[:,:end])[:,offset:end]\n            actual,cache=model.cached(ids[:,offset:end],mask[:,:end],cache)\n            valid=mask[:,offset:end].bool()\n            error=(actual[valid]-reference[valid]).abs().max().item()\n            errors.append({'stage':'prefill' if offset==0 else 'decode','start':offset,'end':end,'max_abs':error})\n            pieces.append(actual); offset=end\n    result={'fixture':True,'device':'cpu','dtype':'float32','chunks':errors,'passed':all(x['max_abs']<2e-5 for x in errors)}\n    return result\nif __name__=='__main__':\n    result=run(); print(json.dumps(result,indent=2))\n    raise SystemExit(0 if result['passed'] else 1)\n",
+        "workload.py": "\"\"\"Synthetic CPU inference fixture; intentionally contains one injected wrapper defect.\nNo upstream framework defect is asserted. Native SDPA and fixed model weights are used.\n\"\"\"\nimport torch\nfrom torch import nn\nfrom torch.nn import functional as F\n\ntorch.set_num_threads(1)\nclass TinyTransformer(nn.Module):\n    def __init__(self, seed=17):\n        super().__init__()\n        with torch.random.fork_rng():\n            torch.manual_seed(seed)\n            self.token = nn.Embedding(53, 32)\n            self.position = nn.Embedding(64, 32)\n            self.norm1 = nn.LayerNorm(32)\n            self.qkv = nn.Linear(32, 96)\n            self.proj = nn.Linear(32, 32)\n            self.norm2 = nn.LayerNorm(32)\n            self.ff = nn.Sequential(nn.Linear(32, 64), nn.GELU(), nn.Linear(64, 32))\n            self.head = nn.Linear(32, 53, bias=False)\n        self.eval()\n\n    def _finish(self, x, q, k, v, allowed):\n        a = F.scaled_dot_product_attention(q, k, v, attn_mask=allowed, dropout_p=0.0)\n        x = x + self.proj(a.transpose(1, 2).reshape(x.shape))\n        return self.head(x + self.ff(self.norm2(x)))\n\n    def _inputs(self, ids, offset):\n        x = self.token(ids) + self.position(torch.arange(offset, offset+ids.shape[1], device=ids.device))\n        q, k, v = self.qkv(self.norm1(x)).chunk(3, dim=-1)\n        return x, *(z.view(ids.shape[0], ids.shape[1], 4, 8).transpose(1, 2) for z in (q, k, v))\n\n    def full(self, ids, attention_mask):\n        x, q, k, v = self._inputs(ids, 0)\n        n = ids.shape[1]\n        causal = torch.arange(n)[None, :] <= torch.arange(n)[:, None]\n        allowed = causal[None, None] & attention_mask[:, None, None, :].bool()\n        return self._finish(x, q, k, v, allowed)\n\n    def cached(self, ids, attention_mask, cache=None):\n        \"\"\"Return logits and KV state; attention_mask spans the entire prefix including this chunk.\"\"\"\n        offset = 0 if cache is None else cache[0].shape[2]\n        x, q, k, v = self._inputs(ids, offset)\n        if cache is not None:\n            k = torch.cat((cache[0], k), dim=2)\n            v = torch.cat((cache[1], v), dim=2)\n        key_len = k.shape[2]\n        causal = torch.arange(key_len)[None, :] <= (offset + torch.arange(ids.shape[1]))[:, None]\n        allowed = causal[None, None] & attention_mask[:, None, None, :].bool()\n        if cache is not None:\n            allowed = causal[None, None].expand(ids.shape[0], 1, -1, -1)\n        return self._finish(x, q, k, v, allowed), (k, v)\n",
+        "README.md": "# CPU cache correctness fixture\nThis synthetic benchmark includes one intentionally injected wrapper defect. It is not evidence of an upstream PyTorch issue.\nRun the original workload with `python run_workload.py`. `TinyTransformer.full` provides full-prefix inference; `cached` provides chunked inference and returns the KV tuple. Both take integer token IDs and an attention mask whose shape spans all keys available at that call. Positions are physical prefix positions, including padded slots. Compare logits at valid query positions. Keep the model, weights, full-prefix semantics, and SDPA computation intact.\n"
+      },
+      "initial_sha256": {
+        "run_workload.py": "3609037ae9bd96b08968f887318897248b6e49d39c7251cb7c33cdfcff310440",
+        "workload.py": "76e5368e77c2c9fca566bc3e6764fd3122bdd5f217fe4b2b99aadc8ca0824c66",
+        "README.md": "a6895c62c0636c8a3a207168a11ea52a23ef343d0e44b45c292205ca64da6204"
+      },
+      "execution_order": [
+        "a",
+        "b"
+      ],
+      "arms": {
+        "a": {
+          "agent_id": "01a16bec-bf99-7a51-90d6-b6a1df7f5118",
+          "context": {
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "completed": true,
+          "elapsed_seconds": 356.73,
+          "requests": 9,
+          "total_tool_calls": 8,
+          "tokens": {
+            "input_tokens": 848913,
+            "cached_input_tokens": 832128,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 5079,
+            "total_tokens": 853992,
+            "uncached_input_tokens": 16785
+          },
+          "standard_usd_estimate": 0.16757279999999997,
+          "task_messages": [
+            "在 {TASK_DIR} 完成推理精度检查与修复：比较原工作负载的 prefill 和增量 decode，修复差异，验证原任务与相邻输入。保留模型计算、权重、完整前缀行为、cache 接口和未掩码输出。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录写文件；不得读取其他实验目录、历史或会话日志；不委派其他 agent。留下修复前后指标、回归测试，直接返回结果和现有证据路径。使用 {SKILLS} 下的 framework-adapt、precision-compare、precision-repair；仅可额外读取这些 skill 目录。"
+          ],
+          "raw_usage": [
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc247b43e887d0a022ee60b24037e3",
+              "usage": {
+                "input_tokens": 84707,
+                "cached_input_tokens": 83328,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 226,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84933
+              },
+              "standard_usd_estimate": 0.013350800000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc24a10cd887d0ad5885b541ef25dd",
+              "usage": {
+                "input_tokens": 84993,
+                "cached_input_tokens": 84736,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 134,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 85127
+              },
+              "standard_usd_estimate": 0.0103276,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc24aee53887d08fa8fb91a65cfaef",
+              "usage": {
+                "input_tokens": 86642,
+                "cached_input_tokens": 84992,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 101,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 86743
+              },
+              "standard_usd_estimate": 0.012809200000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc24b9bfd487d0882ca2f0fe8df29f",
+              "usage": {
+                "input_tokens": 92566,
+                "cached_input_tokens": 86528,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 2972,
+                "reasoning_output_tokens": 185,
+                "total_tokens": 95538
+              },
+              "standard_usd_estimate": 0.0504488,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc24ed634087d09b9fd01385bd20ff",
+              "usage": {
+                "input_tokens": 95827,
+                "cached_input_tokens": 95360,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 76,
+                "reasoning_output_tokens": 16,
+                "total_tokens": 95903
+              },
+              "standard_usd_estimate": 0.01123,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc24f6db8887d0bf270a39fcc4ef8f",
+              "usage": {
+                "input_tokens": 99750,
+                "cached_input_tokens": 95744,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 240,
+                "reasoning_output_tokens": 72,
+                "total_tokens": 99990
+              },
+              "standard_usd_estimate": 0.0199864,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc25478b4487d098cd012e53c3f82f",
+              "usage": {
+                "input_tokens": 100278,
+                "cached_input_tokens": 99840,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 339,
+                "reasoning_output_tokens": 24,
+                "total_tokens": 100617
+              },
+              "standard_usd_estimate": 0.014249999999999999,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc2554ebcc87d0a5173e3afd3bc7be",
+              "usage": {
+                "input_tokens": 100914,
+                "cached_input_tokens": 100480,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 331,
+                "reasoning_output_tokens": 32,
+                "total_tokens": 101245
+              },
+              "standard_usd_estimate": 0.014226,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0f16f7d123a9ad9f016adc2560320487d0a6084bd9ffd627cd",
+              "usage": {
+                "input_tokens": 103236,
+                "cached_input_tokens": 101120,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 660,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 103896
+              },
+              "standard_usd_estimate": 0.020944,
+              "long_context": false
+            }
+          ],
+          "session_sha256": "5758e5ec26b3f70b40a35d4f6b2e97f0b057dbf7a770ec73eced59769c9d9fb1",
+          "patches": {
+            "workload.py": "--- initial/workload.py\n+++ a/workload.py\n@@ -48,6 +48,4 @@\n         key_len = k.shape[2]\n         causal = torch.arange(key_len)[None, :] <= (offset + torch.arange(ids.shape[1]))[:, None]\n         allowed = causal[None, None] & attention_mask[:, None, None, :].bool()\n-        if cache is not None:\n-            allowed = causal[None, None].expand(ids.shape[0], 1, -1, -1)\n         return self._finish(x, q, k, v, allowed), (k, v)\n"
+          }
+        },
+        "b": {
+          "agent_id": "01a16bf4-66a8-7ba2-890b-22cd5cf03e22",
+          "context": {
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "completed": true,
+          "elapsed_seconds": 176.804,
+          "requests": 11,
+          "total_tool_calls": 10,
+          "tokens": {
+            "input_tokens": 977116,
+            "cached_input_tokens": 970880,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6274,
+            "total_tokens": 983390,
+            "uncached_input_tokens": 6236
+          },
+          "standard_usd_estimate": 0.1723,
+          "task_messages": [
+            "在 {TASK_DIR} 完成推理精度检查与修复：比较原工作负载的 prefill 和增量 decode，修复差异，验证原任务与相邻输入。保留模型计算、权重、完整前缀行为、cache 接口和未掩码输出。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录写文件；不得读取仓库的 skills、其他实验目录、历史或会话日志；不委派其他 agent。留下修复前后指标、回归测试，直接返回结果和现有证据路径。"
+          ],
+          "raw_usage": [
+            {
+              "response_id": "resp_0128220907c8cac0016adc2600c6ac87d09e4cf08159c67900",
+              "usage": {
+                "input_tokens": 84672,
+                "cached_input_tokens": 83328,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 170,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84842
+              },
+              "standard_usd_estimate": 0.0127208,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc260aac9c87d08e58d42b3c8871c6",
+              "usage": {
+                "input_tokens": 84914,
+                "cached_input_tokens": 84608,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 51,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84965
+              },
+              "standard_usd_estimate": 0.0095828,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26124f4487d0a4b10271129e317c",
+              "usage": {
+                "input_tokens": 86148,
+                "cached_input_tokens": 84736,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 305,
+                "reasoning_output_tokens": 222,
+                "total_tokens": 86453
+              },
+              "standard_usd_estimate": 0.0143476,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26241b6887d09f97842f3c6c10c8",
+              "usage": {
+                "input_tokens": 86651,
+                "cached_input_tokens": 86272,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 2050,
+                "reasoning_output_tokens": 23,
+                "total_tokens": 88701
+              },
+              "standard_usd_estimate": 0.0298852,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26491f2887d0b1006e0232cf01ff",
+              "usage": {
+                "input_tokens": 88748,
+                "cached_input_tokens": 88576,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 244,
+                "reasoning_output_tokens": 29,
+                "total_tokens": 88992
+              },
+              "standard_usd_estimate": 0.0116416,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26544dcc87d08c5051e633883e38",
+              "usage": {
+                "input_tokens": 89339,
+                "cached_input_tokens": 88832,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 583,
+                "reasoning_output_tokens": 216,
+                "total_tokens": 89922
+              },
+              "standard_usd_estimate": 0.0157272,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26632db887d09d518ac5dd33d4db",
+              "usage": {
+                "input_tokens": 89969,
+                "cached_input_tokens": 89728,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 216,
+                "reasoning_output_tokens": 12,
+                "total_tokens": 90185
+              },
+              "standard_usd_estimate": 0.011614800000000002,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc266ec1d887d099a6e53b2f622fce",
+              "usage": {
+                "input_tokens": 90512,
+                "cached_input_tokens": 89984,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 250,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 90762
+              },
+              "standard_usd_estimate": 0.0125544,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26796cf887d082d8ac44bb418b31",
+              "usage": {
+                "input_tokens": 91023,
+                "cached_input_tokens": 90624,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 485,
+                "reasoning_output_tokens": 158,
+                "total_tokens": 91508
+              },
+              "standard_usd_estimate": 0.0147104,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc2688fa4887d0b49e1e4ed6f52177",
+              "usage": {
+                "input_tokens": 91759,
+                "cached_input_tokens": 91264,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 1351,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 93110
+              },
+              "standard_usd_estimate": 0.0236264,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0128220907c8cac0016adc26a3268087d09980d27e2e75258b",
+              "usage": {
+                "input_tokens": 93381,
+                "cached_input_tokens": 92928,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 569,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 93950
+              },
+              "standard_usd_estimate": 0.0158888,
+              "long_context": false
+            }
+          ],
+          "session_sha256": "5311376eebb51efd7bf4fb1f8f688b0fbe90bfa31a3d2bd9eff7f855aa58231e",
+          "patches": {
+            "workload.py": "--- initial/workload.py\n+++ b/workload.py\n@@ -48,6 +48,4 @@\n         key_len = k.shape[2]\n         causal = torch.arange(key_len)[None, :] <= (offset + torch.arange(ids.shape[1]))[:, None]\n         allowed = causal[None, None] & attention_mask[:, None, None, :].bool()\n-        if cache is not None:\n-            allowed = causal[None, None].expand(ids.shape[0], 1, -1, -1)\n         return self._finish(x, q, k, v, allowed), (k, v)\n"
+          }
+        }
+      },
+      "verification": {
+        "a": {
+          "passed": true,
+          "cases": [
+            {
+              "seed": 17,
+              "pads": [
+                2,
+                1
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 5.960464477539062e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 17,
+              "pads": [
+                0,
+                0
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 17,
+              "pads": [
+                3,
+                0
+              ],
+              "chunks": [
+                4,
+                2,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 3.5762786865234375e-07,
+              "sdpa_calls": 4,
+              "passed": true
+            },
+            {
+              "seed": 17,
+              "pads": [
+                1,
+                2
+              ],
+              "chunks": [
+                3,
+                3,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 3.5762786865234375e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                2,
+                1
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                0,
+                0
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 7.152557373046875e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                3,
+                0
+              ],
+              "chunks": [
+                4,
+                2,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 9.5367431640625e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 3.5762786865234375e-07,
+              "sdpa_calls": 4,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                1,
+                2
+              ],
+              "chunks": [
+                3,
+                3,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 3.5762786865234375e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                2,
+                1
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                0,
+                0
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 3.5762786865234375e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                3,
+                0
+              ],
+              "chunks": [
+                4,
+                2,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 4,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                1,
+                2
+              ],
+              "chunks": [
+                3,
+                3,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 3.5762786865234375e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            }
+          ],
+          "original_workload": {
+            "fixture": true,
+            "device": "cpu",
+            "dtype": "float32",
+            "chunks": [
+              {
+                "stage": "prefill",
+                "start": 0,
+                "end": 5,
+                "max_abs": 0.0
+              },
+              {
+                "stage": "decode",
+                "start": 5,
+                "end": 6,
+                "max_abs": 2.384185791015625e-07
+              },
+              {
+                "stage": "decode",
+                "start": 6,
+                "end": 8,
+                "max_abs": 4.76837158203125e-07
+              }
+            ],
+            "passed": true
+          },
+          "original_runner_file_preserved": true
+        },
+        "b": {
+          "passed": true,
+          "cases": [
+            {
+              "seed": 17,
+              "pads": [
+                2,
+                1
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 5.960464477539062e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 17,
+              "pads": [
+                0,
+                0
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 17,
+              "pads": [
+                3,
+                0
+              ],
+              "chunks": [
+                4,
+                2,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 3.5762786865234375e-07,
+              "sdpa_calls": 4,
+              "passed": true
+            },
+            {
+              "seed": 17,
+              "pads": [
+                1,
+                2
+              ],
+              "chunks": [
+                3,
+                3,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 3.5762786865234375e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                2,
+                1
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                0,
+                0
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 7.152557373046875e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                3,
+                0
+              ],
+              "chunks": [
+                4,
+                2,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 9.5367431640625e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 3.5762786865234375e-07,
+              "sdpa_calls": 4,
+              "passed": true
+            },
+            {
+              "seed": 29,
+              "pads": [
+                1,
+                2
+              ],
+              "chunks": [
+                3,
+                3,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 3.5762786865234375e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                2,
+                1
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                0,
+                0
+              ],
+              "chunks": [
+                5,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 3.5762786865234375e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 2.384185791015625e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                3,
+                0
+              ],
+              "chunks": [
+                4,
+                2,
+                1,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 4.76837158203125e-07,
+              "sdpa_calls": 4,
+              "passed": true
+            },
+            {
+              "seed": 71,
+              "pads": [
+                1,
+                2
+              ],
+              "chunks": [
+                3,
+                3,
+                2
+              ],
+              "weights_preserved": true,
+              "masked_max_abs": 4.76837158203125e-07,
+              "full_prefix_max_abs": 0.0,
+              "unmasked_original_max_abs": 0.0,
+              "kv_max_abs": 3.5762786865234375e-07,
+              "sdpa_calls": 3,
+              "passed": true
+            }
+          ],
+          "original_workload": {
+            "fixture": true,
+            "device": "cpu",
+            "dtype": "float32",
+            "chunks": [
+              {
+                "stage": "prefill",
+                "start": 0,
+                "end": 5,
+                "max_abs": 0.0
+              },
+              {
+                "stage": "decode",
+                "start": 5,
+                "end": 6,
+                "max_abs": 2.384185791015625e-07
+              },
+              {
+                "stage": "decode",
+                "start": 6,
+                "end": 8,
+                "max_abs": 4.76837158203125e-07
+              }
+            ],
+            "passed": true
+          },
+          "original_runner_file_preserved": true
+        }
+      },
+      "A_reduction_vs_B_percent": {
+        "elapsed_seconds": -101.76579715391054,
+        "standard_usd_estimate": 2.743586767266415,
+        "total_tool_calls": 19.999999999999996
+      }
+    },
+    "sft": {
+      "kind": "injected_synthetic_fixture",
+      "initial_sources": {
+        "workload.json": "{\n  \"task\": \"masked-token SFT\",\n  \"original\": {\n    \"case\": \"original\",\n    \"chunks\": 3,\n    \"steps\": 2\n  },\n  \"nearby\": {\n    \"case\": \"nearby\",\n    \"chunks\": 2,\n    \"steps\": 2\n  },\n  \"objective\": \"Mean cross entropy over all supervised tokens in each effective batch; ignored labels do not contribute. Preserve the declared optimizer and reference.\",\n  \"runtime\": \"CPU float64; dropout-free; deterministic\"\n}",
+        "native_sft.py": "\"\"\"Native masked-token SFT; benchmark-injected wrapper defect, not an upstream issue.\"\"\"\nimport copy,json,pathlib,argparse\nimport torch\nimport torch.nn.functional as F\ntorch.set_num_threads(1)\n\ndef model(seed=17):\n    torch.manual_seed(seed)\n    return torch.nn.Sequential(torch.nn.Embedding(23,7),torch.nn.Linear(7,23)).double()\n\ndef dataset(case=\"original\"):\n    x=torch.tensor([[1,2,3,4,5,6],[3,4,5,6,7,8],[5,6,7,8,9,10],[7,8,9,10,11,12],[9,10,11,12,13,14],[11,12,13,14,15,16]])\n    y=(x*3+2)%23\n    lengths=[1,5,2,6,3,4] if case==\"original\" else [6,2,4,1,5,3]\n    for i,n in enumerate(lengths): y[i,n:]=-100\n    return x,y\n\ndef optimizer(m):\n    return torch.optim.SGD(m.parameters(),lr=.075,momentum=.8,weight_decay=.025)\n\ndef reference_step(m,opt,x,y,chunks=1):\n    opt.zero_grad(set_to_none=True)\n    loss=F.cross_entropy(m(x).reshape(-1,23),y.reshape(-1),ignore_index=-100,reduction=\"mean\")\n    loss.backward()\n    grads={n:p.grad.detach().clone() for n,p in m.named_parameters()}\n    opt.step()\n    return float(loss.detach()),grads\n\ndef accumulated_step(m,opt,x,y,chunks=3):\n    opt.zero_grad(set_to_none=True)\n    reported=0.\n    for xb,yb in zip(x.chunk(chunks),y.chunk(chunks)):\n        loss=F.cross_entropy(m(xb).reshape(-1,23),yb.reshape(-1),ignore_index=-100,reduction=\"mean\")\n        scaled=loss/chunks\n        scaled.backward()\n        reported+=float(scaled.detach())\n    grads={n:p.grad.detach().clone() for n,p in m.named_parameters()}\n    opt.step()\n    return reported,grads\n\ndef run(side,case=\"original\",chunks=3,steps=2):\n    m=model();opt=optimizer(m);x,y=dataset(case);records=[]\n    fn=reference_step if side==\"full\" else accumulated_step\n    for step in range(steps):\n        before={n:p.detach().clone() for n,p in m.named_parameters()}\n        loss,grads=fn(m,opt,x,y,chunks)\n        records.append({\"step\":step,\"loss\":loss,\"grads\":grads,\"updates\":{n:p.detach().clone()-before[n] for n,p in m.named_parameters()},\"parameters\":{n:p.detach().clone() for n,p in m.named_parameters()}})\n    return records\n\nif __name__==\"__main__\":\n    p=argparse.ArgumentParser();p.add_argument(\"--side\",choices=[\"full\",\"accumulated\"],required=True);p.add_argument(\"--case\",default=\"original\");p.add_argument(\"--chunks\",type=int,default=3);p.add_argument(\"--output\",required=True);a=p.parse_args()\n    out=pathlib.Path(a.output);out.parent.mkdir(parents=True,exist_ok=True);torch.save(run(a.side,a.case,a.chunks),out)\n    print(json.dumps({\"output\":str(out),\"side\":a.side,\"case\":a.case,\"chunks\":a.chunks}))\n",
+        "capture.py": "\"\"\"Export native captures in two layouts. Keys are stable logical parameter coordinates.\"\"\"\nimport argparse,pathlib,json,numpy as np,torch\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"output\");p.add_argument(\"--layout\",choices=[\"flat\",\"split\"],required=True);a=p.parse_args()\nr=torch.load(a.input,weights_only=True);out=pathlib.Path(a.output);out.mkdir(parents=True,exist_ok=True);manifest=[]\nfor row in r:\n    values={\"loss\":np.asarray(row[\"loss\"])}\n    for stage in [\"grads\",\"updates\",\"parameters\"]:\n        for name,v in row[stage].items():values[stage+\"/\"+name]=v.numpy()\n    if a.layout==\"flat\":\n        filename=f\"step-{row['step']}.npz\";np.savez(out/filename,**values)\n        manifest.append({\"step\":row['step'],\"file\":filename,\"keys\":list(values)})\n    else:\n        for i,(key,value) in enumerate(values.items()):\n            filename=f\"s{row['step']}-tensor-{i}.npy\";np.save(out/filename,value)\n            manifest.append({\"step\":row['step'],\"key\":key,\"file\":filename})\n(out/\"index.json\").write_text(json.dumps({\"layout\":a.layout,\"entries\":manifest},indent=2))\n"
+      },
+      "initial_sha256": {
+        "workload.json": "baec9f6722e8910cd7172ce13a0eded26cdb338007b53901b083b54983202ac5",
+        "native_sft.py": "ca1c2f2d958fe38e9a9e8e4004be0d7469ed2a71231511a349911e55b0e7e379",
+        "capture.py": "4d92b09126d7015679d5b757317027eb6e52513e375f959be53a53fba1d68545"
+      },
+      "execution_order": [
+        "b",
+        "a"
+      ],
+      "arms": {
+        "a": {
+          "agent_id": "01a16bee-84eb-7c63-b83b-0d8211d12917",
+          "context": {
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "completed": true,
+          "elapsed_seconds": 508.776,
+          "requests": 12,
+          "total_tool_calls": 11,
+          "tokens": {
+            "input_tokens": 1139624,
+            "cached_input_tokens": 1123328,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6369,
+            "total_tokens": 1145993,
+            "uncached_input_tokens": 16296
+          },
+          "standard_usd_estimate": 0.20861480000000002,
+          "task_messages": [
+            "在 {TASK_DIR} 完成这份 SFT 工作负载的精度检查与修复。比较完整有效 batch 与梯度累积的 loss、梯度和参数更新，修复差异并验证原任务及相邻输入。保留原模型、数据、优化器、token objective 和 reference_step，实现可运行，并留下修复前后指标与回归测试。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录工作；不得读取历史、其他实验目录或会话日志；不委派其他 agent。完成后直接返回结果和现有证据路径。使用 {SKILLS} 下的 framework-adapt、precision-compare、precision-repair；仅可额外读取这些 skill 目录。"
+          ],
+          "raw_usage": [
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc2484f46087d09db027ae0b5ae3a4",
+              "usage": {
+                "input_tokens": 84714,
+                "cached_input_tokens": 83328,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 151,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84865
+              },
+              "standard_usd_estimate": 0.012614800000000002,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc249368ec87d08cb045e03f9131c7",
+              "usage": {
+                "input_tokens": 84940,
+                "cached_input_tokens": 84736,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 111,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 85051
+              },
+              "standard_usd_estimate": 0.0099916,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc24a404d087d095f4f199f228f48a",
+              "usage": {
+                "input_tokens": 86554,
+                "cached_input_tokens": 84864,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 99,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 86653
+              },
+              "standard_usd_estimate": 0.012856399999999999,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc24ad6aec87d0bfce06b08e2e5d1c",
+              "usage": {
+                "input_tokens": 92121,
+                "cached_input_tokens": 86528,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 304,
+                "reasoning_output_tokens": 57,
+                "total_tokens": 92425
+              },
+              "standard_usd_estimate": 0.022878800000000005,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc24bb1b8c87d0b0056a23884ebcba",
+              "usage": {
+                "input_tokens": 93248,
+                "cached_input_tokens": 92288,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 2994,
+                "reasoning_output_tokens": 109,
+                "total_tokens": 96242
+              },
+              "standard_usd_estimate": 0.0410888,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc24ed7dd487d08598f170a017c3d3",
+              "usage": {
+                "input_tokens": 96368,
+                "cached_input_tokens": 96000,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 286,
+                "reasoning_output_tokens": 33,
+                "total_tokens": 96654
+              },
+              "standard_usd_estimate": 0.013196,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc24f9f84887d0bed43768e608bb2b",
+              "usage": {
+                "input_tokens": 96701,
+                "cached_input_tokens": 96512,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 57,
+                "reasoning_output_tokens": 18,
+                "total_tokens": 96758
+              },
+              "standard_usd_estimate": 0.0105992,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc2635775087d0a9c39e881a38ec8e",
+              "usage": {
+                "input_tokens": 96856,
+                "cached_input_tokens": 96640,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 183,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 97039
+              },
+              "standard_usd_estimate": 0.011926,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc263faa3887d0ae575d771d372da8",
+              "usage": {
+                "input_tokens": 101193,
+                "cached_input_tokens": 96896,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 466,
+                "reasoning_output_tokens": 85,
+                "total_tokens": 101659
+              },
+              "standard_usd_estimate": 0.022943599999999998,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc264e11e487d0a6498b0e511f9946",
+              "usage": {
+                "input_tokens": 101708,
+                "cached_input_tokens": 101504,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 37,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 101745
+              },
+              "standard_usd_estimate": 0.010928400000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc2657ce0887d09ce05673ad2cbd0c",
+              "usage": {
+                "input_tokens": 101846,
+                "cached_input_tokens": 101504,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 897,
+                "reasoning_output_tokens": 139,
+                "total_tokens": 102743
+              },
+              "standard_usd_estimate": 0.0198044,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0b590e3ff5a37b94016adc266b010c87d08e7b48597f38bee0",
+              "usage": {
+                "input_tokens": 103375,
+                "cached_input_tokens": 102528,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 784,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 104159
+              },
+              "standard_usd_estimate": 0.0197868,
+              "long_context": false
+            }
+          ],
+          "session_sha256": "c210a0149f12663620b9db27aa6aa964a2045cab61cf2477e9531f7053c7153c",
+          "patches": {
+            "native_sft.py": "--- initial/native_sft.py\n+++ a/native_sft.py\n@@ -29,9 +29,11 @@\n def accumulated_step(m,opt,x,y,chunks=3):\n     opt.zero_grad(set_to_none=True)\n     reported=0.\n+    # Normalize every microbatch by the same effective-batch token count.\n+    valid_tokens=(y != -100).sum()\n     for xb,yb in zip(x.chunk(chunks),y.chunk(chunks)):\n-        loss=F.cross_entropy(m(xb).reshape(-1,23),yb.reshape(-1),ignore_index=-100,reduction=\"mean\")\n-        scaled=loss/chunks\n+        loss=F.cross_entropy(m(xb).reshape(-1,23),yb.reshape(-1),ignore_index=-100,reduction=\"sum\")\n+        scaled=loss/valid_tokens\n         scaled.backward()\n         reported+=float(scaled.detach())\n     grads={n:p.grad.detach().clone() for n,p in m.named_parameters()}\n"
+          }
+        },
+        "b": {
+          "agent_id": "01a16bea-713d-7771-b488-d38af8e1400f",
+          "context": {
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "completed": true,
+          "elapsed_seconds": 207.38,
+          "requests": 9,
+          "total_tool_calls": 8,
+          "tokens": {
+            "input_tokens": 806756,
+            "cached_input_tokens": 800512,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 7673,
+            "total_tokens": 814429,
+            "uncached_input_tokens": 6244
+          },
+          "standard_usd_estimate": 0.1692692,
+          "task_messages": [
+            "在 {TASK_DIR} 完成这份 SFT 工作负载的精度检查与修复。比较完整有效 batch 与梯度累积的 loss、梯度和参数更新，修复差异并验证原任务及相邻输入。保留原模型、数据、优化器、token objective 和 reference_step，实现可运行，并留下修复前后指标与回归测试。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录工作；不得读取仓库的 skills、历史、其他实验目录或会话日志；不委派其他 agent。完成后直接返回结果和现有证据路径。"
+          ],
+          "raw_usage": [
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc237498e487d0b54d3eec5fce6286",
+              "usage": {
+                "input_tokens": 84679,
+                "cached_input_tokens": 83328,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 157,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84836
+              },
+              "standard_usd_estimate": 0.012604800000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc237e40c487d089ca888143492b22",
+              "usage": {
+                "input_tokens": 84910,
+                "cached_input_tokens": 84608,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 51,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84961
+              },
+              "standard_usd_estimate": 0.009574800000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc2389c7bc87d0a57a7c1b17778a00",
+              "usage": {
+                "input_tokens": 86134,
+                "cached_input_tokens": 84736,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 879,
+                "reasoning_output_tokens": 265,
+                "total_tokens": 87013
+              },
+              "standard_usd_estimate": 0.0200596,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc23a0a9fc87d098e52e3e119231ef",
+              "usage": {
+                "input_tokens": 87877,
+                "cached_input_tokens": 86784,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 2273,
+                "reasoning_output_tokens": 278,
+                "total_tokens": 90150
+              },
+              "standard_usd_estimate": 0.033594399999999996,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc23ce480887d09617634a8e1403e7",
+              "usage": {
+                "input_tokens": 90796,
+                "cached_input_tokens": 89984,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 710,
+                "reasoning_output_tokens": 302,
+                "total_tokens": 91506
+              },
+              "standard_usd_estimate": 0.0177224,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc23e1621087d080ed38f387493af7",
+              "usage": {
+                "input_tokens": 91561,
+                "cached_input_tokens": 91264,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 625,
+                "reasoning_output_tokens": 65,
+                "total_tokens": 92186
+              },
+              "standard_usd_estimate": 0.0159704,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc23fb0d0887d0972eed20bb6eb2a6",
+              "usage": {
+                "input_tokens": 92498,
+                "cached_input_tokens": 92032,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 863,
+                "reasoning_output_tokens": 304,
+                "total_tokens": 93361
+              },
+              "standard_usd_estimate": 0.018765200000000003,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc2412332487d0a4dd4f39b9fbca29",
+              "usage": {
+                "input_tokens": 93464,
+                "cached_input_tokens": 93184,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 1326,
+                "reasoning_output_tokens": 78,
+                "total_tokens": 94790
+              },
+              "standard_usd_estimate": 0.023138399999999996,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e9740781faf3bc4016adc24316f3087d0b7786c4659579030",
+              "usage": {
+                "input_tokens": 94837,
+                "cached_input_tokens": 94592,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 789,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 95626
+              },
+              "standard_usd_estimate": 0.0178392,
+              "long_context": false
+            }
+          ],
+          "session_sha256": "14e587392d1a1b50b88c2fa08913dfdb3457f74aef892dd72214743029018acb",
+          "patches": {
+            "native_sft.py": "--- initial/native_sft.py\n+++ b/native_sft.py\n@@ -29,9 +29,12 @@\n def accumulated_step(m,opt,x,y,chunks=3):\n     opt.zero_grad(set_to_none=True)\n     reported=0.\n+    # Each microbatch contributes to the same effective-batch token mean.\n+    # Sum reduction also gives zero for a fully ignored microbatch.\n+    supervised_tokens=(y!=-100).sum()\n     for xb,yb in zip(x.chunk(chunks),y.chunk(chunks)):\n-        loss=F.cross_entropy(m(xb).reshape(-1,23),yb.reshape(-1),ignore_index=-100,reduction=\"mean\")\n-        scaled=loss/chunks\n+        loss=F.cross_entropy(m(xb).reshape(-1,23),yb.reshape(-1),ignore_index=-100,reduction=\"sum\")\n+        scaled=loss/supervised_tokens\n         scaled.backward()\n         reported+=float(scaled.detach())\n     grads={n:p.grad.detach().clone() for n,p in m.named_parameters()}\n"
+          }
+        }
+      },
+      "verification": {
+        "a": {
+          "preserved": {
+            "reference_step": true,
+            "model": true,
+            "dataset": true,
+            "optimizer": true
+          },
+          "cases": [
+            {
+              "case": "original",
+              "chunks": 1,
+              "supervised_tokens_per_microbatch": [
+                21
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "original",
+              "chunks": 2,
+              "supervised_tokens_per_microbatch": [
+                8,
+                13
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 4.163336342344337e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "original",
+              "chunks": 3,
+              "supervised_tokens_per_microbatch": [
+                6,
+                8,
+                7
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 4.440892098500626e-16,
+                "grads": 5.551115123125783e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "original",
+              "chunks": 6,
+              "supervised_tokens_per_microbatch": [
+                1,
+                5,
+                2,
+                6,
+                3,
+                4
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 5.551115123125783e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 1,
+              "supervised_tokens_per_microbatch": [
+                21
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 2,
+              "supervised_tokens_per_microbatch": [
+                12,
+                9
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 3,
+              "supervised_tokens_per_microbatch": [
+                8,
+                5,
+                8
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 5.551115123125783e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 6,
+              "supervised_tokens_per_microbatch": [
+                6,
+                2,
+                4,
+                1,
+                5,
+                3
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 5.551115123125783e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            }
+          ],
+          "all_pass": true
+        },
+        "b": {
+          "preserved": {
+            "reference_step": true,
+            "model": true,
+            "dataset": true,
+            "optimizer": true
+          },
+          "cases": [
+            {
+              "case": "original",
+              "chunks": 1,
+              "supervised_tokens_per_microbatch": [
+                21
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "original",
+              "chunks": 2,
+              "supervised_tokens_per_microbatch": [
+                8,
+                13
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 4.163336342344337e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "original",
+              "chunks": 3,
+              "supervised_tokens_per_microbatch": [
+                6,
+                8,
+                7
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 4.440892098500626e-16,
+                "grads": 5.551115123125783e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "original",
+              "chunks": 6,
+              "supervised_tokens_per_microbatch": [
+                1,
+                5,
+                2,
+                6,
+                3,
+                4
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 5.551115123125783e-17,
+                "updates": 1.3877787807814457e-17,
+                "parameters": 1.3877787807814457e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 1,
+              "supervised_tokens_per_microbatch": [
+                21
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 2,
+              "supervised_tokens_per_microbatch": [
+                12,
+                9
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 3,
+              "supervised_tokens_per_microbatch": [
+                8,
+                5,
+                8
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 5.551115123125783e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            },
+            {
+              "case": "nearby",
+              "chunks": 6,
+              "supervised_tokens_per_microbatch": [
+                6,
+                2,
+                4,
+                1,
+                5,
+                3
+              ],
+              "ignored_tokens": 15,
+              "reference_vs_oracle_max_abs": {
+                "loss": 8.881784197001252e-16,
+                "grads": 2.7755575615628914e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "accumulated_vs_oracle_max_abs": {
+                "loss": 0.0,
+                "grads": 5.551115123125783e-17,
+                "updates": 2.7755575615628914e-17,
+                "parameters": 2.7755575615628914e-17
+              },
+              "pass": true
+            }
+          ],
+          "all_pass": true
+        }
+      },
+      "A_reduction_vs_B_percent": {
+        "elapsed_seconds": -145.33513357122195,
+        "standard_usd_estimate": -23.24439413667696,
+        "total_tool_calls": -37.5
+      }
+    },
+    "rl": {
+      "kind": "injected_synthetic_fixture",
+      "initial_sources": {
+        "workload.py": "\"\"\"Synthetic explicitly injected benchmark fixture; not an upstream defect claim.\"\"\"\nimport argparse,json,pathlib,torch\nfrom ppo import Policy,objective\n\ndef batches(kind=\"original\"):\n    lengths={\"original\":[3,0,2],\"nearby\":[1,4,0],\"constant\":[2,0,1],\"empty\":[0,0],\"singleton\":[0,1]}[kind]\n    rows=len(lengths); width=max(4,max(lengths)); n=rows*width\n    obs=torch.sin(torch.arange(n*3,dtype=torch.float64).reshape(rows,width,3)*.37)\n    actions=(torch.arange(n).reshape(rows,width)%2).long()\n    mask=torch.arange(width)[None,:]<torch.tensor(lengths)[:,None]\n    advantages=torch.cos(torch.arange(n,dtype=torch.float64).reshape(rows,width)*.7)*2+.4\n    if kind==\"constant\": advantages=torch.where(mask,torch.full_like(advantages,2.75),advantages)\n    advantages=torch.where(mask,advantages,torch.full_like(advantages,9.0))\n    with torch.no_grad():\n        p=Policy(); logp=p(obs).log_softmax(-1).gather(-1,actions[...,None]).squeeze(-1)\n        ratios=torch.tensor([1.5,.65,1.05,.9,1.35,.7,.95,1.1],dtype=torch.float64).repeat((n+7)//8)[:n].reshape(rows,width)\n        old=logp-ratios.log()\n    padded=dict(obs=obs,actions=actions,mask=mask,advantages=advantages,old_logp=old)\n    packed={k:v[mask] for k,v in padded.items()}\n    return {\"packed\":packed,\"padded\":padded}\n\ndef execute(batch,steps=2):\n    policy=Policy(); optimizer=torch.optim.SGD(policy.parameters(),lr=.07)\n    records=[]\n    for _ in range(steps):\n        optimizer.zero_grad(); loss,aux=objective(policy,batch); loss.backward()\n        records.append({\"loss\":float(loss.detach()),\"grads\":{k:v.grad.detach().tolist() for k,v in policy.named_parameters()},\"parameters_before\":{k:v.detach().tolist() for k,v in policy.named_parameters()},\"aux\":{k:v.tolist() for k,v in aux.items()}})\n        optimizer.step()\n        records[-1][\"parameters_after\"]={k:v.detach().tolist() for k,v in policy.named_parameters()}\n    return records\n\ndef main():\n    ap=argparse.ArgumentParser();ap.add_argument(\"--out\",required=True);args=ap.parse_args()\n    torch.set_num_threads(1)\n    result={kind:{layout:execute(batch) for layout,batch in batches(kind).items()} for kind in [\"original\",\"nearby\",\"constant\",\"empty\",\"singleton\"]}\n    pathlib.Path(args.out).write_text(json.dumps(result,indent=2,allow_nan=True))\nif __name__==\"__main__\":main()\n",
+        "ppo.py": "import torch\nfrom torch import nn\n\nclass Policy(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.proj = nn.Linear(3, 2, dtype=torch.float64)\n        with torch.no_grad():\n            self.proj.weight.copy_(torch.tensor([[.18,-.11,.07],[-.08,.13,-.04]],dtype=torch.float64))\n            self.proj.bias.copy_(torch.tensor([.03,-.02],dtype=torch.float64))\n    def forward(self, obs):\n        return self.proj(obs)\n\ndef objective(policy, batch, clip=.2, epsilon=1e-8):\n    logits=policy(batch[\"obs\"])\n    logp=logits.log_softmax(-1).gather(-1,batch[\"actions\"].unsqueeze(-1)).squeeze(-1)\n    advantages=batch[\"advantages\"]\n    mean=advantages.mean()\n    variance=((advantages-mean)**2).mean()\n    normalized=(advantages-mean)/torch.sqrt(variance+epsilon)\n    ratio=(logp-batch[\"old_logp\"]).exp()\n    raw=ratio*normalized\n    clipped=ratio.clamp(1-clip,1+clip)*normalized\n    terms=torch.minimum(raw,clipped)\n    mask=batch[\"mask\"].to(terms.dtype)\n    loss=-(terms*mask).sum()/mask.sum().clamp_min(1)\n    return loss, {\"ratio\":ratio.detach(),\"normalized\":normalized.detach(),\"terms\":terms.detach()}\n"
+      },
+      "initial_sha256": {
+        "workload.py": "65a175ed130ae61f333de027eb2920835740f954614b69b84aa72f4651f0ce97",
+        "ppo.py": "80771f7004c2d88ea347a20ae3c618ccd548e77fd4c4a1dc1fbf499ebc4a6d45"
+      },
+      "execution_order": [
+        "a",
+        "b"
+      ],
+      "arms": {
+        "a": {
+          "agent_id": "01a16bec-f04c-7220-bfff-4e693f3df586",
+          "context": {
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "completed": true,
+          "elapsed_seconds": 234.257,
+          "requests": 10,
+          "total_tool_calls": 9,
+          "tokens": {
+            "input_tokens": 977534,
+            "cached_input_tokens": 960768,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6023,
+            "total_tokens": 983557,
+            "uncached_input_tokens": 16766
+          },
+          "standard_usd_estimate": 0.1898388,
+          "task_messages": [
+            "在 {TASK_DIR} 完成 PPO 工作负载精度检查与修复：比较相同轨迹 packed/padded 表示的 loss、全部参数梯度及两步 SGD 更新，修复差异并验证原任务和相邻输入。以任务目录中声明的 PPO 公式、mask 语义、float64 和优化器设置为准，保留模型初始化与 workload.py 输入接口。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录写文件；不得读取其他实验目录、历史、会话日志或隐藏验证器；不委派其他 agent。留下修复前后指标、回归测试，直接返回结果和现有证据路径。使用 {SKILLS} 下的 framework-adapt、precision-compare、precision-repair；仅可额外读取这些 skill 目录。",
+            "补充任务语义：统计仅包括全 batch 的 mask=True token，N 个有效 advantage 用总体均值 μ 和总体方差 v，A=(a−μ)/sqrt(v+1e−8)；loss=−mean_valid(min(r*A,clip(r,0.8,1.2)*A))，r=exp(logp−old_logp)，advantage/old_logp 是固定数据。无 value/entropy 项。N=0 时 loss 可微且为0，梯度为0、参数不变；constant/singleton advantage 归一化为0。packed/padded 应 rtol=1e−9,atol=1e−11 一致。无效位置任意有限值不影响有效结果。"
+          ],
+          "raw_usage": [
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc241b076487d0b77138ea7321af53",
+              "usage": {
+                "input_tokens": 84730,
+                "cached_input_tokens": 83328,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 179,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84909
+              },
+              "standard_usd_estimate": 0.0129268,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc2436222487d0bf9365621d49b8fa",
+              "usage": {
+                "input_tokens": 85880,
+                "cached_input_tokens": 84736,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 84,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 85964
+              },
+              "standard_usd_estimate": 0.0116016,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24574a8487d0abb1d12b29010e1b",
+              "usage": {
+                "input_tokens": 88554,
+                "cached_input_tokens": 88192,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 112,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 88666
+              },
+              "standard_usd_estimate": 0.0106632,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc246e03d487d0ad8c2b47324867ce",
+              "usage": {
+                "input_tokens": 95591,
+                "cached_input_tokens": 88448,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 3302,
+                "reasoning_output_tokens": 516,
+                "total_tokens": 98893
+              },
+              "standard_usd_estimate": 0.0561508,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24a423a887d09e428f5970f30aab",
+              "usage": {
+                "input_tokens": 98939,
+                "cached_input_tokens": 98688,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 62,
+                "reasoning_output_tokens": 23,
+                "total_tokens": 99001
+              },
+              "standard_usd_estimate": 0.010990800000000002,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24b3e22c87d0871c51b523e74bc7",
+              "usage": {
+                "input_tokens": 103448,
+                "cached_input_tokens": 98816,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 718,
+                "reasoning_output_tokens": 32,
+                "total_tokens": 104166
+              },
+              "standard_usd_estimate": 0.026325599999999998,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24cbd73887d084365cbb4d5ac70d",
+              "usage": {
+                "input_tokens": 104215,
+                "cached_input_tokens": 103936,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 37,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 104252
+              },
+              "standard_usd_estimate": 0.011321600000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24d40d9487d0a1ecbf5bf84cd75e",
+              "usage": {
+                "input_tokens": 104664,
+                "cached_input_tokens": 104064,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 735,
+                "reasoning_output_tokens": 122,
+                "total_tokens": 105399
+              },
+              "standard_usd_estimate": 0.0189564,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24e66f8c87d0a4b622c1740a498b",
+              "usage": {
+                "input_tokens": 105446,
+                "cached_input_tokens": 105216,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 37,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 105483
+              },
+              "standard_usd_estimate": 0.011351600000000002,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0e7df6854e0d91e4016adc24f015cc87d08174ff38fbaf4e6c",
+              "usage": {
+                "input_tokens": 106067,
+                "cached_input_tokens": 105344,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 757,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 106824
+              },
+              "standard_usd_estimate": 0.019550400000000002,
+              "long_context": false
+            }
+          ],
+          "session_sha256": "cca349c33acf46804a9a29942ba370390893359eacaf533eef04d1e7d92dc48a",
+          "patches": {
+            "ppo.py": "--- initial/ppo.py\n+++ a/ppo.py\n@@ -12,16 +12,26 @@\n         return self.proj(obs)\n \n def objective(policy, batch, clip=.2, epsilon=1e-8):\n-    logits=policy(batch[\"obs\"])\n-    logp=logits.log_softmax(-1).gather(-1,batch[\"actions\"].unsqueeze(-1)).squeeze(-1)\n-    advantages=batch[\"advantages\"]\n-    mean=advantages.mean()\n-    variance=((advantages-mean)**2).mean()\n-    normalized=(advantages-mean)/torch.sqrt(variance+epsilon)\n-    ratio=(logp-batch[\"old_logp\"]).exp()\n-    raw=ratio*normalized\n-    clipped=ratio.clamp(1-clip,1+clip)*normalized\n-    terms=torch.minimum(raw,clipped)\n-    mask=batch[\"mask\"].to(terms.dtype)\n-    loss=-(terms*mask).sum()/mask.sum().clamp_min(1)\n-    return loss, {\"ratio\":ratio.detach(),\"normalized\":normalized.detach(),\"terms\":terms.detach()}\n+    # Select before any arithmetic: padding must not affect statistics,\n+    # action indexing, exponentiation, or the policy's backward pass.\n+    valid = batch[\"mask\"].bool()\n+    logits = policy(batch[\"obs\"][valid])\n+    actions = batch[\"actions\"][valid]\n+    logp = logits.log_softmax(-1).gather(-1, actions.unsqueeze(-1)).squeeze(-1)\n+    advantages = batch[\"advantages\"].detach()[valid]\n+    count = max(advantages.numel(), 1)\n+    mean = advantages.sum() / count\n+    variance = ((advantages - mean) ** 2).sum() / count\n+    normalized = (advantages - mean) / torch.sqrt(variance + epsilon)\n+    ratio = (logp - batch[\"old_logp\"].detach()[valid]).exp()\n+    raw = ratio * normalized\n+    clipped = ratio.clamp(1 - clip, 1 + clip) * normalized\n+    terms = torch.minimum(raw, clipped)\n+    # Empty terms still retain the policy graph and yield zero parameter grads.\n+    loss = -terms.sum() / count\n+    aux = {}\n+    for name, values in ((\"ratio\", ratio), (\"normalized\", normalized), (\"terms\", terms)):\n+        full = values.new_zeros(valid.shape)\n+        full[valid] = values.detach()\n+        aux[name] = full\n+    return loss, aux\n"
+          }
+        },
+        "b": {
+          "agent_id": "01a16bf4-978a-7833-87da-42a26199e2c9",
+          "context": {
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "completed": true,
+          "elapsed_seconds": 181.987,
+          "requests": 9,
+          "total_tool_calls": 8,
+          "tokens": {
+            "input_tokens": 807104,
+            "cached_input_tokens": 799744,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 6056,
+            "total_tokens": 813160,
+            "uncached_input_tokens": 7360
+          },
+          "standard_usd_estimate": 0.15525440000000001,
+          "task_messages": [
+            "在 {TASK_DIR} 完成 PPO 工作负载精度检查与修复：比较相同轨迹 packed/padded 表示的 loss、全部参数梯度及两步 SGD 更新，修复差异并验证原任务和相邻输入。以任务目录中声明的 PPO 公式、mask 语义、float64 和优化器设置为准，保留模型初始化与 workload.py 输入接口。这里是人为注入缺陷的实验夹具。Python：{PYTHON}。仅在指定任务目录写文件；不得读取仓库的 skills、其他实验目录、历史、会话日志或隐藏验证器；不委派其他 agent。留下修复前后指标、回归测试，直接返回结果和现有证据路径。",
+            "补充任务语义：统计仅包括全 batch 的 mask=True token，N 个有效 advantage 用总体均值 μ 和总体方差 v，A=(a−μ)/sqrt(v+1e−8)；loss=−mean_valid(min(r*A,clip(r,0.8,1.2)*A))，r=exp(logp−old_logp)，advantage/old_logp 是固定数据。无 value/entropy 项。N=0 时 loss 可微且为0，梯度为0、参数不变；constant/singleton advantage 归一化为0。packed/padded 应 rtol=1e−9,atol=1e−11 一致。无效位置任意有限值不影响有效结果。"
+          ],
+          "raw_usage": [
+            {
+              "response_id": "resp_0c1ee5378695a566016adc260f78f487d0ba79573d41856b88",
+              "usage": {
+                "input_tokens": 84695,
+                "cached_input_tokens": 83328,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 136,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84831
+              },
+              "standard_usd_estimate": 0.012426800000000002,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc261d1d2487d09e79132460dbc1e9",
+              "usage": {
+                "input_tokens": 84897,
+                "cached_input_tokens": 84608,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 45,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 84942
+              },
+              "standard_usd_estimate": 0.009488800000000002,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc262b951487d0adb91e3c55039e83",
+              "usage": {
+                "input_tokens": 86073,
+                "cached_input_tokens": 85760,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 752,
+                "reasoning_output_tokens": 437,
+                "total_tokens": 86825
+              },
+              "standard_usd_estimate": 0.016722,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc2644415887d090ce26f09612a34d",
+              "usage": {
+                "input_tokens": 86898,
+                "cached_input_tokens": 86656,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 1823,
+                "reasoning_output_tokens": 24,
+                "total_tokens": 88721
+              },
+              "standard_usd_estimate": 0.0273796,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc2666e42c87d08cb6a0ca163e89f4",
+              "usage": {
+                "input_tokens": 88768,
+                "cached_input_tokens": 88576,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 220,
+                "reasoning_output_tokens": 25,
+                "total_tokens": 88988
+              },
+              "standard_usd_estimate": 0.011441600000000001,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc2671a51c87d0b82e37d36a3711c1",
+              "usage": {
+                "input_tokens": 92720,
+                "cached_input_tokens": 88832,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 514,
+                "reasoning_output_tokens": 16,
+                "total_tokens": 93234
+              },
+              "standard_usd_estimate": 0.021799199999999998,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc2681c57887d09f87109cab9c4074",
+              "usage": {
+                "input_tokens": 93411,
+                "cached_input_tokens": 93056,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 515,
+                "reasoning_output_tokens": 86,
+                "total_tokens": 93926
+              },
+              "standard_usd_estimate": 0.0151656,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc2697396c87d0af727ecb52fc3d45",
+              "usage": {
+                "input_tokens": 93996,
+                "cached_input_tokens": 93696,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 1359,
+                "reasoning_output_tokens": 115,
+                "total_tokens": 95355
+              },
+              "standard_usd_estimate": 0.0235596,
+              "long_context": false
+            },
+            {
+              "response_id": "resp_0c1ee5378695a566016adc26b3459887d08b46be1a52cc0760",
+              "usage": {
+                "input_tokens": 95646,
+                "cached_input_tokens": 95232,
+                "cache_write_input_tokens": 0,
+                "output_tokens": 692,
+                "reasoning_output_tokens": 0,
+                "total_tokens": 96338
+              },
+              "standard_usd_estimate": 0.0172712,
+              "long_context": false
+            }
+          ],
+          "session_sha256": "64dc69884b7bebd66435750ef388f350319292ad0dc209bf0fbd12ccef6f7ada",
+          "patches": {
+            "ppo.py": "--- initial/ppo.py\n+++ b/ppo.py\n@@ -12,16 +12,25 @@\n         return self.proj(obs)\n \n def objective(policy, batch, clip=.2, epsilon=1e-8):\n-    logits=policy(batch[\"obs\"])\n-    logp=logits.log_softmax(-1).gather(-1,batch[\"actions\"].unsqueeze(-1)).squeeze(-1)\n-    advantages=batch[\"advantages\"]\n-    mean=advantages.mean()\n-    variance=((advantages-mean)**2).mean()\n-    normalized=(advantages-mean)/torch.sqrt(variance+epsilon)\n-    ratio=(logp-batch[\"old_logp\"]).exp()\n-    raw=ratio*normalized\n-    clipped=ratio.clamp(1-clip,1+clip)*normalized\n-    terms=torch.minimum(raw,clipped)\n-    mask=batch[\"mask\"].to(terms.dtype)\n-    loss=-(terms*mask).sum()/mask.sum().clamp_min(1)\n-    return loss, {\"ratio\":ratio.detach(),\"normalized\":normalized.detach(),\"terms\":terms.detach()}\n+    # Select before arithmetic: padding must not affect statistics or gradients.\n+    mask = batch[\"mask\"].bool()\n+    logits = policy(batch[\"obs\"][mask])\n+    actions = batch[\"actions\"][mask]\n+    logp = logits.log_softmax(-1).gather(-1, actions.unsqueeze(-1)).squeeze(-1)\n+    advantages = batch[\"advantages\"][mask].detach()\n+    count = max(advantages.numel(), 1)\n+    mean = advantages.sum() / count\n+    variance = ((advantages - mean) ** 2).sum() / count\n+    normalized = (advantages - mean) / torch.sqrt(variance + epsilon)\n+    ratio = (logp - batch[\"old_logp\"][mask].detach()).exp()\n+    raw = ratio * normalized\n+    clipped = ratio.clamp(1 - clip, 1 + clip) * normalized\n+    terms = torch.minimum(raw, clipped)\n+    # An empty sum remains connected to the policy and has zero gradients.\n+    loss = -terms.sum() / count\n+    aux = {}\n+    for name, value in ((\"ratio\", ratio), (\"normalized\", normalized), (\"terms\", terms)):\n+        full = value.new_zeros(mask.shape)\n+        full[mask] = value.detach()\n+        aux[name] = full\n+    return loss, aux\n"
+          }
+        }
+      },
+      "verification": {
+        "a": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "original_workload_unchanged",
+              "pass": true,
+              "detail": "hash matches initial"
+            },
+            {
+              "name": "native_original_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_original_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_nearby_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_nearby_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_constant_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_constant_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_empty_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_empty_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_singleton_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_singleton_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_0",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_0",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_1",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_1",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_2",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_2",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_3",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_3",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_4",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_4",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_5",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_5",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_6",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_6",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_7",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_7",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_outputs",
+              "pass": true,
+              "detail": "all native losses, gradients and SGD updates match independent reference"
+            }
+          ]
+        },
+        "b": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "original_workload_unchanged",
+              "pass": true,
+              "detail": "hash matches initial"
+            },
+            {
+              "name": "native_original_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_original_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_nearby_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_nearby_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_constant_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_constant_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_empty_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_empty_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_singleton_packed",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_singleton_padded",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_0",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_0",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_1",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_1",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_2",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_2",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_3",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_3",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_4",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_4",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_5",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_5",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_6",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_6",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_mask_branch_7",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "hidden_packed_7",
+              "pass": true,
+              "detail": {
+                "steps": 3,
+                "max_loss_abs_error": 0
+              }
+            },
+            {
+              "name": "native_outputs",
+              "pass": true,
+              "detail": "all native losses, gradients and SGD updates match independent reference"
+            }
+          ]
+        }
+      },
+      "A_reduction_vs_B_percent": {
+        "elapsed_seconds": -28.72183177919303,
+        "standard_usd_estimate": -22.27595481996001,
+        "total_tool_calls": -12.5
+      }
+    }
+  },
+  "pricing": "2026-10-24 retained Standard snapshot: input $2, cached $.10, cache-write $2.5, output $10/M; >272k single-request input multipliers 2x/1.5x; actual billed tier unknown.",
+  "limits": [
+    "One valid attempt per arm per task. Initial rejected CLI requests and stopped partial launches are infrastructure preparation, separately retained outside valid samples.",
+    "Independent verifier, fixture preparation and parent orchestration are excluded from arm times/usage.",
+    "Fresh contexts are instruction isolated, not filesystem sandboxed. Agents see direct task requirements and their own inputs only.",
+    "No model/library defect discovery claimed: defects are explicitly injected synthetic fixtures.",
+    "All six evaluator contexts automatically received the same repository AGENTS.md maintenance instructions; B did not load skill entrypoints/references/tool implementations. The experiment tests loading the skill packages beyond this shared scaffold, not absence of all repository guidance.",
+    "RL received the same formula requirements as a second message in both arms; delivery timing differed.",
+    "These are prepared CPU fixtures, not from-zero environment deployment or new framework/hardware adaptation.",
+    "Model latency, background CPU contention and context caches were not controlled; single observations establish no confidence interval.",
+    "Price is an estimate from the retained snapshot, not account billing.",
+    "Baseline B artifacts are now retained for later A-only iterations."
+  ],
+  "observed_improvements": {
+    "implemented": "Explicit array groups reuse global and per-array reductions in one scan; entrypoint routes task recipes only for unresolved semantics/integration.",
+    "verified": "386 tool regressions plus native 129-array one-read mappings; 18 task/stage groups share the scan.",
+    "not_measured": "No post-change agent rerun in this publication."
+  }
+}

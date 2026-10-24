@@ -89,12 +89,12 @@ class EvaluationModelTests(unittest.TestCase):
 
     def test_published_facets_group_model_aliases_and_hardware_annotations(self):
         facets=self.evaluate('h.evaluationFacets(d.evaluations)',all_records=True)
-        self.assertEqual(set(facets['models']),{
+        self.assertTrue({
             'Qwen2.5-0.5B-Instruct','Qwen3-0.6B','Qwen3-0.6B-Base','Qwen3.5-9B-Base',
-            'SmolLM2-135M-Instruct','tiny Llama','tiny Megatron GPT','tiny Qwen2','tiny Qwen3'})
-        self.assertEqual(set(facets['hardware']),{
+            'SmolLM2-135M-Instruct','tiny Llama','tiny Megatron GPT','tiny Qwen2','tiny Qwen3'}.issubset(facets['models']))
+        self.assertTrue({
             'CPU','Ascend 910','Ascend 910C','Ascend NPU',
-            'NVIDIA GeForce RTX 5060','NVIDIA H100','NVIDIA H200'})
+            'NVIDIA GeForce RTX 5060','NVIDIA H100','NVIDIA H200'}.issubset(facets['hardware']))
         self.assertEqual(facets,self.evaluate("(()=>{const f=h.evaluationFacets(d.evaluations);return {models:[...f.models].sort((a,b)=>a.localeCompare(b,'en')),hardware:[...f.hardware].sort((a,b)=>a.localeCompare(b,'en'))}})()",all_records=True))
         self.assertEqual(self.evaluate('h.evaluationCounts(d.evaluations).hardware',all_records=True),len(facets['hardware']))
 

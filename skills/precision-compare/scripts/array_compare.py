@@ -1,18 +1,25 @@
 #!/usr/bin/env python3
 """Compare already corresponding named arrays without artifact conversion (NumPy).
-Call: compare_arrays(a, b, expected=None, metrics=False); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics]
+Call: compare_arrays(a, b, expected=None, metrics=False, groups=None); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics]
 Input: Corresponding name-to-numeric-array maps, or NPZ files.
-Output: exact_equal, coverage, bounded findings; optional FP64 error metrics. --all-findings returns every differing/nonfinite coordinate.
+Output: exact_equal, coverage, bounded findings; optional FP64 metrics and single-scan group reports. --all-findings returns every differing/nonfinite coordinate.
 Requires: NumPy; equality requires matching shapes/dtypes and finite values. expected detects shared omissions.
 
 Details:
 API: compare_arrays(side_a, side_b, expected=None, metrics=False,
-                    max_findings=8, chunk_size=1048576) -> JSON-ready report.
+                    max_findings=8, chunk_size=1048576, *, groups=None) -> JSON-ready report.
 Sides map unique logical names to real numeric arrays/scalars. Adapters establish
 observation semantics, inputs/state, masks and logical correspondence. Native
 loaders can supply mappings directly; names are paired literally. expected is an
 optional independent inventory of names; otherwise the observed union is used,
 which cannot detect omissions shared by both sides. Inputs are not modified.
+Optional groups maps nonempty group names to nonempty inventories of expected
+array names. Groups may overlap or cover only part of the inventory. The report
+adds groups={name: comparison_report}; each report has the same equality,
+coverage, findings and optional metrics fields as the global result. Arrays are
+loaded/scanned once; global and group statistics merge those reductions. Missing
+or incompatible arrays invalidate only affected groups and the global report.
+Group membership is explicit; no name prefixes or training stages are assumed.
 
 Report fields: status, exact_equal, coverage, unequal_arrays, unequal_elements,
 incompatible_arrays, dtype_differences, nonfinite, findings, findings_omitted. coverage contains
@@ -42,7 +49,7 @@ the number of findings. NPZ loading materializes
 one named array at a time; use native mappings/memmaps for larger observations.
 
 CLI: array_compare.py A.npz B.npz --output NEW.json [--metrics]
-                     [--expected names.json] [--max-findings 8 | --all-findings]
+                     [--expected names.json] [--groups groups.json] [--max-findings 8 | --all-findings]
 The CLI reads NPZ files with allow_pickle=False; no task directory layout is
 assumed. Native Torch/BF16 state needs an adapter preserving its dtype identity.
 Exit 0=complete comparison (including unequal values), 1=incomplete/incompatible,
@@ -221,22 +228,38 @@ def _compare_partitions(side_a, side_b, expected=None, metrics=False, max_findin
         selected = set(selected)
         groups[group] = _Comparison(selected, [k & selected for k in keys], metrics, max_findings)
         for name in selected:
-            if name not in names or name in owners:
-                raise ValueError('partitions must contain disjoint expected names')
-            owners[name] = group
+            if name not in names:
+                raise ValueError('groups must contain expected names')
+            owners.setdefault(name, []).append(group)
     for name in sorted(names & keys[0] & keys[1]):
         a, b = (np.asarray(side[name]) for side in (side_a, side_b))
         part = _scan_array(name, a, b, metrics, max_findings, chunk_size)
         total.merge(part)
-        if name in owners:
-            groups[owners[name]].merge(part)
+        for group in owners.get(name, ()):
+            groups[group].merge(part)
     return total.report(), {key: group.report() for key, group in groups.items()}
 
 
 def compare_arrays(side_a, side_b, expected=None, metrics=False, max_findings=8,
-                   chunk_size=1_048_576):
-    """Pair named native arrays; compute exact equality and optional FP64 metrics."""
-    return _compare_partitions(side_a, side_b, expected, metrics, max_findings, chunk_size)[0]
+                   chunk_size=1_048_576, *, groups=None):
+    """Compare named arrays once; optional explicit groups reuse their reductions."""
+    if groups is not None:
+        if not isinstance(groups, Mapping):
+            raise ValueError('groups must map names to nonempty array inventories')
+        selected = {}
+        for name, values in groups.items():
+            if not isinstance(name, str) or not name or isinstance(values, (str, bytes)):
+                raise ValueError('groups need nonempty names and array inventories')
+            selected[name] = _names(values)
+            if not selected[name]:
+                raise ValueError('group array inventories must be nonempty')
+    else:
+        selected = None
+    result, reports = _compare_partitions(side_a, side_b, expected, metrics,
+                                          max_findings, chunk_size, selected)
+    if groups is not None:
+        result['groups'] = reports
+    return result
 
 
 def main():
@@ -245,6 +268,7 @@ def main():
     parser.add_argument('side_b')
     parser.add_argument('--output', required=True)
     parser.add_argument('--expected')
+    parser.add_argument('--groups', help='JSON mapping group names to array-name inventories')
     parser.add_argument('--metrics', action='store_true')
     findings = parser.add_mutually_exclusive_group()
     findings.add_argument('--max-findings', type=int, default=8)
@@ -255,7 +279,9 @@ def main():
         with ExitStack() as stack:
             sides = [stack.enter_context(np.load(p, allow_pickle=False)) for p in (args.side_a, args.side_b)]
             expected = load_json(args.expected) if args.expected else None
-            result = compare_arrays(*sides, expected=expected, metrics=args.metrics, max_findings=args.max_findings)
+            result = compare_arrays(*sides, expected=expected, metrics=args.metrics,
+                                    max_findings=args.max_findings,
+                                    groups=load_json(args.groups) if args.groups else None)
         with Path(args.output).open('x') as stream:
             json.dump(result, stream, indent=2, allow_nan=False)
             stream.write('\n')
