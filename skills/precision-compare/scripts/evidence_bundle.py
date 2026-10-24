@@ -3,6 +3,7 @@
 Call: fetch(transport, source_dir, include, output); CLI: evidence_bundle.py fetch REQUEST.json NEW_DIRECTORY
 Input: REQUEST={"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}.
 Output: Verified local files + EXPORT.json index; receipt includes output, file_count, payload_bytes, transfer_bytes.
+Reuse: EXPORT.json supplies verified per-file hashes/sizes; unchanged files need no second integrity scan.
 Requires: Standard library and endpoint Python-stdin command; new output; defaults 10 MiB/file and 50 MiB total.
 Other operations: pack(source_dir, bundle_path), verify(bundle_path), extract(bundle_path, output) for requested portable evidence.
 
@@ -17,6 +18,9 @@ Selection must find regular files; oversized selections fail rather than omit
 files. Per-file, expanded and transfer caps are checked before remote transfer.
 Files arrive through a temporary indexed ZIP, verified before output creation.
 The ZIP is removed; output/EXPORT.json retains member hashes and sizes.
+A successful fetch has verified every selected file; use this index for per-file
+evidence instead of hashing unchanged outputs again. Adapters still check task
+identities and semantic correspondence not established by file transfer.
 Receipt fields: action=fetch, output, index, file_count, payload_bytes,
 transfer_bytes, archive_sha256, entries_without_indexed_sizes and size_source.
 Receive-side stdout is bounded while streaming; stderr retains its last 2048

@@ -18,7 +18,7 @@ Follow these requirements for the bundled tools:
 |---|---|
 | Interface details | Use declarations or `tool_help TOOL` / `--full`. Read tool source only for tool edits, observed tool failures or requested audits. |
 | Supported work | Call the declared tool. Write adapters for uncovered semantics; identify an unsupported requirement before replacing a tool. |
-| Metrics and coverage | Use returned values. Recompute only for requested audits or observed inconsistencies. |
+| Results and checks | Reuse returned metrics, coverage and integrity receipts. Recheck only affected inputs/artifacts after changes, observed inconsistencies or requested audits. |
 | Delivery | Return existing results, configurations and evidence paths. Create extra report files, bundles or offline replay only on request. |
 
 ## Compare
@@ -44,7 +44,7 @@ python scripts/evidence_bundle.py fetch REQUEST.json NEW_SIDE_DIRECTORY
 
 NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both comparators accept `--metrics` and `--all-findings`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
 
-Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch returns verified files, hashes, sizes and a local index; large arrays stay at source.
+Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch verifies selected files. Reuse its receipt and `EXPORT.json` hashes/sizes for unchanged files; large arrays stay at source.
 
 [tool_help](scripts/tool_help.py): `--list` for discovery, `--full` for schemas. Shards/runtime/repeated commands → [shared tools](references/comparison.md#tools).
 

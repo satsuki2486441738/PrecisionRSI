@@ -77,7 +77,7 @@ python scripts/record_run.py --execution environment.json --output-root runs --s
 
 Its CLI returns log paths and byte counts; failures include the final 2048 bytes per stream (`--tail-bytes` adjusts this). For scheduled work, the adapter waits for the job's terminal result within its budget and propagates its exit status; a successful submission alone does not establish workload completion. Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
 
-Fetch selected terminal artifacts in one transport per side, retaining their relative paths and hashes. `fetch` uses a temporary transfer archive; its output is the verified files and index. Large arrays remain at source. It fails on size limits rather than silently omitting selected files.
+Fetch selected terminal artifacts in one transport per side. `fetch` verifies paths, hashes and sizes; its temporary transfer archive is removed. Use the receipt and `EXPORT.json` for per-file evidence, without rescanning unchanged outputs. Adapters check uncovered task identities and semantics. Large arrays remain at source; size-limit failures retain no partial output.
 
 ```json
 {"transport":["ssh","HOST","bash -lc 'python3 -I -'"],"source_dir":"/work/native-run","include":["*.json","*/command.json","*/stderr.bin"]}
