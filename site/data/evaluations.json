@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-22",
+  "updated_at": "2026-10-24",
   "evaluations": [
     {
       "id": "trl-sfttrainer-checkpoint-20261021",
@@ -54739,6 +54739,1729 @@
           "bridge-tiny-bf16-rank-0"
         ],
         "source_result": "tests/results/gpt-6/compare-h100native-20261021T200953Z/bridge/summary.json"
+      }
+    },
+    {
+      "id": "skills-ab-cache-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：推理缓存修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny Transformer",
+        "revision": "b8e053c39ddeb9311a741059272e0e728b2e2397"
+      },
+      "summary": "比较相同模型与推理设置下，有／无 skill 完成同一注入缺陷任务的正确性、用时、费用与工具调用。两侧均通过隐藏独立验证。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float32",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "skills_loaded": true
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float32",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "skills_loaded": false
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "均收到相同仓库 AGENTS.md 维护规则；B 没有读取 skill 包与工具源码。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "推理包含 prefill and cached decode。"
+      ],
+      "differences": [
+        "A 读取 framework-adapt / precision-compare / precision-repair；B 使用自身能力。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": 179.92600000000002,
+              "side_values": {
+                "a": 356.73,
+                "b": 176.804
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.0047272000000000425,
+              "side_values": {
+                "a": 0.16757279999999997,
+                "b": 0.1723
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": -2,
+              "side_values": {
+                "a": 8,
+                "b": 10
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": -129398,
+              "side_values": {
+                "a": 853992,
+                "b": 983390
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 10549,
+              "side_values": {
+                "a": 16785,
+                "b": 6236
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 9.5367431640625e-07,
+                "b": 9.5367431640625e-07
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 12,
+              "expected": 12,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人为注入的 benchmark 缺陷，不是上游库新发现；不计入真实库修复历史。",
+        "这是已准备 CPU 小负载，不覆盖从零部署或跨硬件适配。",
+        "单次结果，背景 CPU、模型延迟和缓存未控制；不能据此推断总体成功率。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "此记录测量改进前的冻结版本；新增 groups 接口尚未做 agent 成本复跑。",
+        "执行顺序：A → B"
+      ],
+      "evidence": [
+        {
+          "label": "完整 A/B 证据、初始夹具、补丁、原始用量及独立验证",
+          "url": "evidence/skills-ab-multitask-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "25aef1947190da9092b0e80dc6ee4670fc01d6c7",
+        "prefix": "site/evidence/skills-ab-multitask-20261024.json",
+        "replay_cases": 12
+      }
+    },
+    {
+      "id": "skills-ab-sft-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：SFT 梯度累积修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B"
+      },
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny token classifier",
+        "revision": "b8e053c39ddeb9311a741059272e0e728b2e2397"
+      },
+      "summary": "比较相同模型与推理设置下，有／无 skill 完成同一注入缺陷任务的正确性、用时、费用与工具调用。两侧均通过隐藏独立验证。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "training": "full-parameter",
+            "skills_loaded": true
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "training": "full-parameter",
+            "skills_loaded": false
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "均收到相同仓库 AGENTS.md 维护规则；B 没有读取 skill 包与工具源码。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "训练目标与优化器不变；验证原负载与相邻输入。"
+      ],
+      "differences": [
+        "A 读取 framework-adapt / precision-compare / precision-repair；B 使用自身能力。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": 301.396,
+              "side_values": {
+                "a": 508.776,
+                "b": 207.38
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.03934560000000001,
+              "side_values": {
+                "a": 0.20861480000000002,
+                "b": 0.1692692
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 3,
+              "side_values": {
+                "a": 11,
+                "b": 8
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": 331564,
+              "side_values": {
+                "a": 1145993,
+                "b": 814429
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 10052,
+              "side_values": {
+                "a": 16296,
+                "b": 6244
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0.0,
+              "side_values": {
+                "a": 8.881784197001252e-16,
+                "b": 8.881784197001252e-16
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 8,
+              "expected": 8,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人为注入的 benchmark 缺陷，不是上游库新发现；不计入真实库修复历史。",
+        "这是已准备 CPU 小负载，不覆盖从零部署或跨硬件适配。",
+        "单次结果，背景 CPU、模型延迟和缓存未控制；不能据此推断总体成功率。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "此记录测量改进前的冻结版本；新增 groups 接口尚未做 agent 成本复跑。",
+        "执行顺序：B → A"
+      ],
+      "evidence": [
+        {
+          "label": "完整 A/B 证据、初始夹具、补丁、原始用量及独立验证",
+          "url": "evidence/skills-ab-multitask-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "25aef1947190da9092b0e80dc6ee4670fc01d6c7",
+        "prefix": "site/evidence/skills-ab-multitask-20261024.json",
+        "replay_cases": 8
+      }
+    },
+    {
+      "id": "skills-ab-rl-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B：PPO 轨迹掩码修复（注入夹具）",
+      "framework": {
+        "name": "Skills A/B"
+      },
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny PPO policy",
+        "revision": "b8e053c39ddeb9311a741059272e0e728b2e2397"
+      },
+      "summary": "比较相同模型与推理设置下，有／无 skill 完成同一注入缺陷任务的正确性、用时、费用与工具调用。两侧均通过隐藏独立验证。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "algorithm": "PPO",
+            "skills_loaded": true
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 未加载 skills",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "runtime": "CPU float64",
+            "injected_synthetic_fixture": true,
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "python": "3.12.14",
+            "shared_AGENTS_md": true,
+            "algorithm": "PPO",
+            "skills_loaded": false
+          }
+        }
+      ],
+      "common": [
+        "相同初始夹具、Python、agent 模型与 reasoning effort；新子 agent，不继承对话。",
+        "均收到相同仓库 AGENTS.md 维护规则；B 没有读取 skill 包与工具源码。",
+        "只有任务直接要求；独立验证器未提供给执行 agent。",
+        "训练目标与优化器不变；验证原负载与相邻输入。"
+      ],
+      "differences": [
+        "A 读取 framework-adapt / precision-compare / precision-repair；B 使用自身能力。"
+      ],
+      "comparisons": [
+        {
+          "id": "efficiency",
+          "title": "A/B 用时与费用",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "从任务首条事件到最终交付；包含 agent 的阅读、代码、执行、修复和自测，排除父级准备与独立验证。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "用时差（A − B）",
+              "unit": "s",
+              "value": 52.27000000000001,
+              "side_values": {
+                "a": 234.257,
+                "b": 181.987
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": 0.03458439999999999,
+              "side_values": {
+                "a": 0.1898388,
+                "b": 0.15525440000000001
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 1,
+              "side_values": {
+                "a": 9,
+                "b": 8
+              }
+            },
+            {
+              "id": "tokens",
+              "label": "总 token 差（A − B）",
+              "unit": "tokens",
+              "value": 170397,
+              "side_values": {
+                "a": 983557,
+                "b": 813160
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": 9406,
+              "side_values": {
+                "a": 16766,
+                "b": 7360
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立复核的执行",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "独立数值验证",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "相同隐藏用例检查原算法、loss/logits、梯度、更新与保留项；这里只展示 logits 或 loss 的最大残差，全部检查见证据。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "验证最大残差差值（A − B）",
+              "unit": "absolute",
+              "value": 0,
+              "side_values": {
+                "a": 0,
+                "b": 0
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧独立用例／检查",
+              "observed": 28,
+              "expected": 28,
+              "unit": "checks per side"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "人为注入的 benchmark 缺陷，不是上游库新发现；不计入真实库修复历史。",
+        "这是已准备 CPU 小负载，不覆盖从零部署或跨硬件适配。",
+        "单次结果，背景 CPU、模型延迟和缓存未控制；不能据此推断总体成功率。",
+        "费用沿用证据中的 Standard 价格快照估算，不代表账户账单。",
+        "此记录测量改进前的冻结版本；新增 groups 接口尚未做 agent 成本复跑。",
+        "执行顺序：A → B"
+      ],
+      "evidence": [
+        {
+          "label": "完整 A/B 证据、初始夹具、补丁、原始用量及独立验证",
+          "url": "evidence/skills-ab-multitask-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "25aef1947190da9092b0e80dc6ee4670fc01d6c7",
+        "prefix": "site/evidence/skills-ab-multitask-20261024.json",
+        "replay_cases": 28
+      }
+    },
+    {
+      "id": "torch-native-multitask-inference-20261024",
+      "date": "2026-10-24",
+      "title": "PyTorch：BF16 完整前向 双端微型模型",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny MLP (8-16-7)",
+        "revision": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+      },
+      "summary": "在已准备的 H200 与 Ascend 910C 原生环境执行新负载，采集与比较 BF16 完整前向；不是 Qwen 或完整训练框架的新验证。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 · CUDA",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cu128"
+            }
+          ],
+          "settings": {
+            "runtime_device_name": "NVIDIA H20Z",
+            "device": "cuda:0",
+            "native_dtype": "BF16",
+            "score_objective_dtype": "FP32",
+            "export_dtype": "FP32",
+            "stored_update_subtraction": "FP32 after promoting both operands",
+            "optimizer": "AdamW foreach=False",
+            "training": "eval/no_grad",
+            "steps": 1,
+            "algorithm": "inference",
+            "inputs_sha256": "3772d5cc49846c83ac30a608d31ff981595cbf84a82f56f88f22a7f8fe6ab156",
+            "initial_sha256": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "Ascend 910C · CANN",
+          "hardware": "Ascend 910C",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "runtime_device_name": "Ascend910_9382",
+            "device": "npu:0",
+            "native_dtype": "BF16",
+            "score_objective_dtype": "FP32",
+            "export_dtype": "FP32",
+            "stored_update_subtraction": "FP32 after promoting both operands",
+            "optimizer": "AdamW foreach=False",
+            "training": "eval/no_grad",
+            "steps": 1,
+            "algorithm": "inference",
+            "inputs_sha256": "3772d5cc49846c83ac30a608d31ff981595cbf84a82f56f88f22a7f8fe6ab156",
+            "initial_sha256": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+          }
+        }
+      ],
+      "common": [
+        "相同输入、初始权重、BF16 模型及 FP32 objective；输入与采集器哈希均核对。",
+        "推理 8 个有效目标；SFT/RL 各连续 3 步，全量采集梯度、参数、FP32 实际更新和 AdamW 一二阶矩。",
+        "单设备、未量化、原生 PyTorch；测试模型 263 个参数。"
+      ],
+      "differences": [
+        "CUDA 与 CANN 原生算子、PyTorch 版本及相应完整依赖栈。"
+      ],
+      "comparisons": [
+        {
+          "id": "logits",
+          "title": "logits",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.0,
+              "coordinate": {
+                "name": "inference/logits",
+                "index": [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.0
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 0.0
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 1.0
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 1,
+              "expected": 1,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 84,
+              "expected": 84,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "target-logp",
+          "title": "target_logp",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 1.1920928955078125e-07,
+              "coordinate": {
+                "name": "inference/target_logp",
+                "index": [
+                  4
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 1.6858739404357614e-07
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 5.960464477539063e-08
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999999999999994
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 1,
+              "expected": 1,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 8,
+              "expected": 8,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "nll",
+          "title": "nll",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.0,
+              "coordinate": {
+                "name": "inference/nll",
+                "index": []
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.0
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 0.0
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 1.0
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 1,
+              "expected": 1,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 1,
+              "expected": 1,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Hardware 采用用户确认的平台名称；settings 保留实际 runtime 报告的 NVIDIA H20Z / Ascend910_9382。",
+        "仅报告数值差异与覆盖；未归因为库 bug，未做修复或可接受性判断。",
+        "多步轨迹初态相同，后续各端状态自然演化；不是逐步固定中间态重放。",
+        "已验证所有更新量等于存储参数在 FP32 中相减。"
+      ],
+      "evidence": [
+        {
+          "label": "原始输入、采集代码、配置、逐阶段指标与校验",
+          "url": "evidence/torch-native-multitask-20261024.json"
+        },
+        {
+          "label": "GPU 原生数组（NPZ）",
+          "url": "evidence/torch-native-multitask-gpu-20261024.npz"
+        },
+        {
+          "label": "NPU 原生数组（NPZ）",
+          "url": "evidence/torch-native-multitask-npu-20261024.npz"
+        }
+      ],
+      "archive": {
+        "revision": "25aef1947190da9092b0e80dc6ee4670fc01d6c7",
+        "prefix": "site/evidence/torch-native-multitask-20261024",
+        "replay_cases": 1
+      }
+    },
+    {
+      "id": "torch-native-multitask-sft-20261024",
+      "date": "2026-10-24",
+      "title": "PyTorch：BF16 全参 SFT 双端微型模型",
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny MLP (8-16-7)",
+        "revision": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+      },
+      "summary": "在已准备的 H200 与 Ascend 910C 原生环境执行新负载，采集与比较 BF16 全参 SFT；不是 Qwen 或完整训练框架的新验证。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 · CUDA",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cu128"
+            }
+          ],
+          "settings": {
+            "runtime_device_name": "NVIDIA H20Z",
+            "device": "cuda:0",
+            "native_dtype": "BF16",
+            "score_objective_dtype": "FP32",
+            "export_dtype": "FP32",
+            "stored_update_subtraction": "FP32 after promoting both operands",
+            "optimizer": "AdamW foreach=False",
+            "training": "full-parameter",
+            "steps": 3,
+            "algorithm": "sft",
+            "inputs_sha256": "3772d5cc49846c83ac30a608d31ff981595cbf84a82f56f88f22a7f8fe6ab156",
+            "initial_sha256": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "Ascend 910C · CANN",
+          "hardware": "Ascend 910C",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "runtime_device_name": "Ascend910_9382",
+            "device": "npu:0",
+            "native_dtype": "BF16",
+            "score_objective_dtype": "FP32",
+            "export_dtype": "FP32",
+            "stored_update_subtraction": "FP32 after promoting both operands",
+            "optimizer": "AdamW foreach=False",
+            "training": "full-parameter",
+            "steps": 3,
+            "algorithm": "sft",
+            "inputs_sha256": "3772d5cc49846c83ac30a608d31ff981595cbf84a82f56f88f22a7f8fe6ab156",
+            "initial_sha256": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+          }
+        }
+      ],
+      "common": [
+        "相同输入、初始权重、BF16 模型及 FP32 objective；输入与采集器哈希均核对。",
+        "推理 8 个有效目标；SFT/RL 各连续 3 步，全量采集梯度、参数、FP32 实际更新和 AdamW 一二阶矩。",
+        "单设备、未量化、原生 PyTorch；测试模型 263 个参数。"
+      ],
+      "differences": [
+        "CUDA 与 CANN 原生算子、PyTorch 版本及相应完整依赖栈。"
+      ],
+      "comparisons": [
+        {
+          "id": "loss",
+          "title": "loss",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.00012195110321044922,
+              "coordinate": {
+                "name": "sft/step2/loss",
+                "index": []
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.00013480947364744153
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 7.783228589966212e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999999992440037
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 3,
+              "expected": 3,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 3,
+              "expected": 3,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "grads",
+          "title": "grads",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.0009765625,
+              "coordinate": {
+                "name": "sft/step2/grads/2.weight",
+                "index": [
+                  1,
+                  0
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.002171649212733739
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 7.731275924229205e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999961223015447
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "params",
+          "title": "params",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.005859375,
+              "coordinate": {
+                "name": "sft/step0/params/0.weight",
+                "index": [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.010342619417976436
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 0.0003682070015304566
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999978440845934
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "updates",
+          "title": "updates",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.005859375,
+              "coordinate": {
+                "name": "sft/step0/updates/0.weight",
+                "index": [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.00618692138967167
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 0.00022026023404053306
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9974434676190559
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "exp-avg",
+          "title": "exp_avg",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.000244140625,
+              "coordinate": {
+                "name": "sft/step2/exp_avg/2.bias",
+                "index": [
+                  1
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.0004913952724802011
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 1.7494134951122186e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999953193535417
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "exp-avg-sq",
+          "title": "exp_avg_sq",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 2.384185791015625e-07,
+              "coordinate": {
+                "name": "sft/step2/exp_avg_sq/2.bias",
+                "index": [
+                  1
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 5.018134283713379e-07
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 1.7865031122307307e-08
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999933319812337
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Hardware 采用用户确认的平台名称；settings 保留实际 runtime 报告的 NVIDIA H20Z / Ascend910_9382。",
+        "仅报告数值差异与覆盖；未归因为库 bug，未做修复或可接受性判断。",
+        "多步轨迹初态相同，后续各端状态自然演化；不是逐步固定中间态重放。",
+        "已验证所有更新量等于存储参数在 FP32 中相减。"
+      ],
+      "evidence": [
+        {
+          "label": "原始输入、采集代码、配置、逐阶段指标与校验",
+          "url": "evidence/torch-native-multitask-20261024.json"
+        },
+        {
+          "label": "GPU 原生数组（NPZ）",
+          "url": "evidence/torch-native-multitask-gpu-20261024.npz"
+        },
+        {
+          "label": "NPU 原生数组（NPZ）",
+          "url": "evidence/torch-native-multitask-npu-20261024.npz"
+        }
+      ],
+      "archive": {
+        "revision": "25aef1947190da9092b0e80dc6ee4670fc01d6c7",
+        "prefix": "site/evidence/torch-native-multitask-20261024",
+        "replay_cases": 1
+      }
+    },
+    {
+      "id": "torch-native-multitask-rl-20261024",
+      "date": "2026-10-24",
+      "title": "PyTorch：BF16 固定轨迹 PPO 双端微型模型",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny MLP (8-16-7)",
+        "revision": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+      },
+      "summary": "在已准备的 H200 与 Ascend 910C 原生环境执行新负载，采集与比较 BF16 固定轨迹 PPO；不是 Qwen 或完整训练框架的新验证。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 · CUDA",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cu128"
+            }
+          ],
+          "settings": {
+            "runtime_device_name": "NVIDIA H20Z",
+            "device": "cuda:0",
+            "native_dtype": "BF16",
+            "score_objective_dtype": "FP32",
+            "export_dtype": "FP32",
+            "stored_update_subtraction": "FP32 after promoting both operands",
+            "optimizer": "AdamW foreach=False",
+            "training": "fixed-trajectory PPO",
+            "steps": 3,
+            "algorithm": "PPO",
+            "inputs_sha256": "3772d5cc49846c83ac30a608d31ff981595cbf84a82f56f88f22a7f8fe6ab156",
+            "initial_sha256": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "Ascend 910C · CANN",
+          "hardware": "Ascend 910C",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "runtime_device_name": "Ascend910_9382",
+            "device": "npu:0",
+            "native_dtype": "BF16",
+            "score_objective_dtype": "FP32",
+            "export_dtype": "FP32",
+            "stored_update_subtraction": "FP32 after promoting both operands",
+            "optimizer": "AdamW foreach=False",
+            "training": "fixed-trajectory PPO",
+            "steps": 3,
+            "algorithm": "PPO",
+            "inputs_sha256": "3772d5cc49846c83ac30a608d31ff981595cbf84a82f56f88f22a7f8fe6ab156",
+            "initial_sha256": "e15a77bf8a4e9580e7971b6acdbfff4d7b820c81bceed7c2eb793645305999de"
+          }
+        }
+      ],
+      "common": [
+        "相同输入、初始权重、BF16 模型及 FP32 objective；输入与采集器哈希均核对。",
+        "推理 8 个有效目标；SFT/RL 各连续 3 步，全量采集梯度、参数、FP32 实际更新和 AdamW 一二阶矩。",
+        "单设备、未量化、原生 PyTorch；测试模型 263 个参数。"
+      ],
+      "differences": [
+        "CUDA 与 CANN 原生算子、PyTorch 版本及相应完整依赖栈。"
+      ],
+      "comparisons": [
+        {
+          "id": "loss",
+          "title": "loss",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 2.205371856689453e-06,
+              "coordinate": {
+                "name": "rl/step1/loss",
+                "index": []
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 2.342564911825758e-06
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 1.3524804824367737e-06
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999999999026301
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 3,
+              "expected": 3,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 3,
+              "expected": 3,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "grads",
+          "title": "grads",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.00048828125,
+              "coordinate": {
+                "name": "rl/step1/grads/0.bias",
+                "index": [
+                  0
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.0012856865348422172
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 4.577165268979391e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999987789525573
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "params",
+          "title": "params",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.001953125,
+              "coordinate": {
+                "name": "rl/step2/params/0.weight",
+                "index": [
+                  2,
+                  7
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.0022669151442008257
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 8.070431621213798e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999998963735746
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "updates",
+          "title": "updates",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.0009765625,
+              "coordinate": {
+                "name": "rl/step1/updates/0.weight",
+                "index": [
+                  2,
+                  7
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.0014678971683151783
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 5.2258523016031885e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9998574015442303
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "exp-avg",
+          "title": "exp_avg",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 0.0001220703125,
+              "coordinate": {
+                "name": "rl/step2/exp_avg/0.bias",
+                "index": [
+                  6
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 0.000357695633954945
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 1.2734301777571816e-05
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999978755099029
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "exp-avg-sq",
+          "title": "exp_avg_sq",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "同一输入和初始权重的完整数值轨迹；按逻辑 tensor 与 element 配对，保留各端原生算子。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大绝对误差",
+              "unit": "absolute",
+              "value": 1.1920928955078125e-07,
+              "coordinate": {
+                "name": "rl/step1/exp_avg_sq/0.bias",
+                "index": [
+                  0
+                ]
+              }
+            },
+            {
+              "id": "error-norm",
+              "label": "L2 误差",
+              "unit": "absolute",
+              "value": 1.968970340270084e-07
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "unit": "absolute",
+              "value": 7.0097200312055645e-09
+            },
+            {
+              "id": "cosine",
+              "label": "Cosine",
+              "unit": "ratio",
+              "value": 0.9999994492088494
+            }
+          ],
+          "coverage": [
+            {
+              "label": "逻辑数组",
+              "observed": 12,
+              "expected": 12,
+              "unit": "arrays"
+            },
+            {
+              "label": "逻辑元素",
+              "observed": 789,
+              "expected": 789,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Hardware 采用用户确认的平台名称；settings 保留实际 runtime 报告的 NVIDIA H20Z / Ascend910_9382。",
+        "仅报告数值差异与覆盖；未归因为库 bug，未做修复或可接受性判断。",
+        "多步轨迹初态相同，后续各端状态自然演化；不是逐步固定中间态重放。",
+        "已验证所有更新量等于存储参数在 FP32 中相减。"
+      ],
+      "evidence": [
+        {
+          "label": "原始输入、采集代码、配置、逐阶段指标与校验",
+          "url": "evidence/torch-native-multitask-20261024.json"
+        },
+        {
+          "label": "GPU 原生数组（NPZ）",
+          "url": "evidence/torch-native-multitask-gpu-20261024.npz"
+        },
+        {
+          "label": "NPU 原生数组（NPZ）",
+          "url": "evidence/torch-native-multitask-npu-20261024.npz"
+        }
+      ],
+      "archive": {
+        "revision": "25aef1947190da9092b0e80dc6ee4670fc01d6c7",
+        "prefix": "site/evidence/torch-native-multitask-20261024",
+        "replay_cases": 1
       }
     }
   ]

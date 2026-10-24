@@ -27,6 +27,8 @@ retain empty/false/zero/unknown states, and keep original values in the JSON
 download. Human-readable execution descriptions must preserve the recorded
 meaning. Render all supplied text as text, never HTML.
 
+Synthetic repair fixtures belong in Evaluations; reserve Repairs for established implementation defects. For skill A/B experiments, retain the shared context, loaded skill revision, execution order, raw per-response usage and pricing snapshot in evidence. Report preparation separately from evaluator work; publish failed or slower outcomes alongside successful ones.
+
 ## Record a repair
 
 Organize `data/repairs.json` as library groups → independent fixes → verification records. Declare each group in `library_groups` with a stable `id`, `title` and `components` (one library or an interacting combination). An independent repair sets `library_group_id`; `affected_library` identifies where the defect is located. A verification follow-up sets `related_repair_id` to the independent repair and inherits its group. `verification_title` labels that round of verification.
