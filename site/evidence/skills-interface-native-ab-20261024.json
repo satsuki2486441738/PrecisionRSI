@@ -1,0 +1,2375 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "direct_interface_native_retest",
+  "source_revision": "e2593d606045753fa935b691401c1944752f5ce6",
+  "summary": {
+    "a": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 486.383,
+      "requests": 29,
+      "total_tool_calls": 28,
+      "tokens": {
+        "input_tokens": 3382644,
+        "cached_input_tokens": 3225600,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 15168,
+        "total_tokens": 3397812,
+        "uncached_input_tokens": 157044
+      },
+      "standard_usd_estimate": 0.7883279999999999
+    },
+    "b": {
+      "elapsed_seconds": 589.908,
+      "standard_usd_estimate": 0.8271804,
+      "requests": 40,
+      "total_tool_calls": 38,
+      "tokens": {
+        "input_tokens": 4279513,
+        "cached_input_tokens": 4161024,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 17410,
+        "total_tokens": 4296923,
+        "uncached_input_tokens": 118489
+      }
+    },
+    "baseline_id": "native-prefill-noskills-20261024T011154Z",
+    "source_revision": "e2593d606045753fa935b691401c1944752f5ce6",
+    "A_reduction_vs_B_percent": {
+      "elapsed_seconds": 17.54934667778705,
+      "standard_usd_estimate": 4.696968158336457,
+      "total_tool_calls": 26.315789473684216
+    },
+    "previous_a": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 398.309,
+      "requests": 22,
+      "total_tool_calls": 21,
+      "tokens": {
+        "input_tokens": 2345812,
+        "cached_input_tokens": 2276096,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 12063,
+        "total_tokens": 2357875,
+        "uncached_input_tokens": 69716
+      },
+      "standard_usd_estimate": 0.48767159999999987
+    }
+  },
+  "verification": {
+    "status": "PASS",
+    "checks": {
+      "global_and_per_sample_metrics_match_withheld_oracle": true,
+      "delivered_file_manifest": true,
+      "selected_native_and_launcher_success_and_resource_identity": true,
+      "both_coordinate_inventories_and_native_gpu_scores": true,
+      "independent_saved_npu_array_hash_and_targets": true,
+      "frozen_baseline_identity": true,
+      "all_280_native_scores_equal_historical_B": true,
+      "skill_snapshot_unchanged": true
+    },
+    "remote_array_checks": [
+      {
+        "sample": "sample-1",
+        "checked": 23,
+        "array_sha256": "d9fab1f3b150de0f52142cc6a8b277086f293049eb88c4036c4a3b6f0b396be2"
+      },
+      {
+        "sample": "sample-2",
+        "checked": 23,
+        "array_sha256": "4f2c6a6decf1cfa0a79ae7bcfd9cf2cd0dc1133fc8e48fce23e2792edd460e1d"
+      },
+      {
+        "sample": "sample-3",
+        "checked": 47,
+        "array_sha256": "7e29cd1a3c6f55ce913b28b3fd85f41f3366fc6f97e6bdad288f0d803635720d"
+      },
+      {
+        "sample": "sample-4",
+        "checked": 47,
+        "array_sha256": "587bbaf1b4eb08b03fb334400fdf2949f106ba593dd2fa6107fbf3d1fc38bb3f"
+      }
+    ],
+    "native_attempts": {
+      "gpu": 2,
+      "npu": 1
+    },
+    "scheduler_first_attempt": {
+      "status": "failed",
+      "native_status": "completed",
+      "native_returncode": 0
+    },
+    "config_difference": "NPU use_cache=True for independent prefill calls; previous A used False; both return identical target scores.",
+    "metrics": {
+      "coverage": {
+        "expected": 140,
+        "gpu": 140,
+        "npu": 140,
+        "missing": []
+      },
+      "global_metrics": {
+        "count": 140,
+        "side_a_nll": 12.983606467928205,
+        "side_b_nll": 12.980666133335658,
+        "nll_abs_diff": 0.0029403345925462787,
+        "mae": 0.02059140205383301,
+        "p99": 0.07268386840820296,
+        "max_abs": 0.08256149291992188,
+        "max_coordinates": [
+          [
+            "sample-1",
+            1,
+            8763
+          ]
+        ]
+      },
+      "samples": {
+        "sample-1": {
+          "count": 23,
+          "side_a_nll": 13.51643699148427,
+          "side_b_nll": 13.508584768875785,
+          "nll_abs_diff": 0.007852222608484283,
+          "mae": 0.022419224614682404,
+          "p99": 0.07742370605468753,
+          "max_abs": 0.08256149291992188,
+          "max_coordinates": [
+            [
+              "sample-1",
+              1,
+              8763
+            ]
+          ]
+        },
+        "sample-2": {
+          "count": 23,
+          "side_a_nll": 12.939452254253885,
+          "side_b_nll": 12.932685478873875,
+          "nll_abs_diff": 0.006766775380009804,
+          "mae": 0.02370013361391814,
+          "p99": 0.07065452575683598,
+          "max_abs": 0.07714557647705078,
+          "max_coordinates": [
+            [
+              "sample-2",
+              4,
+              4944
+            ]
+          ]
+        },
+        "sample-3": {
+          "count": 47,
+          "side_a_nll": 12.902968203767816,
+          "side_b_nll": 12.9026206199159,
+          "nll_abs_diff": 0.0003475838519158003,
+          "mae": 0.018471251142785906,
+          "p99": 0.06183561325073242,
+          "max_abs": 0.0657052993774414,
+          "max_coordinates": [
+            [
+              "sample-3",
+              24,
+              4554
+            ]
+          ]
+        },
+        "sample-4": {
+          "count": 47,
+          "side_a_nll": 12.8251052612954,
+          "side_b_nll": 12.823848379419205,
+          "nll_abs_diff": 0.001256881876194882,
+          "mae": 0.020295792437614278,
+          "p99": 0.05477424621582031,
+          "max_abs": 0.05656147003173828,
+          "max_coordinates": [
+            [
+              "sample-4",
+              22,
+              14787
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "normalized_scores": {
+    "gpu": [
+      {
+        "sample": "sample-1",
+        "position": 1,
+        "token": 8763,
+        "logprob": -17.518299102783203
+      },
+      {
+        "sample": "sample-1",
+        "position": 2,
+        "token": 6721,
+        "logprob": -19.62024688720703
+      },
+      {
+        "sample": "sample-1",
+        "position": 3,
+        "token": 17587,
+        "logprob": -12.354000091552734
+      },
+      {
+        "sample": "sample-1",
+        "position": 4,
+        "token": 11659,
+        "logprob": -11.317928314208984
+      },
+      {
+        "sample": "sample-1",
+        "position": 5,
+        "token": 7987,
+        "logprob": -11.002662658691406
+      },
+      {
+        "sample": "sample-1",
+        "position": 6,
+        "token": 18883,
+        "logprob": -17.155168533325195
+      },
+      {
+        "sample": "sample-1",
+        "position": 7,
+        "token": 12125,
+        "logprob": -13.424735069274902
+      },
+      {
+        "sample": "sample-1",
+        "position": 8,
+        "token": 850,
+        "logprob": -8.673709869384766
+      },
+      {
+        "sample": "sample-1",
+        "position": 9,
+        "token": 13443,
+        "logprob": -16.413124084472656
+      },
+      {
+        "sample": "sample-1",
+        "position": 10,
+        "token": 2620,
+        "logprob": -16.115182876586914
+      },
+      {
+        "sample": "sample-1",
+        "position": 11,
+        "token": 13156,
+        "logprob": -11.625020027160645
+      },
+      {
+        "sample": "sample-1",
+        "position": 12,
+        "token": 6793,
+        "logprob": -14.589472770690918
+      },
+      {
+        "sample": "sample-1",
+        "position": 13,
+        "token": 10323,
+        "logprob": -9.536869049072266
+      },
+      {
+        "sample": "sample-1",
+        "position": 14,
+        "token": 11450,
+        "logprob": -12.207452774047852
+      },
+      {
+        "sample": "sample-1",
+        "position": 15,
+        "token": 9801,
+        "logprob": -10.29964828491211
+      },
+      {
+        "sample": "sample-1",
+        "position": 16,
+        "token": 19412,
+        "logprob": -15.533401489257812
+      },
+      {
+        "sample": "sample-1",
+        "position": 17,
+        "token": 8603,
+        "logprob": -11.783797264099121
+      },
+      {
+        "sample": "sample-1",
+        "position": 18,
+        "token": 19006,
+        "logprob": -17.67440414428711
+      },
+      {
+        "sample": "sample-1",
+        "position": 19,
+        "token": 11736,
+        "logprob": -14.038249969482422
+      },
+      {
+        "sample": "sample-1",
+        "position": 20,
+        "token": 1516,
+        "logprob": -13.215757369995117
+      },
+      {
+        "sample": "sample-1",
+        "position": 21,
+        "token": 18689,
+        "logprob": -14.944068908691406
+      },
+      {
+        "sample": "sample-1",
+        "position": 22,
+        "token": 13313,
+        "logprob": -13.284603118896484
+      },
+      {
+        "sample": "sample-1",
+        "position": 23,
+        "token": 749,
+        "logprob": -8.550248146057129
+      },
+      {
+        "sample": "sample-2",
+        "position": 1,
+        "token": 15049,
+        "logprob": -14.677992820739746
+      },
+      {
+        "sample": "sample-2",
+        "position": 2,
+        "token": 19638,
+        "logprob": -13.161710739135742
+      },
+      {
+        "sample": "sample-2",
+        "position": 3,
+        "token": 12431,
+        "logprob": -13.479034423828125
+      },
+      {
+        "sample": "sample-2",
+        "position": 4,
+        "token": 4944,
+        "logprob": -13.641066551208496
+      },
+      {
+        "sample": "sample-2",
+        "position": 5,
+        "token": 9655,
+        "logprob": -14.453327178955078
+      },
+      {
+        "sample": "sample-2",
+        "position": 6,
+        "token": 1875,
+        "logprob": -10.379257202148438
+      },
+      {
+        "sample": "sample-2",
+        "position": 7,
+        "token": 9433,
+        "logprob": -11.668095588684082
+      },
+      {
+        "sample": "sample-2",
+        "position": 8,
+        "token": 7477,
+        "logprob": -15.552715301513672
+      },
+      {
+        "sample": "sample-2",
+        "position": 9,
+        "token": 18927,
+        "logprob": -14.373307228088379
+      },
+      {
+        "sample": "sample-2",
+        "position": 10,
+        "token": 13466,
+        "logprob": -15.410996437072754
+      },
+      {
+        "sample": "sample-2",
+        "position": 11,
+        "token": 8636,
+        "logprob": -13.544921875
+      },
+      {
+        "sample": "sample-2",
+        "position": 12,
+        "token": 12349,
+        "logprob": -15.752878189086914
+      },
+      {
+        "sample": "sample-2",
+        "position": 13,
+        "token": 10875,
+        "logprob": -13.499482154846191
+      },
+      {
+        "sample": "sample-2",
+        "position": 14,
+        "token": 1411,
+        "logprob": -9.34765911102295
+      },
+      {
+        "sample": "sample-2",
+        "position": 15,
+        "token": 18720,
+        "logprob": -11.563011169433594
+      },
+      {
+        "sample": "sample-2",
+        "position": 16,
+        "token": 1102,
+        "logprob": -10.336589813232422
+      },
+      {
+        "sample": "sample-2",
+        "position": 17,
+        "token": 9031,
+        "logprob": -13.636472702026367
+      },
+      {
+        "sample": "sample-2",
+        "position": 18,
+        "token": 8332,
+        "logprob": -12.751977920532227
+      },
+      {
+        "sample": "sample-2",
+        "position": 19,
+        "token": 5112,
+        "logprob": -12.210521697998047
+      },
+      {
+        "sample": "sample-2",
+        "position": 20,
+        "token": 17089,
+        "logprob": -13.920228958129883
+      },
+      {
+        "sample": "sample-2",
+        "position": 21,
+        "token": 16586,
+        "logprob": -12.147506713867188
+      },
+      {
+        "sample": "sample-2",
+        "position": 22,
+        "token": 19104,
+        "logprob": -11.080785751342773
+      },
+      {
+        "sample": "sample-2",
+        "position": 23,
+        "token": 7945,
+        "logprob": -11.017862319946289
+      },
+      {
+        "sample": "sample-3",
+        "position": 1,
+        "token": 17451,
+        "logprob": -17.762832641601562
+      },
+      {
+        "sample": "sample-3",
+        "position": 2,
+        "token": 8977,
+        "logprob": -10.937753677368164
+      },
+      {
+        "sample": "sample-3",
+        "position": 3,
+        "token": 9977,
+        "logprob": -14.211601257324219
+      },
+      {
+        "sample": "sample-3",
+        "position": 4,
+        "token": 11656,
+        "logprob": -10.24421501159668
+      },
+      {
+        "sample": "sample-3",
+        "position": 5,
+        "token": 802,
+        "logprob": -12.168828964233398
+      },
+      {
+        "sample": "sample-3",
+        "position": 6,
+        "token": 9276,
+        "logprob": -16.64996337890625
+      },
+      {
+        "sample": "sample-3",
+        "position": 7,
+        "token": 5002,
+        "logprob": -11.953815460205078
+      },
+      {
+        "sample": "sample-3",
+        "position": 8,
+        "token": 8936,
+        "logprob": -11.015576362609863
+      },
+      {
+        "sample": "sample-3",
+        "position": 9,
+        "token": 7538,
+        "logprob": -14.61471939086914
+      },
+      {
+        "sample": "sample-3",
+        "position": 10,
+        "token": 6456,
+        "logprob": -12.028166770935059
+      },
+      {
+        "sample": "sample-3",
+        "position": 11,
+        "token": 3262,
+        "logprob": -9.679363250732422
+      },
+      {
+        "sample": "sample-3",
+        "position": 12,
+        "token": 1300,
+        "logprob": -10.967355728149414
+      },
+      {
+        "sample": "sample-3",
+        "position": 13,
+        "token": 10451,
+        "logprob": -13.073076248168945
+      },
+      {
+        "sample": "sample-3",
+        "position": 14,
+        "token": 19891,
+        "logprob": -15.251559257507324
+      },
+      {
+        "sample": "sample-3",
+        "position": 15,
+        "token": 19908,
+        "logprob": -13.490887641906738
+      },
+      {
+        "sample": "sample-3",
+        "position": 16,
+        "token": 5184,
+        "logprob": -15.528322219848633
+      },
+      {
+        "sample": "sample-3",
+        "position": 17,
+        "token": 19750,
+        "logprob": -15.052275657653809
+      },
+      {
+        "sample": "sample-3",
+        "position": 18,
+        "token": 1423,
+        "logprob": -8.102815628051758
+      },
+      {
+        "sample": "sample-3",
+        "position": 19,
+        "token": 18129,
+        "logprob": -14.954122543334961
+      },
+      {
+        "sample": "sample-3",
+        "position": 20,
+        "token": 6070,
+        "logprob": -11.611505508422852
+      },
+      {
+        "sample": "sample-3",
+        "position": 21,
+        "token": 404,
+        "logprob": -11.939910888671875
+      },
+      {
+        "sample": "sample-3",
+        "position": 22,
+        "token": 7818,
+        "logprob": -13.119749069213867
+      },
+      {
+        "sample": "sample-3",
+        "position": 23,
+        "token": 2823,
+        "logprob": -12.600240707397461
+      },
+      {
+        "sample": "sample-3",
+        "position": 24,
+        "token": 4554,
+        "logprob": -14.268747329711914
+      },
+      {
+        "sample": "sample-3",
+        "position": 25,
+        "token": 10825,
+        "logprob": -13.08025074005127
+      },
+      {
+        "sample": "sample-3",
+        "position": 26,
+        "token": 9094,
+        "logprob": -16.13825225830078
+      },
+      {
+        "sample": "sample-3",
+        "position": 27,
+        "token": 9312,
+        "logprob": -7.968883991241455
+      },
+      {
+        "sample": "sample-3",
+        "position": 28,
+        "token": 1479,
+        "logprob": -13.155742645263672
+      },
+      {
+        "sample": "sample-3",
+        "position": 29,
+        "token": 14810,
+        "logprob": -11.735179901123047
+      },
+      {
+        "sample": "sample-3",
+        "position": 30,
+        "token": 13374,
+        "logprob": -13.974556922912598
+      },
+      {
+        "sample": "sample-3",
+        "position": 31,
+        "token": 16464,
+        "logprob": -13.739127159118652
+      },
+      {
+        "sample": "sample-3",
+        "position": 32,
+        "token": 13014,
+        "logprob": -12.619372367858887
+      },
+      {
+        "sample": "sample-3",
+        "position": 33,
+        "token": 16861,
+        "logprob": -12.300546646118164
+      },
+      {
+        "sample": "sample-3",
+        "position": 34,
+        "token": 12461,
+        "logprob": -13.2513427734375
+      },
+      {
+        "sample": "sample-3",
+        "position": 35,
+        "token": 2687,
+        "logprob": -15.449317932128906
+      },
+      {
+        "sample": "sample-3",
+        "position": 36,
+        "token": 19355,
+        "logprob": -22.20986557006836
+      },
+      {
+        "sample": "sample-3",
+        "position": 37,
+        "token": 5874,
+        "logprob": -10.589678764343262
+      },
+      {
+        "sample": "sample-3",
+        "position": 38,
+        "token": 10439,
+        "logprob": -10.881229400634766
+      },
+      {
+        "sample": "sample-3",
+        "position": 39,
+        "token": 4840,
+        "logprob": -10.194320678710938
+      },
+      {
+        "sample": "sample-3",
+        "position": 40,
+        "token": 6250,
+        "logprob": -11.461008071899414
+      },
+      {
+        "sample": "sample-3",
+        "position": 41,
+        "token": 15440,
+        "logprob": -11.31260871887207
+      },
+      {
+        "sample": "sample-3",
+        "position": 42,
+        "token": 8485,
+        "logprob": -11.854745864868164
+      },
+      {
+        "sample": "sample-3",
+        "position": 43,
+        "token": 14054,
+        "logprob": -14.352766990661621
+      },
+      {
+        "sample": "sample-3",
+        "position": 44,
+        "token": 17040,
+        "logprob": -13.65285587310791
+      },
+      {
+        "sample": "sample-3",
+        "position": 45,
+        "token": 17994,
+        "logprob": -14.190522193908691
+      },
+      {
+        "sample": "sample-3",
+        "position": 46,
+        "token": 15120,
+        "logprob": -13.280695915222168
+      },
+      {
+        "sample": "sample-3",
+        "position": 47,
+        "token": 783,
+        "logprob": -7.819229602813721
+      },
+      {
+        "sample": "sample-4",
+        "position": 1,
+        "token": 4026,
+        "logprob": -13.393867492675781
+      },
+      {
+        "sample": "sample-4",
+        "position": 2,
+        "token": 18460,
+        "logprob": -15.09229564666748
+      },
+      {
+        "sample": "sample-4",
+        "position": 3,
+        "token": 15527,
+        "logprob": -10.389674186706543
+      },
+      {
+        "sample": "sample-4",
+        "position": 4,
+        "token": 19313,
+        "logprob": -16.042804718017578
+      },
+      {
+        "sample": "sample-4",
+        "position": 5,
+        "token": 7805,
+        "logprob": -12.053568840026855
+      },
+      {
+        "sample": "sample-4",
+        "position": 6,
+        "token": 9786,
+        "logprob": -12.318450927734375
+      },
+      {
+        "sample": "sample-4",
+        "position": 7,
+        "token": 822,
+        "logprob": -10.918257713317871
+      },
+      {
+        "sample": "sample-4",
+        "position": 8,
+        "token": 8139,
+        "logprob": -13.248603820800781
+      },
+      {
+        "sample": "sample-4",
+        "position": 9,
+        "token": 18855,
+        "logprob": -10.144308090209961
+      },
+      {
+        "sample": "sample-4",
+        "position": 10,
+        "token": 5328,
+        "logprob": -9.297480583190918
+      },
+      {
+        "sample": "sample-4",
+        "position": 11,
+        "token": 10468,
+        "logprob": -13.359004020690918
+      },
+      {
+        "sample": "sample-4",
+        "position": 12,
+        "token": 15013,
+        "logprob": -16.52676773071289
+      },
+      {
+        "sample": "sample-4",
+        "position": 13,
+        "token": 5411,
+        "logprob": -12.161857604980469
+      },
+      {
+        "sample": "sample-4",
+        "position": 14,
+        "token": 11640,
+        "logprob": -15.820718765258789
+      },
+      {
+        "sample": "sample-4",
+        "position": 15,
+        "token": 15239,
+        "logprob": -15.800198554992676
+      },
+      {
+        "sample": "sample-4",
+        "position": 16,
+        "token": 2641,
+        "logprob": -10.200349807739258
+      },
+      {
+        "sample": "sample-4",
+        "position": 17,
+        "token": 18263,
+        "logprob": -13.944293022155762
+      },
+      {
+        "sample": "sample-4",
+        "position": 18,
+        "token": 7329,
+        "logprob": -14.85406494140625
+      },
+      {
+        "sample": "sample-4",
+        "position": 19,
+        "token": 12064,
+        "logprob": -17.7314395904541
+      },
+      {
+        "sample": "sample-4",
+        "position": 20,
+        "token": 5428,
+        "logprob": -8.883187294006348
+      },
+      {
+        "sample": "sample-4",
+        "position": 21,
+        "token": 12229,
+        "logprob": -13.032752990722656
+      },
+      {
+        "sample": "sample-4",
+        "position": 22,
+        "token": 14787,
+        "logprob": -11.786153793334961
+      },
+      {
+        "sample": "sample-4",
+        "position": 23,
+        "token": 1285,
+        "logprob": -13.14885139465332
+      },
+      {
+        "sample": "sample-4",
+        "position": 24,
+        "token": 1191,
+        "logprob": -13.703082084655762
+      },
+      {
+        "sample": "sample-4",
+        "position": 25,
+        "token": 13877,
+        "logprob": -16.889204025268555
+      },
+      {
+        "sample": "sample-4",
+        "position": 26,
+        "token": 15968,
+        "logprob": -11.081509590148926
+      },
+      {
+        "sample": "sample-4",
+        "position": 27,
+        "token": 1137,
+        "logprob": -8.756380081176758
+      },
+      {
+        "sample": "sample-4",
+        "position": 28,
+        "token": 3805,
+        "logprob": -15.741961479187012
+      },
+      {
+        "sample": "sample-4",
+        "position": 29,
+        "token": 16583,
+        "logprob": -11.51327133178711
+      },
+      {
+        "sample": "sample-4",
+        "position": 30,
+        "token": 1768,
+        "logprob": -10.106430053710938
+      },
+      {
+        "sample": "sample-4",
+        "position": 31,
+        "token": 8614,
+        "logprob": -13.163558006286621
+      },
+      {
+        "sample": "sample-4",
+        "position": 32,
+        "token": 13608,
+        "logprob": -13.503808975219727
+      },
+      {
+        "sample": "sample-4",
+        "position": 33,
+        "token": 10880,
+        "logprob": -13.240771293640137
+      },
+      {
+        "sample": "sample-4",
+        "position": 34,
+        "token": 18591,
+        "logprob": -12.62758731842041
+      },
+      {
+        "sample": "sample-4",
+        "position": 35,
+        "token": 1169,
+        "logprob": -12.807905197143555
+      },
+      {
+        "sample": "sample-4",
+        "position": 36,
+        "token": 9459,
+        "logprob": -15.149118423461914
+      },
+      {
+        "sample": "sample-4",
+        "position": 37,
+        "token": 18619,
+        "logprob": -12.648191452026367
+      },
+      {
+        "sample": "sample-4",
+        "position": 38,
+        "token": 7958,
+        "logprob": -14.048894882202148
+      },
+      {
+        "sample": "sample-4",
+        "position": 39,
+        "token": 18573,
+        "logprob": -14.931623458862305
+      },
+      {
+        "sample": "sample-4",
+        "position": 40,
+        "token": 3238,
+        "logprob": -10.58183765411377
+      },
+      {
+        "sample": "sample-4",
+        "position": 41,
+        "token": 14712,
+        "logprob": -12.003814697265625
+      },
+      {
+        "sample": "sample-4",
+        "position": 42,
+        "token": 8437,
+        "logprob": -13.229894638061523
+      },
+      {
+        "sample": "sample-4",
+        "position": 43,
+        "token": 3574,
+        "logprob": -14.651561737060547
+      },
+      {
+        "sample": "sample-4",
+        "position": 44,
+        "token": 10286,
+        "logprob": -11.558151245117188
+      },
+      {
+        "sample": "sample-4",
+        "position": 45,
+        "token": 12121,
+        "logprob": -10.409069061279297
+      },
+      {
+        "sample": "sample-4",
+        "position": 46,
+        "token": 4105,
+        "logprob": -9.87590503692627
+      },
+      {
+        "sample": "sample-4",
+        "position": 47,
+        "token": 2575,
+        "logprob": -10.407464027404785
+      }
+    ],
+    "npu": [
+      {
+        "sample": "sample-1",
+        "position": 1,
+        "token": 8763,
+        "logprob": -17.43573760986328
+      },
+      {
+        "sample": "sample-1",
+        "position": 2,
+        "token": 6721,
+        "logprob": -19.561038970947266
+      },
+      {
+        "sample": "sample-1",
+        "position": 3,
+        "token": 17587,
+        "logprob": -12.37519359588623
+      },
+      {
+        "sample": "sample-1",
+        "position": 4,
+        "token": 11659,
+        "logprob": -11.299205780029297
+      },
+      {
+        "sample": "sample-1",
+        "position": 5,
+        "token": 7987,
+        "logprob": -10.984318733215332
+      },
+      {
+        "sample": "sample-1",
+        "position": 6,
+        "token": 18883,
+        "logprob": -17.128664016723633
+      },
+      {
+        "sample": "sample-1",
+        "position": 7,
+        "token": 12125,
+        "logprob": -13.4393310546875
+      },
+      {
+        "sample": "sample-1",
+        "position": 8,
+        "token": 850,
+        "logprob": -8.648253440856934
+      },
+      {
+        "sample": "sample-1",
+        "position": 9,
+        "token": 13443,
+        "logprob": -16.415294647216797
+      },
+      {
+        "sample": "sample-1",
+        "position": 10,
+        "token": 2620,
+        "logprob": -16.077051162719727
+      },
+      {
+        "sample": "sample-1",
+        "position": 11,
+        "token": 13156,
+        "logprob": -11.625551223754883
+      },
+      {
+        "sample": "sample-1",
+        "position": 12,
+        "token": 6793,
+        "logprob": -14.593063354492188
+      },
+      {
+        "sample": "sample-1",
+        "position": 13,
+        "token": 10323,
+        "logprob": -9.554910659790039
+      },
+      {
+        "sample": "sample-1",
+        "position": 14,
+        "token": 11450,
+        "logprob": -12.23006820678711
+      },
+      {
+        "sample": "sample-1",
+        "position": 15,
+        "token": 9801,
+        "logprob": -10.312263488769531
+      },
+      {
+        "sample": "sample-1",
+        "position": 16,
+        "token": 19412,
+        "logprob": -15.537049293518066
+      },
+      {
+        "sample": "sample-1",
+        "position": 17,
+        "token": 8603,
+        "logprob": -11.761754989624023
+      },
+      {
+        "sample": "sample-1",
+        "position": 18,
+        "token": 19006,
+        "logprob": -17.640993118286133
+      },
+      {
+        "sample": "sample-1",
+        "position": 19,
+        "token": 11736,
+        "logprob": -14.051843643188477
+      },
+      {
+        "sample": "sample-1",
+        "position": 20,
+        "token": 1516,
+        "logprob": -13.240866661071777
+      },
+      {
+        "sample": "sample-1",
+        "position": 21,
+        "token": 18689,
+        "logprob": -14.973884582519531
+      },
+      {
+        "sample": "sample-1",
+        "position": 22,
+        "token": 13313,
+        "logprob": -13.284565925598145
+      },
+      {
+        "sample": "sample-1",
+        "position": 23,
+        "token": 749,
+        "logprob": -8.526545524597168
+      },
+      {
+        "sample": "sample-2",
+        "position": 1,
+        "token": 15049,
+        "logprob": -14.72563362121582
+      },
+      {
+        "sample": "sample-2",
+        "position": 2,
+        "token": 19638,
+        "logprob": -13.163711547851562
+      },
+      {
+        "sample": "sample-2",
+        "position": 3,
+        "token": 12431,
+        "logprob": -13.434261322021484
+      },
+      {
+        "sample": "sample-2",
+        "position": 4,
+        "token": 4944,
+        "logprob": -13.563920974731445
+      },
+      {
+        "sample": "sample-2",
+        "position": 5,
+        "token": 9655,
+        "logprob": -14.425992965698242
+      },
+      {
+        "sample": "sample-2",
+        "position": 6,
+        "token": 1875,
+        "logprob": -10.364585876464844
+      },
+      {
+        "sample": "sample-2",
+        "position": 7,
+        "token": 9433,
+        "logprob": -11.65861988067627
+      },
+      {
+        "sample": "sample-2",
+        "position": 8,
+        "token": 7477,
+        "logprob": -15.5523681640625
+      },
+      {
+        "sample": "sample-2",
+        "position": 9,
+        "token": 18927,
+        "logprob": -14.35307502746582
+      },
+      {
+        "sample": "sample-2",
+        "position": 10,
+        "token": 13466,
+        "logprob": -15.392766952514648
+      },
+      {
+        "sample": "sample-2",
+        "position": 11,
+        "token": 8636,
+        "logprob": -13.522631645202637
+      },
+      {
+        "sample": "sample-2",
+        "position": 12,
+        "token": 12349,
+        "logprob": -15.720573425292969
+      },
+      {
+        "sample": "sample-2",
+        "position": 13,
+        "token": 10875,
+        "logprob": -13.516691207885742
+      },
+      {
+        "sample": "sample-2",
+        "position": 14,
+        "token": 1411,
+        "logprob": -9.392034530639648
+      },
+      {
+        "sample": "sample-2",
+        "position": 15,
+        "token": 18720,
+        "logprob": -11.597699165344238
+      },
+      {
+        "sample": "sample-2",
+        "position": 16,
+        "token": 1102,
+        "logprob": -10.317928314208984
+      },
+      {
+        "sample": "sample-2",
+        "position": 17,
+        "token": 9031,
+        "logprob": -13.630130767822266
+      },
+      {
+        "sample": "sample-2",
+        "position": 18,
+        "token": 8332,
+        "logprob": -12.728804588317871
+      },
+      {
+        "sample": "sample-2",
+        "position": 19,
+        "token": 5112,
+        "logprob": -12.239830017089844
+      },
+      {
+        "sample": "sample-2",
+        "position": 20,
+        "token": 17089,
+        "logprob": -13.934179306030273
+      },
+      {
+        "sample": "sample-2",
+        "position": 21,
+        "token": 16586,
+        "logprob": -12.117971420288086
+      },
+      {
+        "sample": "sample-2",
+        "position": 22,
+        "token": 19104,
+        "logprob": -11.074932098388672
+      },
+      {
+        "sample": "sample-2",
+        "position": 23,
+        "token": 7945,
+        "logprob": -11.023423194885254
+      },
+      {
+        "sample": "sample-3",
+        "position": 1,
+        "token": 17451,
+        "logprob": -17.780094146728516
+      },
+      {
+        "sample": "sample-3",
+        "position": 2,
+        "token": 8977,
+        "logprob": -10.92419719696045
+      },
+      {
+        "sample": "sample-3",
+        "position": 3,
+        "token": 9977,
+        "logprob": -14.199223518371582
+      },
+      {
+        "sample": "sample-3",
+        "position": 4,
+        "token": 11656,
+        "logprob": -10.248952865600586
+      },
+      {
+        "sample": "sample-3",
+        "position": 5,
+        "token": 802,
+        "logprob": -12.164012908935547
+      },
+      {
+        "sample": "sample-3",
+        "position": 6,
+        "token": 9276,
+        "logprob": -16.616262435913086
+      },
+      {
+        "sample": "sample-3",
+        "position": 7,
+        "token": 5002,
+        "logprob": -11.955456733703613
+      },
+      {
+        "sample": "sample-3",
+        "position": 8,
+        "token": 8936,
+        "logprob": -11.015064239501953
+      },
+      {
+        "sample": "sample-3",
+        "position": 9,
+        "token": 7538,
+        "logprob": -14.618494033813477
+      },
+      {
+        "sample": "sample-3",
+        "position": 10,
+        "token": 6456,
+        "logprob": -12.03030014038086
+      },
+      {
+        "sample": "sample-3",
+        "position": 11,
+        "token": 3262,
+        "logprob": -9.65999984741211
+      },
+      {
+        "sample": "sample-3",
+        "position": 12,
+        "token": 1300,
+        "logprob": -11.01060962677002
+      },
+      {
+        "sample": "sample-3",
+        "position": 13,
+        "token": 10451,
+        "logprob": -13.108442306518555
+      },
+      {
+        "sample": "sample-3",
+        "position": 14,
+        "token": 19891,
+        "logprob": -15.251508712768555
+      },
+      {
+        "sample": "sample-3",
+        "position": 15,
+        "token": 19908,
+        "logprob": -13.48171615600586
+      },
+      {
+        "sample": "sample-3",
+        "position": 16,
+        "token": 5184,
+        "logprob": -15.528889656066895
+      },
+      {
+        "sample": "sample-3",
+        "position": 17,
+        "token": 19750,
+        "logprob": -15.062385559082031
+      },
+      {
+        "sample": "sample-3",
+        "position": 18,
+        "token": 1423,
+        "logprob": -8.125994682312012
+      },
+      {
+        "sample": "sample-3",
+        "position": 19,
+        "token": 18129,
+        "logprob": -14.949525833129883
+      },
+      {
+        "sample": "sample-3",
+        "position": 20,
+        "token": 6070,
+        "logprob": -11.668798446655273
+      },
+      {
+        "sample": "sample-3",
+        "position": 21,
+        "token": 404,
+        "logprob": -11.958196640014648
+      },
+      {
+        "sample": "sample-3",
+        "position": 22,
+        "token": 7818,
+        "logprob": -13.139598846435547
+      },
+      {
+        "sample": "sample-3",
+        "position": 23,
+        "token": 2823,
+        "logprob": -12.610527038574219
+      },
+      {
+        "sample": "sample-3",
+        "position": 24,
+        "token": 4554,
+        "logprob": -14.203042030334473
+      },
+      {
+        "sample": "sample-3",
+        "position": 25,
+        "token": 10825,
+        "logprob": -13.077502250671387
+      },
+      {
+        "sample": "sample-3",
+        "position": 26,
+        "token": 9094,
+        "logprob": -16.10616683959961
+      },
+      {
+        "sample": "sample-3",
+        "position": 27,
+        "token": 9312,
+        "logprob": -7.972499847412109
+      },
+      {
+        "sample": "sample-3",
+        "position": 28,
+        "token": 1479,
+        "logprob": -13.117186546325684
+      },
+      {
+        "sample": "sample-3",
+        "position": 29,
+        "token": 14810,
+        "logprob": -11.729253768920898
+      },
+      {
+        "sample": "sample-3",
+        "position": 30,
+        "token": 13374,
+        "logprob": -13.99345874786377
+      },
+      {
+        "sample": "sample-3",
+        "position": 31,
+        "token": 16464,
+        "logprob": -13.7575101852417
+      },
+      {
+        "sample": "sample-3",
+        "position": 32,
+        "token": 13014,
+        "logprob": -12.59119987487793
+      },
+      {
+        "sample": "sample-3",
+        "position": 33,
+        "token": 16861,
+        "logprob": -12.337559700012207
+      },
+      {
+        "sample": "sample-3",
+        "position": 34,
+        "token": 12461,
+        "logprob": -13.25028133392334
+      },
+      {
+        "sample": "sample-3",
+        "position": 35,
+        "token": 2687,
+        "logprob": -15.468500137329102
+      },
+      {
+        "sample": "sample-3",
+        "position": 36,
+        "token": 19355,
+        "logprob": -22.178302764892578
+      },
+      {
+        "sample": "sample-3",
+        "position": 37,
+        "token": 5874,
+        "logprob": -10.592151641845703
+      },
+      {
+        "sample": "sample-3",
+        "position": 38,
+        "token": 10439,
+        "logprob": -10.88692569732666
+      },
+      {
+        "sample": "sample-3",
+        "position": 39,
+        "token": 4840,
+        "logprob": -10.244351387023926
+      },
+      {
+        "sample": "sample-3",
+        "position": 40,
+        "token": 6250,
+        "logprob": -11.481199264526367
+      },
+      {
+        "sample": "sample-3",
+        "position": 41,
+        "token": 15440,
+        "logprob": -11.281557083129883
+      },
+      {
+        "sample": "sample-3",
+        "position": 42,
+        "token": 8485,
+        "logprob": -11.849430084228516
+      },
+      {
+        "sample": "sample-3",
+        "position": 43,
+        "token": 14054,
+        "logprob": -14.325777053833008
+      },
+      {
+        "sample": "sample-3",
+        "position": 44,
+        "token": 17040,
+        "logprob": -13.61703872680664
+      },
+      {
+        "sample": "sample-3",
+        "position": 45,
+        "token": 17994,
+        "logprob": -14.171136856079102
+      },
+      {
+        "sample": "sample-3",
+        "position": 46,
+        "token": 15120,
+        "logprob": -13.260976791381836
+      },
+      {
+        "sample": "sample-3",
+        "position": 47,
+        "token": 783,
+        "logprob": -7.821908950805664
+      },
+      {
+        "sample": "sample-4",
+        "position": 1,
+        "token": 4026,
+        "logprob": -13.41010570526123
+      },
+      {
+        "sample": "sample-4",
+        "position": 2,
+        "token": 18460,
+        "logprob": -15.093744277954102
+      },
+      {
+        "sample": "sample-4",
+        "position": 3,
+        "token": 15527,
+        "logprob": -10.387672424316406
+      },
+      {
+        "sample": "sample-4",
+        "position": 4,
+        "token": 19313,
+        "logprob": -16.05421257019043
+      },
+      {
+        "sample": "sample-4",
+        "position": 5,
+        "token": 7805,
+        "logprob": -12.001431465148926
+      },
+      {
+        "sample": "sample-4",
+        "position": 6,
+        "token": 9786,
+        "logprob": -12.28420352935791
+      },
+      {
+        "sample": "sample-4",
+        "position": 7,
+        "token": 822,
+        "logprob": -10.951803207397461
+      },
+      {
+        "sample": "sample-4",
+        "position": 8,
+        "token": 8139,
+        "logprob": -13.270975112915039
+      },
+      {
+        "sample": "sample-4",
+        "position": 9,
+        "token": 18855,
+        "logprob": -10.163570404052734
+      },
+      {
+        "sample": "sample-4",
+        "position": 10,
+        "token": 5328,
+        "logprob": -9.279245376586914
+      },
+      {
+        "sample": "sample-4",
+        "position": 11,
+        "token": 10468,
+        "logprob": -13.315455436706543
+      },
+      {
+        "sample": "sample-4",
+        "position": 12,
+        "token": 15013,
+        "logprob": -16.492313385009766
+      },
+      {
+        "sample": "sample-4",
+        "position": 13,
+        "token": 5411,
+        "logprob": -12.165989875793457
+      },
+      {
+        "sample": "sample-4",
+        "position": 14,
+        "token": 11640,
+        "logprob": -15.855892181396484
+      },
+      {
+        "sample": "sample-4",
+        "position": 15,
+        "token": 15239,
+        "logprob": -15.808860778808594
+      },
+      {
+        "sample": "sample-4",
+        "position": 16,
+        "token": 2641,
+        "logprob": -10.223991394042969
+      },
+      {
+        "sample": "sample-4",
+        "position": 17,
+        "token": 18263,
+        "logprob": -13.967134475708008
+      },
+      {
+        "sample": "sample-4",
+        "position": 18,
+        "token": 7329,
+        "logprob": -14.855826377868652
+      },
+      {
+        "sample": "sample-4",
+        "position": 19,
+        "token": 12064,
+        "logprob": -17.72075653076172
+      },
+      {
+        "sample": "sample-4",
+        "position": 20,
+        "token": 5428,
+        "logprob": -8.858514785766602
+      },
+      {
+        "sample": "sample-4",
+        "position": 21,
+        "token": 12229,
+        "logprob": -13.044174194335938
+      },
+      {
+        "sample": "sample-4",
+        "position": 22,
+        "token": 14787,
+        "logprob": -11.729592323303223
+      },
+      {
+        "sample": "sample-4",
+        "position": 23,
+        "token": 1285,
+        "logprob": -13.105903625488281
+      },
+      {
+        "sample": "sample-4",
+        "position": 24,
+        "token": 1191,
+        "logprob": -13.693652153015137
+      },
+      {
+        "sample": "sample-4",
+        "position": 25,
+        "token": 13877,
+        "logprob": -16.864328384399414
+      },
+      {
+        "sample": "sample-4",
+        "position": 26,
+        "token": 15968,
+        "logprob": -11.069511413574219
+      },
+      {
+        "sample": "sample-4",
+        "position": 27,
+        "token": 1137,
+        "logprob": -8.776036262512207
+      },
+      {
+        "sample": "sample-4",
+        "position": 28,
+        "token": 3805,
+        "logprob": -15.755650520324707
+      },
+      {
+        "sample": "sample-4",
+        "position": 29,
+        "token": 16583,
+        "logprob": -11.491783142089844
+      },
+      {
+        "sample": "sample-4",
+        "position": 30,
+        "token": 1768,
+        "logprob": -10.124603271484375
+      },
+      {
+        "sample": "sample-4",
+        "position": 31,
+        "token": 8614,
+        "logprob": -13.178993225097656
+      },
+      {
+        "sample": "sample-4",
+        "position": 32,
+        "token": 13608,
+        "logprob": -13.506429672241211
+      },
+      {
+        "sample": "sample-4",
+        "position": 33,
+        "token": 10880,
+        "logprob": -13.22845458984375
+      },
+      {
+        "sample": "sample-4",
+        "position": 34,
+        "token": 18591,
+        "logprob": -12.609888076782227
+      },
+      {
+        "sample": "sample-4",
+        "position": 35,
+        "token": 1169,
+        "logprob": -12.83202075958252
+      },
+      {
+        "sample": "sample-4",
+        "position": 36,
+        "token": 9459,
+        "logprob": -15.168411254882812
+      },
+      {
+        "sample": "sample-4",
+        "position": 37,
+        "token": 18619,
+        "logprob": -12.666080474853516
+      },
+      {
+        "sample": "sample-4",
+        "position": 38,
+        "token": 7958,
+        "logprob": -14.025716781616211
+      },
+      {
+        "sample": "sample-4",
+        "position": 39,
+        "token": 18573,
+        "logprob": -14.941699028015137
+      },
+      {
+        "sample": "sample-4",
+        "position": 40,
+        "token": 3238,
+        "logprob": -10.588129043579102
+      },
+      {
+        "sample": "sample-4",
+        "position": 41,
+        "token": 14712,
+        "logprob": -11.991467475891113
+      },
+      {
+        "sample": "sample-4",
+        "position": 42,
+        "token": 8437,
+        "logprob": -13.255681991577148
+      },
+      {
+        "sample": "sample-4",
+        "position": 43,
+        "token": 3574,
+        "logprob": -14.62411880493164
+      },
+      {
+        "sample": "sample-4",
+        "position": 44,
+        "token": 10286,
+        "logprob": -11.56795597076416
+      },
+      {
+        "sample": "sample-4",
+        "position": 45,
+        "token": 12121,
+        "logprob": -10.386382102966309
+      },
+      {
+        "sample": "sample-4",
+        "position": 46,
+        "token": 4105,
+        "logprob": -9.928581237792969
+      },
+      {
+        "sample": "sample-4",
+        "position": 47,
+        "token": 2575,
+        "logprob": -10.403928756713867
+      }
+    ]
+  },
+  "actual_config": {
+    "gpu": {
+      "model": "Qwen/Qwen3.5-9B-Base",
+      "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+      "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+      "collector_sha256": "49c4d69c56a19a60c98cd428823390b592907d862fbf930ef3f1dc5ab4b5770e",
+      "semantics": "target_position p (zero based input index) predicted by row p-1; natural log; full vocabulary FP32 log_softmax; no score processors",
+      "execution_max_context": 128,
+      "batch_size": 1,
+      "quantization": null,
+      "seed": 0,
+      "python": "3.12.13",
+      "torch": "2.10.0+cu128",
+      "framework": "vllm",
+      "framework_version": "0.19.1",
+      "device_name": "NVIDIA H20Z",
+      "device_count": 1,
+      "requested_options": {
+        "dtype": "bfloat16",
+        "quantization": null,
+        "tensor_parallel_size": 1,
+        "pipeline_parallel_size": 1,
+        "max_model_len": 128,
+        "enforce_eager": true,
+        "compilation_config": 0,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "max_num_seqs": 1,
+        "max_num_batched_tokens": 128,
+        "gpu_memory_utilization": 0.75,
+        "skip_tokenizer_init": true,
+        "trust_remote_code": false,
+        "seed": 0,
+        "logprobs_mode": "raw_logprobs",
+        "limit_mm_per_prompt": {
+          "image": 0,
+          "video": 0
+        },
+        "generation_config": "vllm"
+      }
+    },
+    "npu": {
+      "model": "Qwen/Qwen3.5-9B-Base",
+      "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+      "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+      "collector_sha256": "49c4d69c56a19a60c98cd428823390b592907d862fbf930ef3f1dc5ab4b5770e",
+      "semantics": "target_position p (zero based input index) predicted by row p-1; natural log; full vocabulary FP32 log_softmax; no score processors",
+      "execution_max_context": 128,
+      "batch_size": 1,
+      "quantization": null,
+      "seed": 0,
+      "python": "3.12.13",
+      "torch": "2.9.0+cpu",
+      "framework": "transformers",
+      "framework_version": "5.3.0",
+      "torch_npu": "2.9.0.post2",
+      "device_name": "Ascend910_9382",
+      "device_count": 1,
+      "parameter_dtypes": [
+        "torch.bfloat16"
+      ],
+      "attention_implementation": "eager"
+    }
+  },
+  "task_messages": [
+    "在 <TASK_DIR> 完成以下任务：在 resources.json 指定的 GPU/vLLM 和 NPU/Transformers 环境，用同一份 Qwen3.5-9B-Base 对 inputs.json 的所有目标位置完成一次新的原生 prefill 评分比较。BF16、无量化、单设备、eager、最大上下文128；比较完整词表归一化的 FP32 原始 logprob，不含采样和惩罚变换。输出总体及分样本的双方 NLL、NLL 绝对差、目标 logprob MAE/P99/最大误差及原始坐标、覆盖率和实际配置。保留可复现代码、原生分数及终态运行证据。无需判断精度是否可接受或修复库。资源与预算见 resources.json。本地仅在本任务目录读写；远程新增文件仅在各 work_root 内，资源声明的运行缓存及短 IPC 目录除外。只使用任务声明设备，不修改共享环境，不下载或传输模型，不终止其他任务。不读取仓库历史、其他实验目录、旧采集器或会话日志；不委派其他 agent。可用 skills 见本目录 skills.json，按需使用。"
+  ],
+  "raw_usage": [
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc45bf11ac87d0928f10d16f4963e9",
+      "usage": {
+        "input_tokens": 84798,
+        "cached_input_tokens": 3712,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 133,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 84931
+      },
+      "standard_usd_estimate": 0.1638732,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc45c917c087d0831312e2057378a0",
+      "usage": {
+        "input_tokens": 88067,
+        "cached_input_tokens": 84736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 206,
+        "reasoning_output_tokens": 11,
+        "total_tokens": 88273
+      },
+      "standard_usd_estimate": 0.017195600000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc45d2e0a087d0b75544e5466ca3f6",
+      "usage": {
+        "input_tokens": 90894,
+        "cached_input_tokens": 88064,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 139,
+        "reasoning_output_tokens": 28,
+        "total_tokens": 91033
+      },
+      "standard_usd_estimate": 0.0158564,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc45df2d2887d08546a5c67b3d6a73",
+      "usage": {
+        "input_tokens": 97858,
+        "cached_input_tokens": 90880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 808,
+        "reasoning_output_tokens": 172,
+        "total_tokens": 98666
+      },
+      "standard_usd_estimate": 0.031124,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc45f23ef487d09b8e8d7c300c187d",
+      "usage": {
+        "input_tokens": 98713,
+        "cached_input_tokens": 98432,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 98750
+      },
+      "standard_usd_estimate": 0.0107752,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc45f9620487d0905a9368e05d23d1",
+      "usage": {
+        "input_tokens": 99013,
+        "cached_input_tokens": 98560,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 552,
+        "reasoning_output_tokens": 8,
+        "total_tokens": 99565
+      },
+      "standard_usd_estimate": 0.016282,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc4611b9f087d0a184b0cdd950b033",
+      "usage": {
+        "input_tokens": 99613,
+        "cached_input_tokens": 99328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 99650
+      },
+      "standard_usd_estimate": 0.010872800000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc461a2f2087d0b3c7a0ac698fd586",
+      "usage": {
+        "input_tokens": 106719,
+        "cached_input_tokens": 99456,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3057,
+        "reasoning_output_tokens": 516,
+        "total_tokens": 109776
+      },
+      "standard_usd_estimate": 0.055041599999999996,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc464e065087d0a79239a55567e905",
+      "usage": {
+        "input_tokens": 109836,
+        "cached_input_tokens": 109568,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 119,
+        "reasoning_output_tokens": 28,
+        "total_tokens": 109955
+      },
+      "standard_usd_estimate": 0.012682800000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc4657d1ac87d080eecb74d4bf78ba",
+      "usage": {
+        "input_tokens": 110006,
+        "cached_input_tokens": 109824,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 497,
+        "reasoning_output_tokens": 86,
+        "total_tokens": 110503
+      },
+      "standard_usd_estimate": 0.016316400000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc466baa5887d0885c5b4303544df2",
+      "usage": {
+        "input_tokens": 110552,
+        "cached_input_tokens": 83328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 110589
+      },
+      "standard_usd_estimate": 0.06315079999999999,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc467e96fc87d0af027079f62eeccd",
+      "usage": {
+        "input_tokens": 111008,
+        "cached_input_tokens": 110336,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 116,
+        "reasoning_output_tokens": 77,
+        "total_tokens": 111124
+      },
+      "standard_usd_estimate": 0.0135376,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc4688dca887d0a1f1ddb1b0d9b61a",
+      "usage": {
+        "input_tokens": 115966,
+        "cached_input_tokens": 110976,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 844,
+        "reasoning_output_tokens": 101,
+        "total_tokens": 116810
+      },
+      "standard_usd_estimate": 0.029517599999999998,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc469d27bc87d0bc5c80030e1de6b7",
+      "usage": {
+        "input_tokens": 116857,
+        "cached_input_tokens": 116608,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 116894
+      },
+      "standard_usd_estimate": 0.012528800000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46a6190087d08d401e59f4a28141",
+      "usage": {
+        "input_tokens": 117300,
+        "cached_input_tokens": 116736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 247,
+        "reasoning_output_tokens": 32,
+        "total_tokens": 117547
+      },
+      "standard_usd_estimate": 0.0152716,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46b20e8087d098d0ce082a13ba9f",
+      "usage": {
+        "input_tokens": 117594,
+        "cached_input_tokens": 117376,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 117631
+      },
+      "standard_usd_estimate": 0.0125436,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46ba5ed087d096219e737f532210",
+      "usage": {
+        "input_tokens": 119427,
+        "cached_input_tokens": 117504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 119464
+      },
+      "standard_usd_estimate": 0.015966400000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46c3973487d0b5f75b19ce063122",
+      "usage": {
+        "input_tokens": 122337,
+        "cached_input_tokens": 119296,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 287,
+        "reasoning_output_tokens": 90,
+        "total_tokens": 122624
+      },
+      "standard_usd_estimate": 0.0208816,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46cf2f8087d080d34af66540bb7d",
+      "usage": {
+        "input_tokens": 122671,
+        "cached_input_tokens": 122496,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 132,
+        "reasoning_output_tokens": 93,
+        "total_tokens": 122803
+      },
+      "standard_usd_estimate": 0.0139196,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46dcc9d887d095eede6d239495cf",
+      "usage": {
+        "input_tokens": 125478,
+        "cached_input_tokens": 122624,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 177,
+        "reasoning_output_tokens": 20,
+        "total_tokens": 125655
+      },
+      "standard_usd_estimate": 0.0197404,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46e7d77487d08af772a71eff0dc9",
+      "usage": {
+        "input_tokens": 130849,
+        "cached_input_tokens": 125440,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 561,
+        "reasoning_output_tokens": 216,
+        "total_tokens": 131410
+      },
+      "standard_usd_estimate": 0.028972,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc46f89f8087d0b12b2fb36f01ed46",
+      "usage": {
+        "input_tokens": 131456,
+        "cached_input_tokens": 131200,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 269,
+        "reasoning_output_tokens": 230,
+        "total_tokens": 131725
+      },
+      "standard_usd_estimate": 0.016322,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc4706367887d09577da1131d63af5",
+      "usage": {
+        "input_tokens": 131966,
+        "cached_input_tokens": 131584,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 617,
+        "reasoning_output_tokens": 264,
+        "total_tokens": 132583
+      },
+      "standard_usd_estimate": 0.020092400000000003,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc4719530c87d0a0398ca2d6193c92",
+      "usage": {
+        "input_tokens": 132632,
+        "cached_input_tokens": 132352,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3315,
+        "reasoning_output_tokens": 265,
+        "total_tokens": 135947
+      },
+      "standard_usd_estimate": 0.0469452,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc474e285487d0b10a3b89dd50b250",
+      "usage": {
+        "input_tokens": 135997,
+        "cached_input_tokens": 135808,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 66,
+        "reasoning_output_tokens": 27,
+        "total_tokens": 136063
+      },
+      "standard_usd_estimate": 0.014618800000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc475cbeac87d0a66e264154979096",
+      "usage": {
+        "input_tokens": 136473,
+        "cached_input_tokens": 135936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 86,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 136559
+      },
+      "standard_usd_estimate": 0.0155276,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc4767400087d0a0bba5fc19731983",
+      "usage": {
+        "input_tokens": 136606,
+        "cached_input_tokens": 136320,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 378,
+        "reasoning_output_tokens": 241,
+        "total_tokens": 136984
+      },
+      "standard_usd_estimate": 0.017984,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc47757bb887d09d4467dbce4578ac",
+      "usage": {
+        "input_tokens": 139507,
+        "cached_input_tokens": 136832,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 954,
+        "reasoning_output_tokens": 249,
+        "total_tokens": 140461
+      },
+      "standard_usd_estimate": 0.0285732,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_032384f0c5dfb8a7016adc478abd7c87d08bbdcd2c2afd41da",
+      "usage": {
+        "input_tokens": 142451,
+        "cached_input_tokens": 140288,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1386,
+        "reasoning_output_tokens": 128,
+        "total_tokens": 143837
+      },
+      "standard_usd_estimate": 0.0322148,
+      "long_context": false
+    }
+  ],
+  "session_sha256": "744f221e6eb5e9e874edb5429c5f9afef113b9dcd3eedcd23a4a93733a774851",
+  "baseline": {
+    "id": "native-prefill-noskills-20261024T011154Z",
+    "public_evidence_revision": "06296945bb0397350fab26fd6682d984234a1b44",
+    "public_evidence": "skills-demand-native-ab-20261024.json",
+    "frozen_hashes": {
+      "design.json": "81a3b57cf9bcb4e007aa1e6d85e91a44b79b744d750a2cb7fe13023b7a1ea252",
+      "verification.json": "98bf21cd94314de38be0c15068df51816dc43783f4216d49afa74b9db2ccc616",
+      "usage.json": "20212ff989be1e2f82478a76a008415314ef5376040a43aaf353d923aff0192c",
+      "b/resources.json": "6cfb38a1973c97c51a2acac9c5227ffb574e8206d0f6b9c8160c1687adfca2ea",
+      "b/inputs.json": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+      "b-independent.json": "697f87fa5572cf77e6e3f63440bb0aab1cf1077cf17b7f2d7509ffaa2e32dfdd",
+      "b-normalized.json": "5282ebdde24261c76e3343898fc0779c37e4cf1cc9e0245dce3c7d7f2b19df1b",
+      "b-execution.json": "57b4b9fd14dd57b915d2007f4d01635c2b2a527c48e3c0a74caa97c56be81647"
+    }
+  },
+  "changes": [
+    "Entrypoint includes executable fetch CLI/request fields and one-call global/grouped score reduction.",
+    "Short tool declarations name request/receipt and coverage fields. No numerical algorithm changed."
+  ],
+  "observed_behavior": {
+    "used_grouped_score_reducer": true,
+    "used_shared_fetch": false,
+    "read_tool_implementations": true,
+    "wrote_extra_markdown_report": true,
+    "added_extra_arithmetic_and_array_audit": true,
+    "exec_command_calls": 17,
+    "write_stdin_calls": 11,
+    "native_attempts": {
+      "gpu": 2,
+      "npu": 1
+    }
+  },
+  "pricing": "Retained Standard snapshot: input $2/M, cached $0.10/M, cache write $2.50/M, output $10/M; per-response long-input multipliers retained. Estimate, not account billing.",
+  "limits": [
+    "Only A rerun with fresh gpt-6.1-sol / medium agent; verified historical B reused.",
+    "Initial native collector completed but outer GPU job failed. All diagnosis and retry usage/time included; no counterfactual retry-free total.",
+    "NPU use_cache=True in this iteration versus False in previous A. Each input is an independent prefill call; all scores equal the retained baseline. Actual configuration is not identical.",
+    "Agent still read full tool source and reimplemented fetch. Grouped metric reuse alone did not reduce measured total cost versus previous A.",
+    "Single trial, uncontrolled cache and historical background concurrency. Cost changes are not attributable solely to skill text.",
+    "Same direct task requirements and prepared resources; parent preparation and withheld independent verification excluded. Shared repository maintenance instructions exist.",
+    "Full model/array bytes stay remote; public evidence retains only scores, hashes, compact configuration and accounting."
+  ]
+}
