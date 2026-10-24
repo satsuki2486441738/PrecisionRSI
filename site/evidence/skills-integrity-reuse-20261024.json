@@ -581,5 +581,63 @@
     "No downloaded-file hash or size rescans in executed adapter. Local inputs.json SHA256 remains a necessary uncovered identity check.",
     "Two fetch calls retained and passed through in the result; all 10 target positions/three groups independently verified."
   ],
-  "pricing": "Retained Standard snapshot: input $2/M, cached $0.10/M, cache-write $2.50/M, output $10/M, with per-response long-input multipliers. Estimate, not account billing."
+  "pricing": "Retained Standard snapshot: input $2/M, cached $0.10/M, cache-write $2.50/M, output $10/M, with per-response long-input multipliers. Estimate, not account billing.",
+  "executed_commands": [
+    {
+      "timestamp": "2026-10-24T06:34:23.750Z",
+      "arguments": {
+        "cmd": "pwd; ls -la; for f in resources.json inputs.json skills.json; do if [ -f \"$f\" ]; then echo \"$f\"; cat \"$f\"; fi; done",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 7000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:34:31.173Z",
+      "arguments": {
+        "cmd": "cat skills/precision-compare/SKILL.md",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 6500
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:34:41.736Z",
+      "arguments": {
+        "cmd": "python3 -B skills/precision-compare/scripts/tool_help.py --list\npython3 -B skills/precision-compare/scripts/tool_help.py evidence_bundle --full\npython3 -B skills/precision-compare/scripts/tool_help.py score_metrics --full\npython3 -B skills/precision-compare/scripts/tool_help.py group_metrics --full\ncat skills/precision-compare/references/inference.md",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 8500
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:34:55.517Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport json,subprocess,concurrent.futures\nr=json.load(open('resources.json'))\ndef inspect(item):\n side,e=item\n code='import pathlib,json\\np=pathlib.Path('+repr(e['source_dir'])+')\\nprint(json.dumps([{ \"path\":str(f.relative_to(p)),\"bytes\":f.stat().st_size} for f in sorted(p.rglob(\"*\")) if f.is_file() and not f.is_symlink()]))\\n'\n q=subprocess.run(e['transport'],input=code,text=True,capture_output=True,timeout=30,check=True)\n return side,json.loads(q.stdout)\nwith concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:\n for side,files in pool.map(inspect,r['endpoints'].items()):print(json.dumps({'side':side,'files':files}))\nPY\npython3 -B skills/precision-compare/scripts/tool_help.py compare_target_scores --full",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 6000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:35:08.359Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport sys,json,concurrent.futures,datetime,pathlib\nsys.path.insert(0,str(pathlib.Path('skills/precision-compare/scripts').resolve()))\nfrom evidence_bundle import fetch\nr=json.load(open('resources.json')); run=pathlib.Path('compare-target-logprob-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')); run.mkdir()\ndef collect(item):\n side,e=item\n receipt=fetch(e['transport'],e['source_dir'],['configuration.json','scores.json','status.json','stdout.log'],str(run/side),timeout=45,max_file_bytes=r['limits']['max_selected_file_bytes'],max_expanded_bytes=r['limits']['max_selected_total_bytes']//2,max_transfer_bytes=r['limits']['max_selected_total_bytes']//2)\n return side,receipt\nwith concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool: receipts=dict(pool.map(collect,r['endpoints'].items()))\n(run/'fetch-receipts.json').write_text(json.dumps(receipts,indent=2)+'\\n')\nprint(run.resolve())\nfor side in r['endpoints']:\n for name in ['configuration.json','scores.json','status.json','stdout.log']:\n  print(side,name);print((run/side/name).read_text())\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 5500
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:35:21.418Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport hashlib,pathlib,json\np=pathlib.Path('inputs.json');print('raw_input_sha256',hashlib.sha256(p.read_bytes()).hexdigest())\nr=next(pathlib.Path('.').glob('compare-target-logprob-*'))\nprint((r/'fetch-receipts.json').read_text())\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 1800
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:35:58.509Z",
+      "arguments": {
+        "cmd": "cat > compare_target_logprobs.py <<'PY'\n\"\"\"Validate native completed score JSON and reduce raw target logprobs.\n\nUsage: python3 -B compare_target_logprobs.py RUN_DIRECTORY\nAll paths are relative to this task directory; no source endpoint access occurs.\nThe native records/configuration schema is adapted to bundled grouped reducers.\n\"\"\"\nimport hashlib\nimport json\nimport math\nfrom pathlib import Path\nimport sys\n\nROOT = Path(__file__).resolve().parent\nsys.path.insert(0, str(ROOT / 'skills/precision-compare/scripts'))\nfrom group_metrics import reduce_groups\nfrom score_metrics import reduce_scores\n\n\ndef load(path):\n    return json.loads(path.read_text())\n\n\ndef main():\n    run = Path(sys.argv[1]).resolve()\n    assert run.parent == ROOT, 'Run must belong to this task directory'\n    inputs_path = ROOT / 'inputs.json'\n    inputs = load(inputs_path)\n    resources = load(ROOT / 'resources.json')\n    input_hash = hashlib.sha256(inputs_path.read_bytes()).hexdigest()\n    expected, groups = {}, {}\n    for sample in inputs['samples']:\n        sid = sample['id']\n        assert sid not in groups, 'Duplicate sample ID'\n        groups[sid] = []\n        for pos in sample['target_positions']:\n            assert type(pos) is int and 0 < pos < len(sample['input_ids'])\n            coord = (sid, pos, sample['input_ids'][pos])\n            assert coord not in expected, 'Duplicate input target'\n            expected[coord] = pos - 1\n            groups[sid].append(coord)\n\n    observations, configurations, evidence, checks = {}, {}, {}, {}\n    for side, endpoint in resources['endpoints'].items():\n        local = run / side\n        config, status, scores = [load(local / name) for name in\n                                  ('configuration.json', 'status.json', 'scores.json')]\n        assert endpoint['terminal_receipt']['status'] == 'completed'\n        assert endpoint['terminal_receipt']['returncode'] == 0\n        assert endpoint['terminal_receipt']['run'] == endpoint['source_dir']\n        assert status['status'] == 'completed' and status['returncode'] == 0\n        assert scores['status'] == 'completed'\n        assert config['side'] == side\n        assert config['input_sha256'] == input_hash\n        assert config['capture'] == 'prefill'\n        assert config['normalization'] == 'natural logprob'\n        mapping = {}\n        for row in scores['records']:\n            assert type(row['target_position']) is int and type(row['token_id']) is int\n            coord = (row['sample_id'], row['target_position'], row['token_id'])\n            assert coord in expected, 'Unknown coordinate or token identity'\n            assert coord not in mapping, 'Duplicate score coordinate'\n            assert row['prediction_position'] == expected[coord], 'Prediction shift mismatch'\n            value = row['logprob']\n            assert type(value) in (int, float) and math.isfinite(value) and value <= 0\n            mapping[coord] = value\n        observations[side] = mapping\n        configurations[side] = config\n        evidence[side] = {\n            'source_dir': endpoint['source_dir'],\n            'transport': endpoint['transport'],\n            'terminal_receipt': endpoint['terminal_receipt'],\n            'files': {name: {'source': str(Path(endpoint['source_dir']) / name),\n                              'local': str(local / name)}\n                      for name in ('scores.json', 'configuration.json', 'status.json', 'stdout.log')},\n            'verified_export_index': str(local / 'EXPORT.json'),\n            'full_array_retained_at_source': str(Path(endpoint['source_dir']) / 'full_rows.npy'),\n        }\n        checks[side] = {'completed': True, 'input_sha256_matches': True,\n                        'unique_known_coordinates': True, 'token_identity_matches': True,\n                        'prediction_position_equals_target_minus_one': True,\n                        'finite_nonpositive_raw_logprobs': True}\n\n    results = reduce_groups(expected, groups, reduce_scores,\n                            observations['left'], observations['right'])\n    for block in [results['global'], *results['groups'].values()]:\n        coverage = block['coverage']\n        count = coverage['expected_count']\n        coverage['paired_fraction'] = coverage['paired_count'] / count if count else None\n        coverage['side_fractions'] = {\n            side: sum(coord in observations[side] for coord in\n                      (expected if block is results['global'] else groups[next(\n                          name for name, value in results['groups'].items() if value is block)])) / count\n            if count else None for side in ('left', 'right')}\n        metrics = block['metrics']\n        if metrics:\n            metrics['left_nll_nat_per_token'] = metrics['side_a_nll_nat_per_token']\n            metrics['right_nll_nat_per_token'] = metrics['side_b_nll_nat_per_token']\n            sid, pos, token = metrics['max_coordinate']\n            metrics['max_coordinate_named'] = {\n                'sample_id': sid, 'target_position': pos,\n                'prediction_position': pos - 1, 'token_id': token}\n\n    receipts = load(run / 'fetch-receipts.json')\n    payload_bytes = sum(x['payload_bytes'] for x in receipts.values())\n    assert payload_bytes <= resources['limits']['max_selected_total_bytes']\n    report = {\n        'schema_version': 1, 'kind': 'raw-target-logprob-comparison',\n        'status': results['global']['status'],\n        'acceptance_judgment': None,\n        'inputs': {'path': str(inputs_path), 'sha256': input_hash,\n                   'model': inputs['model'], 'capture': inputs['capture']},\n        'semantics': {\n            'side_a': 'left', 'side_b': 'right',\n            'coordinate_fields': ['sample_id', 'target_position', 'token_id'],\n            'positions': 'zero-based target token index; prediction_position = target_position - 1',\n            'score_source': 'Unmodified original logprob numbers in fetched scores.json records',\n            'nll': 'negative arithmetic mean of raw logprob over selected targets',\n            'overall_weighting': 'each target equally weighted',\n            'nll_abs_diff': 'absolute difference between the two mean NLLs',\n            'logprob_error': 'absolute difference of paired raw target logprobs',\n            'percentile': 'linear interpolation over original paired absolute errors',\n            'units': 'natural logarithm; NLL and errors in nats per target',\n            'arithmetic': 'Python binary64 offline reduction',\n            'precision_acceptance': 'not requested; no thresholds applied',\n        },\n        'comparison': results,\n        'actual_configurations': configurations,\n        'integrity_checks': checks,\n        'evidence': evidence,\n        'fetch_receipts_path': str(run / 'fetch-receipts.json'),\n        'fetch_receipts': receipts,\n        'selected_payload_bytes': payload_bytes,\n        'selected_transfer_bytes': sum(x['transfer_bytes'] for x in receipts.values()),\n        'limits': resources['limits'],\n        'tools': {'adapter': str(Path(__file__).resolve()),\n                  'reducers': ['group_metrics.reduce_groups', 'score_metrics.reduce_scores']},\n    }\n    output = run / 'comparison.json'\n    assert not output.exists(), 'Preserve existing result bytes'\n    output.write_text(json.dumps(report, indent=2, ensure_ascii=False, allow_nan=False) + '\\n')\n    print(json.dumps({'output': str(output), 'comparison': results}, indent=2))\n\n\nif __name__ == '__main__':\n    main()\nPY\npython3 -B compare_target_logprobs.py compare-target-logprob-20261024T063508Z",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-integrity-lwkezpwt/new",
+        "max_output_tokens": 4000
+      }
+    }
+  ]
 }
