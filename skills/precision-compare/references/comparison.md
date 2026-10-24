@@ -15,7 +15,7 @@ Module names return short declarations; API names add current signatures. Script
 | Operation | Interface | Input → output |
 |---|---|---|
 | Discover interfaces | [tool_help](../scripts/tool_help.py): `--list` or API names | Names → short declarations/signatures; `--full` → detailed contracts |
-| Compare arrays | [array_compare](../scripts/array_compare.py): `compare_arrays` | Named arrays / NPZ → equality, coverage, optional metrics |
+| Compare arrays | [array_compare](../scripts/array_compare.py): `compare_arrays` | Named arrays / NPZ → equality, coverage; `mode=nonfinite` adds categories and paired-finite metrics |
 | Compare state | [tree_compare](../scripts/tree_compare.py): `compare_trees`, `compare_checkpoints` | Nested state / Torch files → structure, metadata, numeric differences |
 | Group results | [group_metrics](../scripts/group_metrics.py): `reduce_groups` | Coordinates, groups, reducer → global/per-group results |
 | Compare tensor artifacts | [compare_tensors](../scripts/compare_tensors.py): `compare`, `--mode metrics` / `nonfinite` | Contract + two manifests → metrics or anomaly counts/finite-subset metrics |
@@ -34,7 +34,7 @@ Module names return short declarations; API names add current signatures. Script
 | Collect / package evidence | [evidence_bundle](../scripts/evidence_bundle.py): `fetch`, `pack`, `verify`, `extract` | Selected remote files → verified local files; optional portable ZIP |
 | Replay evidence | [replay_bundle](../scripts/replay_bundle.py) | Bundle + replay specification → reproduced reports/checks |
 
-Tensor comparison defaults to `mode=metrics`; `mode=nonfinite` selects category counts and paired-finite metrics. `--chunk-size` controls streaming reads; `--max-locations` caps nonfinite coordinate examples.
+Tensor and array comparators accept `mode=metrics` (default) or `mode=nonfinite`. The latter returns category counts and paired-finite metrics; array groups share the same scan, including anomalies in unpaired expected arrays. Full coverage and subset coverage remain separate. `--chunk-size` controls streaming reads; `--max-locations` caps nonfinite coordinate examples.
 
 
 Adapters establish semantic correspondence, input/state and dtype identity. Equal names/shapes alone do not establish correspondence. Native mappings avoid file conversion; other formats use task-owned loaders and leaf adapters. A leaf adapter may return `{dtype: native_dtype, values: exported_array}` to retain dtype identity during conversion.
