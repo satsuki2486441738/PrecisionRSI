@@ -60791,6 +60791,351 @@
         "prefix": "site/evidence/skills-conditional-reuse-20261024.json",
         "replay_cases": 2
       }
+    },
+    {
+      "id": "skills-retained-results-20261024",
+      "date": "2026-10-24",
+      "title": "Skills A/B（连续任务）：结果复用接口与请求范围",
+      "framework": {
+        "name": "Skills A/B（连续任务复用）"
+      },
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "tiny GPT2, CPU FP32",
+        "revision": "controlled source sha256 d601007fbdacad4c3ec6024bf8a65677f69ec4f20de42ca81d2ede31f7b1232a"
+      },
+      "summary": "补齐已有身份检查工具的结果留存接口，收敛配置变更的执行范围；用同一上下文完成三阶段任务并独立核验。",
+      "sides": [
+        {
+          "id": "a",
+          "label": "A · 使用 skills",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.53.3"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "dtype": "FP32",
+            "steps": 8,
+            "accumulation": 2,
+            "skills_loaded": true,
+            "source_revision": "abc1f625cb5f8132d0aca8e26e3f3d25d8d007bc",
+            "baseline_id": null
+          }
+        },
+        {
+          "id": "b",
+          "label": "B · 无 skills（冻结基线）",
+          "hardware": "CPU / macOS arm64",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.6.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "4.53.3"
+            },
+            {
+              "name": "NumPy",
+              "version": "2.2.6"
+            }
+          ],
+          "settings": {
+            "agent_model": "gpt-6.1-sol",
+            "reasoning_effort": "medium",
+            "dtype": "FP32",
+            "steps": 8,
+            "accumulation": 2,
+            "skills_loaded": false,
+            "source_revision": "no skills",
+            "baseline_id": "integrated-checkpoint-noskills-20261022T134338Z"
+          }
+        }
+      ],
+      "common": [
+        "相同原始train.py、settings.json、batches.pt及CPU依赖；Torch 2.6.0、Transformers 4.53.3、NumPy 2.2.6。",
+        "默认8步、seed=927、cut=3、梯度累积2；第三阶段改为seed=211、cut=4。",
+        "A/B均为gpt-6.1-sol / medium；每个新A保留自身上下文和工作目录完成三次直接请求，无实现或复用提示。"
+      ],
+      "differences": [
+        "A使用当前对应版本的skills，B为2026-10-22已验证的无skill历史基线，不重跑B。",
+        "组件按需进入；这是已有CPU原生入口的受控恢复缺陷，不是从零部署或加速卡适配测试。"
+      ],
+      "comparisons": [
+        {
+          "id": "repeat",
+          "title": "原样重复请求",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "原样请求时源码/数据/配置不变。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -25.576,
+              "side_values": {
+                "a": 35.074,
+                "b": 60.65
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.030506,
+              "side_values": {
+                "a": 0.0329056,
+                "b": 0.0634116
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": -2,
+              "side_values": {
+                "a": 1,
+                "b": 3
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": -3382,
+              "side_values": {
+                "a": 809,
+                "b": 4191
+              }
+            },
+            {
+              "id": "workload-reexecuted",
+              "label": "是否重新训练（A − B）",
+              "unit": "flag",
+              "value": -1,
+              "side_values": {
+                "a": 0,
+                "b": 1
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立核验的任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "changed",
+          "title": "配置变更请求",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "仅请求条件变为seed=211、cut=4；核对新采集与独立原始训练参考，防止错误复用旧配置。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "活跃用时差（A − B）",
+              "unit": "s",
+              "value": -23.802,
+              "side_values": {
+                "a": 46.853,
+                "b": 70.655
+              }
+            },
+            {
+              "id": "cost",
+              "label": "估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.007923600000000003,
+              "side_values": {
+                "a": 0.0583052,
+                "b": 0.0662288
+              }
+            },
+            {
+              "id": "calls",
+              "label": "工具调用数差（A − B）",
+              "unit": "calls",
+              "value": 0,
+              "side_values": {
+                "a": 3,
+                "b": 3
+              }
+            },
+            {
+              "id": "uncached",
+              "label": "未缓存输入差（A − B）",
+              "unit": "tokens",
+              "value": -85,
+              "side_values": {
+                "a": 4172,
+                "b": 4257
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "完成并独立核验的任务",
+              "observed": 2,
+              "expected": 2,
+              "unit": "arms"
+            }
+          ]
+        },
+        {
+          "id": "total",
+          "title": "完整三阶段任务",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "首次修复、原样重复和配置变更三次活跃执行之和；阶段间父级等待、准备和独立验证不计入。首请求/后续费用分列，不构造缓存归一化总价。",
+          "metrics": [
+            {
+              "id": "elapsed",
+              "label": "总活跃用时差（A − B）",
+              "unit": "s",
+              "value": -175.00600000000003,
+              "side_values": {
+                "a": 219.988,
+                "b": 394.994
+              }
+            },
+            {
+              "id": "cost",
+              "label": "总估算费用差（A − B）",
+              "unit": "USD",
+              "value": -0.27119079999999995,
+              "side_values": {
+                "a": 0.22319360000000002,
+                "b": 0.4943844
+              }
+            },
+            {
+              "id": "calls",
+              "label": "总工具调用差（A − B）",
+              "unit": "calls",
+              "value": -9,
+              "side_values": {
+                "a": 11,
+                "b": 20
+              }
+            },
+            {
+              "id": "first-cost",
+              "label": "首请求费用差（A − B）",
+              "unit": "USD",
+              "value": -0.151336,
+              "side_values": {
+                "a": 0.0112872,
+                "b": 0.1626232
+              }
+            },
+            {
+              "id": "post-initial-cost",
+              "label": "首请求之后实际费用差（A − B）",
+              "unit": "USD",
+              "value": -0.11985479999999996,
+              "side_values": {
+                "a": 0.21190640000000002,
+                "b": 0.3317612
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧完成阶段",
+              "observed": 3,
+              "expected": 3,
+              "unit": "phases per side"
+            }
+          ]
+        },
+        {
+          "id": "correctness",
+          "title": "原始工作负载正确性",
+          "side_ids": [
+            "a",
+            "b"
+          ],
+          "scope": "默认927/3及变更211/4配置。全部loss/lr/梯度/参数/更新/优化器状态与独立原始连续训练参考精确一致；额外heldout验证通过。",
+          "metrics": [
+            {
+              "id": "max-residual",
+              "label": "最大绝对残差",
+              "unit": "absolute",
+              "value": 0,
+              "side_values": {
+                "a": 0,
+                "b": 0
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "每侧共同比较配置",
+              "observed": 2,
+              "expected": 2,
+              "unit": "configurations per side"
+            },
+            {
+              "label": "每个请求配置的数组",
+              "observed": 1360,
+              "expected": 1360,
+              "unit": "arrays per configuration"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "A三阶段合计219.988秒、0.2231936美元、11次工具调用；B为394.994秒、0.4943844美元、20次。",
+        "A首请求费用0.0112872美元，首请求之后0.2119064美元；B分别为0.1626232和0.3317612美元。",
+        "仅后续两次任务：A81.927秒、0.0912108美元；B131.305秒、0.1296404美元。",
+        "上一版A三阶段349.038秒、0.3466612美元；后续两次148.547秒、0.1418036美元。",
+        "新增持久trajectory文件数：{'cold': 6, 'repeat': 0, 'changed': 2}；文件数并非全部模型执行次数，回归可能使用临时目录。",
+        "所有版本保留在网页；新agent只收到原始任务和可选skill路径，三个阶段沿用同一上下文。",
+        "是否使用身份快照、是否重读入口、是否扩展回归以本轮原始调用轨迹为准；不根据指令文字假定已经改善。",
+        "独立验证默认、两个heldout与变更配置，并核对交付轨迹；原始连续训练语义保持不变。",
+        "统一保留的Standard快照估算，非账单；单次观测，缓存和模型策略未控制，不能推断稳定总体优势。",
+        "原样重复请求：无新文件、无训练、无回归、一次工具调用；配置变更：仅请求配置的连续/恢复两份新轨迹。",
+        "agent未使用新增save_identity/check_identity接口，仍手写身份核对；因此本轮测得的提升不能归因于该接口。接口自身通过21项runtime_probe行为测试中的相关回归。",
+        "配置变更阶段仍重读两个skill入口；未声称所有文档重读已经消除。",
+        "首次/重复/变更新增持久轨迹分别为6/0/2，上一版为14/0/6。独立额外配置验证由父级完成，不计入agent开销。"
+      ],
+      "evidence": [
+        {
+          "label": "直接任务、逐请求用量、执行轨迹及独立验证",
+          "url": "evidence/skills-retained-results-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "9a7ddf5fa4682dd893c405f6ac9dcbed816efb8c",
+        "prefix": "site/evidence/skills-retained-results-20261024.json",
+        "replay_cases": 2
+      }
     }
   ]
 }
