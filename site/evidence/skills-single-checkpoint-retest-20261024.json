@@ -1,0 +1,699 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "single_platform_checkpoint_repair_skill_retest",
+  "source_revision": "2013ce8532eacccb88bfd36125e1333cbf584265",
+  "initial_source_revision": "818476369e3935574a9b17f9045be71201262573",
+  "working_skill_diff": "diff --git a/skills/framework-adapt/SKILL.md b/skills/framework-adapt/SKILL.md\nindex 630cc1b..2dc4d3f 100644\n--- a/skills/framework-adapt/SKILL.md\n+++ b/skills/framework-adapt/SKILL.md\n@@ -7,7 +7,7 @@ description: Establish native execution when a requested model, framework or har\n \n ## Execute\n \n-Use available 10–30 s completion waits for noninteractive commands.\n+Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.\n \n - Enter for missing native execution. Reuse environments, adapters and receipts matching source, dependencies and target.\n - Missing support: inspect the selected revision's support declarations and closest native example; implement the required model/backend integration.\ndiff --git a/skills/precision-compare/SKILL.md b/skills/precision-compare/SKILL.md\nindex 3f0f907..0b3976c 100644\n--- a/skills/precision-compare/SKILL.md\n+++ b/skills/precision-compare/SKILL.md\n@@ -50,7 +50,7 @@ Fetch request: `{\"transport\":[\"ssh\",\"HOST\",\"python3 -I -\"],\"source_dir\":\"/work/n\n \n ## Collect\n \n-Use available 10–30 s completion waits for noninteractive commands.\n+Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.\n \n Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Use task recipes for unresolved capture semantics or framework integration.\n \ndiff --git a/skills/precision-repair/SKILL.md b/skills/precision-repair/SKILL.md\nindex 71ff0a4..d0d20c2 100644\n--- a/skills/precision-repair/SKILL.md\n+++ b/skills/precision-repair/SKILL.md\n@@ -16,7 +16,7 @@ description: Diagnose and repair numerical defects in model, framework or operat\n \n ## Patch and verify\n \n-Use available 10–30 s completion waits for noninteractive commands.\n+Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.\n \n - Patch the responsible implementation; keep framework-specific fixes with the case.\n - Extend existing checks for missing causal or nearby-case coverage; the regression must fail before the fix and pass after.\n",
+  "summary": {
+    "a": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 169.401,
+      "requests": 14,
+      "total_tool_calls": 13,
+      "tokens": {
+        "input_tokens": 1332594,
+        "cached_input_tokens": 1315456,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4136,
+        "total_tokens": 1336730,
+        "uncached_input_tokens": 17138
+      },
+      "standard_usd_estimate": 0.20718160000000002,
+      "first_request_usd": 0.012642800000000001,
+      "subsequent_requests_usd": 0.1945388
+    },
+    "b": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 223.632,
+      "requests": 12,
+      "total_tool_calls": 11,
+      "tokens": {
+        "input_tokens": 1079380,
+        "cached_input_tokens": 1068672,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3566,
+        "total_tokens": 1082946,
+        "uncached_input_tokens": 10708
+      },
+      "standard_usd_estimate": 0.1639432,
+      "first_request_usd": 0.0100072,
+      "subsequent_requests_usd": 0.15393600000000002
+    },
+    "A_reduction_vs_B_percent": {
+      "elapsed_seconds": 24.250107319167203,
+      "standard_usd_estimate": -26.374012462853003,
+      "total_tool_calls": -18.181818181818187
+    },
+    "correct": true
+  },
+  "verification": {
+    "all_pass": true,
+    "variants": [
+      {
+        "settings": {
+          "seed": 927,
+          "lr": 0.003,
+          "steps": 8,
+          "cut": 3,
+          "accumulation": 2
+        },
+        "keys": 1360,
+        "elements": 648248,
+        "key_coverage_exact": true,
+        "original_continuous_unchanged": true,
+        "resumed_exact": true,
+        "finite": true,
+        "mismatch_count": 0,
+        "first_mismatches": []
+      },
+      {
+        "settings": {
+          "seed": 38,
+          "lr": 0.001,
+          "steps": 6,
+          "cut": 1,
+          "accumulation": 1
+        },
+        "keys": 1020,
+        "elements": 486180,
+        "key_coverage_exact": true,
+        "original_continuous_unchanged": true,
+        "resumed_exact": true,
+        "finite": true,
+        "mismatch_count": 0,
+        "first_mismatches": []
+      },
+      {
+        "settings": {
+          "seed": 519,
+          "lr": 0.004,
+          "steps": 9,
+          "cut": 5,
+          "accumulation": 3
+        },
+        "keys": 1530,
+        "elements": 729288,
+        "key_coverage_exact": true,
+        "original_continuous_unchanged": true,
+        "resumed_exact": true,
+        "finite": true,
+        "mismatch_count": 0,
+        "first_mismatches": []
+      },
+      {
+        "settings": {
+          "seed": 729,
+          "lr": 0.002,
+          "steps": 7,
+          "cut": 6,
+          "accumulation": 2
+        },
+        "keys": 1190,
+        "elements": 567217,
+        "key_coverage_exact": true,
+        "original_continuous_unchanged": true,
+        "resumed_exact": true,
+        "finite": true,
+        "mismatch_count": 0,
+        "first_mismatches": []
+      }
+    ],
+    "verification_run": "compare-verification-20261024T072718Z",
+    "input_files_unchanged": {
+      "settings.json": true,
+      "batches.pt": true
+    }
+  },
+  "behavior": {
+    "bundled_tool_implementation_read": false,
+    "bundled_tools_used": [
+      "record_run",
+      "array_compare"
+    ],
+    "extra_causal_variants": [
+      "scheduler-only",
+      "rng-only"
+    ],
+    "progress_calls": [
+      {
+        "session_id": 10767,
+        "chars": "",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 3500
+      },
+      {
+        "session_id": 70181,
+        "chars": "",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 2200
+      },
+      {
+        "session_id": 96330,
+        "chars": "",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 1200
+      },
+      {
+        "session_id": 40859,
+        "chars": "",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 2500
+      }
+    ],
+    "checks": "Actual command audit; no private reasoning exported."
+  },
+  "baseline_identity": {
+    "run": "compare-sft-ablation-20261022T081949Z",
+    "arm": "b",
+    "agent_id": "01a162b3-78bd-7b23-9672-01c9ba512b09",
+    "session_sha256": "7314e1a91143f07ac4b9634fe75f90fe5df2eedb40b04bda76265b95faaf4c86"
+  },
+  "input_sha256": {
+    "train.py": "d601007fbdacad4c3ec6024bf8a65677f69ec4f20de42ca81d2ede31f7b1232a",
+    "settings.json": "c09c3c2b494ae3b38e33c6bfd074e4b82d2f295b1cf50c9e5fabaa85716965f1",
+    "batches.pt": "958a0492e64a06b8206408111b23b6a060c8aa967ffe7ff7822f419a2cc4a880"
+  },
+  "raw_usage": {
+    "a": [
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d17e22087d0bbecf5d7b1878624",
+        "usage": {
+          "input_tokens": 84603,
+          "cached_input_tokens": 83328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 176,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84779
+        },
+        "standard_usd_estimate": 0.012642800000000001,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d21e16c87d0a22b35a12741eba5",
+        "usage": {
+          "input_tokens": 84899,
+          "cached_input_tokens": 84608,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 127,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 85026
+        },
+        "standard_usd_estimate": 0.010312800000000002,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d2a4b5887d0ab88ff776c7a038c",
+        "usage": {
+          "input_tokens": 87944,
+          "cached_input_tokens": 84864,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 105,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 88049
+        },
+        "standard_usd_estimate": 0.0156964,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d33143087d08fcf0ec1df867477",
+        "usage": {
+          "input_tokens": 92386,
+          "cached_input_tokens": 87808,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 250,
+          "reasoning_output_tokens": 64,
+          "total_tokens": 92636
+        },
+        "standard_usd_estimate": 0.0204368,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d40fa9887d0bb0f96e3d1c6e5da",
+        "usage": {
+          "input_tokens": 94541,
+          "cached_input_tokens": 92416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 815,
+          "reasoning_output_tokens": 78,
+          "total_tokens": 95356
+        },
+        "standard_usd_estimate": 0.0216416,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d545a0487d0b5f9dd54efaec0f5",
+        "usage": {
+          "input_tokens": 95402,
+          "cached_input_tokens": 95232,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 173,
+          "reasoning_output_tokens": 134,
+          "total_tokens": 95575
+        },
+        "standard_usd_estimate": 0.011593200000000001,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d5fe5b887d0ae23fa40471b200e",
+        "usage": {
+          "input_tokens": 96551,
+          "cached_input_tokens": 95360,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 711,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 97262
+        },
+        "standard_usd_estimate": 0.019028,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d72b15c87d0b2f062c36276bf21",
+        "usage": {
+          "input_tokens": 97310,
+          "cached_input_tokens": 97024,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 157,
+          "reasoning_output_tokens": 8,
+          "total_tokens": 97467
+        },
+        "standard_usd_estimate": 0.0118444,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d7c39e887d0b8b35b2460386af4",
+        "usage": {
+          "input_tokens": 98535,
+          "cached_input_tokens": 97280,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 438,
+          "reasoning_output_tokens": 66,
+          "total_tokens": 98973
+        },
+        "standard_usd_estimate": 0.016618,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d8ba21887d08f75989b43487565",
+        "usage": {
+          "input_tokens": 99021,
+          "cached_input_tokens": 98816,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 464,
+          "reasoning_output_tokens": 92,
+          "total_tokens": 99485
+        },
+        "standard_usd_estimate": 0.0149316,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5d99980487d0b616970b543a50bf",
+        "usage": {
+          "input_tokens": 99532,
+          "cached_input_tokens": 99328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 99569
+        },
+        "standard_usd_estimate": 0.010710800000000001,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5da2d46487d09ab6e6402245df3d",
+        "usage": {
+          "input_tokens": 99819,
+          "cached_input_tokens": 99328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 99856
+        },
+        "standard_usd_estimate": 0.011284800000000001,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5dab585c87d086bcd8d667110895",
+        "usage": {
+          "input_tokens": 100358,
+          "cached_input_tokens": 99712,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 139,
+          "reasoning_output_tokens": 22,
+          "total_tokens": 100497
+        },
+        "standard_usd_estimate": 0.012653200000000002,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_06175e2a1b6d4dfc016adc5db380f087d0b3f7f9ae80a139c2",
+        "usage": {
+          "input_tokens": 101693,
+          "cached_input_tokens": 100352,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 507,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 102200
+        },
+        "standard_usd_estimate": 0.017787200000000003,
+        "long_context": false
+      }
+    ],
+    "b": [
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c78f491c87d0975b3e5ca8ab0172",
+        "usage": {
+          "input_tokens": 83875,
+          "cached_input_tokens": 83712,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 131,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84006
+        },
+        "standard_usd_estimate": 0.0100072,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c79b182c87d0970b3fbeda8ff75d",
+        "usage": {
+          "input_tokens": 84572,
+          "cached_input_tokens": 83840,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 181,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84753
+        },
+        "standard_usd_estimate": 0.011658000000000002,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c7ad04f887d0aa5cde12b3aa75e3",
+        "usage": {
+          "input_tokens": 86562,
+          "cached_input_tokens": 84608,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 107,
+          "reasoning_output_tokens": 24,
+          "total_tokens": 86669
+        },
+        "standard_usd_estimate": 0.0134388,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c7be30a087d08565814cc652fde6",
+        "usage": {
+          "input_tokens": 88407,
+          "cached_input_tokens": 86528,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 546,
+          "reasoning_output_tokens": 31,
+          "total_tokens": 88953
+        },
+        "standard_usd_estimate": 0.0178708,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c7d267d087d0bc5b251c321f3bbd",
+        "usage": {
+          "input_tokens": 89000,
+          "cached_input_tokens": 88832,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 193,
+          "reasoning_output_tokens": 154,
+          "total_tokens": 89193
+        },
+        "standard_usd_estimate": 0.0111492,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c7e9fab487d0aada52a9d9325bc8",
+        "usage": {
+          "input_tokens": 89696,
+          "cached_input_tokens": 88960,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 515,
+          "reasoning_output_tokens": 50,
+          "total_tokens": 90211
+        },
+        "standard_usd_estimate": 0.015518,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c7fc4a3087d0b0580369a49dd397",
+        "usage": {
+          "input_tokens": 90258,
+          "cached_input_tokens": 89984,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 90295
+        },
+        "standard_usd_estimate": 0.0099164,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c80af58487d097d861d466d787f7",
+        "usage": {
+          "input_tokens": 92167,
+          "cached_input_tokens": 90112,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 357,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 92524
+        },
+        "standard_usd_estimate": 0.0166912,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c8200abc87d0ac62c048a4c0fc94",
+        "usage": {
+          "input_tokens": 92571,
+          "cached_input_tokens": 92288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 155,
+          "reasoning_output_tokens": 116,
+          "total_tokens": 92726
+        },
+        "standard_usd_estimate": 0.0113448,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c82db7a887d0a623fe599edce5cc",
+        "usage": {
+          "input_tokens": 92846,
+          "cached_input_tokens": 92544,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 913,
+          "reasoning_output_tokens": 56,
+          "total_tokens": 93759
+        },
+        "standard_usd_estimate": 0.0189884,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c84813ec87d092c502b2cabcdae5",
+        "usage": {
+          "input_tokens": 93806,
+          "cached_input_tokens": 93568,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 77,
+          "reasoning_output_tokens": 38,
+          "total_tokens": 93883
+        },
+        "standard_usd_estimate": 0.0106028,
+        "long_context": false
+      },
+      {
+        "response_id": "resp_074a46dd5d542470016ad9c85fbb9c87d0bf72af4431c70568",
+        "usage": {
+          "input_tokens": 95620,
+          "cached_input_tokens": 93696,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 354,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 95974
+        },
+        "standard_usd_estimate": 0.0167576,
+        "long_context": false
+      }
+    ]
+  },
+  "commands": {
+    "a": [
+      {
+        "timestamp": "2026-10-24T07:24:14.866Z",
+        "arguments": {
+          "cmd": "pwd && rg --files -g 'AGENTS.md' -g 'SKILL.md' -g '*test*' -g '*sft*' -g '*checkpoint*' -g 'README*' -g 'pyproject.toml' -g 'requirements*'",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "max_output_tokens": 5000
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:24:23.324Z",
+        "arguments": {
+          "cmd": "ls -la\ncat skills/precision-repair/SKILL.md\ncat skills/precision-compare/SKILL.md\ncat skills/precision-compare/references/sft.md\nrg --files -g '!skills/**' -g '!.venv/**' -g '!**/__pycache__/**'",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "max_output_tokens": 11000
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:24:32.223Z",
+        "arguments": {
+          "cmd": "cat train.py\ncat settings.json\ngit status --short\ncat skills/precision-compare/references/comparison.md\n.venv/bin/python skills/precision-compare/scripts/tool_help.py compare_trees",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "max_output_tokens": 8500
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:24:46.220Z",
+        "arguments": {
+          "cmd": ".venv/bin/python skills/precision-compare/scripts/tool_help.py --full record_run array_compare",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "max_output_tokens": 6500
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:25:04.265Z",
+        "arguments": {
+          "cmd": "cat > diagnose_resume.py <<'PY'\nimport json\nimport sys\nfrom pathlib import Path\nimport numpy as np\nsys.path.insert(0, str(Path('skills/precision-compare/scripts').resolve()))\nfrom array_compare import compare_arrays\nfrom record_run import record_run\n\nif len(sys.argv) == 1:\n    folder, record = record_run('runs', 'compare', 'diagnose', 180,\n        lambda run: [sys.executable, __file__, str(run)], cwd=str(Path.cwd()))\n    print(json.dumps({'run': str(folder), 'status': record['status']}))\n    print((folder / 'stdout.bin').read_text())\n    if record['returncode']:\n        print((folder / 'stderr.bin').read_text())\n        sys.exit(record['returncode'])\nelse:\n    output = Path(sys.argv[1])\n    source = Path('train.py').read_text()\n    settings = json.loads(Path('settings.json').read_text())\n    scope = {'__file__': str(Path('train.py').resolve()), '__name__': 'diagnosis'}\n    exec(compile(source, 'train.py', 'exec'), scope)\n    reference = scope['execute'](settings, 'continuous', output / 'continuous')\n    anchor = \"            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\"\n    fixes = {\n        'original': '',\n        'scheduler-only': \"\\n            scheduler.load_state_dict(saved['scheduler'])\\n            for group, rate in zip(optimizer.param_groups, saved['scheduler']['_last_lr']):\\n                group['lr'] = rate\",\n        'rng-only': \"\\n            torch.set_rng_state(saved['torch_rng'])\\n            np.random.set_state(saved['numpy_rng'])\\n            random.setstate(saved['python_rng'])\",\n    }\n    fixes['both'] = fixes['scheduler-only'] + fixes['rng-only']\n    reports = {}\n    for name, fix in fixes.items():\n        exec(compile(source.replace(anchor, anchor + fix), 'train.py', 'exec'), scope)\n        candidate = scope['execute'](settings, 'resumed', output / name)\n        groups = {stage: [key for key in reference if f'/{stage}' in key] for stage in ('loss', 'lr', 'gradient', 'parameter', 'update', 'optimizer')}\n        report = compare_arrays(reference, candidate, metrics=True, groups=groups)\n        reports[name] = report\n        print(json.dumps({'variant': name, 'exact_equal': report['exact_equal'], 'groups': {k: {'exact_equal': v['exact_equal'], 'max_abs': v['metrics']['max_abs']} for k, v in report['groups'].items()}}))\n    (output / 'comparison.json').write_text(json.dumps(reports, indent=2) + '\\n')\nPY\n.venv/bin/python diagnose_resume.py",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 3000
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:25:34.837Z",
+        "arguments": {
+          "cmd": "cat > test_train.py <<'PY'\nimport json\nfrom pathlib import Path\nimport sys\nimport tempfile\nimport unittest\nfrom unittest.mock import patch\n\nimport numpy as np\nimport torch\n\nimport train\n\nsys.path.insert(0, str(Path(__file__).parent / 'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\n\n\nclass CheckpointContinuationTests(unittest.TestCase):\n    def assert_continuation(self, settings):\n        with tempfile.TemporaryDirectory(prefix='.resume-test-', dir=Path(__file__).parent) as directory:\n            root = Path(directory)\n            reference = train.execute(settings, 'continuous', root / 'continuous')\n            with patch.object(torch, 'set_rng_state', wraps=torch.set_rng_state) as torch_restore, \\\n                 patch.object(np.random, 'set_state', wraps=np.random.set_state) as numpy_restore, \\\n                 patch.object(train.random, 'setstate', wraps=train.random.setstate) as python_restore:\n                resumed = train.execute(settings, 'resumed', root / 'resumed')\n            report = compare_arrays(reference, resumed, expected=list(reference))\n            self.assertTrue(report['exact_equal'], json.dumps(report))\n            checkpoint = torch.load(root / 'resumed/checkpoint.pt', weights_only=False)\n            self.assertEqual(checkpoint['step'], settings['cut'])\n            torch_restore.assert_called_once()\n            self.assertTrue(torch.equal(torch_restore.call_args.args[0], checkpoint['torch_rng']))\n            numpy_restore.assert_called_once()\n            actual_numpy = numpy_restore.call_args.args[0]\n            expected_numpy = checkpoint['numpy_rng']\n            self.assertEqual(actual_numpy[0], expected_numpy[0])\n            np.testing.assert_array_equal(actual_numpy[1], expected_numpy[1])\n            self.assertEqual(actual_numpy[2:], expected_numpy[2:])\n            python_restore.assert_called_once_with(checkpoint['python_rng'])\n            self.assertEqual((root / 'continuous/metrics.json').read_bytes(),\n                             (root / 'resumed/metrics.json').read_bytes())\n\n    def test_original_multistep_workload(self):\n        settings = json.loads(Path(__file__).with_name('settings.json').read_text())\n        self.assert_continuation(settings)\n\n    def test_early_and_late_restore_with_accumulation(self):\n        for cut in (1, 4):\n            with self.subTest(cut=cut):\n                self.assert_continuation(dict(seed=123, lr=0.002, steps=5,\n                                              cut=cut, accumulation=3))\n\n\nif __name__ == '__main__':\n    unittest.main()\nPY\n.venv/bin/python skills/precision-compare/scripts/record_run.py --output-root runs --side compare --task regression-before --timeout 180 -- .venv/bin/python -B -m unittest -v test_train",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 1000
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:25:59.500Z",
+        "arguments": {
+          "cmd": ".venv/bin/python - <<'PY'\nfrom pathlib import Path\npath = Path('train.py')\nsource = path.read_text()\nsource = source.replace(\"            seed(settings['seed'])\\n\", '')\nsource = source.replace(\"            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\", \"            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\\n            # Construct the scheduler before loading the optimizer so its initial\\n            # step cannot overwrite the checkpoint's current learning rate.\\n            optimizer.load_state_dict(saved['optimizer'])\\n            scheduler.load_state_dict(saved['scheduler'])\\n            # Object construction consumes RNG; restore streams immediately before\\n            # continuing the saved trajectory (including dropout).\\n            torch.set_rng_state(saved['torch_rng'])\\n            np.random.set_state(saved['numpy_rng'])\\n            random.setstate(saved['python_rng'])\")\npath.write_text(source)\nPath('diagnose_resume.py').unlink()\nPY\n.venv/bin/python skills/precision-compare/scripts/record_run.py --output-root runs --side compare --task regression-after --timeout 180 -- .venv/bin/python -B -m unittest -v test_train",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 1500
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:26:13.537Z",
+        "arguments": {
+          "cmd": ".venv/bin/python - <<'PY'\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nsys.path.insert(0, str(Path('skills/precision-compare/scripts').resolve()))\nfrom record_run import record_run\nfolder, record = record_run('runs', 'compare', 'verify', 180,\n    lambda run: [sys.executable, '-B', 'train.py', '--mode', 'resumed', '--output', str(run / 'resumed')], cwd=str(Path.cwd()))\nprint(json.dumps({'run': str(folder), 'status': record['status']}))\nif record['returncode']:\n    print((folder / 'stderr.bin').read_text())\n    sys.exit(record['returncode'])\nreference = Path('runs/compare-diagnose-20261024T072504Z/continuous/trajectory.npz')\nsubprocess.run([sys.executable, 'skills/precision-compare/scripts/array_compare.py', str(reference), str(folder / 'resumed/trajectory.npz'), '--metrics', '--output', str(folder / 'comparison.json')], check=True)\nreport = json.loads((folder / 'comparison.json').read_text())\nprint(json.dumps(report))\nassert report['exact_equal']\nassert (reference.parent / 'metrics.json').read_bytes() == (folder / 'resumed/metrics.json').read_bytes()\nPY",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 2500
+        }
+      },
+      {
+        "timestamp": "2026-10-24T07:26:40.751Z",
+        "arguments": {
+          "cmd": "git diff --check\ngit diff -- train.py\ngit rev-parse HEAD\ngit status --short\ncat runs/compare-regression-after-20261024T072559Z/stderr.bin\nnl -ba train.py | head -48",
+          "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_",
+          "max_output_tokens": 2500
+        }
+      }
+    ],
+    "b": [
+      {
+        "timestamp": "2026-10-22T08:21:42.974Z",
+        "arguments": {
+          "cmd": "pwd && rg --files -g AGENTS.md -g '*.py' -g '*.json' -g '*.md' -g '*.sh' /tmp/precision-sft-ablation-20261022T081949Z/b | head -160",
+          "max_output_tokens": 6000
+        }
+      },
+      {
+        "timestamp": "2026-10-22T08:21:59.459Z",
+        "arguments": {
+          "cmd": "ls -la /tmp/precision-sft-ablation-20261022T081949Z/b && cat /tmp/precision-sft-ablation-20261022T081949Z/b/train.py && cat /tmp/precision-sft-ablation-20261022T081949Z/b/settings.json && cat /tmp/precision-sft-ablation-20261022T081949Z/b/runs/*/metrics.json && for p in /tmp/AGENTS.md /tmp/precision-sft-ablation-20261022T081949Z/AGENTS.md /tmp/precision-sft-ablation-20261022T081949Z/b/AGENTS.md; do if [ -f \"$p\" ]; then cat \"$p\"; fi; done",
+          "max_output_tokens": 14000
+        }
+      },
+      {
+        "timestamp": "2026-10-22T08:22:17.453Z",
+        "arguments": {
+          "cmd": "git status --short && ls -l .venv/bin/python* && sed -n '1,100p' tools/compare_tensors.py && ls -lh runs/*",
+          "workdir": "/tmp/precision-sft-ablation-20261022T081949Z/b",
+          "max_output_tokens": 4500
+        }
+      },
+      {
+        "timestamp": "2026-10-22T08:22:38.584Z",
+        "arguments": {
+          "cmd": "cat > /tmp/reproduce_precision_sft_resume.py <<'PY'\nimport json, sys\nfrom datetime import datetime, timezone\nfrom pathlib import Path\nimport numpy as np\nsys.path.insert(0, '/tmp/precision-sft-ablation-20261022T081949Z/b')\nfrom train import execute\nroot = Path('/tmp/precision-sft-ablation-20261022T081949Z/b')\ns = json.loads((root/'settings.json').read_text())\nstamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\na = execute(s, 'continuous', root/'runs'/f'b-sft-reproduce-continuous-{stamp}')\nb = execute(s, 'resumed', root/'runs'/f'b-sft-reproduce-resumed-{stamp}')\nfor step in range(s['steps']):\n    keys = [k for k in a if k.startswith(f'{step}/')]\n    changed = [k for k in keys if not np.array_equal(a[k], b[k])]\n    print(json.dumps({'step':step+1, 'different_captures':len(changed), 'lr_continuous':float(a[f'{step}/lr']), 'lr_resumed':float(b[f'{step}/lr']), 'loss_max_abs':float(np.max(np.abs(a[f'{step}/loss']-b[f'{step}/loss'])))}))\nPY\n.venv/bin/python -B /tmp/reproduce_precision_sft_resume.py",
+          "workdir": "/tmp/precision-sft-ablation-20261022T081949Z/b",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 2500
+        }
+      },
+      {
+        "timestamp": "2026-10-22T08:23:19.480Z",
+        "arguments": {
+          "cmd": "mkdir -p tests\ncat > tests/test_resume.py <<'PY'\n\"\"\"Ensure checkpoint recovery preserves the complete multistep SFT trajectory.\"\"\"\nimport json\nfrom datetime import datetime, timezone\nfrom pathlib import Path\nimport sys\nimport unittest\n\nimport numpy as np\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0, str(ROOT))\nfrom train import execute\n\n\nclass ResumeTests(unittest.TestCase):\n    def test_resume_matches_continuous_at_multiple_boundaries(self):\n        settings = json.loads((ROOT / 'settings.json').read_text())\n        stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\n        for cut in (1, settings['cut'], settings['steps'] - 1):\n            with self.subTest(cut=cut):\n                config = dict(settings, cut=cut)\n                outputs = {\n                    mode: ROOT / 'runs' / f'b-sft-regression-cut{cut}-{mode}-{stamp}'\n                    for mode in ('continuous', 'resumed')\n                }\n                reference = execute(config, 'continuous', outputs['continuous'])\n                recovered = execute(config, 'resumed', outputs['resumed'])\n                self.assertEqual(reference.keys(), recovered.keys())\n                for key in reference:\n                    np.testing.assert_array_equal(\n                        reference[key], recovered[key], err_msg=f'cut={cut}, capture={key}'\n                    )\n                self.assertEqual(\n                    (outputs['continuous'] / 'metrics.json').read_bytes(),\n                    (outputs['resumed'] / 'metrics.json').read_bytes(),\n                )\n\n\nif __name__ == '__main__':\n    unittest.main()\nPY\n.venv/bin/python -B -m unittest discover -s tests -v",
+          "workdir": "/tmp/precision-sft-ablation-20261022T081949Z/b",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 3000
+        }
+      },
+      {
+        "timestamp": "2026-10-22T08:23:55.280Z",
+        "arguments": {
+          "cmd": ".venv/bin/python -B - <<'PY'\nfrom pathlib import Path\npath = Path('train.py')\ntext = path.read_text()\ntext = text.replace(\"            seed(settings['seed'])\\n            model =\", \"            model =\")\nold = \"\"\"            optimizer.load_state_dict(saved['optimizer'])\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\n\"\"\"\nnew = \"\"\"            # Construct the scheduler before loading optimizer state: LambdaLR's\n            # initialization otherwise overwrites the checkpoint learning rate.\n            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda index: max(0.1, 1-index/settings['steps']))\n            optimizer.load_state_dict(saved['optimizer'])\n            scheduler.load_state_dict(saved['scheduler'])\n            # Restore RNGs last so model initialization cannot consume the saved\n            # dropout stream before the next training microbatch.\n            torch.set_rng_state(saved['torch_rng'])\n            np.random.set_state(saved['numpy_rng'])\n            random.setstate(saved['python_rng'])\n\"\"\"\nassert old in text\npath.write_text(text.replace(old,new))\nPath('/tmp/reproduce_precision_sft_resume.py').unlink()\nPY\n.venv/bin/python -B -m unittest discover -s tests -v",
+          "workdir": "/tmp/precision-sft-ablation-20261022T081949Z/b",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 3500
+        }
+      },
+      {
+        "timestamp": "2026-10-22T08:24:35.965Z",
+        "arguments": {
+          "cmd": ".venv/bin/python -B - <<'PY'\nfrom concurrent.futures import ThreadPoolExecutor\nfrom datetime import datetime, timezone\nimport hashlib\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport numpy as np\n\nroot = Path.cwd()\nstamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')\noutputs = {mode: root/'runs'/f'b-sft-verified-{mode}-{stamp}' for mode in ('continuous', 'resumed')}\ndef run(mode):\n    result = subprocess.run([sys.executable, '-B', 'train.py', '--mode', mode, '--settings', 'settings.json', '--output', str(outputs[mode])], capture_output=True, text=True, check=True)\n    return mode, result.stderr\nwith ThreadPoolExecutor(max_workers=2) as pool:\n    for mode, stderr in pool.map(run, outputs):\n        print(mode, 'completed')\nwith np.load(outputs['continuous']/'trajectory.npz') as a, np.load(outputs['resumed']/'trajectory.npz') as b, np.load(root/'runs/b-sft-continuous-20261022T081949Z/trajectory.npz') as original:\n    assert set(a.files) == set(b.files) == set(original.files)\n    for key in a.files:\n        assert np.isfinite(a[key]).all() and np.isfinite(b[key]).all(), key\n        np.testing.assert_array_equal(a[key], b[key], err_msg=key)\n        np.testing.assert_array_equal(a[key], original[key], err_msg=f'original workload: {key}')\n    report = {'settings': json.loads((root/'settings.json').read_text()), 'runs': {k:str(v.relative_to(root)) for k,v in outputs.items()}, 'capture_count':len(a.files), 'scalar_count':sum(a[k].size for k in a.files), 'all_finite': True, 'resumed_exactly_matches_continuous':True, 'continuous_exactly_matches_historical_baseline':True, 'max_abs_error':0.0, 'steps':[]}\n    for step in range(report['settings']['steps']):\n        keys = [k for k in a.files if k.startswith(f'{step}/')]\n        report['steps'].append({'step':step+1, 'captures':len(keys), 'lr':float(a[f'{step}/lr']), 'mean_loss':float(a[f'{step}/loss'].mean()), 'max_abs_error':0.0})\nreport['sha256'] = {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for out in outputs.values() for p in out.iterdir()}\nreport_path = root/'runs'/f'compare-sft-verification-{stamp}'\nreport_path.mkdir(exist_ok=False)\n(report_path/'verification.json').write_text(json.dumps(report, indent=2)+'\\n')\nprint(json.dumps(report, indent=2))\nprint('Evidence:', report_path/'verification.json')\nPY\ngit diff --check\ngit diff -- train.py\ngit status --short",
+          "workdir": "/tmp/precision-sft-ablation-20261022T081949Z/b",
+          "yield_time_ms": 1000,
+          "max_output_tokens": 4500
+        }
+      }
+    ]
+  },
+  "task_messages": [
+    {
+      "timestamp": "2026-10-24T07:24:05.226Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "Shared repository/environment instructions; exact task prompt separately retained."
+        },
+        {
+          "type": "input_text",
+          "text": "<environment_context>\n  <cwd>/Users/xcx/Documents/ChatGPT/precision-skill</cwd>\n  <shell>zsh</shell>\n  <current_date>2026-10-24</current_date>\n  <timezone>Asia/Shanghai</timezone>\n  <filesystem><workspace_roots><root>/Users/xcx/Documents/ChatGPT/precision-skill</root><root>/Users/xcx/.codex/visualizations/2026/10/21/01a15cf2-e239-7d43-8ab9-3a6f139b162b</root></workspace_roots><permission_profile type=\"disabled\"><file_system type=\"unrestricted\" /></permission_profile></filesystem>\n</environment_context>"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-24T07:24:05.321Z",
+      "content": [
+        {
+          "type": "input_text",
+          "text": "修复 /var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-singleab-9ftimg6_ 中 checkpoint 恢复后的多步 SFT 精度差异。\n\n可用 skills（按任务需要使用）：该目录 skills/framework-adapt、skills/precision-compare、skills/precision-repair；环境：该目录 .venv/bin/python。工作范围仅该目录；不读取其他项目、历史实验或其他 agent 产物。"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Fresh A only; verified historical no-skill B reused. Same original source/data/settings, Python environment, agent model and effort.",
+    "Controlled injected CPU checkpoint defect; not an upstream library defect or accelerator validation.",
+    "One observation each; uncontrolled model latency/cache and evolved shared system/tool prefix. Orchestration and independent verification excluded.",
+    "Current A may use all three skills on demand; historical B had standalone tools available. Actual commands retained for access audit.",
+    "Original design source revision plus recorded working diff resolves to committed skill update 2013ce8; no tool implementation changed.",
+    "Price estimate from retained common Standard snapshot, not billing: $2/M input, $0.10/M cached input, $2.50/M cache writes, $10/M output, request long-context multipliers retained."
+  ]
+}
