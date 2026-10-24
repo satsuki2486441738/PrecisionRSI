@@ -1,0 +1,3051 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "original_native_task_skill_retest",
+  "source_revision": "a078bd95b4b205bbfd8e8c8a0f7ab1b7c9637e55",
+  "summary": {
+    "native_scores_exactly_reproduce_B": true,
+    "a": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 405.435,
+      "requests": 24,
+      "total_tool_calls": 23,
+      "tokens": {
+        "input_tokens": 2740780,
+        "cached_input_tokens": 2686848,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 11920,
+        "total_tokens": 2752700,
+        "uncached_input_tokens": 53932
+      },
+      "standard_usd_estimate": 0.4957488,
+      "first_request_usd": 0.0126008,
+      "subsequent_requests_usd": 0.48314799999999997
+    },
+    "b": {
+      "elapsed_seconds": 589.908,
+      "standard_usd_estimate": 0.8271804,
+      "requests": 40,
+      "total_tool_calls": 38,
+      "tokens": {
+        "input_tokens": 4279513,
+        "cached_input_tokens": 4161024,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 17410,
+        "total_tokens": 4296923,
+        "uncached_input_tokens": 118489
+      },
+      "first_request_usd": 0.1629408,
+      "subsequent_requests_usd": 0.6642396
+    },
+    "baseline_id": "native-prefill-noskills-20261024T011154Z",
+    "source_revision": "a078bd95b4b205bbfd8e8c8a0f7ab1b7c9637e55",
+    "A_reduction_vs_B_percent": {
+      "elapsed_seconds": 31.271486401269357,
+      "standard_usd_estimate": 40.06763216343134,
+      "total_tool_calls": 39.473684210526315
+    },
+    "previous_a": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 486.383,
+      "requests": 29,
+      "total_tool_calls": 28,
+      "tokens": {
+        "input_tokens": 3382644,
+        "cached_input_tokens": 3225600,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 15168,
+        "total_tokens": 3397812,
+        "uncached_input_tokens": 157044
+      },
+      "standard_usd_estimate": 0.7883279999999999
+    }
+  },
+  "verification": {
+    "status": "PASS",
+    "checks": {
+      "global_four_groups_metrics_coordinates_coverage": true,
+      "both_native_and_launcher_terminals_success": true,
+      "resource_identity_and_all_exported_file_bytes": true,
+      "native_per_sample_scores_and_coordinate_events": true,
+      "model_inputs_and_main_library_versions_comparable": true
+    },
+    "native_scores_exactly_reproduce_B": true,
+    "actual_config_comparison": {
+      "gpu": {
+        "B_versions": {
+          "torch": "2.10.0",
+          "vllm": "0.19.1",
+          "transformers": "5.5.4"
+        },
+        "A_versions": {
+          "torch": "2.10.0+cu128",
+          "vllm": "0.19.1"
+        },
+        "B_device": "NVIDIA H20Z",
+        "B_physical_chip": null,
+        "A_device": {
+          "count": 1,
+          "name": "NVIDIA H20Z",
+          "capability": [
+            9,
+            0
+          ]
+        },
+        "B_use_cache": null,
+        "A_use_cache": null
+      },
+      "npu": {
+        "B_versions": {
+          "torch": "2.9.0",
+          "torch-npu": "2.9.0.post2",
+          "transformers": "5.3.0"
+        },
+        "A_versions": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.3.0",
+          "torch_npu": "2.9.0.post2"
+        },
+        "B_device": "Ascend910_9382",
+        "B_physical_chip": 12,
+        "A_device": {
+          "count": 1,
+          "logical": "npu:0",
+          "name": "Ascend910_9382",
+          "physical_chip": 13
+        },
+        "B_use_cache": false,
+        "A_use_cache": true
+      }
+    },
+    "recorded_differences": [
+      "NPU physical chip: B=12, A=13; same declared Ascend device type.",
+      "NPU use_cache: B=False, A=True; task specifies independent prefill and does not fix this flag. All selected scores reproduce B exactly.",
+      "A reuses declared prepared launcher/identity interface; preparation excluded and its advantage is not amortized.",
+      "Shared repository maintenance instructions and skill text evolved; historical B cache/background load uncontrolled."
+    ],
+    "behavior": {
+      "read_bundled_tool_source": false,
+      "shared_fetch_calls": 2,
+      "custom_download_reimplementation": false,
+      "downloaded_file_hash_or_size_rescans": 0,
+      "shared_grouped_score_reduction": true,
+      "manual_NLL_P99_implementation": false,
+      "extra_markdown_report": true,
+      "short_poll_calls": 8,
+      "native_attempts": {
+        "gpu": 1,
+        "npu": 1
+      },
+      "notes": [
+        "Adapter hashes local inputs.json/collect.py to match native identities; it does not rehash fetched artifacts.",
+        "One extra Markdown report duplicates machine-readable results despite the skill requirement.",
+        "Large actual-configuration/log excerpts were read into context."
+      ]
+    },
+    "independent_metrics": {
+      "coverage": {
+        "expected": 140,
+        "gpu": 140,
+        "npu": 140,
+        "missing": []
+      },
+      "global_metrics": {
+        "count": 140,
+        "side_a_nll": 12.983606467928205,
+        "side_b_nll": 12.980666133335658,
+        "nll_abs_diff": 0.0029403345925462787,
+        "mae": 0.02059140205383301,
+        "p99": 0.07268386840820296,
+        "max_abs": 0.08256149291992188,
+        "max_coordinates": [
+          [
+            "sample-1",
+            1,
+            8763
+          ]
+        ]
+      },
+      "samples": {
+        "sample-1": {
+          "count": 23,
+          "side_a_nll": 13.51643699148427,
+          "side_b_nll": 13.508584768875785,
+          "nll_abs_diff": 0.007852222608484283,
+          "mae": 0.022419224614682404,
+          "p99": 0.07742370605468753,
+          "max_abs": 0.08256149291992188,
+          "max_coordinates": [
+            [
+              "sample-1",
+              1,
+              8763
+            ]
+          ]
+        },
+        "sample-2": {
+          "count": 23,
+          "side_a_nll": 12.939452254253885,
+          "side_b_nll": 12.932685478873875,
+          "nll_abs_diff": 0.006766775380009804,
+          "mae": 0.02370013361391814,
+          "p99": 0.07065452575683598,
+          "max_abs": 0.07714557647705078,
+          "max_coordinates": [
+            [
+              "sample-2",
+              4,
+              4944
+            ]
+          ]
+        },
+        "sample-3": {
+          "count": 47,
+          "side_a_nll": 12.902968203767816,
+          "side_b_nll": 12.9026206199159,
+          "nll_abs_diff": 0.0003475838519158003,
+          "mae": 0.018471251142785906,
+          "p99": 0.06183561325073242,
+          "max_abs": 0.0657052993774414,
+          "max_coordinates": [
+            [
+              "sample-3",
+              24,
+              4554
+            ]
+          ]
+        },
+        "sample-4": {
+          "count": 47,
+          "side_a_nll": 12.8251052612954,
+          "side_b_nll": 12.823848379419205,
+          "nll_abs_diff": 0.001256881876194882,
+          "mae": 0.020295792437614278,
+          "p99": 0.05477424621582031,
+          "max_abs": 0.05656147003173828,
+          "max_coordinates": [
+            [
+              "sample-4",
+              22,
+              14787
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "normalized_scores": {
+    "gpu": [
+      {
+        "sample": "sample-1",
+        "position": 1,
+        "token": 8763,
+        "logprob": -17.518299102783203
+      },
+      {
+        "sample": "sample-1",
+        "position": 2,
+        "token": 6721,
+        "logprob": -19.62024688720703
+      },
+      {
+        "sample": "sample-1",
+        "position": 3,
+        "token": 17587,
+        "logprob": -12.354000091552734
+      },
+      {
+        "sample": "sample-1",
+        "position": 4,
+        "token": 11659,
+        "logprob": -11.317928314208984
+      },
+      {
+        "sample": "sample-1",
+        "position": 5,
+        "token": 7987,
+        "logprob": -11.002662658691406
+      },
+      {
+        "sample": "sample-1",
+        "position": 6,
+        "token": 18883,
+        "logprob": -17.155168533325195
+      },
+      {
+        "sample": "sample-1",
+        "position": 7,
+        "token": 12125,
+        "logprob": -13.424735069274902
+      },
+      {
+        "sample": "sample-1",
+        "position": 8,
+        "token": 850,
+        "logprob": -8.673709869384766
+      },
+      {
+        "sample": "sample-1",
+        "position": 9,
+        "token": 13443,
+        "logprob": -16.413124084472656
+      },
+      {
+        "sample": "sample-1",
+        "position": 10,
+        "token": 2620,
+        "logprob": -16.115182876586914
+      },
+      {
+        "sample": "sample-1",
+        "position": 11,
+        "token": 13156,
+        "logprob": -11.625020027160645
+      },
+      {
+        "sample": "sample-1",
+        "position": 12,
+        "token": 6793,
+        "logprob": -14.589472770690918
+      },
+      {
+        "sample": "sample-1",
+        "position": 13,
+        "token": 10323,
+        "logprob": -9.536869049072266
+      },
+      {
+        "sample": "sample-1",
+        "position": 14,
+        "token": 11450,
+        "logprob": -12.207452774047852
+      },
+      {
+        "sample": "sample-1",
+        "position": 15,
+        "token": 9801,
+        "logprob": -10.29964828491211
+      },
+      {
+        "sample": "sample-1",
+        "position": 16,
+        "token": 19412,
+        "logprob": -15.533401489257812
+      },
+      {
+        "sample": "sample-1",
+        "position": 17,
+        "token": 8603,
+        "logprob": -11.783797264099121
+      },
+      {
+        "sample": "sample-1",
+        "position": 18,
+        "token": 19006,
+        "logprob": -17.67440414428711
+      },
+      {
+        "sample": "sample-1",
+        "position": 19,
+        "token": 11736,
+        "logprob": -14.038249969482422
+      },
+      {
+        "sample": "sample-1",
+        "position": 20,
+        "token": 1516,
+        "logprob": -13.215757369995117
+      },
+      {
+        "sample": "sample-1",
+        "position": 21,
+        "token": 18689,
+        "logprob": -14.944068908691406
+      },
+      {
+        "sample": "sample-1",
+        "position": 22,
+        "token": 13313,
+        "logprob": -13.284603118896484
+      },
+      {
+        "sample": "sample-1",
+        "position": 23,
+        "token": 749,
+        "logprob": -8.550248146057129
+      },
+      {
+        "sample": "sample-2",
+        "position": 1,
+        "token": 15049,
+        "logprob": -14.677992820739746
+      },
+      {
+        "sample": "sample-2",
+        "position": 2,
+        "token": 19638,
+        "logprob": -13.161710739135742
+      },
+      {
+        "sample": "sample-2",
+        "position": 3,
+        "token": 12431,
+        "logprob": -13.479034423828125
+      },
+      {
+        "sample": "sample-2",
+        "position": 4,
+        "token": 4944,
+        "logprob": -13.641066551208496
+      },
+      {
+        "sample": "sample-2",
+        "position": 5,
+        "token": 9655,
+        "logprob": -14.453327178955078
+      },
+      {
+        "sample": "sample-2",
+        "position": 6,
+        "token": 1875,
+        "logprob": -10.379257202148438
+      },
+      {
+        "sample": "sample-2",
+        "position": 7,
+        "token": 9433,
+        "logprob": -11.668095588684082
+      },
+      {
+        "sample": "sample-2",
+        "position": 8,
+        "token": 7477,
+        "logprob": -15.552715301513672
+      },
+      {
+        "sample": "sample-2",
+        "position": 9,
+        "token": 18927,
+        "logprob": -14.373307228088379
+      },
+      {
+        "sample": "sample-2",
+        "position": 10,
+        "token": 13466,
+        "logprob": -15.410996437072754
+      },
+      {
+        "sample": "sample-2",
+        "position": 11,
+        "token": 8636,
+        "logprob": -13.544921875
+      },
+      {
+        "sample": "sample-2",
+        "position": 12,
+        "token": 12349,
+        "logprob": -15.752878189086914
+      },
+      {
+        "sample": "sample-2",
+        "position": 13,
+        "token": 10875,
+        "logprob": -13.499482154846191
+      },
+      {
+        "sample": "sample-2",
+        "position": 14,
+        "token": 1411,
+        "logprob": -9.34765911102295
+      },
+      {
+        "sample": "sample-2",
+        "position": 15,
+        "token": 18720,
+        "logprob": -11.563011169433594
+      },
+      {
+        "sample": "sample-2",
+        "position": 16,
+        "token": 1102,
+        "logprob": -10.336589813232422
+      },
+      {
+        "sample": "sample-2",
+        "position": 17,
+        "token": 9031,
+        "logprob": -13.636472702026367
+      },
+      {
+        "sample": "sample-2",
+        "position": 18,
+        "token": 8332,
+        "logprob": -12.751977920532227
+      },
+      {
+        "sample": "sample-2",
+        "position": 19,
+        "token": 5112,
+        "logprob": -12.210521697998047
+      },
+      {
+        "sample": "sample-2",
+        "position": 20,
+        "token": 17089,
+        "logprob": -13.920228958129883
+      },
+      {
+        "sample": "sample-2",
+        "position": 21,
+        "token": 16586,
+        "logprob": -12.147506713867188
+      },
+      {
+        "sample": "sample-2",
+        "position": 22,
+        "token": 19104,
+        "logprob": -11.080785751342773
+      },
+      {
+        "sample": "sample-2",
+        "position": 23,
+        "token": 7945,
+        "logprob": -11.017862319946289
+      },
+      {
+        "sample": "sample-3",
+        "position": 1,
+        "token": 17451,
+        "logprob": -17.762832641601562
+      },
+      {
+        "sample": "sample-3",
+        "position": 2,
+        "token": 8977,
+        "logprob": -10.937753677368164
+      },
+      {
+        "sample": "sample-3",
+        "position": 3,
+        "token": 9977,
+        "logprob": -14.211601257324219
+      },
+      {
+        "sample": "sample-3",
+        "position": 4,
+        "token": 11656,
+        "logprob": -10.24421501159668
+      },
+      {
+        "sample": "sample-3",
+        "position": 5,
+        "token": 802,
+        "logprob": -12.168828964233398
+      },
+      {
+        "sample": "sample-3",
+        "position": 6,
+        "token": 9276,
+        "logprob": -16.64996337890625
+      },
+      {
+        "sample": "sample-3",
+        "position": 7,
+        "token": 5002,
+        "logprob": -11.953815460205078
+      },
+      {
+        "sample": "sample-3",
+        "position": 8,
+        "token": 8936,
+        "logprob": -11.015576362609863
+      },
+      {
+        "sample": "sample-3",
+        "position": 9,
+        "token": 7538,
+        "logprob": -14.61471939086914
+      },
+      {
+        "sample": "sample-3",
+        "position": 10,
+        "token": 6456,
+        "logprob": -12.028166770935059
+      },
+      {
+        "sample": "sample-3",
+        "position": 11,
+        "token": 3262,
+        "logprob": -9.679363250732422
+      },
+      {
+        "sample": "sample-3",
+        "position": 12,
+        "token": 1300,
+        "logprob": -10.967355728149414
+      },
+      {
+        "sample": "sample-3",
+        "position": 13,
+        "token": 10451,
+        "logprob": -13.073076248168945
+      },
+      {
+        "sample": "sample-3",
+        "position": 14,
+        "token": 19891,
+        "logprob": -15.251559257507324
+      },
+      {
+        "sample": "sample-3",
+        "position": 15,
+        "token": 19908,
+        "logprob": -13.490887641906738
+      },
+      {
+        "sample": "sample-3",
+        "position": 16,
+        "token": 5184,
+        "logprob": -15.528322219848633
+      },
+      {
+        "sample": "sample-3",
+        "position": 17,
+        "token": 19750,
+        "logprob": -15.052275657653809
+      },
+      {
+        "sample": "sample-3",
+        "position": 18,
+        "token": 1423,
+        "logprob": -8.102815628051758
+      },
+      {
+        "sample": "sample-3",
+        "position": 19,
+        "token": 18129,
+        "logprob": -14.954122543334961
+      },
+      {
+        "sample": "sample-3",
+        "position": 20,
+        "token": 6070,
+        "logprob": -11.611505508422852
+      },
+      {
+        "sample": "sample-3",
+        "position": 21,
+        "token": 404,
+        "logprob": -11.939910888671875
+      },
+      {
+        "sample": "sample-3",
+        "position": 22,
+        "token": 7818,
+        "logprob": -13.119749069213867
+      },
+      {
+        "sample": "sample-3",
+        "position": 23,
+        "token": 2823,
+        "logprob": -12.600240707397461
+      },
+      {
+        "sample": "sample-3",
+        "position": 24,
+        "token": 4554,
+        "logprob": -14.268747329711914
+      },
+      {
+        "sample": "sample-3",
+        "position": 25,
+        "token": 10825,
+        "logprob": -13.08025074005127
+      },
+      {
+        "sample": "sample-3",
+        "position": 26,
+        "token": 9094,
+        "logprob": -16.13825225830078
+      },
+      {
+        "sample": "sample-3",
+        "position": 27,
+        "token": 9312,
+        "logprob": -7.968883991241455
+      },
+      {
+        "sample": "sample-3",
+        "position": 28,
+        "token": 1479,
+        "logprob": -13.155742645263672
+      },
+      {
+        "sample": "sample-3",
+        "position": 29,
+        "token": 14810,
+        "logprob": -11.735179901123047
+      },
+      {
+        "sample": "sample-3",
+        "position": 30,
+        "token": 13374,
+        "logprob": -13.974556922912598
+      },
+      {
+        "sample": "sample-3",
+        "position": 31,
+        "token": 16464,
+        "logprob": -13.739127159118652
+      },
+      {
+        "sample": "sample-3",
+        "position": 32,
+        "token": 13014,
+        "logprob": -12.619372367858887
+      },
+      {
+        "sample": "sample-3",
+        "position": 33,
+        "token": 16861,
+        "logprob": -12.300546646118164
+      },
+      {
+        "sample": "sample-3",
+        "position": 34,
+        "token": 12461,
+        "logprob": -13.2513427734375
+      },
+      {
+        "sample": "sample-3",
+        "position": 35,
+        "token": 2687,
+        "logprob": -15.449317932128906
+      },
+      {
+        "sample": "sample-3",
+        "position": 36,
+        "token": 19355,
+        "logprob": -22.20986557006836
+      },
+      {
+        "sample": "sample-3",
+        "position": 37,
+        "token": 5874,
+        "logprob": -10.589678764343262
+      },
+      {
+        "sample": "sample-3",
+        "position": 38,
+        "token": 10439,
+        "logprob": -10.881229400634766
+      },
+      {
+        "sample": "sample-3",
+        "position": 39,
+        "token": 4840,
+        "logprob": -10.194320678710938
+      },
+      {
+        "sample": "sample-3",
+        "position": 40,
+        "token": 6250,
+        "logprob": -11.461008071899414
+      },
+      {
+        "sample": "sample-3",
+        "position": 41,
+        "token": 15440,
+        "logprob": -11.31260871887207
+      },
+      {
+        "sample": "sample-3",
+        "position": 42,
+        "token": 8485,
+        "logprob": -11.854745864868164
+      },
+      {
+        "sample": "sample-3",
+        "position": 43,
+        "token": 14054,
+        "logprob": -14.352766990661621
+      },
+      {
+        "sample": "sample-3",
+        "position": 44,
+        "token": 17040,
+        "logprob": -13.65285587310791
+      },
+      {
+        "sample": "sample-3",
+        "position": 45,
+        "token": 17994,
+        "logprob": -14.190522193908691
+      },
+      {
+        "sample": "sample-3",
+        "position": 46,
+        "token": 15120,
+        "logprob": -13.280695915222168
+      },
+      {
+        "sample": "sample-3",
+        "position": 47,
+        "token": 783,
+        "logprob": -7.819229602813721
+      },
+      {
+        "sample": "sample-4",
+        "position": 1,
+        "token": 4026,
+        "logprob": -13.393867492675781
+      },
+      {
+        "sample": "sample-4",
+        "position": 2,
+        "token": 18460,
+        "logprob": -15.09229564666748
+      },
+      {
+        "sample": "sample-4",
+        "position": 3,
+        "token": 15527,
+        "logprob": -10.389674186706543
+      },
+      {
+        "sample": "sample-4",
+        "position": 4,
+        "token": 19313,
+        "logprob": -16.042804718017578
+      },
+      {
+        "sample": "sample-4",
+        "position": 5,
+        "token": 7805,
+        "logprob": -12.053568840026855
+      },
+      {
+        "sample": "sample-4",
+        "position": 6,
+        "token": 9786,
+        "logprob": -12.318450927734375
+      },
+      {
+        "sample": "sample-4",
+        "position": 7,
+        "token": 822,
+        "logprob": -10.918257713317871
+      },
+      {
+        "sample": "sample-4",
+        "position": 8,
+        "token": 8139,
+        "logprob": -13.248603820800781
+      },
+      {
+        "sample": "sample-4",
+        "position": 9,
+        "token": 18855,
+        "logprob": -10.144308090209961
+      },
+      {
+        "sample": "sample-4",
+        "position": 10,
+        "token": 5328,
+        "logprob": -9.297480583190918
+      },
+      {
+        "sample": "sample-4",
+        "position": 11,
+        "token": 10468,
+        "logprob": -13.359004020690918
+      },
+      {
+        "sample": "sample-4",
+        "position": 12,
+        "token": 15013,
+        "logprob": -16.52676773071289
+      },
+      {
+        "sample": "sample-4",
+        "position": 13,
+        "token": 5411,
+        "logprob": -12.161857604980469
+      },
+      {
+        "sample": "sample-4",
+        "position": 14,
+        "token": 11640,
+        "logprob": -15.820718765258789
+      },
+      {
+        "sample": "sample-4",
+        "position": 15,
+        "token": 15239,
+        "logprob": -15.800198554992676
+      },
+      {
+        "sample": "sample-4",
+        "position": 16,
+        "token": 2641,
+        "logprob": -10.200349807739258
+      },
+      {
+        "sample": "sample-4",
+        "position": 17,
+        "token": 18263,
+        "logprob": -13.944293022155762
+      },
+      {
+        "sample": "sample-4",
+        "position": 18,
+        "token": 7329,
+        "logprob": -14.85406494140625
+      },
+      {
+        "sample": "sample-4",
+        "position": 19,
+        "token": 12064,
+        "logprob": -17.7314395904541
+      },
+      {
+        "sample": "sample-4",
+        "position": 20,
+        "token": 5428,
+        "logprob": -8.883187294006348
+      },
+      {
+        "sample": "sample-4",
+        "position": 21,
+        "token": 12229,
+        "logprob": -13.032752990722656
+      },
+      {
+        "sample": "sample-4",
+        "position": 22,
+        "token": 14787,
+        "logprob": -11.786153793334961
+      },
+      {
+        "sample": "sample-4",
+        "position": 23,
+        "token": 1285,
+        "logprob": -13.14885139465332
+      },
+      {
+        "sample": "sample-4",
+        "position": 24,
+        "token": 1191,
+        "logprob": -13.703082084655762
+      },
+      {
+        "sample": "sample-4",
+        "position": 25,
+        "token": 13877,
+        "logprob": -16.889204025268555
+      },
+      {
+        "sample": "sample-4",
+        "position": 26,
+        "token": 15968,
+        "logprob": -11.081509590148926
+      },
+      {
+        "sample": "sample-4",
+        "position": 27,
+        "token": 1137,
+        "logprob": -8.756380081176758
+      },
+      {
+        "sample": "sample-4",
+        "position": 28,
+        "token": 3805,
+        "logprob": -15.741961479187012
+      },
+      {
+        "sample": "sample-4",
+        "position": 29,
+        "token": 16583,
+        "logprob": -11.51327133178711
+      },
+      {
+        "sample": "sample-4",
+        "position": 30,
+        "token": 1768,
+        "logprob": -10.106430053710938
+      },
+      {
+        "sample": "sample-4",
+        "position": 31,
+        "token": 8614,
+        "logprob": -13.163558006286621
+      },
+      {
+        "sample": "sample-4",
+        "position": 32,
+        "token": 13608,
+        "logprob": -13.503808975219727
+      },
+      {
+        "sample": "sample-4",
+        "position": 33,
+        "token": 10880,
+        "logprob": -13.240771293640137
+      },
+      {
+        "sample": "sample-4",
+        "position": 34,
+        "token": 18591,
+        "logprob": -12.62758731842041
+      },
+      {
+        "sample": "sample-4",
+        "position": 35,
+        "token": 1169,
+        "logprob": -12.807905197143555
+      },
+      {
+        "sample": "sample-4",
+        "position": 36,
+        "token": 9459,
+        "logprob": -15.149118423461914
+      },
+      {
+        "sample": "sample-4",
+        "position": 37,
+        "token": 18619,
+        "logprob": -12.648191452026367
+      },
+      {
+        "sample": "sample-4",
+        "position": 38,
+        "token": 7958,
+        "logprob": -14.048894882202148
+      },
+      {
+        "sample": "sample-4",
+        "position": 39,
+        "token": 18573,
+        "logprob": -14.931623458862305
+      },
+      {
+        "sample": "sample-4",
+        "position": 40,
+        "token": 3238,
+        "logprob": -10.58183765411377
+      },
+      {
+        "sample": "sample-4",
+        "position": 41,
+        "token": 14712,
+        "logprob": -12.003814697265625
+      },
+      {
+        "sample": "sample-4",
+        "position": 42,
+        "token": 8437,
+        "logprob": -13.229894638061523
+      },
+      {
+        "sample": "sample-4",
+        "position": 43,
+        "token": 3574,
+        "logprob": -14.651561737060547
+      },
+      {
+        "sample": "sample-4",
+        "position": 44,
+        "token": 10286,
+        "logprob": -11.558151245117188
+      },
+      {
+        "sample": "sample-4",
+        "position": 45,
+        "token": 12121,
+        "logprob": -10.409069061279297
+      },
+      {
+        "sample": "sample-4",
+        "position": 46,
+        "token": 4105,
+        "logprob": -9.87590503692627
+      },
+      {
+        "sample": "sample-4",
+        "position": 47,
+        "token": 2575,
+        "logprob": -10.407464027404785
+      }
+    ],
+    "npu": [
+      {
+        "sample": "sample-1",
+        "position": 1,
+        "token": 8763,
+        "logprob": -17.43573760986328
+      },
+      {
+        "sample": "sample-1",
+        "position": 2,
+        "token": 6721,
+        "logprob": -19.561038970947266
+      },
+      {
+        "sample": "sample-1",
+        "position": 3,
+        "token": 17587,
+        "logprob": -12.37519359588623
+      },
+      {
+        "sample": "sample-1",
+        "position": 4,
+        "token": 11659,
+        "logprob": -11.299205780029297
+      },
+      {
+        "sample": "sample-1",
+        "position": 5,
+        "token": 7987,
+        "logprob": -10.984318733215332
+      },
+      {
+        "sample": "sample-1",
+        "position": 6,
+        "token": 18883,
+        "logprob": -17.128664016723633
+      },
+      {
+        "sample": "sample-1",
+        "position": 7,
+        "token": 12125,
+        "logprob": -13.4393310546875
+      },
+      {
+        "sample": "sample-1",
+        "position": 8,
+        "token": 850,
+        "logprob": -8.648253440856934
+      },
+      {
+        "sample": "sample-1",
+        "position": 9,
+        "token": 13443,
+        "logprob": -16.415294647216797
+      },
+      {
+        "sample": "sample-1",
+        "position": 10,
+        "token": 2620,
+        "logprob": -16.077051162719727
+      },
+      {
+        "sample": "sample-1",
+        "position": 11,
+        "token": 13156,
+        "logprob": -11.625551223754883
+      },
+      {
+        "sample": "sample-1",
+        "position": 12,
+        "token": 6793,
+        "logprob": -14.593063354492188
+      },
+      {
+        "sample": "sample-1",
+        "position": 13,
+        "token": 10323,
+        "logprob": -9.554910659790039
+      },
+      {
+        "sample": "sample-1",
+        "position": 14,
+        "token": 11450,
+        "logprob": -12.23006820678711
+      },
+      {
+        "sample": "sample-1",
+        "position": 15,
+        "token": 9801,
+        "logprob": -10.312263488769531
+      },
+      {
+        "sample": "sample-1",
+        "position": 16,
+        "token": 19412,
+        "logprob": -15.537049293518066
+      },
+      {
+        "sample": "sample-1",
+        "position": 17,
+        "token": 8603,
+        "logprob": -11.761754989624023
+      },
+      {
+        "sample": "sample-1",
+        "position": 18,
+        "token": 19006,
+        "logprob": -17.640993118286133
+      },
+      {
+        "sample": "sample-1",
+        "position": 19,
+        "token": 11736,
+        "logprob": -14.051843643188477
+      },
+      {
+        "sample": "sample-1",
+        "position": 20,
+        "token": 1516,
+        "logprob": -13.240866661071777
+      },
+      {
+        "sample": "sample-1",
+        "position": 21,
+        "token": 18689,
+        "logprob": -14.973884582519531
+      },
+      {
+        "sample": "sample-1",
+        "position": 22,
+        "token": 13313,
+        "logprob": -13.284565925598145
+      },
+      {
+        "sample": "sample-1",
+        "position": 23,
+        "token": 749,
+        "logprob": -8.526545524597168
+      },
+      {
+        "sample": "sample-2",
+        "position": 1,
+        "token": 15049,
+        "logprob": -14.72563362121582
+      },
+      {
+        "sample": "sample-2",
+        "position": 2,
+        "token": 19638,
+        "logprob": -13.163711547851562
+      },
+      {
+        "sample": "sample-2",
+        "position": 3,
+        "token": 12431,
+        "logprob": -13.434261322021484
+      },
+      {
+        "sample": "sample-2",
+        "position": 4,
+        "token": 4944,
+        "logprob": -13.563920974731445
+      },
+      {
+        "sample": "sample-2",
+        "position": 5,
+        "token": 9655,
+        "logprob": -14.425992965698242
+      },
+      {
+        "sample": "sample-2",
+        "position": 6,
+        "token": 1875,
+        "logprob": -10.364585876464844
+      },
+      {
+        "sample": "sample-2",
+        "position": 7,
+        "token": 9433,
+        "logprob": -11.65861988067627
+      },
+      {
+        "sample": "sample-2",
+        "position": 8,
+        "token": 7477,
+        "logprob": -15.5523681640625
+      },
+      {
+        "sample": "sample-2",
+        "position": 9,
+        "token": 18927,
+        "logprob": -14.35307502746582
+      },
+      {
+        "sample": "sample-2",
+        "position": 10,
+        "token": 13466,
+        "logprob": -15.392766952514648
+      },
+      {
+        "sample": "sample-2",
+        "position": 11,
+        "token": 8636,
+        "logprob": -13.522631645202637
+      },
+      {
+        "sample": "sample-2",
+        "position": 12,
+        "token": 12349,
+        "logprob": -15.720573425292969
+      },
+      {
+        "sample": "sample-2",
+        "position": 13,
+        "token": 10875,
+        "logprob": -13.516691207885742
+      },
+      {
+        "sample": "sample-2",
+        "position": 14,
+        "token": 1411,
+        "logprob": -9.392034530639648
+      },
+      {
+        "sample": "sample-2",
+        "position": 15,
+        "token": 18720,
+        "logprob": -11.597699165344238
+      },
+      {
+        "sample": "sample-2",
+        "position": 16,
+        "token": 1102,
+        "logprob": -10.317928314208984
+      },
+      {
+        "sample": "sample-2",
+        "position": 17,
+        "token": 9031,
+        "logprob": -13.630130767822266
+      },
+      {
+        "sample": "sample-2",
+        "position": 18,
+        "token": 8332,
+        "logprob": -12.728804588317871
+      },
+      {
+        "sample": "sample-2",
+        "position": 19,
+        "token": 5112,
+        "logprob": -12.239830017089844
+      },
+      {
+        "sample": "sample-2",
+        "position": 20,
+        "token": 17089,
+        "logprob": -13.934179306030273
+      },
+      {
+        "sample": "sample-2",
+        "position": 21,
+        "token": 16586,
+        "logprob": -12.117971420288086
+      },
+      {
+        "sample": "sample-2",
+        "position": 22,
+        "token": 19104,
+        "logprob": -11.074932098388672
+      },
+      {
+        "sample": "sample-2",
+        "position": 23,
+        "token": 7945,
+        "logprob": -11.023423194885254
+      },
+      {
+        "sample": "sample-3",
+        "position": 1,
+        "token": 17451,
+        "logprob": -17.780094146728516
+      },
+      {
+        "sample": "sample-3",
+        "position": 2,
+        "token": 8977,
+        "logprob": -10.92419719696045
+      },
+      {
+        "sample": "sample-3",
+        "position": 3,
+        "token": 9977,
+        "logprob": -14.199223518371582
+      },
+      {
+        "sample": "sample-3",
+        "position": 4,
+        "token": 11656,
+        "logprob": -10.248952865600586
+      },
+      {
+        "sample": "sample-3",
+        "position": 5,
+        "token": 802,
+        "logprob": -12.164012908935547
+      },
+      {
+        "sample": "sample-3",
+        "position": 6,
+        "token": 9276,
+        "logprob": -16.616262435913086
+      },
+      {
+        "sample": "sample-3",
+        "position": 7,
+        "token": 5002,
+        "logprob": -11.955456733703613
+      },
+      {
+        "sample": "sample-3",
+        "position": 8,
+        "token": 8936,
+        "logprob": -11.015064239501953
+      },
+      {
+        "sample": "sample-3",
+        "position": 9,
+        "token": 7538,
+        "logprob": -14.618494033813477
+      },
+      {
+        "sample": "sample-3",
+        "position": 10,
+        "token": 6456,
+        "logprob": -12.03030014038086
+      },
+      {
+        "sample": "sample-3",
+        "position": 11,
+        "token": 3262,
+        "logprob": -9.65999984741211
+      },
+      {
+        "sample": "sample-3",
+        "position": 12,
+        "token": 1300,
+        "logprob": -11.01060962677002
+      },
+      {
+        "sample": "sample-3",
+        "position": 13,
+        "token": 10451,
+        "logprob": -13.108442306518555
+      },
+      {
+        "sample": "sample-3",
+        "position": 14,
+        "token": 19891,
+        "logprob": -15.251508712768555
+      },
+      {
+        "sample": "sample-3",
+        "position": 15,
+        "token": 19908,
+        "logprob": -13.48171615600586
+      },
+      {
+        "sample": "sample-3",
+        "position": 16,
+        "token": 5184,
+        "logprob": -15.528889656066895
+      },
+      {
+        "sample": "sample-3",
+        "position": 17,
+        "token": 19750,
+        "logprob": -15.062385559082031
+      },
+      {
+        "sample": "sample-3",
+        "position": 18,
+        "token": 1423,
+        "logprob": -8.125994682312012
+      },
+      {
+        "sample": "sample-3",
+        "position": 19,
+        "token": 18129,
+        "logprob": -14.949525833129883
+      },
+      {
+        "sample": "sample-3",
+        "position": 20,
+        "token": 6070,
+        "logprob": -11.668798446655273
+      },
+      {
+        "sample": "sample-3",
+        "position": 21,
+        "token": 404,
+        "logprob": -11.958196640014648
+      },
+      {
+        "sample": "sample-3",
+        "position": 22,
+        "token": 7818,
+        "logprob": -13.139598846435547
+      },
+      {
+        "sample": "sample-3",
+        "position": 23,
+        "token": 2823,
+        "logprob": -12.610527038574219
+      },
+      {
+        "sample": "sample-3",
+        "position": 24,
+        "token": 4554,
+        "logprob": -14.203042030334473
+      },
+      {
+        "sample": "sample-3",
+        "position": 25,
+        "token": 10825,
+        "logprob": -13.077502250671387
+      },
+      {
+        "sample": "sample-3",
+        "position": 26,
+        "token": 9094,
+        "logprob": -16.10616683959961
+      },
+      {
+        "sample": "sample-3",
+        "position": 27,
+        "token": 9312,
+        "logprob": -7.972499847412109
+      },
+      {
+        "sample": "sample-3",
+        "position": 28,
+        "token": 1479,
+        "logprob": -13.117186546325684
+      },
+      {
+        "sample": "sample-3",
+        "position": 29,
+        "token": 14810,
+        "logprob": -11.729253768920898
+      },
+      {
+        "sample": "sample-3",
+        "position": 30,
+        "token": 13374,
+        "logprob": -13.99345874786377
+      },
+      {
+        "sample": "sample-3",
+        "position": 31,
+        "token": 16464,
+        "logprob": -13.7575101852417
+      },
+      {
+        "sample": "sample-3",
+        "position": 32,
+        "token": 13014,
+        "logprob": -12.59119987487793
+      },
+      {
+        "sample": "sample-3",
+        "position": 33,
+        "token": 16861,
+        "logprob": -12.337559700012207
+      },
+      {
+        "sample": "sample-3",
+        "position": 34,
+        "token": 12461,
+        "logprob": -13.25028133392334
+      },
+      {
+        "sample": "sample-3",
+        "position": 35,
+        "token": 2687,
+        "logprob": -15.468500137329102
+      },
+      {
+        "sample": "sample-3",
+        "position": 36,
+        "token": 19355,
+        "logprob": -22.178302764892578
+      },
+      {
+        "sample": "sample-3",
+        "position": 37,
+        "token": 5874,
+        "logprob": -10.592151641845703
+      },
+      {
+        "sample": "sample-3",
+        "position": 38,
+        "token": 10439,
+        "logprob": -10.88692569732666
+      },
+      {
+        "sample": "sample-3",
+        "position": 39,
+        "token": 4840,
+        "logprob": -10.244351387023926
+      },
+      {
+        "sample": "sample-3",
+        "position": 40,
+        "token": 6250,
+        "logprob": -11.481199264526367
+      },
+      {
+        "sample": "sample-3",
+        "position": 41,
+        "token": 15440,
+        "logprob": -11.281557083129883
+      },
+      {
+        "sample": "sample-3",
+        "position": 42,
+        "token": 8485,
+        "logprob": -11.849430084228516
+      },
+      {
+        "sample": "sample-3",
+        "position": 43,
+        "token": 14054,
+        "logprob": -14.325777053833008
+      },
+      {
+        "sample": "sample-3",
+        "position": 44,
+        "token": 17040,
+        "logprob": -13.61703872680664
+      },
+      {
+        "sample": "sample-3",
+        "position": 45,
+        "token": 17994,
+        "logprob": -14.171136856079102
+      },
+      {
+        "sample": "sample-3",
+        "position": 46,
+        "token": 15120,
+        "logprob": -13.260976791381836
+      },
+      {
+        "sample": "sample-3",
+        "position": 47,
+        "token": 783,
+        "logprob": -7.821908950805664
+      },
+      {
+        "sample": "sample-4",
+        "position": 1,
+        "token": 4026,
+        "logprob": -13.41010570526123
+      },
+      {
+        "sample": "sample-4",
+        "position": 2,
+        "token": 18460,
+        "logprob": -15.093744277954102
+      },
+      {
+        "sample": "sample-4",
+        "position": 3,
+        "token": 15527,
+        "logprob": -10.387672424316406
+      },
+      {
+        "sample": "sample-4",
+        "position": 4,
+        "token": 19313,
+        "logprob": -16.05421257019043
+      },
+      {
+        "sample": "sample-4",
+        "position": 5,
+        "token": 7805,
+        "logprob": -12.001431465148926
+      },
+      {
+        "sample": "sample-4",
+        "position": 6,
+        "token": 9786,
+        "logprob": -12.28420352935791
+      },
+      {
+        "sample": "sample-4",
+        "position": 7,
+        "token": 822,
+        "logprob": -10.951803207397461
+      },
+      {
+        "sample": "sample-4",
+        "position": 8,
+        "token": 8139,
+        "logprob": -13.270975112915039
+      },
+      {
+        "sample": "sample-4",
+        "position": 9,
+        "token": 18855,
+        "logprob": -10.163570404052734
+      },
+      {
+        "sample": "sample-4",
+        "position": 10,
+        "token": 5328,
+        "logprob": -9.279245376586914
+      },
+      {
+        "sample": "sample-4",
+        "position": 11,
+        "token": 10468,
+        "logprob": -13.315455436706543
+      },
+      {
+        "sample": "sample-4",
+        "position": 12,
+        "token": 15013,
+        "logprob": -16.492313385009766
+      },
+      {
+        "sample": "sample-4",
+        "position": 13,
+        "token": 5411,
+        "logprob": -12.165989875793457
+      },
+      {
+        "sample": "sample-4",
+        "position": 14,
+        "token": 11640,
+        "logprob": -15.855892181396484
+      },
+      {
+        "sample": "sample-4",
+        "position": 15,
+        "token": 15239,
+        "logprob": -15.808860778808594
+      },
+      {
+        "sample": "sample-4",
+        "position": 16,
+        "token": 2641,
+        "logprob": -10.223991394042969
+      },
+      {
+        "sample": "sample-4",
+        "position": 17,
+        "token": 18263,
+        "logprob": -13.967134475708008
+      },
+      {
+        "sample": "sample-4",
+        "position": 18,
+        "token": 7329,
+        "logprob": -14.855826377868652
+      },
+      {
+        "sample": "sample-4",
+        "position": 19,
+        "token": 12064,
+        "logprob": -17.72075653076172
+      },
+      {
+        "sample": "sample-4",
+        "position": 20,
+        "token": 5428,
+        "logprob": -8.858514785766602
+      },
+      {
+        "sample": "sample-4",
+        "position": 21,
+        "token": 12229,
+        "logprob": -13.044174194335938
+      },
+      {
+        "sample": "sample-4",
+        "position": 22,
+        "token": 14787,
+        "logprob": -11.729592323303223
+      },
+      {
+        "sample": "sample-4",
+        "position": 23,
+        "token": 1285,
+        "logprob": -13.105903625488281
+      },
+      {
+        "sample": "sample-4",
+        "position": 24,
+        "token": 1191,
+        "logprob": -13.693652153015137
+      },
+      {
+        "sample": "sample-4",
+        "position": 25,
+        "token": 13877,
+        "logprob": -16.864328384399414
+      },
+      {
+        "sample": "sample-4",
+        "position": 26,
+        "token": 15968,
+        "logprob": -11.069511413574219
+      },
+      {
+        "sample": "sample-4",
+        "position": 27,
+        "token": 1137,
+        "logprob": -8.776036262512207
+      },
+      {
+        "sample": "sample-4",
+        "position": 28,
+        "token": 3805,
+        "logprob": -15.755650520324707
+      },
+      {
+        "sample": "sample-4",
+        "position": 29,
+        "token": 16583,
+        "logprob": -11.491783142089844
+      },
+      {
+        "sample": "sample-4",
+        "position": 30,
+        "token": 1768,
+        "logprob": -10.124603271484375
+      },
+      {
+        "sample": "sample-4",
+        "position": 31,
+        "token": 8614,
+        "logprob": -13.178993225097656
+      },
+      {
+        "sample": "sample-4",
+        "position": 32,
+        "token": 13608,
+        "logprob": -13.506429672241211
+      },
+      {
+        "sample": "sample-4",
+        "position": 33,
+        "token": 10880,
+        "logprob": -13.22845458984375
+      },
+      {
+        "sample": "sample-4",
+        "position": 34,
+        "token": 18591,
+        "logprob": -12.609888076782227
+      },
+      {
+        "sample": "sample-4",
+        "position": 35,
+        "token": 1169,
+        "logprob": -12.83202075958252
+      },
+      {
+        "sample": "sample-4",
+        "position": 36,
+        "token": 9459,
+        "logprob": -15.168411254882812
+      },
+      {
+        "sample": "sample-4",
+        "position": 37,
+        "token": 18619,
+        "logprob": -12.666080474853516
+      },
+      {
+        "sample": "sample-4",
+        "position": 38,
+        "token": 7958,
+        "logprob": -14.025716781616211
+      },
+      {
+        "sample": "sample-4",
+        "position": 39,
+        "token": 18573,
+        "logprob": -14.941699028015137
+      },
+      {
+        "sample": "sample-4",
+        "position": 40,
+        "token": 3238,
+        "logprob": -10.588129043579102
+      },
+      {
+        "sample": "sample-4",
+        "position": 41,
+        "token": 14712,
+        "logprob": -11.991467475891113
+      },
+      {
+        "sample": "sample-4",
+        "position": 42,
+        "token": 8437,
+        "logprob": -13.255681991577148
+      },
+      {
+        "sample": "sample-4",
+        "position": 43,
+        "token": 3574,
+        "logprob": -14.62411880493164
+      },
+      {
+        "sample": "sample-4",
+        "position": 44,
+        "token": 10286,
+        "logprob": -11.56795597076416
+      },
+      {
+        "sample": "sample-4",
+        "position": 45,
+        "token": 12121,
+        "logprob": -10.386382102966309
+      },
+      {
+        "sample": "sample-4",
+        "position": 46,
+        "token": 4105,
+        "logprob": -9.928581237792969
+      },
+      {
+        "sample": "sample-4",
+        "position": 47,
+        "token": 2575,
+        "logprob": -10.403928756713867
+      }
+    ]
+  },
+  "actual_config": {
+    "gpu": {
+      "side": "gpu",
+      "model": "Qwen/Qwen3.5-9B-Base",
+      "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+      "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+      "collector_sha256": "26130c49e70c74c2b8ad918c0b2eae64555aa27aa87f9df51f4ec34ca68ef0fe",
+      "max_context": 128,
+      "quantization": null,
+      "batch_size": 1,
+      "score_dtype": "float32",
+      "normalization": "full vocabulary log_softmax before sampling/penalties",
+      "positions": "zero-based target t predicted at t-1; no BOS/template",
+      "torch": "2.10.0+cu128",
+      "vllm": "0.19.1",
+      "device": {
+        "count": 1,
+        "name": "NVIDIA H20Z",
+        "capability": [
+          9,
+          0
+        ]
+      },
+      "requested_engine_options": {
+        "dtype": "bfloat16",
+        "quantization": null,
+        "tensor_parallel_size": 1,
+        "pipeline_parallel_size": 1,
+        "max_model_len": 128,
+        "enforce_eager": true,
+        "compilation_config": 0,
+        "enable_prefix_caching": false,
+        "enable_chunked_prefill": false,
+        "max_num_seqs": 1,
+        "max_num_batched_tokens": 128,
+        "gpu_memory_utilization": 0.75,
+        "skip_tokenizer_init": true,
+        "trust_remote_code": false,
+        "seed": 0,
+        "logprobs_mode": "raw_logprobs",
+        "limit_mm_per_prompt": {
+          "image": 0,
+          "video": 0
+        },
+        "generation_config": "vllm"
+      },
+      "elapsed_seconds": 33.66272306442261
+    },
+    "npu": {
+      "side": "npu",
+      "model": "Qwen/Qwen3.5-9B-Base",
+      "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+      "input_sha256": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+      "collector_sha256": "26130c49e70c74c2b8ad918c0b2eae64555aa27aa87f9df51f4ec34ca68ef0fe",
+      "max_context": 128,
+      "quantization": null,
+      "batch_size": 1,
+      "score_dtype": "float32",
+      "normalization": "full vocabulary log_softmax before sampling/penalties",
+      "positions": "zero-based target t predicted at t-1; no BOS/template",
+      "torch": "2.9.0+cpu",
+      "transformers": "5.3.0",
+      "torch_npu": "2.9.0.post2",
+      "device": {
+        "count": 1,
+        "logical": "npu:0",
+        "name": "Ascend910_9382",
+        "physical_chip": 13
+      },
+      "attention_implementation": "eager",
+      "eager": true,
+      "use_cache": true,
+      "parameter_dtypes": {
+        "torch.bfloat16": 760
+      },
+      "elapsed_seconds": 17.70806384086609
+    }
+  },
+  "task_messages": [
+    "在 <TASK_DIR> 完成以下任务：在 resources.json 指定的 GPU/vLLM 和 NPU/Transformers 环境，用同一份 Qwen3.5-9B-Base 对 inputs.json 的所有目标位置完成一次新的原生 prefill 评分比较。BF16、无量化、单设备、eager、最大上下文128；比较完整词表归一化的 FP32 原始 logprob，不含采样和惩罚变换。输出总体及分样本的双方 NLL、NLL 绝对差、目标 logprob MAE/P99/最大误差及原始坐标、覆盖率和实际配置。保留可复现代码、原生分数及终态运行证据。无需判断精度是否可接受或修复库。资源与预算见 resources.json。本地仅在本任务目录读写；远程新增文件仅在各 work_root 内，资源声明的运行缓存及短 IPC 目录除外。只使用任务声明设备，不修改共享环境，不下载或传输模型，不终止其他任务。不读取仓库历史、其他实验目录、旧采集器或会话日志；不委派其他 agent。可用 skills 见本目录 skills.json，按需使用。"
+  ],
+  "raw_usage": [
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc5540f2b087d09bb228001083376f",
+      "usage": {
+        "input_tokens": 84797,
+        "cached_input_tokens": 83328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 133,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 84930
+      },
+      "standard_usd_estimate": 0.0126008,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc554996ac87d0955f9961e34b13c3",
+      "usage": {
+        "input_tokens": 88064,
+        "cached_input_tokens": 84736,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 107,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 88171
+      },
+      "standard_usd_estimate": 0.0161996,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55538f9087d0b77ad333b834adb6",
+      "usage": {
+        "input_tokens": 90679,
+        "cached_input_tokens": 87936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 312,
+        "reasoning_output_tokens": 46,
+        "total_tokens": 90991
+      },
+      "standard_usd_estimate": 0.0173996,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc555fb0b087d0bf12ffd3f675c991",
+      "usage": {
+        "input_tokens": 97834,
+        "cached_input_tokens": 90752,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 596,
+        "reasoning_output_tokens": 46,
+        "total_tokens": 98430
+      },
+      "standard_usd_estimate": 0.0291992,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55731f5887d098415f42da42bf6d",
+      "usage": {
+        "input_tokens": 98477,
+        "cached_input_tokens": 98304,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 73,
+        "reasoning_output_tokens": 34,
+        "total_tokens": 98550
+      },
+      "standard_usd_estimate": 0.010906400000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc557f090c87d0abdbb0df57fbea86",
+      "usage": {
+        "input_tokens": 107098,
+        "cached_input_tokens": 98432,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 431,
+        "reasoning_output_tokens": 33,
+        "total_tokens": 107529
+      },
+      "standard_usd_estimate": 0.0314852,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc5593f3f887d0ab37105c1bc6112e",
+      "usage": {
+        "input_tokens": 107577,
+        "cached_input_tokens": 107392,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 54,
+        "reasoning_output_tokens": 15,
+        "total_tokens": 107631
+      },
+      "standard_usd_estimate": 0.011649200000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc559c02ac87d092fc7ec2bb52c505",
+      "usage": {
+        "input_tokens": 109140,
+        "cached_input_tokens": 107392,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 503,
+        "reasoning_output_tokens": 107,
+        "total_tokens": 109643
+      },
+      "standard_usd_estimate": 0.0192652,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55ab4db487d08b37562c6d959cd5",
+      "usage": {
+        "input_tokens": 110421,
+        "cached_input_tokens": 109440,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 345,
+        "reasoning_output_tokens": 108,
+        "total_tokens": 110766
+      },
+      "standard_usd_estimate": 0.016356000000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55b8a51887d0b0d503093f11a652",
+      "usage": {
+        "input_tokens": 110813,
+        "cached_input_tokens": 110592,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 110850
+      },
+      "standard_usd_estimate": 0.011871200000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55c4f43887d0a6de3a91ef82c618",
+      "usage": {
+        "input_tokens": 112928,
+        "cached_input_tokens": 110720,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2697,
+        "reasoning_output_tokens": 184,
+        "total_tokens": 115625
+      },
+      "standard_usd_estimate": 0.042458,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55f4018087d08b7f3587367aa858",
+      "usage": {
+        "input_tokens": 115672,
+        "cached_input_tokens": 115456,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 178,
+        "reasoning_output_tokens": 81,
+        "total_tokens": 115850
+      },
+      "standard_usd_estimate": 0.0137576,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc55fe6dd887d0963d512f4496830b",
+      "usage": {
+        "input_tokens": 116077,
+        "cached_input_tokens": 115712,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 143,
+        "reasoning_output_tokens": 15,
+        "total_tokens": 116220
+      },
+      "standard_usd_estimate": 0.0137312,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc560ca19487d0aefb89ddc2382872",
+      "usage": {
+        "input_tokens": 116269,
+        "cached_input_tokens": 116096,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 324,
+        "reasoning_output_tokens": 33,
+        "total_tokens": 116593
+      },
+      "standard_usd_estimate": 0.0151956,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc561d440887d0b7573c7d0b60e90a",
+      "usage": {
+        "input_tokens": 116640,
+        "cached_input_tokens": 116352,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 90,
+        "reasoning_output_tokens": 51,
+        "total_tokens": 116730
+      },
+      "standard_usd_estimate": 0.0131112,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc56280fc487d08d5c85aeea9138c5",
+      "usage": {
+        "input_tokens": 116891,
+        "cached_input_tokens": 116608,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 285,
+        "reasoning_output_tokens": 25,
+        "total_tokens": 117176
+      },
+      "standard_usd_estimate": 0.015076800000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc56360c3c87d0a281b39c10d954ff",
+      "usage": {
+        "input_tokens": 117223,
+        "cached_input_tokens": 116992,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 117260
+      },
+      "standard_usd_estimate": 0.012531200000000001,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc563ec39487d09e1e2c0c1ac22ef3",
+      "usage": {
+        "input_tokens": 125114,
+        "cached_input_tokens": 117120,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 72,
+        "reasoning_output_tokens": 33,
+        "total_tokens": 125186
+      },
+      "standard_usd_estimate": 0.028419999999999997,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc5645922887d08ece1846857d7f5f",
+      "usage": {
+        "input_tokens": 125950,
+        "cached_input_tokens": 125056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 633,
+        "reasoning_output_tokens": 122,
+        "total_tokens": 126583
+      },
+      "standard_usd_estimate": 0.0206236,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc5657c82c87d0b337982fc678a5e0",
+      "usage": {
+        "input_tokens": 126628,
+        "cached_input_tokens": 126464,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 95,
+        "reasoning_output_tokens": 56,
+        "total_tokens": 126723
+      },
+      "standard_usd_estimate": 0.013924400000000002,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc56647c4c87d0a4884b10b4a2794b",
+      "usage": {
+        "input_tokens": 127055,
+        "cached_input_tokens": 126592,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 206,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 127261
+      },
+      "standard_usd_estimate": 0.0156452,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc566fdd1487d0b5d38410e26796ba",
+      "usage": {
+        "input_tokens": 136771,
+        "cached_input_tokens": 127104,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 140,
+        "reasoning_output_tokens": 13,
+        "total_tokens": 136911
+      },
+      "standard_usd_estimate": 0.0334444,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc5678cc9887d085e60c6741d5459c",
+      "usage": {
+        "input_tokens": 139061,
+        "cached_input_tokens": 136704,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2672,
+        "reasoning_output_tokens": 133,
+        "total_tokens": 141733
+      },
+      "standard_usd_estimate": 0.0451044,
+      "long_context": false
+    },
+    {
+      "response_id": "resp_0316fddcaf36d6a1016adc56b59cac87d085bcd3965c1d89b8",
+      "usage": {
+        "input_tokens": 143601,
+        "cached_input_tokens": 141568,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1757,
+        "reasoning_output_tokens": 435,
+        "total_tokens": 145358
+      },
+      "standard_usd_estimate": 0.0357928,
+      "long_context": false
+    }
+  ],
+  "executed_commands": [
+    {
+      "timestamp": "2026-10-24T06:50:46.162Z",
+      "arguments": {
+        "cmd": "pwd; ls -la; cat resources.json; cat inputs.json; cat skills.json",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 12000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:50:56.141Z",
+      "arguments": {
+        "cmd": "cat skills/precision-compare/SKILL.md; cat gpu-execution.json; cat gpu-options.json; cat npu-execution.json; ls skills/precision-compare/references; ls skills/precision-compare/scripts",
+        "max_output_tokens": 14000,
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c"
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:51:07.794Z",
+      "arguments": {
+        "cmd": "cat skills/precision-compare/references/inference.md; cat skills/precision-compare/references/comparison.md; python3 -B skills/precision-compare/scripts/tool_help.py inference_capture --full; python3 -B skills/precision-compare/scripts/tool_help.py workflow --full; python3 -B skills/precision-compare/scripts/tool_help.py evidence_bundle --full",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 15500
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:51:24.233Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport concurrent.futures,subprocess,json\nr=json.load(open('resources.json'))\ncommands={\n'gpu': r['gpu']['python']+\" -B - <<'END'\\nimport importlib.util,pathlib\\np=pathlib.Path(importlib.util.find_spec('vllm').origin).parent\\nfor rel,terms in [('sampling_params.py',['prompt_logprobs','max_tokens']),('v1/worker/gpu_model_runner.py',['prompt_logprobs','logprobs_mode']),('v1/sample/sampler.py',['log_softmax','float32','raw_logprobs'])]:\\n f=p/rel; lines=f.read_text().splitlines(); print(str(f))\\n for i,l in enumerate(lines):\\n  if any(t in l for t in terms): print('\\\\n'.join(f'{j+1}: {lines[j]}' for j in range(max(0,i-3),min(len(lines),i+6))))\\nEND\",\n'npu': r['npu']['python']+\" -B - <<'END'\\nimport importlib.metadata as m,importlib.util,pathlib,json\\nfor n in ['torch','torch-npu','transformers']: print(n,m.version(n))\\np=pathlib.Path(importlib.util.find_spec('transformers').origin).parent/'models/qwen3_5/modeling_qwen3_5.py'\\nprint('MODEL',p)\\nls=p.read_text().splitlines()\\nfor i,l in enumerate(ls):\\n if any(t in l for t in ['class Qwen3_5For','logits_to_keep','class Qwen3_5TextModel']): print('\\\\n'.join(f'{j+1}: {ls[j]}' for j in range(max(0,i-2),min(len(ls),i+12))))\\nEND\"}\ndef run(s):\n x=subprocess.run(['ssh',r[s]['ssh'],commands[s]],capture_output=True,text=True,timeout=45); return s,x.returncode,x.stdout,x.stderr\nwith concurrent.futures.ThreadPoolExecutor() as ex:\n for out in ex.map(run,commands): print(out)\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 10000,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:51:53.639Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport subprocess,concurrent.futures,json,shlex\nr=json.load(open('resources.json'))\ngcode=\"import importlib.util,pathlib; p=pathlib.Path(importlib.util.find_spec('vllm').origin).parent; print((p/'v1/worker/gpu_model_runner.py').read_text().split('    def _get_prompt_logprobs_dict(')[1].split('    def _get_nans_in_logits')[0]); print((p/'v1/sample/sampler.py').read_text()[0:1000])\"\nncode=\"import importlib.metadata as m,importlib.util,pathlib; print([(n,m.version(n)) for n in ['torch','torch-npu','transformers']]); p=pathlib.Path(importlib.util.find_spec('transformers').origin).parent/'models/qwen3_5/modeling_qwen3_5.py'; s=p.read_text(); print(s[s.index('class Qwen3_5ForConditionalGeneration'):][-13000:])\"\ndef run(side,code):\n cmd=shlex.join([r[side]['python'],'-B','-c',code]); x=subprocess.run(['ssh',r[side]['ssh'],cmd],capture_output=True,text=True,timeout=40); return side,x.returncode,x.stdout,x.stderr\nwith concurrent.futures.ThreadPoolExecutor() as e:\n for x in e.map(lambda z:run(*z),[('gpu',gcode),('npu',ncode)]): print(x)\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 9000,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:52:23.294Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport subprocess,base64,shlex\ncode='import importlib.metadata as m,importlib.util,pathlib; print([(n,m.version(n)) for n in [\"torch\",\"torch-npu\",\"transformers\"]]); p=pathlib.Path(importlib.util.find_spec(\"transformers\").origin).parent/\"models/qwen3_5/modeling_qwen3_5.py\"; s=p.read_text(); print(s[s.index(\"class Qwen3_5ForConditionalGeneration\"):][:9000])'\nenc=base64.b64encode(code.encode()).decode()\ncmd='/usr/local/python3.12.13/bin/python3 -B -c '+shlex.quote('exec(__import__(\"base64\").b64decode(\"'+enc+'\"))')\nx=subprocess.run(['ssh','modelmate','bash -lc '+shlex.quote(cmd)],capture_output=True,text=True,timeout=30);print(x.returncode,x.stdout,x.stderr)\nPY\npython3 -B skills/precision-compare/scripts/tool_help.py score_metrics group_metrics --full",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 6500,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:52:37.133Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport subprocess\ncode='import importlib.metadata as m,importlib.util,pathlib\\nprint([(n,m.version(n)) for n in [\"torch\",\"torch-npu\",\"transformers\"]])\\np=pathlib.Path(importlib.util.find_spec(\"transformers\").origin).parent/\"models/qwen3_5/modeling_qwen3_5.py\"\\ns=p.read_text(); print(s[s.index(\"class Qwen3_5ForConditionalGeneration\"):][:9000])\\n'\nx=subprocess.run(['ssh','modelmate','/usr/local/python3.12.13/bin/python3 -B -'],input=code,capture_output=True,text=True,timeout=30);print(x.returncode,x.stdout,x.stderr)\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 7000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:53:35.561Z",
+      "arguments": {
+        "cmd": "cat > collect.py <<'PY'\n\"\"\"Native prefill target scores; run only via the declared environment launcher.\"\"\"\nimport argparse, collections, hashlib, importlib.metadata, inspect, json, math, os, pathlib, time\np=argparse.ArgumentParser(); p.add_argument('--side',required=True); p.add_argument('--model',required=True); p.add_argument('--inputs',required=True); p.add_argument('--output',required=True); p.add_argument('--options'); a=p.parse_args()\nout=pathlib.Path(a.output); out.mkdir(parents=True,exist_ok=True)\ndef save(name,x): (out/name).write_text(json.dumps(x,indent=2,default=str,allow_nan=False)+'\\n')\ndef digest(path): return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()\nstart=time.time(); data=json.load(open(a.inputs)); rows=[]; events=[]\nimport torch\nactual={'side':a.side,'model_path':a.model,'model':data['model'],'revision':data['revision'],'input_sha256':digest(a.inputs),'collector_sha256':digest(__file__),'max_context':128,'quantization':None,'batch_size':1,'score_dtype':'float32','normalization':'full vocabulary log_softmax before sampling/penalties','positions':'zero-based target t predicted at t-1; no BOS/template','env':{k:v for k,v in os.environ.items() if k.startswith(('CUDA_VISIBLE','ASCEND_RT_VISIBLE','VLLM_','HF_HUB_OFFLINE','TRANSFORMERS_OFFLINE'))},'torch':torch.__version__}\ndef add(s,t,value):\n assert math.isfinite(value) and value<=0\n rows.append({'sample_id':s['id'],'target_position':t,'prediction_position':t-1,'target_token_id':s['input_ids'][t],'logprob':value})\nif a.side=='gpu':\n from vllm import LLM,SamplingParams\n from vllm.v1.sample.sampler import Sampler\n actual['vllm']=importlib.metadata.version('vllm')\n options=json.load(open(a.options)); llm=LLM(model=a.model,**options)\n cfg=llm.llm_engine.vllm_config\n actual['requested_engine_options']=options\n actual['engine_config']={k:str(getattr(cfg,k)) for k in ['model_config','cache_config','parallel_config','scheduler_config','compilation_config','attention_config']}\n actual['device']={'count':torch.cuda.device_count(),'name':torch.cuda.get_device_name(0),'capability':torch.cuda.get_device_capability(0)}\n assert torch.cuda.device_count()==1\n actual['native_score_implementation']=inspect.getsource(Sampler.compute_logprobs)\n (out/'native_prompt_scoring.txt').write_text(inspect.getsource(type(llm.llm_engine.model_executor.driver_worker.worker.model_runner)._get_prompt_logprobs_dict) if hasattr(llm.llm_engine.model_executor,'driver_worker') else 'See installed vllm/v1/worker/gpu_model_runner.py::_get_prompt_logprobs_dict; compute_logprobs implementation recorded in actual.json')\n sp=SamplingParams(temperature=0,max_tokens=1,prompt_logprobs=0,detokenize=False,top_p=1,top_k=-1,repetition_penalty=1,presence_penalty=0,frequency_penalty=0)\n actual['sampling_api_parameters']=str(sp); actual['extra_output']='API requires max_tokens>=1: one greedy output per sample is discarded; only raw prompt scores compared; no decode forward'\n for s in data['samples']:\n  assert len(s['input_ids'])<=128\n  result=llm.generate([{'prompt_token_ids':s['input_ids']}],sp,use_tqdm=False)[0]\n  assert result.finished and list(result.prompt_token_ids)==s['input_ids']\n  assert len(result.prompt_logprobs)==len(s['input_ids']) and result.prompt_logprobs[0] is None\n  native=[]\n  for t in s['target_positions']:\n   lp=result.prompt_logprobs[t][s['input_ids'][t]]; add(s,t,float(lp.logprob)); native.append({'position':t,'token_id':s['input_ids'][t],'logprob':float(lp.logprob),'rank':lp.rank})\n  save(s['id']+'-native.json',native)\n  events.append({'sample_id':s['id'],'stage':'prefill','input_ids':s['input_ids'],'prompt_logprob_length':len(result.prompt_logprobs),'finished':result.finished,'output_token_ids_discarded':result.outputs[0].token_ids})\nelse:\n import torch_npu\n from transformers import Qwen3_5ForConditionalGeneration\n torch.npu.set_device('npu:0'); assert torch.npu.device_count()==1\n model=Qwen3_5ForConditionalGeneration.from_pretrained(a.model,dtype=torch.bfloat16,attn_implementation='eager',local_files_only=True,trust_remote_code=False).to('npu:0').eval()\n actual.update({'transformers':importlib.metadata.version('transformers'),'torch_npu':importlib.metadata.version('torch-npu'),'device':{'count':torch.npu.device_count(),'logical':'npu:0','name':torch.npu.get_device_name(0),'physical_chip':13},'attention_implementation':model.config.text_config._attn_implementation,'eager':True,'use_cache':True,'parameter_dtypes':dict(collections.Counter(str(x.dtype) for x in model.parameters())),'model_config':model.config.to_dict(),'native_forward':inspect.getsource(type(model).forward)})\n assert actual['attention_implementation']=='eager'\n assert all(x.dtype==torch.bfloat16 for x in model.parameters() if x.is_floating_point())\n with torch.inference_mode():\n  for s in data['samples']:\n   ids=torch.tensor([s['input_ids']],dtype=torch.long,device='npu:0'); assert ids.shape[1]<=128\n   result=model(input_ids=ids,attention_mask=torch.ones_like(ids),use_cache=True,logits_to_keep=0,return_dict=True)\n   logits=result.logits[0]; assert logits.shape[0]==len(s['input_ids'])\n   logp=torch.log_softmax(logits,dim=-1,dtype=torch.float32)\n   normerr=float(torch.logsumexp(logp,dim=-1).abs().max().item())\n   native=[]\n   for t in s['target_positions']:\n    v=float(logp[t-1,s['input_ids'][t]].item()); add(s,t,v); native.append({'position':t,'prediction_position':t-1,'token_id':s['input_ids'][t],'logprob':v})\n   save(s['id']+'-native.json',native)\n   events.append({'sample_id':s['id'],'stage':'prefill','input_ids':s['input_ids'],'logits_shape':list(logits.shape),'native_logits_dtype':str(logits.dtype),'logprobs_dtype':str(logp.dtype),'logsumexp_max_abs':normerr,'cache_class':type(result.past_key_values).__name__})\n   del result,logits,logp\n torch.npu.synchronize()\nactual['elapsed_seconds']=time.time()-start\nsave('scores.json',rows); save('actual.json',actual); save('events.json',events)\nsave('completion.json',{'status':'completed','side':a.side,'sample_count':len(events),'target_count':len(rows),'elapsed_seconds':time.time()-start,'files':{f.name:{'sha256':digest(f),'bytes':f.stat().st_size} for f in out.iterdir() if f.is_file()}})\nprint(json.dumps({'status':'completed','side':a.side,'targets':len(rows),'output':str(out)}),flush=True)\nPY\ncat > execute.py <<'PY'\n\"\"\"Stage only task-owned code and inputs; concurrently invoke declared launchers.\"\"\"\nimport base64,concurrent.futures,hashlib,json,pathlib,shlex,subprocess,time\nROOT=pathlib.Path(__file__).resolve().parent\nR=json.loads((ROOT/'resources.json').read_text())\ndef ssh_python(side,code,timeout):\n r=R[side]\n return subprocess.run(['ssh',r['ssh'],r['python']+' -B -'],input=code,text=True,capture_output=True,timeout=timeout)\ndef run(side):\n r=R[side]; root=r['work_root']; files=['collect.py','inputs.json',r['execution']]+([r['native_options']] if 'native_options' in r else [])\n blobs={n:base64.b64encode((ROOT/n).read_bytes()).decode() for n in files}\n stage='import pathlib,base64\\nr=pathlib.Path('+repr(root)+'); r.mkdir(parents=True,exist_ok=True)\\n(r/\"tmp\").mkdir(exist_ok=True)\\nfor n,b in '+repr(blobs)+'.items():\\n p=r/n\\n if p.exists():\\n  assert p.read_bytes()==base64.b64decode(b), \"existing different task file\"\\n else: p.write_bytes(base64.b64decode(b))\\nprint(\"staged\")\\n'\n x=ssh_python(side,stage,40)\n (ROOT/(side+'-stage.json')).write_text(json.dumps({'returncode':x.returncode,'stdout':x.stdout,'stderr':x.stderr,'payload_bytes':sum((ROOT/n).stat().st_size for n in files)},indent=2))\n if x.returncode: return side,'stage failed'\n argv=r['launcher_argv']+['--execution',root+'/'+r['execution'],'--output-root',root+'/runs','--side',side,'--task','prefill','--timeout','480','--cwd',root,'--','{cwd}/collect.py','--side',side,'--model',r['model_path'],'--inputs',root+'/inputs.json','--output','{run}/capture']\n argv[argv.index('{cwd}/collect.py')]=root+'/collect.py'\n if 'native_options' in r: argv+=['--options',root+'/'+r['native_options']]\n (ROOT/(side+'-launch.json')).write_text(json.dumps({'argv':argv,'launcher_sha256':r['launcher_sha256'],'wall_start':time.time()},indent=2))\n code='import subprocess,sys\\na='+repr(argv)+'\\nx=subprocess.run(a)\\nsys.exit(x.returncode)\\n'\n x=ssh_python(side,code,810)\n (ROOT/(side+'-terminal.stdout')).write_text(x.stdout); (ROOT/(side+'-terminal.stderr')).write_text(x.stderr)\n (ROOT/(side+'-transport.json')).write_text(json.dumps({'returncode':x.returncode,'wall_end':time.time()},indent=2))\n return side,x.returncode,x.stdout[-10000:],x.stderr[-2000:]\nif __name__=='__main__':\n with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:\n  for result in ex.map(run,['gpu','npu']): print(result,flush=True)\nPY\npython3 -B execute.py",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:53:47.900Z",
+      "arguments": {
+        "cmd": "ls -l gpu-stage.json npu-stage.json gpu-launch.json npu-launch.json; cat gpu-stage.json npu-stage.json",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 2000,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:54:13.957Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport concurrent.futures,json,subprocess\nr=json.load(open('resources.json'))\ndef check(s):\n code='import pathlib\\nr=pathlib.Path('+repr(r[s]['work_root'])+')\\nfor p in sorted((r/\"runs\").glob(\"*\")):\\n print(p.name)\\n for f in p.iterdir():\\n  if f.is_file():\\n   print(f.name, f.stat().st_size)\\n   if f.name in [\"stderr.bin\",\"stdout.bin\",\"receipt.json\",\"result.json\"]: print(f.read_bytes()[-4000:].decode(errors=\"replace\"))\\n'\n x=subprocess.run(['ssh',r[s]['ssh'],r[s]['python']+' -B -'],input=code,text=True,capture_output=True,timeout=30);return s,x.stdout,x.stderr\nwith concurrent.futures.ThreadPoolExecutor() as e:\n for x in e.map(check,['gpu','npu']): print(x)\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 4000,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:54:41.512Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport concurrent.futures,json,subprocess\nr=json.load(open('resources.json'))\ndef check(s):\n code='import pathlib\\nr=pathlib.Path('+repr(r[s]['work_root'])+')\\nfor p in sorted((r/\"runs\").glob(\"*\")):\\n for n in [\"terminal.json\",\"job-terminal.json\",\"pods-terminal.json\"]:\\n  f=p/n\\n  if f.exists(): print(n, f.read_text()[:18000])\\n'\n x=subprocess.run(['ssh',r[s]['ssh'],r[s]['python']+' -B -'],input=code,text=True,capture_output=True,timeout=30);return s,x.stdout,x.stderr\nwith concurrent.futures.ThreadPoolExecutor() as e:\n for x in e.map(check,['gpu','npu']): print(x)\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 7000,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:55:15.932Z",
+      "arguments": {
+        "cmd": "cat > fetch_results.py <<'PY'\n\"\"\"Fetch small artifacts from completed native runs through the bundled tool.\"\"\"\nimport concurrent.futures,json,pathlib,sys\nROOT=pathlib.Path(__file__).resolve().parent\nsys.path.insert(0,str(ROOT/'skills/precision-compare/scripts'))\nfrom evidence_bundle import fetch\nR=json.loads((ROOT/'resources.json').read_text())\ndef run(side):\n r=R[side]; receipt=json.loads((ROOT/(side+'-terminal.stdout')).read_text())\n assert receipt['status']=='completed' and receipt['returncode']==0 and receipt['checks']['native_execution']=='completed'\n request={'transport':['ssh',r['ssh'],r['python']+' -I -'],'source_dir':r['work_root'],'include':['collect.py','inputs.json',r['execution'],'runs/*/*.json','runs/*/*.sh','runs/*/native/*/*.json','runs/*/native/*/*.bin','runs/*/native/*/capture/*']+([r['native_options']] if 'native_options' in r else [])}\n result=fetch(**request,output=ROOT/(side+'-evidence'),max_file_bytes=R['budget']['max_file_transfer_bytes'],max_expanded_bytes=R['budget']['max_total_transfer_bytes']//2,max_transfer_bytes=R['budget']['max_total_transfer_bytes']//2)\n (ROOT/(side+'-fetch.json')).write_text(json.dumps(result,indent=2)+'\\n'); return side,result\nif __name__=='__main__':\n with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:\n  for x in ex.map(run,['gpu','npu']): print(x)\nPY\npython3 -B fetch_results.py",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 3000,
+        "yield_time_ms": 1000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:55:41.062Z",
+      "arguments": {
+        "cmd": "python3 -B - <<'PY'\nimport pathlib,json\nfor side in ['gpu','npu']:\n root=pathlib.Path(side+'-evidence'); a=json.load(open(next(root.glob('runs/*/native/*/capture/actual.json')))); print(side,json.dumps(a,indent=2)[:14000]); print('EVENTS',next(root.glob('runs/*/native/*/capture/events.json')).read_text()[:2200]); print('STDERR',next(root.glob('runs/*/native/*/stderr.bin')).read_text()); print('COMMAND',next(root.glob('runs/*/native/*/command.json')).read_text()[:1000])\nPY",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 11000
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:55:50.265Z",
+      "arguments": {
+        "cmd": "rg -n 'backend|dtype|cache|attention|delta' gpu-evidence/runs/*/native/*/stdout.bin; cat gpu-evidence/runs/*/native/*/stderr.bin; ls gpu-evidence/runs/*/native/*; ls npu-evidence/runs/*/native/*",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "max_output_tokens": 4500
+      }
+    },
+    {
+      "timestamp": "2026-10-24T06:56:35.661Z",
+      "arguments": {
+        "cmd": "cat > compare.py <<'PY'\n\"\"\"Offline comparison. Run: python3 -B compare.py (creates a fresh compare run).\"\"\"\nimport datetime,hashlib,json,pathlib,struct,sys\nROOT=pathlib.Path(__file__).resolve().parent\nsys.path.insert(0,str(ROOT/'skills/precision-compare/scripts'))\nfrom score_metrics import reduce_scores\nfrom group_metrics import reduce_groups\nD=json.loads((ROOT/'inputs.json').read_text()); R=json.loads((ROOT/'resources.json').read_text())\ndef load(p): return json.loads(p.read_text())\ndef sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()\nexpected=[(s['id'],t,s['input_ids'][t]) for s in D['samples'] for t in s['target_positions']]\ngroups={s['id']:[c for c in expected if c[0]==s['id']] for s in D['samples']}\nmaps=[]; actual={}; evidence={}; events={}; receipts={}; budgets={}\nfor side in ['gpu','npu']:\n receipt=load(ROOT/(side+'-terminal.stdout')); receipts[side]=receipt\n assert receipt['status']=='completed' and receipt['returncode']==0\n assert receipt['checks']['native_execution']=='completed'\n assert receipt['checks']['resource_identity']==R[side]['prepared_checks']\n base=ROOT/(side+'-evidence'); caps=list(base.glob('runs/*/native/*/capture')); assert len(caps)==1; cap=caps[0]\n a=load(cap/'actual.json'); actual[side]=a; ev=load(cap/'events.json'); events[side]=ev\n assert a['input_sha256']==sha(ROOT/'inputs.json') and a['collector_sha256']==sha(ROOT/'collect.py')\n assert a['revision']==D['revision'] and a['model']==D['model'] and a['device']['count']==1\n assert a['score_dtype']=='float32' and a['max_context']==128 and a['quantization'] is None\n assert len(ev)==len(D['samples'])\n for s,e in zip(D['samples'],ev):\n  assert e['input_ids']==s['input_ids'] and e['sample_id']==s['id'] and e['stage']=='prefill'\n rows=load(cap/'scores.json'); m={}\n for x in rows:\n  c=(x['sample_id'],x['target_position'],x['target_token_id']); assert c not in m\n  assert x['prediction_position']==x['target_position']-1\n  assert struct.unpack('f',struct.pack('f',x['logprob']))[0]==x['logprob']\n  m[c]=x['logprob']\n assert set(m)==set(expected)\n maps.append(m)\n evidence[side]={'capture':str(cap.relative_to(ROOT)),'remote_native_run':receipt['run'],'export_index':str((base/'EXPORT.json').relative_to(ROOT)),'terminal_receipt':side+'-terminal.stdout'}\n cmd=load(cap.parent/'command.json'); budgets[side]={'native_attempts':1,'command_start':cmd['start'],'command_end':cmd['end'],'collector_seconds':a['elapsed_seconds'],'command_elapsed_seconds':(datetime.datetime.fromisoformat(cmd['end'])-datetime.datetime.fromisoformat(cmd['start'])).total_seconds()}\n assert budgets[side]['command_elapsed_seconds']<R['budget']['native_seconds_per_side']\nassert 'dtype=torch.bfloat16' in actual['gpu']['engine_config']['model_config']\nassert 'enforce_eager=True' in actual['gpu']['engine_config']['model_config']\nassert 'max_model_len=128' in actual['gpu']['engine_config']['model_config']\nassert actual['npu']['parameter_dtypes']=={'torch.bfloat16':760}\nassert actual['npu']['attention_implementation']=='eager'\nsummary=reduce_groups(expected,groups,reduce_scores,*maps)\nfor x in [summary['global'],*summary['groups'].values()]:\n x['coverage']['fraction']=x['coverage']['paired_count']/x['coverage']['expected_count']\n c=tuple(x['metrics']['max_coordinate']); x['max_error_detail']={'sample_id':c[0],'target_position':c[1],'prediction_position':c[1]-1,'target_token_id':c[2],'gpu_logprob':maps[0][c],'npu_logprob':maps[1][c]}\npaired=[{'sample_id':c[0],'target_position':c[1],'prediction_position':c[1]-1,'target_token_id':c[2],'gpu_logprob':maps[0][c],'npu_logprob':maps[1][c],'abs_error':abs(maps[0][c]-maps[1][c])} for c in expected]\ntransfer={s:load(ROOT/(s+'-fetch.json')) for s in ['gpu','npu']}\ntransfer['staged_payload_bytes']=sum(load(ROOT/(s+'-stage.json'))['payload_bytes'] for s in ['gpu','npu'])\ntransfer['artifact_transfer_bytes']=sum(transfer[s]['transfer_bytes'] for s in ['gpu','npu'])\nresult={'status':'completed','model':D['model'],'revision':D['revision'],'units':'natural log; NLL nats per target token','coordinate_order':['sample_id','zero_based_target_position','target_token_id'],'p99_method':'linear interpolation at 0.99*(N-1), absolute paired logprob errors','weighting':'all 140 targets equally; sample sizes 23,23,47,47','summary':summary,'paired_scores':paired,'actual_configurations':actual,'events':events,'evidence':evidence,'terminal_receipts':receipts,'budget_usage':budgets,'transfer':transfer,'notes':['Only prefill target scores; first input token has no preceding prediction and is not requested.','vLLM prompt_logprobs=0 retains each requested target after full-vocabulary FP32 normalization, regardless of target rank.','vLLM max_tokens=1 emits one discarded greedy token per sample; it is not compared and no subsequent decode forward is needed.','Transformers uses_cache=True, native Qwen3_5DynamicCache; independent prefill per sample.','Operational context limit is 128; original model max_position_embeddings=262144 and RoPE configuration are preserved.','GPU: FLASH_ATTN full attention, FlashInfer GDN prefill, native paged cache auto/BF16 with FP32 SSM state. NPU: eager attention and native torch fallback for unavailable fast linear-attention path.','NPU host clock trails local/GPU clock by approximately four minutes; native timestamps and run names are preserved verbatim. Launcher/transport receipts bind these fresh executions to this task.','No accuracy acceptance judgment or library repair.']}\nrun=ROOT/('compare-prefill-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'));run.mkdir()\n(run/'results.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\\n')\nlines=['# Native prefill comparison','',f\"Model: {D['model']} @ {D['revision']}\",'','All values use natural logs. NLL is mean per target token. P99 uses linear interpolation.','', '| Scope | Targets | GPU NLL | NPU NLL | NLL abs diff | logprob MAE | P99 | Maximum |','|---|---:|---:|---:|---:|---:|---:|---:|']\nfor name,x in [('Overall',summary['global']),*summary['groups'].items()]:\n m=x['metrics']; lines.append('| '+name+' | '+str(m['target_count'])+' | '+' | '.join(f'{m[k]:.12g}' for k in ['side_a_nll_nat_per_token','side_b_nll_nat_per_token','nll_abs_diff_nat_per_token','mae_nat','p99_nat','max_abs_nat'])+' |')\nlines+=['','Coverage: GPU 140/140, NPU 140/140, paired 140/140 (100%); no missing, duplicate or nonfinite targets.','','## Maximum-error coordinates','','| Scope | Sample | Target position (0-based) | Prediction position | Token ID | GPU logprob | NPU logprob |','|---|---|---:|---:|---:|---:|---:|']\nfor name,x in [('Overall',summary['global']),*summary['groups'].items()]:\n d=x['max_error_detail']; lines.append(f\"| {name} | {d['sample_id']} | {d['target_position']} | {d['prediction_position']} | {d['target_token_id']} | {d['gpu_logprob']:.12g} | {d['npu_logprob']:.12g} |\")\nlines+=['','## Actual configuration','', 'GPU: NVIDIA H20Z, one visible CUDA device (physical ordinal 7), vLLM 0.19.1, Torch 2.10.0+cu128, BF16, no quantization, TP/PP/DP=1, enforce_eager=True, compilation/cudagraph NONE, max_model_len=128, max_num_seqs=1, chunked prefill and prefix caching disabled, FLASH_ATTN + FlashInfer GDN prefill.', '', 'NPU: Ascend910_9382, declared physical chip 13 / logical npu:0, Transformers 5.3.0, Torch 2.9.0+cpu with torch-npu 2.9.0.post2, 760 BF16 parameter tensors, eager attention, native torch linear-attention fallback, use_cache=True. Operational input cap 128; original model/RoPE context configuration preserved.', '', 'Both: unchanged supplied token IDs, no BOS or chat template, independent samples, 248320-token vocabulary, native FP32 log-softmax before any sampling or penalty transforms. Original per-sample target scores and events are retained in each capture.','', '## Evidence and reproduction','', 'Run `python3 -B compare.py` from the task directory for a fresh offline summary. `execute.py` records the exact declared launcher commands for native reruns; its current staging check preserves the original source and inputs. `fetch_results.py` retrieves completed artifacts with indexed SHA256/size verification. For a new native validation, invoke `execute.py` again to create fresh launcher run directories; do not reuse historical output paths.','']\nfor side in ['gpu','npu']: lines.append(f\"- {side}: `{evidence[side]['capture']}`; terminal `{evidence[side]['terminal_receipt']}`; verified index `{evidence[side]['export_index']}`.\")\nlines+=['']+['- '+n for n in result['notes']]+['',f\"Native attempts: one per side. Collector seconds: GPU {actual['gpu']['elapsed_seconds']:.3f}, NPU {actual['npu']['elapsed_seconds']:.3f}. Fetched artifact bytes on wire: {transfer['artifact_transfer_bytes']}; staged payload bytes: {transfer['staged_payload_bytes']}.\",'']\n(run/'report.md').write_text('\\n'.join(lines));print(run);print(json.dumps(summary,indent=2));print(json.dumps(budgets,indent=2))\nPY\npython3 -B compare.py",
+        "workdir": "/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c",
+        "yield_time_ms": 1000,
+        "max_output_tokens": 5500
+      }
+    }
+  ],
+  "session_sha256": "4f81e27a77d6bac5fa4ae9dc14a43c405af36c395d0b32dca8d1aedcebabe8cb",
+  "baseline": {
+    "id": "native-prefill-noskills-20261024T011154Z",
+    "source_run": "compare-batchab-20261024T011154Z",
+    "frozen_hashes": {
+      "design.json": "81a3b57cf9bcb4e007aa1e6d85e91a44b79b744d750a2cb7fe13023b7a1ea252",
+      "verification.json": "98bf21cd94314de38be0c15068df51816dc43783f4216d49afa74b9db2ccc616",
+      "usage.json": "20212ff989be1e2f82478a76a008415314ef5376040a43aaf353d923aff0192c",
+      "b/resources.json": "6cfb38a1973c97c51a2acac9c5227ffb574e8206d0f6b9c8160c1687adfca2ea",
+      "b/inputs.json": "6d5a504c48d5c88d7881b4400601d75661a33435a727657a7deac41d06c58c86",
+      "b-independent.json": "697f87fa5572cf77e6e3f63440bb0aab1cf1077cf17b7f2d7509ffaa2e32dfdd",
+      "b-normalized.json": "5282ebdde24261c76e3343898fc0779c37e4cf1cc9e0245dce3c7d7f2b19df1b",
+      "b-execution.json": "57b4b9fd14dd57b915d2007f4d01635c2b2a527c48e3c0a74caa97c56be81647"
+    },
+    "raw_usage": [
+      {
+        "response_id": "resp_067fb5384f241d87016adc05fce7fc87d090661241687debe4",
+        "usage": {
+          "input_tokens": 84460,
+          "cached_input_tokens": 3968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 156,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84616
+        },
+        "long_context": false,
+        "standard_usd": 0.1629408
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc060628d087d0ba5ddcaf314de0d5",
+        "usage": {
+          "input_tokens": 84702,
+          "cached_input_tokens": 84480,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 67,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 84769
+        },
+        "long_context": false,
+        "standard_usd": 0.009562000000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc060db1d087d0bb52b9249daf4abb",
+        "usage": {
+          "input_tokens": 88172,
+          "cached_input_tokens": 84608,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 415,
+          "reasoning_output_tokens": 131,
+          "total_tokens": 88587
+        },
+        "long_context": false,
+        "standard_usd": 0.0197388
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc061cbf9487d08e63f73a1fa59bdd",
+        "usage": {
+          "input_tokens": 88636,
+          "cached_input_tokens": 88448,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 88673
+        },
+        "long_context": false,
+        "standard_usd": 0.009590800000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0625d27087d0af6f57529080f9f7",
+        "usage": {
+          "input_tokens": 88805,
+          "cached_input_tokens": 88448,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 430,
+          "reasoning_output_tokens": 59,
+          "total_tokens": 89235
+        },
+        "long_context": false,
+        "standard_usd": 0.013858800000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0641cdd887d0909b57579c86e081",
+        "usage": {
+          "input_tokens": 89274,
+          "cached_input_tokens": 89088,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 312,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 89586
+        },
+        "long_context": false,
+        "standard_usd": 0.0124008
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc064d5a0087d0b27e969895a5e659",
+        "usage": {
+          "input_tokens": 89633,
+          "cached_input_tokens": 89344,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 55,
+          "reasoning_output_tokens": 16,
+          "total_tokens": 89688
+        },
+        "long_context": false,
+        "standard_usd": 0.010062399999999999
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc065597e087d09a8653cafbca18bd",
+        "usage": {
+          "input_tokens": 93424,
+          "cached_input_tokens": 89472,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 493,
+          "reasoning_output_tokens": 54,
+          "total_tokens": 93917
+        },
+        "long_context": false,
+        "standard_usd": 0.0217812
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0664b96887d08b5e98829d3d7820",
+        "usage": {
+          "input_tokens": 93963,
+          "cached_input_tokens": 93696,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 94000
+        },
+        "long_context": false,
+        "standard_usd": 0.0102736
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc066d641487d094816d8525163498",
+        "usage": {
+          "input_tokens": 94597,
+          "cached_input_tokens": 93824,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 631,
+          "reasoning_output_tokens": 123,
+          "total_tokens": 95228
+        },
+        "long_context": false,
+        "standard_usd": 0.0172384
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc067ddee487d0a0a3a1d3f536d1ef",
+        "usage": {
+          "input_tokens": 95275,
+          "cached_input_tokens": 95104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 102,
+          "reasoning_output_tokens": 63,
+          "total_tokens": 95377
+        },
+        "long_context": false,
+        "standard_usd": 0.010872399999999999
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0689763887d09db5787f9b70f809",
+        "usage": {
+          "input_tokens": 98456,
+          "cached_input_tokens": 95232,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4045,
+          "reasoning_output_tokens": 149,
+          "total_tokens": 102501
+        },
+        "long_context": false,
+        "standard_usd": 0.056421200000000005
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc06ca9e1087d08bb4bef39e03e387",
+        "usage": {
+          "input_tokens": 102549,
+          "cached_input_tokens": 102272,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 348,
+          "reasoning_output_tokens": 34,
+          "total_tokens": 102897
+        },
+        "long_context": false,
+        "standard_usd": 0.014261200000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc06d8492887d0b508ab982cedad2b",
+        "usage": {
+          "input_tokens": 102945,
+          "cached_input_tokens": 102656,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 102982
+        },
+        "long_context": false,
+        "standard_usd": 0.0112136
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc06e4bd5087d09802a7a0682b6d28",
+        "usage": {
+          "input_tokens": 103056,
+          "cached_input_tokens": 102784,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 103093
+        },
+        "long_context": false,
+        "standard_usd": 0.011192400000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc06ee55b487d08f95d7ab913b3a37",
+        "usage": {
+          "input_tokens": 103236,
+          "cached_input_tokens": 102912,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 278,
+          "reasoning_output_tokens": 26,
+          "total_tokens": 103514
+        },
+        "long_context": false,
+        "standard_usd": 0.0137192
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc06f99eac87d08608492d40018482",
+        "usage": {
+          "input_tokens": 103562,
+          "cached_input_tokens": 103296,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 319,
+          "reasoning_output_tokens": 11,
+          "total_tokens": 103881
+        },
+        "long_context": false,
+        "standard_usd": 0.014051600000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0706b7c087d0879dc394887c0cd5",
+        "usage": {
+          "input_tokens": 103927,
+          "cached_input_tokens": 103680,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 103964
+        },
+        "long_context": false,
+        "standard_usd": 0.011232
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc070f731887d09b7d06c391b00cb6",
+        "usage": {
+          "input_tokens": 104770,
+          "cached_input_tokens": 103808,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 104807
+        },
+        "long_context": false,
+        "standard_usd": 0.012674800000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0716c6e887d0abf8601eba6e675b",
+        "usage": {
+          "input_tokens": 105416,
+          "cached_input_tokens": 104576,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 55,
+          "reasoning_output_tokens": 16,
+          "total_tokens": 105471
+        },
+        "long_context": false,
+        "standard_usd": 0.0126876
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc071df4f087d08abfde0f91cb3814",
+        "usage": {
+          "input_tokens": 106148,
+          "cached_input_tokens": 105344,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 250,
+          "reasoning_output_tokens": 38,
+          "total_tokens": 106398
+        },
+        "long_context": false,
+        "standard_usd": 0.014642400000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0728967087d09ccbd66d886ce7cd",
+        "usage": {
+          "input_tokens": 106446,
+          "cached_input_tokens": 106240,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 160,
+          "reasoning_output_tokens": 27,
+          "total_tokens": 106606
+        },
+        "long_context": false,
+        "standard_usd": 0.012636000000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc073736c887d0be31920428f52ed0",
+        "usage": {
+          "input_tokens": 110453,
+          "cached_input_tokens": 106368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 221,
+          "reasoning_output_tokens": 14,
+          "total_tokens": 110674
+        },
+        "long_context": false,
+        "standard_usd": 0.021016800000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0742d8a487d0ae27a95b33aab586",
+        "usage": {
+          "input_tokens": 110721,
+          "cached_input_tokens": 110464,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 120,
+          "reasoning_output_tokens": 81,
+          "total_tokens": 110841
+        },
+        "long_context": false,
+        "standard_usd": 0.012760400000000002
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc074bc7c487d09ba0bf7ffc4f0c00",
+        "usage": {
+          "input_tokens": 111098,
+          "cached_input_tokens": 110720,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 233,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 111331
+        },
+        "long_context": false,
+        "standard_usd": 0.014158
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07569fe887d0b10a4bdf3eea8364",
+        "usage": {
+          "input_tokens": 111380,
+          "cached_input_tokens": 111104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 78,
+          "reasoning_output_tokens": 39,
+          "total_tokens": 111458
+        },
+        "long_context": false,
+        "standard_usd": 0.012442400000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc075e0f7487d08a3d942d8f42bd33",
+        "usage": {
+          "input_tokens": 112253,
+          "cached_input_tokens": 111232,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1075,
+          "reasoning_output_tokens": 131,
+          "total_tokens": 113328
+        },
+        "long_context": false,
+        "standard_usd": 0.023915199999999998
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0774e42087d0a6a8af0420825b1f",
+        "usage": {
+          "input_tokens": 113376,
+          "cached_input_tokens": 113152,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1382,
+          "reasoning_output_tokens": 58,
+          "total_tokens": 114758
+        },
+        "long_context": false,
+        "standard_usd": 0.0255832
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc078e5ad487d0b3cd6862c7b1cfef",
+        "usage": {
+          "input_tokens": 114815,
+          "cached_input_tokens": 114560,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 37,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 114852
+        },
+        "long_context": false,
+        "standard_usd": 0.012336
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc079a40f087d0b642283fb26aa697",
+        "usage": {
+          "input_tokens": 114919,
+          "cached_input_tokens": 114688,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 218,
+          "reasoning_output_tokens": 11,
+          "total_tokens": 115137
+        },
+        "long_context": false,
+        "standard_usd": 0.014110800000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07b1df9487d08574d258d6109ae6",
+        "usage": {
+          "input_tokens": 115184,
+          "cached_input_tokens": 114944,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 82,
+          "reasoning_output_tokens": 43,
+          "total_tokens": 115266
+        },
+        "long_context": false,
+        "standard_usd": 0.012794400000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07bb99e487d08509150c4570dc4a",
+        "usage": {
+          "input_tokens": 117899,
+          "cached_input_tokens": 115072,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 45,
+          "reasoning_output_tokens": 6,
+          "total_tokens": 117944
+        },
+        "long_context": false,
+        "standard_usd": 0.0176112
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07c3790087d0b188104207198213",
+        "usage": {
+          "input_tokens": 118013,
+          "cached_input_tokens": 117760,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 87,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 118100
+        },
+        "long_context": false,
+        "standard_usd": 0.013151999999999999
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07ca53b887d09e57157e1d32ca61",
+        "usage": {
+          "input_tokens": 119835,
+          "cached_input_tokens": 117888,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 364,
+          "reasoning_output_tokens": 20,
+          "total_tokens": 120199
+        },
+        "long_context": false,
+        "standard_usd": 0.0193228
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07d753f487d0baa9d1c33df27a24",
+        "usage": {
+          "input_tokens": 126870,
+          "cached_input_tokens": 120064,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2305,
+          "reasoning_output_tokens": 308,
+          "total_tokens": 129175
+        },
+        "long_context": false,
+        "standard_usd": 0.0486684
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc07ffbea087d09816305c5719404e",
+        "usage": {
+          "input_tokens": 129222,
+          "cached_input_tokens": 129024,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 325,
+          "reasoning_output_tokens": 286,
+          "total_tokens": 129547
+        },
+        "long_context": false,
+        "standard_usd": 0.0165484
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc080b82bc87d09eef74761764e69d",
+        "usage": {
+          "input_tokens": 129919,
+          "cached_input_tokens": 129408,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 148,
+          "reasoning_output_tokens": 21,
+          "total_tokens": 130067
+        },
+        "long_context": false,
+        "standard_usd": 0.015442800000000001
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc08143d9087d0843a9df6e55a5fed",
+        "usage": {
+          "input_tokens": 130114,
+          "cached_input_tokens": 129920,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 185,
+          "reasoning_output_tokens": 146,
+          "total_tokens": 130299
+        },
+        "long_context": false,
+        "standard_usd": 0.01523
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc081ec56487d0a770b814a046a50a",
+        "usage": {
+          "input_tokens": 130352,
+          "cached_input_tokens": 130176,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 976,
+          "reasoning_output_tokens": 90,
+          "total_tokens": 131328
+        },
+        "long_context": false,
+        "standard_usd": 0.0231296
+      },
+      {
+        "response_id": "resp_067fb5384f241d87016adc0833364487d0b4ba83ad3958caf2",
+        "usage": {
+          "input_tokens": 131638,
+          "cached_input_tokens": 131200,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1191,
+          "reasoning_output_tokens": 0,
+          "total_tokens": 132829
+        },
+        "long_context": false,
+        "standard_usd": 0.025906
+      }
+    ]
+  },
+  "earlier_successful_A": {
+    "run": "compare-demandnative-20261024T050602Z",
+    "measurements": {
+      "context": {
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "elapsed_seconds": 398.309,
+      "requests": 22,
+      "total_tool_calls": 21,
+      "tokens": {
+        "input_tokens": 2345812,
+        "cached_input_tokens": 2276096,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 12063,
+        "total_tokens": 2357875,
+        "uncached_input_tokens": 69716
+      },
+      "standard_usd_estimate": 0.48767159999999987
+    }
+  },
+  "transfer": {
+    "gpu": {
+      "action": "fetch",
+      "index": "EXPORT.json",
+      "file_count": 26,
+      "payload_bytes": 136692,
+      "archive_sha256": "5faa16bf5a37618e95e2fe6f66bf929547bf6cf49c51b168cfee6cf4bb48499a",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index",
+      "output": "/private/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c/gpu-evidence",
+      "transfer_bytes": 39536
+    },
+    "npu": {
+      "action": "fetch",
+      "index": "EXPORT.json",
+      "file_count": 18,
+      "payload_bytes": 72538,
+      "archive_sha256": "731d087e42992aab17753078766a6f420074d9eafe9d2295a907f1f1181e0888",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index",
+      "output": "/private/var/folders/yw/8843x36j771dds0zx1g48w600000gn/T/precision-returnab-b7obir0c/npu-evidence",
+      "transfer_bytes": 21909
+    },
+    "staged_payload_bytes": 25554,
+    "artifact_transfer_bytes": 61445
+  },
+  "limits": [
+    "Only A rerun; B is retained verified historical no-skill baseline.",
+    "Fresh gpt-6.1-sol / medium agent, same direct task requirements; no previous collector, scores or verifier supplied.",
+    "All actual agent inspection, code, capture, fetch, comparison, waits and reports counted; parent preparation and independent verification excluded.",
+    "Prepared launcher/identity resources reused by A. This interface and its preparation advantage are not amortized against B.",
+    "NPU chip allocation differs (B=12, A=13); NPU use_cache differs (B=False, A=True) for independent prefill. Original task did not fix this flag. All selected scores equal B.",
+    "Single observations with historical baseline, uncontrolled cache/latency/background workload and evolved shared maintenance instructions; no single-variable causal claim.",
+    "First-response and subsequent-response costs are reported separately as actual partitions, not a hypothetical cache-normalized total.",
+    "This run did not improve materially on the earlier successful A (398.309 s, $0.4876716); retained without selecting only the immediately preceding retry-affected run."
+  ],
+  "pricing": "Retained Standard snapshot: input $2/M, cached $0.10/M, cache-write $2.50/M, output $10/M; per-response long-input multipliers applied. Estimate, not account billing."
+}
