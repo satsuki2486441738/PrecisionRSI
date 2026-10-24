@@ -58037,6 +58037,140 @@
         "prefix": "site/evidence/skills-tool-policy-20261024.json",
         "replay_cases": 10
       }
+    },
+    {
+      "id": "skills-integrity-reuse-microtest-20261024",
+      "date": "2026-10-24",
+      "title": "Skills 校验复用：已有采集取回与比较",
+      "framework": {
+        "name": "Skills 校验复用"
+      },
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "synthetic target-score fixture",
+        "revision": "fixture-v1-corrected-input-digest"
+      },
+      "summary": "新 agent 直接复用下载回执与 EXPORT.json，不重算下载文件的哈希或大小；保留输入身份和token坐标检查。10个位置、三个分组的数值与覆盖率独立复核通过。",
+      "sides": [
+        {
+          "id": "left",
+          "label": "left",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "Python",
+              "version": "3.12.14"
+            }
+          ],
+          "settings": {
+            "synthetic": true,
+            "capture": "completed fixed-input prefill fixture",
+            "score_dtype": "float32",
+            "normalization": "natural logprob"
+          }
+        },
+        {
+          "id": "right",
+          "label": "right",
+          "hardware": "CPU",
+          "libraries": [
+            {
+              "name": "Python",
+              "version": "3.12.14"
+            }
+          ],
+          "settings": {
+            "synthetic": true,
+            "capture": "completed fixed-input prefill fixture",
+            "score_dtype": "float32",
+            "normalization": "natural logprob"
+          }
+        }
+      ],
+      "common": [
+        "相同10个目标位置，三个不等长分组（2/3/5）；原始目标 logprob 直接比较。",
+        "本地独立 Python-stdin 进程模拟源端；无真实SSH、模型运行或调度作业。",
+        "本次使用精确输入文件字节的SHA256，修正了前次夹具的摘要编码歧义。"
+      ],
+      "differences": [
+        "两份固定合成 target logprob 记录的数值不同；输入位置/token身份一致。"
+      ],
+      "comparisons": [
+        {
+          "id": "target-scores",
+          "title": "固定目标分数比较",
+          "side_ids": [
+            "left",
+            "right"
+          ],
+          "scope": "全部10个位置；全局及三个分组均经独立公式核验。",
+          "metrics": [
+            {
+              "id": "nll",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.030500000000000416,
+              "side_values": {
+                "left": 2.18,
+                "right": 2.1494999999999997
+              }
+            },
+            {
+              "id": "mae",
+              "label": "logprob MAE",
+              "unit": "nat",
+              "value": 0.10550000000000001
+            },
+            {
+              "id": "p99",
+              "label": "logprob P99绝对误差",
+              "unit": "nat",
+              "value": 0.38200000000000034
+            },
+            {
+              "id": "max-abs",
+              "label": "logprob最大绝对误差",
+              "unit": "nat",
+              "value": 0.40000000000000036,
+              "coordinate": {
+                "sample": "sample-c",
+                "target_position": 2,
+                "token_id": 206
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标位置",
+              "observed": 10,
+              "expected": 10,
+              "unit": "positions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "gpt-6.1-sol / medium，无上下文新 agent；直接任务要求，隐藏独立验证器未提供给执行 agent。",
+        "轨迹检查：工具实现读取0次、下载重写0次、下载文件重复哈希/大小扫描0次；共享 fetch 调用2次。",
+        "本地 inputs.json 摘要属于下载工具未覆盖的身份检查，保留；token和预测位置语义检查保留。",
+        "取回8个小文件、3756字节；未传输源端的大文件哨兵。",
+        "完整执行：122.833秒、7次工具调用、估算费用0.2880688美元。",
+        "仅一次合成行为测试；修正夹具且缓存未控制，不与前次做直接成本对照，也不推广为稳定成功率结论。",
+        "费用沿用保留的统一Standard价格快照，不代表账户账单。"
+      ],
+      "evidence": [
+        {
+          "label": "执行命令、原始用量、输入记录与独立核验",
+          "url": "evidence/skills-integrity-reuse-20261024.json"
+        }
+      ],
+      "archive": {
+        "revision": "35c5266489d1e73b0214de6d85c7e66c8bc606c3",
+        "prefix": "site/evidence/skills-integrity-reuse-20261024.json",
+        "replay_cases": 10
+      }
     }
   ]
 }
