@@ -16,6 +16,8 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 ## Patch and verify
 
+Use available 10–30 s completion waits for noninteractive commands.
+
 - Patch the responsible implementation; keep framework-specific fixes with the case.
 - Extend existing checks for missing causal or nearby-case coverage; the regression must fail before the fix and pass after.
 - Verify through the original entrypoint and collectors at identical inputs/initial state. A regression invoking that workload can also provide its before/after metrics.

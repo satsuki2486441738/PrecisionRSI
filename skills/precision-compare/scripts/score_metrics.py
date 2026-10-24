@@ -1,7 +1,8 @@
 """Framework-independent natural-log target-score arithmetic; standard library.
 Call: reduce_scores(side_a, side_b)
 Input: Matching coordinate-tuple maps to finite natural logprobs <= 0.
-Output: Per-side NLL, absolute NLL difference, MAE/P99/max error and worst coordinate.
+Output: Dict keys target_count, side_a_nll_nat_per_token, side_b_nll_nat_per_token,
+nll_abs_diff_nat_per_token, mae_nat, p99_nat, p99_method, max_abs_nat, max_coordinate.
 Requires: Standard library; equal nonempty inventories; task adapters own masks, shifts and objectives.
 
 Details:

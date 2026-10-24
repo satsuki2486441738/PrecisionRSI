@@ -7,6 +7,8 @@ description: Establish native execution when a requested model, framework or har
 
 ## Execute
 
+Use available 10–30 s completion waits for noninteractive commands.
+
 - Enter for missing native execution. Reuse environments, adapters and receipts matching source, dependencies and target.
 - Missing support: inspect the selected revision's support declarations and closest native example; implement the required model/backend integration.
 - Reuse a matching successful preflight; otherwise check a minimal native call with the capture configuration. Verify the original workload; retry within budget.

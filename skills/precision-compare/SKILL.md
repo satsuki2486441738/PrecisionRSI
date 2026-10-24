@@ -35,6 +35,8 @@ Use existing checks when they cover the request; otherwise use shared comparator
 
 ## Collect
 
+Use available 10–30 s completion waits for noninteractive commands.
+
 Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Use task recipes for unresolved capture semantics or framework integration.
 
 - [Inference](references/inference.md): scores, distributions, cache stages.

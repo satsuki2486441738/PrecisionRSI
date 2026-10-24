@@ -2,7 +2,8 @@
 """Compare already corresponding named arrays without artifact conversion (NumPy).
 Call: compare_arrays(a, b, expected=None, metrics=False, groups=None); CLI: python scripts/array_compare.py A.npz B.npz --output NEW.json [--metrics]
 Input: Corresponding name-to-numeric-array maps, or NPZ files.
-Output: exact_equal, coverage, bounded findings; optional FP64 metrics and single-scan group reports. --all-findings returns every differing/nonfinite coordinate.
+Output: exact_equal, coverage, findings; optional metrics and groups[name] with the same report shape.
+Metrics: metrics.{max_abs,rmse,cosine,error_norm}.value and metrics.max_coordinate; unavailable metrics are null. --all-findings returns every differing/nonfinite coordinate.
 Requires: NumPy; equality requires matching shapes/dtypes and finite values. expected detects shared omissions.
 
 Details:
