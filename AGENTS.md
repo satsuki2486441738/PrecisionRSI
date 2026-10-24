@@ -21,6 +21,8 @@ Confirm the approach before editing and change at most three files per batch. Fo
 
 Create new runs exclusively as `<side>-<task>-<UTC YYYYmmddTHHMMSSZ>`, using the task's side ID or `compare`. Keep model/data/environment resources in place and preserve historical run bytes and paths. Use a new run for later validation. For undated migrations, use `<side>-<task>-migrated-<UTC migration timestamp>` and retain the path mapping.
 
+For skill/no-skill benchmark iterations, reuse a verified no-skill baseline while the task and model/runtime conditions remain comparable; rerun only the skill arm. Keep baseline artifacts outside evaluator inputs, record the reused baseline identity, and retain raw usage for consistent repricing.
+
 ## Validation
 
 Install maintenance dependencies with `python -m pip install -r .github/requirements.txt`. Run `python -B -m unittest discover -s tests -v` and `python -B .github/validate.py` from the repository root. With Torch installed, run `python -B .github/smoke_install.py` to verify clean skill installations, companion links and the CPU gradient example. Validate skill metadata, local links/anchors and changed script behavior. For documentation edits, check documented fields and commands against their owning scripts.
