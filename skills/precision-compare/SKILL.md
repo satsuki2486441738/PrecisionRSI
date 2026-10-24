@@ -8,7 +8,7 @@ description: Collect and compare numerical results across hardware and software 
 ## Scope
 
 - Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
-- Enter for missing collection or comparison. Reuse workload checks, observations and results matching identities, semantics and coverage. Refresh changed scope or requested fresh measurements.
+- Follow-ups: unchanged inputs/state, source/runtime and scope → return existing results and evidence; changed conditions → recompute affected scope; explicit fresh-execution request → collect anew. Enter only for missing collection or comparison.
 
 ## Tool use
 

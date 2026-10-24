@@ -27,5 +27,5 @@ Execution tools own waiting, timeouts and terminal receipts. Use completion noti
 ## Return
 
 - Cause, source revision, patch/regression, original-workload before/after metrics, configuration changes and existing evidence paths.
-- Finish after regression and original-workload checks pass; reuse results. Repeat only changed, failed or unresolved checks. Package, replay offline or write extra reports only when requested.
+- Finish after regression and original-workload checks pass. Unchanged follow-ups return existing results and evidence; changed conditions recheck affected scope; explicit fresh-execution requests run anew. Repeat failed or unresolved checks. Packaging, offline replay and extra reports require a request.
 - If budget prevents verification, return the unresolved question and next discriminating check.
