@@ -10,6 +10,8 @@ Metric `value` is the symmetric comparison result. Optional `side_values` record
 
 Append concise public evidence under `evidence/` and keep native arrays/checkpoints in the existing artifact store. Preserve recorded IDs, values and immutable provenance. The initial entries cover same-H200 BF16/FP16 inference, native cross-platform TRL LoRA SFT and same-platform checkpoint restoration with peer comparison. New frameworks and hardware require data entries, not UI changes.
 
+Set `visibility: "archived"` to retain an experiment in the raw archive and JSON download while excluding it from cards, counts, filters and charts. Historical skill efficiency experiments are currently archived because they measured earlier skill revisions. Numerical precision comparisons remain visible.
+
 Links use `#evaluations` and `#evaluation-<id>`. Existing repair/fix links still select the Repairs tab. Both tabs support keyword, library, model and hardware filters; evaluations also support task filtering and comparison selection. JSON downloads contain the selected archive.
 
 Evaluation charts use the Repair tab's gray/green palette. Only two recorded,

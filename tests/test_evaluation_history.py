@@ -76,6 +76,25 @@ class EvaluationModelTests(unittest.TestCase):
         result=subprocess.run(['node','-e',script],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',check=True)
         return json.loads(result.stdout)
 
+    def test_archived_benchmarks_are_excluded_from_public_view_only(self):
+        result = self.evaluate("""(()=>{
+          const before=JSON.stringify(d.evaluations);
+          const archived=d.evaluations.filter(r=>r.visibility==='archived');
+          const visible=h.publicEvaluations(d.evaluations);
+          return {archived:archived.map(r=>r.id),visible:visible.map(r=>r.id),
+            unchanged:before===JSON.stringify(d.evaluations),
+            sameObjects:visible.every(r=>d.evaluations.includes(r)),
+            hiddenSearch:h.filterEvaluations(visible,{query:archived[0].id}).length};
+        })()""", all_records=True)
+        data=json.loads((ROOT/'site/data/evaluations.json').read_text())['evaluations']
+        self.assertEqual(set(result['archived']), {r['id'] for r in data if r['id'].startswith('skills-')})
+        self.assertGreater(len(result['archived']), 0)
+        self.assertEqual(set(result['visible']), {r['id'] for r in data if not r['id'].startswith('skills-')})
+        self.assertTrue(result['unchanged'])
+        self.assertTrue(result['sameObjects'])
+        self.assertEqual(result['hiddenSearch'], 0)
+        self.assertEqual(self.evaluate("h.publicEvaluations([{id:'new'},{id:'old',visibility:'archived'}]).map(r=>r.id)"), ['new'])
+
     def test_counts_and_task_groups(self):
         self.assertEqual(self.evaluate('h.evaluationCounts(d.evaluations)'),{'experiments':3,'comparisons':7,'hardware':2})
         self.assertEqual(self.evaluate('h.evaluationGroups(d.evaluations).map(g=>g.id)'),['inference','sft'])
