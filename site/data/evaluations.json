@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-24",
+  "updated_at": "2026-10-25",
   "evaluations": [
     {
       "id": "trl-sfttrainer-checkpoint-20261021",
@@ -62608,6 +62608,591 @@
         "prefix": "site/evidence/skills-native-sglang-transformers-20261024.json",
         "replay_cases": 4
       }
+    },
+    {
+      "date": "2026-10-25",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "common": [
+        "完整条件生成模型，9,409,813,744个基础参数，32个语言层；文本输入。",
+        "原始模型revision、输入token、mask与逻辑位置对应；离线指标使用共享比较工具。"
+      ],
+      "differences": [
+        "GPU CUDA与NPU CANN/torch-npu原生计算实现；保留各端执行路径。"
+      ],
+      "notes": [
+        "两个无上下文worker独立选择检查，未先读取历史修复或上游Issue/PR提示。",
+        "早期GPU结果因资源归属未验证而排除；父级使用已有PCI绑定工具补齐采集，复用有效NPU结果。",
+        "未建立数值库缺陷，无库补丁；这些记录属于评测，不增加修复历史。",
+        "main仅核查身份和相关源码；本轮未执行main。",
+        "checkpoint含727个BF16和48个FP32张量；FP32对照直接重新加载原checkpoint，排除先BF16再提升精度的GPU捕获。",
+        "覆盖范围为采样位置、最长257 tokens；不代表整个模型或任意上下文无缺陷。"
+      ],
+      "evidence": [
+        {
+          "label": "原始指标、运行配置、资源绑定、正确性核查与执行源码",
+          "url": "evidence/autonomous-cross-platform-qwen35-20261025.json"
+        },
+        {
+          "label": "调查范围与结论",
+          "url": "evidence/autonomous-cross-platform-qwen35-20261025.md"
+        }
+      ],
+      "archive": {
+        "revision": "7e5d8742f1b3a988bb4ddc58764b6265c9e39b4c",
+        "prefix": "site/evidence/autonomous-cross-platform-qwen35-20261025.json",
+        "replay_cases": 4
+      },
+      "id": "autonomous-cross-platform-inference-20261025",
+      "title": "自主调查：910C ↔ H200 · Transformers 推理",
+      "framework": {
+        "name": "Transformers"
+      },
+      "task": "inference",
+      "summary": "完成双端BF16/FP32比较；20个位置/精度观测的top-1一致，未确认库缺陷。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA",
+          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H20Z）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            }
+          ],
+          "settings": {
+            "single_device": true,
+            "attention": "eager",
+            "native_dtype": "BF16 and fresh-checkpoint FP32",
+            "external_fla_causal_conv_kernels": false,
+            "gpu_binding": "allocated NVML UUID -> PCI == CUDA-driver PCI; one visible device"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "910C / CANN",
+          "hardware": "Ascend 910C（runtime Ascend910_9382）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "single_device": true,
+            "attention": "eager",
+            "native_dtype": "BF16 and fresh-checkpoint FP32",
+            "external_fla_causal_conv_kernels": false,
+            "gpu_binding": null
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "short-bf16",
+          "title": "短序列 · BF16",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "65-token样本的4个位置；每位置比较全部248,320个词表logits。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大logits绝对差",
+              "unit": "logit",
+              "value": 0.125,
+              "coordinate": {
+                "sample": 0,
+                "prediction_position": 62,
+                "vocabulary_id": 15122
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "logits RMSE",
+              "unit": "logit",
+              "value": 0.022248158998656523
+            },
+            {
+              "id": "cosine",
+              "label": "logits cosine",
+              "unit": "cosine",
+              "value": 0.9999733851450685
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1一致率",
+              "unit": "fraction",
+              "value": 1.0
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对预测位置",
+              "observed": 4,
+              "expected": 4,
+              "unit": "positions"
+            },
+            {
+              "label": "配对logits元素",
+              "observed": 993280,
+              "expected": 993280,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "short-fp32",
+          "title": "短序列 · FP32",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "65-token样本的4个位置；每位置比较全部248,320个词表logits。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大logits绝对差",
+              "unit": "logit",
+              "value": 3.552436828613281e-05,
+              "coordinate": {
+                "sample": 0,
+                "prediction_position": 31,
+                "vocabulary_id": 80067
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "logits RMSE",
+              "unit": "logit",
+              "value": 4.327897344324386e-06
+            },
+            {
+              "id": "cosine",
+              "label": "logits cosine",
+              "unit": "cosine",
+              "value": 0.999999999999008
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1一致率",
+              "unit": "fraction",
+              "value": 1.0
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对预测位置",
+              "observed": 4,
+              "expected": 4,
+              "unit": "positions"
+            },
+            {
+              "label": "配对logits元素",
+              "observed": 993280,
+              "expected": 993280,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "long-bf16",
+          "title": "不等长批量 · BF16",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "257/145-token批量的6个位置；每位置比较全部248,320个词表logits。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大logits绝对差",
+              "unit": "logit",
+              "value": 0.25,
+              "coordinate": {
+                "sample": 1,
+                "prediction_position": 137,
+                "vocabulary_id": 1906
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "logits RMSE",
+              "unit": "logit",
+              "value": 0.03901740491689878
+            },
+            {
+              "id": "cosine",
+              "label": "logits cosine",
+              "unit": "cosine",
+              "value": 0.999933962420223
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1一致率",
+              "unit": "fraction",
+              "value": 1.0
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对预测位置",
+              "observed": 6,
+              "expected": 6,
+              "unit": "positions"
+            },
+            {
+              "label": "配对logits元素",
+              "observed": 1489920,
+              "expected": 1489920,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "long-fp32",
+          "title": "不等长批量 · FP32",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "257/145-token批量的6个位置；每位置比较全部248,320个词表logits。",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "最大logits绝对差",
+              "unit": "logit",
+              "value": 3.5762786865234375e-05,
+              "coordinate": {
+                "sample": 0,
+                "prediction_position": 249,
+                "vocabulary_id": 531
+              }
+            },
+            {
+              "id": "rmse",
+              "label": "logits RMSE",
+              "unit": "logit",
+              "value": 5.6753391626211395e-06
+            },
+            {
+              "id": "cosine",
+              "label": "logits cosine",
+              "unit": "cosine",
+              "value": 0.9999999999986201
+            },
+            {
+              "id": "top1-agreement",
+              "label": "Top-1一致率",
+              "unit": "fraction",
+              "value": 1.0
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对预测位置",
+              "observed": 6,
+              "expected": 6,
+              "unit": "positions"
+            },
+            {
+              "label": "配对logits元素",
+              "observed": 1489920,
+              "expected": 1489920,
+              "unit": "elements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-10-25",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "common": [
+        "完整条件生成模型，9,409,813,744个基础参数，32个语言层；文本输入。",
+        "原始模型revision、输入token、mask与逻辑位置对应；离线指标使用共享比较工具。"
+      ],
+      "differences": [
+        "GPU CUDA与NPU CANN/torch-npu原生计算实现；保留各端执行路径。"
+      ],
+      "notes": [
+        "两个无上下文worker独立选择检查，未先读取历史修复或上游Issue/PR提示。",
+        "早期GPU结果因资源归属未验证而排除；父级使用已有PCI绑定工具补齐采集，复用有效NPU结果。",
+        "未建立数值库缺陷，无库补丁；这些记录属于评测，不增加修复历史。",
+        "main仅核查身份和相关源码；本轮未执行main。",
+        "两端实际梯度各自代入独立首步AdamW公式，最大存储更新误差为2.18e-11 / 2.91e-11。最大跨端更新差位置的梯度符号已相反。",
+        "实际第一层单头融合Attention对FP64公式：两端前向相对L2误差约0.178%，输入梯度约0.506% / 0.508%；仅为局部采样证据。",
+        "PEFT 0.20.0沿用已准备环境；不宣称所有依赖均为最新版本。",
+        "仅单步LoRA、文本输入；未覆盖全参、长程或分布式训练，也未定位所有跨端梯度差异的来源。"
+      ],
+      "evidence": [
+        {
+          "label": "原始指标、运行配置、资源绑定、正确性核查与执行源码",
+          "url": "evidence/autonomous-cross-platform-qwen35-20261025.json"
+        },
+        {
+          "label": "调查范围与结论",
+          "url": "evidence/autonomous-cross-platform-qwen35-20261025.md"
+        }
+      ],
+      "archive": {
+        "revision": "7e5d8742f1b3a988bb4ddc58764b6265c9e39b4c",
+        "prefix": "site/evidence/autonomous-cross-platform-qwen35-20261025.json",
+        "replay_cases": 1
+      },
+      "id": "autonomous-cross-platform-sft-20261025",
+      "title": "自主调查：910C ↔ H200 · 融合 Attention SFT",
+      "framework": {
+        "name": "Transformers / PEFT"
+      },
+      "task": "sft",
+      "summary": "123个目标、80个LoRA张量完成跨端比较；更新差异来自已不同的梯度，未确认库缺陷。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA",
+          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H20Z）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            }
+          ],
+          "settings": {
+            "single_device": true,
+            "attention": "CUDA Flash SDPA",
+            "native_dtype": "BF16 backbone / FP32 LoRA",
+            "external_fla_causal_conv_kernels": false,
+            "gpu_binding": "allocated NVML UUID -> PCI == CUDA-driver PCI; one visible device",
+            "lora_rank": 2,
+            "lora_alpha": 4,
+            "lora_dropout": 0,
+            "initial_adapters_exact_equal": true,
+            "optimizer": "AdamW lr=1e-4 weight_decay=0 foreach=False",
+            "steps": 1
+          }
+        },
+        {
+          "id": "npu",
+          "label": "910C / CANN",
+          "hardware": "Ascend 910C（runtime Ascend910_9382）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            }
+          ],
+          "settings": {
+            "single_device": true,
+            "attention": "torch_npu.npu_fusion_attention",
+            "native_dtype": "BF16 backbone / FP32 LoRA",
+            "external_fla_causal_conv_kernels": false,
+            "gpu_binding": null,
+            "lora_rank": 2,
+            "lora_alpha": 4,
+            "lora_dropout": 0,
+            "initial_adapters_exact_equal": true,
+            "optimizer": "AdamW lr=1e-4 weight_decay=0 foreach=False",
+            "steps": 1
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "targets",
+          "title": "原生融合Attention · 目标分数",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "123个监督目标（含EOS），相同mask、标签与初始LoRA；全词表归一化分数。",
+          "metrics": [
+            {
+              "id": "nll-difference",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.0018931412015558147,
+              "side_values": {
+                "gpu": 0.5441815106418652,
+                "npu": 0.546074651843421
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nat",
+              "value": 0.004231977514158149
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99",
+              "unit": "nat",
+              "value": 0.081935454889997
+            },
+            {
+              "id": "maximum",
+              "label": "最大目标logprob差",
+              "unit": "nat",
+              "value": 0.14861454380111017,
+              "coordinate": {
+                "position": 55,
+                "token": 14162
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 123,
+              "expected": 123,
+              "unit": "targets"
+            }
+          ]
+        },
+        {
+          "id": "gradients",
+          "title": "LoRA梯度",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "80个trainable张量的全部671,744个坐标，保留零梯度和未变化更新。",
+          "metrics": [
+            {
+              "id": "cosine",
+              "label": "LoRA梯度 cosine",
+              "unit": "cosine",
+              "value": 0.999241361934603
+            },
+            {
+              "id": "rmse",
+              "label": "LoRA梯度 RMSE",
+              "unit": "absolute",
+              "value": 7.539258111976912e-06
+            },
+            {
+              "id": "maximum",
+              "label": "LoRA梯度最大绝对差",
+              "unit": "absolute",
+              "value": 0.0010940991342067719,
+              "coordinate": {
+                "name": "base_model.model.model.language_model.layers.3.self_attn.v_proj.lora_B.default.weight",
+                "index": [
+                  416,
+                  0
+                ]
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        },
+        {
+          "id": "updates",
+          "title": "首步存储更新",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "80个trainable张量的全部671,744个坐标，保留零梯度和未变化更新。",
+          "metrics": [
+            {
+              "id": "cosine",
+              "label": "首步存储更新 cosine",
+              "unit": "cosine",
+              "value": 0.976142557323779
+            },
+            {
+              "id": "rmse",
+              "label": "首步存储更新 RMSE",
+              "unit": "absolute",
+              "value": 1.5615200143081198e-05
+            },
+            {
+              "id": "maximum",
+              "label": "首步存储更新最大绝对差",
+              "unit": "absolute",
+              "value": 0.0001999883388634771,
+              "coordinate": {
+                "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+                "index": [
+                  302,
+                  1
+                ]
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
