@@ -1,0 +1,950 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-25",
+  "task": "sft",
+  "source_revision": "f4d9e9e0ce58389a56b0d9bdfa7b0c77c5aa0383",
+  "outcome": "unresolved; no confirmed library defect or accepted overall repair",
+  "baseline_evaluation_id": "autonomous-cross-platform-sft-20261025",
+  "model": {
+    "name": "Qwen3.5-9B-Base",
+    "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+    "decoder_layers": 32
+  },
+  "scope": {
+    "supervised_targets": 123,
+    "adapter_tensors": 80,
+    "adapter_elements": 671744,
+    "steps": 1,
+    "training": "LoRA rank2 alpha4 dropout0",
+    "base_dtype": "BF16",
+    "adapter_dtype": "FP32"
+  },
+  "policies": {
+    "boundaries": {
+      "config_matched": true,
+      "targets": {
+        "target_count": 123,
+        "side_a_nll_nat_per_token": 0.5441815106418652,
+        "side_b_nll_nat_per_token": 0.546074651843421,
+        "nll_abs_diff_nat_per_token": 0.0018931412015558147,
+        "mae_nat": 0.004231977514158315,
+        "p99_nat": 0.08193545488999635,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.14861454380110928,
+        "max_coordinate": [
+          55,
+          14162
+        ]
+      },
+      "initial_exact_equal": true,
+      "gradients": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.15373326710972074,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.15208803539227478,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.006179175212679883,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 7.539258111976912e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.999241361934603,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0010940991342067719,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 502592,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.3.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              416,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-0.006156163290143013",
+            "side_b": "-0.007250262424349785"
+          }
+        }
+      },
+      "updates": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.05858934722341421,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.05859038600817404,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.012798216513091596,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 1.5615200143081198e-05,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.976142557323779,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0001999883388634771,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 637533,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              302,
+              1
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "9.999221219914034e-05",
+            "side_b": "-9.999612666433677e-05"
+          }
+        }
+      },
+      "target_coordinate": {
+        "gpu": {
+          "gradient": -0.00012838603288400918,
+          "update": 9.999221219914034e-05
+        },
+        "npu": {
+          "gradient": 0.00025825362536124885,
+          "update": -9.999612666433677e-05
+        }
+      }
+    },
+    "qkv-fp32": {
+      "config_matched": true,
+      "targets": {
+        "target_count": 123,
+        "side_a_nll_nat_per_token": 0.543866236806923,
+        "side_b_nll_nat_per_token": 0.5459569776234462,
+        "nll_abs_diff_nat_per_token": 0.0020907408165231622,
+        "mae_nat": 0.00383385888783163,
+        "p99_nat": 0.06172094740184534,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.062470683961404205,
+        "max_coordinate": [
+          137,
+          248044
+        ]
+      },
+      "initial_exact_equal": true,
+      "gradients": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.15277561926673713,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.15294762892689645,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.0035328502229646673,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 4.310457105542131e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9997335640026099,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0002668015658855438,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 503034,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.3.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              637,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-0.010656673461198807",
+            "side_b": "-0.01092347502708435"
+          }
+        }
+      },
+      "updates": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.05859103615816371,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.05859079404907251,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.010771025001979602,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 1.3141808546526447e-05,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9831024589606989,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.00019997166964458302,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 57596,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.11.self_attn.q_proj.lora_B.default.weight",
+            "index": [
+              126,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "9.997978486353531e-05",
+            "side_b": "-9.99918847810477e-05"
+          }
+        }
+      },
+      "target_coordinate": {
+        "gpu": {
+          "gradient": 0.00021241907961666584,
+          "update": -9.999529720516875e-05
+        },
+        "npu": {
+          "gradient": 0.00012211049033794552,
+          "update": -9.999181202147156e-05
+        }
+      }
+    },
+    "attention-fp32": {
+      "config_matched": true,
+      "targets": {
+        "target_count": 123,
+        "side_a_nll_nat_per_token": 0.5437242204007239,
+        "side_b_nll_nat_per_token": 0.543545195255367,
+        "nll_abs_diff_nat_per_token": 0.000179025145356837,
+        "mae_nat": 0.005748392860977321,
+        "p99_nat": 0.11536918963218493,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.12853248889248903,
+        "max_coordinate": [
+          55,
+          14162
+        ]
+      },
+      "initial_exact_equal": true,
+      "gradients": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.15263829944599078,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.15318133555992494,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.004768040745503981,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 5.817522344246175e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.999520144574578,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0005595270558842458,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 637532,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              302,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-0.00011342527432134375",
+            "side_b": "-0.0006729523302055895"
+          }
+        }
+      },
+      "updates": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.05859118840302552,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.05859059792013738,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.012077175044226228,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 1.4735452028468767e-05,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9787557947715531,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.000199982438061852,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 636944,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              8,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-9.998885070672259e-05",
+            "side_b": "9.999358735512942e-05"
+          }
+        }
+      },
+      "target_coordinate": {
+        "gpu": {
+          "gradient": 2.5329131858597975e-06,
+          "update": -9.960674651665613e-05
+        },
+        "npu": {
+          "gradient": 0.00039044616278260946,
+          "update": -9.999742906074971e-05
+        }
+      }
+    },
+    "qkv-attention-fp32": {
+      "config_matched": true,
+      "targets": {
+        "target_count": 123,
+        "side_a_nll_nat_per_token": 0.5433585227311223,
+        "side_b_nll_nat_per_token": 0.5462790078860053,
+        "nll_abs_diff_nat_per_token": 0.002920485154882968,
+        "mae_nat": 0.007062455918447543,
+        "p99_nat": 0.11916643160478148,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.15475536126856326,
+        "max_coordinate": [
+          15,
+          8771
+        ]
+      },
+      "initial_exact_equal": true,
+      "gradients": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.15344163642367495,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.15258316649385778,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.003795160418119256,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 4.6305037458470265e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9997081429294583,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0006767436861991882,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 492256,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.3.self_attn.q_proj.lora_B.default.weight",
+            "index": [
+              7536,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "0.03302978724241257",
+            "side_b": "0.03235304355621338"
+          }
+        }
+      },
+      "updates": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.05859128766179395,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.058592868348386576,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.011147435724495555,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 1.3601070097702419e-05,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9819015180960672,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.00019994428294012323,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 638794,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              933,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "9.998630412155762e-05",
+            "side_b": "-9.995797881856561e-05"
+          }
+        }
+      },
+      "target_coordinate": {
+        "gpu": {
+          "gradient": -4.400182206154568e-06,
+          "update": 9.97732495306991e-05
+        },
+        "npu": {
+          "gradient": 0.00012124997738283128,
+          "update": -9.999175381381065e-05
+        }
+      }
+    },
+    "oproj7-backward-fp32": {
+      "config_matched": true,
+      "targets": {
+        "target_count": 123,
+        "side_a_nll_nat_per_token": 0.5441815106418652,
+        "side_b_nll_nat_per_token": 0.546074651843421,
+        "nll_abs_diff_nat_per_token": 0.0018931412015558147,
+        "mae_nat": 0.004231977514158315,
+        "p99_nat": 0.08193545488999635,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.14861454380110928,
+        "max_coordinate": [
+          55,
+          14162
+        ]
+      },
+      "initial_exact_equal": true,
+      "gradients": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.15367991615472723,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.15209141179550534,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.006181769458423053,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 7.542423370703275e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.999236505289287,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.001208541914820671,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 502592,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.3.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              416,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-0.006193174514919519",
+            "side_b": "-0.0074017164297401905"
+          }
+        }
+      },
+      "updates": {
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.058589101605061186,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.05859051055642073,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.012789559540961063,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 1.560463770632971e-05,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9761747726182625,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0001999883388634771,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 637533,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              302,
+              1
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "9.999221219914034e-05",
+            "side_b": "-9.999612666433677e-05"
+          }
+        }
+      },
+      "target_coordinate": {
+        "gpu": {
+          "gradient": -0.00012838603288400918,
+          "update": 9.999221219914034e-05
+        },
+        "npu": {
+          "gradient": 0.00025825362536124885,
+          "update": -9.999612666433677e-05
+        }
+      }
+    }
+  },
+  "causal_interventions": {
+    "16": {
+      "classification": "common-cotangent causal diagnostic; not original-loss gradient or accepted repair",
+      "boundary": 16,
+      "target_gradient": {
+        "gpu": -0.00012838603288400918,
+        "npu": 0.00016923870134633034
+      },
+      "original_target_gradient": {
+        "gpu": {
+          "gradient": -0.00012838603288400918,
+          "update": 9.999221219914034e-05
+        },
+        "npu": {
+          "gradient": 0.00025825362536124885,
+          "update": -9.999612666433677e-05
+        }
+      },
+      "original_target_gap": 0.00038663965824525803,
+      "diagnostic_target_gap": 0.00029762473423033953,
+      "target_gap_ratio": 0.7697729084002721,
+      "layer7_gout_error_norm_ratio": 0.7895348479416439,
+      "preservation": {
+        "gpu": {
+          "forward_logits_exact_baseline": true,
+          "boundary_forward_exact_baseline": {
+            "exact_equal": true
+          },
+          "incoming_boundary_gradient_vs_baseline": {
+            "exact_equal": true
+          },
+          "layer7_gout_vs_own_baseline": {
+            "exact_equal": true
+          },
+          "layer7_kernel_dy_vs_own_baseline": {
+            "exact_equal": true
+          },
+          "layer7_B_input_exact_baseline": {
+            "exact_equal": true
+          },
+          "upper_adapter_gradients_exact_baseline": {
+            "exact_equal": true
+          },
+          "complete_adapter_gradient_vs_baseline": {
+            "exact_equal": true
+          }
+        },
+        "npu": {
+          "forward_logits_exact_baseline": true,
+          "boundary_forward_exact_baseline": {
+            "exact_equal": true
+          },
+          "incoming_boundary_gradient_vs_baseline": {
+            "exact_equal": true
+          },
+          "layer7_gout_vs_own_baseline": {
+            "exact_equal": false
+          },
+          "layer7_kernel_dy_vs_own_baseline": {
+            "exact_equal": false
+          },
+          "layer7_B_input_exact_baseline": {
+            "exact_equal": true
+          },
+          "upper_adapter_gradients_exact_baseline": {
+            "exact_equal": true
+          },
+          "layer7_gout_vs_gpu_baseline": {
+            "exact_equal": false
+          },
+          "own_baseline_layer7_gout_vs_gpu_baseline": {
+            "exact_equal": false
+          },
+          "complete_adapter_gradient_vs_baseline": {
+            "exact_equal": false
+          }
+        }
+      }
+    },
+    "8": {
+      "classification": "common-cotangent causal diagnostic; not original-loss gradient or accepted repair",
+      "boundary": 8,
+      "target_gradient": {
+        "gpu": -0.00012838603288400918,
+        "npu": -0.00014865850971546024
+      },
+      "original_target_gradient": {
+        "gpu": {
+          "gradient": -0.00012838603288400918,
+          "update": 9.999221219914034e-05
+        },
+        "npu": {
+          "gradient": 0.00025825362536124885,
+          "update": -9.999612666433677e-05
+        }
+      },
+      "original_target_gap": 0.00038663965824525803,
+      "diagnostic_target_gap": -2.027247683145106e-05,
+      "target_gap_ratio": -0.05243248176727792,
+      "layer7_gout_error_norm_ratio": 0.10867325153539588,
+      "preservation": {
+        "gpu": {
+          "forward_logits_exact_baseline": true,
+          "boundary_forward_exact_baseline": {
+            "exact_equal": true
+          },
+          "incoming_boundary_gradient_vs_baseline": {
+            "exact_equal": true
+          },
+          "layer7_gout_vs_own_baseline": {
+            "exact_equal": true
+          },
+          "layer7_kernel_dy_vs_own_baseline": {
+            "exact_equal": true
+          },
+          "layer7_B_input_exact_baseline": {
+            "exact_equal": true
+          },
+          "upper_adapter_gradients_exact_baseline": {
+            "exact_equal": true
+          },
+          "complete_adapter_gradient_vs_baseline": {
+            "exact_equal": true
+          }
+        },
+        "npu": {
+          "forward_logits_exact_baseline": true,
+          "boundary_forward_exact_baseline": {
+            "exact_equal": true
+          },
+          "incoming_boundary_gradient_vs_baseline": {
+            "exact_equal": true
+          },
+          "layer7_gout_vs_own_baseline": {
+            "exact_equal": false
+          },
+          "layer7_kernel_dy_vs_own_baseline": {
+            "exact_equal": false
+          },
+          "layer7_B_input_exact_baseline": {
+            "exact_equal": true
+          },
+          "upper_adapter_gradients_exact_baseline": {
+            "exact_equal": true
+          },
+          "layer7_gout_vs_gpu_baseline": {
+            "exact_equal": false
+          },
+          "own_baseline_layer7_gout_vs_gpu_baseline": {
+            "exact_equal": false
+          },
+          "complete_adapter_gradient_vs_baseline": {
+            "exact_equal": false
+          }
+        }
+      }
+    }
+  },
+  "causal_conclusion": "Layer8 common reverse signal suppresses most target and layer7 o_proj incoming-gradient discrepancy; layer16 does not. This implicates reverse propagation through layers8–15 at the differing native forward states, not a localized operator defect.",
+  "budgets": {
+    "cumulative_tensor_raw_bytes_per_side": {
+      "gpu": 862893408,
+      "npu": 862893408
+    },
+    "additional_capture_limit_per_job": 33554432,
+    "total_capture_limit_per_side": 1073741824,
+    "fetched_compressed_transfer_bytes": 39558106,
+    "packet_download_upload_bytes": 7080021,
+    "source_control_metadata_allowance_bytes": 4194304,
+    "conservative_transfer_total_bytes": 50832431,
+    "transfer_limit_bytes": 52428800
+  },
+  "execution": {
+    "native_jobs": 16,
+    "boundary16_native_status": "failed after saving model computation; CPU-only postprocessing recovery completed",
+    "boundary8_native_status": "completed",
+    "new_upstream_bug_fixes": 0
+  },
+  "sources": {
+    "policy.py": {
+      "sha256": "1e33e21b0280be60be847331f926386498721cebffa49b84ea4b51cc7df701e1",
+      "source": "\"\"\"Isolated numerical-policy candidates; these are not upstream library bug fixes.\nWeights, boundary dtypes, labels, model structure and adapter initial state stay\nunchanged. Promote only the named contraction, then round to the original dtype.\n\"\"\"\nimport torch,types\n\ndef install(model,accelerated,mode):\n if mode=='qkv-attention-fp32':\n  q=install(model,accelerated,'qkv-fp32');att=install(model,accelerated,'attention-fp32')\n  return dict(classification='numerical-policy adjustment',mode=mode,components=[q,att])\n record=dict(classification='numerical-policy adjustment',mode=mode,calls=[])\n if mode=='qkv-fp32':\n  names=[]\n  for name,module in model.named_modules():\n   if name.endswith('.linear_attn.in_proj_qkv'):\n    assert isinstance(module,torch.nn.Linear) and not module.weight.requires_grad\n    names.append(name)\n    def forward(self,x,_name=name):\n     y=torch.nn.functional.linear(x.float(),self.weight.float(),None if self.bias is None else self.bias.float()).to(x.dtype)\n     record['calls'].append(dict(module=_name,weight_dtype=str(self.weight.dtype),input_dtype=str(x.dtype),output_dtype=str(y.dtype),shape=list(y.shape)))\n     return y\n    module.forward=types.MethodType(forward,module)\n  assert len(names)==24,names\n  record['scope']=names\n elif mode=='oproj7-backward-fp32':\n  name='base_model.model.model.language_model.layers.7.self_attn.o_proj'\n  module=dict(model.named_modules())[name]\n  assert isinstance(module,torch.nn.Linear) and not module.weight.requires_grad and module.bias is None\n  class FrozenBackwardPolicy(torch.autograd.Function):\n   @staticmethod\n   def forward(ctx,x,w):\n    ctx.save_for_backward(w);ctx.input_dtype=x.dtype\n    return torch.nn.functional.linear(x,w)\n   @staticmethod\n   def backward(ctx,dy):\n    (w,)=ctx.saved_tensors\n    return (dy.float()@w.float()).to(ctx.input_dtype),None\n  def forward(self,x):\n   y=FrozenBackwardPolicy.apply(x,self.weight)\n   record['calls'].append(dict(module=name,forward='unchanged native BF16 F.linear',backward='FP32 dy @ W, rounded BF16',shape=list(y.shape)))\n   return y\n  module.forward=types.MethodType(forward,module)\n  record['scope']=[name];record['attention_backend']='unchanged native fused attention'\n elif mode=='attention-fp32':\n  def kernel(q,k,v,scale,side):\n   score=q.float()@k.float().transpose(-1,-2)*scale\n   mask=torch.ones(score.shape[-2:],device=q.device,dtype=torch.bool).triu(1)\n   y=(score.masked_fill(mask,float('-inf')).softmax(-1)@v.float()).to(q.dtype)\n   record['calls'].append(dict(module='full_attention',device=str(q.device),shape=list(q.shape),input_dtype=str(q.dtype),output_dtype=str(y.dtype),kernel='FP32 QK/softmax/AV, BF16 boundary'))\n   return y\n  accelerated.kernel=kernel;record['scope']='8 full-attention contractions; unchanged BF16 Q/K/V and outputs'\n else:raise ValueError(mode)\n return record\n"
+    },
+    "capture.py": {
+      "sha256": "483d9a8c265841c553ba201324c56632dfd14aef5ceeca767255310237322397",
+      "source": "\"\"\"Exact trusted SFT reproduction with bounded first-step causal boundaries.\nOne complete pretrained model, one batch/backward/update. Raw boundaries <=1 GiB\nper side. Sketches are explicitly sampled; original Torch values remain native.\n\"\"\"\nimport os,sys,argparse,json,time,hashlib,importlib.util\nfrom pathlib import Path\nP=argparse.ArgumentParser()\nfor k in ['side','model','baseline','source','mode','output']:P.add_argument('--'+k,required=True)\na=P.parse_args();out=Path(a.output);out.mkdir(parents=True,exist_ok=False);root=Path(__file__).resolve().parent\nfor k in list(os.environ):\n if k in ['RANK','LOCAL_RANK','WORLD_SIZE','LOCAL_WORLD_SIZE','GROUP_RANK','ROLE_RANK','ROLE_WORLD_SIZE','MASTER_ADDR','MASTER_PORT'] or k.startswith(('OMPI_COMM_WORLD_','PMI_','PMIX_')):os.environ.pop(k,None)\nif a.side=='npu':os.environ.update(ASCEND_RT_VISIBLE_DEVICES='14',ASCEND_DEVICE_ID='0',DEVICE_ID='0')\nimport torch,numpy as np,transformers,peft\nfrom array_compare import compare_arrays\nif a.side=='npu':\n import torch_npu\n torch.npu.set_device(0);device='npu:0';sync=torch.npu.synchronize\nelse:\n assert os.environ.get('CUDA_VISIBLE_DEVICES') and torch.cuda.device_count()==1\n torch.cuda.set_device(0);device='cuda:0';sync=torch.cuda.synchronize;torch.backends.cuda.matmul.allow_tf32=False\n\ndef write(n,x):(out/n).write_text(json.dumps(x,indent=2,allow_nan=False)+'\\n')\ndef sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()\nfrom transformers import AutoModelForImageTextToText\nfrom peft import LoraConfig,get_peft_model\nimport transformers.models.qwen3_5.modeling_qwen3_5 as impl\nspec=importlib.util.spec_from_file_location('trusted_accelerated',Path(a.source)/'accelerated.py');accelerated=importlib.util.module_from_spec(spec);spec.loader.exec_module(accelerated)\nb=Path(a.baseline);cfg=json.loads((b/'configuration.json').read_text());torch.manual_seed(2317);t0=time.monotonic()\nwrite('identity.json',dict(side=a.side,mode=a.mode,torch=torch.__version__,transformers=transformers.__version__,peft=peft.__version__,collector_sha256=sha(__file__),attention_source_sha256=sha(Path(a.source)/'accelerated.py'),model_source_sha256=sha(impl.__file__),baseline=str(b),device=device,runtime_name=torch.cuda.get_device_name(0) if a.side=='gpu' else torch.npu.get_device_name(0),assigned_uuid=os.environ.get('NVIDIA_VISIBLE_DEVICES'),torch_uuid=str(torch.cuda.get_device_properties(0).uuid) if a.side=='gpu' else None,CUDA_VISIBLE_DEVICES=os.environ.get('CUDA_VISIBLE_DEVICES'),npu_physical=14 if a.side=='npu' else None))\nmodel=AutoModelForImageTextToText.from_pretrained(a.model,dtype=torch.bfloat16,attn_implementation='eager',local_files_only=True).to(device)\nmodel.config.use_cache=False\nlora=LoraConfig(r=cfg['lora']['rank'],lora_alpha=cfg['lora']['alpha'],lora_dropout=0,target_modules=cfg['lora']['targets'],bias='none',init_lora_weights=True)\nmodel=get_peft_model(model,lora).train();train={n:p for n,p in model.named_parameters() if p.requires_grad}\ninitial=torch.load(b/'initial.pt',map_location='cpu',weights_only=True);assert set(initial)==set(train)\nwith torch.no_grad():\n for n,p in train.items():p.copy_(initial[n].to(p.device,p.dtype))\nattention=accelerated.install(impl,a.side)\npolicy_record=None\nif a.mode in ['qkv-fp32','attention-fp32','qkv-attention-fp32','oproj7-backward-fp32']:\n from policy import install as install_policy\n policy_record=install_policy(model,accelerated,a.mode)\nids=torch.tensor([[cfg['labels'][0][0] if False else 248044]*4+cfg['ids']],device=device)\nmask=torch.tensor(cfg['mask'],device=device);pos=torch.tensor(cfg['positions'],device=device);labels=torch.tensor(cfg['labels'],device=device)\nwrite('configuration.json',dict(source_configuration=cfg,ids=ids.cpu().tolist(),mask=mask.cpu().tolist(),positions=pos.cpu().tolist(),labels=labels.cpu().tolist(),initial_exact=all(torch.equal(initial[n],p.detach().cpu()) for n,p in train.items()),model_parameters=sum(p.numel() for p in model.parameters()),trainable={n:dict(shape=list(p.shape),dtype=str(p.dtype)) for n,p in train.items()},mode=a.mode))\nprint('LOADED',a.side,time.monotonic()-t0,flush=True)\nraw=out/'raw';raw.mkdir();manifest={};sketch={};used=0\nprevious_raw=sum(json.loads(p.read_text()).get('raw_bytes',0) for p in root.glob('runs/**/artifacts/result.json'))\nraw_limit=1024**3-previous_raw\n\ndef save(key,t):\n global used\n if key in manifest:raise RuntimeError('duplicate boundary '+key)\n x=t.detach().cpu().contiguous();size=x.numel()*x.element_size()\n if used+size>raw_limit:raise RuntimeError('raw capture budget exceeded')\n name=hashlib.sha256(key.encode()).hexdigest()[:24]+'.pt';torch.save(x,raw/name);used+=size\n n=x.numel();indices=np.unique(np.linspace(0,n-1,min(1024,n),dtype=np.int64)) if n else np.array([],dtype=np.int64)\n vals=x.float().reshape(-1).numpy();sketch[key]=vals[indices].copy()\n manifest[key]=dict(path='raw/'+name,shape=list(x.shape),dtype=str(x.dtype),bytes=size,requires_grad=t.requires_grad,sketch_indices=indices.tolist(),norm=float(torch.linalg.vector_norm(x.float().reshape(-1).double())),maximum=float(x.float().abs().max()) if n else 0)\n\nhandles=[]\ndef tap(key,t):\n if not isinstance(t,torch.Tensor):return\n save(key+'.fwd',t)\n if t.requires_grad:t.register_hook(lambda g,k=key:(save(k+'.bwd',g),None)[1])\n\ndef hook(name,capture_input=False):\n def callback(mod,args,output):\n  if capture_input and args:tap(name+'.input',args[0])\n  t=output[0] if isinstance(output,tuple) else output\n  tap(name+'.output',t)\n return callback\n\nif a.mode=='boundaries':\n for name,mod in model.named_modules():\n  if '.language_model.layers.' not in name:continue\n  rel=name.split('.language_model.layers.',1)[1];parts=rel.split('.')\n  select=len(parts)==1 or '.'.join(parts[1:]) in ['input_layernorm','post_attention_layernorm','linear_attn','self_attn','mlp','linear_attn.in_proj_qkv','linear_attn.norm','self_attn.q_norm','self_attn.k_norm'] or name.endswith('.lora_B.default')\n  if select:handles.append(mod.register_forward_hook(hook('layer.'+rel,capture_input=len(parts)==1 or name.endswith('.lora_B.default'))))\nif a.mode=='causal':\n native_kernel=accelerated.kernel\n kernel_calls=[0]\n def kernel_capture(q,k,v,scale,side):\n  layer=3+4*kernel_calls[0];kernel_calls[0]+=1\n  def mark(key,t):\n   save(key+'.fwd',t[:,4:8])\n   if t.requires_grad:t.register_hook(lambda g,kk=key:(save(kk+'.bwd',g[:,4:8]),None)[1])\n  if layer in [3,7,31]:\n   for key,t in zip(['q','k','v'],[q,k,v]):mark(f'kernel.{layer}.'+key,t)\n  y=native_kernel(q,k,v,scale,side)\n  if layer in [3,7,31]:mark(f'kernel.{layer}.y',y)\n  return y\n accelerated.kernel=kernel_capture\n modules=dict(model.named_modules())\n path='base_model.model.model.language_model.layers.0.linear_attn.in_proj_qkv'\n handles.append(modules[path].register_forward_hook(hook('projection0',capture_input=True)))\n path='base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default'\n handles.append(modules[path].register_forward_hook(hook('layer.7.self_attn.v_proj.lora_B.default',capture_input=True)))\nif policy_record is not None:\n modules=dict(model.named_modules())\n path='base_model.model.model.language_model.layers.0.linear_attn.in_proj_qkv'\n handles.append(modules[path].register_forward_hook(hook('projection0',capture_input=True)))\n path='base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default'\n handles.append(modules[path].register_forward_hook(hook('layer.7.self_attn.v_proj.lora_B.default',capture_input=True)))\nif a.mode=='oproj7-backward-fp32':\n for suffix in ['q_proj','o_proj']:\n  path='base_model.model.model.language_model.layers.7.self_attn.'+suffix\n  handles.append(modules[path].register_forward_hook(hook('oproj7.'+suffix,capture_input=suffix=='o_proj')))\n native_kernel=accelerated.kernel;kernel_calls=[0];benchmark_inputs={}\n def kernel_capture(q,k,v,scale,side):\n  layer=3+4*kernel_calls[0];kernel_calls[0]+=1\n  y=native_kernel(q,k,v,scale,side)\n  if layer==7:\n   save('kernel.7.y.fwd',y[:,4:8])\n   y.register_hook(lambda g:(save('kernel.7.y.bwd',g[:,4:8]),None)[1])\n   benchmark_inputs.update(q=q.detach(),k=k.detach(),v=v.detach(),scale=scale)\n  return y\n accelerated.kernel=kernel_capture\nif a.mode.startswith('cotangent-boundary'):\n boundary_index=int(a.mode.removeprefix('cotangent-boundary'))\n common_path=root/f'common-boundary{boundary_index}.pt'\n common_cotangent=torch.load(common_path,map_location='cpu',weights_only=True).to(device)\n assert common_cotangent.dtype==torch.bfloat16 and tuple(common_cotangent.shape)==(1,138,4096)\n modules=dict(model.named_modules());prefix='base_model.model.model.language_model.layers.'\n intervention_calls=[0]\n def intervention(mod,args):\n  h=args[0];save(f'boundary.{boundary_index}.input.fwd',h)\n  def replace(g):\n   intervention_calls[0]+=1\n   save(f'boundary.{boundary_index}.incoming.bwd',g)\n   save(f'boundary.{boundary_index}.substituted.bwd',common_cotangent)\n   assert g.shape==common_cotangent.shape and g.dtype==common_cotangent.dtype\n   return common_cotangent\n  h.register_hook(replace)\n handles.append(modules[prefix+str(boundary_index)].register_forward_pre_hook(intervention))\n handles.append(modules[prefix+'7.self_attn'].register_forward_hook(hook('layer.7.self_attn')))\n handles.append(modules[prefix+'7.self_attn.v_proj.lora_B.default'].register_forward_hook(hook('layer.7.self_attn.v_proj.lora_B.default',capture_input=True)))\n def gate_capture(mod,args,y):\n  gate=y.reshape(1,138,16,512)[...,256:].sigmoid()\n  save('layer.7.gate.fwd',gate)\n handles.append(modules[prefix+'7.self_attn.q_proj'].register_forward_hook(gate_capture))\n native_kernel=accelerated.kernel;kernel_calls=[0]\n def diagnostic_kernel(q,k,v,scale,side):\n  layer=3+4*kernel_calls[0];kernel_calls[0]+=1\n  def mark(key,t):\n   save(key+'.fwd',t[:,4:8])\n   t.register_hook(lambda g,kk=key:(save(kk+'.bwd',g[:,4:8]),None)[1])\n  y=native_kernel(q,k,v,scale,side)\n  if layer==7:\n   for name,t in zip(['q','k','v','y'],[q,k,v,y]):mark('kernel.7.'+name,t)\n  return y\n accelerated.kernel=diagnostic_kernel\nbase_versions={n:p._version for n,p in model.named_parameters() if not p.requires_grad}\nmodel.zero_grad(set_to_none=True)\noutputs=model(input_ids=ids,attention_mask=mask,position_ids=pos,labels=labels,use_cache=False)\noutputs.loss.backward();sync()\nG={n:p.grad.detach().cpu().clone() if p.grad is not None else None for n,p in train.items()}\nnp.savez_compressed(out/'initial.npz',**{n:v.float().numpy() for n,v in initial.items()})\nnp.savez_compressed(out/'gradients.npz',**{n:v.float().numpy() for n,v in G.items() if v is not None})\ntorch.save(G,out/'gradients.pt')\nbaseG=torch.load(b/'grad-0.pt',map_location='cpu',weights_only=True)\nwrite('baseline-gradient-check.json',compare_arrays({n:v.float().numpy() for n,v in G.items() if v is not None},{n:v.float().numpy() for n,v in baseG.items() if v is not None},expected=list(train),metrics=True))\nz=outputs.logits.detach().float().cpu();valid=labels[:,1:].cpu()!=-100;zz=z[:,:-1].double()[valid];target=labels[:,1:].cpu()[valid]\nlogp=zz.gather(-1,target[:,None]).squeeze(-1)-torch.logsumexp(zz,dim=-1)\npositions=valid.nonzero().tolist();write('targets.json',[dict(position=p[1]+1,token=int(t),logprob=float(v)) for p,t,v in zip(positions,target,logp)])\nif a.mode!='oproj7-backward-fp32' and not a.mode.startswith('cotangent-boundary'):np.save(out/'valid-logits.npy',z[:,4:].numpy())\nelse:write('forward-logits-check.json',dict(shape=list(z[:,4:].shape),sha256=hashlib.sha256(z[:,4:].contiguous().numpy().tobytes()).hexdigest(),baseline_file_sha256=sha(b/'valid-logits.npy') if (b/'valid-logits.npy').exists() else None))\noptim=torch.optim.AdamW(list(train.values()),lr=1e-4,weight_decay=0,foreach=False);optim.step();sync()\nafter={n:p.detach().cpu().clone() for n,p in train.items()}\nnp.savez_compressed(out/'updates.npz',**{n:(after[n].float()-initial[n].float()).numpy() for n in train})\nif a.mode in ['attention-fp32','qkv-attention-fp32']:\n for entry in attention['calls']:entry['kernel']='FP32 QK/softmax/AV with BF16 boundary (policy, not fused native kernel)'\nif policy_record is not None:\n write('policy.json',policy_record)\n if a.mode in ['qkv-fp32','qkv-attention-fp32']:\n  x=torch.load(out/manifest['projection0.input.fwd']['path'],map_location='cpu',weights_only=True)[0,78].double()\n  y=torch.load(out/manifest['projection0.output.fwd']['path'],map_location='cpu',weights_only=True)[0,78,6389]\n  w=dict(model.named_modules())['base_model.model.model.language_model.layers.0.linear_attn.in_proj_qkv'].weight[6389].detach().cpu().double()\n  ref=(x*w).sum().to(torch.bfloat16)\n  write('policy-regression.json',dict(scope='actual layer0 QKV token78/channel6389',classification='correct-rounding objective for precision policy, not vendor-bug proof',actual=float(y),fp64_round_bf16=float(ref),pass_at_coordinate=bool(y==ref)))\nwrite('result.json',dict(status='completed',loss=float(outputs.loss.detach()),nll=float(-logp.mean()),elapsed=time.monotonic()-t0,gradients=len(G),absent=[n for n,v in G.items() if v is None],nonfinite=[n for n,v in G.items() if v is not None and not bool(torch.isfinite(v).all())],frozen_mutated=[n for n,p in model.named_parameters() if n in base_versions and p._version!=base_versions[n]],attention_calls=attention['calls'],raw_bytes=used))\nwrite('boundaries.json',manifest);np.savez_compressed(out/'sketches.npz',**sketch)\nif a.mode=='causal':\n from causal_checks import gemm_experiment,verify_attention\n gemm_experiment(out,manifest,model,a.side)\n verify_attention(out,manifest,native_kernel,a.side,root/'common-layer7.npz')\nif a.mode=='oproj7-backward-fp32':\n from causal_checks import verify_oproj7\n verify_oproj7(out,manifest,model,a.side,root,native_kernel,benchmark_inputs,sync)\nif a.mode.startswith('cotangent-boundary'):\n assert intervention_calls[0]==1 and used<=32*1024**2\n from diagnostic_checks import check_intervention\n check_intervention(out,manifest,root,a.side,boundary_index,sha(common_path))\nwrite('causal-terminal.json',dict(status='completed'))\nprint('DONE',json.loads((out/'result.json').read_text()),flush=True)\n"
+    },
+    "causal_checks.py": {
+      "sha256": "b5887737d831d95201dcccd05733b4aeb8a3768b1c0998ec48c77da01a9ae9be",
+      "source": "\"\"\"Actual-state attention VJP replay and first-divergence GEMM experiment.\nFP64 references consume the native captured q/k/v and the real SFT cotangent.\n\"\"\"\nimport torch,numpy as np,json,hashlib\nfrom array_compare import compare_arrays\n\ndef arrays_report(a,b):return compare_arrays({k:x.detach().float().cpu().numpy() for k,x in a.items()},{k:x.detach().float().cpu().numpy() for k,x in b.items()},expected=list(b),metrics=True)\ndef exact_attention(q,k,v,scale):\n score=q@k.transpose(-1,-2)*scale\n mask=torch.ones(score.shape[-2:],device=q.device,dtype=torch.bool).triu(1)\n return score.masked_fill(mask,float('-inf')).softmax(-1)@v\n\ndef verify_attention(out,manifest,native_kernel,side,common_path=None):\n def get(key):return torch.load(out/manifest[key]['path'],map_location='cpu',weights_only=True)\n result={};device='cuda:0' if side=='gpu' else 'npu:0'\n scenarios={}\n for layer in [3,7,31]:\n  prefix=f'kernel.{layer}.'\n  scenarios['own-'+str(layer)]=([get(prefix+k+'.fwd') for k in ['q','k','v']],get(prefix+'y.bwd'),[get(prefix+k+'.bwd') for k in ['q','k','v']],layer)\n if common_path and common_path.exists():\n  z=np.load(common_path);scenarios['gpu-common-7']=([torch.from_numpy(z[k]).to(torch.bfloat16) for k in ['q','k','v']],torch.from_numpy(z['dy']).to(torch.bfloat16),None,7)\n xB=get('layer.7.self_attn.v_proj.lora_B.default.input.fwd')[0,4:,1].double()\n dyB=get('layer.7.self_attn.v_proj.lora_B.default.output.bwd')[0,4:,302].double()\n for name,(values,dy,actual,layer) in scenarios.items():\n  cpu=[x.double().requires_grad_() for x in values];ref=exact_attention(*cpu,1/16)\n  rg=torch.autograd.grad(ref,cpu,grad_outputs=dy.double())\n  xs=[x.to(device).requires_grad_() for x in values];y=native_kernel(*xs,1/16,side);ng=torch.autograd.grad(y,xs,grad_outputs=dy.to(device))\n  native=dict(output=y,**dict(zip(['grad_q','grad_k','grad_v'],ng)));reference=dict(output=ref,**dict(zip(['grad_q','grad_k','grad_v'],rg)))\n  float_inputs=[x.to(device=device,dtype=torch.float32).requires_grad_() for x in values]\n  fp32=exact_attention(*float_inputs,1/16).to(torch.bfloat16);fg=torch.autograd.grad(fp32,float_inputs,grad_outputs=dy.to(device))\n  policy=dict(output=fp32,**{k:v.to(torch.bfloat16) for k,v in zip(['grad_q','grad_k','grad_v'],fg)})\n  row=dict(native_vs_fp64=arrays_report(native,reference),attention_fp32_policy_vs_fp64=arrays_report(policy,reference))\n  if actual is not None:row['replay_vs_actual_backward']=arrays_report(dict(zip(['grad_q','grad_k','grad_v'],ng)),dict(zip(['grad_q','grad_k','grad_v'],actual)))\n  if layer==7:\n   # KV head1/channel46 == v_proj output302; repeated over attention heads4..7.\n   for tag,grad in [('native_replay',ng[2].cpu().double()),('fp64',rg[2]),('attention_fp32',fg[2].detach().cpu().to(torch.bfloat16).double())]:\n    adapter_dy=(grad.sum(1)[0,:,46].to(torch.bfloat16).double()*2)\n    x=xB\n    if name=='gpu-common-7':x=torch.from_numpy(z['xB']).double()\n    row[tag+'_B302_1_from_vjp']=float((x*adapter_dy).sum())\n   row['actual_B302_1_from_recorded_adapter']=float((xB*dyB).sum())\n   row['native_replay_adapter_dy_vs_actual']=arrays_report({'dy':ng[2].detach().cpu().float().sum(1)[0,:,46].to(torch.bfloat16).float()*2},{'dy':dyB.float()}) if name=='own-7' else None\n  result[name]=row\n if side=='gpu':\n  values,dy,_,_=scenarios['own-7'];np.savez_compressed(out/'common-layer7.npz',**{k:v.float().numpy() for k,v in zip(['q','k','v'],values)},dy=dy.float().numpy(),xB=xB.float().numpy())\n (out/'attention-causal.json').write_text(json.dumps(result,indent=2)+'\\n')\n\ndef gemm_experiment(out,manifest,model,side):\n def get(k):return torch.load(out/manifest[k]['path'],map_location='cpu',weights_only=True)\n x=get('projection0.input.fwd');native=get('projection0.output.fwd')\n mod=dict(model.named_modules())['base_model.model.model.language_model.layers.0.linear_attn.in_proj_qkv'];w=mod.weight.detach();device=w.device\n reference=(x[0,78].double()*w[6389].cpu().double()).sum();mid=3.4921875\n result=dict(token=78,channel=6389,fp64_dot=float(reference),bf16_round=float(reference.to(torch.bfloat16)),midpoint=mid,distance_above_midpoint=float(reference-mid),original_native=float(native[0,78,6389]),replays={})\n values=x.to(device)\n if side=='gpu':\n  original=torch.backends.cuda.matmul.allow_bf16_reduced_precision_reduction\n  for flag in [True,False]:\n   torch.backends.cuda.matmul.allow_bf16_reduced_precision_reduction=flag\n   y=torch.nn.functional.linear(values,w)\n   result['replays']['bf16_reduced_'+str(flag)]=dict(selected=float(y[0,78,6389]),versus_original=arrays_report({'y':y},{'y':native}))\n  torch.backends.cuda.matmul.allow_bf16_reduced_precision_reduction=original\n else:\n  y=torch.nn.functional.linear(values,w);result['replays']['native_bf16']=dict(selected=float(y[0,78,6389]),versus_original=arrays_report({'y':y},{'y':native}))\n y=torch.nn.functional.linear(values.float(),w.float()).to(torch.bfloat16)\n result['replays']['fp32_accum_cast_bf16']=dict(selected=float(y[0,78,6389]),versus_original=arrays_report({'y':y},{'y':native}))\n (out/'gemm-causal.json').write_text(json.dumps(result,indent=2)+'\\n')\n\n\ndef verify_oproj7(out,manifest,model,side,root,native_kernel,bench,sync):\n \"\"\"Controlled backward-only intervention with actual-state FP64 reference.\n CPU64 is a numerical reference, not a proof of a library contract violation.\n \"\"\"\n import time,statistics\n def get(key):return torch.load(out/manifest[key]['path'],map_location='cpu',weights_only=True)\n def previous(mode):\n  found=[]\n  for p in root.glob('runs/**/artifacts/identity.json'):\n   if json.loads(p.read_text())['mode']==mode:found.append(p.parent)\n  assert len(found)==1,(mode,found)\n  return found[0]\n def load_previous(folder,key):\n  m=json.loads((folder/'boundaries.json').read_text())\n  return torch.load(folder/m[key]['path'],map_location='cpu',weights_only=True)\n boundaries=previous('boundaries');causal=previous('causal')\n base_gout=load_previous(boundaries,'layer.7.self_attn.output.bwd')\n gout=get('oproj7.o_proj.output.bwd');qout=get('oproj7.q_proj.output.fwd')\n mod=dict(model.named_modules())['base_model.model.model.language_model.layers.7.self_attn.o_proj'];w=mod.weight.detach();dev=w.device\n gate=qout.to(dev).reshape(1,138,16,512)[...,256:].reshape(1,138,4096).sigmoid().cpu()\n native=(gout.to(dev)@w).cpu();promoted=(gout.to(dev).float()@w.float()).to(torch.bfloat16).cpu()\n reference=gout.double()@w.cpu().double();rounded=reference.to(torch.bfloat16)\n def select(x):return x.reshape(1,138,16,256)[:,4:,4:8].permute(0,2,1,3).contiguous()\n native_dy=(native.to(dev)*gate.to(dev)).cpu();promoted_dy=(promoted.to(dev)*gate.to(dev)).cpu()\n old_dy=load_previous(causal,'kernel.7.y.bwd');new_dy=get('kernel.7.y.bwd')\n result=dict(classification='backward-only numerical-policy intervention; unchanged native forward/fused attention',\n  incoming_gout_vs_baseline=arrays_report({'gout':gout},{'gout':base_gout}),\n  input_vjp_native_vs_fp64=arrays_report({'dx':native},{'dx':reference}),\n  input_vjp_policy_vs_fp64=arrays_report({'dx':promoted},{'dx':reference}),\n  input_vjp_native_vs_rounded_fp64=arrays_report({'dx':native},{'dx':rounded}),\n  input_vjp_policy_vs_rounded_fp64=arrays_report({'dx':promoted},{'dx':rounded}),\n  input_vjp_policy_vs_actual=arrays_report({'dx':promoted},{'dx':get('oproj7.o_proj.input.bwd')}),\n  gate_native_reconstruction_vs_baseline_kernel_dy=arrays_report({'dy':select(native_dy)},{'dy':old_dy}),\n  gate_policy_reconstruction_vs_actual_kernel_dy=arrays_report({'dy':select(promoted_dy)},{'dy':new_dy}),\n  weight_sha256=hashlib.sha256(w.cpu().contiguous().view(torch.uint8).numpy().tobytes()).hexdigest())\n # Compare complete forward bytes with own trusted instrumented baseline.\n current=np.load(out/'valid-logits.npy') if (out/'valid-logits.npy').exists() else None\n baseline=np.load(boundaries/'valid-logits.npy',mmap_mode='r')\n recorded=json.loads((out/'forward-logits-check.json').read_text())\n result['forward_logits_exact_baseline']=recorded['sha256']==hashlib.sha256(baseline.tobytes()).hexdigest()\n assert result['forward_logits_exact_baseline'] and result['incoming_gout_vs_baseline']['exact_equal']\n assert result['input_vjp_policy_vs_actual']['exact_equal'] and result['gate_policy_reconstruction_vs_actual_kernel_dy']['exact_equal']\n # Native local replay exactness is measured rather than assumed.\n packet=dict(gout=gout.float().numpy(),gate=select(gate).float().numpy(),dx=select(native).float().numpy())\n np.savez_compressed(out/'oproj7-packet.npz',**packet)\n # Native vs explicit attention performance on the same complete layer7 inputs.\n # Isolated FW+BWD timing excludes model loading, hooks and CPU references.\n dy_full=torch.zeros_like(bench['q']);dy_full[:,4:8]=old_dy.to(dev)\n times={}\n for kind in ['native_fused','explicit_fp32_attention']:\n  elapsed=[]\n  for i in range(7):\n   xs=[bench[k].detach().requires_grad_() for k in ['q','k','v']]\n   sync();start=time.perf_counter()\n   y=native_kernel(*xs,bench['scale'],side) if kind=='native_fused' else exact_attention(*[x.float() for x in xs],bench['scale']).to(torch.bfloat16)\n   torch.autograd.grad(y,xs,grad_outputs=dy_full);sync()\n   if i>=2:elapsed.append(time.perf_counter()-start)\n  times[kind]=dict(median_seconds=statistics.median(elapsed),samples_seconds=elapsed)\n result['attention_operator_timing']=dict(scope='actual full16-head layer7 q/k/v, fixed cotangent, forward+backward; not end-to-end throughput',shape=list(bench['q'].shape),timings=times,explicit_to_fused_ratio=times['explicit_fp32_attention']['median_seconds']/times['native_fused']['median_seconds'])\n # New same-input projection replay on NPU, not a repeated fused-kernel check.\n common=root/'gpu-oproj7-packet.npz'\n if side=='npu' and common.exists():\n  z=np.load(common);cg=torch.from_numpy(z['gout']).to(torch.bfloat16).to(dev)\n  cn=(cg@w).cpu();cr=cg.cpu().double()@w.cpu().double()\n  result['gpu_common_input_projection_vjp_vs_gpu']=arrays_report({'dx':select(cn)},{'dx':torch.from_numpy(z['dx']).to(torch.bfloat16)})\n  result['gpu_common_input_projection_vjp_vs_fp64']=arrays_report({'dx':cn},{'dx':cr})\n  # QK and B input held at the authoritative GPU state. Only incoming o_proj\n  # cotangent / gate switch. This tests which pre-kernel factor flips B[302,1].\n  old=np.load(root/'common-layer7.npz');q,k,v=[torch.from_numpy(old[t]).double().requires_grad_() for t in ['q','k','v']]\n  yy=exact_attention(q,k,v,1/16);xB=torch.from_numpy(old['xB']).double()\n  factors={};dxx=[select(cr.to(torch.bfloat16)),select(reference.to(torch.bfloat16))];gates=[torch.from_numpy(z['gate']).to(torch.bfloat16),select(gate)]\n  for i,dx in enumerate(dxx):\n   for j,gg in enumerate(gates):\n    dyy=(dx.double()*gg.double()).to(torch.bfloat16).double()\n    dv=torch.autograd.grad(yy,v,grad_outputs=dyy,retain_graph=True)[0]\n    adapter_dy=dv.sum(1)[0,:,46].to(torch.bfloat16).double()*2\n    factors[str(i)+str(j)]=float((xB*adapter_dy).sum())\n  result['gout_gate_factorial']=dict(scope='fixed GPU QK/V and xB; FP64 o_proj VJP rounded BF16, BF16 gate multiply, FP64 attention VJP rounded repeat-KV; bits incoming_gout,gate:0GPU1NPU',B302_1=factors)\n (out/'oproj7-causal.json').write_text(json.dumps(result,indent=2)+'\\n')\n"
+    },
+    "diagnostic_checks.py": {
+      "sha256": "8553ffe4bf98737de7133f2e16666204f48ea2d0caf7d3fac9ba2e2bec70c248",
+      "source": "\"\"\"Actual-state decoder reverse-boundary intervention. Not a repair or loss gradient.\"\"\"\nimport json,hashlib,re\nimport numpy as np\nimport torch\nfrom causal_checks import arrays_report\n\ndef check_intervention(out,manifest,root,side,boundary,common_sha,destination=None):\n def get(key):return torch.load(out/manifest[key]['path'],map_location='cpu',weights_only=True)\n def previous(mode):\n  found=[p.parent for p in root.glob('runs/**/artifacts/identity.json') if json.loads(p.read_text())['mode']==mode]\n  assert len(found)==1,(mode,found)\n  return found[0]\n baseline=previous('boundaries');causal=previous('causal')\n def old(folder,key):\n  m=json.loads((folder/'boundaries.json').read_text());return torch.load(folder/m[key]['path'],map_location='cpu',weights_only=True)\n prefix=f'boundary.{boundary}.'\n incoming=get(prefix+'incoming.bwd');substituted=get(prefix+'substituted.bwd')\n logits=np.load(baseline/'valid-logits.npy',mmap_mode='r')\n h=hashlib.sha256(logits.tobytes()).hexdigest()\n recorded=json.loads((out/'forward-logits-check.json').read_text())\n key='layer.7.self_attn.v_proj.lora_B.default'\n x=get(key+'.input.fwd');dy=get(key+'.output.bwd');original_x=old(baseline,key+'.input.fwd');original_dy=old(baseline,key+'.output.bwd')\n gkey='layer.7.self_attn.output.bwd';gout=get(gkey);base_gout=old(baseline,gkey)\n result=dict(classification='causal diagnostic only: substituted decoder input cotangent; native forward/backend unchanged',boundary=boundary,side=side,common_packet_sha256=common_sha,\n  forward_logits_exact_baseline=recorded['sha256']==h,\n  boundary_forward_exact_baseline=arrays_report({'h':get(prefix+'input.fwd')},{'h':old(baseline,f'layer.{boundary}.input.fwd')}),\n  incoming_boundary_gradient_vs_baseline=arrays_report({'g':incoming},{'g':old(baseline,f'layer.{boundary}.input.bwd')}),\n  substitution_vs_incoming=arrays_report({'g':substituted},{'g':incoming}),\n  layer7_gout_vs_own_baseline=arrays_report({'g':gout},{'g':base_gout}),\n  layer7_kernel_dy_vs_own_baseline=arrays_report({'g':get('kernel.7.y.bwd')},{'g':old(causal,'kernel.7.y.bwd')}),\n  layer7_B_input_exact_baseline=arrays_report({'x':x},{'x':original_x}),\n  native_target_gradient=json.loads((out/'baseline-gradient-check.json').read_text()).get('status'))\n with np.load(out/'gradients.npz') as z:actual=float(z['base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight'][302,1])\n basegrad=torch.load(baseline/'gradients.pt',map_location='cpu',weights_only=True)\n with np.load(out/'gradients.npz') as z:\n  upper={n:torch.from_numpy(z[n]) for n in z.files if (m:=re.search(r'\\.layers\\.(\\d+)\\.',n)) and int(m.group(1))>=boundary}\n result['upper_adapter_gradients_exact_baseline']=arrays_report(upper,{n:basegrad[n] for n in upper})\n result['target_coordinate']=dict(actual_native=actual,reconstructed_fp64=float((x[0,:,1].double()*dy[0,:,302].double()).sum()),baseline_reconstructed_fp64=float((original_x[0,:,1].double()*original_dy[0,:,302].double()).sum()))\n # Decompose fixed-side target change into actual input/cotangent factors.\n x0=original_x[0,:,1].double();x1=x[0,:,1].double();d0=original_dy[0,:,302].double();d1=dy[0,:,302].double()\n result['target_change_decomposition']=dict(input=float(((x1-x0)*(d0+d1)/2).sum()),cotangent=float(((d1-d0)*(x0+x1)/2).sum()))\n common=root/'gpu-oproj7-packet.npz'\n if side=='npu' and common.exists():\n  with np.load(common) as z:gpu_gout=torch.from_numpy(z['gout']).to(torch.bfloat16)\n  result['layer7_gout_vs_gpu_baseline']=arrays_report({'g':gout},{'g':gpu_gout})\n  result['own_baseline_layer7_gout_vs_gpu_baseline']=arrays_report({'g':base_gout},{'g':gpu_gout})\n result['complete_adapter_gradient_vs_baseline']=json.loads((out/'baseline-gradient-check.json').read_text())\n # Write diagnostics before enforcing collector preservation checks.\n ((destination or out)/'intervention.json').write_text(json.dumps(result,indent=2)+'\\n')\n assert result['forward_logits_exact_baseline']\n for name in ['boundary_forward_exact_baseline','incoming_boundary_gradient_vs_baseline','layer7_B_input_exact_baseline','upper_adapter_gradients_exact_baseline']:assert result[name]['exact_equal'],name\n if side=='gpu':\n  assert result['complete_adapter_gradient_vs_baseline']['exact_equal'],'GPU own common-signal replay failed'\n  assert result['substitution_vs_incoming']['exact_equal']\n"
+    },
+    "compare_diagnostic.py": {
+      "sha256": "cf7fce0c49c947ce2dc8c98d76f29237562a57bbaa67fff28bf599a386aec0c1",
+      "source": "\"\"\"Compare complete adapter gradients from a labeled causal intervention, not a repair.\"\"\"\nimport json,sys,re\nfrom pathlib import Path\nimport numpy as np\nR=Path(__file__).resolve().parent\nsys.path.insert(0,str(R.parents[3]/'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\n\ndef read(path):return json.loads(path.read_text())\ndef main(boundary):\n mode='cotangent-boundary'+str(boundary)\n dirs={s:R/(s+'-'+mode+'-evidence/artifacts') for s in ['gpu','npu']}\n diagnostics={s:read(p/'intervention.json' if (p/'intervention.json').exists() else R/(s+'-'+mode+'-analysis-evidence/artifacts/intervention.json')) for s,p in dirs.items()}\n configs={s:read(p/'configuration.json') for s,p in dirs.items()}\n for field in ['ids','mask','positions','labels','trainable']:assert configs['gpu'][field]==configs['npu'][field],field\n assert all(c['initial_exact'] for c in configs.values())\n arrays={}\n for s,p in dirs.items():\n  with np.load(p/'gradients.npz') as z:arrays[s]={n:z[n] for n in z.files}\n expected=list(configs['gpu']['trainable']);assert set(expected)==set(arrays['gpu'])==set(arrays['npu'])\n groups={}\n for label,predicate in [('lower',lambda i:i<boundary),('upper',lambda i:i>=boundary),('layer7',lambda i:i==7)]:\n  names=[n for n in expected if predicate(int(re.search(r'\\.layers\\.(\\d+)\\.',n).group(1)))]\n  groups[label]=compare_arrays({n:arrays['gpu'][n] for n in names},{n:arrays['npu'][n] for n in names},expected=names,metrics=True)\n coord='base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight'\n target={s:float(arrays[s][coord][302,1]) for s in arrays}\n original=read(R/'boundaries-comparison.json')['target_coordinate'];original_gap=original['npu']['gradient']-original['gpu']['gradient']\n newgap=target['npu']-target['gpu']\n n=diagnostics['npu'];ratio=n['layer7_gout_vs_gpu_baseline']['metrics']['error_norm']['value']/n['own_baseline_layer7_gout_vs_gpu_baseline']['metrics']['error_norm']['value']\n report=dict(classification='common-cotangent causal diagnostic; not original-loss gradient or accepted repair',boundary=boundary,target_gradient=target,original_target_gradient=original,original_target_gap=original_gap,diagnostic_target_gap=newgap,target_gap_ratio=newgap/original_gap,layer7_gout_error_norm_ratio=ratio,diagnostics=diagnostics,gradient_groups=groups)\n p=R/(mode+'-comparison.json');assert not p.exists();p.write_text(json.dumps(report,indent=2)+'\\n')\n print(json.dumps({k:report[k] for k in ['boundary','target_gradient','original_target_gap','diagnostic_target_gap','target_gap_ratio','layer7_gout_error_norm_ratio']},indent=2))\n for name,g in groups.items():print(name,'cosine',g['metrics']['cosine']['value'],'error_l2',g['metrics']['error_norm']['value'])\nif __name__=='__main__':main(int(sys.argv[1]))\n"
+    }
+  },
+  "limitations": [
+    "The runtime is the pinned Torch 2.9 / Transformers 5.20.2 / PEFT 0.20.0 environment; latest/main runtime was not tested.",
+    "Cotangent replacement is a diagnostic and is not a gradient of the unmodified loss.",
+    "Increased cross-platform similarity does not establish correctness.",
+    "Explicit FP32 attention changes the backend and has an operator-level cost; measured medians are not end-to-end throughput."
+  ]
+}
