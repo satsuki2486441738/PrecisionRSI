@@ -62674,7 +62674,8 @@
             "attention": "eager",
             "native_dtype": "BF16 and fresh-checkpoint FP32",
             "external_fla_causal_conv_kernels": false,
-            "gpu_binding": "allocated NVML UUID -> PCI == CUDA-driver PCI; one visible device"
+            "gpu_binding": "allocated NVML UUID -> PCI == CUDA-driver PCI; one visible device",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -62700,7 +62701,8 @@
             "attention": "eager",
             "native_dtype": "BF16 and fresh-checkpoint FP32",
             "external_fla_causal_conv_kernels": false,
-            "gpu_binding": null
+            "gpu_binding": null,
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
@@ -63000,7 +63002,8 @@
             "lora_dropout": 0,
             "initial_adapters_exact_equal": true,
             "optimizer": "AdamW lr=1e-4 weight_decay=0 foreach=False",
-            "steps": 1
+            "steps": 1,
+            "training": "LoRA"
           }
         },
         {
@@ -63036,7 +63039,8 @@
             "lora_dropout": 0,
             "initial_adapters_exact_equal": true,
             "optimizer": "AdamW lr=1e-4 weight_decay=0 foreach=False",
-            "steps": 1
+            "steps": 1,
+            "training": "LoRA"
           }
         }
       ],
