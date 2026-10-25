@@ -1,0 +1,2620 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-25",
+  "task": "autonomous_cross_platform_inference_and_sft",
+  "source_revision": "bce558170eb5b91bd0c2e6442f1a8d7f2098c159",
+  "outcome": {
+    "confirmed_library_defect": false,
+    "library_patch": null,
+    "cross_platform_comparison": "completed",
+    "acceptance": null
+  },
+  "model": {
+    "name": "Qwen3.5-9B-Base",
+    "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+    "loaded_parameters": 9409813744,
+    "checkpoint_tensor_dtypes": {
+      "BF16": 727,
+      "F32": 48
+    },
+    "paired_weight_identity": true
+  },
+  "independence": {
+    "fresh_workers": 2,
+    "fork_context": false,
+    "initial_inputs": "Goal and resource interfaces; no historical case or Issue/PR hints",
+    "parent_followup": "Completed missing allocated-GPU captures, retained original workers' results and failures; target selection did not use an upstream bug report"
+  },
+  "identities": {
+    "gpu_inference": {
+      "side": "gpu",
+      "host": "node037",
+      "python": "3.12.13 | packaged by conda-forge | (main, Aug 11 2026, 10:27:28) [GCC 14.4.0]",
+      "torch": "2.9.0+cu126",
+      "transformers": "5.20.2",
+      "transformers_file": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/deps/transformers/__init__.py",
+      "device": "cuda:0",
+      "device_count": 1,
+      "selected_device_name": "NVIDIA H20Z",
+      "distributed_env": {
+        "NVIDIA_VISIBLE_DEVICES": "GPU-ec76873d-adee-2751-d225-ebdce88ead33",
+        "CUDA_VISIBLE_DEVICES": "4"
+      },
+      "packages": {
+        "transformers": "5.20.2",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.23.3",
+        "huggingface-hub": "2.3.0",
+        "numpy": "1.26.4"
+      },
+      "model": "/home/jovyan/projects/precision-resources/models/qwen35-base-68c46c4-20261013T084744Z",
+      "files": {
+        "config.json": {
+          "sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+          "bytes": 3126
+        },
+        "model.safetensors.index.json": {
+          "sha256": "026b9d9fe03f19fd065f2a2f56a332c67640878106c0ca6be2f60c655ed5a8c1",
+          "bytes": 79657
+        }
+      },
+      "hardware": "name, uuid, memory.total [MiB], memory.used [MiB]\nNVIDIA H20Z, GPU-52f5ccdc-2a99-2ef5-6199-490e2076e54e, 143771 MiB, 1 MiB\nNVIDIA H20Z, GPU-7539b5eb-ff57-87b3-18e5-2ab88dc2d5d3, 143771 MiB, 1 MiB\nNVIDIA H20Z, GPU-1594736c-79ed-81e6-a4d1-90778d6ff1f7, 143771 MiB, 1 MiB\nNVIDIA H20Z, GPU-f1bd21a9-6a85-53a4-1e7b-6c386e2b0f83, 143771 MiB, 1 MiB\nNVIDIA H20Z, GPU-ec76873d-adee-2751-d225-ebdce88ead33, 143771 MiB, 526 MiB\nNVIDIA H20Z, GPU-44818815-963b-2fa1-0e4b-ad27c032cf3f, 143771 MiB, 1 MiB\nNVIDIA H20Z, GPU-9bb55ade-38ab-d87c-9341-472786e9c052, 143771 MiB, 1 MiB\nNVIDIA H20Z, GPU-893be398-d688-da06-1208-ac6053173e64, 143771 MiB, 1 MiB\n",
+      "shards": [
+        {
+          "name": "model.safetensors-00001-of-00004.safetensors",
+          "bytes": 5276436216
+        },
+        {
+          "name": "model.safetensors-00002-of-00004.safetensors",
+          "bytes": 5335161576
+        },
+        {
+          "name": "model.safetensors-00003-of-00004.safetensors",
+          "bytes": 5368717376
+        },
+        {
+          "name": "model.safetensors-00004-of-00004.safetensors",
+          "bytes": 3325995704
+        }
+      ],
+      "assigned_gpu_uuid": "GPU-ec76873d-adee-2751-d225-ebdce88ead33",
+      "selected_gpu_properties": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=45bd11cf-d66d-bcad-300c-9350ddcfc156, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+      "selected_gpu_uuid": "45bd11cf-d66d-bcad-300c-9350ddcfc156",
+      "selected_cuda_pci": "0000:A3:00.0",
+      "binding_verified_by": "allocated NVML UUID -> PCI == selected CUDA driver PCI; one visible CUDA device",
+      "native_dtype": "torch.float32"
+    },
+    "npu_inference": {
+      "side": "npu",
+      "host": "notebook-qwen352-34677f0b-677b4c9bb4-crj99",
+      "python": "3.12.13 (main, Aug  3 2026, 02:40:28) [GCC 11.4.0]",
+      "torch": "2.9.0+cpu",
+      "transformers": "5.20.2",
+      "transformers_file": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/deps/transformers/__init__.py",
+      "device": "npu:0",
+      "device_count": 1,
+      "selected_device_name": "Ascend910_9382",
+      "distributed_env": {
+        "ASCEND_RT_VISIBLE_DEVICES": "12",
+        "ASCEND_VISIBLE_DEVICES": "12"
+      },
+      "packages": {
+        "transformers": "5.20.2",
+        "safetensors": "0.8.0",
+        "tokenizers": "0.23.3",
+        "huggingface-hub": "2.3.0",
+        "numpy": "1.26.4"
+      },
+      "model": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/models/qwen35-base-68c46c4-precision-20261012T141602Z",
+      "files": {
+        "config.json": {
+          "sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+          "bytes": 3126
+        },
+        "model.safetensors.index.json": {
+          "sha256": "026b9d9fe03f19fd065f2a2f56a332c67640878106c0ca6be2f60c655ed5a8c1",
+          "bytes": 79657
+        }
+      },
+      "hardware": "+------------------------------------------------------------------------------------------------+\n| npu-smi 25.5.2                   Version: 25.5.2                                               |\n+---------------------------+---------------+----------------------------------------------------+\n| NPU   Name                | Health        | Power(W)    Temp(C)           Hugepages-Usage(page)|\n| Chip  Phy-ID              | Bus-Id        | AICore(%)   Memory-Usage(MB)  HBM-Usage(MB)        |\n+===========================+===============+====================================================+\n| 0     Ascend910           | OK            | 163.7       41                0    / 0             |\n| 0     0                   | 0000:9D:00.0  | 0           0    / 0          61250/ 65536         |\n+------------------------------------------------------------------------------------------------+\n| 0     Ascend910           | OK            | -           40                0    / 0             |\n| 1     1                   | 0000:9F:00.0  | 0           0    / 0          60994/ 65536         |\n+===========================+===============+====================================================+\n| 1     Ascend910           | OK            | 169.0       41                0    / 0             |\n| 0     2                   | 0000:99:00.0  | 0           0    / 0          61208/ 65536         |\n+------------------------------------------------------------------------------------------------+\n| 1     Ascend910           | OK            | -           42                0    / 0             |\n| 1     3                   | 0000:9B:00.0  | 0           0    / 0          60974/ 65536         |\n+===========================+===============+====================================================+\n| 2     Ascend910           | OK            | 170.8       44                0    / 0             |\n| 0     4                   | 0000:95:00.0  | 0           0    / 0          61238/ 65536         |\n+------------------------------------------------------------------------------------------------+\n| 2     Ascend910           | OK            | -           43                0    / 0             |\n| 1     5                   | 0000:97:00.0  | 0           0    / 0          60958/ 65536         |\n+===========================+===============+====================================================+\n| 3     Ascend910           | OK            | 168.2       44                0    / 0             |\n| 0     6                   | 0000:91:00.0  | 0           0    / 0          61212/ 65536         |\n+------------------------------------------------------------------------------------------------+\n| 3     Ascend910           | OK            | -           44                0    / 0             |\n| 1     7                   | 0000:93:00.0  | 0           0    / 0          60969/ 65536         |\n+===========================+===============+====================================================+\n| 4     Ascend910           | OK            | 160.0       41                0    / 0             |\n| 0     8                   | 0000:8D:00.0  | 0           0    / 0          61216/ 65536         |\n+------------------------------------------------------------------------------------------------+\n| 4     Ascend910           | OK            | -           39                0    / 0             |\n| 1     9                   | 0000:8F:00.0  | 0           0    / 0          60971/ 65536         |\n+===========================+===============+====================================================+\n| 5     Ascend910           | OK            | 165.2       40                0    / 0             |\n| 0     10                  | 0000:89:00.0  | 0           0    / 0          61203/ 65536         |\n+------------------------------------------------------------------------------------------------+\n| 5     Ascend910           | OK            | -           40                0    / 0             |\n| 1     11                  | 0000:8B:00.0  | 0           0    / 0          60971/ 65536         |\n+===========================+===============+====================================================+\n| 6     Ascend910           | OK            | 171.1       43                0    / 0             |\n| 0     12                  | 0000:85:00.0  | 0           0    / 0          3209 / 65536         |\n+------------------------------------------------------------------------------------------------+\n| 6     Ascend910           | OK            | -           45                0    / 0             |\n| 1     13                  | 0000:87:00.0  | 0           0    / 0          2881 / 65536         |\n+===========================+===============+====================================================+\n| 7     Ascend910           | OK            | 164.6       43                0    / 0             |\n| 0     14                  | 0000:81:00.0  | 0           0    / 0          3148 / 65536         |\n+------------------------------------------------------------------------------------------------+\n| 7     Ascend910           | OK            | -           44                0    / 0             |\n| 1     15                  | 0000:83:00.0  | 0           0    / 0          2883 / 65536         |\n+===========================+===============+====================================================+\n+---------------------------+---------------+----------------------------------------------------+\n| NPU     Chip              | Process id    | Process name             | Process memory(MB)      |\n+===========================+===============+====================================================+\n| 0       0                 | 700916        | VLLMWorker_TP            | 58166                   |\n| 0       1                 | 700917        | VLLMWorker_TP            | 58166                   |\n+===========================+===============+====================================================+\n| 1       0                 | 700972        | VLLMWorker_TP            | 58143                   |\n| 1       1                 | 700973        | VLLMWorker_TP            | 58143                   |\n+===========================+===============+====================================================+\n| 2       0                 | 700872        | VLLMWorker_TP            | 58143                   |\n| 2       1                 | 700874        | VLLMWorker_TP            | 58143                   |\n+===========================+===============+====================================================+\n| 3       0                 | 700863        | VLLMWorker_TP            | 58143                   |\n| 3       1                 | 700864        | VLLMWorker_TP            | 58143                   |\n+===========================+===============+====================================================+\n| 4       0                 | 700903        | VLLMWorker_TP            | 58143                   |\n| 4       1                 | 700904        | VLLMWorker_TP            | 58143                   |\n+===========================+===============+====================================================+\n| 5       0                 | 700920        | VLLMWorker_TP            | 58144                   |\n| 5       1                 | 700921        | VLLMWorker_TP            | 58144                   |\n+===========================+===============+====================================================+\n| 6       0                 | 1394777       | python3                  | 113                     |\n+===========================+===============+====================================================+\n| No running processes found in NPU 7                                                            |\n+===========================+===============+====================================================+\n",
+      "shards": [
+        {
+          "name": "model.safetensors-00001-of-00004.safetensors",
+          "bytes": 5276436216
+        },
+        {
+          "name": "model.safetensors-00002-of-00004.safetensors",
+          "bytes": 5335161576
+        },
+        {
+          "name": "model.safetensors-00003-of-00004.safetensors",
+          "bytes": 5368717376
+        },
+        {
+          "name": "model.safetensors-00004-of-00004.safetensors",
+          "bytes": 3325995704
+        }
+      ]
+    },
+    "gpu_sft": {
+      "side": "gpu",
+      "torch": "2.9.0+cu126",
+      "transformers": "5.20.2",
+      "peft": "0.20.0",
+      "source": "/home/jovyan/projects/precision-skills/projects/precision-repair/cases/autonomous-cross-sft-20261025T034857Z/deps/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "source_sha256": "b4b17fe08d8d54da34a0fce78639666279ae7fd0a9e4ec06fce6602774707ca3",
+      "config_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+      "device": "cuda:0",
+      "device_name": "NVIDIA H20Z",
+      "mapping": {
+        "ASCEND_RT_VISIBLE_DEVICES": null,
+        "ASCEND_DEVICE_ID": null,
+        "DEVICE_ID": null,
+        "CUDA_VISIBLE_DEVICES": "4"
+      },
+      "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+    },
+    "npu_sft": {
+      "side": "npu",
+      "torch": "2.9.0+cpu",
+      "transformers": "5.20.2",
+      "peft": "0.20.0",
+      "source": "/home/work/user-job-dir/app/slai/user-xiexinyuan/xinyuan/precision-skill/precision-skills-publish/projects/precision-repair/cases/autonomous-cross-sft-20261025T034857Z/deps/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "source_sha256": "b4b17fe08d8d54da34a0fce78639666279ae7fd0a9e4ec06fce6602774707ca3",
+      "config_sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+      "device": "npu:0",
+      "device_name": "Ascend910_9382",
+      "mapping": {
+        "ASCEND_RT_VISIBLE_DEVICES": "14",
+        "ASCEND_DEVICE_ID": "0",
+        "DEVICE_ID": "0",
+        "CUDA_VISIBLE_DEVICES": null
+      },
+      "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+    }
+  },
+  "metrics": {
+    "inference": {
+      "short-bf16": {
+        "status": "completed",
+        "exact_equal": false,
+        "coverage": {
+          "expected_arrays": 1,
+          "side_a_arrays": 1,
+          "side_b_arrays": 1,
+          "paired_arrays": 1,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 1,
+          "compared_elements": 993280
+        },
+        "unequal_arrays": 1,
+        "unequal_elements": 723106,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [
+          {
+            "name": "logits",
+            "reason": "values",
+            "index": [
+              0,
+              0,
+              1
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "6.875",
+              "side_b": "6.8125"
+            }
+          }
+        ],
+        "findings_omitted": 0,
+        "metrics": {
+          "count": 993280,
+          "side_a_norm": {
+            "value": 3032.1902481322354,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 3033.612015013422,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 22.173279174262134,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 0.022248158998656523,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9999733851450685,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.125,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 511762,
+          "max_coordinate": {
+            "name": "logits",
+            "index": [
+              0,
+              2,
+              15122
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-8.375",
+            "side_b": "-8.5"
+          }
+        },
+        "metrics_unavailable": null,
+        "positions": 4,
+        "top1_disagreements": 0,
+        "side_paths": {
+          "gpu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/cross-platform-binding-verification-20261025T041111Z/evidence/short-bf16",
+          "npu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/evidence/npu/runs/npu-inference-20261025T034918Z"
+        },
+        "input_dtype_note": "Native dtype is taken from scope identity and native launch source; embedded input template dtype strings are not authoritative."
+      },
+      "short-fp32": {
+        "status": "completed",
+        "exact_equal": false,
+        "coverage": {
+          "expected_arrays": 1,
+          "side_a_arrays": 1,
+          "side_b_arrays": 1,
+          "paired_arrays": 1,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 1,
+          "compared_elements": 993280
+        },
+        "unequal_arrays": 1,
+        "unequal_elements": 972625,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [
+          {
+            "name": "logits",
+            "reason": "values",
+            "index": [
+              0,
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "7.604175567626953",
+              "side_b": "7.604178428649902"
+            }
+          }
+        ],
+        "findings_omitted": 0,
+        "metrics": {
+          "count": 993280,
+          "side_a_norm": {
+            "value": 3035.025924221929,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 3035.025352640766,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.004313331096700953,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 4.327897344324386e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.999999999999008,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 3.552436828613281e-05,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 80067,
+          "max_coordinate": {
+            "name": "logits",
+            "index": [
+              0,
+              0,
+              80067
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-3.478818893432617",
+            "side_b": "-3.478783369064331"
+          }
+        },
+        "metrics_unavailable": null,
+        "positions": 4,
+        "top1_disagreements": 0,
+        "side_paths": {
+          "gpu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/cross-platform-binding-verification-20261025T041111Z/completion-evidence/inference-fp32/short-fp32",
+          "npu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/evidence/npu/runs/npu-reference-20261025T035253Z"
+        },
+        "input_dtype_note": "Native dtype is taken from scope identity and native launch source; embedded input template dtype strings are not authoritative."
+      },
+      "long-bf16": {
+        "status": "completed",
+        "exact_equal": false,
+        "coverage": {
+          "expected_arrays": 1,
+          "side_a_arrays": 1,
+          "side_b_arrays": 1,
+          "paired_arrays": 1,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 1,
+          "compared_elements": 1489920
+        },
+        "unequal_arrays": 1,
+        "unequal_elements": 1220031,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [
+          {
+            "name": "logits",
+            "reason": "values",
+            "index": [
+              0,
+              0,
+              2
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.3125",
+              "side_b": "9.25"
+            }
+          }
+        ],
+        "findings_omitted": 0,
+        "metrics": {
+          "count": 1489920,
+          "side_a_norm": {
+            "value": 4084.3341864068498,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 4076.001297712147,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 47.625533720667605,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 0.03901740491689878,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.999933962420223,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.25,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 746866,
+          "max_coordinate": {
+            "name": "logits",
+            "index": [
+              1,
+              0,
+              1906
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "3.171875",
+            "side_b": "3.421875"
+          }
+        },
+        "metrics_unavailable": null,
+        "positions": 6,
+        "top1_disagreements": 0,
+        "side_paths": {
+          "gpu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/cross-platform-binding-verification-20261025T041111Z/evidence/long-bf16",
+          "npu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/evidence/npu/runs/npu-long-inference-20261025T035506Z"
+        },
+        "input_dtype_note": "Native dtype is taken from scope identity and native launch source; embedded input template dtype strings are not authoritative."
+      },
+      "long-fp32": {
+        "status": "completed",
+        "exact_equal": false,
+        "coverage": {
+          "expected_arrays": 1,
+          "side_a_arrays": 1,
+          "side_b_arrays": 1,
+          "paired_arrays": 1,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 1,
+          "compared_elements": 1489920
+        },
+        "unequal_arrays": 1,
+        "unequal_elements": 1461951,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [
+          {
+            "name": "logits",
+            "reason": "values",
+            "index": [
+              0,
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.923188209533691",
+              "side_b": "9.923190116882324"
+            }
+          }
+        ],
+        "findings_omitted": 0,
+        "metrics": {
+          "count": 1489920,
+          "side_a_norm": {
+            "value": 4087.941535804986,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 4087.9429028997197,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.0069274483334121765,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 5.6753391626211395e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.9999999999986201,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 3.5762786865234375e-05,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 531,
+          "max_coordinate": {
+            "name": "logits",
+            "index": [
+              0,
+              0,
+              531
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-4.040424346923828",
+            "side_b": "-4.040460109710693"
+          }
+        },
+        "metrics_unavailable": null,
+        "positions": 6,
+        "top1_disagreements": 0,
+        "side_paths": {
+          "gpu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/cross-platform-binding-verification-20261025T041111Z/completion-evidence/inference-fp32/long-fp32",
+          "npu": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/evidence/npu/runs/npu-long-reference-20261025T035601Z"
+        },
+        "input_dtype_note": "Native dtype is taken from scope identity and native launch source; embedded input template dtype strings are not authoritative."
+      }
+    },
+    "sft": {
+      "initial": {
+        "status": "completed",
+        "exact_equal": true,
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "unequal_arrays": 0,
+        "unequal_elements": 0,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [],
+        "findings_omitted": 0,
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 2.5266065981761043,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 2.5266065981761043,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.0,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 0.0,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 1.0,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 0,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.0.linear_attn.out_proj.lora_A.default.weight",
+            "index": [
+              0,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-0.00762939453125",
+            "side_b": "-0.00762939453125"
+          }
+        },
+        "metrics_unavailable": null
+      },
+      "gradients": {
+        "status": "completed",
+        "exact_equal": false,
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "unequal_arrays": 40,
+        "unequal_elements": 344063,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [
+          {
+            "name": "base_model.model.model.language_model.layers.0.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-0.0003477904247120023",
+              "side_b": "-0.00035382225178182125"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.1.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-8.644248737255111e-05",
+              "side_b": "-7.666800956940278e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.10.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "0.00011204388283658773",
+              "side_b": "0.00010848588863154873"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.11.self_attn.q_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "4.228618308843579e-06",
+              "side_b": "6.5848776102939155e-06"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.11.self_attn.v_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-0.0010944133391603827",
+              "side_b": "-0.0010702437721192837"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.12.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-2.32280399359297e-05",
+              "side_b": "-2.443579251121264e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.13.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "7.412189734168351e-05",
+              "side_b": "7.374919368885458e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.14.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-0.00030446340679191053",
+              "side_b": "-0.00030509341740980744"
+            }
+          }
+        ],
+        "findings_omitted": 32,
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.15373326710972074,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.15208803539227478,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.006179175212679883,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 7.539258111976912e-06,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.999241361934603,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0010940991342067719,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 502592,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.3.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              416,
+              0
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "-0.006156163290143013",
+            "side_b": "-0.007250262424349785"
+          }
+        },
+        "metrics_unavailable": null
+      },
+      "updates": {
+        "status": "completed",
+        "exact_equal": false,
+        "coverage": {
+          "expected_arrays": 80,
+          "side_a_arrays": 80,
+          "side_b_arrays": 80,
+          "paired_arrays": 80,
+          "missing": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "unexpected": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "compared_arrays": 80,
+          "compared_elements": 671744
+        },
+        "unequal_arrays": 40,
+        "unequal_elements": 340081,
+        "incompatible_arrays": 0,
+        "dtype_differences": 0,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "findings": [
+          {
+            "name": "base_model.model.model.language_model.layers.0.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.999712347052991e-05",
+              "side_b": "9.99971671262756e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.1.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.998843597713858e-05",
+              "side_b": "9.99869589577429e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.10.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-9.999106987379491e-05",
+              "side_b": "-9.999079338740557e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.11.self_attn.q_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-9.976408182410523e-05",
+              "side_b": "-9.984836651710793e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.11.self_attn.v_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.999909525504336e-05",
+              "side_b": "9.999905887525529e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.12.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.995696746045724e-05",
+              "side_b": "9.995907748816535e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.13.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "-9.998652240028605e-05",
+              "side_b": "-9.998644236475229e-05"
+            }
+          },
+          {
+            "name": "base_model.model.model.language_model.layers.14.linear_attn.out_proj.lora_B.default.weight",
+            "reason": "values",
+            "index": [
+              0,
+              0
+            ],
+            "values": {
+              "dtype": "float32",
+              "side_a": "9.99967087409459e-05",
+              "side_b": "9.999671601690352e-05"
+            }
+          }
+        ],
+        "findings_omitted": 32,
+        "metrics": {
+          "count": 671744,
+          "side_a_norm": {
+            "value": 0.05858934722341421,
+            "status": "no_thresholds"
+          },
+          "side_b_norm": {
+            "value": 0.05859038600817404,
+            "status": "no_thresholds"
+          },
+          "error_norm": {
+            "value": 0.012798216513091596,
+            "status": "no_thresholds"
+          },
+          "rmse": {
+            "value": 1.5615200143081198e-05,
+            "status": "no_thresholds"
+          },
+          "cosine": {
+            "value": 0.976142557323779,
+            "status": "no_thresholds"
+          },
+          "max_abs": {
+            "value": 0.0001999883388634771,
+            "status": "no_thresholds"
+          },
+          "max_flat_index": 637533,
+          "max_coordinate": {
+            "name": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+            "index": [
+              302,
+              1
+            ]
+          },
+          "max_values": {
+            "dtype": "float32",
+            "side_a": "9.999221219914034e-05",
+            "side_b": "-9.999612666433677e-05"
+          }
+        },
+        "metrics_unavailable": null
+      },
+      "targets": {
+        "target_count": 123,
+        "side_a_nll_nat_per_token": 0.5441815106418652,
+        "side_b_nll_nat_per_token": 0.546074651843421,
+        "nll_abs_diff_nat_per_token": 0.0018931412015558147,
+        "mae_nat": 0.004231977514158149,
+        "p99_nat": 0.081935454889997,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.14861454380111017,
+        "max_coordinate": [
+          55,
+          14162
+        ]
+      },
+      "native_results": {
+        "gpu": {
+          "status": "completed",
+          "steps": [
+            {
+              "index": 0,
+              "loss": 0.5441813468933105,
+              "fp64_ce": 0.5441815106418652,
+              "ce_error": 1.637485546046591e-07,
+              "valid_tokens": 123,
+              "gradients": 80,
+              "absent": [],
+              "nonfinite": [],
+              "elapsed": 7.473048428073525
+            },
+            {
+              "index": 1,
+              "loss": 0.5441813468933105,
+              "fp64_ce": 0.5441815106418652,
+              "ce_error": 1.637485546046591e-07,
+              "valid_tokens": 123,
+              "gradients": 80,
+              "absent": [],
+              "nonfinite": [],
+              "elapsed": 8.124293406959623
+            }
+          ],
+          "elapsed": 9.601882898015901
+        },
+        "npu": {
+          "status": "completed",
+          "steps": [
+            {
+              "index": 0,
+              "loss": 0.5460742115974426,
+              "fp64_ce": 0.546074651843421,
+              "ce_error": 4.402459783392487e-07,
+              "valid_tokens": 123,
+              "gradients": 80,
+              "absent": [],
+              "nonfinite": [],
+              "elapsed": 8.141602599993348
+            },
+            {
+              "index": 1,
+              "loss": 0.5460742115974426,
+              "fp64_ce": 0.546074651843421,
+              "ce_error": 4.402459783392487e-07,
+              "valid_tokens": 123,
+              "gradients": 80,
+              "absent": [],
+              "nonfinite": [],
+              "elapsed": 9.471927009988576
+            }
+          ],
+          "elapsed": 10.104113810230047
+        }
+      },
+      "oracle": {
+        "gpu": {
+          "status": "completed",
+          "exact_equal": false,
+          "coverage": {
+            "expected_arrays": 4,
+            "side_a_arrays": 4,
+            "side_b_arrays": 4,
+            "paired_arrays": 4,
+            "missing": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "unexpected": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "compared_arrays": 4,
+            "compared_elements": 137216
+          },
+          "unequal_arrays": 4,
+          "unequal_elements": 136960,
+          "incompatible_arrays": 0,
+          "dtype_differences": 0,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "findings": [
+            {
+              "name": "grad_key",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "-0.412109375",
+                "side_b": "-0.4136812090873718"
+              }
+            },
+            {
+              "name": "grad_query",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "6.606569513678551e-09",
+                "side_b": "0.0"
+              }
+            },
+            {
+              "name": "grad_value",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "-0.055908203125",
+                "side_b": "-0.05631554499268532"
+              }
+            },
+            {
+              "name": "output",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                1,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "0.001220703125",
+                "side_b": "0.0013298027915880084"
+              }
+            }
+          ],
+          "findings_omitted": 0,
+          "metrics": {
+            "count": 137216,
+            "side_a_norm": {
+              "value": 73.42267660478872,
+              "status": "no_thresholds"
+            },
+            "side_b_norm": {
+              "value": 73.42888665009018,
+              "status": "no_thresholds"
+            },
+            "error_norm": {
+              "value": 0.20972744062739224,
+              "status": "no_thresholds"
+            },
+            "rmse": {
+              "value": 0.0005661778560499797,
+              "status": "no_thresholds"
+            },
+            "cosine": {
+              "value": 0.9999959242979766,
+              "status": "no_thresholds"
+            },
+            "max_abs": {
+              "value": 0.00962376594543457,
+              "status": "no_thresholds"
+            },
+            "max_flat_index": 1305,
+            "max_coordinate": {
+              "name": "grad_key",
+              "index": [
+                0,
+                0,
+                5,
+                25
+              ]
+            },
+            "max_values": {
+              "dtype": "float32",
+              "side_a": "-0.55078125",
+              "side_b": "-0.5604050159454346"
+            }
+          },
+          "metrics_unavailable": null,
+          "groups": {
+            "output": {
+              "status": "completed",
+              "exact_equal": false,
+              "coverage": {
+                "expected_arrays": 1,
+                "side_a_arrays": 1,
+                "side_b_arrays": 1,
+                "paired_arrays": 1,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 1,
+                "compared_elements": 34304
+              },
+              "unequal_arrays": 1,
+              "unequal_elements": 34048,
+              "incompatible_arrays": 0,
+              "dtype_differences": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "findings": [
+                {
+                  "name": "output",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "0.001220703125",
+                    "side_b": "0.0013298027915880084"
+                  }
+                }
+              ],
+              "findings_omitted": 0,
+              "metrics": {
+                "count": 34304,
+                "side_a_norm": {
+                  "value": 64.75650799130432,
+                  "status": "no_thresholds"
+                },
+                "side_b_norm": {
+                  "value": 64.76032987273007,
+                  "status": "no_thresholds"
+                },
+                "error_norm": {
+                  "value": 0.11559895674039142,
+                  "status": "no_thresholds"
+                },
+                "rmse": {
+                  "value": 0.0006241393047385606,
+                  "status": "no_thresholds"
+                },
+                "cosine": {
+                  "value": 0.9999984084862765,
+                  "status": "no_thresholds"
+                },
+                "max_abs": {
+                  "value": 0.007739067077636719,
+                  "status": "no_thresholds"
+                },
+                "max_flat_index": 16700,
+                "max_coordinate": {
+                  "name": "output",
+                  "index": [
+                    0,
+                    0,
+                    65,
+                    60
+                  ]
+                },
+                "max_values": {
+                  "dtype": "float32",
+                  "side_a": "-2.046875",
+                  "side_b": "-2.0546140670776367"
+                }
+              },
+              "metrics_unavailable": null
+            },
+            "gradients": {
+              "status": "completed",
+              "exact_equal": false,
+              "coverage": {
+                "expected_arrays": 3,
+                "side_a_arrays": 3,
+                "side_b_arrays": 3,
+                "paired_arrays": 3,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 3,
+                "compared_elements": 102912
+              },
+              "unequal_arrays": 3,
+              "unequal_elements": 102912,
+              "incompatible_arrays": 0,
+              "dtype_differences": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "findings": [
+                {
+                  "name": "grad_key",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "-0.412109375",
+                    "side_b": "-0.4136812090873718"
+                  }
+                },
+                {
+                  "name": "grad_query",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "6.606569513678551e-09",
+                    "side_b": "0.0"
+                  }
+                },
+                {
+                  "name": "grad_value",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "-0.055908203125",
+                    "side_b": "-0.05631554499268532"
+                  }
+                }
+              ],
+              "findings_omitted": 0,
+              "metrics": {
+                "count": 102912,
+                "side_a_norm": {
+                  "value": 34.604683390886976,
+                  "status": "no_thresholds"
+                },
+                "side_b_norm": {
+                  "value": 34.61070743927343,
+                  "status": "no_thresholds"
+                },
+                "error_norm": {
+                  "value": 0.17499280143094298,
+                  "status": "no_thresholds"
+                },
+                "rmse": {
+                  "value": 0.0005454904786843587,
+                  "status": "no_thresholds"
+                },
+                "cosine": {
+                  "value": 0.9999872312010243,
+                  "status": "no_thresholds"
+                },
+                "max_abs": {
+                  "value": 0.00962376594543457,
+                  "status": "no_thresholds"
+                },
+                "max_flat_index": 1305,
+                "max_coordinate": {
+                  "name": "grad_key",
+                  "index": [
+                    0,
+                    0,
+                    5,
+                    25
+                  ]
+                },
+                "max_values": {
+                  "dtype": "float32",
+                  "side_a": "-0.55078125",
+                  "side_b": "-0.5604050159454346"
+                }
+              },
+              "metrics_unavailable": null
+            }
+          },
+          "calls": [
+            {
+              "layer": 3,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 7,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 11,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 15,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 19,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 23,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 27,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 31,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 3,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 7,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 11,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 15,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 19,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 23,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 27,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            },
+            {
+              "layer": 31,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "cuda:0",
+              "kernel": "aten flash SDPA"
+            }
+          ],
+          "profiler_events": [
+            "MulBackward0",
+            "ScaledDotProductFlashAttentionBackward0",
+            "SumBackward0",
+            "aten::_flash_attention_backward",
+            "aten::_flash_attention_forward",
+            "aten::_scaled_dot_product_flash_attention",
+            "aten::_scaled_dot_product_flash_attention_backward",
+            "aten::_to_copy",
+            "aten::as_strided",
+            "aten::copy_",
+            "aten::empty",
+            "aten::empty_like",
+            "aten::empty_strided",
+            "aten::expand",
+            "aten::expand_as",
+            "aten::fill_",
+            "aten::mul",
+            "aten::ones_like",
+            "aten::scaled_dot_product_attention",
+            "aten::sum",
+            "aten::to",
+            "aten::transpose",
+            "autograd::engine::evaluate_function: MulBackward0",
+            "autograd::engine::evaluate_function: ScaledDotProductFlashAttentionBackward0",
+            "autograd::engine::evaluate_function: SumBackward0",
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+            "cudaDeviceGetAttribute",
+            "cudaFuncSetAttribute",
+            "cudaLaunchKernel",
+            "cudaMemcpyAsync",
+            "cudaStreamSynchronize"
+          ],
+          "scope": "actual first full-attention layer, valid positions, head 0; BF16 native forward/backward vs CPU FP64 mathematical attention"
+        },
+        "npu": {
+          "status": "completed",
+          "exact_equal": false,
+          "coverage": {
+            "expected_arrays": 4,
+            "side_a_arrays": 4,
+            "side_b_arrays": 4,
+            "paired_arrays": 4,
+            "missing": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "unexpected": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "compared_arrays": 4,
+            "compared_elements": 137216
+          },
+          "unequal_arrays": 4,
+          "unequal_elements": 136959,
+          "incompatible_arrays": 0,
+          "dtype_differences": 0,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          },
+          "findings": [
+            {
+              "name": "grad_key",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "-0.412109375",
+                "side_b": "-0.41139981150627136"
+              }
+            },
+            {
+              "name": "grad_query",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "6.693881005048752e-09",
+                "side_b": "0.0"
+              }
+            },
+            {
+              "name": "grad_value",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "-0.05224609375",
+                "side_b": "-0.053009454160928726"
+              }
+            },
+            {
+              "name": "output",
+              "reason": "values",
+              "index": [
+                0,
+                0,
+                1,
+                0
+              ],
+              "values": {
+                "dtype": "float32",
+                "side_a": "0.0017547607421875",
+                "side_b": "0.0016656428342685103"
+              }
+            }
+          ],
+          "findings_omitted": 0,
+          "metrics": {
+            "count": 137216,
+            "side_a_norm": {
+              "value": 73.41675116269543,
+              "status": "no_thresholds"
+            },
+            "side_b_norm": {
+              "value": 73.40692068877225,
+              "status": "no_thresholds"
+            },
+            "error_norm": {
+              "value": 0.2101787091846441,
+              "status": "no_thresholds"
+            },
+            "rmse": {
+              "value": 0.0005673960956064407,
+              "status": "no_thresholds"
+            },
+            "cosine": {
+              "value": 0.9999959105569405,
+              "status": "no_thresholds"
+            },
+            "max_abs": {
+              "value": 0.008761823177337646,
+              "status": "no_thresholds"
+            },
+            "max_flat_index": 36632,
+            "max_coordinate": {
+              "name": "grad_query",
+              "index": [
+                0,
+                0,
+                9,
+                24
+              ]
+            },
+            "max_values": {
+              "dtype": "float32",
+              "side_a": "-0.037353515625",
+              "side_b": "-0.028591692447662354"
+            }
+          },
+          "metrics_unavailable": null,
+          "groups": {
+            "output": {
+              "status": "completed",
+              "exact_equal": false,
+              "coverage": {
+                "expected_arrays": 1,
+                "side_a_arrays": 1,
+                "side_b_arrays": 1,
+                "paired_arrays": 1,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 1,
+                "compared_elements": 34304
+              },
+              "unequal_arrays": 1,
+              "unequal_elements": 34047,
+              "incompatible_arrays": 0,
+              "dtype_differences": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "findings": [
+                {
+                  "name": "output",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "0.0017547607421875",
+                    "side_b": "0.0016656428342685103"
+                  }
+                }
+              ],
+              "findings_omitted": 0,
+              "metrics": {
+                "count": 34304,
+                "side_a_norm": {
+                  "value": 64.75200255283153,
+                  "status": "no_thresholds"
+                },
+                "side_b_norm": {
+                  "value": 64.75001450969997,
+                  "status": "no_thresholds"
+                },
+                "error_norm": {
+                  "value": 0.11540561310589018,
+                  "status": "no_thresholds"
+                },
+                "rmse": {
+                  "value": 0.0006230954081064807,
+                  "status": "no_thresholds"
+                },
+                "cosine": {
+                  "value": 0.9999984121776998,
+                  "status": "no_thresholds"
+                },
+                "max_abs": {
+                  "value": 0.007889509201049805,
+                  "status": "no_thresholds"
+                },
+                "max_flat_index": 2876,
+                "max_coordinate": {
+                  "name": "output",
+                  "index": [
+                    0,
+                    0,
+                    11,
+                    60
+                  ]
+                },
+                "max_values": {
+                  "dtype": "float32",
+                  "side_a": "-2.234375",
+                  "side_b": "-2.24226450920105"
+                }
+              },
+              "metrics_unavailable": null
+            },
+            "gradients": {
+              "status": "completed",
+              "exact_equal": false,
+              "coverage": {
+                "expected_arrays": 3,
+                "side_a_arrays": 3,
+                "side_b_arrays": 3,
+                "paired_arrays": 3,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 3,
+                "compared_elements": 102912
+              },
+              "unequal_arrays": 3,
+              "unequal_elements": 102912,
+              "incompatible_arrays": 0,
+              "dtype_differences": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "findings": [
+                {
+                  "name": "grad_key",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "-0.412109375",
+                    "side_b": "-0.41139981150627136"
+                  }
+                },
+                {
+                  "name": "grad_query",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "6.693881005048752e-09",
+                    "side_b": "0.0"
+                  }
+                },
+                {
+                  "name": "grad_value",
+                  "reason": "values",
+                  "index": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "values": {
+                    "dtype": "float32",
+                    "side_a": "-0.05224609375",
+                    "side_b": "-0.053009454160928726"
+                  }
+                }
+              ],
+              "findings_omitted": 0,
+              "metrics": {
+                "count": 102912,
+                "side_a_norm": {
+                  "value": 34.60054214435432,
+                  "status": "no_thresholds"
+                },
+                "side_b_norm": {
+                  "value": 34.583401018427054,
+                  "status": "no_thresholds"
+                },
+                "error_norm": {
+                  "value": 0.17566056546128045,
+                  "status": "no_thresholds"
+                },
+                "rmse": {
+                  "value": 0.0005475720438549164,
+                  "status": "no_thresholds"
+                },
+                "cosine": {
+                  "value": 0.9999872293569054,
+                  "status": "no_thresholds"
+                },
+                "max_abs": {
+                  "value": 0.008761823177337646,
+                  "status": "no_thresholds"
+                },
+                "max_flat_index": 36632,
+                "max_coordinate": {
+                  "name": "grad_query",
+                  "index": [
+                    0,
+                    0,
+                    9,
+                    24
+                  ]
+                },
+                "max_values": {
+                  "dtype": "float32",
+                  "side_a": "-0.037353515625",
+                  "side_b": "-0.028591692447662354"
+                }
+              },
+              "metrics_unavailable": null
+            }
+          },
+          "calls": [
+            {
+              "layer": 3,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 7,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 11,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 15,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 19,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 23,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 27,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 31,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 3,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 7,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 11,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 15,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 19,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 23,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 27,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            },
+            {
+              "layer": 31,
+              "shape": [
+                1,
+                16,
+                134,
+                256
+              ],
+              "device": "npu:0",
+              "kernel": "torch_npu.npu_fusion_attention"
+            }
+          ],
+          "profiler_events": [
+            "MulBackward0",
+            "NpuFusionAttentionBackward0",
+            "SumBackward0",
+            "aclnnFlashAttentionScore",
+            "aclnnFlashAttentionScoreGrad",
+            "aclnnInplaceFillScalar",
+            "aclnnInplaceOne",
+            "aclnnMul",
+            "aclnnReduceSum",
+            "aclnnTriu",
+            "aten::_to_copy",
+            "aten::as_strided",
+            "aten::copy_",
+            "aten::empty",
+            "aten::empty_like",
+            "aten::empty_strided",
+            "aten::expand",
+            "aten::expand_as",
+            "aten::fill_",
+            "aten::mul",
+            "aten::ones",
+            "aten::ones_like",
+            "aten::sum",
+            "aten::to",
+            "aten::triu",
+            "autograd::engine::evaluate_function: MulBackward0",
+            "autograd::engine::evaluate_function: NpuFusionAttentionBackward0",
+            "autograd::engine::evaluate_function: SumBackward0",
+            "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+            "destroy_event",
+            "empty_tensor",
+            "npu::_npu_format_cast",
+            "npu::npu_format_cast",
+            "npu::npu_fusion_attention",
+            "npu::npu_fusion_attention_grad",
+            "record_event",
+            "wait_event"
+          ],
+          "scope": "actual first full-attention layer, valid positions, head 0; BF16 native forward/backward vs CPU FP64 mathematical attention"
+        }
+      }
+    },
+    "classification": "No library defect established by these comparisons"
+  },
+  "adamw_correctness": {
+    "gpu": {
+      "status": "completed",
+      "exact_equal": false,
+      "coverage": {
+        "expected_arrays": 80,
+        "side_a_arrays": 80,
+        "side_b_arrays": 80,
+        "paired_arrays": 80,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 80,
+        "compared_elements": 671744
+      },
+      "unequal_arrays": 40,
+      "unequal_elements": 194105,
+      "incompatible_arrays": 0,
+      "dtype_differences": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "findings": [
+        {
+          "name": "base_model.model.model.language_model.layers.0.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            1
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.999748726841062e-05",
+            "side_b": "9.999749454436824e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.1.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            1
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.999718895414844e-05",
+            "side_b": "-9.999718167819083e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.10.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.999106987379491e-05",
+            "side_b": "-9.999107714975253e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.11.self_attn.q_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.976408182410523e-05",
+            "side_b": "-9.976407454814762e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.11.self_attn.v_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.999909525504336e-05",
+            "side_b": "9.999908797908574e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.12.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            1
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.980604954762384e-05",
+            "side_b": "-9.980605682358146e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.13.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.998652240028605e-05",
+            "side_b": "-9.998650784837082e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.14.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.99967087409459e-05",
+            "side_b": "9.999671601690352e-05"
+          }
+        }
+      ],
+      "findings_omitted": 32,
+      "metrics": {
+        "count": 671744,
+        "side_a_norm": {
+          "value": 0.05858934722341421,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.05858934725647359,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 3.88737674393409e-09,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 4.743017577956776e-12,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9999999999999978,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 2.1827872842550278e-11,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 8505,
+        "max_coordinate": {
+          "name": "base_model.model.model.language_model.layers.0.linear_attn.out_proj.lora_B.default.weight",
+          "index": [
+            156,
+            1
+          ]
+        },
+        "max_values": {
+          "dtype": "float32",
+          "side_a": "-9.998397581512108e-05",
+          "side_b": "-9.998395398724824e-05"
+        }
+      },
+      "metrics_unavailable": null,
+      "cross_max_update_coordinate": {
+        "parameter": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+        "index": [
+          302,
+          1
+        ],
+        "gradient": -0.00012838603288400918,
+        "stored_update": 9.999221219914034e-05,
+        "formula_update": 9.999221219914034e-05
+      }
+    },
+    "npu": {
+      "status": "completed",
+      "exact_equal": false,
+      "coverage": {
+        "expected_arrays": 80,
+        "side_a_arrays": 80,
+        "side_b_arrays": 80,
+        "paired_arrays": 80,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 80,
+        "compared_elements": 671744
+      },
+      "unequal_arrays": 40,
+      "unequal_elements": 196083,
+      "incompatible_arrays": 0,
+      "dtype_differences": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "findings": [
+        {
+          "name": "base_model.model.model.language_model.layers.0.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.99971671262756e-05",
+            "side_b": "9.999717440223321e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.1.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            1
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.999723260989413e-05",
+            "side_b": "-9.999723988585174e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.10.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.999079338740557e-05",
+            "side_b": "-9.999078611144796e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.11.self_attn.q_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            1,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "-9.997186862165108e-05",
+            "side_b": "-9.99718758976087e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.11.self_attn.v_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.999905887525529e-05",
+            "side_b": "9.99990661512129e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.12.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.995907748816535e-05",
+            "side_b": "9.995909204008058e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.13.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            1
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.99608455458656e-05",
+            "side_b": "9.996085282182321e-05"
+          }
+        },
+        {
+          "name": "base_model.model.model.language_model.layers.14.linear_attn.out_proj.lora_B.default.weight",
+          "reason": "values",
+          "index": [
+            0,
+            0
+          ],
+          "values": {
+            "dtype": "float32",
+            "side_a": "9.999671601690352e-05",
+            "side_b": "9.999672329286113e-05"
+          }
+        }
+      ],
+      "findings_omitted": 32,
+      "metrics": {
+        "count": 671744,
+        "side_a_norm": {
+          "value": 0.05859038600817404,
+          "status": "no_thresholds"
+        },
+        "side_b_norm": {
+          "value": 0.05859038671206822,
+          "status": "no_thresholds"
+        },
+        "error_norm": {
+          "value": 3.944599257941647e-09,
+          "status": "no_thresholds"
+        },
+        "rmse": {
+          "value": 4.812835197310555e-12,
+          "status": "no_thresholds"
+        },
+        "cosine": {
+          "value": 0.9999999999999977,
+          "status": "no_thresholds"
+        },
+        "max_abs": {
+          "value": 2.9103830456733704e-11,
+          "status": "no_thresholds"
+        },
+        "max_flat_index": 151791,
+        "max_coordinate": {
+          "name": "base_model.model.model.language_model.layers.15.self_attn.q_proj.lora_B.default.weight",
+          "index": [
+            5239,
+            1
+          ]
+        },
+        "max_values": {
+          "dtype": "float32",
+          "side_a": "9.99381227302365e-05",
+          "side_b": "9.993815183406696e-05"
+        }
+      },
+      "metrics_unavailable": null,
+      "cross_max_update_coordinate": {
+        "parameter": "base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight",
+        "index": [
+          302,
+          1
+        ],
+        "gradient": 0.00025825362536124885,
+        "stored_update": -9.999612666433677e-05,
+        "formula_update": -9.999612666433677e-05
+      }
+    }
+  },
+  "gpu_binding": {
+    "allocated_uuid": "GPU-ec76873d-adee-2751-d225-ebdce88ead33",
+    "torch_gpu_uuid": "45bd11cf-d66d-bcad-300c-9350ddcfc156",
+    "CUDA_VISIBLE_DEVICES": "4",
+    "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+    "visible_count": 1,
+    "verification": "preceding gpu_resolve.py allocated PCI vs CUDA driver PCI; UUID strings recorded only"
+  },
+  "scope": {
+    "inference": "10 full-vocabulary positions per dtype: four in a 65-token sample, six in a 257/145-token unequal batch; same checkpoint and explicit logical positions",
+    "sft": "One AdamW LoRA step; 123 targets, 80 tensors, 671744 coordinates; CUDA Flash SDPA versus torch_npu.npu_fusion_attention in the complete model",
+    "oracle": "CE from each native logit matrix; first real attention layer/head-0 forward and input gradients versus FP64 formulas; first-step AdamW at each side's actual gradients"
+  },
+  "limits": [
+    "No confirmed new library defect or library patch.",
+    "PEFT 0.20.0 is inherited; no assertion that every dependency is the latest release.",
+    "Main identity/source was checked by workers but main was not executed in this batch.",
+    "Attention oracle is sampled; no claim of full-layer correctness or an isolated root cause for all cross-platform gradient differences.",
+    "Only one optimizer step, text-only inputs, one device per side, no long-context or distributed coverage.",
+    "Earlier unverified GPU runs and failed UUID-string guards are excluded.",
+    "Cross-device FP32 uses fresh checkpoint loading; promoted BF16 captures are excluded because checkpoint includes FP32 tensors."
+  ],
+  "evidence_receipts": {
+    "bf16_fetch": {
+      "action": "fetch",
+      "index": "EXPORT.json",
+      "file_count": 19,
+      "payload_bytes": 13169340,
+      "archive_sha256": "72fb5643821d5ee87650e8d93a7c702e175a162f0905445c12c3d51bbb3cce4d",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index",
+      "output": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/cross-platform-binding-verification-20261025T041111Z/evidence",
+      "transfer_bytes": 13081409
+    },
+    "completion_fetch": {
+      "action": "fetch",
+      "index": "EXPORT.json",
+      "file_count": 35,
+      "payload_bytes": 11309662,
+      "archive_sha256": "4edeb19cda4157fc2db952d0150f1c6745d8300bc8e0dde44ff378ba06d4a6d3",
+      "entries_without_indexed_sizes": 0,
+      "size_source": "index",
+      "output": "/Users/xcx/Documents/ChatGPT/precision-skill/projects/precision-repair/cases/cross-platform-binding-verification-20261025T041111Z/completion-evidence",
+      "transfer_bytes": 11103467
+    }
+  },
+  "sources": {
+    "cross_compare": {
+      "sha256": "61546025579a5e4438761a38fd3a41158ddfc9b9888434470cc85614bd5005bf",
+      "source": "\"\"\"Compare verified GPU completion captures with retained original NPU evidence.\"\"\"\nfrom pathlib import Path\nimport sys,json,numpy as np\nROOT=Path(__file__).resolve().parent;REPO=ROOT.parents[3]\nsys.path.insert(0,str(REPO/'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\nfrom score_metrics import reduce_scores\nOLD=REPO/'projects/precision-repair/cases/autonomous-cross-platform-20261025T035100Z/evidence/npu/runs'\nNPU={'short-bf16':'npu-inference-20261025T034918Z','short-fp32':'npu-reference-20261025T035253Z','long-bf16':'npu-long-inference-20261025T035506Z','long-fp32':'npu-long-reference-20261025T035601Z'}\ndef load_npz(p):\n with np.load(p,allow_pickle=False) as f:return {k:f[k] for k in f.files}\ndef read(p):return json.loads(p.read_text())\nresult={'inference':{},'sft':{},'classification':'No library defect established by these comparisons'}\nfor label,folder in NPU.items():\n g=(ROOT/'evidence'/label) if label.endswith('bf16') else (ROOT/'completion-evidence/inference-fp32'/label)\n n=OLD/folder;gi=read(g/'inputs.json');ni=read(n/'inputs.json')\n for key in ['input_ids','rows','position_ids','mask','model_revision']:\n  assert gi[key]==ni[key],(label,key)\n a=load_npz(g/'baseline.npz');b=load_npz(n/'baseline.npz');report=compare_arrays(a,b,expected=['logits'],metrics=True)\n ga=a['logits'];na=b['logits'];assert ga.shape==na.shape\n report['positions']=int(np.prod(ga.shape[:-1]));report['top1_disagreements']=int(np.count_nonzero(ga.argmax(-1)!=na.argmax(-1)));report['side_paths']={'gpu':str(g),'npu':str(n)}\n report['input_dtype_note']='Native dtype is taken from scope identity and native launch source; embedded input template dtype strings are not authoritative.'\n result['inference'][label]=report\nG=ROOT/'completion-evidence/small-sft-export/accelerated';N=REPO/'projects/precision-repair/cases/autonomous-cross-sft-20261025T034857Z/npu-accelerated-evidence/export-accelerated/accelerated'\ngc=read(ROOT/'completion-evidence/sft/configuration.json');nc=read(N.parents[1]/'accelerated-artifacts/configuration.json')\nfor key in ['ids','labels','mask','positions','lora','trainable','parameters','language_layers','base_dtype']:assert gc[key]==nc[key],('sft',key)\nfor stage in ['initial','gradients','updates']:\n a=load_npz(G/(stage+'.npz'));b=load_npz(N/(stage+'.npz'));expected=list(gc['trainable']);assert set(a)==set(b)==set(expected)\n result['sft'][stage]=compare_arrays(a,b,expected=expected,metrics=True)\nassert result['sft']['initial']['exact_equal'],'Cross-device initial adapter state must match exactly'\ngt=read(G/'targets.json');nt=read(N/'targets.json')\ndef scores(rows):return {(r['position'],r['token']):r['logprob'] for r in rows}\nresult['sft']['targets']=reduce_scores(scores(gt[0]),scores(nt[0]))\nresult['sft']['native_results']={'gpu':read(ROOT/'completion-evidence/sft/result.json'),'npu':read(N.parents[1]/'accelerated-artifacts/result.json')}\nresult['sft']['oracle']={'gpu':read(ROOT/'completion-evidence/sft/attention-fp64.json'),'npu':read(N.parents[1]/'accelerated-artifacts/attention-fp64.json')}\n(ROOT/'cross-comparison.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\\n')\nprint(json.dumps({'inference':{k:{'max_abs':v['metrics']['max_abs']['value'],'positions':v['positions'],'top1_disagreements':v['top1_disagreements']} for k,v in result['inference'].items()},'sft':{'initial_equal':result['sft']['initial']['exact_equal'],'targets':result['sft']['targets'],'gradients':result['sft']['gradients']['metrics'],'updates':result['sft']['updates']['metrics']}},indent=2))\n"
+    },
+    "adamw_formula": {
+      "sha256": "21d9c04c6dcd4f024b9f2fe36b73457f044c4e59e082abdbbce94ec1ae6b710f",
+      "source": "from pathlib import Path\nimport json,sys,numpy as np\nroot=Path(sys.argv[1]);repo=root.parents[3];sys.path.insert(0,str(repo/'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\nnpu=repo/'projects/precision-repair/cases/autonomous-cross-sft-20261025T034857Z/npu-accelerated-evidence/export-accelerated/accelerated';gpu=root/'completion-evidence/small-sft-export/accelerated'\nreport={};lr=1e-4;eps=1e-8\nfor side,path in [('gpu',gpu),('npu',npu)]:\n with np.load(path/'initial.npz') as f:initial={k:f[k] for k in f.files}\n with np.load(path/'gradients.npz') as f:grad={k:f[k] for k in f.files}\n with np.load(path/'updates.npz') as f:actual={k:f[k] for k in f.files}\n expected={}\n for k,before in initial.items():\n  g=grad[k].astype(np.float64);after=(before.astype(np.float64)-lr*g/(np.abs(g)+eps)).astype(np.float32)\n  expected[k]=(after.astype(np.float64)-before.astype(np.float64)).astype(np.float32)\n report[side]=compare_arrays(actual,expected,expected=list(initial),metrics=True)\n key='base_model.model.model.language_model.layers.7.self_attn.v_proj.lora_B.default.weight';coordinate=(302,1)\n report[side]['cross_max_update_coordinate']={'parameter':key,'index':list(coordinate),'gradient':float(grad[key][coordinate]),'stored_update':float(actual[key][coordinate]),'formula_update':float(expected[key][coordinate])}\n(root/'adamw-first-step-check.json').write_text(json.dumps(report,indent=2)+'\\n')\nprint(json.dumps({s:{'max_formula_error':r['metrics']['max_abs']['value'],'max_update_coordinate':r['cross_max_update_coordinate']} for s,r in report.items()},indent=2))\n"
+    },
+    "fp32_inference": {
+      "sha256": "5533f34e9769fb60aa385ff44c9f62bb3d44e6e8ba8a76a8ed3475e500ce3e36",
+      "source": "\"\"\"Full pretrained inference partition/padding checks; run under record_run/launcher.\"\"\"\nimport argparse, hashlib, importlib.metadata, json, os, pathlib, subprocess, sys, time\np=argparse.ArgumentParser();p.add_argument('--side',required=True);p.add_argument('--model',required=True);p.add_argument('--out',required=True);p.add_argument('--repo',required=True);a=p.parse_args()\nout=pathlib.Path(a.out);out.mkdir(parents=True,exist_ok=True)\ndef save(name,obj): (out/name).write_text(json.dumps(obj,indent=2,allow_nan=False)+'\\n')\nassert a.side=='gpu'\nassigned=os.environ['NVIDIA_VISIBLE_DEVICES']\nassert assigned.startswith('GPU-') and ',' not in assigned, assigned\nquery=subprocess.check_output(['nvidia-smi','--query-gpu=index,uuid,pci.bus_id','--format=csv,noheader'],text=True)\nrecords=[dict(zip(['index','uuid','pci'],[v.strip() for v in line.split(',')])) for line in query.strip().splitlines()]\ndef pci_key(r):\n d,b,slot=r['pci'].split(':');dev,fn=slot.split('.')\n return tuple(int(v,16) for v in [d,b,dev,fn])\nordered=sorted(records,key=pci_key);selected=next(i for i,r in enumerate(ordered) if r['uuid']==assigned)\nos.environ['CUDA_DEVICE_ORDER']='PCI_BUS_ID'\nos.environ['CUDA_VISIBLE_DEVICES']=str(selected)\nsave('binding.json',{'assigned_uuid':assigned,'nvidia_smi':records,'pci_order_index':selected,'selected_record':ordered[selected]})\nimport numpy as np\nimport torch\nif a.side=='npu':\n import torch_npu\n torch.npu.set_device(0)\n torch.npu.matmul.allow_hf32=False\n torch.npu.conv.allow_hf32=False\n device='npu:0'; sync=torch.npu.synchronize\nelse:\n device='cuda:0';torch.cuda.set_device(0);sync=torch.cuda.synchronize\n torch.backends.cuda.matmul.allow_tf32=False\nassert torch.cuda.device_count()==1, 'GPU UUID binding must expose exactly one GPU'\nimport transformers\nfrom transformers import Qwen3_5ForConditionalGeneration\nsys.path.insert(0,str(pathlib.Path(a.repo)/'skills/precision-compare/scripts'))\nfrom array_compare import compare_arrays\nidentity={'side':a.side,'host':os.uname().nodename,'python':sys.version,'torch':torch.__version__,'transformers':transformers.__version__,'transformers_file':transformers.__file__,'device':device,'device_count':torch.npu.device_count() if a.side=='npu' else torch.cuda.device_count(),'selected_device_name':torch.npu.get_device_name(0) if a.side=='npu' else torch.cuda.get_device_name(0),'distributed_env':{k:v for k,v in os.environ.items() if any(s in k for s in ['RANK','WORLD','VISIBLE','MASTER'])},'packages':{x:importlib.metadata.version(x) for x in ['transformers','safetensors','tokenizers','huggingface-hub','numpy']},'model':a.model,'files':{}}\nidentity['hardware']=subprocess.run(['npu-smi','info'] if a.side=='npu' else ['nvidia-smi','--query-gpu=name,uuid,memory.total,memory.used','--format=csv'],capture_output=True,text=True).stdout\nfor f in ['config.json','model.safetensors.index.json']:\n b=(pathlib.Path(a.model)/f).read_bytes();identity['files'][f]={'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}\nidentity['shards']=[{'name':f.name,'bytes':f.stat().st_size} for f in sorted(pathlib.Path(a.model).glob('*.safetensors'))]\nidentity['assigned_gpu_uuid']=assigned\nidentity['selected_gpu_properties']=str(torch.cuda.get_device_properties(0))\nidentity['selected_gpu_uuid']=str(torch.cuda.get_device_properties(0).uuid)\n# NVML and CUDA UUID namespaces can differ; verify the selected device by PCI.\nimport ctypes\ncuda_driver=ctypes.CDLL('libcuda.so.1')\nhandle=ctypes.c_int();assert cuda_driver.cuDeviceGet(ctypes.byref(handle),0)==0\npci=ctypes.create_string_buffer(64);assert cuda_driver.cuDeviceGetPCIBusId(pci,64,handle)==0\nidentity['selected_cuda_pci']=pci.value.decode()\nnormalize_pci=lambda value:int(value.replace(':','').replace('.',''),16)\nassert normalize_pci(identity['selected_cuda_pci'])==normalize_pci(ordered[selected]['pci']), identity\nidentity['binding_verified_by']='allocated NVML UUID -> PCI == selected CUDA driver PCI; one visible CUDA device'\n\nsave('identity.json',identity)\nprint('IDENTITY',json.dumps(identity),flush=True)\nt0=time.monotonic()\nmodel=Qwen3_5ForConditionalGeneration.from_pretrained(a.model,dtype=torch.float32,attn_implementation='eager',local_files_only=True).eval().to(device)\nsync();print('LOADED',time.monotonic()-t0,flush=True)\n\nroot=out\nscope_results={}\nfor label,dtype in [('fp32',torch.float32)]:\n if label=='fp32':model.float()\n sync()\n for scope,source in [('short',\"# Valid ordinary vocabulary IDs, deterministic and independent of tokenizer revision.\\nids=[9707,11,358,646,1492,264,1296,315,1938,11,323,1690,374,264,2664,13,198,785,400,220,16,10,17,28,18,13,198,40,1079,429,279,2082,374,697,13,198,791,8465,374,264,4442,315,1000,13,198,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,13,198]\\nx=torch.tensor([ids],device=device);n=x.shape[1];rows=[31,47,62,63];mask=torch.ones_like(x);pos=torch.arange(n,device=device).unsqueeze(0)\\nsave('inputs.json',{'input_ids':ids,'rows':rows,'position_ids':list(range(n)),'mask':[1]*n,'dtype':'bfloat16','attention':'eager','model_revision':'68c46c4b3498877f3ef123c856ecfde50c39f404'})\\nresults={};raw={}\\ndef call(xx,mm,pp,cache=None,use=True):\\n return model(input_ids=xx,attention_mask=mm,position_ids=pp,past_key_values=cache,use_cache=use,return_dict=True)\\nwith torch.inference_mode():\\n y=call(x,mask,pos,use=False).logits\\n base=y[:,rows,:].float().cpu().numpy();raw['full']=base;del y\\n for name,parts in [('token',[31]+[1]*(n-31)),('chunk',[31,17,n-48])]:\\n  cache=None;start=0;got={}\\n  for size in parts:\\n   end=start+size;r=call(x[:,start:end],mask[:,:end],pos[:,start:end],cache);cache=r.past_key_values\\n   for row in rows:\\n    if start<=row<end:got[row]=r.logits[:,row-start,:].float().cpu().numpy()\\n   start=end\\n  v=np.stack([got[row] for row in rows],axis=1);raw[name]=v\\n  results[name]=compare_arrays({'logits':base},{'logits':v},metrics=True)\\n  print('CHECK',name,json.dumps(results[name]),flush=True)\\n  del r,cache\\n pad=7;px=torch.cat([torch.zeros((1,pad),dtype=torch.long,device=device),x],1);pm=torch.cat([torch.zeros((1,pad),dtype=torch.long,device=device),mask],1);pp=(pm.cumsum(-1)-1).clamp_min(0)\\n r=call(px,pm,pp,use=False);v=r.logits[:,[z+pad for z in rows],:].float().cpu().numpy();raw['leftpad']=v\\n results['leftpad']=compare_arrays({'logits':base},{'logits':v},metrics=True)\\n np.savez_compressed(out/'observations.npz',**raw)\\n # Only baseline full rows need cross-host transport; all variants remain at source.\\n np.savez_compressed(out/'baseline.npz',logits=base)\\n save('results.json',{'checks':results,'wall_seconds':time.monotonic()-t0,'parameters':sum(p.numel() for p in model.parameters()),'finite':{k:bool(np.isfinite(v).all()) for k,v in raw.items()},'top1':{k:v.argmax(-1).tolist() for k,v in raw.items()}})\\nprint('DONE',time.monotonic()-t0,flush=True)\\n\" if label=='bf16' else \"# Valid ordinary vocabulary IDs, deterministic and independent of tokenizer revision.\\nids=[9707,11,358,646,1492,264,1296,315,1938,11,323,1690,374,264,2664,13,198,785,400,220,16,10,17,28,18,13,198,40,1079,429,279,2082,374,697,13,198,791,8465,374,264,4442,315,1000,13,198,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,13,198]\\nx=torch.tensor([ids],device=device);n=x.shape[1];rows=[31,47,62,63];mask=torch.ones_like(x);pos=torch.arange(n,device=device).unsqueeze(0)\\nsave('inputs.json',{'input_ids':ids,'rows':rows,'position_ids':list(range(n)),'mask':[1]*n,'dtype':'float32','attention':'eager','model_revision':'68c46c4b3498877f3ef123c856ecfde50c39f404'})\\nresults={};raw={}\\ndef call(xx,mm,pp,cache=None,use=True):\\n return model(input_ids=xx,attention_mask=mm,position_ids=pp,past_key_values=cache,use_cache=use,return_dict=True)\\nwith torch.inference_mode():\\n y=call(x,mask,pos,use=False).logits\\n base=y[:,rows,:].float().cpu().numpy();raw['full']=base;del y\\n for name,parts in [('token',[31]+[1]*(n-31)),('chunk',[31,17,n-48])]:\\n  cache=None;start=0;got={}\\n  for size in parts:\\n   end=start+size;r=call(x[:,start:end],mask[:,:end],pos[:,start:end],cache);cache=r.past_key_values\\n   for row in rows:\\n    if start<=row<end:got[row]=r.logits[:,row-start,:].float().cpu().numpy()\\n   start=end\\n  v=np.stack([got[row] for row in rows],axis=1);raw[name]=v\\n  results[name]=compare_arrays({'logits':base},{'logits':v},metrics=True)\\n  print('CHECK',name,json.dumps(results[name]),flush=True)\\n  del r,cache\\n pad=7;px=torch.cat([torch.zeros((1,pad),dtype=torch.long,device=device),x],1);pm=torch.cat([torch.zeros((1,pad),dtype=torch.long,device=device),mask],1);pp=(pm.cumsum(-1)-1).clamp_min(0)\\n r=call(px,pm,pp,use=False);v=r.logits[:,[z+pad for z in rows],:].float().cpu().numpy();raw['leftpad']=v\\n results['leftpad']=compare_arrays({'logits':base},{'logits':v},metrics=True)\\n np.savez_compressed(out/'observations.npz',**raw)\\n # Only baseline full rows need cross-host transport; all variants remain at source.\\n np.savez_compressed(out/'baseline.npz',logits=base)\\n save('results.json',{'checks':results,'wall_seconds':time.monotonic()-t0,'parameters':sum(p.numel() for p in model.parameters()),'finite':{k:bool(np.isfinite(v).all()) for k,v in raw.items()},'top1':{k:v.argmax(-1).tolist() for k,v in raw.items()}})\\nprint('DONE',time.monotonic()-t0,flush=True)\\n\"),('long',\"ids=[9707,11,358,646,1492,264,1296,315,1938,11,323,1690,374,264,2664,13,198,785,400,220,16,10,17,28,18,13,198,40,1079,429,279,2082,374,697,13,198,791,8465,374,264,4442,315,1000,13,198,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,13,198]\\nids=(ids*4)[:257];n=len(ids);pad=112;rows=[249,253,256]\\nx=torch.tensor([ids,[0]*pad+ids[pad:]],device=device);mask=torch.ones_like(x);mask[1,:pad]=0;pos=(mask.cumsum(-1)-1).clamp_min(0)\\nsave('inputs.json',{'input_ids':x.cpu().tolist(),'rows':rows,'position_ids':pos.cpu().tolist(),'mask':mask.cpu().tolist(),'native_dtype':str(next(model.parameters()).dtype),'attention':'eager','model_revision':'68c46c4b3498877f3ef123c856ecfde50c39f404','logical_rows':{'sample0':rows,'sample1':[r-pad for r in rows]}})\\nresults={};raw={}\\ndef call(xx,mm,pp,cache=None,use=True):\\n return model(input_ids=xx,attention_mask=mm,position_ids=pp,past_key_values=cache,use_cache=use,return_dict=True)\\nwith torch.inference_mode():\\n r=call(x,mask,pos,use=False);base=r.logits[:,rows,:].float().cpu().numpy();raw['full']=base;del r\\n alone=[]\\n for b,start in [(0,0),(1,pad)]:\\n  xx=x[b:b+1,start:];r=call(xx,torch.ones_like(xx),torch.arange(xx.shape[1],device=device).unsqueeze(0),use=False)\\n  alone.append(r.logits[:,[z-start for z in rows],:].float().cpu().numpy());del r\\n raw['standalone']=np.concatenate(alone,axis=0)\\n results['standalone']=compare_arrays({'logits':base},{'logits':raw['standalone']},metrics=True)\\n for name,parts in [('token',[249]+[1]*8),('chunk',[129,64,64])]:\\n  cache=None;start=0;got={}\\n  for size in parts:\\n   end=start+size;r=call(x[:,start:end],mask[:,:end],pos[:,start:end],cache);cache=r.past_key_values\\n   for row in rows:\\n    if start<=row<end:got[row]=r.logits[:,row-start,:].float().cpu().numpy()\\n   start=end\\n  v=np.stack([got[row] for row in rows],axis=1);raw[name]=v\\n  results[name]=compare_arrays({'logits':base},{'logits':v},metrics=True)\\n  print('CHECK',name,json.dumps(results[name]),flush=True);del r,cache\\n np.savez_compressed(out/'observations.npz',**raw);np.savez_compressed(out/'baseline.npz',logits=base)\\n save('results.json',{'checks':results,'wall_seconds':time.monotonic()-t0,'parameters':sum(p.numel() for p in model.parameters()),'finite':{k:bool(np.isfinite(v).all()) for k,v in raw.items()},'top1':{k:v.argmax(-1).tolist() for k,v in raw.items()}})\\nprint('DONE',time.monotonic()-t0,flush=True)\\n\")]:\n  out=root/(scope+'-'+label);out.mkdir()\n  scope_identity=dict(identity,native_dtype=str(dtype));save('identity.json',scope_identity)\n  t0=time.monotonic();exec(compile(source,'retained-'+scope+'-workload','exec'),globals())\n  scope_results[scope+'-'+label]=str(out)\nout=root;save('scopes.json',scope_results)\n"
+    },
+    "sft": {
+      "sha256": "79c2d19a536369f1e802c87fa6132ae3fd9defb49884a8501ab09d7361b51ee9",
+      "source": "import os,sys,json,time,hashlib,inspect,argparse\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument('--side',required=True);p.add_argument('--model',required=True);p.add_argument('--output',required=True);p.add_argument('--fix',action='store_true');p.add_argument('--extended',action='store_true');p.add_argument('--fp32',action='store_true');p.add_argument('--canonical',action='store_true');p.add_argument('--accelerated',action='store_true');a=p.parse_args()\nroot=Path(__file__).resolve().parent\nsys.path.insert(0,str(root/'deps'))\nfor k in list(os.environ):\n if k in ['RANK','LOCAL_RANK','WORLD_SIZE','LOCAL_WORLD_SIZE','GROUP_RANK','ROLE_RANK','ROLE_WORLD_SIZE','MASTER_ADDR','MASTER_PORT'] or k.startswith(('OMPI_COMM_WORLD_','PMI_','PMIX_')):os.environ.pop(k,None)\nos.environ['HF_HUB_OFFLINE']='1';os.environ['TOKENIZERS_PARALLELISM']='false'\nif a.side=='npu':os.environ['ASCEND_RT_VISIBLE_DEVICES']='14';os.environ['ASCEND_DEVICE_ID']='0';os.environ['DEVICE_ID']='0'\nif a.side=='gpu' and a.accelerated:\n assigned=os.environ['NVIDIA_VISIBLE_DEVICES'];assert assigned.startswith('GPU-') and ',' not in assigned\n assert os.environ.get('CUDA_VISIBLE_DEVICES'), 'resolver must bind before Torch import'\nimport torch,numpy as np,transformers,peft\nif a.side=='npu':\n import torch_npu\n torch.npu.set_device(0);device='npu:0';sync=torch.npu.synchronize\nelse:\n torch.cuda.set_device(0);device='cuda:0';sync=torch.cuda.synchronize\n torch.backends.cuda.matmul.allow_tf32=False\n if a.accelerated:\n  actual=str(torch.cuda.get_device_properties(0).uuid)\n  # NVML/Torch UUID naming is not assumed equal; resolver verified allocated PCI via CUDA driver.\n  assert torch.cuda.device_count()==1\nout=Path(a.output);out.mkdir(parents=True,exist_ok=True)\ndef write(n,x):(out/n).write_text(json.dumps(x,indent=2,allow_nan=False)+'\\n')\ndef sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()\nt0=time.monotonic()\nfrom transformers import AutoModelForImageTextToText,AutoTokenizer\nfrom peft import LoraConfig,get_peft_model\nimport transformers.models.qwen3_5.modeling_qwen3_5 as impl\nwrite('identity.json',dict(side=a.side,torch=torch.__version__,transformers=transformers.__version__,peft=peft.__version__,source=inspect.getfile(impl),source_sha256=sha(inspect.getfile(impl)),config_sha256=sha(Path(a.model)/'config.json'),device=device,device_name=torch.cuda.get_device_name(0) if a.side=='gpu' else torch.npu.get_device_name(0),mapping={k:os.environ.get(k) for k in ['ASCEND_RT_VISIBLE_DEVICES','ASCEND_DEVICE_ID','DEVICE_ID','CUDA_VISIBLE_DEVICES']},revision='68c46c4b3498877f3ef123c856ecfde50c39f404'))\nif a.side=='gpu' and a.accelerated:\n write('gpu-binding.json',dict(allocated_uuid=assigned,torch_gpu_uuid=actual,CUDA_VISIBLE_DEVICES=os.environ['CUDA_VISIBLE_DEVICES'],CUDA_DEVICE_ORDER=os.environ.get('CUDA_DEVICE_ORDER'),visible_count=torch.cuda.device_count(),verification='preceding gpu_resolve.py allocated PCI vs CUDA driver PCI; UUID strings recorded only'))\nprint('IDENTITY',json.loads((out/'identity.json').read_text()),flush=True)\ntorch.manual_seed(2317)\nmodel=AutoModelForImageTextToText.from_pretrained(a.model,dtype=torch.float32 if a.fp32 else torch.bfloat16,attn_implementation='eager',local_files_only=True).to(device)\nprint('LOADED',sum(p.numel() for p in model.parameters()),time.monotonic()-t0,flush=True)\nmodel.config.use_cache=False\ncfg=LoraConfig(r=2,lora_alpha=4,lora_dropout=0,target_modules=['out_proj','q_proj','v_proj'],bias='none',init_lora_weights=True)\nmodel=get_peft_model(model,cfg)\ntrain={n:p for n,p in model.named_parameters() if p.requires_grad}\n# Replace random init with deterministic coordinate values, identical across devices.\nwith torch.no_grad():\n for n,v in train.items():\n  if 'lora_A' in n:\n   init=((torch.arange(v.numel(),dtype=torch.int64).reshape(v.shape)%251-125).float()/16384) if a.canonical else (torch.sin(torch.arange(v.numel(),dtype=torch.float32).reshape(v.shape)*0.013)*0.01)\n   v.copy_(init.to(v.device,v.dtype))\n  else:v.zero_()\nmodel.train()\ntok=AutoTokenizer.from_pretrained(a.model,local_files_only=True)\ntext='Question: What is two plus three?\\nAnswer: Two plus three is five.'\nids=tok.encode(text,add_special_tokens=False)+[tok.eos_token_id]\nids=ids[:47]+([tok.eos_token_id] if len(ids)>47 else [])\nif a.extended or a.accelerated:ids=(ids[:-1]*8)[:133]+[tok.eos_token_id]\nmask=torch.tensor([[0]*4+[1]*len(ids)],device=device)\npos=(mask.cumsum(-1)-1).clamp_min(0)\nlabels=torch.tensor([[-100]*4+ids],device=device);labels[:,:4+len(tok.encode('Question: What is two plus three?\\nAnswer:',add_special_tokens=False))]=-100\ninputs=[torch.tensor([[pad]*4+ids],device=device) for pad in [tok.eos_token_id,42]]\nbase_versions={n:p._version for n,p in model.named_parameters() if not p.requires_grad}\nwrite('configuration.json',dict(text=text,ids=ids,labels=labels.cpu().tolist(),mask=mask.cpu().tolist(),positions=pos.cpu().tolist(),lora=cfg.to_dict() if False else dict(rank=2,alpha=4,dropout=0,targets=cfg.target_modules and sorted(cfg.target_modules)),trainable={n:dict(shape=list(v.shape),dtype=str(v.dtype)) for n,v in train.items()},parameters=sum(p.numel() for p in model.parameters()),language_layers=model.config.text_config.num_hidden_layers,fix=a.fix,base_dtype='float32' if a.fp32 else 'bfloat16'))\ninitial={n:v.detach().cpu().clone() for n,v in train.items()};torch.save(initial,out/'initial.pt')\nif (Path(a.model)/'download_provenance.json').exists():\n import shutil\n shutil.copyfile(Path(a.model)/'download_provenance.json',out/'model-provenance.json')\nresults=[]\nif a.accelerated:\n from accelerated import install\n attention_capture=install(impl,a.side)\nif a.extended:\n import subprocess\n if a.side=='gpu':\n  p=subprocess.run(['nvidia-smi','-q'],capture_output=True,text=True);(out/'nvidia-smi.txt').write_text(p.stdout+p.stderr)\n from operator_check import install_capture\n captured=install_capture(impl)\n\nfor i,x in enumerate(inputs):\n model.zero_grad(set_to_none=True)\n outputs=model(input_ids=x,attention_mask=mask,position_ids=pos,labels=labels,use_cache=False)\n logits=outputs.logits\n valid=labels[:,1:]!=-100\n z=logits[:,:-1].detach().float().cpu().double()[valid.cpu()];targets=labels[:,1:].cpu()[valid.cpu()]\n reference=(torch.logsumexp(z,dim=-1)-z.gather(-1,targets[:,None]).squeeze(-1)).mean()\n outputs.loss.backward();sync()\n grads={n:v.grad.detach().cpu().clone() if v.grad is not None else None for n,v in train.items()}\n torch.save(grads,out/f'grad-{i}.pt')\n np.save(out/f'logits-{i}.npy',logits[:,4:].detach().float().cpu().numpy())\n r=dict(index=i,loss=float(outputs.loss),fp64_ce=float(reference),ce_error=abs(float(reference)-float(outputs.loss)),valid_tokens=int(valid.sum()),gradients=len(grads),absent=[n for n,g in grads.items() if g is None],nonfinite=[n for n,g in grads.items() if g is not None and not bool(torch.isfinite(g).all())],elapsed=time.monotonic()-t0)\n results.append(r);write('progress.json',results);print('SFT',r,flush=True)\n del outputs,logits,z,reference\n if i==0:\n  optim=torch.optim.AdamW(list(train.values()),lr=1e-4,weight_decay=0,foreach=False)\n  optim.step();sync()\n  after={n:v.detach().cpu().clone() for n,v in train.items()};torch.save(after,out/'after.pt')\n  write('update.json',dict(changed=[n for n in train if not torch.equal(initial[n],after[n])],unchanged=[n for n in train if torch.equal(initial[n],after[n])],frozen_mutated=[n for n,p in model.named_parameters() if n in base_versions and p._version!=base_versions[n]],optimizer='AdamW lr=1e-4 weight_decay=0 foreach=False'))\n  with torch.no_grad():\n   for n,v in train.items():v.copy_(initial[n].to(v.device))\nif a.extended:\n from operator_check import verify\n verify(captured,impl,out)\nif a.accelerated:\n from accelerated import verify as verify_attention\n verify_attention(attention_capture,a.side,out)\nfrom array_compare import compare_arrays\nL=[np.load(out/f'logits-{i}.npy') for i in [0,1]]\nG=[torch.load(out/f'grad-{i}.pt',weights_only=True) for i in [0,1]]\nwrite('padding-logits.json',compare_arrays({'valid_logits':L[0]},{'valid_logits':L[1]},metrics=True))\nwrite('padding-gradients.json',compare_arrays({n:v.float().numpy() for n,v in G[0].items() if v is not None},{n:v.float().numpy() for n,v in G[1].items() if v is not None},expected=list(train),metrics=True))\nwrite('result.json',dict(status='completed',steps=results,elapsed=time.monotonic()-t0));print('DONE',time.monotonic()-t0,flush=True)\n"
+    },
+    "accelerated_attention": {
+      "sha256": "419eb797645f631ae9f5ecb6e577be4437aaff928f5fa47b45d7f69bc2207875",
+      "source": "\"\"\"Case-only native fused attention adapter. Full model remains intact.\nThe declared singleton batch has four left-pad positions; only these positions\nare removed inside attention. Valid queries attend exactly to their causal prefix.\n\"\"\"\nimport torch,json,numpy as np\nfrom array_compare import compare_arrays\n\ndef kernel(q,k,v,scale,side):\n if side=='gpu':\n  from torch.nn.attention import sdpa_kernel,SDPBackend\n  with sdpa_kernel(SDPBackend.FLASH_ATTENTION):\n   return torch.nn.functional.scaled_dot_product_attention(q,k,v,dropout_p=0.0,is_causal=True,scale=scale)\n import torch_npu\n length=q.shape[-2]\n mask=torch.ones(length,length,device=q.device,dtype=torch.bool).triu(1)\n return torch_npu.npu_fusion_attention(q,k,v,q.shape[1],'BNSD',atten_mask=mask,scale=scale,keep_prob=1.0,pre_tockens=2147483647,next_tockens=0,sparse_mode=0)[0]\n\ndef install(impl,side):\n cap={'calls':[]}\n def forward(module,query,key,value,attention_mask,scaling,dropout=0.0,**kw):\n  assert query.shape[0]==1 and dropout==0 and query.shape[-2]==138\n  assert attention_mask is not None and bool((attention_mask[0,0,4:,0:4]<-1e10).all())\n  q=query[:,:,4:,:].contiguous();k=impl.repeat_kv(key,module.num_key_value_groups)[:,:,4:,:].contiguous();v=impl.repeat_kv(value,module.num_key_value_groups)[:,:,4:,:].contiguous()\n  y=kernel(q,k,v,scaling,side)\n  cap['calls'].append(dict(layer=module.layer_idx,shape=list(q.shape),device=str(q.device),kernel='aten flash SDPA' if side=='gpu' else 'torch_npu.npu_fusion_attention'))\n  if 'inputs' not in cap:cap.update(inputs=[x[:,:,:1,:].cpu() if False else x[:,:1].detach().cpu().clone() for x in [q,k,v]],scale=scaling)\n  # Padded queries are masked in subsequent linear attention and excluded as keys/labels.\n  padding=torch.zeros(query.shape[0],4,query.shape[1],query.shape[-1],device=query.device,dtype=query.dtype)\n  return torch.cat([padding,y.transpose(1,2)],dim=1).contiguous(),None\n impl.eager_attention_forward=forward\n return cap\n\ndef verify(cap,side,out):\n assert len(cap['calls'])==16,len(cap['calls'])\n torch.save(dict(inputs=cap['inputs'],scale=cap['scale']),out/'attention-inputs.pt')\n cpu=[x.double().requires_grad_() for x in cap['inputs']]\n q,k,v=cpu;z=q@k.transpose(-1,-2)*cap['scale'];mask=torch.ones(z.shape[-2:],dtype=torch.bool).triu(1)\n ref=torch.softmax(z.masked_fill(mask,float('-inf')),dim=-1)@v\n weights=torch.sin(torch.arange(ref.numel(),dtype=torch.float64)*0.011).reshape(ref.shape)\n rg=torch.autograd.grad((ref*weights).sum(),cpu)\n device='cuda:0' if side=='gpu' else 'npu:0'\n xs=[x.to(device).requires_grad_() for x in cap['inputs']]\n with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU]) as prof:\n  result=kernel(*xs,cap['scale'],side)\n  ng=torch.autograd.grad((result*weights.to(device,dtype=result.dtype)).sum(),xs)\n events=sorted(set(e.key for e in prof.key_averages()))\n if side=='gpu':assert any('_scaled_dot_product_flash_attention' in k for k in events),events\n else:assert any('npu_fusion_attention' in k for k in events),events\n A={'output':result.detach().float().cpu().numpy()};B={'output':ref.detach().float().numpy()}\n for name,x,y in zip(['query','key','value'],ng,rg):A['grad_'+name]=x.detach().float().cpu().numpy();B['grad_'+name]=y.detach().float().numpy()\n report=compare_arrays(A,B,expected=list(B),metrics=True,groups={'output':['output'],'gradients':['grad_query','grad_key','grad_value']})\n report['calls']=cap['calls'];report['profiler_events']=events;report['scope']='actual first full-attention layer, valid positions, head 0; BF16 native forward/backward vs CPU FP64 mathematical attention'\n (out/'attention-fp64.json').write_text(json.dumps(report,indent=2)+'\\n')\n np.savez_compressed(out/'attention-native.npz',**A);np.savez_compressed(out/'attention-reference.npz',**B)\n"
+    },
+    "delta_oracle": {
+      "sha256": "dec96d9ec3fc705535ee07b91bea9fe0be5198db52181fdbabec0aa77d4d3d64",
+      "source": "\"\"\"Independent FP64 recurrence oracle on actual first-layer SFT inputs; no model substitution.\"\"\"\nimport torch,json,numpy as np\nfrom array_compare import compare_arrays\n\ndef install_capture(impl):\n result={};original=impl.torch_chunk_gated_delta_rule\n def wrapped(q,k,v,*args,**kw):\n  out=original(q,k,v,*args,**kw)\n  if 'inputs' not in result:\n   result.update(inputs=[x[:1,:,:1].detach().cpu().clone() for x in [q,k,v,kw['g'],kw['beta']]],native_output=out[0][:1,:,:1].detach().cpu().clone(),kwargs=dict(use_qk_l2norm_in_kernel=kw['use_qk_l2norm_in_kernel']))\n  return out\n impl.torch_chunk_gated_delta_rule=wrapped\n result['original']=original\n # Capture flag cannot rely on dict emptiness because original is retained.\n result.pop('original')\n wrapped.original=original\n result['_fn']=wrapped\n return result\n\ndef recurrence(q,k,v,g,beta):\n q=q*torch.rsqrt(q.square().sum(-1,keepdim=True)+1e-6)\n k=k*torch.rsqrt(k.square().sum(-1,keepdim=True)+1e-6)\n state=torch.zeros(q.shape[0],q.shape[2],q.shape[3],v.shape[3],dtype=q.dtype)\n output=[]\n for t in range(q.shape[1]):\n  state=state*torch.exp(g[:,t])[...,None,None]\n  correction=(v[:,t]-torch.einsum('bhkv,bhk->bhv',state,k[:,t]))*beta[:,t,:,None]\n  state=state+k[:,t,:,:,None]*correction[:,:,None,:]\n  output.append(torch.einsum('bhkv,bhk->bhv',state,q[:,t]/(q.shape[-1]**0.5)))\n return torch.stack(output,dim=1)\n\ndef verify(cap,impl,out):\n fn=cap['_fn'].original\n # The wrapper's metadata is set before the first call, so check explicit inputs.\n if 'inputs' not in cap:raise RuntimeError('No real-layer inputs were captured')\n torch.save({k:v for k,v in cap.items() if k!='_fn'},out/'operator-inputs.pt')\n cpu=[x.double().requires_grad_() for x in cap['inputs']]\n ref=recurrence(*cpu)\n weights=torch.sin(torch.arange(ref.numel(),dtype=torch.float64)*0.017).reshape(ref.shape)\n rg=torch.autograd.grad((ref*weights).sum(),cpu)\n device='npu:0' if hasattr(torch,'npu') and torch.npu.is_available() else 'cuda:0'\n native=[x.to(device=device,dtype=torch.float32).requires_grad_() for x in cap['inputs']]\n val,_=fn(*native[:3],g=native[3],beta=native[4],use_qk_l2norm_in_kernel=True)\n ng=torch.autograd.grad((val*weights.to(device=device,dtype=val.dtype)).sum(),native)\n A={'output':val.detach().cpu().numpy()};B={'output':ref.detach().float().numpy()}\n for name,x,y in zip(['query','key','value','g','beta'],ng,rg):A['grad_'+name]=x.detach().cpu().numpy();B['grad_'+name]=y.detach().float().numpy()\n report=compare_arrays(A,B,expected=list(B),metrics=True,groups={'output':['output'],'gradient':[k for k in B if k.startswith('grad_')]})\n (out/'operator-fp64.json').write_text(json.dumps(report,indent=2)+'\\n')\n np.savez_compressed(out/'operator-reference.npz',**B)\n np.savez_compressed(out/'operator-native.npz',**A)\n"
+    }
+  }
+}
