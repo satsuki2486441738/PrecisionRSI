@@ -114,6 +114,27 @@ class EvaluationPresentationTests(unittest.TestCase):
         self.assertEqual(names[2], 'AnotherEngine · CPU 缓存推理 · 模型')
         self.assertEqual(names[3], '评测 · 实验 · 模型')
 
+    def test_cross_platform_metadata_preserves_execution_scope_and_training_kind(self):
+        result = self.evaluate("""(() => {
+          const rows=[
+            {framework:{name:'Transformers'},task:'inference',
+             title:'自主调查：910C ↔ H200 · Transformers 推理',
+             sides:[{hardware:'NVIDIA H200',settings:{scope:'full-forward fixed-history scoring'}},
+                    {hardware:'Ascend 910C',settings:{scope:'full-forward fixed-history scoring'}}]},
+            {framework:{name:'Transformers / PEFT'},task:'sft',
+             title:'自主调查：910C ↔ H200 · 融合 Attention SFT',
+             sides:[{hardware:'NVIDIA H200',settings:{training:'LoRA'}},
+                    {hardware:'Ascend 910C',settings:{training:'LoRA'}}]}
+          ];
+          const before=JSON.stringify(rows);
+          return {names:rows.map(r=>titleFor(r,'模型')),unchanged:before===JSON.stringify(rows)};
+        })()""")
+        self.assertTrue(result['unchanged'])
+        self.assertEqual(result['names'], [
+            'Transformers · CUDA ↔ Ascend 完整前向推理 · 模型',
+            'Transformers / PEFT · CUDA ↔ Ascend LoRA SFT · 模型',
+        ])
+
     def test_cross_library_benchmark_names_keep_libraries_and_phase_once(self):
         names = self.evaluate("""[
           'skills-native-sglangtf-initial-20261024',
