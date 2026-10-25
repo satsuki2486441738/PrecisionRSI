@@ -107,6 +107,9 @@
     const sorted = (values) => [...new Set(values)].sort((a, b) => a.localeCompare(b, 'en'));
     return { models: sorted(records.map(evaluationModel)), hardware: sorted(records.flatMap(evaluationHardware)) };
   }
+  function publicEvaluations(records) {
+    return records.filter((record) => record.visibility !== 'archived');
+  }
   function filterEvaluations(records, filters = {}) {
     const query = (filters.query || '').trim().toLocaleLowerCase();
     return records.filter((record) =>
@@ -135,7 +138,7 @@
   }
   const api = { buildCatalog, counts, filterCatalog, taskLabels, evaluationLibraries,
     evaluationModel, hardwareLabels, evaluationHardware, evaluationFacets,
-    filterEvaluations, evaluationGroups, evaluationCounts, routeForHash };
+    publicEvaluations, filterEvaluations, evaluationGroups, evaluationCounts, routeForHash };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else global.PrecisionHistory = api;
 })(globalThis);

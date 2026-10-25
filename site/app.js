@@ -382,7 +382,7 @@ async function load() {
     }
     let options;
     if (kind === 'evaluations') {
-      evaluations = historyAPI.filterEvaluations(data.evaluations);
+      evaluations = historyAPI.filterEvaluations(historyAPI.publicEvaluations(data.evaluations));
       const totals = historyAPI.evaluationCounts(evaluations);
       $('total-count').textContent = totals.experiments;
       $('verification-count').textContent = totals.comparisons;

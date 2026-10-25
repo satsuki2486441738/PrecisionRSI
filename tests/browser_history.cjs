@@ -5,9 +5,10 @@ const { readFile } = require('node:fs/promises');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
-const data = require('../site/data/evaluations.json');
+const rawData = require('../site/data/evaluations.json');
 const repairs = require('../site/data/repairs.json');
 const historyModel = require('../site/history.js');
+const data = { ...rawData, evaluations: historyModel.publicEvaluations(rawData.evaluations) };
 const presentationModel = require('../site/evaluation-presentation.js');
 (async () => {
   const server = spawn(process.env.PRECISION_PYTHON || 'python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', path.join(root, 'site')], { stdio: ['ignore', 'pipe', 'pipe'] });
@@ -97,6 +98,10 @@ const presentationModel = require('../site/evaluation-presentation.js');
     await page.getByRole('tab', { name: /精度评测历史/ }).click();
     await page.waitForSelector('.evaluation-card');
     assert.equal(await cards.count(), data.evaluations.length);
+    for (const record of rawData.evaluations.filter((r) => r.visibility === 'archived')) {
+      assert.equal(await page.locator('#evaluation-' + record.id).count(), 0);
+    }
+    assert.equal(await page.locator('#total-count').innerText(), String(data.evaluations.length));
     assert.deepEqual(await compactFilterLayout(), repairFilterLayout);
     assert.equal(await cards.locator('.card-topline .pill').filter({ hasText: '验收' }).count(), 0);
     assert.equal(await cards.locator('.card-topline .pill').count(), data.evaluations.length);
@@ -294,7 +299,7 @@ const presentationModel = require('../site/evaluation-presentation.js');
     await page.locator('#download').click();
     const download = await downloadEvent;
     assert.equal(download.suggestedFilename(), 'precision-skills-evaluations.json');
-    assert.deepEqual(JSON.parse(await readFile(await download.path(), 'utf8')), data);
+    assert.deepEqual(JSON.parse(await readFile(await download.path(), 'utf8')), rawData);
     await page.goto(url + '#evaluation-' + restoration.id, { waitUntil: 'networkidle' });
     await page.waitForSelector('.evaluation-card');
     assert.equal(await page.locator('#evaluation-' + restoration.id).evaluate((e) => e.open), true);
