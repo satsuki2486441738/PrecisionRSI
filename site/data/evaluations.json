@@ -63197,6 +63197,479 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-10-25",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.5-9B-Base",
+        "revision": "68c46c4b3498877f3ef123c856ecfde50c39f404"
+      },
+      "common": [
+        "完整条件生成模型，9,409,813,744个基础参数，32个语言层；文本输入。",
+        "原始模型revision、输入token、mask与逻辑位置对应；离线指标使用共享比较工具。"
+      ],
+      "differences": [
+        "各策略分别比较GPU CUDA与NPU CANN/torch-npu执行实现；策略的FP32范围在比较项中声明。"
+      ],
+      "notes": [
+        "完整32层真实模型、同一输入/初始LoRA；候选均以原始SFT任务验证，尚无确认的库缺陷或整体修复。",
+        "QKV FP32改善梯度一致性但NLL差变大；显式FP32 Attention缩小NLL差但token MAE/P99变差，且改变融合backend。",
+        "固定第16层/第8层输入反向信号后，目标梯度差分别剩76.98% / 5.24%；这属于因果诊断，不作为修复结果。",
+        "16个native作业；第16层双端完成模型计算后CPU后处理失败，单独CPU恢复通过，原失败记录保留。"
+      ],
+      "evidence": [
+        {
+          "label": "策略指标、覆盖率、干预核查与执行源码",
+          "url": "evidence/cross-platform-sft-causal-continuation-20261025.json"
+        },
+        {
+          "label": "因果结论与候选取舍",
+          "url": "evidence/cross-platform-sft-causal-continuation-20261025.md"
+        }
+      ],
+      "archive": {
+        "revision": "b48ced8af3dfdfab518effaa1e658debc7255350",
+        "prefix": "site/evidence/cross-platform-sft-causal-continuation-20261025.json",
+        "replay_cases": 1
+      },
+      "id": "cross-platform-sft-causal-continuation-20261025",
+      "title": "910C ↔ H200 · SFT 数值策略与反向定位",
+      "framework": {
+        "name": "Transformers / PEFT"
+      },
+      "task": "sft",
+      "summary": "4项数值策略均未形成整体修复；边界干预将目标梯度差压至5.24%，定位至第8–15层实际状态下的反向传播。",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA",
+          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H20Z）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            }
+          ],
+          "settings": {
+            "single_device": true,
+            "attention": "CUDA Flash SDPA",
+            "native_dtype": "BF16 backbone / FP32 LoRA",
+            "external_fla_causal_conv_kernels": false,
+            "gpu_binding": "allocated NVML UUID -> PCI == CUDA-driver PCI; one visible device",
+            "lora_rank": 2,
+            "lora_alpha": 4,
+            "lora_dropout": 0,
+            "initial_adapters_exact_equal": true,
+            "optimizer": "AdamW lr=1e-4 weight_decay=0 foreach=False",
+            "steps": 1,
+            "training": "LoRA"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "910C / CANN",
+          "hardware": "Ascend 910C（runtime Ascend910_9382）",
+          "libraries": [
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "PEFT",
+              "version": "0.20.0"
+            }
+          ],
+          "settings": {
+            "single_device": true,
+            "attention": "torch_npu.npu_fusion_attention",
+            "native_dtype": "BF16 backbone / FP32 LoRA",
+            "external_fla_causal_conv_kernels": false,
+            "gpu_binding": null,
+            "lora_rank": 2,
+            "lora_alpha": 4,
+            "lora_dropout": 0,
+            "initial_adapters_exact_equal": true,
+            "optimizer": "AdamW lr=1e-4 weight_decay=0 foreach=False",
+            "steps": 1,
+            "training": "LoRA"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "boundaries",
+          "title": "原生基线",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "原生BF16投影及CUDA Flash SDPA / NPU fusion_attention。 同一123个目标、80个LoRA张量的原始单步SFT。",
+          "metrics": [
+            {
+              "id": "nll-difference",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.0018931412015558147,
+              "side_values": {
+                "gpu": 0.5441815106418652,
+                "npu": 0.546074651843421
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nat",
+              "value": 0.004231977514158315
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99",
+              "unit": "nat",
+              "value": 0.08193545488999635
+            },
+            {
+              "id": "gradient-cosine",
+              "label": "梯度 cosine",
+              "unit": "cosine",
+              "value": 0.999241361934603
+            },
+            {
+              "id": "gradient-error-l2",
+              "label": "梯度差 L2",
+              "unit": "absolute",
+              "value": 0.006179175212679883
+            },
+            {
+              "id": "update-cosine",
+              "label": "更新 cosine",
+              "unit": "cosine",
+              "value": 0.976142557323779
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 123,
+              "expected": 123,
+              "unit": "targets"
+            },
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        },
+        {
+          "id": "qkv-fp32",
+          "title": "QKV FP32 累加",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "24个DeltaNet QKV投影使用FP32操作数并转回BF16，保留原生融合Attention。 同一123个目标、80个LoRA张量的原始单步SFT。",
+          "metrics": [
+            {
+              "id": "nll-difference",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.0020907408165231622,
+              "side_values": {
+                "gpu": 0.543866236806923,
+                "npu": 0.5459569776234462
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nat",
+              "value": 0.00383385888783163
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99",
+              "unit": "nat",
+              "value": 0.06172094740184534
+            },
+            {
+              "id": "gradient-cosine",
+              "label": "梯度 cosine",
+              "unit": "cosine",
+              "value": 0.9997335640026099
+            },
+            {
+              "id": "gradient-error-l2",
+              "label": "梯度差 L2",
+              "unit": "absolute",
+              "value": 0.0035328502229646673
+            },
+            {
+              "id": "update-cosine",
+              "label": "更新 cosine",
+              "unit": "cosine",
+              "value": 0.9831024589606989
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 123,
+              "expected": 123,
+              "unit": "targets"
+            },
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        },
+        {
+          "id": "attention-fp32",
+          "title": "显式 FP32 Attention",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "8个全Attention改用显式FP32 QK/softmax/AV；输入输出仍为BF16，替换融合backend。 同一123个目标、80个LoRA张量的原始单步SFT。",
+          "metrics": [
+            {
+              "id": "nll-difference",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.000179025145356837,
+              "side_values": {
+                "gpu": 0.5437242204007239,
+                "npu": 0.543545195255367
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nat",
+              "value": 0.005748392860977321
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99",
+              "unit": "nat",
+              "value": 0.11536918963218493
+            },
+            {
+              "id": "gradient-cosine",
+              "label": "梯度 cosine",
+              "unit": "cosine",
+              "value": 0.999520144574578
+            },
+            {
+              "id": "gradient-error-l2",
+              "label": "梯度差 L2",
+              "unit": "absolute",
+              "value": 0.004768040745503981
+            },
+            {
+              "id": "update-cosine",
+              "label": "更新 cosine",
+              "unit": "cosine",
+              "value": 0.9787557947715531
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 123,
+              "expected": 123,
+              "unit": "targets"
+            },
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        },
+        {
+          "id": "qkv-attention-fp32",
+          "title": "QKV + 显式 Attention FP32",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "合并QKV和Attention数值策略；显式Attention替换原生融合backend。 同一123个目标、80个LoRA张量的原始单步SFT。",
+          "metrics": [
+            {
+              "id": "nll-difference",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.002920485154882968,
+              "side_values": {
+                "gpu": 0.5433585227311223,
+                "npu": 0.5462790078860053
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nat",
+              "value": 0.007062455918447543
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99",
+              "unit": "nat",
+              "value": 0.11916643160478148
+            },
+            {
+              "id": "gradient-cosine",
+              "label": "梯度 cosine",
+              "unit": "cosine",
+              "value": 0.9997081429294583
+            },
+            {
+              "id": "gradient-error-l2",
+              "label": "梯度差 L2",
+              "unit": "absolute",
+              "value": 0.003795160418119256
+            },
+            {
+              "id": "update-cosine",
+              "label": "更新 cosine",
+              "unit": "cosine",
+              "value": 0.9819015180960672
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 123,
+              "expected": 123,
+              "unit": "targets"
+            },
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        },
+        {
+          "id": "oproj7-backward-fp32",
+          "title": "第7层 o_proj 反向 FP32",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "仅第7层冻结o_proj的输入梯度使用FP32乘法后转回BF16；原生前向与融合Attention保留。 同一123个目标、80个LoRA张量的原始单步SFT。",
+          "metrics": [
+            {
+              "id": "nll-difference",
+              "label": "NLL绝对差",
+              "unit": "nat/token",
+              "value": 0.0018931412015558147,
+              "side_values": {
+                "gpu": 0.5441815106418652,
+                "npu": 0.546074651843421
+              }
+            },
+            {
+              "id": "mae",
+              "label": "目标logprob MAE",
+              "unit": "nat",
+              "value": 0.004231977514158315
+            },
+            {
+              "id": "p99",
+              "label": "目标logprob P99",
+              "unit": "nat",
+              "value": 0.08193545488999635
+            },
+            {
+              "id": "gradient-cosine",
+              "label": "梯度 cosine",
+              "unit": "cosine",
+              "value": 0.999236505289287
+            },
+            {
+              "id": "gradient-error-l2",
+              "label": "梯度差 L2",
+              "unit": "absolute",
+              "value": 0.006181769458423053
+            },
+            {
+              "id": "update-cosine",
+              "label": "更新 cosine",
+              "unit": "cosine",
+              "value": 0.9761747726182625
+            }
+          ],
+          "coverage": [
+            {
+              "label": "配对目标",
+              "observed": 123,
+              "expected": 123,
+              "unit": "targets"
+            },
+            {
+              "label": "配对LoRA坐标",
+              "observed": 671744,
+              "expected": 671744,
+              "unit": "elements"
+            },
+            {
+              "label": "配对LoRA张量",
+              "observed": 80,
+              "expected": 80,
+              "unit": "tensors"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
