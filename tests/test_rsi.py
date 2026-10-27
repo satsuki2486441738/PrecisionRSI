@@ -501,6 +501,22 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         self.assertEqual(first['version'],second['version'])
         self.assertTrue(second['workflow']['stages'][0]['reused'])
 
+    def test_improver_can_choose_a_context_update_without_building_a_tool(self):
+        self.setup_improvement()
+        self.improver.write_text('''import json,sys
+from pathlib import Path
+p=json.loads(Path(sys.argv[1]).read_text().split('\\n',1)[1])
+Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
+ 'content':'Inspect objective normalization.','tags':['mean'],'artifacts':[]}]}))
+''')
+        result=improve(self.improve_cfg,self.root/'context-only-session')
+        self.assertEqual(result['status'],'completed')
+        self.assertEqual(len(result['candidates']),1)
+        candidate=read(self.root/'memory'/(result['candidates'][0]+'.json'))
+        self.assertEqual(candidate['kind'],'context')
+        self.assertEqual(candidate['artifacts'],{})
+        self.assertEqual(versions.current(self.root/'memory'),'empty')
+
     def test_failed_task_can_produce_outcome_labeled_data(self):
         self.setup_improvement(complete=False)
         result=improve(self.improve_cfg,self.root/'improvement-session')

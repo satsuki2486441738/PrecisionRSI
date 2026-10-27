@@ -41,7 +41,7 @@ Task paths are relative to the task JSON. `plan` uses the existing [workflow int
 Task evidence → Select limitation → Build candidate → Independent evaluation → Activate version → Subsequent tasks
 ```
 
-The separate improvement agent receives bounded summaries of completed and incomplete tasks, including tool counts, repeated commands and file mentions, with paths to detailed evidence. It builds a minimal update or returns no update. The host prepares datasets, evaluates runtime bundles and activates accepted versions. Each round has its own budget inside the series budget.
+The separate improvement agent receives bounded summaries of completed and incomplete tasks, including tool counts, repeated commands and file mentions, with paths to detailed evidence. Its objective is task completion and lower cumulative time/token use, including construction, while preserving correctness and coverage. It chooses the bottleneck, method and update kind, then builds a minimal update or returns no update. The host prepares datasets, evaluates runtime bundles and activates accepted versions. Each round has its own budget inside the series budget.
 
 ```json
 {
