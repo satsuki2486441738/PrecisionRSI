@@ -101,7 +101,7 @@ The exporter verifies source artifacts, assigns the source task outcome, dedupli
 
 Versions bind tools, memory, procedure overlays, artifact hashes, evidence families and runner/skill source identities. `replaces` removes superseded base members. Evaluation compares that exact bundle with its parent on disjoint task families. Accepted versions become current for subsequent tasks. `activate` restores a previously admitted, unchanged version; `activate empty` clears active memory.
 
-An evaluator template uses `{version_id}`, `{baseline_version}`, `{store}` and `{construction_file}`. Its workflow declares `workload: {purpose: "held_out_evaluation", version_id: "{version_id}", baseline_version: "{baseline_version}"}`. The final output named `evaluation` binds these IDs and contains `mode`, `scope`, `families`, `baseline` and `candidate` measurements. Existing task-owned evaluators can use [versions.evaluate](versions.py).
+An evaluator template uses `{version_id}`, `{baseline_version}`, `{store}` and `{construction_file}`. Pass `{evaluation_budget_seconds}` as an argv value to nested evaluators; it supplies the remaining round budget. Reserve time within that limit for native verification and receipt writing. Its workflow declares `workload: {purpose: "held_out_evaluation", version_id: "{version_id}", baseline_version: "{baseline_version}"}`. The final output named `evaluation` binds these IDs and contains `mode`, `scope`, `families`, `baseline` and `candidate` measurements. Existing task-owned evaluators can use [versions.evaluate](versions.py).
 
 The supplied [benchmark runner](benchmark.py) executes both arms and measures them:
 

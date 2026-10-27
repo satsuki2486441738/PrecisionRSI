@@ -91,8 +91,9 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'save the minimum complete proposals early, then return after necessary checks. '
                 'Reuse unchanged persistent artifacts; save new files '
                 'under the artifact directory. Return {"updates":[]} when no useful update is justified. '
-                'Each update has kind, content (call signature and input/output fields, or a short rule), tags, artifacts (absolute persistent '
-                'file paths), and benefit. Kinds: tool, context, procedure, data. '
+                'Each update has kind, content (call signature and input/output fields, or a short rule), tags, '
+                'artifacts: ["/absolute/persistent/file"] (a JSON array of paths; [] for no files), and benefit. '
+                'The host computes artifact fingerprints. Kinds: tool, context, procedure, data. '
                 'context stores a concise rule; tool stores callable code plus a test. '
                 'procedure declares entrypoint: an artifact JSON with instruction and/or '
                 'skill_paths mapping framework-adapt/precision-compare/precision-repair to declared SKILL.md artifacts. '
@@ -198,12 +199,17 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                                         cost=price(result['usage'],cfg.get('pricing')))
                     if not (workspace/'construction.json').exists():
                         write(workspace/'construction.json', construction)
+                    result['construction'] = read(workspace/'construction.json')
                     if cfg.get('evaluation_plan') and deadline > time.monotonic():
                         template = (config.parent/cfg['evaluation_plan']).resolve()
+                        budget_path = workspace/'evaluation-budget.json'
+                        if not budget_path.exists():
+                            write(budget_path, dict(seconds=deadline-time.monotonic()))
                         evaluation = _render(read(template),
                             {'{version_id}':version['id'], '{baseline_version}':base,
                              '{store}':str(store), '{construction_file}':str(workspace/'construction.json'),
-                             '{round_workspace}':str(workspace)})
+                             '{round_workspace}':str(workspace),
+                             '{evaluation_budget_seconds}':str(read(budget_path)['seconds'])})
                         evaluation['root'] = str((template.parent/evaluation.get('root', '.')).resolve())
                         evaluation_path = workspace/'evaluation-plan.json'
                         write(evaluation_path, evaluation)
@@ -214,6 +220,9 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                             result['errors'].append(dict(stage='evaluation', reason=str(exc)))
                 result['status'] = 'completed' if not result['errors'] else 'needs_action'
                 result['no_update'] = not updates
+            result.setdefault('construction', dict(
+                seconds=sum(a['seconds'] for a in state['history'][:-1])+time.monotonic()-started,
+                usage=result.get('usage'),cost=price(result.get('usage'),cfg.get('pricing'))))
             state['result'] = result
         finally:
             attempt.update(seconds=time.monotonic()-started, status='finished')

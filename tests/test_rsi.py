@@ -639,6 +639,33 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertTrue(replay['workflow']['stages'][0]['reused'])
         self.assertEqual(replay['candidates'],result['candidates'])
 
+    def test_nested_evaluator_receives_remaining_budget_and_build_receipt(self):
+        self.setup_improvement()
+        cfg=read(self.improve_cfg);cfg['evaluation_plan']='evaluate-template.json'
+        self.improve_cfg.write_text(json.dumps(cfg))
+        (self.root/'evaluate-template.json').write_text(json.dumps(dict(root='.',
+            argv=['nested-evaluator','--seconds','{evaluation_budget_seconds}'])))
+        received=[]
+        def evaluate(store,identity,plan,workspace,**kwargs):
+            received.append((read(plan),kwargs))
+            return dict(id=identity,evaluation=dict(accepted=False))
+        with patch('precision_rsi.improve.versions.evaluate',side_effect=evaluate):
+            result=improve(self.improve_cfg,self.root/'budget-session')
+        plan,limits=received[0]
+        budget=float(plan['argv'][-1])
+        self.assertGreater(budget,0)
+        self.assertLess(budget,cfg['budget_seconds'])
+        self.assertLessEqual(limits['time_budget_seconds'],budget)
+        self.assertLessEqual(result['construction']['seconds'],result['spent_seconds'])
+        self.assertEqual(result['construction']['usage'],result['usage'])
+        self.assertEqual(read(self.root/'budget-session/improvement.json')['result']['construction'],
+                         result['construction'])
+        with patch('precision_rsi.improve.versions.evaluate',side_effect=evaluate):
+            replay=improve(self.improve_cfg,self.root/'budget-session')
+        self.assertEqual(received[1][0],plan)
+        self.assertEqual(replay['construction'],result['construction'])
+        self.assertTrue(replay['workflow']['stages'][0]['reused'])
+
     def test_improver_receives_prior_feedback_and_retains_evaluator_failure(self):
         self.setup_improvement()
         cfg=read(self.improve_cfg)
