@@ -31,7 +31,16 @@ Task execution → Verified experience → Agent self-iteration → Subsequent t
 
 Updates feed any stage of subsequent task loops. Evaluate updates on independent tasks using correctness, completion time and cost, including the cost of building and maintaining the update. Keep evaluation data separate from training data.
 
-Current implementation: framework adaptation, precision comparison and repair. Operator optimization and the automated improvement loop are planned.
+Closed tasks (precision validation/repair) measure correct completion, time and cost. Open tasks (operator optimization) measure the best valid performance reached at a given budget and its improvement as the budget grows.
+
+The [system runner](precision_rsi/README.md) connects native workflows to an existing agent harness, retains candidate experience and evaluates tools/context before reuse in a task stream. Run from the checkout:
+
+```sh
+python -m precision_rsi run task.json --workspace projects/my-task/session
+python -m precision_rsi iterate series.json --workspace projects/my-stream/session
+```
+
+Operator optimization and data/weight training adapters are planned.
 
 ## Use
 
