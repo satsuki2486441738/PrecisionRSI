@@ -704,7 +704,11 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertTrue(improve(self.improve_cfg,self.root/'improvement-session')['workflow']['stages'][0]['reused'])
 
     def test_benchmark_runs_independent_arms_and_retains_actual_measurements(self):
-        self.cfg['family']='unseen-objective';self.save()
+        self.cfg['family']='unseen-objective'
+        self.cfg['agent']['usage_format']='dsh-jsonl';self.save()
+        agent=self.root/'agent.py'
+        agent.write_text(agent.read_text()+"\nprint(json.dumps({'type':'status','phase':'step_end',"
+            "'usage':{'inputTokens':12,'outputTokens':4,'totalTokens':16}}))\n")
         tasks={}
         for arm in ('baseline','candidate'):
             folder=self.root/arm;folder.mkdir()
@@ -721,6 +725,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         first=benchmark(suite,self.root/'bench',version['id'],'empty',30)
         self.assertTrue(first['baseline']['correct']);self.assertTrue(first['candidate']['correct'])
         self.assertGreater(first['baseline']['seconds'],0)
+        self.assertEqual(first['usage']['total_tokens'],32)
         with patch('precision_rsi.loop.record_run',side_effect=AssertionError('benchmark replay called agent')):
             self.assertEqual(benchmark(suite,self.root/'bench',version['id'],'empty',30),first)
         fresh=self.root/'fresh-candidate';fresh.mkdir()
@@ -733,6 +738,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         suite2=self.root/'reuse-suite.json';suite2.write_text(json.dumps(spec))
         reused=benchmark(suite2,self.root/'reuse-bench',version['id'],'empty',30)
         self.assertEqual(reused['baseline'],first['baseline'])
+        self.assertEqual(reused['usage']['total_tokens'],16)
         state=read(self.root/'reuse-bench/benchmark.json')
         self.assertEqual(state['arms']['0:baseline']['evidence']['state'],
                          read(self.root/'bench/0/baseline/result.json')['evidence']['state'])

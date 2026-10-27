@@ -156,6 +156,9 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
         result = dict(status='completed',version_id=version_id, baseline_version=baseline_version, mode='closed',
             scope=[c['id'] for c in cases], families=sorted({c['family'] for c in cases}),
             baseline=values['baseline'], candidate=values['candidate'],
+            usage=usage_totals([state['arms'][str(i)+':'+arm]
+                for i,case in enumerate(cases) for arm in ('baseline','candidate')
+                if arm=='candidate' or not case.get('baseline_receipt')]),
             construction=construction, amortize_over_tasks=reuse, evidence=str(state_path))
         write(workspace/'measurement.json', result)
         return result

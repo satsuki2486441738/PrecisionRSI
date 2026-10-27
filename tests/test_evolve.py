@@ -94,6 +94,28 @@ class EvolutionTests(unittest.TestCase):
         self.assertEqual(result['reason'],'budget exhausted')
         self.assertEqual(result['spent_seconds'],31)
 
+    def test_raw_usage_includes_evaluation_without_recounting_construction(self):
+        construction=dict(input_tokens=10,output_tokens=2,total_tokens=12)
+        measured=dict(input_tokens=20,output_tokens=3,total_tokens=23)
+        value=dict(status='completed',no_update=True,candidates=[],usage=construction,
+                   evaluation=dict(evaluation=dict(accepted=False,measurement=dict(usage=measured))))
+        with patch('precision_rsi.evolve.improve',return_value=value):
+            result=run(self.config,self.root/'usage')
+        self.assertEqual(result['usage']['total_tokens'],35)
+        self.assertEqual(result['construction_usage']['total_tokens'],12)
+        self.assertEqual(result['evaluation_usage']['total_tokens'],23)
+        with patch('precision_rsi.evolve.improve',side_effect=AssertionError('replayed call')):
+            self.assertEqual(run(self.config,self.root/'usage'),result)
+
+    def test_unmeasured_evaluation_usage_is_unknown(self):
+        value=dict(status='completed',no_update=True,candidates=[],usage=dict(total_tokens=12),
+                   evaluation=dict(evaluation=dict(accepted=False,measurement=None)))
+        with patch('precision_rsi.evolve.improve',return_value=value):
+            result=run(self.config,self.root/'unknown-usage')
+        self.assertIsNone(result['evaluation_usage']['total_tokens'])
+        self.assertIsNone(result['usage']['total_tokens'])
+        self.assertEqual(result['construction_usage']['total_tokens'],12)
+
     def test_feedback_separates_build_cost_from_task_measurements(self):
         measurement=dict(baseline=dict(seconds=100,total_tokens=1000),
             candidate=dict(seconds=110,total_tokens=1100,usage=dict(total_tokens=500)),
