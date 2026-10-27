@@ -19,17 +19,19 @@ Reproduce the selected library's native model workload. Enter at the first missi
 **Improvement loop**
 
 ```text
-Task execution → Verified experience → Agent self-iteration → Subsequent tasks
+Task traces → Improvement selection → Candidate update → Independent evaluation → Next system version
 ```
 
-| Update target | Reusable capability |
+| Update target | Output and reuse |
 |---|---|
-| Tools | Analysis tools, collectors, adapters, operator implementations and shared utilities |
-| Context memory | Rules and retrieved experience loaded when applicable |
-| Data | Verified trajectories, failure/fix pairs and regression cases |
-| Agent weights | Persistent parametric memory learned from accumulated data |
+| Analysis tools | Tested collectors, diagnostics, adapters and shared utilities with callable interfaces |
+| Context memory | Concise rules with applicability conditions, retrieved for relevant tasks |
+| Training data | Outcome-labeled trajectories, failure/fix pairs and regression cases, deduplicated and split by task family |
+| Task-loop procedure | Versioned skill instructions, routing, tool selection, execution reuse and verification scope |
 
-Updates feed any stage of subsequent task loops. Evaluate updates on independent tasks using correctness, completion time and cost, including the cost of building and maintaining the update. Keep evaluation data separate from training data.
+Use successful, failed and unnecessarily expensive task traces. An improvement agent selects a recurring limitation or missing capability and constructs a bounded candidate update. Run improvement when new evidence justifies it; each task need not trigger another model call. Task completion ends the task loop; the improvement loop continues across tasks within its own budget.
+
+Evaluate candidate system versions on independent tasks using correctness, completion time and cost, including update construction and maintenance. Keep task goals, correctness criteria and evaluation coverage fixed. Retain the useful version for subsequent tasks; pause improvement when its budget is exhausted or evidence shows no gain. Training data undergoes provenance, outcome, deduplication and split checks before use; agent-weight training and evaluation consume accepted datasets in a later stage.
 
 Closed tasks (precision validation/repair) measure correct completion, time and cost. Open tasks (operator optimization) measure the best valid performance reached at a given budget and its improvement as the budget grows.
 
@@ -40,7 +42,7 @@ python -m precision_rsi run task.json --workspace projects/my-task/session
 python -m precision_rsi iterate series.json --workspace projects/my-stream/session
 ```
 
-Operator optimization and data/weight training adapters are planned.
+The independent improvement agent, dataset construction and task-loop update application remain to be implemented. Operator optimization and agent-weight training are later extensions.
 
 ## Use
 
