@@ -119,7 +119,7 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 prompt_path.write_text(prompt)
             stage = dict(id='improve', skill='precision-repair', timeout=agent['timeout'],
                 argv=[sys.executable, '-B', str(Path(__file__).with_name('harness.py')),
-                      str(workspace/'agent.json'), str(prompt_path), '{run}'],
+                      str(workspace/'agent.json'), str(prompt_path), '{run}', '--cwd-run'],
                 inputs=[str(workspace/'config.json'), str(workspace/'evidence.json'), str(workspace/'agent.json'),
                         str(prompt_path), str(Path(__file__).with_name('harness.py'))],
                 outputs={'proposals':'proposals.json', 'artifacts':'artifacts'})
