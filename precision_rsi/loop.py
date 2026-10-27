@@ -30,38 +30,12 @@ sys.path.insert(0, str(TOOLS))
 from record_run import record_run
 from workflow import fingerprint, inspect_workflow, run_workflow, workspace_lock
 from .memory import evaluate, propose, read, select, write
+from .harness import command as harness_command, usage as _usage
+from . import versions
 
 
 def _positive(value):
     return type(value) in (int, float) and math.isfinite(value) and value > 0
-
-
-def _usage(path, format_name):
-    """Normalize explicitly selected Harness step events; retain unknown cache usage."""
-    if format_name is None:
-        return None
-    if format_name != 'dsh-jsonl':
-        raise ValueError('unknown usage format')
-    result = dict(input_tokens=0, output_tokens=0, total_tokens=0, steps=0,
-                  cached_input_tokens=None)
-    with Path(path).open(errors='replace') as stream:
-        for line in stream:
-            try:
-                event = json.loads(line)
-            except ValueError:
-                continue
-            if not isinstance(event, dict) or event.get('type') != 'status' or event.get('phase') != 'step_end':
-                continue
-            usage = event.get('usage', {})
-            if not isinstance(usage, dict):
-                continue
-            values = [usage.get(k) for k in ('inputTokens', 'outputTokens', 'totalTokens')]
-            if not all(type(v) is int and v >= 0 for v in values):
-                continue
-            for key, value in zip(('input_tokens', 'output_tokens', 'total_tokens'), values):
-                result[key] += value
-            result['steps'] += 1
-    return result if result['steps'] else None
 
 
 def _config(path):
@@ -116,6 +90,8 @@ def _recover(workspace, state):
 
 def _prompt(cfg, plan, action, workspace, memories):
     skill = ROOT / 'skills' / action['skill'] / 'SKILL.md'
+    for memory in memories:
+        skill = memory.get('procedure', {}).get('skill_paths', {}).get(action['skill'], skill)
     action = {k:v for k,v in action.items() if k in
               ('stage','skill','reason','inputs','depends_on','outputs','run','execution')}
     if action.get('execution',{}).get('status') == 'completed':
@@ -133,7 +109,11 @@ def _prompt(cfg, plan, action, workspace, memories):
                               proposal=str(workspace / 'proposal.json')), ensure_ascii=False))
 
 
-def run_task(task, workspace, time_budget_seconds=None):
+def _version_key(key, version):
+    return hashlib.sha256((key + ':' + version).encode()).hexdigest() if version else key
+
+
+def run_task(task, workspace, time_budget_seconds=None, system_version=None):
     path, cfg, plan, root, identities, key = _config(task)
     if time_budget_seconds is not None and not _positive(time_budget_seconds):
         raise ValueError('positive outer time budget required')
@@ -142,13 +122,25 @@ def run_task(task, workspace, time_budget_seconds=None):
     workspace.mkdir(parents=True, exist_ok=True)
     state_path = workspace / 'loop.json'
     with workspace_lock(workspace):
-        state = read(state_path) if state_path.exists() else dict(schema_version=1, task=str(path),
-                key=key, history=[], created_at=datetime.now(timezone.utc).isoformat())
+        memory = cfg.get('memory', {})
+        store = (path.parent / memory['directory']).resolve() if memory.get('directory') else None
+        requested = system_version if system_version is not None else memory.get('version')
+        if requested is not None and store is None:
+            raise ValueError('a system version requires a memory directory')
+        if state_path.exists():
+            state = read(state_path)
+            version = state.get('system_version')
+            if requested is not None and requested != version:
+                raise ValueError('system version changed; use a new workspace')
+        else:
+            version = requested or (versions.current(store) if store and
+                (store/'versions/current.json').exists() else 'legacy')
+            state = dict(schema_version=1, task=str(path), system_version=version,
+                key=_version_key(key,version), history=[], created_at=datetime.now(timezone.utc).isoformat())
+        key = _version_key(key, version)
         if state.get('key') != key or state.get('task') != str(path):
             raise ValueError('task/verification changed; use a new workspace')
         _recover(workspace, state)
-        memory = cfg.get('memory', {})
-        store = (path.parent / memory['directory']).resolve() if memory.get('directory') else None
         report, reason, refresh, agent_failure = None, None, (), None
         while True:
             if not _protected(identities):
@@ -197,7 +189,8 @@ def run_task(task, workspace, time_budget_seconds=None):
                 reason = 'agent made no verified progress'
                 break
             state['last_action'] = action_key
-            memories = select(store, memory.get('tags', []), memory.get('limit_chars', 4000)) if store else []
+            memories = select(store, memory.get('tags', []), memory.get('limit_chars', 4000),
+                              version=version or 'legacy') if store else []
             prompt = _prompt(cfg, plan, report['next_action'], workspace, memories)
             timeout = min(cfg['agent']['timeout'], remaining)
             attempt = dict(kind='agent', task='agent-call' + str(calls + 1), status='running',
@@ -205,10 +198,7 @@ def run_task(task, workspace, time_budget_seconds=None):
             state['history'].append(attempt)
             write(state_path, state)
             def argv(run):
-                prompt_file = run / 'prompt.txt'
-                prompt_file.write_text(prompt)
-                return [a.replace('{prompt}', prompt).replace('{prompt_file}', str(prompt_file))
-                        for a in cfg['agent']['argv']]
+                return harness_command(cfg['agent'], prompt, run)
             execution = cfg['agent'].get('execution')
             folder, command = record_run(workspace / 'agents', 'compare', attempt['task'], timeout,
                     argv, cwd=root, execution=(path.parent / execution).resolve() if execution else None)
@@ -223,7 +213,7 @@ def run_task(task, workspace, time_budget_seconds=None):
         result = dict(status='completed' if completed else 'needs_action', reason=reason,
                       workflow=report, agent_calls=sum(a['kind'] == 'agent' for a in state['history']),
                       spent_seconds=sum(a['wall_seconds'] for a in state['history']),
-                      state=str(state_path), candidate=None)
+                      state=str(state_path), system_version=version, candidate=None)
         proposal = workspace / 'proposal.json'
         if completed and store and proposal.is_file():
             # Final independent native checks, rather than the agent's completion claim,
@@ -297,7 +287,7 @@ def iterate(series, workspace):
                 results.append(entry)
                 candidate = result.get('candidate')
                 remaining = deadline-time.monotonic()
-                if candidate and spec.get('evaluation_plan') and remaining > 0:
+                if candidate and spec.get('evaluation_plan') and not spec.get('improvement') and remaining > 0:
                     cfg = read(task)
                     store = (task.parent/cfg['memory']['directory']).resolve()
                     template = (path.parent/spec['evaluation_plan']).resolve()
@@ -308,6 +298,13 @@ def iterate(series, workspace):
                     write(evaluation_path,evaluation)
                     entry['evaluation'] = evaluate(store,candidate,evaluation_path,
                             task_workspace/'evaluation',time_budget_seconds=remaining)
+                remaining = deadline-time.monotonic()
+                if spec.get('improvement') and remaining > 0:
+                    from .improve import maybe
+                    sources = [workspace/'tasks'/str(i) for i in range(index+1)]
+                    entry['improvement'] = maybe((path.parent/spec['improvement']).resolve(),
+                        sources, state, workspace, remaining)
+                    write(state_path,state)
             result = dict(status='completed' if len(results)==len(spec['tasks']) and
                           all(x['result']['status']=='completed' for x in results) else 'needs_action',
                           tasks=results, state=str(state_path))
@@ -323,10 +320,23 @@ def iterate(series, workspace):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest='command', required=True)
-    for name in ('run', 'status', 'iterate'):
+    for name in ('run', 'status', 'iterate', 'improve'):
         sub = commands.add_parser(name)
         sub.add_argument('task')
         sub.add_argument('--workspace', required=True)
+        if name == 'improve':
+            sub.add_argument('--time-budget-seconds', type=float)
+    sub = commands.add_parser('benchmark')
+    sub.add_argument('suite')
+    sub.add_argument('--workspace', required=True)
+    sub.add_argument('--version', required=True)
+    sub.add_argument('--baseline', required=True)
+    sub.add_argument('--time-budget-seconds', type=float, required=True)
+    sub.add_argument('--output')
+    sub.add_argument('--construction-file')
+    sub = commands.add_parser('activate')
+    sub.add_argument('version')
+    sub.add_argument('--store', required=True)
     sub = commands.add_parser('evaluate')
     sub.add_argument('candidate_id')
     sub.add_argument('--store', required=True)
@@ -339,12 +349,23 @@ def main(argv=None):
             result = run_task(args.task, args.workspace)
         elif args.command == 'iterate':
             result = iterate(args.task, args.workspace)
+        elif args.command == 'improve':
+            from .improve import improve
+            result = improve(args.task, args.workspace, time_budget_seconds=args.time_budget_seconds)
+        elif args.command == 'benchmark':
+            from .benchmark import run
+            result = run(args.suite, args.workspace, args.version, args.baseline, args.time_budget_seconds,
+                         args.construction_file)
+            if args.output:
+                write(args.output,result)
+        elif args.command == 'activate':
+            result = versions.activate(args.store,args.version)
         elif args.command == 'status':
             _, _, plan, _, _, key = _config(args.task)
             state_path = Path(args.workspace) / 'loop.json'
             state = read(state_path) if state_path.exists() else None
             result = dict(status='new' if state is None else 'recorded',
-                          identity_matches=state is None or key == state.get('key'),
+                          identity_matches=state is None or _version_key(key,state.get('system_version')) == state.get('key'),
                           previous=None if state is None else state.get('result'),
                           workflow=inspect_workflow(plan, Path(args.workspace) / 'native'))
         else:

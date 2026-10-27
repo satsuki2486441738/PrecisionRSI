@@ -33,7 +33,7 @@ def write(path, value):
 
 def propose(store, proposal, source):
     """Retain verified-task experience as a candidate; artifact paths must be absolute."""
-    if proposal.get('kind') not in ('tool', 'context', 'data', 'weights'):
+    if proposal.get('kind') not in ('tool', 'context', 'procedure', 'data', 'weights'):
         raise ValueError('unknown experience kind')
     if not isinstance(proposal.get('content'), str) or not proposal['content'].strip():
         raise ValueError('experience content required')
@@ -43,10 +43,18 @@ def propose(store, proposal, source):
     artifacts = proposal.get('artifacts', [])
     if not isinstance(artifacts, list) or not all(isinstance(p, str) and Path(p).is_absolute() for p in artifacts):
         raise ValueError('artifact paths must be absolute')
-    if proposal['kind'] == 'tool' and not artifacts:
-        raise ValueError('tool experience needs a versioned artifact')
+    if proposal['kind'] in ('tool', 'procedure', 'data', 'weights') and not artifacts:
+        raise ValueError(proposal['kind'] + ' experience needs a versioned artifact')
     item = dict(kind=proposal['kind'], content=proposal['content'], tags=sorted(set(tags)),
                 artifacts={p: fingerprint(p) for p in artifacts}, source=source)
+    for key in ('entrypoint', 'benefit', 'base_version', 'replaces'):
+        if key in proposal:
+            item[key] = proposal[key]
+    if 'replaces' in item and (not isinstance(item['replaces'], list) or
+            not all(isinstance(v, str) and len(v) == 64 for v in item['replaces'])):
+        raise ValueError('replaces must list candidate IDs')
+    if item['kind'] == 'procedure':
+        procedure(item)
     identity = hashlib.sha256(json.dumps(item, sort_keys=True).encode()).hexdigest()
     store = Path(store)
     store.mkdir(parents=True, exist_ok=True)
@@ -70,18 +78,43 @@ def _unchanged(item):
         return False
 
 
-def select(store, tags=(), limit_chars=4000):
+def procedure(item):
+    """Versioned instruction/skill-route overlay; all referenced files are identified."""
+    entrypoint = item.get('entrypoint')
+    if entrypoint not in item['artifacts']:
+        raise ValueError('procedure entrypoint must be a declared artifact')
+    value = read(entrypoint)
+    if not isinstance(value, dict) or set(value) - {'instruction', 'skill_paths'}:
+        raise ValueError('procedure supports instruction and skill_paths')
+    if 'instruction' in value and (not isinstance(value['instruction'], str) or not value['instruction'].strip()):
+        raise ValueError('procedure instruction must be nonempty')
+    routes = value.get('skill_paths', {})
+    if not isinstance(routes, dict) or any(k not in ('framework-adapt', 'precision-compare', 'precision-repair')
+            or p not in item['artifacts'] for k, p in routes.items()):
+        raise ValueError('procedure skill paths must be declared skill artifacts')
+    if not value.get('instruction') and not routes:
+        raise ValueError('procedure must provide an instruction or a skill route')
+    return value
+
+
+def select(store, tags=(), limit_chars=4000, version=None):
     """Load only active, applicable, unchanged interfaces within a character budget."""
     if type(limit_chars) is not int or limit_chars < 0:
         raise ValueError('nonnegative memory character budget required')
+    from .versions import current, members
+    version = (None if version == 'legacy' else version or
+               (current(store) if (Path(store)/'versions/current.json').exists() else None))
+    items = members(store, version) if version else [read(p) for p in sorted(Path(store).glob('*.json'))]
     result, used = [], 0
-    for path in sorted(Path(store).glob('*.json')):
-        item = read(path)
-        if (item['status'] != 'active' or not set(item['tags']) <= set(tags)
+    for item in items:
+        if ((version is None and item['status'] != 'active') or
+                item['kind'] not in ('tool', 'context', 'procedure') or not set(item['tags']) <= set(tags)
                 or not _unchanged(item)):
             continue
         value = dict(id=item['id'], kind=item['kind'], content=item['content'],
                      artifacts=list(item['artifacts']))
+        if item['kind'] == 'procedure':
+            value['procedure'] = procedure(item)
         size = len(json.dumps(value, ensure_ascii=False))
         if used + size <= limit_chars:
             result.append(value)
@@ -113,34 +146,25 @@ def improvement(result):
     if not a['correct']:
         return True
     metrics = ['seconds']
-    if 'cost' in a or 'cost' in b:
-        if not all(_number(x.get('cost')) for x in (a, b)):
-            raise ValueError('both costs required when evaluating cost')
-        metrics.append('cost')
+    for metric in ('cost', 'total_tokens'):
+        if metric in a or metric in b:
+            if not all(_number(x.get(metric)) for x in (a, b)):
+                raise ValueError('both costs required when evaluating cost' if metric=='cost'
+                                 else 'both token totals required when evaluating usage')
+            metrics.append(metric)
     return all(b[k] <= a[k] for k in metrics) and any(b[k] < a[k] for k in metrics)
 
 
 def evaluate(store, candidate_id, plan, workspace, time_budget_seconds=None):
     """Activate a tool/context candidate only after a declared held-out comparison."""
     path = _entry(store, candidate_id)
-    item, spec = read(path), read(plan)
+    item = read(path)
     if item['kind'] not in ('tool', 'context'):
         raise ValueError('data and weights are retained for future training adapters')
     if not _unchanged(item):
         raise ValueError('candidate artifact changed; propose the new version')
-    workload = spec.get('workload', {})
-    if workload.get('purpose') != 'held_out_evaluation' or workload.get('candidate_id') != candidate_id:
-        raise ValueError('evaluation must bind a candidate and declare held-out scope')
-    result = run_workflow(plan, workspace, time_budget_seconds=time_budget_seconds)
-    accepted, measurement = False, None
-    if result['status'] == 'completed':
-        output = result['stages'][-1]['outputs'].get('evaluation')
-        if output is None:
-            raise ValueError('final evaluator output must be named evaluation')
-        measurement = read(output['path'])
-        if measurement.get('candidate_id') != candidate_id:
-            raise ValueError('measurement belongs to another candidate')
-        accepted = improvement(measurement)
+    result, measurement = measure(plan, workspace, {'candidate_id':candidate_id}, time_budget_seconds)
+    accepted = measurement is not None and improvement(measurement)
     if not _unchanged(item):
         raise ValueError('candidate artifact changed during evaluation')
     record = dict(accepted=accepted, workflow=result, measurement=measurement)
@@ -152,3 +176,20 @@ def evaluate(store, candidate_id, plan, workspace, time_budget_seconds=None):
         item['status'] = 'active' if accepted else 'candidate'
         write(path, item)
     return dict(id=candidate_id, status=item['status'], evaluation=record)
+
+
+def measure(plan, workspace, binding, time_budget_seconds=None):
+    """Shared native evaluation interface, bound to the exact candidate/version."""
+    workload = read(plan).get('workload', {})
+    if workload.get('purpose') != 'held_out_evaluation' or any(workload.get(k) != v for k,v in binding.items()):
+        raise ValueError('evaluation must bind its subject and declare held-out scope')
+    result = run_workflow(plan, workspace, time_budget_seconds=time_budget_seconds)
+    measurement = None
+    if result['status'] == 'completed':
+        output = result['stages'][-1]['outputs'].get('evaluation')
+        if output is None:
+            raise ValueError('final evaluator output must be named evaluation')
+        measurement = read(output['path'])
+        if any(measurement.get(k) != v for k,v in binding.items()):
+            raise ValueError('measurement belongs to another candidate/version')
+    return result, measurement
