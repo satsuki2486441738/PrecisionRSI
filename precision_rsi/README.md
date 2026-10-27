@@ -1,6 +1,6 @@
 # PrecisionRSI runner
 
-The task loop runs native commands, calls an existing agent harness for missing adaptation/repair, and verifies the original workload. The improvement loop retains candidate experience, evaluates it on separately selected tasks, and exposes admitted tools/context to subsequent tasks. Operator search and agent-weight training are extension points.
+The task loop runs native commands, calls an existing agent harness for missing adaptation/repair, and verifies the original workload. The current iteration runner retains candidate experience, evaluates it on separately selected tasks, and exposes admitted tools/context to subsequent tasks.
 
 Run from the repository checkout; the runner uses Python 3.10+ and the standard library. Native workloads and agent harnesses supply their own dependencies.
 
@@ -34,7 +34,30 @@ Use `{prompt_file}` instead of `{prompt}` for a harness adapter accepting a UTF-
 
 `loop.json` retains cumulative time, agent-call count, native results and raw harness output paths. The time budget includes native execution and agent calls; agent timeouts terminate the owned process group. Saved patches return to native verification even after an agent timeout or nonzero exit, within the remaining budget. Completion requires native checks. Unchanged completion calls no model; unchanged failure after an agent action stops for lack of progress. Optional `dsh-jsonl` usage counts completed Harness step events; unknown cache usage remains `null`. Other harnesses retain raw output with normalized usage `null`.
 
-## Experience and iteration
+## Improvement-loop design
+
+```text
+Task traces → Select limitation → Build candidate → Evaluate → Publish system version → Subsequent tasks
+```
+
+The task executor completes a workload. A separate improvement agent uses evidence across workloads to change how later tasks execute. Inputs include successful and failed checks, patches, repeated operations, missing capabilities, wall time and raw usage. Summaries reference full traces instead of loading them into every task prompt.
+
+| Update | Candidate artifact | Evaluation and use |
+|---|---|---|
+| Analysis tool | Implementation, short interface, tests | Verify behavior and measure its effect on independent tasks; expose the interface |
+| Context memory | Rule, applicability, supporting evidence | Measure relevant-task benefit; retrieve within the context budget |
+| Training data | Outcome-labeled examples and source/task-family identities | Check provenance, outcome labels, duplicates and train/evaluation separation; export accepted data |
+| Task-loop procedure | Patch to skill instructions, routing, tool selection, reuse or verification scope | Run the same independent task checks with the candidate procedure; use the accepted version on later tasks |
+
+Updates identify their base version, evidence, intended benefit and applicable tasks. An evaluated system version binds its tools, memory and procedure. A candidate may change one component or a coupled set; evaluation compares that exact version with the retained baseline. Goals and correctness criteria remain task-owned. Regression checks cover affected task families; accepted updates retain a path back to the previous version.
+
+Task success ends its execution loop. Improvement is triggered by new evidence of reusable work or a limitation, with a separate budget for construction and evaluation. It may conclude with no update and resume when more evidence arrives. Account for construction/maintenance costs alongside task execution; preserve unknown usage rather than estimating it as zero.
+
+Training-data acceptance establishes dataset quality and separation. Runtime benefit is evaluated after retrieval or agent training uses that dataset. Operator search and agent-weight training are later extensions.
+
+Current implementation covers native task execution, optional single proposals from completed tasks, tool/context evaluation and bounded reuse. The separate improvement-agent stage, failed-task extraction, dataset construction and versioned task-loop update application are the next implementation work. The interfaces below describe the current runner.
+
+## Current experience and iteration interface
 
 An agent may leave `proposal.json` in its task workspace:
 
