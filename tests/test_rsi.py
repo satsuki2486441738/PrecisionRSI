@@ -508,6 +508,26 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         rows=[json.loads(line) for p in dataset['artifacts'] for line in Path(p).read_text().splitlines()]
         self.assertEqual(rows[0]['outcome'],'needs_action')
 
+    def test_invalid_replacement_retains_candidate_usage_and_replay(self):
+        self.setup_improvement()
+        # A rejected historical candidate is not a member of the empty base.
+        text=self.improver.read_text().replace("'kind':'context',", "'kind':'context','replaces':['"+'a'*64+"'],")
+        self.improver.write_text(text)
+        session=self.root/'replacement-session'
+        result=improve(self.improve_cfg,session)
+        self.assertEqual(result['status'],'needs_action')
+        self.assertEqual(result['usage']['total_tokens'],12)
+        self.assertEqual(len(result['candidates']),4)
+        self.assertIsNone(result['version'])
+        self.assertEqual(result['errors'][0]['stage'],'prepare')
+        self.assertIn('replacement is absent',result['errors'][0]['reason'])
+        self.assertEqual(read(session/'improvement.json')['result']['usage'],result['usage'])
+        prompt=json.loads((session/'prompt-template.txt').read_text().split('\n',1)[1])
+        self.assertEqual(prompt['base_members'],[])
+        replay=improve(self.improve_cfg,session)
+        self.assertTrue(replay['workflow']['stages'][0]['reused'])
+        self.assertEqual(replay['candidates'],result['candidates'])
+
     def test_improver_receives_prior_feedback_and_retains_evaluator_failure(self):
         self.setup_improvement()
         cfg=read(self.improve_cfg)

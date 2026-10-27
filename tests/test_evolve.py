@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from precision_rsi.evolve import run
+from precision_rsi.evolve import _feedback, run
 from precision_rsi.memory import read
 
 
@@ -78,6 +78,19 @@ class EvolutionTests(unittest.TestCase):
         self.assertEqual(agent.call_count,1)
         self.assertEqual(result['reason'],'budget exhausted')
         self.assertEqual(result['spent_seconds'],31)
+
+    def test_feedback_separates_build_cost_from_task_measurements(self):
+        measurement=dict(baseline=dict(seconds=100,total_tokens=1000),
+            candidate=dict(seconds=110,total_tokens=1100,usage=dict(total_tokens=500)),
+            construction=dict(seconds=60,usage=dict(total_tokens=600)),amortize_over_tasks=1)
+        result=dict(status='completed',candidates=[],evaluation=dict(evaluation=dict(
+            accepted=False,measurement=measurement)))
+        feedback,_=_feedback(result,self.root/'memory')
+        received=feedback['measurements']
+        self.assertEqual(received['candidate']['seconds']-received['construction']['seconds'],50)
+        self.assertEqual(received['candidate']['usage']['total_tokens'],500)
+        self.assertEqual(received['amortize_over_tasks'],1)
+        self.assertFalse(feedback['accepted'])
 
 
 if __name__=='__main__':
