@@ -37,11 +37,26 @@ class EvolutionTests(unittest.TestCase):
         with patch('precision_rsi.evolve.improve',side_effect=AssertionError('replayed model')):
             self.assertEqual(run(self.config,self.root/'session'),result)
 
-    def test_repeated_candidate_stops(self):
+    def test_repeated_failure_stops(self):
         with patch('precision_rsi.evolve.improve',return_value=dict(status='completed',candidates=[])) as agent:
             result=run(self.config,self.root/'session')
         self.assertEqual(agent.call_count,2)
-        self.assertEqual(result['reason'],'repeated candidate')
+        self.assertEqual(result['reason'],'repeated failure')
+
+    def test_improver_launch_failure_reaches_next_round(self):
+        calls=[]
+        failure=dict(status='needs_action',next_action=dict(stage='improve',
+            reason='native command failed',execution=dict(status='launch_failed')))
+        def improve(config,workspace,**kwargs):
+            calls.append(read(config))
+            if len(calls)==1:
+                return dict(status='needs_action',candidates=[],workflow=failure)
+            return dict(status='completed',candidates=[],no_update=True)
+        with patch('precision_rsi.evolve.improve',side_effect=improve):
+            result=run(self.config,self.root/'launch-failure')
+        self.assertEqual(calls[1]['feedback'][0]['workflow']['next_action']['execution']['status'],
+                         'launch_failed')
+        self.assertEqual(result['rounds'],2)
 
     def test_interrupted_budget_is_not_granted_again(self):
         with patch('precision_rsi.evolve.improve',side_effect=KeyboardInterrupt):

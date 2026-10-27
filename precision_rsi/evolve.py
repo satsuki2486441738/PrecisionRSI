@@ -21,7 +21,7 @@ def _feedback(result, store):
     summary = dict(status=result.get('status'), version=result.get('version'),
         accepted=evaluation.get('accepted', False), no_update=result.get('no_update', False),
         errors=result.get('errors', []),
-        workflow=evaluation.get('workflow'),
+        workflow=evaluation.get('workflow') or result.get('workflow'),
         measurements={k:measurement[k] for k in
             ('baseline','candidate','construction','amortize_over_tasks') if k in measurement},
         updates=[{k:item[k] for k in ('id','kind','content','tags','artifacts')} for item in updates])
@@ -30,7 +30,8 @@ def _feedback(result, store):
         flow = summary['workflow']
         summary['workflow'] = {k:flow[k] for k in ('status','reason','state','next_action') if k in flow}
     signature = digest([dict(kind=i['kind'], content=i['content'], tags=i['tags'],
-        artifacts=sorted(digest(fingerprint(p)) for p in i['artifacts'])) for i in updates])
+        artifacts=sorted(digest(fingerprint(p)) for p in i['artifacts'])) for i in updates]
+        if updates else summary)
     return summary, signature
 
 
@@ -115,7 +116,9 @@ def run(config, workspace):
                     break
                 stalled += 1
             if result.get('no_update') or repeated or stalled >= cfg.get('patience',3):
-                reason = 'no useful update' if result.get('no_update') else 'repeated candidate' if repeated else 'no measured progress'
+                reason = ('no useful update' if result.get('no_update') else
+                    'repeated candidate' if repeated and result.get('candidates') else
+                    'repeated failure' if repeated else 'no measured progress')
                 break
         state['seconds'] = spent+time.monotonic()-started
         state['result'] = dict(status='completed',reason=reason,spent_seconds=state['seconds'],
