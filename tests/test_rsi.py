@@ -528,6 +528,22 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         self.assertEqual(first['version'],second['version'])
         self.assertTrue(second['workflow']['stages'][0]['reused'])
 
+    def test_improver_relative_proposal_is_written_to_declared_run(self):
+        self.setup_improvement()
+        self.improver.write_text('''import json
+from pathlib import Path
+Path('proposals.json').write_text(json.dumps({'updates':[{'kind':'context',
+ 'content':'Inspect objective normalization.','tags':['mean'],'artifacts':[]}]}))
+''')
+        session=self.root/'relative-proposal'
+        result=improve(self.improve_cfg,session)
+        self.assertEqual(result['status'],'completed')
+        self.assertEqual(len(result['candidates']),1)
+        run=Path(result['workflow']['stages'][0]['run'])
+        self.assertTrue((run/'proposals.json').is_file())
+        self.assertEqual(read(session/'proposals.json'),read(run/'proposals.json'))
+        self.assertTrue(improve(self.improve_cfg,session)['workflow']['stages'][0]['reused'])
+
     def test_improver_can_choose_a_context_update_without_building_a_tool(self):
         self.setup_improvement()
         self.improver.write_text('''import json,sys
@@ -743,6 +759,27 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(state['arms']['0:baseline']['evidence']['state'],
                          read(self.root/'bench/0/baseline/result.json')['evidence']['state'])
 
+    def test_benchmark_rejects_partially_selected_new_bundle_before_task_calls(self):
+        tasks={}
+        for arm in ('baseline','candidate'):
+            folder=self.root/arm;folder.mkdir()
+            for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
+                shutil.copyfile(self.root/name,folder/name)
+            tasks[arm]=str(folder/'task.json')
+        store=self.root/'memory'
+        ids=[propose(store,dict(kind='context',content=content,tags=['mean']),
+                     dict(families=['source'])) for content in ('Use mean.','x'*5000)]
+        version=versions.prepare(store,ids)
+        suite=self.root/'partial-suite.json';suite.write_text(json.dumps(dict(schema_version=1,
+            store=str(store),cases=[dict(id='partial',family='other',**tasks)])))
+        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('uncovered bundle executed')):
+            with self.assertRaisesRegex(ValueError,'updates not selected'):
+                benchmark(suite,self.root/'partial-bench',version['id'],'empty',30)
+        diagnostic=read(self.root/'partial-bench/selection.json')
+        self.assertEqual(len(diagnostic['missing_updates']),1)
+        self.assertEqual(len(diagnostic['cases'][0]['selected']),1)
+        self.assertEqual(diagnostic['cases'][0]['rejected'][0]['reason'],'interface_budget')
+
     def test_benchmark_rejects_shared_workload_and_source_family(self):
         self.cfg['family']='source-objective';self.save()
         store=self.root/'memory'
@@ -841,12 +878,12 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         suite.write_text(json.dumps(dict(schema_version=1,store=str(store),cases=[dict(
             id='unrelated-tool',family='unseen-objective',**tasks)])))
         with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent should not run')):
-            with self.assertRaisesRegex(ValueError,'no applicable runtime difference'):
+            with self.assertRaisesRegex(ValueError,'candidate updates not selected'):
                 benchmark(suite,self.root/'unrelated-bench',version['id'],'empty',30)
         diagnostics=read(self.root/'unrelated-bench/selection.json')
-        self.assertEqual(diagnostics['consumer'],dict(tags=['mean'],limit_chars=4000))
-        self.assertEqual(diagnostics['rejected']['candidate'][0]['unmatched_tags'],['other-schema'])
-        self.assertEqual(diagnostics['selected']['candidate'],[])
+        self.assertEqual(diagnostics['missing_updates'],[identity])
+        self.assertEqual(diagnostics['cases'][0]['rejected'][0]['unmatched_tags'],['other-schema'])
+        self.assertEqual(diagnostics['cases'][0]['selected'],[])
         self.assertFalse((store/'versions/current.json').exists())
 
     def test_stream_publishes_bundle_for_the_next_task_without_replaying_improvement(self):

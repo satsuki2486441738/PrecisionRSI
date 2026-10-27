@@ -75,6 +75,23 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
         state = read(state_path) if state_path.exists() else dict(key=digest(binding), arms={}, conditions={})
         if state['key'] != digest(binding):
             raise ValueError('benchmark changed; use a new workspace')
+        # Every added interface must reach at least one evaluation consumer.
+        # Otherwise activation would admit members absent from the measured bundle.
+        additions=set(version['members'])-set(versions.load(store,baseline_version)['members'])
+        covered=set();selection=[]
+        for case in cases:
+            _,cfg,_,_,_,_=_config((suite.parent/case['candidate']).resolve())
+            memory=cfg.get('memory',{});rejected=[]
+            selected=select(store,memory.get('tags',[]),memory.get('limit_chars',4000),
+                            version=version_id,diagnostics=rejected)
+            covered.update(v['id'] for v in selected)
+            selection.append(dict(case=case['id'],selected=[v['id'] for v in selected],rejected=rejected))
+        missing=sorted(additions-covered)
+        if missing:
+            details=dict(reason='candidate updates not selected by evaluation tasks',missing_updates=missing,
+                         cases=selection)
+            write(workspace/'selection.json',details)
+            raise ValueError(details['reason']+': '+json.dumps(details))
         for index, case in enumerate(cases):
             tasks = {arm:(suite.parent/case[arm]).resolve() for arm in ('baseline','candidate') if arm in case}
             reused = read(suite.parent/case['baseline_receipt']) if case.get('baseline_receipt') else None

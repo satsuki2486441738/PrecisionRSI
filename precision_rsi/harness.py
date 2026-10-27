@@ -1,8 +1,9 @@
 """Shared literal-argv harness adapter; preserves raw output for usage accounting.
 
 command(agent, prompt, run) writes prompt.txt and returns argv without a shell.
-CLI: python harness.py AGENT.json PROMPT.txt RUN; execs the configured harness.
+CLI: python harness.py AGENT.json PROMPT.txt RUN [--cwd-run]; execs the configured harness.
 The CLI resolves the host-owned {run} placeholder in the prompt template.
+--cwd-run places relative agent outputs in RUN; task workloads retain their cwd.
 """
 import json
 import math
@@ -122,7 +123,12 @@ def price(usage, rates):
 
 if __name__ == '__main__':
     agent = json.loads(Path(sys.argv[1]).read_text())
-    prompt = Path(sys.argv[2]).read_text().replace('{run}', str(Path(sys.argv[3]).resolve()))
-    (Path(sys.argv[3])/'artifacts').mkdir(exist_ok=True)
-    argv = command(agent, prompt, sys.argv[3])
+    run = Path(sys.argv[3]).resolve()
+    prompt = Path(sys.argv[2]).read_text().replace('{run}', str(run))
+    (run/'artifacts').mkdir(exist_ok=True)
+    argv = command(agent, prompt, run)
+    if sys.argv[4:]:
+        if sys.argv[4:] != ['--cwd-run']:
+            raise ValueError('expected --cwd-run')
+        os.chdir(run)
     os.execvpe(argv[0], argv, os.environ)
