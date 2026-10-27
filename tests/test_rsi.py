@@ -759,6 +759,36 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(state['arms']['0:baseline']['evidence']['state'],
                          read(self.root/'bench/0/baseline/result.json')['evidence']['state'])
 
+    def test_failed_benchmark_passes_native_error_to_improver_without_full_logs(self):
+        from precision_rsi.evolve import _feedback
+        self.cfg['family']='unseen-objective';self.save()
+        (self.root/'agent.py').write_text('import json,sys\nfrom pathlib import Path\np=json.loads(Path(sys.argv[1]).read_text().split(\'\\n\',1)[1])\ncode="def objective(values): return sum(values)/len(values)\\n"\nif p[\'memory\']:\n code="def objective(values):\\n print(\'PRIVATE_TRACE_MARKER\')\\n raise ValueError(\'unsupported capture kind: records\')\\n"\nPath(\'implementation.py\').write_text(code)\n')
+        tasks={}
+        for arm in ('baseline','candidate'):
+            folder=self.root/arm;folder.mkdir()
+            for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
+                shutil.copyfile(self.root/name,folder/name)
+            tasks[arm]=str(folder/'task.json')
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='context',content='Use the supplied adapter.',tags=['mean']),
+                         dict(families=['source-objective']))
+        version=versions.prepare(store,[identity])
+        suite=self.root/'failure-suite.json';suite.write_text(json.dumps(dict(schema_version=1,
+            store=str(store),cases=[dict(id='schema-mismatch',family='unseen-objective',**tasks)])))
+        result=benchmark(suite,self.root/'failure-bench',version['id'],'empty',30)
+        self.assertTrue(result['baseline']['correct'])
+        self.assertFalse(result['candidate']['correct'])
+        feedback,_=_feedback(dict(evaluation=dict(evaluation=dict(measurement=result))),store)
+        failures=feedback['measurements']['candidate']['failures']
+        self.assertEqual(failures[0]['case'],'schema-mismatch')
+        self.assertIn('ValueError: unsupported capture kind: records',
+                      [s.get('error') for s in failures[0]['stages']])
+        self.assertLess(len(json.dumps(failures)),2000)
+        for private in ('PRIVATE_TRACE_MARKER','Traceback',str(self.root)):
+            self.assertNotIn(private,json.dumps(failures))
+        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('diagnostic replay called task')):
+            self.assertEqual(benchmark(suite,self.root/'failure-bench',version['id'],'empty',30),result)
+
     def test_benchmark_rejects_partially_selected_new_bundle_before_task_calls(self):
         tasks={}
         for arm in ('baseline','candidate'):

@@ -47,6 +47,26 @@ def _task_copy(task, path, store, family):
     return path
 
 
+def _failure(result, evidence):
+    """Bounded native failure facts; no task files, source frames or model logs."""
+    stages=[]
+    for stage in [s for s in evidence['stages'] if s['status']!='completed'][-3:]:
+        item={k:(stage[k][:240] if isinstance(stage[k],str) else stage[k])
+              for k in ('stage','status','reason') if k in stage}
+        if stage.get('run'):
+            try:
+                with (Path(stage['run'])/'stderr.bin').open('rb') as stream:
+                    stream.seek(0,2);stream.seek(max(0,stream.tell()-2048))
+                    lines=stream.read().decode(errors='replace').strip().splitlines()
+                if lines:
+                    item['error']=lines[-1][:400]
+            except OSError:
+                pass
+        stages.append(item)
+    reason=result.get('reason')
+    return dict(reason=reason[:240] if isinstance(reason,str) else reason,stages=stages)
+
+
 def run(suite, workspace, version_id, baseline_version, time_budget_seconds, construction_file=None):
     from .loop import _config, _positive, _version_key, run_task
     suite = Path(suite).resolve()
@@ -146,6 +166,8 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
                     family=case['family'], root=str(_config(task)[3]),
                     version=baseline_version if arm=='baseline' else version_id,
                     runtime=versions._runtime())
+                if result['status']!='completed':
+                    state['arms'][key]['failure']=_failure(result,evidence)
                 write(folder/'result.json',state['arms'][key])
                 write(state_path, state)
         values = {}
@@ -154,6 +176,10 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
             values[arm] = dict(correct=all(r['correct'] for r in records),
                                seconds=sum(r['seconds'] for r in records),
                                usage=usage_totals(records))
+            failures=[dict(case=cases[i]['id'],**r['failure']) for i,r in enumerate(records)
+                      if r.get('failure')]
+            if failures:
+                values[arm]['failures']=failures
         construction_path = construction_file or (suite.parent/spec['construction'] if spec.get('construction') else None)
         construction = read(construction_path) if construction_path else None
         if construction:
