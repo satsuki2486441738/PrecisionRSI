@@ -1,4 +1,4 @@
-# Precision-Skills: Numerical Precision Comparison and Repair
+# PrecisionRSI: Numerical Precision Comparison and Repair
 
 English | [简体中文](README.zh-CN.md)
 
@@ -59,7 +59,7 @@ Additional historical backports were verified using small native CPU workloads:
 | PEFT 0.17.1 | Duplicate LoRA scaling in SVD adapter combination | Forward, input gradients, checkpoint reload and merge; 24 workloads |
 | Transformers 4.51.3 | Qwen2 attention mask ignores disabled sliding window | Eager/SDPA full forward and dynamic/static cache; 18 workloads and 16 mask cases |
 
-The [repair history](https://satsuki2486441738.github.io/precision-skills/) records affected and upstream-fixed revisions, patches, before/after metrics and verification scope.
+The [repair history](https://satsuki2486441738.github.io/PrecisionRSI/) records affected and upstream-fixed revisions, patches, before/after metrics and verification scope.
 
 
 ## Tools and development
@@ -92,4 +92,4 @@ Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 
 ## Evaluation and repair history
 
-The [history website](https://satsuki2486441738.github.io/precision-skills/) has two tabs: **Evaluations** shows inference/SFT/RL comparison settings, numerical metrics, coverage and evidence; **Repairs** retains library-grouped fixes, causes and before/after verification. Records and public evidence are maintained in [site/](site/README.md).
+The [history website](https://satsuki2486441738.github.io/PrecisionRSI/) has two tabs: **Evaluations** shows inference/SFT/RL comparison settings, numerical metrics, coverage and evidence; **Repairs** retains library-grouped fixes, causes and before/after verification. Records and public evidence are maintained in [site/](site/README.md).
