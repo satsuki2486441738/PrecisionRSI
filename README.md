@@ -4,6 +4,35 @@ English | [简体中文](README.zh-CN.md)
 
 Agent Skills for framework adaptation, numerical precision comparison and repair across devices and execution environments.
 
+## Method
+
+PrecisionRSI has two loops: complete a model workload, then use its experience to improve subsequent tasks.
+
+**Task loop**
+
+```text
+Environment setup → Library workload reproduction → Precision validation → Precision repair → Operator optimization
+```
+
+Reproduce the selected library's native model workload. Enter at the first missing stage and finish at the requested outcome. Repairs and operator changes return to precision validation on the original workload; operator optimization also verifies performance.
+
+**Improvement loop**
+
+```text
+Task execution → Verified experience → Agent self-iteration → Subsequent tasks
+```
+
+| Update target | Reusable capability |
+|---|---|
+| Tools | Analysis tools, collectors, adapters, operator implementations and shared utilities |
+| Context memory | Rules and retrieved experience loaded when applicable |
+| Data | Verified trajectories, failure/fix pairs and regression cases |
+| Agent weights | Persistent parametric memory learned from accumulated data |
+
+Updates feed any stage of subsequent task loops. Evaluate updates on independent tasks using correctness, completion time and cost, including the cost of building and maintaining the update. Keep evaluation data separate from training data.
+
+Current implementation: framework adaptation, precision comparison and repair. Operator optimization and the automated improvement loop are planned.
+
 ## Use
 
 Install `framework-adapt`, `precision-compare` and `precision-repair` side by side in your client's skill directory. Load a component for the next missing capability:
