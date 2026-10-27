@@ -31,7 +31,16 @@ PrecisionRSI 包含两个闭环：完成模型工作负载，再将执行经验�
 
 更新按需作用于后续任务 loop 的各阶段。在独立任务上评估更新后的正确性、完成时间和成本，并计入构建与维护成本。评测数据与训练数据分开。
 
-当前实现：框架适配、精度比较与修复。算子优化和自动优化 loop 为后续计划。
+封闭式任务（精度检验／修复）评估正确完成率、时间和成本。开放式任务（算子优化）评估给定预算下达到的最优有效性能，以及性能随预算增长的变化。
+
+[系统入口](precision_rsi/README.md)将原生工作流接入现有 agent harness，保留候选经验，评估工具／上下文后再供后续任务复用。在仓库目录运行：
+
+```sh
+python -m precision_rsi run task.json --workspace projects/my-task/session
+python -m precision_rsi iterate series.json --workspace projects/my-stream/session
+```
+
+算子优化、数据／权重训练适配器为后续计划。
 
 ## 使用
 

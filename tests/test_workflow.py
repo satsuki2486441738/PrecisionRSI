@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -60,6 +61,16 @@ print(kind)
 
     def run_task(self, refresh=()):
         return run_workflow(self.plan_path, self.workspace, refresh)
+
+    def test_outer_budget_limits_native_child_timeout(self):
+        self.spec['stages'] = [dict(id='slow', skill='framework-adapt', timeout=10,
+            argv=[sys.executable, '-c', 'import time; time.sleep(5)'], outputs={'ready': 'ready.json'})]
+        self.save()
+        start = time.monotonic()
+        result = run_workflow(self.plan_path, self.workspace, time_budget_seconds=0.2)
+        self.assertLess(time.monotonic() - start, 3)
+        self.assertEqual(result['status'], 'needs_action')
+        self.assertEqual(result['next_action']['execution']['status'], 'timed_out')
 
     def execution_plan(self, seed):
         (self.root/'execution-seed.json').write_text(json.dumps(seed))

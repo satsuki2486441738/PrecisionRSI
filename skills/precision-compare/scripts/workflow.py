@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Run and resume dependency-linked adaptation/comparison/repair commands (POSIX, stdlib).
-Call: run_workflow(plan_path, workspace, refresh=()); inspect_workflow(plan_path, workspace)
+Call: run_workflow(plan_path, workspace, refresh=(), time_budget_seconds=None); inspect_workflow(plan_path, workspace)
 Input: Dependency plan with source/runtime inputs, outputs, checks and cumulative budget.
 Output: Verified reuse/execution receipts, artifact paths and next_action.
 Requires: Standard library/POSIX; status launches nothing; unchanged failures are retained; --refresh reruns selected stages and descendants.
 
 Details:
-API: run_workflow(plan_path, workspace, refresh=()) or inspect_workflow(plan_path,
+API: run_workflow(plan_path, workspace, refresh=(), time_budget_seconds=None) or inspect_workflow(plan_path,
 workspace) -> compact continuation report. CLI: workflow.py run|status --plan P
---workspace W [--refresh STAGE ...]. Exit 0=all declared stages completed,
+--workspace W [--refresh STAGE ...] [--time-budget-seconds SECONDS]. The optional
+time_budget_seconds caps this invocation's native command execution within an
+outer agent-loop budget; the plan's cumulative budget still applies.
+Exit 0=all declared stages completed,
 1=next action/budget required, 2=invalid plan or concurrent runner.
 
 Plan JSON: schema_version=1, id (alphanumeric/hyphens), root (relative to plan,
@@ -60,6 +63,7 @@ from pathlib import Path
 import re
 import shutil
 import sys
+import time
 
 from conditions import canonical, load_json
 from record_run import load_execution, record_run, summarize_run
@@ -352,7 +356,7 @@ def _action(stage, reason, receipt=None):
     return result
 
 
-def _walk(spec, root, stages, workspace, state, execute, refresh):
+def _walk(spec, root, stages, workspace, state, execute, refresh, deadline=None):
     completed, entries = {}, []
     forced = set(refresh)
     _require(forced <= {s['id'] for s in stages}, 'unknown refresh stage')
@@ -377,6 +381,8 @@ def _walk(spec, root, stages, workspace, state, execute, refresh):
             return _report(spec, state, entries, _action(stage, latest.get('reason', latest['status']), latest))
         spent = sum(x.get('wall_seconds', 0) for x in state['history'])
         remaining = spec['budget_seconds'] - spent
+        if deadline is not None:
+            remaining = min(remaining, deadline - time.monotonic())
         if remaining <= 0:
             return _report(spec, state, entries, _action(stage, 'cumulative command budget exhausted', latest))
         timeout = min(stage['timeout'], remaining)
@@ -411,15 +417,18 @@ def _walk(spec, root, stages, workspace, state, execute, refresh):
     return _report(spec, state, entries)
 
 
-def run_workflow(plan_path, workspace, refresh=()):
+def run_workflow(plan_path, workspace, refresh=(), time_budget_seconds=None):
     """Execute missing stages and return their reusable outputs or the next skill action."""
+    _require(time_budget_seconds is None or _positive(time_budget_seconds),
+             'time_budget_seconds must be positive')
+    deadline = None if time_budget_seconds is None else time.monotonic() + time_budget_seconds
     spec, root, stages = _plan(plan_path)
     workspace = Path(workspace).resolve()
     workspace.mkdir(parents=True, exist_ok=True)
     with workspace_lock(workspace):
         state = _state(workspace, spec, root)
         _recover(workspace, state)
-        result = _walk(spec, root, stages, workspace, state, True, refresh)
+        result = _walk(spec, root, stages, workspace, state, True, refresh, deadline)
         _save(workspace, state)
         return result
 
@@ -438,10 +447,12 @@ def main(argv=None):
     parser.add_argument('--plan', required=True)
     parser.add_argument('--workspace', required=True)
     parser.add_argument('--refresh', action='append', default=[])
+    parser.add_argument('--time-budget-seconds', type=float)
     args = parser.parse_args(argv)
     try:
-        _require(args.command == 'run' or not args.refresh, '--refresh applies to run')
-        report = (run_workflow(args.plan, args.workspace, args.refresh) if args.command == 'run'
+        _require(args.command == 'run' or not (args.refresh or args.time_budget_seconds is not None),
+                 '--refresh and --time-budget-seconds apply to run')
+        report = (run_workflow(args.plan, args.workspace, args.refresh, args.time_budget_seconds) if args.command == 'run'
                   else inspect_workflow(args.plan, args.workspace))
     except (OSError, ValueError, KeyError, TypeError, OverflowError) as exc:
         print(json.dumps(dict(status='error', reason=str(exc))))
