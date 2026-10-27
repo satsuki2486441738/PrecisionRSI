@@ -14,7 +14,7 @@ import time
 from .dataset import build as build_dataset
 from .evidence import brief, collect, digest, verify
 from .harness import price, usage
-from .memory import propose, read, run_workflow, select, workspace_lock, write
+from .memory import fingerprint, propose, read, run_workflow, select, workspace_lock, write
 from . import versions
 
 
@@ -88,7 +88,8 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'Do not read host implementation source or full harness transcripts. '
                 'Read an individual evidence artifact only to resolve a specific missing fact. '
                 'Build the minimum candidate, '
-                'save proposals and return. Reuse unchanged persistent artifacts; save new files '
+                'save the minimum complete proposals early, then return after necessary checks. '
+                'Reuse unchanged persistent artifacts; save new files '
                 'under the artifact directory. Return {"updates":[]} when no useful update is justified. '
                 'Each update has kind, content (call signature and input/output fields, or a short rule), tags, artifacts (absolute persistent '
                 'file paths), and benefit. Kinds: tool, context, procedure, data. '
@@ -98,6 +99,8 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'Data artifacts are JSONL: {source: indexed task ID, messages: [{role,content}]}; '
                 'labels refer to whole-task outcomes. replaces may contain only IDs in base_members. '
                 'One limitation may need a coupled set of updates, up to max_updates. '
+                'Every update tag must match the consumer tags. The JSON interface, including artifact paths, '
+                'must fit its character budget; evaluation selection feedback supplies exact mismatches and limits. '
                 'The host builds datasets, evaluates and publishes; benefits are hypotheses until measured.\n'
                 + json.dumps(dict(base_version=base, base_members=base_info['members'],
                     evidence=brief(index)[:cfg.get('summary_limit',12)],
@@ -126,20 +129,36 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
             plan_path = workspace/'agent-plan.json'
             if not plan_path.exists() or read(plan_path) != plan:
                 write(plan_path, plan)
+            inputs = {p:fingerprint(p) for p in stage['inputs']}
             workflow = run_workflow(plan_path, workspace/'agent', time_budget_seconds=remaining)
             result = dict(status='needs_action', workflow=workflow, candidates=[], datasets=[],
                           errors=[], version=None, evaluation=None, state=str(state_path))
             receipt = workflow['stages'][0] if workflow['status']=='completed' else workflow.get('next_action', {})
             stdout = Path(receipt['run'])/'stdout.bin' if receipt.get('run') else None
             result['usage'] = usage(stdout, agent.get('usage_format')) if stdout and stdout.is_file() else None
-            if workflow['status'] == 'completed':
-                for task in index['tasks']:
-                    verify(task)
-                if versions._runtime() != runtime:
-                    raise ValueError('improvement changed the running system')
-                updates = read(receipt['outputs']['proposals']['path'])['updates']
-                if not isinstance(updates, list) or len(updates) > maximum:
-                    raise ValueError('updates must be a bounded list')
+            updates = None
+            stopped = receipt.get('execution',{}).get('status')
+            if workflow['status']=='completed' or (receipt.get('run') and stopped in ('timed_out','failed')):
+                try:
+                    proposal_path = (Path(receipt['outputs']['proposals']['path']) if workflow['status']=='completed'
+                                     else Path(receipt['run'])/'proposals.json')
+                    proposals = read(proposal_path)
+                    if not isinstance(proposals,dict) or not isinstance(proposals.get('updates'),list) or len(proposals['updates'])>maximum:
+                        raise ValueError('updates must be a bounded list')
+                    for task in index['tasks']:
+                        verify(task)
+                    if versions._runtime()!=runtime or any(fingerprint(p)!=v for p,v in inputs.items()):
+                        raise ValueError('improvement changed runtime or declared inputs')
+                    _stable(workspace/'proposals.json',proposals)
+                    artifacts = {p:fingerprint(p) for u in proposals['updates'] if isinstance(u,dict)
+                                 for p in u.get('artifacts',[]) if isinstance(p,str) and Path(p).is_absolute()}
+                    _stable(workspace/'proposal-artifacts.json',artifacts)
+                    updates = proposals['updates']
+                    if workflow['status']!='completed':
+                        result['proposal_recovery'] = dict(status=stopped,path=str(proposal_path))
+                except (OSError,ValueError,KeyError,TypeError) as exc:
+                    result['errors'].append(dict(stage='proposals',reason=str(exc)))
+            if updates is not None:
                 runtime_ids = []
                 for position, update in enumerate(updates):
                     try:
@@ -174,12 +193,12 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                     version = None
                 if version is not None:
                     result['version'] = version['id']
+                    construction = dict(seconds=sum(a['seconds'] for a in state['history'][:-1])+
+                                        time.monotonic()-started, usage=result['usage'],
+                                        cost=price(result['usage'],cfg.get('pricing')))
+                    if not (workspace/'construction.json').exists():
+                        write(workspace/'construction.json', construction)
                     if cfg.get('evaluation_plan') and deadline > time.monotonic():
-                        construction = dict(seconds=sum(a['seconds'] for a in state['history'][:-1])+
-                                            time.monotonic()-started, usage=result['usage'],
-                                            cost=price(result['usage'],cfg.get('pricing')))
-                        if not (workspace/'construction.json').exists():
-                            write(workspace/'construction.json', construction)
                         template = (config.parent/cfg['evaluation_plan']).resolve()
                         evaluation = _render(read(template),
                             {'{version_id}':version['id'], '{baseline_version}':base,

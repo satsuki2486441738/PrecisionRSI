@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from precision_rsi.evolve import _feedback, run
-from precision_rsi.memory import read
+from precision_rsi.memory import propose, read
 
 
 class EvolutionTests(unittest.TestCase):
@@ -106,6 +106,27 @@ class EvolutionTests(unittest.TestCase):
         self.assertEqual(received['candidate']['usage']['total_tokens'],500)
         self.assertEqual(received['amortize_over_tasks'],1)
         self.assertFalse(feedback['accepted'])
+
+    def test_recovered_tool_feedback_keeps_interfaces_costs_and_native_diagnostics(self):
+        tool=self.root/'tool.py';tool.write_text('def compare(a,b): return a==b\n')
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='tool',content='compare(a,b) -> bool',tags=['compare'],
+            artifacts=[str(tool)]),{})
+        native=dict(status='needs_action',reason='selection mismatch',
+            selection=dict(consumer=dict(tags=['compare'],limit_chars=20)))
+        logs=dict(stdout=dict(tail='{"type":"thinking","text":"FULL_TRACE_MARKER"}\n'+json.dumps(native)),
+                  stderr=dict(tail='verbose traceback'))
+        workflow=dict(status='needs_action',next_action=dict(stage='evaluate',reason='native command failed',
+            execution=dict(status='failed',logs=logs)))
+        result=dict(status='completed',candidates=[identity],spent_seconds=12,usage=dict(total_tokens=34),
+            proposal_recovery=dict(status='timed_out',path='/retained/proposals.json'),workflow=workflow)
+        feedback,_=_feedback(result,store)
+        self.assertEqual(feedback['updates'][0]['artifacts'].keys(),{str(tool)})
+        self.assertEqual(feedback['construction'],dict(seconds=12,usage=dict(total_tokens=34)))
+        self.assertEqual(feedback['proposal_recovery']['status'],'timed_out')
+        self.assertEqual(feedback['workflow']['next_action']['diagnostic'],native)
+        self.assertNotIn('FULL_TRACE_MARKER',json.dumps(feedback))
+        self.assertNotIn('verbose traceback',json.dumps(feedback))
 
 
 if __name__=='__main__':

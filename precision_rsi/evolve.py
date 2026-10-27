@@ -4,6 +4,7 @@ CONFIG is an improvement config plus round_seconds (default 900), max_rounds
 (default 8), patience (default 3). budget_seconds bounds the entire experiment.
 Completed rounds replay without agent calls; an interrupted round is resumed.
 """
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 import time
@@ -21,6 +22,8 @@ def _feedback(result, store):
     summary = dict(status=result.get('status'), version=result.get('version'),
         accepted=evaluation.get('accepted', False), no_update=result.get('no_update', False),
         errors=result.get('errors', []),
+        proposal_recovery=result.get('proposal_recovery'),
+        construction=dict(seconds=result.get('spent_seconds'),usage=result.get('usage')),
         workflow=evaluation.get('workflow') or result.get('workflow'),
         measurements={k:measurement[k] for k in
             ('baseline','candidate','construction','amortize_over_tasks') if k in measurement},
@@ -29,6 +32,24 @@ def _feedback(result, store):
     if summary['workflow']:
         flow = summary['workflow']
         summary['workflow'] = {k:flow[k] for k in ('status','reason','state','next_action') if k in flow}
+        if flow.get('next_action'):
+            action = flow['next_action']
+            compact = {k:action[k] for k in ('stage','skill','reason') if k in action}
+            execution = action.get('execution',{})
+            if execution:
+                compact['execution'] = {k:execution[k] for k in ('status','returncode') if k in execution}
+                logs = execution.get('logs',{})
+                # Keep native diagnostics, not model reasoning/tool events embedded in stdout.
+                for line in logs.get('stdout',{}).get('tail','').splitlines():
+                    try:
+                        value = json.loads(line)
+                    except ValueError:
+                        continue
+                    if isinstance(value,dict) and ('reason' in value or 'error' in value):
+                        compact['diagnostic'] = {k:value[k] for k in ('status','reason','error','selection') if k in value}
+                if 'diagnostic' not in compact and logs.get('stderr',{}).get('tail'):
+                    compact['error'] = logs['stderr']['tail'][-1200:]
+            summary['workflow']['next_action'] = compact
     signature = digest([dict(kind=i['kind'], content=i['content'], tags=i['tags'],
         artifacts=sorted(digest(fingerprint(p)) for p in i['artifacts'])) for i in updates]
         if updates else summary)
