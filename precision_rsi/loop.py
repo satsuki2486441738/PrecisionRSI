@@ -98,8 +98,8 @@ def _prompt(cfg, plan, action, workspace, memories):
         action.pop('execution')
     return ('Complete the indicated action in the existing workload. Load only the needed skill/interface. '
             'Preserve the task plan, protected inputs, evaluation criteria and workload semantics. '
-            'Your delegated action ends when the implementation patch is saved. '
-            'The host owns all workflow execution and original-workload checks. '
+            'Save the implementation patch, then stop. Do not run workload commands or its verifier; '
+            'the host runs them and delegates any remaining failure. '
             'Reuse existing tools and evidence. Optional experience at the proposal path: '
             '{"kind":"context","content":"reusable rule","tags":[],"artifacts":[]}. '
             'Use kind=tool for reusable code, with absolute paths to its persistent files in artifacts. '

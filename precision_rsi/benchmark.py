@@ -10,7 +10,7 @@ from pathlib import Path
 import time
 
 from .evidence import collect, digest, usage_totals, verify
-from .memory import fingerprint, read, workspace_lock, write
+from .memory import fingerprint, read, select, workspace_lock, write
 from .harness import price
 from . import versions
 
@@ -21,8 +21,11 @@ def _signature(task):
     spec = read(plan)
     normalized = _render(spec, {str(root):'{workload}'})
     normalized.pop('root', None)
-    sources = [[fingerprint(root/name) for name in s.get('inputs', [])] for s in spec['stages']]
+    sources = [[fingerprint(root/name) if (root/name).exists() else {'kind':'missing'}
+                for name in s.get('inputs', [])] for s in spec['stages']]
+    memory = cfg.get('memory', {})
     return dict(goal=cfg['goal'], plan=normalized, sources=sources, agent=cfg['agent'],
+                retrieval=dict(tags=memory.get('tags', []), limit_chars=memory.get('limit_chars', 4000)),
                 budget=cfg['budget'], protected=[fingerprint(path.parent/p) for p in cfg.get('protected', [])]), root
 
 
@@ -91,6 +94,10 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
                     raise ValueError('benchmark arms need independent workload copies')
                 if a != b:
                     raise ValueError('benchmark initial conditions differ')
+                retrieval = b['retrieval']
+                if (select(store, version=version_id, **retrieval) ==
+                        select(store, version=baseline_version, **retrieval)):
+                    raise ValueError('candidate has no applicable runtime difference: ' + case['id'])
                 state['conditions'][str(index)] = a
                 write(state_path,state)
             for arm, task in tasks.items():

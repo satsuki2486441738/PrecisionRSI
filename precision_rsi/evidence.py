@@ -10,6 +10,7 @@ import math
 from pathlib import Path
 
 from .memory import fingerprint, read
+from .harness import activity
 
 
 def digest(value):
@@ -70,15 +71,20 @@ def collect(sources):
                 if value:
                     observations.append(dict(stage=attempt['stage'], status=attempt['status'],
                                              output=name, values=value, path=filename))
+        actions = []
         for attempt in agents:
             if attempt.get('raw_output'):
                 refs[attempt['raw_output']] = fingerprint(attempt['raw_output'])
+                summary = activity(attempt['raw_output'], cfg['agent'].get('usage_format'))
+                if summary:
+                    actions.append(summary)
         workflow = result.get('workflow') or {}
         item = dict(task=state['task'], task_key=state['key'], state=str(path), family=family,
                     tags=cfg.get('memory', {}).get('tags', []),
                     goal=cfg['goal'][:600], workload=workflow.get('workload'),
                     status=result['status'], reason=result.get('reason'), stages=stages,
                     agent_calls=len(agents), usage=usage_totals(agents),
+                    agent_activity=actions[-4:],
                     observations=observations[-12:],
                     seconds=sum(a.get('wall_seconds', 0) for a in native['history']) +
                             sum(a['wall_seconds'] for a in agents),
