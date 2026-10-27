@@ -1,4 +1,4 @@
-# Precision-Skills: Numerical Precision Comparison and Repair
+# PrecisionRSI: Numerical Precision Comparison and Repair
 
 [English](README.md) | 简体中文
 
@@ -59,7 +59,7 @@
 | PEFT 0.17.1 | SVD adapter 合并重复应用 LoRA 缩放 | 前向、输入梯度、checkpoint 加载及合并；24 组工作负载 |
 | Transformers 4.51.3 | Qwen2 attention mask 忽略关闭滑动窗口的配置 | Eager/SDPA 完整前向及动态/静态 cache；18 组工作负载和 16 组 mask 检查 |
 
-[修复历史](https://satsuki2486441738.github.io/precision-skills/)记录受影响版本、上游修复版本、补丁、前后指标和验证范围。
+[修复历史](https://satsuki2486441738.github.io/PrecisionRSI/)记录受影响版本、上游修复版本、补丁、前后指标和验证范围。
 
 
 ## 工具与开发
@@ -92,4 +92,4 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 
 ## 评测与修复历史
 
-[历史网页](https://satsuki2486441738.github.io/precision-skills/)包含两个标签页：**精度评测**展示推理 / SFT / RL 的比较配置、数值指标、覆盖率和证据；**精度修复**保留按库分组的修复、问题归因及前后验证。记录及公开证据维护在 [site/](site/README.md)。
+[历史网页](https://satsuki2486441738.github.io/PrecisionRSI/)包含两个标签页：**精度评测**展示推理 / SFT / RL 的比较配置、数值指标、覆盖率和证据；**精度修复**保留按库分组的修复、问题归因及前后验证。记录及公开证据维护在 [site/](site/README.md)。

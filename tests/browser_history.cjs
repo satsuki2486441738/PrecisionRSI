@@ -298,7 +298,7 @@ const presentationModel = require('../site/evaluation-presentation.js');
     const downloadEvent = page.waitForEvent('download');
     await page.locator('#download').click();
     const download = await downloadEvent;
-    assert.equal(download.suggestedFilename(), 'precision-skills-evaluations.json');
+    assert.equal(download.suggestedFilename(), 'PrecisionRSI-evaluations.json');
     assert.deepEqual(JSON.parse(await readFile(await download.path(), 'utf8')), rawData);
     await page.goto(url + '#evaluation-' + restoration.id, { waitUntil: 'networkidle' });
     await page.waitForSelector('.evaluation-card');
