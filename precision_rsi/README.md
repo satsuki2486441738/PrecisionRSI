@@ -76,7 +76,7 @@ The agent writes `{"updates": [...]}` at the supplied output path. Every update 
 
 | Kind | Artifact and use |
 |---|---|
-| `tool` | Callable implementation and tests; expose its interface after version evaluation |
+| `tool` | Reuse existing modules first; extract missing common logic into a callable module/CLI and regression. Consumers adapt inputs and invoke it. |
 | `context` | A concise applicable rule; artifacts optional; retrieve within the context budget |
 | `procedure` | `entrypoint` names a declared JSON artifact with `instruction` and/or `skill_paths`; referenced skill files are declared artifacts |
 | `data` | JSONL examples referencing indexed task IDs; validated exports become `ready` datasets |
