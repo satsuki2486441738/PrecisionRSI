@@ -60,7 +60,8 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
         state_path = workspace/'improvement.json'
         state = read(state_path) if state_path.exists() else dict(base_version=versions.current(store), history=[])
         base = state['base_version']
-        runtime = versions.load(store, base)['runtime']
+        base_info = versions.load(store, base)
+        runtime = base_info['runtime']
         _stable(workspace/'evidence.json', index)
         _stable(workspace/'config.json', {k:v for k,v in cfg.items() if k != 'budget_seconds'})
         remaining = cfg['budget_seconds'] - sum(a['seconds'] for a in state['history'])
@@ -85,18 +86,19 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'Do not read host implementation source or full harness transcripts. '
                 'Read an individual evidence artifact only to resolve a specific missing fact. '
                 'Build the minimum candidate, '
-                'save proposals and return. Build new files under the artifact '
-                'directory and return {"updates":[]} when no useful update is justified. '
-                'Each update has kind, content (short interface/rule), tags, artifacts (absolute persistent '
+                'save proposals and return. Reuse unchanged persistent artifacts; save new files '
+                'under the artifact directory. Return {"updates":[]} when no useful update is justified. '
+                'Each update has kind, content (call signature and input/output fields, or a short rule), tags, artifacts (absolute persistent '
                 'file paths), and benefit. Kinds: tool, context, procedure, data. '
                 'context stores a concise rule; tool stores callable code plus a test. '
                 'procedure declares entrypoint: an artifact JSON with instruction and/or '
                 'skill_paths mapping framework-adapt/precision-compare/precision-repair to declared SKILL.md artifacts. '
                 'Data artifacts are JSONL: {source: indexed task ID, messages: [{role,content}]}; '
-                'labels refer to whole-task outcomes. Use replaces:[candidate IDs] to replace base members. '
+                'labels refer to whole-task outcomes. replaces may contain only IDs in base_members. '
                 'One limitation may need a coupled set of updates, up to max_updates. '
                 'The host builds datasets, evaluates and publishes; benefits are hypotheses until measured.\n'
-                + json.dumps(dict(base_version=base, evidence=brief(index)[:cfg.get('summary_limit',12)],
+                + json.dumps(dict(base_version=base, base_members=base_info['members'],
+                    evidence=brief(index)[:cfg.get('summary_limit',12)],
                     available_interfaces=interfaces,
                     feedback=cfg.get('feedback', []),
                     tool_help=[sys.executable, str(Path(__file__).resolve().parents[1]/
@@ -161,7 +163,14 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                     except (OSError, ValueError, KeyError, TypeError) as exc:
                         result['errors'].append(dict(update=position, reason=str(exc)))
                 if runtime_ids:
-                    version = versions.prepare(store, runtime_ids, base)
+                    try:
+                        version = versions.prepare(store, runtime_ids, base)
+                    except (OSError, ValueError, KeyError, TypeError) as exc:
+                        result['errors'].append(dict(stage='prepare', reason=str(exc)))
+                        version = None
+                else:
+                    version = None
+                if version is not None:
                     result['version'] = version['id']
                     if cfg.get('evaluation_plan') and deadline > time.monotonic():
                         construction = dict(seconds=sum(a['seconds'] for a in state['history'][:-1])+

@@ -22,8 +22,9 @@ def _feedback(result, store):
         accepted=evaluation.get('accepted', False), no_update=result.get('no_update', False),
         errors=result.get('errors', []),
         workflow=evaluation.get('workflow'),
-        measurements={k:measurement[k] for k in ('baseline','candidate','amortize_over_tasks') if k in measurement},
-        updates=[{k:item[k] for k in ('kind','content','tags','artifacts')} for item in updates])
+        measurements={k:measurement[k] for k in
+            ('baseline','candidate','construction','amortize_over_tasks') if k in measurement},
+        updates=[{k:item[k] for k in ('id','kind','content','tags','artifacts')} for item in updates])
     # Paths identify retained details; full workflow transcripts stay outside prompts.
     if summary['workflow']:
         flow = summary['workflow']
