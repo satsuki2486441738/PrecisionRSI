@@ -24,7 +24,7 @@ def _signature(task):
     sources = [[fingerprint(root/name) if (root/name).exists() else {'kind':'missing'}
                 for name in s.get('inputs', [])] for s in spec['stages']]
     memory = cfg.get('memory', {})
-    return dict(goal=cfg['goal'], plan=normalized, sources=sources, agent=cfg['agent'],
+    return dict(goal=cfg['goal'], interface=cfg.get('interface'), plan=normalized, sources=sources, agent=cfg['agent'],
                 retrieval=dict(tags=memory.get('tags', []), limit_chars=memory.get('limit_chars', 4000)),
                 budget=cfg['budget'], protected=[fingerprint(path.parent/p) for p in cfg.get('protected', [])]), root
 

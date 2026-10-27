@@ -6,6 +6,7 @@ CLI: python -m precision_rsi run|status TASK.json --workspace DIRECTORY
 Task JSON: schema_version=1, goal, plan, budget:{seconds,agent_calls},
 agent:{argv:[...,"{prompt}" or "{prompt_file}"],timeout,execution?:profile},
 protected:[verifier/input paths relative to the task JSON],
+interface?:agent-visible input/output and invocation specification (replaces plan paths),
 memory?:{directory,tags:[],limit_chars:4000}. Relative plan and memory paths are
 relative to the task JSON. The native plan owns workload semantics and checks.
 Run the loop where native commands and the selected agent harness can access them.
@@ -45,6 +46,8 @@ def _config(path):
         raise ValueError('task schema_version=1 and goal required')
     if cfg.get('mode', 'closed') != 'closed':
         raise ValueError('open operator search awaits the operator-optimize implementation')
+    if 'interface' in cfg and (not isinstance(cfg['interface'], dict) or not cfg['interface']):
+        raise ValueError('task interface must be a nonempty object')
     budget, agent = cfg['budget'], cfg['agent']
     if agent.get('usage_format') not in (None, 'dsh-jsonl'):
         raise ValueError('unknown agent usage format')
@@ -96,18 +99,23 @@ def _prompt(cfg, plan, action, workspace, memories):
               ('stage','skill','reason','inputs','depends_on','outputs','run','execution')}
     if action.get('execution',{}).get('status') == 'completed':
         action.pop('execution')
+    payload=dict(goal=cfg['goal'], skill=str(skill), action=action, memory=memories,
+                 proposal=str(workspace / 'proposal.json'))
+    if 'interface' in cfg:
+        payload['interface'] = cfg['interface']
+    else:
+        payload.update(plan=str(plan), protected=cfg.get('protected', []))
     return ('Complete the indicated action in the existing workload. Load only the needed skill/interface. '
             'Preserve the task plan, protected inputs, evaluation criteria and workload semantics. '
             'Save the implementation patch, then stop. Do not run workload commands or its verifier; '
             'the host runs them and delegates any remaining failure. '
+            'Native checks are host-owned; implement the stated interface without locating their source. '
             'Reuse existing tools and evidence. Invoke supplied APIs or CLIs; adapt inputs around them '
             'instead of copying their implementations. Optional experience at the proposal path: '
             '{"kind":"context","content":"reusable rule","tags":[],"artifacts":[]}. '
             'Use kind=tool for reusable code, with absolute paths to its persistent files in artifacts. '
             'Use context for a reusable rule; no extra report is needed.\n'
-            + json.dumps(dict(goal=cfg['goal'], plan=str(plan), skill=str(skill), action=action,
-                              protected=cfg.get('protected', []), memory=memories,
-                              proposal=str(workspace / 'proposal.json')), ensure_ascii=False))
+            + json.dumps(payload, ensure_ascii=False))
 
 
 def _version_key(key, version):

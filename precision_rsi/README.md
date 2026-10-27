@@ -33,6 +33,8 @@ Task paths are relative to the task JSON. `plan` uses the existing [workflow int
 
 `family` groups related tasks for data separation. `{prompt_file}` supports adapters accepting a UTF-8 file. `agent.execution` selects a [record_run execution profile](../skills/precision-compare/scripts/record_run.py). Run the scheduler where the harness and workload paths are available; native remote stages retain their execution adapters.
 
+Tasks with private native checks supply `interface: {...}`: visible inputs, identifier mappings, invocation and required output fields. Delegation sends this object instead of host plan/protected paths. Keep those files outside the harness view; the host retains them for execution and integrity checks. Interface changes invalidate baseline reuse.
+
 `loop.json` retains time, calls, version, native receipts and raw harness output. Time/call budgets persist across invocations. Saved patches return to verification even after harness timeout or failure, within the remaining budget. Unchanged completion calls no model; unchanged failure after an action stops for lack of progress. The current system version is pinned for each new task; replay preserves that version. `status` inspects without executing.
 
 ## Improvement
@@ -71,6 +73,8 @@ An improvement configuration:
 A series supplies prior task states automatically. Standalone `improve` declares `evidence: ["/work/task/session/loop.json"]`; `{state: path, family: name}` can declare families for older traces. Paths resolve relative to the improvement configuration. New evidence triggers a round after the configured task count or an incomplete task. Replays reuse agent/evaluation receipts. Without `evaluation_plan`, runtime updates remain candidates.
 
 `evolve` repeats the independent improvement stage with aggregate evaluation feedback. Its configuration adds `round_seconds` (default 900), `max_rounds` (8) and `patience` (3); `budget_seconds` covers all construction and evaluation rounds. Each round records candidates, measurements, raw usage and the next round's feedback, including construction costs and the declared reuse horizon. Failed bundle preparation retains candidate interfaces, artifacts and usage for revision. Replays reuse finished rounds; interrupted calls consume their reserved budget. No update, a repeated candidate, consecutive rounds without measured progress, or the budget ends the run. Evaluation templates may use `{round_workspace}` for isolated candidate workloads. Repeated evaluation tasks provide development feedback; a final generalization claim needs fresh tasks.
+
+A measured baseline task failure is an outcome, not a prerequisite failure for improvement. Retain its receipt, pass aggregate failure feedback to the improver and evaluate fresh candidate workloads. Accept correctness recovery before comparing costs among successful runs; retain construction and failed-task costs. Source evidence and independent evaluation families remain disjoint.
 
 The agent writes `{"updates": [...]}` at the supplied output path. Every update has `kind`, `content` (short rule/interface), `tags`, `artifacts` (absolute persistent paths), and optional `benefit`/`replaces` (base member IDs). The host records provenance and base version.
 
