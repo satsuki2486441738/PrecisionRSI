@@ -184,7 +184,7 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                             runtime_ids.append(identity)
                     except (OSError, ValueError, KeyError, TypeError) as exc:
                         result['errors'].append(dict(update=position, reason=str(exc)))
-                if runtime_ids:
+                if runtime_ids and not result['errors']:
                     try:
                         version = versions.prepare(store, runtime_ids, base)
                     except (OSError, ValueError, KeyError, TypeError) as exc:

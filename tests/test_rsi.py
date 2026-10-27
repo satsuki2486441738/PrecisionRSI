@@ -544,6 +544,21 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(candidate['artifacts'],{})
         self.assertEqual(versions.current(self.root/'memory'),'empty')
 
+    def test_invalid_companion_keeps_valid_candidates_without_evaluating_partial_bundle(self):
+        self.setup_improvement()
+        source=self.improver.read_text().replace(
+            "'artifacts':[str(tool)]", "'artifacts':{str(tool):{}}")
+        self.improver.write_text(source)
+        cfg=read(self.improve_cfg);cfg['evaluation_plan']='unused.json'
+        self.improve_cfg.write_text(json.dumps(cfg))
+        with patch('precision_rsi.improve.versions.evaluate',side_effect=AssertionError('partial evaluation')):
+            result=improve(self.improve_cfg,self.root/'partial-bundle')
+        self.assertEqual(len(result['candidates']),3)
+        self.assertEqual(result['errors'][0]['update'],1)
+        self.assertIsNone(result['version'])
+        self.assertIsNone(result['evaluation'])
+        self.assertEqual(versions.current(self.root/'memory'),'empty')
+
     def test_saved_proposals_survive_timeout_and_replay_without_model_calls(self):
         self.setup_improvement()
         cfg=read(self.improve_cfg);cfg['agent']['timeout']=1
