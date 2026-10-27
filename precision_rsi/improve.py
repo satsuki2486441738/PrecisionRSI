@@ -98,6 +98,7 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'The host builds datasets, evaluates and publishes; benefits are hypotheses until measured.\n'
                 + json.dumps(dict(base_version=base, evidence=brief(index)[:cfg.get('summary_limit',12)],
                     available_interfaces=interfaces,
+                    feedback=cfg.get('feedback', []),
                     tool_help=[sys.executable, str(Path(__file__).resolve().parents[1]/
                         'skills/precision-compare/scripts/tool_help.py')],
                     evidence_count=len(index['tasks']),
@@ -171,12 +172,16 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                         template = (config.parent/cfg['evaluation_plan']).resolve()
                         evaluation = _render(read(template),
                             {'{version_id}':version['id'], '{baseline_version}':base,
-                             '{store}':str(store), '{construction_file}':str(workspace/'construction.json')})
+                             '{store}':str(store), '{construction_file}':str(workspace/'construction.json'),
+                             '{round_workspace}':str(workspace)})
                         evaluation['root'] = str((template.parent/evaluation.get('root', '.')).resolve())
                         evaluation_path = workspace/'evaluation-plan.json'
                         write(evaluation_path, evaluation)
-                        result['evaluation'] = versions.evaluate(store, version['id'], evaluation_path,
-                            workspace/'evaluation', time_budget_seconds=deadline-time.monotonic())
+                        try:
+                            result['evaluation'] = versions.evaluate(store, version['id'], evaluation_path,
+                                workspace/'evaluation', time_budget_seconds=deadline-time.monotonic())
+                        except (OSError, ValueError, KeyError, TypeError) as exc:
+                            result['errors'].append(dict(stage='evaluation', reason=str(exc)))
                 result['status'] = 'completed' if not result['errors'] else 'needs_action'
                 result['no_update'] = not updates
             state['result'] = result

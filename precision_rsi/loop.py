@@ -320,7 +320,7 @@ def iterate(series, workspace):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest='command', required=True)
-    for name in ('run', 'status', 'iterate', 'improve'):
+    for name in ('run', 'status', 'iterate', 'improve', 'evolve'):
         sub = commands.add_parser(name)
         sub.add_argument('task')
         sub.add_argument('--workspace', required=True)
@@ -352,6 +352,9 @@ def main(argv=None):
         elif args.command == 'improve':
             from .improve import improve
             result = improve(args.task, args.workspace, time_budget_seconds=args.time_budget_seconds)
+        elif args.command == 'evolve':
+            from .evolve import run
+            result = run(args.task, args.workspace)
         elif args.command == 'benchmark':
             from .benchmark import run
             result = run(args.suite, args.workspace, args.version, args.baseline, args.time_budget_seconds,

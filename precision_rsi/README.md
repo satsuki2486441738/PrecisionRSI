@@ -6,6 +6,7 @@ A bounded task executor and an independent improvement stage over the existing w
 python -m precision_rsi run task.json --workspace projects/my-task/session
 python -m precision_rsi iterate series.json --workspace projects/my-stream/session
 python -m precision_rsi improve improve.json --workspace projects/my-improvement/session
+python -m precision_rsi evolve improve.json --workspace projects/my-evolution/session
 python -m precision_rsi activate VERSION_ID --store projects/memory
 ```
 
@@ -68,6 +69,8 @@ An improvement configuration:
 ```
 
 A series supplies prior task states automatically. Standalone `improve` declares `evidence: ["/work/task/session/loop.json"]`; `{state: path, family: name}` can declare families for older traces. Paths resolve relative to the improvement configuration. New evidence triggers a round after the configured task count or an incomplete task. Replays reuse agent/evaluation receipts. Without `evaluation_plan`, runtime updates remain candidates.
+
+`evolve` repeats the independent improvement stage with aggregate evaluation feedback. Its configuration adds `round_seconds` (default 900), `max_rounds` (8) and `patience` (3); `budget_seconds` covers all construction and evaluation rounds. Each round records candidates, measurements, raw usage and the next round's feedback. Replays reuse finished rounds; interrupted calls consume their reserved budget. No update, a repeated candidate, consecutive rounds without measured progress, or the budget ends the run. Evaluation templates may use `{round_workspace}` for isolated candidate workloads. Repeated evaluation tasks provide development feedback; a final generalization claim needs fresh tasks.
 
 The agent writes `{"updates": [...]}` at the supplied output path. Every update has `kind`, `content` (short rule/interface), `tags`, `artifacts` (absolute persistent paths), and optional `benefit`/`replaces` (base member IDs). The host records provenance and base version.
 

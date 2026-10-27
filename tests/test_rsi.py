@@ -508,6 +508,21 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         rows=[json.loads(line) for p in dataset['artifacts'] for line in Path(p).read_text().splitlines()]
         self.assertEqual(rows[0]['outcome'],'needs_action')
 
+    def test_improver_receives_prior_feedback_and_retains_evaluator_failure(self):
+        self.setup_improvement()
+        cfg=read(self.improve_cfg)
+        cfg['feedback']=[dict(reason='previous adapter was not applicable')]
+        cfg['evaluation_plan']='invalid-eval.json'
+        self.improve_cfg.write_text(json.dumps(cfg))
+        (self.root/'invalid-eval.json').write_text(json.dumps(dict(root='.',workload={})))
+        result=improve(self.improve_cfg,self.root/'feedback-session')
+        self.assertEqual(result['status'],'needs_action')
+        self.assertTrue(result['version'])
+        self.assertEqual(result['errors'][0]['stage'],'evaluation')
+        prompt=(self.root/'feedback-session/prompt-template.txt').read_text()
+        self.assertIn('previous adapter was not applicable',prompt)
+        self.assertEqual(read(self.root/'feedback-session/improvement.json')['result']['version'],result['version'])
+
     def test_no_update_is_a_successful_cached_result(self):
         self.setup_improvement(mode='none')
         result=improve(self.improve_cfg,self.root/'improvement-session')
