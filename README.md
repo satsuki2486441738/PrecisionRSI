@@ -35,14 +35,14 @@ Evaluate candidate system versions on independent tasks using correctness, compl
 
 Closed tasks (precision validation/repair) measure correct completion, time and cost. Open tasks (operator optimization) measure the best valid performance reached at a given budget and its improvement as the budget grows.
 
-The [system runner](precision_rsi/README.md) connects native workflows to an existing agent harness, retains candidate experience and evaluates tools/context before reuse in a task stream. Run from the checkout:
+The [system runner](precision_rsi/README.md) connects native workflows to an existing agent harness. An independent improvement stage builds tools, memory, datasets and instruction/routing overlays from task evidence. Runtime updates form versioned bundles for evaluation and reuse; dataset checks prepare outcome-labeled examples. Run from the checkout:
 
 ```sh
 python -m precision_rsi run task.json --workspace projects/my-task/session
 python -m precision_rsi iterate series.json --workspace projects/my-stream/session
 ```
 
-The independent improvement agent, dataset construction and task-loop update application remain to be implemented. Operator optimization and agent-weight training are later extensions.
+Task streams can trigger improvement on new evidence within a shared time budget. Operator optimization and agent-weight training are later extensions.
 
 ## Use
 

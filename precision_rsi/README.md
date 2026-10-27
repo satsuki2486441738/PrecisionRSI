@@ -1,23 +1,23 @@
 # PrecisionRSI runner
 
-The task loop runs native commands, calls an existing agent harness for missing adaptation/repair, and verifies the original workload. The current iteration runner retains candidate experience, evaluates it on separately selected tasks, and exposes admitted tools/context to subsequent tasks.
-
-Run from the repository checkout; the runner uses Python 3.10+ and the standard library. Native workloads and agent harnesses supply their own dependencies.
+A bounded task executor and an independent improvement stage over the existing workflow tools and an external agent harness. Run from the checkout with Python 3.10+; the runner uses the standard library. Workloads and harnesses supply their own dependencies.
 
 ```sh
 python -m precision_rsi run task.json --workspace projects/my-task/session
-python -m precision_rsi status task.json --workspace projects/my-task/session
 python -m precision_rsi iterate series.json --workspace projects/my-stream/session
+python -m precision_rsi improve improve.json --workspace projects/my-improvement/session
+python -m precision_rsi activate VERSION_ID --store projects/memory
 ```
 
-## Task interface
+## Task execution
 
-Paths are relative to the task JSON. `plan` uses the existing [workflow interface](../skills/precision-compare/scripts/workflow.py); it declares native environment, reproduction, collection and task-owned checks. The agent modifies implementations; the runner reuses valid stages and reruns affected verification. The plan and declared `protected` inputs retain their identities. A changed task/evaluator uses a new workspace. Budget increases can resume the same workspace.
+Task paths are relative to the task JSON. `plan` uses the existing [workflow interface](../skills/precision-compare/scripts/workflow.py) for native preparation, reproduction, collection and task-owned checks. The agent edits implementations; the host executes and verifies the original workload.
 
 ```json
 {
   "schema_version": 1,
-  "goal": "Reproduce the supplied workload, diagnose and repair confirmed numerical defects.",
+  "family": "fixed-history-inference",
+  "goal": "Reproduce the workload, compare its results and repair confirmed defects.",
   "plan": "native-plan.json",
   "budget": {"seconds": 1800, "agent_calls": 4},
   "agent": {
@@ -26,68 +26,86 @@ Paths are relative to the task JSON. `plan` uses the existing [workflow interfac
     "usage_format": "dsh-jsonl"
   },
   "protected": ["verify.py", "inputs.json"],
-  "memory": {"directory": "../memory", "tags": ["torch", "sft"], "limit_chars": 4000}
+  "memory": {"directory": "../memory", "tags": ["torch", "inference"], "limit_chars": 4000}
 }
 ```
 
-Use `{prompt_file}` instead of `{prompt}` for a harness adapter accepting a UTF-8 prompt file. `agent.execution` optionally selects a [record_run execution profile](../skills/precision-compare/scripts/record_run.py). Run the scheduler on the host where the harness and workload paths are available. Remote native stages use their existing execution adapters.
+`family` groups related tasks for data separation. `{prompt_file}` supports adapters accepting a UTF-8 file. `agent.execution` selects a [record_run execution profile](../skills/precision-compare/scripts/record_run.py). Run the scheduler where the harness and workload paths are available; native remote stages retain their execution adapters.
 
-`loop.json` retains cumulative time, agent-call count, native results and raw harness output paths. The time budget includes native execution and agent calls; agent timeouts terminate the owned process group. Saved patches return to native verification even after an agent timeout or nonzero exit, within the remaining budget. Completion requires native checks. Unchanged completion calls no model; unchanged failure after an agent action stops for lack of progress. Optional `dsh-jsonl` usage counts completed Harness step events; unknown cache usage remains `null`. Other harnesses retain raw output with normalized usage `null`.
+`loop.json` retains time, calls, version, native receipts and raw harness output. Time/call budgets persist across invocations. Saved patches return to verification even after harness timeout or failure, within the remaining budget. Unchanged completion calls no model; unchanged failure after an action stops for lack of progress. The current system version is pinned for each new task; replay preserves that version. `status` inspects without executing.
 
-## Improvement-loop design
+## Improvement
 
 ```text
-Task traces → Select limitation → Build candidate → Evaluate → Publish system version → Subsequent tasks
+Task evidence → Select limitation → Build candidate → Independent evaluation → Activate version → Subsequent tasks
 ```
 
-The task executor completes a workload. A separate improvement agent uses evidence across workloads to change how later tasks execute. Inputs include successful and failed checks, patches, repeated operations, missing capabilities, wall time and raw usage. Summaries reference full traces instead of loading them into every task prompt.
-
-| Update | Candidate artifact | Evaluation and use |
-|---|---|---|
-| Analysis tool | Implementation, short interface, tests | Verify behavior and measure its effect on independent tasks; expose the interface |
-| Context memory | Rule, applicability, supporting evidence | Measure relevant-task benefit; retrieve within the context budget |
-| Training data | Outcome-labeled examples and source/task-family identities | Check provenance, outcome labels, duplicates and train/evaluation separation; export accepted data |
-| Task-loop procedure | Patch to skill instructions, routing, tool selection, reuse or verification scope | Run the same independent task checks with the candidate procedure; use the accepted version on later tasks |
-
-Updates identify their base version, evidence, intended benefit and applicable tasks. An evaluated system version binds its tools, memory and procedure. A candidate may change one component or a coupled set; evaluation compares that exact version with the retained baseline. Goals and correctness criteria remain task-owned. Regression checks cover affected task families; accepted updates retain a path back to the previous version.
-
-Task success ends its execution loop. Improvement is triggered by new evidence of reusable work or a limitation, with a separate budget for construction and evaluation. It may conclude with no update and resume when more evidence arrives. Account for construction/maintenance costs alongside task execution; preserve unknown usage rather than estimating it as zero.
-
-Training-data acceptance establishes dataset quality and separation. Runtime benefit is evaluated after retrieval or agent training uses that dataset. Operator search and agent-weight training are later extensions.
-
-Current implementation covers native task execution, optional single proposals from completed tasks, tool/context evaluation and bounded reuse. The separate improvement-agent stage, failed-task extraction, dataset construction and versioned task-loop update application are the next implementation work. The interfaces below describe the current runner.
-
-## Current experience and iteration interface
-
-An agent may leave `proposal.json` in its task workspace:
-
-```json
-{"kind":"tool","content":"Use /work/tools/capture.py --help for this capture interface.","tags":["torch","sft"],"artifacts":["/work/tools/capture.py"]}
-```
-
-Completed tasks retain proposals as candidates. Kinds are `tool`, `context`, `data`, `weights`; only tools/context currently support admission. Artifact paths are absolute and content-identified. Active memory includes only matching tags and unchanged artifacts within the configured character budget. Candidates and full traces are outside the prompt.
+The separate improvement agent receives bounded summaries of completed and incomplete tasks, with paths to detailed evidence. It builds a minimal update or returns no update. The host prepares datasets, evaluates runtime bundles and activates accepted versions. Each round has its own budget inside the series budget.
 
 ```json
 {
   "schema_version": 1,
   "tasks": ["task-a/task.json", "task-b/task.json"],
-  "budget_seconds": 7200,
+  "budget_seconds": 10800,
+  "improvement": "improve.json"
+}
+```
+
+An improvement configuration:
+
+```json
+{
+  "schema_version": 1,
+  "store": "memory",
+  "budget_seconds": 600,
+  "agent": {"argv": ["dsh", "--profile", "headless", "--json", "{prompt}"], "timeout": 480, "usage_format": "dsh-jsonl"},
+  "trigger": {"min_new_tasks": 2, "on_failure": true},
+  "max_updates": 4,
+  "summary_limit": 12,
+  "held_out_families": ["independent-inference"],
   "evaluation_plan": "evaluate-template.json"
 }
 ```
 
-`iterate` executes the finite task list. After a task proposes experience, it renders the evaluator template with `{candidate_id}` and `{candidate_file}`, runs it, and continues with the resulting memory. Without `evaluation_plan`, proposals remain candidates. A replay reuses native/evaluation receipts.
+A series supplies prior task states automatically. Standalone `improve` declares `evidence: ["/work/task/session/loop.json"]`; `{state: path, family: name}` can declare families for older traces. Paths resolve relative to the improvement configuration. New evidence triggers a round after the configured task count or an incomplete task. Replays reuse agent/evaluation receipts. Without `evaluation_plan`, runtime updates remain candidates.
 
-The evaluator is a workflow plan with `workload: {purpose: "held_out_evaluation", candidate_id: "{candidate_id}"}`. Its final named output `evaluation` contains:
+The agent writes `{"updates": [...]}` at the supplied output path. Every update has `kind`, `content` (short rule/interface), `tags`, `artifacts` (absolute persistent paths), and optional `benefit`/`replaces` (base member IDs). The host records provenance and base version.
+
+| Kind | Artifact and use |
+|---|---|
+| `tool` | Callable implementation and tests; expose its interface after version evaluation |
+| `context` | A concise applicable rule; artifacts optional; retrieve within the context budget |
+| `procedure` | `entrypoint` names a declared JSON artifact with `instruction` and/or `skill_paths`; referenced skill files are declared artifacts |
+| `data` | JSONL examples referencing indexed task IDs; validated exports become `ready` datasets |
+
+Procedure overlays change agent instructions and skill routing. Native task plans and correctness criteria remain task-owned. Scheduler implementation changes and agent-weight training are future extensions.
+
+## Data and evidence
+
+[evidence.collect](evidence.py) indexes task results, declared families, stage outcomes, time, usage and artifact identities. Full logs remain outside summaries. [dataset.build](dataset.py) accepts JSONL records:
 
 ```json
-{
-  "candidate_id": "{candidate_id}", "mode": "closed", "scope": ["independent-task-id"],
-  "baseline": {"correct": true, "seconds": 100, "cost": 0.2},
-  "candidate": {"correct": true, "seconds": 80, "cost": 0.15}
-}
+{"source":"INDEXED_TASK_ID","messages":[{"role":"user","content":"Task input"},{"role":"assistant","content":"Observed response"}]}
 ```
 
-The evaluator owns independent task selection, correctness/coverage checks, timing and usage-based pricing; it runs or reuses verified baseline/candidate measurements. Building and maintaining an improvement belongs in its cost accounting. Closed admission requires improved correctness, or preserved correctness with no measured time/cost regression and a strict gain. Optional cost must be supplied for both sides. An open evaluation instead compares higher `quality` at equal positive `budget`; operator search itself remains unimplemented.
+The exporter verifies source artifacts, assigns the source task outcome, deduplicates conversations and keeps each family in one split. Defaults are deterministic 80/10/10 family hashing; `splits: {family: "train"}` can override it. External held-out families are excluded. Labels describe whole-task completion, not correctness of every intermediate message; incomplete traces remain labeled incomplete. Data readiness establishes provenance and partition checks. Runtime benefit requires a later consumer/training evaluation.
 
-Run an evaluation separately with `python -m precision_rsi evaluate ID --store MEMORY --plan EVALUATION.json --workspace EVALUATION_WORKSPACE --time-budget-seconds 600`.
+## Versions and evaluation
+
+Versions bind tools, memory, procedure overlays, artifact hashes, evidence families and runner/skill source identities. `replaces` removes superseded base members. Evaluation compares that exact bundle with its parent on disjoint task families. Accepted versions become current for subsequent tasks. `activate` restores a previously admitted, unchanged version; `activate empty` clears active memory.
+
+An evaluator template uses `{version_id}`, `{baseline_version}`, `{store}` and `{construction_file}`. Its workflow declares `workload: {purpose: "held_out_evaluation", version_id: "{version_id}", baseline_version: "{baseline_version}"}`. The final output named `evaluation` binds these IDs and contains `mode`, `scope`, `families`, `baseline` and `candidate` measurements. Existing task-owned evaluators can use [versions.evaluate](versions.py).
+
+The supplied [benchmark runner](benchmark.py) executes both arms and measures them:
+
+```sh
+python -m precision_rsi benchmark suite.json --version VERSION_ID --baseline BASE_ID \
+  --workspace projects/evaluation/session --time-budget-seconds 1800 \
+  --construction-file /work/improvement/construction.json --output /work/evaluation.json
+```
+
+Suite JSON: `schema_version: 1`, `store`, and `cases: [{id, family, baseline: task_JSON, candidate: task_JSON}]`. Arms use independent workload copies with matching initial conditions, agent and runtime declarations. Run its command from the checkout in an evaluator workflow; `--output` supplies the named `evaluation` artifact. A case may replace `baseline` with `baseline_receipt: "/work/previous/0/baseline/result.json"`; reuse checks family, version, runtime, initial conditions and retained evidence. Each measured arm is retained for replay.
+
+Measurements include native completion, time and raw usage. Construction time is included once by default; `amortize_over_tasks` declares an explicit reuse horizon. Known token totals include allocated construction usage. Optional `pricing` uses `input_per_million`, `cached_input_per_million`, `output_per_million`; configure improvement and task pricing separately. Unknown cache attribution/cost stays unknown. Closed admission preserves correctness and avoids measured time/token/cost regressions with at least one strict gain, or improves correctness. Evaluators own task selection, coverage and measurement validity.
+
+The original optional single `proposal.json` from completed tasks and candidate-level `evaluate` CLI remain available. Versioned improvement evaluates the runtime bundle together. Operator search and agent-weight training are not implemented.

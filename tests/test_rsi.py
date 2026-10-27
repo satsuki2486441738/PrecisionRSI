@@ -9,6 +9,12 @@ from unittest.mock import patch
 
 from precision_rsi.loop import _prompt, _render, _usage, iterate, run_task
 from precision_rsi.memory import evaluate, improvement, propose, read, select
+from precision_rsi.evidence import collect, usage_totals
+from precision_rsi.dataset import build as build_dataset
+from precision_rsi import versions
+from precision_rsi.improve import improve
+from precision_rsi.benchmark import run as benchmark
+from precision_rsi.harness import price
 
 
 class TaskLoopTests(unittest.TestCase):
@@ -176,6 +182,82 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         self.assertEqual(json.loads(json.dumps(result))['argv'][1],'/work/a "quoted" path/c.json')
         self.assertEqual(result['id'],'abc')
 
+    def test_evidence_includes_incomplete_tasks_without_loading_raw_logs(self):
+        self.cfg['budget']['agent_calls']=0;self.cfg['family']='objective-reduction';self.save()
+        run_task(self.task,self.workspace)
+        index=collect([self.workspace])
+        item=index['tasks'][0]
+        self.assertEqual(item['status'],'needs_action')
+        self.assertEqual(item['family'],'objective-reduction')
+        self.assertEqual(item['agent_calls'],0)
+        self.assertTrue(item['references'])
+        observed=[v['values'] for v in item['observations'] if v['output']=='metrics']
+        self.assertEqual(observed[0]['correct'],False)
+        before=index['id']
+        run_task(self.task,self.workspace)
+        self.assertEqual(collect([self.workspace])['id'],before)
+
+    def dataset_source(self):
+        self.cfg['family']='objective-reduction';self.save()
+        run_task(self.task,self.workspace)
+        index=collect([self.workspace])
+        item=dict(source=index['tasks'][0]['id'],messages=[dict(role='user',content='Repair mean loss.'),
+                                                        dict(role='assistant',content='Use the mean reduction.')])
+        filename=self.root/'examples.jsonl'
+        filename.write_text(json.dumps(item)+'\n'+json.dumps(item)+'\n')
+        return index,item,filename
+
+    def test_dataset_deduplicates_and_uses_declared_family_split(self):
+        index,item,filename=self.dataset_source()
+        result=build_dataset([filename],index,self.root/'data',splits={'objective-reduction':'train'})
+        self.assertEqual(result['counts'],dict(train=1,validation=0,test=0))
+        self.assertEqual(result['duplicates'],1)
+        record=json.loads(Path(result['artifacts'][0]).read_text())
+        self.assertEqual(record['outcome'],'completed')
+        self.assertEqual(record['label_scope'],'task')
+        replay=build_dataset([filename],index,self.root/'data',splits={'objective-reduction':'train'})
+        self.assertEqual(result['id'],replay['id'])
+
+    def test_dataset_rejects_holdout_families_and_forged_outcomes(self):
+        index,item,filename=self.dataset_source()
+        with self.assertRaisesRegex(ValueError,'held-out'):
+            build_dataset([filename],index,self.root/'data',['objective-reduction'])
+        item['outcome']='needs_action';filename.write_text(json.dumps(item)+'\n')
+        with self.assertRaisesRegex(ValueError,'outcome'):
+            build_dataset([filename],index,self.root/'data')
+
+    def test_dataset_rejects_modified_native_evidence(self):
+        index,item,filename=self.dataset_source()
+        evidence=next(iter(index['tasks'][0]['references']))
+        Path(evidence).write_text('changed capture')
+        with self.assertRaisesRegex(ValueError,'artifact changed'):
+            build_dataset([filename],index,self.root/'data')
+
+    def test_unknown_usage_is_not_counted_as_zero(self):
+        result=usage_totals([dict(usage=dict(input_tokens=10,output_tokens=2,total_tokens=12,
+                                           cached_input_tokens=None)),dict(usage=None)])
+        self.assertIsNone(result['total_tokens'])
+        self.assertIsNone(result['cached_input_tokens'])
+
+    def test_task_pins_candidate_version_and_procedure_route(self):
+        skill=self.root/'short-skill.md';skill.write_text('Use the existing objective interface.')
+        policy=self.root/'policy.json';policy.write_text(json.dumps(dict(
+            instruction='Use the objective interface.',skill_paths={'precision-repair':str(skill)})))
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='procedure',content='Short repair procedure.',tags=['mean'],
+            artifacts=[str(policy),str(skill)],entrypoint=str(policy)),{})
+        version=versions.prepare(store,[identity])
+        first=run_task(self.task,self.workspace,system_version=version['id'])
+        self.assertEqual(first['status'],'completed')
+        state=read(self.workspace/'loop.json')
+        call=next(a for a in state['history'] if a['kind']=='agent')
+        prompt=Path(call['run'])/'prompt.txt'
+        self.assertEqual(json.loads(prompt.read_text().split('\n',1)[1])['skill'],str(skill))
+        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('replay agent')):
+            self.assertEqual(run_task(self.task,self.workspace)['system_version'],version['id'])
+        with self.assertRaisesRegex(ValueError,'version changed'):
+            run_task(self.task,self.workspace,system_version='empty')
+
     def test_stream_admits_experience_before_the_next_task(self):
         other = tempfile.TemporaryDirectory();self.addCleanup(other.cleanup)
         peer = Path(other.name)/'next'
@@ -270,6 +352,233 @@ class ExperienceTests(unittest.TestCase):
         self.measurement['candidate'].pop('cost')
         with self.assertRaisesRegex(ValueError,'both costs'):
             improvement(self.measurement)
+
+    def test_admission_accounts_for_token_regressions(self):
+        self.measurement['baseline']['total_tokens']=100
+        self.measurement['candidate']['total_tokens']=120
+        self.assertFalse(improvement(self.measurement))
+
+    def test_pricing_requires_cache_attribution_when_rates_differ(self):
+        usage=dict(input_tokens=100,output_tokens=10,cached_input_tokens=None)
+        rates=dict(input_per_million=2,output_per_million=3,cached_input_per_million=1)
+        self.assertIsNone(price(usage,rates))
+        usage['cached_input_tokens']=50
+        self.assertAlmostEqual(price(usage,rates),0.00018)
+        usage['cached_input_tokens']=None;rates['cached_input_per_million']=2
+        self.assertAlmostEqual(price(usage,rates),0.00023)
+
+    def version_evaluation(self, version, correct=True):
+        measurement=dict(version_id=version['id'],baseline_version=version['base_version'],
+            mode='closed',scope=['independent-fixture'],baseline=dict(correct=True,seconds=10),
+            candidate=dict(correct=correct,seconds=8))
+        (self.root/'version-measurement.json').write_text(json.dumps(measurement))
+        (self.root/'copy.py').write_text('import shutil,sys\nshutil.copyfile("version-measurement.json",sys.argv[1])\n')
+        plan=self.root/'version-eval.json'
+        plan.write_text(json.dumps(dict(schema_version=1,id='version-eval',budget_seconds=10,
+            workload=dict(purpose='held_out_evaluation',version_id=version['id'],baseline_version=version['base_version']),
+            stages=[dict(id='evaluate',skill='precision-compare',timeout=5,inputs=['copy.py','version-measurement.json'],
+                argv=[sys.executable,'-B','copy.py','{run}/evaluation.json'],outputs={'evaluation':'evaluation.json'})])))
+        return versions.evaluate(self.store,version['id'],plan,self.root/'version-evaluation')
+
+    def test_bundle_requires_bound_evaluation_before_activation(self):
+        version=versions.prepare(self.store,[self.identity])
+        self.assertEqual(select(self.store,['torch'],version=version['id'])[0]['id'],self.identity)
+        self.assertEqual(versions.current(self.store),'empty')
+        with self.assertRaises(OSError):
+            versions.activate(self.store,version['id'])
+        self.assertEqual(self.version_evaluation(version)['status'],'active')
+        self.assertEqual(versions.current(self.store),version['id'])
+        self.assertEqual(select(self.store,['torch'])[0]['id'],self.identity)
+        self.assertEqual(select(self.store,['torch'],version='empty'),[])
+
+    def test_failed_update_preserves_current_version_and_can_restore_old_version(self):
+        first=versions.prepare(self.store,[self.identity]);self.version_evaluation(first)
+        other=propose(self.store,dict(kind='context',content='A bounded instruction.',tags=['torch']),{})
+        second=versions.prepare(self.store,[other])
+        self.assertEqual(self.version_evaluation(second,False)['status'],'candidate')
+        self.assertEqual(versions.current(self.store),first['id'])
+        self.assertEqual(self.version_evaluation(second)['status'],'active')
+        versions.activate(self.store,first['id'])
+        self.assertEqual(versions.current(self.store),first['id'])
+
+    def test_pinned_version_rejects_changed_artifact_or_candidate(self):
+        version=versions.prepare(self.store,[self.identity])
+        self.tool.write_text('changed tool')
+        with self.assertRaisesRegex(ValueError,'changed'):
+            select(self.store,['torch'],version=version['id'])
+
+    def test_empty_baseline_can_be_restored_without_a_synthetic_evaluation(self):
+        self.assertEqual(versions.activate(self.store,'empty')['id'],'empty')
+        first=versions.prepare(self.store,[self.identity]);self.version_evaluation(first)
+        result=versions.activate(self.store,'empty',expected_current=first['id'])
+        self.assertEqual(result['previous'],first['id'])
+        self.assertEqual(versions.current(self.store),'empty')
+        self.assertEqual(select(self.store,['torch']),[])
+        versions.activate(self.store,first['id'])
+        with self.assertRaisesRegex(ValueError,'active base advanced'):
+            versions.activate(self.store,'empty',expected_current='empty')
+
+    def test_procedure_references_only_versioned_skill_files(self):
+        skill=self.root/'SKILL.md';skill.write_text('Use the supplied tool interface.')
+        policy=self.root/'policy.json';policy.write_text(json.dumps(dict(instruction='Reuse the capture.',
+                                                        skill_paths={'precision-repair':str(skill)})))
+        proposal=dict(kind='procedure',content='Use the short repair route.',tags=['torch'],
+                      entrypoint=str(policy),artifacts=[str(policy)])
+        with self.assertRaisesRegex(ValueError,'declared skill'):
+            propose(self.store,proposal,{})
+        proposal['artifacts'].append(str(skill))
+        identity=propose(self.store,proposal,{})
+        version=versions.prepare(self.store,[identity])
+        memory=select(self.store,['torch'],version=version['id'])
+        self.assertEqual(memory[0]['procedure']['skill_paths']['precision-repair'],str(skill))
+
+
+class ImprovementTests(unittest.TestCase):
+    setUp = TaskLoopTests.setUp
+    save = TaskLoopTests.save
+
+    def setup_improvement(self, complete=True, mode='updates'):
+        self.cfg['family']='source-objective'
+        if not complete:
+            self.cfg['budget']['agent_calls']=0
+        self.save();run_task(self.task,self.workspace)
+        self.improver=self.root/'improver.py'
+        self.improver.write_text('''import json,sys
+from pathlib import Path
+p=json.loads(Path(sys.argv[1]).read_text().split('\\n',1)[1])
+folder=Path(p['artifacts']);folder.mkdir(exist_ok=True)
+tool=folder/'tool.py';tool.write_text('print("reusable")')
+policy=folder/'policy.json';policy.write_text(json.dumps({'instruction':'Reuse the existing reduction diagnostic.'}))
+data=folder/'examples.jsonl';data.write_text(json.dumps({'source':p['evidence'][0]['id'],
+ 'messages':[{'role':'user','content':'Diagnose the reduction.'},{'role':'assistant','content':'Inspect its normalization.'}]})+'\\n')
+updates=[{'kind':'context','content':'Inspect reduction semantics.','tags':['mean'],'artifacts':[]},
+ {'kind':'tool','content':'Run tool.py.','tags':['mean'],'artifacts':[str(tool)]},
+ {'kind':'procedure','content':'Reuse diagnostics.','tags':['mean'],'entrypoint':str(policy),'artifacts':[str(policy)]},
+ {'kind':'data','content':'Outcome-labeled task example.','tags':['mean'],'artifacts':[str(data)]}]
+Path(p['output']).write_text(json.dumps({'updates':[] if sys.argv[2]=='none' else updates}))
+print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'outputTokens':2,'totalTokens':12}}))
+''')
+        self.improve_cfg=self.root/'improve.json'
+        cfg=dict(schema_version=1,store='memory',evidence=[str(self.workspace)],budget_seconds=20,
+            agent=dict(argv=[sys.executable,'-B',str(self.improver),'{prompt_file}',mode],timeout=5,
+                       usage_format='dsh-jsonl'),held_out_families=['unseen-objective'])
+        self.improve_cfg.write_text(json.dumps(cfg))
+
+    def test_independent_improver_builds_four_outputs_and_reuses_completed_call(self):
+        self.setup_improvement()
+        session=self.root/'improvement-session'
+        first=improve(self.improve_cfg,session)
+        self.assertEqual(first['status'],'completed')
+        self.assertEqual(len(first['candidates']),4)
+        self.assertEqual(first['usage']['total_tokens'],12)
+        self.assertEqual(first['datasets'][0]['status'],'ready')
+        self.assertEqual(versions.current(self.root/'memory'),'empty')
+        candidates=[read(self.root/'memory'/(i+'.json')) for i in first['candidates']]
+        self.assertEqual(next(v for v in candidates if v['kind']=='data')['status'],'ready')
+        second=improve(self.improve_cfg,session)
+        self.assertEqual(first['version'],second['version'])
+        self.assertTrue(second['workflow']['stages'][0]['reused'])
+
+    def test_failed_task_can_produce_outcome_labeled_data(self):
+        self.setup_improvement(complete=False)
+        result=improve(self.improve_cfg,self.root/'improvement-session')
+        dataset=result['datasets'][0]
+        rows=[json.loads(line) for p in dataset['artifacts'] for line in Path(p).read_text().splitlines()]
+        self.assertEqual(rows[0]['outcome'],'needs_action')
+
+    def test_no_update_is_a_successful_cached_result(self):
+        self.setup_improvement(mode='none')
+        result=improve(self.improve_cfg,self.root/'improvement-session')
+        self.assertTrue(result['no_update'])
+        self.assertIsNone(result['version'])
+        self.assertTrue(improve(self.improve_cfg,self.root/'improvement-session')['workflow']['stages'][0]['reused'])
+
+    def test_benchmark_runs_independent_arms_and_retains_actual_measurements(self):
+        self.cfg['family']='unseen-objective';self.save()
+        tasks={}
+        for arm in ('baseline','candidate'):
+            folder=self.root/arm;folder.mkdir()
+            for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
+                shutil.copyfile(self.root/name,folder/name)
+            tasks[arm]=str(folder/'task.json')
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='context',content='Inspect reduction semantics.',tags=['mean']),
+                         dict(families=['source-objective']))
+        version=versions.prepare(store,[identity])
+        suite=self.root/'suite.json'
+        suite.write_text(json.dumps(dict(schema_version=1,store=str(store),cases=[dict(
+            id='independent-mean',family='unseen-objective',**tasks)])))
+        first=benchmark(suite,self.root/'bench',version['id'],'empty',30)
+        self.assertTrue(first['baseline']['correct']);self.assertTrue(first['candidate']['correct'])
+        self.assertGreater(first['baseline']['seconds'],0)
+        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('benchmark replay called agent')):
+            self.assertEqual(benchmark(suite,self.root/'bench',version['id'],'empty',30),first)
+        fresh=self.root/'fresh-candidate';fresh.mkdir()
+        for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
+            shutil.copyfile(self.root/name,fresh/name)
+        spec=read(suite)
+        spec['cases'][0].pop('baseline')
+        spec['cases'][0]['baseline_receipt']=str(self.root/'bench/0/baseline/result.json')
+        spec['cases'][0]['candidate']=str(fresh/'task.json')
+        suite2=self.root/'reuse-suite.json';suite2.write_text(json.dumps(spec))
+        reused=benchmark(suite2,self.root/'reuse-bench',version['id'],'empty',30)
+        self.assertEqual(reused['baseline'],first['baseline'])
+        state=read(self.root/'reuse-bench/benchmark.json')
+        self.assertEqual(state['arms']['0:baseline']['evidence']['state'],
+                         read(self.root/'bench/0/baseline/result.json')['evidence']['state'])
+
+    def test_benchmark_rejects_shared_workload_and_source_family(self):
+        self.cfg['family']='source-objective';self.save()
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='context',content='Inspect reduction semantics.',tags=['mean']),
+                         dict(families=['source-objective']))
+        version=versions.prepare(store,[identity])
+        suite=self.root/'suite.json'
+        spec=dict(schema_version=1,store=str(store),cases=[dict(id='same',family='source-objective',
+            baseline=str(self.task),candidate=str(self.task))])
+        suite.write_text(json.dumps(spec))
+        with self.assertRaisesRegex(ValueError,'overlaps'):
+            benchmark(suite,self.root/'bench',version['id'],'empty',30)
+        spec['cases'][0]['family']='unseen';suite.write_text(json.dumps(spec))
+        with self.assertRaisesRegex(ValueError,'independent workload'):
+            benchmark(suite,self.root/'bench',version['id'],'empty',30)
+
+    def test_stream_publishes_bundle_for_the_next_task_without_replaying_improvement(self):
+        self.setup_improvement()
+        cfg=read(self.improve_cfg);cfg['evidence']=[];cfg['trigger']=dict(min_new_tasks=1)
+        cfg['evaluation_plan']='bundle-eval.json'
+        self.improve_cfg.write_text(json.dumps(cfg))
+        (self.root/'implementation.py').write_text('def objective(values): return sum(values)\n')
+        self.cfg['memory']['directory']=str(self.root/'memory');self.save()
+        peer=self.root/'peer';peer.mkdir()
+        for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
+            shutil.copyfile(self.root/name,peer/name)
+        (self.root/'eval.py').write_text('''import json,sys
+from pathlib import Path
+Path(sys.argv[3]).write_text(json.dumps({'version_id':sys.argv[1],'baseline_version':sys.argv[2],
+ 'mode':'closed','scope':['independent-admission-fixture'],'families':['unseen-objective'],
+ 'baseline':{'correct':False,'seconds':10},'candidate':{'correct':True,'seconds':8}}))
+''')
+        (self.root/'bundle-eval.json').write_text(json.dumps(dict(schema_version=1,id='bundle-eval',budget_seconds=10,
+            workload=dict(purpose='held_out_evaluation',version_id='{version_id}',baseline_version='{baseline_version}'),
+            stages=[dict(id='evaluate',skill='precision-compare',timeout=5,inputs=['eval.py'],
+                argv=[sys.executable,'-B','eval.py','{version_id}','{baseline_version}','{run}/evaluation.json'],
+                outputs={'evaluation':'evaluation.json'})])))
+        series=self.root/'series.json'
+        series.write_text(json.dumps(dict(schema_version=1,tasks=[str(self.task),str(peer/'task.json')],
+                            budget_seconds=40,improvement=str(self.improve_cfg))))
+        result=iterate(series,self.root/'stream')
+        self.assertEqual(result['status'],'completed')
+        first=result['tasks'][0]['improvement']
+        self.assertEqual(first['evaluation']['status'],'active')
+        second=read(self.root/'stream/tasks/1/loop.json')
+        self.assertEqual(second['system_version'],first['version'])
+        self.assertTrue(next(a for a in second['history'] if a['kind']=='agent')['memory_ids'])
+        state=read(self.root/'stream/series.json')
+        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('replay called agent')):
+            replay=iterate(series,self.root/'stream')
+        self.assertEqual(replay['status'],'completed')
+        self.assertEqual(len(read(self.root/'stream/series.json')['improvements']),len(state['improvements']))
 
 
 if __name__=='__main__':
