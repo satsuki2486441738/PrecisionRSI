@@ -182,6 +182,18 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         self.assertEqual(json.loads(json.dumps(result))['argv'][1],'/work/a "quoted" path/c.json')
         self.assertEqual(result['id'],'abc')
 
+    def test_declared_interface_delegates_without_host_control_paths(self):
+        self.cfg['interface'] = dict(inputs={'data.json':'list of numbers'},
+            output={'value':'arithmetic mean'}, command=['native.py','reproduce','OUTPUT'])
+        action=dict(stage='reproduce',skill='precision-compare',reason='implementation missing')
+        payload=json.loads(_prompt(self.cfg,self.root/'native-plan.json',action,self.workspace,[])
+                           .split('\n',1)[1])
+        self.assertEqual(payload['interface'],self.cfg['interface'])
+        self.assertNotIn('plan',payload)
+        self.assertNotIn('protected',payload)
+        self.assertNotIn('verify.py',json.dumps(payload))
+        self.assertIn('verify.py',self.cfg['protected'])
+
     def test_evidence_includes_incomplete_tasks_without_exposing_raw_logs(self):
         self.cfg['budget']['agent_calls']=0;self.cfg['family']='objective-reduction';self.save()
         run_task(self.task,self.workspace)
@@ -615,6 +627,49 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         spec['cases'][0]['family']='unseen';suite.write_text(json.dumps(spec))
         with self.assertRaisesRegex(ValueError,'independent workload'):
             benchmark(suite,self.root/'bench',version['id'],'empty',30)
+
+    def test_failed_baseline_can_recover_with_memory_and_reuse_its_receipt(self):
+        self.cfg['family']='unseen-objective'
+        self.cfg['interface']=dict(reduction='arithmetic mean')
+        self.save()
+        self.root.joinpath('agent.py').write_text('''import json,sys
+from pathlib import Path
+p=json.loads(Path(sys.argv[1]).read_text().split('\\n',1)[1])
+if p['memory']:
+ Path('implementation.py').write_text('def objective(values): return sum(values)/len(values)\\n')
+print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
+''')
+        tasks={}
+        names=('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py')
+        for arm in ('baseline','candidate','fresh'):
+            folder=self.root/arm;folder.mkdir()
+            for name in names:shutil.copyfile(self.root/name,folder/name)
+            tasks[arm]=str(folder/'task.json')
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='context',content='Use arithmetic mean.',tags=['mean']),
+                         dict(families=['source-objective']))
+        version=versions.prepare(store,[identity])
+        suite=self.root/'recovery-suite.json'
+        spec=dict(schema_version=1,store=str(store),cases=[dict(id='recovery',
+            family='unseen-objective',baseline=tasks['baseline'],candidate=tasks['candidate'])])
+        suite.write_text(json.dumps(spec))
+        result=benchmark(suite,self.root/'recovery-bench',version['id'],'empty',30)
+        self.assertFalse(result['baseline']['correct'])
+        self.assertTrue(result['candidate']['correct'])
+        self.assertTrue(improvement(result))
+        self.assertEqual(read(self.root/'recovery-bench/benchmark.json')['conditions']['0']['interface'],
+                         self.cfg['interface'])
+        spec['cases'][0].pop('baseline')
+        spec['cases'][0].update(candidate=tasks['fresh'],
+            baseline_receipt=str(self.root/'recovery-bench/0/baseline/result.json'))
+        suite=self.root/'reused-recovery-suite.json';suite.write_text(json.dumps(spec))
+        reused=benchmark(suite,self.root/'reused-recovery-bench',version['id'],'empty',30)
+        self.assertEqual(reused['baseline'],result['baseline'])
+        self.assertTrue(reused['candidate']['correct'])
+        fresh=Path(tasks['fresh']);cfg=read(fresh)
+        cfg['interface']['reduction']='sum';fresh.write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError,'initial conditions differ'):
+            benchmark(suite,self.root/'changed-interface-bench',version['id'],'empty',30)
 
     def test_benchmark_allows_agents_to_create_missing_implementations(self):
         (self.root/'implementation.py').unlink()
