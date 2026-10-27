@@ -107,6 +107,14 @@ class EvolutionTests(unittest.TestCase):
         self.assertEqual(received['amortize_over_tasks'],1)
         self.assertFalse(feedback['accepted'])
 
+    def test_feedback_does_not_label_evaluation_time_as_construction(self):
+        construction=dict(seconds=480,usage=dict(total_tokens=612418),cost=None)
+        result=dict(candidates=[],spent_seconds=900,usage=construction['usage'],
+                    construction=construction)
+        feedback,_=_feedback(result,self.root/'memory')
+        self.assertEqual(feedback['construction'],construction)
+        self.assertNotEqual(feedback['construction']['seconds'],result['spent_seconds'])
+
     def test_recovered_tool_feedback_keeps_interfaces_costs_and_native_diagnostics(self):
         tool=self.root/'tool.py';tool.write_text('def compare(a,b): return a==b\n')
         store=self.root/'memory'
@@ -121,7 +129,10 @@ class EvolutionTests(unittest.TestCase):
         result=dict(status='completed',candidates=[identity],spent_seconds=12,usage=dict(total_tokens=34),
             proposal_recovery=dict(status='timed_out',path='/retained/proposals.json'),workflow=workflow)
         feedback,_=_feedback(result,store)
-        self.assertEqual(feedback['updates'][0]['artifacts'].keys(),{str(tool)})
+        self.assertEqual(feedback['updates'][0]['artifacts'],[str(tool)])
+        # A retained interface can be submitted unchanged instead of copying the
+        # host's fingerprint mapping into the path-array proposal field.
+        self.assertEqual(propose(store,feedback['updates'][0],{}),identity)
         self.assertEqual(feedback['construction'],dict(seconds=12,usage=dict(total_tokens=34)))
         self.assertEqual(feedback['proposal_recovery']['status'],'timed_out')
         self.assertEqual(feedback['workflow']['next_action']['diagnostic'],native)
