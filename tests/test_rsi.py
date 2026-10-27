@@ -351,6 +351,21 @@ class ExperienceTests(unittest.TestCase):
         self.tool.write_text('print("modified")')
         self.assertEqual(select(self.store,['torch']),[])
 
+    def test_selection_reports_unmatched_tags_and_interface_size(self):
+        version=versions.prepare(self.store,[self.identity])
+        rejected=[]
+        self.assertEqual(select(self.store,['inference'],version=version['id'],diagnostics=rejected),[])
+        self.assertEqual(rejected[0]['reason'],'unmatched_tags')
+        self.assertEqual(rejected[0]['unmatched_tags'],['torch'])
+        rejected=[]
+        self.assertEqual(select(self.store,['torch'],limit_chars=1,version=version['id'],diagnostics=rejected),[])
+        self.assertEqual(rejected[0]['reason'],'interface_budget')
+        self.assertEqual(rejected[0]['remaining_chars'],1)
+        self.assertGreater(rejected[0]['interface_chars'],1)
+        rejected=[]
+        self.assertEqual(select(self.store,['torch'],version=version['id'],diagnostics=rejected)[0]['id'],self.identity)
+        self.assertEqual(rejected,[])
+
     def test_correctness_failure_rejects_and_removes_admission(self):
         self.evaluate()
         self.measurement['candidate']['correct']=False
@@ -528,6 +543,74 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(candidate['kind'],'context')
         self.assertEqual(candidate['artifacts'],{})
         self.assertEqual(versions.current(self.root/'memory'),'empty')
+
+    def test_saved_proposals_survive_timeout_and_replay_without_model_calls(self):
+        self.setup_improvement()
+        cfg=read(self.improve_cfg);cfg['agent']['timeout']=1
+        cfg['evaluation_plan']='evaluation.json';self.improve_cfg.write_text(json.dumps(cfg))
+        (self.root/'evaluation.json').write_text('{}')
+        self.improver.write_text(self.improver.read_text()+'\nsys.stdout.flush()\nimport time\ntime.sleep(10)\n')
+        session=self.root/'timeout-proposals'
+        with patch('precision_rsi.versions.evaluate',return_value={'status':'candidate'}) as evaluator:
+            first=improve(self.improve_cfg,session)
+        self.assertEqual(len(first['candidates']),4)
+        self.assertEqual(first['proposal_recovery']['status'],'timed_out')
+        self.assertEqual(first['usage']['total_tokens'],12)
+        self.assertEqual(first['workflow']['status'],'needs_action')
+        self.assertGreater(read(session/'construction.json')['seconds'],0)
+        self.assertEqual(evaluator.call_count,1)
+        self.assertGreater(evaluator.call_args.kwargs['time_budget_seconds'],0)
+        self.assertEqual(versions.current(self.root/'memory'),'empty')
+        with patch('workflow.record_run',side_effect=AssertionError('replayed agent')), \
+             patch('precision_rsi.versions.evaluate',return_value={'status':'candidate'}):
+            second=improve(self.improve_cfg,session)
+        self.assertEqual(second['candidates'],first['candidates'])
+        self.assertEqual(second['usage'],first['usage'])
+        self.assertEqual(second['proposal_recovery'],first['proposal_recovery'])
+        recovered=next(read(self.root/'memory'/(i+'.json')) for i in first['candidates']
+                       if read(self.root/'memory'/(i+'.json'))['kind']=='tool')
+        Path(next(iter(recovered['artifacts']))).write_text('changed after recovery')
+        with patch('workflow.record_run',side_effect=AssertionError('replayed agent')):
+            changed=improve(self.improve_cfg,session)
+        self.assertEqual(changed['candidates'],[])
+        self.assertIn('input changed',changed['errors'][0]['reason'])
+
+    def test_invalid_partial_proposals_retain_failure_usage_without_candidates(self):
+        self.setup_improvement()
+        self.improver.write_text(self.improver.read_text()+
+            "\nPath(p['output']).write_text('{bad json')\nraise SystemExit(7)\n")
+        result=improve(self.improve_cfg,self.root/'invalid-partial')
+        self.assertEqual(result['status'],'needs_action')
+        self.assertEqual(result['candidates'],[])
+        self.assertEqual(result['usage']['total_tokens'],12)
+        self.assertEqual(result['errors'][0]['stage'],'proposals')
+
+    def test_failed_improver_can_retain_complete_proposals_but_not_missing_artifacts(self):
+        self.setup_improvement()
+        self.improver.write_text(self.improver.read_text()+
+            "\nPath(p['output']).write_text(json.dumps({'updates':[updates[1]]}))\ntool.unlink()\nraise SystemExit(7)\n")
+        result=improve(self.improve_cfg,self.root/'missing-partial-artifact')
+        self.assertEqual(result['status'],'needs_action')
+        self.assertEqual(result['candidates'],[])
+        self.assertEqual(result['usage']['total_tokens'],12)
+        self.assertTrue(result['errors'])
+
+    def test_nonzero_exit_can_recover_complete_proposals(self):
+        self.setup_improvement()
+        self.improver.write_text(self.improver.read_text()+'\nraise SystemExit(7)\n')
+        result=improve(self.improve_cfg,self.root/'failed-complete-proposals')
+        self.assertEqual(len(result['candidates']),4)
+        self.assertEqual(result['proposal_recovery']['status'],'failed')
+        self.assertEqual(versions.current(self.root/'memory'),'empty')
+
+    def test_partial_proposals_cannot_change_host_declared_inputs(self):
+        self.setup_improvement()
+        self.improver.write_text(self.improver.read_text()+
+            "\nPath(p['evidence_index']).write_text('{}')\nraise SystemExit(7)\n")
+        result=improve(self.improve_cfg,self.root/'tampered-partial-proposals')
+        self.assertEqual(result['candidates'],[])
+        self.assertIn('declared inputs',result['errors'][0]['reason'])
+        self.assertEqual(result['usage']['total_tokens'],12)
 
     def test_failed_task_can_produce_outcome_labeled_data(self):
         self.setup_improvement(complete=False)
@@ -712,6 +795,10 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent should not run')):
             with self.assertRaisesRegex(ValueError,'no applicable runtime difference'):
                 benchmark(suite,self.root/'unrelated-bench',version['id'],'empty',30)
+        diagnostics=read(self.root/'unrelated-bench/selection.json')
+        self.assertEqual(diagnostics['consumer'],dict(tags=['mean'],limit_chars=4000))
+        self.assertEqual(diagnostics['rejected']['candidate'][0]['unmatched_tags'],['other-schema'])
+        self.assertEqual(diagnostics['selected']['candidate'],[])
         self.assertFalse((store/'versions/current.json').exists())
 
     def test_stream_publishes_bundle_for_the_next_task_without_replaying_improvement(self):

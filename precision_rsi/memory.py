@@ -97,8 +97,8 @@ def procedure(item):
     return value
 
 
-def select(store, tags=(), limit_chars=4000, version=None):
-    """Load only active, applicable, unchanged interfaces within a character budget."""
+def select(store, tags=(), limit_chars=4000, version=None, diagnostics=None):
+    """Load applicable interfaces; optional diagnostics lists rejected IDs/reasons."""
     if type(limit_chars) is not int or limit_chars < 0:
         raise ValueError('nonnegative memory character budget required')
     from .versions import current, members
@@ -107,9 +107,13 @@ def select(store, tags=(), limit_chars=4000, version=None):
     items = members(store, version) if version else [read(p) for p in sorted(Path(store).glob('*.json'))]
     result, used = [], 0
     for item in items:
-        if ((version is None and item['status'] != 'active') or
-                item['kind'] not in ('tool', 'context', 'procedure') or not set(item['tags']) <= set(tags)
-                or not _unchanged(item)):
+        unmatched = sorted(set(item['tags'])-set(tags))
+        reason = ('inactive' if version is None and item['status']!='active' else
+                  'unsupported_kind' if item['kind'] not in ('tool','context','procedure') else
+                  'unmatched_tags' if unmatched else 'artifact_changed' if not _unchanged(item) else None)
+        if reason:
+            if diagnostics is not None:
+                diagnostics.append(dict(id=item['id'],reason=reason,unmatched_tags=unmatched))
             continue
         value = dict(id=item['id'], kind=item['kind'], content=item['content'],
                      artifacts=list(item['artifacts']))
@@ -119,6 +123,9 @@ def select(store, tags=(), limit_chars=4000, version=None):
         if used + size <= limit_chars:
             result.append(value)
             used += size
+        elif diagnostics is not None:
+            diagnostics.append(dict(id=item['id'],reason='interface_budget',
+                                    interface_chars=size,remaining_chars=limit_chars-used))
     return result
 
 

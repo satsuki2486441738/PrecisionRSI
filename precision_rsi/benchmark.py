@@ -6,6 +6,7 @@ Cases declare independent workload copies. Both arms use the same agent/runtime,
 task semantics and initial source bytes. Each arm runs once; replay retains its
 measured result. The host supplies disjoint improvement/evaluation task families.
 """
+import json
 from pathlib import Path
 import time
 
@@ -95,9 +96,14 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
                 if a != b:
                     raise ValueError('benchmark initial conditions differ')
                 retrieval = b['retrieval']
-                if (select(store, version=version_id, **retrieval) ==
-                        select(store, version=baseline_version, **retrieval)):
-                    raise ValueError('candidate has no applicable runtime difference: ' + case['id'])
+                rejected = {arm:[] for arm in ('baseline','candidate')}
+                selected = {arm:select(store,version=identity,diagnostics=rejected[arm],**retrieval)
+                            for arm,identity in (('baseline',baseline_version),('candidate',version_id))}
+                if selected['baseline']==selected['candidate']:
+                    details = dict(case=case['id'],consumer=retrieval,rejected=rejected,
+                                   selected={arm:[v['id'] for v in values] for arm,values in selected.items()})
+                    write(workspace/'selection.json',details)
+                    raise ValueError('candidate has no applicable runtime difference: ' + json.dumps(details))
                 state['conditions'][str(index)] = a
                 write(state_path,state)
             for arm, task in tasks.items():
