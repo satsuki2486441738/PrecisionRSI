@@ -82,6 +82,8 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
             tags = {tag for t in index['tasks'] for tag in t['tags']}
             interfaces = select(store,tags,limit_chars=2000,version=base)
             prompt = ('Produce one small reusable improvement justified by the task evidence. '
+                'Reuse existing modules first. Extract repeated logic into a callable module when an interface is missing; '
+                'keep task-specific parsing in adapters. Consumers should invoke the module, not copy its implementation. '
                 'Use the supplied observations and complete interface directly. '
                 'Do not read host implementation source or full harness transcripts. '
                 'Read an individual evidence artifact only to resolve a specific missing fact. '
