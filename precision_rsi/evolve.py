@@ -29,6 +29,9 @@ def _feedback(result, store):
             ('baseline','candidate','construction','amortize_over_tasks') if k in measurement},
         updates=[dict({k:item[k] for k in ('id','kind','content','tags')},
                       artifacts=list(item['artifacts'])) for item in updates])
+    if result.get('evaluation') or any(e.get('stage')=='evaluation' for e in result.get('errors',[])):
+        summary['evaluation'] = dict(seconds=(evaluation.get('workflow') or {}).get('spent_seconds'),
+                                     usage=measurement.get('usage'))
     # Paths identify retained details; full workflow transcripts stay outside prompts.
     if summary['workflow']:
         flow = summary['workflow']
@@ -143,9 +146,13 @@ def run(config, workspace):
                     'repeated failure' if repeated else 'no measured progress')
                 break
         state['seconds'] = spent+time.monotonic()-started
+        construction_usage = usage_totals([r['result'] for r in state['rounds']])
+        evaluation_usage = usage_totals([r['feedback']['evaluation'] for r in state['rounds']
+                                        if 'evaluation' in r['feedback']])
         state['result'] = dict(status='completed',reason=reason,spent_seconds=state['seconds'],
             rounds=len(state['rounds']),accepted=sum(r['accepted'] for r in state['rounds']),
-            usage=usage_totals([r['result'] for r in state['rounds']]),
+            usage=usage_totals([dict(usage=construction_usage),dict(usage=evaluation_usage)]),
+            construction_usage=construction_usage,evaluation_usage=evaluation_usage,
             active_version=versions.current(store),state=str(path))
         write(path,state)
         return state['result']
