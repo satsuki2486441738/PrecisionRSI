@@ -40,7 +40,7 @@ Task paths are relative to the task JSON. `plan` uses the existing [workflow int
 Task evidence → Select limitation → Build candidate → Independent evaluation → Activate version → Subsequent tasks
 ```
 
-The separate improvement agent receives bounded summaries of completed and incomplete tasks, with paths to detailed evidence. It builds a minimal update or returns no update. The host prepares datasets, evaluates runtime bundles and activates accepted versions. Each round has its own budget inside the series budget.
+The separate improvement agent receives bounded summaries of completed and incomplete tasks, including tool counts, repeated commands and file mentions, with paths to detailed evidence. It builds a minimal update or returns no update. The host prepares datasets, evaluates runtime bundles and activates accepted versions. Each round has its own budget inside the series budget.
 
 ```json
 {
@@ -104,7 +104,7 @@ python -m precision_rsi benchmark suite.json --version VERSION_ID --baseline BAS
   --construction-file /work/improvement/construction.json --output /work/evaluation.json
 ```
 
-Suite JSON: `schema_version: 1`, `store`, and `cases: [{id, family, baseline: task_JSON, candidate: task_JSON}]`. Arms use independent workload copies with matching initial conditions, agent and runtime declarations. Run its command from the checkout in an evaluator workflow; `--output` supplies the named `evaluation` artifact. A case may replace `baseline` with `baseline_receipt: "/work/previous/0/baseline/result.json"`; reuse checks family, version, runtime, initial conditions and retained evidence. Each measured arm is retained for replay.
+Suite JSON: `schema_version: 1`, `store`, and `cases: [{id, family, baseline: task_JSON, candidate: task_JSON}]`. Arms use independent workload copies with matching initial conditions (including missing implementations), agent and memory-selection settings. The candidate must change the retrieved interfaces for that case before either arm runs. Run its command from the checkout in an evaluator workflow; `--output` supplies the named `evaluation` artifact. A case may replace `baseline` with `baseline_receipt: "/work/previous/0/baseline/result.json"`; reuse checks family, version, runtime, initial conditions and retained evidence. Each measured arm is retained for replay.
 
 Measurements include native completion, time and raw usage. Construction time is included once by default; `amortize_over_tasks` declares an explicit reuse horizon. Known token totals include allocated construction usage. Optional `pricing` uses `input_per_million`, `cached_input_per_million`, `output_per_million`; configure improvement and task pricing separately. Unknown cache attribution/cost stays unknown. Closed admission preserves correctness and avoids measured time/token/cost regressions with at least one strict gain, or improves correctness. Evaluators own task selection, coverage and measurement validity.
 

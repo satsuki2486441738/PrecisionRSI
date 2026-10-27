@@ -8,7 +8,9 @@ import json
 import math
 import os
 from pathlib import Path
+import shlex
 import sys
+from collections import Counter
 
 
 def command(agent, prompt, run):
@@ -48,6 +50,54 @@ def usage(path, format_name):
                 result[key] += number
             result['steps'] += 1
     return result if result['steps'] else None
+
+
+def activity(path, format_name):
+    """Bounded DSH tool-call counts; filenames/mentions, never command or file contents.
+
+    Python mentions describe shell tokens, not proven executions. Repeated
+    commands count identical bash inputs. Duplicate call IDs count once.
+    """
+    if format_name is None:
+        return None
+    if format_name != 'dsh-jsonl':
+        raise ValueError('unknown activity format')
+    tools, reads, mentions, commands = (Counter() for _ in range(4))
+    seen = set()
+    with Path(path).open(errors='replace') as stream:
+        for line in stream:
+            try:
+                event = json.loads(line)
+            except ValueError:
+                continue
+            if not isinstance(event, dict) or event.get('type') != 'tool_call':
+                continue
+            tool, args, identity = event.get('tool'), event.get('input'), event.get('callId')
+            if not isinstance(tool, str) or not isinstance(args, dict):
+                continue
+            if isinstance(identity, str):
+                if identity in seen:
+                    continue
+                seen.add(identity)
+            tools[tool[:80]] += 1
+            if tool == 'read' and isinstance(args.get('file_path'), str):
+                reads[Path(args['file_path']).name[:120]] += 1
+            if tool == 'bash' and isinstance(args.get('command'), str):
+                command = args['command']
+                commands[command] += 1
+                try:
+                    tokens = shlex.split(command)
+                except ValueError:
+                    tokens = []
+                for token in tokens:
+                    token = token.rstrip(';|&')
+                    if token.endswith('.py') and not any(c in token for c in '\n*?['):
+                        mentions[Path(token).name[:120]] += 1
+    if not tools:
+        return None
+    return dict(tool_calls=sum(tools.values()), tools=dict(tools.most_common(16)),
+                read_files=dict(reads.most_common(12)), python_mentions=dict(mentions.most_common(12)),
+                repeated_commands=sum(n-1 for n in commands.values()))
 
 
 def price(usage, rates):

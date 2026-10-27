@@ -14,7 +14,7 @@ from precision_rsi.dataset import build as build_dataset
 from precision_rsi import versions
 from precision_rsi.improve import improve
 from precision_rsi.benchmark import run as benchmark
-from precision_rsi.harness import price
+from precision_rsi.harness import activity, price
 
 
 class TaskLoopTests(unittest.TestCase):
@@ -182,7 +182,7 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         self.assertEqual(json.loads(json.dumps(result))['argv'][1],'/work/a "quoted" path/c.json')
         self.assertEqual(result['id'],'abc')
 
-    def test_evidence_includes_incomplete_tasks_without_loading_raw_logs(self):
+    def test_evidence_includes_incomplete_tasks_without_exposing_raw_logs(self):
         self.cfg['budget']['agent_calls']=0;self.cfg['family']='objective-reduction';self.save()
         run_task(self.task,self.workspace)
         index=collect([self.workspace])
@@ -196,6 +196,28 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         before=index['id']
         run_task(self.task,self.workspace)
         self.assertEqual(collect([self.workspace])['id'],before)
+
+    def test_activity_summarizes_actions_without_exposing_commands_or_contents(self):
+        path=self.root/'actions.jsonl'
+        events=[dict(type='tool_call',callId='read1',tool='read',input=dict(file_path='/work/score_metrics.py')),
+                dict(type='tool_call',callId='cmd1',tool='bash',input=dict(command='TOKEN=private-value python compare.py; ls *.py')),
+                dict(type='tool_call',callId='cmd2',tool='bash',input=dict(command='TOKEN=private-value python compare.py; ls *.py'))]
+        path.write_text('\n'.join(json.dumps(e) for e in events+[events[0]])+'\nmalformed\n')
+        result=activity(path,'dsh-jsonl')
+        self.assertEqual(result['tool_calls'],3)
+        self.assertEqual(result['read_files'],{'score_metrics.py':1})
+        self.assertEqual(result['python_mentions'],{'compare.py':2})
+        self.assertEqual(result['repeated_commands'],1)
+        self.assertNotIn('private-value',json.dumps(result))
+
+    def test_evidence_retains_bounded_agent_activity(self):
+        self.cfg['agent']['usage_format']='dsh-jsonl';self.save();run_task(self.task,self.workspace)
+        state=read(self.workspace/'loop.json')
+        attempt=next(a for a in state['history'] if a['kind']=='agent')
+        with Path(attempt['raw_output']).open('a') as stream:
+            stream.write(json.dumps(dict(type='tool_call',tool='read',input=dict(file_path='/work/plan.json')))+'\n')
+        summary=collect([self.workspace])['tasks'][0]['agent_activity']
+        self.assertEqual(summary[0]['read_files'],{'plan.json':1})
 
     def dataset_source(self):
         self.cfg['family']='objective-reduction';self.save()
@@ -542,6 +564,49 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         spec['cases'][0]['family']='unseen';suite.write_text(json.dumps(spec))
         with self.assertRaisesRegex(ValueError,'independent workload'):
             benchmark(suite,self.root/'bench',version['id'],'empty',30)
+
+    def test_benchmark_allows_agents_to_create_missing_implementations(self):
+        (self.root/'implementation.py').unlink()
+        tasks={}
+        for arm in ('baseline','candidate'):
+            folder=self.root/arm;folder.mkdir()
+            for name in ('task.json','native-plan.json','agent.py','data.json','verify.py','native.py'):
+                shutil.copyfile(self.root/name,folder/name)
+            tasks[arm]=str(folder/'task.json')
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='context',content='Use mean reduction.',tags=['mean']),
+                         dict(families=['source-objective']))
+        version=versions.prepare(store,[identity])
+        suite=self.root/'missing-suite.json'
+        suite.write_text(json.dumps(dict(schema_version=1,store=str(store),cases=[dict(
+            id='create-implementation',family='unseen-objective',**tasks)])))
+        result=benchmark(suite,self.root/'missing-bench',version['id'],'empty',30)
+        for arm in ('baseline','candidate'):
+            self.assertTrue(result[arm]['correct'])
+            self.assertTrue((self.root/arm/'implementation.py').is_file())
+        state=read(self.root/'missing-bench/benchmark.json')
+        self.assertEqual(state['conditions']['0']['sources'][1][1],{'kind':'missing'})
+        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent rerun')):
+            self.assertEqual(benchmark(suite,self.root/'missing-bench',version['id'],'empty',30),result)
+
+    def test_benchmark_rejects_unselected_updates_before_calling_agents(self):
+        tasks={}
+        for arm in ('baseline','candidate'):
+            folder=self.root/arm;folder.mkdir()
+            for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
+                shutil.copyfile(self.root/name,folder/name)
+            tasks[arm]=str(folder/'task.json')
+        store=self.root/'memory'
+        identity=propose(store,dict(kind='context',content='An unrelated instruction.',tags=['other-schema']),
+                         dict(families=['source-objective']))
+        version=versions.prepare(store,[identity])
+        suite=self.root/'unrelated-suite.json'
+        suite.write_text(json.dumps(dict(schema_version=1,store=str(store),cases=[dict(
+            id='unrelated-tool',family='unseen-objective',**tasks)])))
+        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent should not run')):
+            with self.assertRaisesRegex(ValueError,'no applicable runtime difference'):
+                benchmark(suite,self.root/'unrelated-bench',version['id'],'empty',30)
+        self.assertFalse((store/'versions/current.json').exists())
 
     def test_stream_publishes_bundle_for_the_next_task_without_replaying_improvement(self):
         self.setup_improvement()
