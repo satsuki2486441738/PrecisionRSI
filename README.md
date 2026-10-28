@@ -133,3 +133,5 @@ Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 ## Evaluation and repair history
 
 The [history website](https://satsuki2486441738.github.io/PrecisionRSI/) has two tabs: **Evaluations** shows inference/SFT/RL comparison settings, numerical metrics, coverage and evidence; **Repairs** retains library-grouped fixes, causes and before/after verification. Records and public evidence are maintained in [site/](site/README.md).
+
+The [RSI dashboard](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html) shows current runs, candidate changes, independent evaluation outcomes and phase-specific time/token usage, including baseline reuse.

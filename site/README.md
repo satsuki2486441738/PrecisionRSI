@@ -49,3 +49,17 @@ With Node.js available, run `python3 -B -m unittest discover -s tests -p 'test_e
 for signed, zero, extreme-value and selective-chart geometry checks. The browser
 regression checks every recorded comparison's chart values, side labels,
 coverage and linear geometry against the archived measurements.
+
+## RSI dashboard
+
+`rsi.html` presents runtime snapshots separately from precision histories. Select a run to inspect candidate components, acceptance, task correctness, tool calls and baseline/construction/evaluation usage. Accepted versions are scoped to each run; acceptance alone does not demonstrate reuse or efficiency. Unknown values remain unknown. Reused baseline receipts retain their historical cost and add zero baseline calls to the new run.
+
+Refresh the public summary after a maintenance check:
+
+```sh
+python -B .github/rsi_snapshot.py --monitor projects/rsi-system/monitor.json --output site/data/rsi.json --refresh
+```
+
+Omit `--refresh` to export archived local evidence. The optional refresh reads the current remote run through the monitor's SSH declaration; it does not change the run or model service. The exporter returns allowlisted summaries, strips paths from diagnostics, and keeps full traces, task inputs, SSH settings and credentials private. The page polls the published JSON every minute and shows its observation time; publication is a snapshot, not a direct connection to the model server. Publish `site/data/rsi.json` through the existing Pages workflow.
+
+Run exporter regressions with `python -B -m unittest discover -s tests -p 'test_rsi_dashboard.py' -v`. Optional page checks use `node tests/browser_rsi.cjs` with Playwright and an installed Chromium.
