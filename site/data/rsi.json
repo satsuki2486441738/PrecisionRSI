@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T04:51:48.783786+00:00",
-  "observed_at": "2026-10-28T04:51:48.783786+00:00",
+  "generated_at": "2026-10-28T05:07:06.808265+00:00",
+  "observed_at": "2026-10-28T05:07:06.808265+00:00",
   "current_run": "npu-rsi-longrun-20261028T044615Z",
   "runs": [
     {
@@ -14,11 +14,15 @@
       "accepted": 0,
       "active_version": "empty",
       "budget_seconds": 10800,
-      "elapsed_seconds": 32.545724,
+      "elapsed_seconds": 950.394241,
       "live_activity": {
-        "tool_calls": 4,
+        "tool_calls": 56,
         "tools": {
-          "bash": 4
+          "bash": 44,
+          "read": 5,
+          "skill": 3,
+          "write": 3,
+          "edit": 1
         }
       },
       "baseline": {
@@ -45,31 +49,124 @@
           }
         },
         "construction": {
-          "seconds": null,
+          "seconds": 613.6130823204294,
           "usage": {
-            "input_tokens": 17996,
-            "output_tokens": 795,
-            "total_tokens": 18791,
+            "input_tokens": 1085807,
+            "output_tokens": 23433,
+            "total_tokens": 1109240,
             "cached_input_tokens": null
           }
         },
         "evaluation": {
           "seconds": null,
           "usage": {
-            "input_tokens": null,
-            "output_tokens": null,
-            "total_tokens": null,
+            "input_tokens": 262063,
+            "output_tokens": 13182,
+            "total_tokens": 275245,
             "cached_input_tokens": null
           }
         }
       },
-      "rounds": [],
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": "c9947dcc15d7d3dc6ffb043f835d7cfa013e9f2194569025da01fdf1b694e47f",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "compare(capture)->{global,groups,configurations}; CLI `python -B compare.py [--capture capture.json] --output PATH`. Samples {id,input_ids,target_positions}; side_a.responses[sid].meta_info.input_token_logprobs or .scores; side_b.scores[{coordinate:[sid,pos,token],logprob}]. Null[private path]=>missing, never 0. Node: status; coverage{expected_count,observed_counts,paired_count,missing}; metrics{t",
+              "artifacts": [
+                "compare.py",
+                "test_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "Use the supplied comparator unchanged: copy compare.py and test_compare.py to cwd; run `python -B test_compare.py` once, then `python -B compare.py --output comparison.json` once. Do not read capture.json or reimplement. Report JSON path, global status[private path] and group statuses; on nonzero exit report stderr and stop.",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 357.07683198014274,
+            "usage": {
+              "input_tokens": 621231,
+              "output_tokens": 14325,
+              "total_tokens": 635556,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 316.0705601195805,
+            "usage": {
+              "input_tokens": 262063,
+              "output_tokens": 13182,
+              "total_tokens": 275245,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": true,
+          "baseline_correct": true,
+          "candidate_seconds": 672.7900175899267,
+          "candidate_tokens": 910801.0,
+          "activity": {
+            "tool_calls": 34,
+            "tools": {
+              "bash": 27,
+              "read": 1,
+              "skill": 2,
+              "write": 3,
+              "edit": 1
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "[Errno 2] No such file or directory: '[private path]'"
+          ],
+          "construction": {
+            "seconds": 256.53625034028664,
+            "usage": {
+              "input_tokens": 464576,
+              "output_tokens": 9108,
+              "total_tokens": 473684,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 22,
+            "tools": {
+              "bash": 17,
+              "read": 4,
+              "skill": 1
+            }
+          }
+        }
+      ],
       "maintenance_notes": [],
       "scope": "留存真实模型采集 · 开发集反复评测",
       "evidence": {
         "archive_sha256": null
       },
-      "observed_at": "2026-10-28T04:51:48.783786+00:00"
+      "observed_at": "2026-10-28T05:07:06.808265+00:00"
     },
     {
       "id": "npu-rsi-continuation-20261028T023838Z",
