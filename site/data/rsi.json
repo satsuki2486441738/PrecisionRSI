@@ -1,31 +1,21 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T07:37:19.630073+00:00",
-  "observed_at": "2026-10-28T07:37:19.630073+00:00",
+  "generated_at": "2026-10-28T08:51:30.508237+00:00",
+  "observed_at": "2026-10-28T08:51:30.508237+00:00",
   "current_run": "npu-rsi-longrun-20261028T044615Z",
   "runs": [
     {
       "id": "npu-rsi-longrun-20261028T044615Z",
       "model": "DeepSeek-V4.1-Flash-1017",
       "commit": "96a1d3d008e65ebfaad70524ec857268334aede3",
-      "status": "running",
-      "phase": "construction",
-      "stop_reason": "",
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "budget exhausted",
       "accepted": 0,
       "active_version": "empty",
       "budget_seconds": 10800,
-      "elapsed_seconds": 9963.861144,
-      "live_activity": {
-        "tool_calls": 509,
-        "tools": {
-          "bash": 395,
-          "read": 50,
-          "skill": 21,
-          "write": 23,
-          "edit": 18,
-          "job_output": 2
-        }
-      },
+      "elapsed_seconds": 10800.393052019645,
+      "live_activity": null,
       "baseline": {
         "correct": true,
         "reused": true,
@@ -50,16 +40,16 @@
           }
         },
         "construction": {
-          "seconds": 7649.724495679606,
+          "seconds": 8566.445236819796,
           "usage": {
-            "input_tokens": 9323307,
-            "output_tokens": 307842,
-            "total_tokens": 9631149,
+            "input_tokens": 10427268,
+            "output_tokens": 344309,
+            "total_tokens": 10771577,
             "cached_input_tokens": null
           }
         },
         "evaluation": {
-          "seconds": null,
+          "seconds": 2232.219841049053,
           "usage": {
             "input_tokens": 2168250,
             "output_tokens": 72860,
@@ -835,14 +825,95 @@
               "edit": 4
             }
           }
+        },
+        {
+          "index": 18,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "[Errno 2] No such file or directory: '[private path]'"
+          ],
+          "construction": {
+            "seconds": 480.16321740997955,
+            "usage": {
+              "input_tokens": 593399,
+              "output_tokens": 20796,
+              "total_tokens": 614195,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 27,
+            "tools": {
+              "bash": 23,
+              "skill": 1,
+              "write": 2,
+              "edit": 1
+            }
+          }
+        },
+        {
+          "index": 19,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "[Errno 2] No such file or directory: '[private path]'"
+          ],
+          "construction": {
+            "seconds": 436.55752373021096,
+            "usage": {
+              "input_tokens": 607518,
+              "output_tokens": 18219,
+              "total_tokens": 625737,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 26,
+            "tools": {
+              "bash": 25,
+              "skill": 1
+            }
+          }
         }
       ],
-      "maintenance_notes": [],
+      "maintenance_notes": [
+        "19轮、0候选接受；12轮未保存完整提案。只有首轮任务正确，但构建后成本高于复用基线，任务成功不代表提供工具已被直接复用。",
+        "单端使用留存跨端采集的开发评测；未执行新双端推理。维护侧只读复核与归档，未代写候选。"
+      ],
       "scope": "留存真实模型采集 · 开发集反复评测",
       "evidence": {
-        "archive_sha256": null
+        "archive_sha256": "951dd11e7bafef981ff409af509432e65faa14ff3bee3710742222c38ef718b3"
       },
-      "observed_at": "2026-10-28T07:37:19.630073+00:00"
+      "observed_at": "2026-10-28T08:51:30.508237+00:00"
     },
     {
       "id": "npu-rsi-continuation-20261028T023838Z",
