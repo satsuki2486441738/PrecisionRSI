@@ -17,6 +17,8 @@
 
 `site/` hosts the GitHub Pages evaluation and repair histories. Append evaluations to `site/data/evaluations.json` with peer configurations, comparison scope, measured metrics, coverage and immutable evidence. Keep repair experiments in `site/data/repairs.json` with their existing library/fix/verification hierarchy. Preserve recorded IDs, measurements and evidence; keep full execution artifacts in private cases. Run `python -B .github/validate_history.py` for history changes.
 
+The RSI dashboard lives in `site/rsi.html`. After hourly maintenance, refresh its allowlisted snapshot with `python -B .github/rsi_snapshot.py --monitor projects/rsi-system/monitor.json --output site/data/rsi.json --refresh` and publish changed public summaries. It reads frozen runs without modifying them. Preserve unknown usage, separate reused baseline costs, show observation timestamps, and keep traces and connection details private.
+
 ## Changes
 
 Confirm the approach before editing and change at most three files per batch. For a bug fix, reproduce the behavior temporarily, add a meaningful regression and remove the temporary reproducer. Preserve permanent tests.

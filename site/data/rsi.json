@@ -1,0 +1,1685 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-28T03:35:37.881047+00:00",
+  "observed_at": "2026-10-28T03:35:37.881047+00:00",
+  "current_run": "npu-rsi-continuation-20261028T023838Z",
+  "runs": [
+    {
+      "id": "npu-rsi-continuation-20261028T023838Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": "96a1d3d008e65ebfaad70524ec857268334aede3",
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 1714.9389255302958,
+      "live_activity": null,
+      "baseline": {
+        "correct": true,
+        "reused": true,
+        "historical": {
+          "seconds": 480.40121045010164,
+          "usage": {
+            "input_tokens": 711760,
+            "output_tokens": 17424,
+            "total_tokens": 729184,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 0,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": 1274.2285473700613,
+          "usage": {
+            "input_tokens": 1791022,
+            "output_tokens": 55833,
+            "total_tokens": 1846855,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 440.3245729897171,
+          "usage": {
+            "input_tokens": 453509,
+            "output_tokens": 18407,
+            "total_tokens": 471916,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "[Errno 2] No such file or directory: '[private path]'"
+          ],
+          "construction": {
+            "seconds": 480.1112772799097,
+            "usage": {
+              "input_tokens": 672019,
+              "output_tokens": 20705,
+              "total_tokens": 692724,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 30,
+            "tools": {
+              "bash": 28,
+              "skill": 1,
+              "write": 1
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": "66116ca5a41abd0ceee50bae04743c1813772ae703851a401ccb240a13cad3f3",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "compare(capture)->report; CLI: python -B compare.py [--capture capture.json] --output comparison.json. Input: samples[{id,input_ids,target_positions?,output_ids?}]; target_positions default all p>=1. side_a/side_b accept {scores:[{coordinate:[sample_id,target_position,token_id],logprob}]} or {responses:{sample_id:{meta_info:{input_token_logprobs:[[logprob,token_id,...],...]}}}} (SGLang null first ",
+              "artifacts": [
+                "compare.py",
+                "test_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "cross-library-prefill / cross-platform-assistant-targets: copy the supplied compare.py into the task cwd without opening it, then immediately run `python -B compare.py --output comparison.json` once. Do not read compare.py, test_compare.py, capture.json, skill sources or prior outputs; do not write, edit or reimplement code. Report the generated JSON path, status, coverage and metrics. If it exits",
+              "artifacts": []
+            }
+          ],
+          "reasons": [
+            "native command failed"
+          ],
+          "construction": {
+            "seconds": 425.3582343002781,
+            "usage": {
+              "input_tokens": 715963,
+              "output_tokens": 19089,
+              "total_tokens": 735052,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 0.22261258959770203,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 28,
+            "tools": {
+              "skill": 1,
+              "bash": 23,
+              "write": 2,
+              "edit": 2
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": "b55d67866ba7d6bc77dd32e7208d34cbec964557a22217683206caccde25215b",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "compare(capture)->report; CLI: python -B compare.py [--capture capture.json] --output comparison.json. Inputs samples[{id|sample_id,input_ids,target_positions?,output_ids?}] (empty id falls back to index); side_a/side_b accept {scores:[{coordinate:[sample_id,target_position,token_id],logprob}]} or {responses:{sample_id:{meta_info:{input_token_logprobs:[[logprob,token_id],...]}}}}; first SGLang nul",
+              "artifacts": [
+                "compare.py",
+                "test_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "Copy supplied compare.py into cwd unopened; run `python -B compare.py --output comparison.json` once. Don't read compare.py, test_compare.py, capture.json or skill sources; don't write/reimplement code. Report JSON path, status, coverage, metrics; on nonzero exit report stderr and stop.",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 368.75903578987345,
+            "usage": {
+              "input_tokens": 403040,
+              "output_tokens": 16039,
+              "total_tokens": 419079,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 440.1019604001194,
+            "usage": {
+              "input_tokens": 453509,
+              "output_tokens": 18407,
+              "total_tokens": 471916,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": true,
+          "baseline_correct": true,
+          "candidate_seconds": 808.5229243300855,
+          "candidate_tokens": 890995.0,
+          "activity": {
+            "tool_calls": 34,
+            "tools": {
+              "bash": 30,
+              "skill": 1,
+              "read": 2,
+              "write": 1
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": null
+      },
+      "observed_at": "2026-10-28T03:35:37.881047+00:00"
+    },
+    {
+      "id": "npu-rsi-diagnostics-20261027T225929Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": "96a1d3d008e65ebfaad70524ec857268334aede3",
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 2207.068678230047,
+      "live_activity": null,
+      "baseline": {
+        "correct": true,
+        "reused": false,
+        "historical": {
+          "seconds": 480.40121045010164,
+          "usage": {
+            "input_tokens": 711760,
+            "output_tokens": 17424,
+            "total_tokens": 729184,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 480.40121045010164,
+          "usage": {
+            "input_tokens": 711760,
+            "output_tokens": 17424,
+            "total_tokens": 729184,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": 1316.1396945402957,
+          "usage": {
+            "input_tokens": 1662759,
+            "output_tokens": 39761,
+            "total_tokens": 1702520,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 410.17659160029143,
+          "usage": {
+            "input_tokens": 495095,
+            "output_tokens": 16104,
+            "total_tokens": 511199,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "[Errno 2] No such file or directory: '[private path]'"
+          ],
+          "construction": {
+            "seconds": 480.1692920601927,
+            "usage": {
+              "input_tokens": 439217,
+              "output_tokens": 7612,
+              "total_tokens": 446829,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 24,
+            "tools": {
+              "bash": 23,
+              "skill": 1
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": "12bb74bc032ae8f0254f4eac4e21ca4855504bfd93271d9fd14c823ed7fac540",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "compare(capture)->report; CLI: python -B compare.py [--capture capture.json] --output comparison.json. No capture-kind gate: accepts cross-library-prefill and cross-platform-assistant-targets. Input samples[{id,input_ids,target_positions?}], side_a responses(input_token_logprobs[private path] or scores, side_b scores/responses. Coordinates (sample_id,target_position,token_id); token defaults to in",
+              "artifacts": [
+                "compare.py",
+                "test_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "cross-library-prefill / cross-platform-assistant-targets: copy the supplied compare.py into the task cwd, run `python -B compare.py --output comparison.json`, then report the JSON path, status, coverage and metrics. Use the tool verbatim; do not read skill sources, reimplement, or replace it after an error.",
+              "artifacts": []
+            }
+          ],
+          "reasons": [
+            "task time budget exhausted"
+          ],
+          "construction": {
+            "seconds": 480.18673708010465,
+            "usage": {
+              "input_tokens": 655959,
+              "output_tokens": 20986,
+              "total_tokens": 676945,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 410.17659160029143,
+            "usage": {
+              "input_tokens": 495095,
+              "output_tokens": 16104,
+              "total_tokens": 511199,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": false,
+          "baseline_correct": true,
+          "candidate_seconds": 890.0212592701428,
+          "candidate_tokens": 1188144.0,
+          "activity": {
+            "tool_calls": 48,
+            "tools": {
+              "skill": 2,
+              "bash": 34,
+              "write": 4,
+              "edit": 7,
+              "read": 1
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "[Errno 2] No such file or directory: '[private path]'"
+          ],
+          "construction": {
+            "seconds": 355.7836653999984,
+            "usage": {
+              "input_tokens": 567583,
+              "output_tokens": 11163,
+              "total_tokens": 578746,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 22,
+            "tools": {
+              "bash": 20,
+              "skill": 2
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [
+        "维护侧独立复核已有记录；不计作模型自主修复。",
+        "维护修复与模型候选分别归档。"
+      ],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "41e1ec83aba63fdfac9cd410d92fdfee1dc87862843f9b4707d73c7b49fc7d24"
+      }
+    },
+    {
+      "id": "npu-rsi-interface-20261027T210125Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": "a988b42ff8439f45c715ad471dd8ae525f9b3fec",
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 1,
+      "active_version": "3f429ab7ebc26cd6a44fce99815783f9ab69d15d95e7ef82e68b3475451c9cdd",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 3407.131671440322,
+      "live_activity": null,
+      "baseline": {
+        "correct": false,
+        "reused": false,
+        "historical": {
+          "seconds": 462.2048636903055,
+          "usage": {
+            "input_tokens": 719074,
+            "output_tokens": 16566,
+            "total_tokens": 735640,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 462.2048636903055,
+          "usage": {
+            "input_tokens": 719074,
+            "output_tokens": 16566,
+            "total_tokens": 735640,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": 1698.903648539912,
+          "usage": {
+            "input_tokens": 2145022,
+            "output_tokens": 63235,
+            "total_tokens": 2208257,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 1245.3817469300702,
+          "usage": {
+            "input_tokens": 1652311,
+            "output_tokens": 50237,
+            "total_tokens": 1702548,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "accepted",
+          "version": "3f429ab7ebc26cd6a44fce99815783f9ab69d15d95e7ef82e68b3475451c9cdd",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "compare(capture)->report; CLI: python compare.py [--capture capture.json] --output PATH. Input kind=cross-library-prefill: samples[{id,input_ids,target_positions}], side_a.responses[id].meta_info.input_token_logprobs, side_b.scores[{coordinate:[id,pos,token_id],logprob}]. Output {global,groups,configurations}: each status, coverage{expected_count,observed_counts,paired_count,missing}, metrics{targ",
+              "artifacts": [
+                "compare.py",
+                "test_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "cross-library-prefill: copy supplied compare.py as compare.py; run `python -B compare.py --output comparison.json`; do not reimplement. Verify the JSON, then report path[private path]",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 338.74057921022177,
+            "usage": {
+              "input_tokens": 541216,
+              "output_tokens": 13851,
+              "total_tokens": 555067,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 402.6165840001777,
+            "usage": {
+              "input_tokens": 373858,
+              "output_tokens": 17668,
+              "total_tokens": 391526,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": true,
+          "baseline_correct": false,
+          "candidate_seconds": 741.0059652402997,
+          "candidate_tokens": 946593.0,
+          "activity": {
+            "tool_calls": 39,
+            "tools": {
+              "bash": 29,
+              "skill": 2,
+              "read": 6,
+              "write": 2
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": "2236cf140cef0179600b050a7e614cb3597b92cc64d5e3208fe399b5217f2e93",
+          "changes": [
+            {
+              "kind": "procedure",
+              "description": "precision-compare skill: supplied-tool-first routing; copy/run the declared compare.py CLI; no capture or tool-source reads and no reimplementation; null/nonfinite stays missing.",
+              "artifacts": [
+                "entrypoint.json",
+                "SKILL.md"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "cross-library-prefill: do not reimplement or inspect capture.json/compare.py source. Copy the supplied compare.py artifact, run `python -B compare.py --output comparison.json`, check only status[private path] and required keys, then return its path.",
+              "artifacts": []
+            }
+          ],
+          "reasons": [
+            "native command failed"
+          ],
+          "construction": {
+            "seconds": 445.33563396008685,
+            "usage": {
+              "input_tokens": 585751,
+              "output_tokens": 16565,
+              "total_tokens": 602316,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 0.27120313001796603,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 26,
+            "tools": {
+              "bash": 25,
+              "skill": 1
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": "3cc80358f59ad6d4d5741c246a373ae9ea7924241cebe0d0a0cf356486fc2422",
+          "changes": [
+            {
+              "kind": "context",
+              "description": "cross-library-prefill: the declared compare tool fully implements the task. Do not read compare.py, test_compare.py, or capture.json; do not reimplement or run tests. Ensure its declared compare.py artifact is ./compare.py (copy if absent), run `python -B compare.py --output comparison.json` exactly once, then check only that the JSON parses and global[private path] contain status[private path] Re",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 480.192354649771,
+            "usage": {
+              "input_tokens": 430342,
+              "output_tokens": 17123,
+              "total_tokens": 447465,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 386.7053968501277,
+            "usage": {
+              "input_tokens": 609404,
+              "output_tokens": 14549,
+              "total_tokens": 623953,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": false,
+          "baseline_correct": true,
+          "candidate_seconds": 866.4609739095904,
+          "candidate_tokens": 1071418.0,
+          "activity": {
+            "tool_calls": 42,
+            "tools": {
+              "bash": 35,
+              "skill": 3,
+              "read": 3,
+              "write": 1
+            }
+          }
+        },
+        {
+          "index": 4,
+          "status": "rejected",
+          "version": "d8e16cbc80c2c1dc5e84836cf99ace98571e08e9e0e593f57e21b4a1d7d73cfa",
+          "changes": [
+            {
+              "kind": "context",
+              "description": "cross-library-prefill: in the task working directory run `python -B [private path] --capture capture.json --output comparison.json`; do not copy, read its source or capture contents, or reimplement. Retry once if capture is missing by locating the task capture. Confirm global[private path] have status[private path], then return the output path and a one-line global summary.",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 434.63508071983233,
+            "usage": {
+              "input_tokens": 587713,
+              "output_tokens": 15696,
+              "total_tokens": 603409,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 455.78856294974685,
+            "usage": {
+              "input_tokens": 669049,
+              "output_tokens": 18020,
+              "total_tokens": 687069,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": false,
+          "baseline_correct": true,
+          "candidate_seconds": 890.0076771499589,
+          "candidate_tokens": 1290478.0,
+          "activity": {
+            "tool_calls": 51,
+            "tools": {
+              "bash": 41,
+              "write": 2,
+              "skill": 1,
+              "read": 7
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [
+        "维护修复与模型候选分别归档。"
+      ],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "f16919474102693ed866cbac49a6ff7bd2d480840b282842f8101cfdd8a382df"
+      }
+    },
+    {
+      "id": "npu-rsi-budget-20261027T185250Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": "b95ec1098a5aceaf41cc2dcc01de24a654f6ad14",
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 1,
+      "active_version": "ff63fd6adf998150c0dcdc309a30a6c4ecf552f257e72b4e24d4f52a715986b4",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 2601.1561620300636,
+      "live_activity": null,
+      "baseline": {
+        "correct": false,
+        "reused": false,
+        "historical": {
+          "seconds": 403.27881007967517,
+          "usage": {
+            "input_tokens": 366537,
+            "output_tokens": 16951,
+            "total_tokens": 383488,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 403.27881007967517,
+          "usage": {
+            "input_tokens": 366537,
+            "output_tokens": 16951,
+            "total_tokens": 383488,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": 1409.071934080217,
+          "usage": {
+            "input_tokens": 1629728,
+            "output_tokens": 52312,
+            "total_tokens": 1682040,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 788.2149978601374,
+          "usage": {
+            "input_tokens": 892795,
+            "output_tokens": 30239,
+            "total_tokens": 923034,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "accepted",
+          "version": "ff63fd6adf998150c0dcdc309a30a6c4ecf552f257e72b4e24d4f52a715986b4",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "capture_prefill_compare.compare(capture)->report; CLI: python capture_prefill_compare.py [--capture capture.json] --output comparison.json. Input: kind=cross-library-prefill, samples[{id,input_ids,target_positions}], side_a.responses[id].meta_info.input_token_logprobs[[logprob,token]], side_b.scores[{coordinate:[id,position,token_id],logprob}], side_*.config. Output: {global:{status,coverage,metri",
+              "artifacts": [
+                "capture_prefill_compare.py",
+                "test_capture_prefill_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "For retained-capture precision comparisons, first adapt each side to the task's declared logical coordinates (for prefill: sample_id,target_position,input_ids[position]); never drop a declared target. Treat a native null/nonfinite logprob as not_covered and list that coordinate in coverage.missing; compute each group from that group's own coordinate inventory. Use natural logprobs, per-token NLLs,",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 281.52853162027895,
+            "usage": {
+              "input_tokens": 332257,
+              "output_tokens": 11072,
+              "total_tokens": 343329,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 324.3945271698758,
+            "usage": {
+              "input_tokens": 302113,
+              "output_tokens": 11400,
+              "total_tokens": 313513,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": true,
+          "baseline_correct": false,
+          "candidate_seconds": 605.5985775301233,
+          "candidate_tokens": 656842.0,
+          "activity": {
+            "tool_calls": 35,
+            "tools": {
+              "bash": 26,
+              "skill": 2,
+              "read": 4,
+              "write": 2,
+              "edit": 1
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "missing input/output: [private path]"
+          ],
+          "construction": {
+            "seconds": 324.31117687001824,
+            "usage": {
+              "input_tokens": 311830,
+              "output_tokens": 12124,
+              "total_tokens": 323954,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 18,
+            "tools": {
+              "bash": 17,
+              "skill": 1
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": "ed8f5054d454d95441ed6edceaefda175a14b8e714c678710e648ac607032716",
+          "changes": [
+            {
+              "kind": "context",
+              "description": "Retained-capture prefill compare: do not reimplement or dump capture.json (its side configs are large). Copy the provided capture_prefill_compare.py to compare.py; its CLI is `python compare.py [--capture capture.json] --output comparison.json`. It adapts side_a responses[id].meta_info.input_token_logprobs and side_b scores[{coordinate:[sample_id,position,token_id],logprob}] to declared coordinate",
+              "artifacts": []
+            }
+          ],
+          "reasons": [
+            "native command failed"
+          ],
+          "construction": {
+            "seconds": 376.45498310029507,
+            "usage": {
+              "input_tokens": 578913,
+              "output_tokens": 13165,
+              "total_tokens": 592078,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 0.2211468401364982,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 27,
+            "tools": {
+              "bash": 13,
+              "skill": 2,
+              "read": 11,
+              "write": 1
+            }
+          }
+        },
+        {
+          "index": 4,
+          "status": "rejected",
+          "version": "1e6bbaeed9b3c4fedb709edc8f507e0e9a683f1cc62fdc05366f455f889717a8",
+          "changes": [
+            {
+              "kind": "context",
+              "description": "Prefill compare: don't parse/dump capture.json or reimplement math. Copy provided capture_prefill_compare.py to compare.py, run `python compare.py --output comparison.json` once (capture.json default). It validates declared (sample,position,token) coordinates, keeps null/nonfinite as coverage.missing/not_covered, uses per-group inventories, natural NLLs, linear P99 h=0.99(N-1), writes {global,grou",
+              "artifacts": []
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": 426.77724248962477,
+            "usage": {
+              "input_tokens": 406728,
+              "output_tokens": 15951,
+              "total_tokens": 422679,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": 463.5993238501251,
+            "usage": {
+              "input_tokens": 590682,
+              "output_tokens": 18839,
+              "total_tokens": 609521,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": false,
+          "baseline_correct": true,
+          "candidate_seconds": 477.0085219796747,
+          "candidate_tokens": 461926.0,
+          "activity": {
+            "tool_calls": 54,
+            "tools": {
+              "bash": 43,
+              "skill": 3,
+              "read": 5,
+              "write": 1,
+              "edit": 2
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [
+        "维护修复与模型候选分别归档。"
+      ],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "58707fdfe9ca48b0b9d0377010c526e353f3993927aa951b139be85a7170c771"
+      },
+      "acceptance_note": "历史接受备注：Historical acceptance includes a context member absent from consumer retrieval; tool interface supplied, consumer independently reimplemented comparator. No demonstrated tool invocation or efficiency gain."
+    },
+    {
+      "id": "npu-rsi-recovery-20261027T165727Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": null,
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 1710.0019474802539,
+      "live_activity": null,
+      "baseline": {
+        "correct": false,
+        "reused": false,
+        "historical": {
+          "seconds": 216.50042882934213,
+          "usage": {
+            "input_tokens": 315441,
+            "output_tokens": 7370,
+            "total_tokens": 322811,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 216.50042882934213,
+          "usage": {
+            "input_tokens": 315441,
+            "output_tokens": 7370,
+            "total_tokens": 322811,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": 1493.273965459317,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 0,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "artifact paths must be absolute"
+          ],
+          "construction": {
+            "seconds": 307.61849340982735,
+            "usage": {
+              "input_tokens": 264328,
+              "output_tokens": 13493,
+              "total_tokens": 277821,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 16,
+            "tools": {
+              "bash": 16
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": "4e01d204017cb7d150f10fc536362cc2faf37d2e1f9d85292ce461a8e31935ba",
+          "changes": [
+            {
+              "kind": "context",
+              "description": "Reuse capture_prefill_compare for retained cross-library-prefill captures. For a compare.py CLI, copy the tool (already accepts --output). Compare exactly declared (sample_id,target_position,input_ids[position]) targets; null/nonfinite is uncovered (not_covered, metrics null, coordinate in coverage.missing), never dropped. Linear p99 h=0.99*(N-1); copy configs verbatim.",
+              "artifacts": []
+            }
+          ],
+          "reasons": [
+            "artifact paths must be absolute"
+          ],
+          "construction": {
+            "seconds": 900.0749713196419,
+            "usage": {
+              "input_tokens": 593100,
+              "output_tokens": 19318,
+              "total_tokens": 612418,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 63,
+            "tools": {
+              "bash": 53,
+              "read": 2,
+              "skill": 2,
+              "edit": 3,
+              "job_output": 2,
+              "write": 1
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "artifact paths must be absolute",
+            "artifact paths must be absolute"
+          ],
+          "construction": {
+            "seconds": 285.5805007298477,
+            "usage": {
+              "input_tokens": 450261,
+              "output_tokens": 11068,
+              "total_tokens": 461329,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 20,
+            "tools": {
+              "bash": 16,
+              "read": 4
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [
+        "维护侧独立复核已有记录；不计作模型自主修复。",
+        "维护修复与模型候选分别归档。"
+      ],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "2c96878d97d681018c8e154e05639e0dea60443dab577f2c65f8ab2c829a7655"
+      }
+    },
+    {
+      "id": "npu-rsi-recovery-20261027T140824Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": null,
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 1814.8128122100607,
+      "live_activity": null,
+      "baseline": {
+        "correct": true,
+        "reused": false,
+        "historical": {
+          "seconds": 480.3555611795746,
+          "usage": {
+            "input_tokens": 522647,
+            "output_tokens": 19177,
+            "total_tokens": 541824,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 480.3555611795746,
+          "usage": {
+            "input_tokens": 522647,
+            "output_tokens": 19177,
+            "total_tokens": 541824,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 0,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "native command timed_out"
+          ],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 31,
+            "tools": {
+              "bash": 26,
+              "write": 3,
+              "edit": 2
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": "aa21e33c7508339c804559211972bf8bc3bd4db6944640015c5ee63b4d9d4681",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "capture_prefill_compare.compare(capture) -> report; CLI: python capture_prefill_compare.py --capture capture.json --output comparison.json. Input: cross-library-prefill capture with samples[{id,input_ids,target_positions}], side_a.responses[sample_id].meta_info.input_token_logprobs[[logprob,token]], side_b.scores[{coordinate:[sample_id,target_position,token_id],logprob}], side_a.config, side_b.con",
+              "artifacts": [
+                "capture_prefill_compare.py",
+                "test_capture_prefill_compare.py"
+              ]
+            },
+            {
+              "kind": "context",
+              "description": "For retained cross-library-prefill captures, reuse capture_prefill_compare rather than rewriting the reducer. Compare exactly the declared (sample_id,target_position,input_ids[position]) coordinates. Keep only finite natural logprobs <=0; a native null/nonfinite value is an uncovered observation -> status not_covered, metrics null, coordinate in that side's coverage.missing; never drop a declared ",
+              "artifacts": [
+                "cross_library_prefill_rule.md"
+              ]
+            }
+          ],
+          "reasons": [
+            "native command failed"
+          ],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 30,
+            "tools": {
+              "skill": 1,
+              "bash": 20,
+              "read": 6,
+              "write": 3
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "native command timed_out"
+          ],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 24,
+            "tools": {
+              "skill": 1,
+              "bash": 18,
+              "read": 4,
+              "write": 1
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "99b9357f25f3f5c3880220d5a6a3d68a9d84ec7b21d4db1740553232b0d67a2b"
+      }
+    },
+    {
+      "id": "npu-rsi-recovery-20261027T140116Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": null,
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "repeated candidate",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 0.416427840013057,
+      "live_activity": null,
+      "baseline": {
+        "correct": false,
+        "reused": false,
+        "historical": {
+          "seconds": 0.016029109712690115,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 0.016029109712690115,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 0,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 0,
+            "tools": {}
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 0,
+            "tools": {}
+          }
+        }
+      ],
+      "maintenance_notes": [],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "d04a88323ea3a01cf734007ef629854f5a7477cbd02d62e28c41254dd17bc288"
+      }
+    },
+    {
+      "id": "npu-rsi-autonomous-20261027T133553Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": null,
+      "status": "failed",
+      "phase": "finished",
+      "stop_reason": "baseline workload did not pass",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 480.2716277297586,
+      "live_activity": null,
+      "baseline": {
+        "correct": false,
+        "reused": false,
+        "historical": {
+          "seconds": 480.18568884953856,
+          "usage": {
+            "input_tokens": 356803,
+            "output_tokens": 4532,
+            "total_tokens": 361335,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 480.18568884953856,
+          "usage": {
+            "input_tokens": 356803,
+            "output_tokens": 4532,
+            "total_tokens": 361335,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [],
+      "maintenance_notes": [],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "8bde1db08474314dceb4db483fcfda9f4bad13cdc5a71eb0248d05a2f0f08826"
+      }
+    },
+    {
+      "id": "npu-rsi-hour-20261027T124646Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": null,
+      "status": "completed",
+      "phase": "finished",
+      "stop_reason": "no measured progress",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 3600,
+      "elapsed_seconds": 1228.1747857299633,
+      "live_activity": null,
+      "baseline": {
+        "correct": true,
+        "reused": false,
+        "historical": {
+          "seconds": 237.4609509599395,
+          "usage": {
+            "input_tokens": 239367,
+            "output_tokens": 9720,
+            "total_tokens": 249087,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 237.4609509599395,
+          "usage": {
+            "input_tokens": 239367,
+            "output_tokens": 9720,
+            "total_tokens": 249087,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": 0,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "status": "rejected",
+          "version": null,
+          "changes": [],
+          "reasons": [
+            "replacement is absent from base version"
+          ],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": null,
+          "baseline_correct": null,
+          "candidate_seconds": null,
+          "candidate_tokens": null,
+          "activity": {
+            "tool_calls": 12,
+            "tools": {
+              "skill": 1,
+              "read": 2,
+              "bash": 9
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "rejected",
+          "version": "23911f195fdd9e145bc4e5aef5b0f8d1f2892f6b1135439ff3a9d335eb008044",
+          "changes": [
+            {
+              "kind": "tool",
+              "description": "precision_score_compare.compare_capture(capture) (CLI: --capture PATH --output PATH) turns a retained per-sample target capture into {global,groups,configurations}: coverage over declared (sample_id,target_position,token_id) coordinates, and natural-log NLL, NLL abs diff, MAE, linear P99 h=0.99*(N-1), max abs and max coordinate. A None or absent side value is a coverage miss at the declared positi",
+              "artifacts": [
+                "precision_score_compare.py",
+                "test_precision_score_compare.py"
+              ]
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": true,
+          "baseline_correct": true,
+          "candidate_seconds": 405.7498082802631,
+          "candidate_tokens": 606531.0,
+          "activity": {
+            "tool_calls": 33,
+            "tools": {
+              "bash": 29,
+              "skill": 1,
+              "read": 2,
+              "write": 1
+            }
+          }
+        },
+        {
+          "index": 3,
+          "status": "rejected",
+          "version": "2089203dc0964e33dbbf1116f9c718d00ad944cf126bbf86887cb2193b2824ae",
+          "changes": [
+            {
+              "kind": "context",
+              "description": "Retained fixed-input precision compares: treat only declared (sample_id,target_position,token_id) coordinates as targets; a null or absent side logprob is a coverage miss at that coordinate, never an index shift. Keep natural-log coordinate maps and reuse score_metrics.reduce_scores plus group_metrics.reduce_groups for NLL[private path], adding configurations only when requested. Emit exactly the ",
+              "artifacts": [
+                "precision_compare_context.md"
+              ]
+            }
+          ],
+          "reasons": [],
+          "construction": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "evaluation": {
+            "seconds": null,
+            "usage": {
+              "input_tokens": null,
+              "output_tokens": null,
+              "total_tokens": null,
+              "cached_input_tokens": null
+            }
+          },
+          "correct": true,
+          "baseline_correct": true,
+          "candidate_seconds": 436.520500539802,
+          "candidate_tokens": 588007.0,
+          "activity": {
+            "tool_calls": 33,
+            "tools": {
+              "bash": 25,
+              "skill": 2,
+              "write": 3,
+              "edit": 2,
+              "read": 1
+            }
+          }
+        }
+      ],
+      "maintenance_notes": [],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": "29ddabfcdd6b5d1fa555af14c8c3efc5907caafa3db192c71d23f8721e99db24"
+      }
+    }
+  ]
+}

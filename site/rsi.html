@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f2f4f1"><meta name="description" content="PrecisionRSI 迭代看板：运行状态、候选变更、独立评测及分阶段时间和 token 开销。">
+  <title>RSI 运行台 · PrecisionRSI</title>
+  <link rel="stylesheet" href="./rsi.css"><script src="./rsi.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">跳至运行详情</a>
+  <header class="topbar"><a class="brand" href="./"><span class="mark">P<span>·</span></span>PrecisionRSI</a><nav aria-label="主导航"><a class="selected" href="./rsi.html" aria-current="page">迭代运行台</a><a href="./">精度档案 ↗</a></nav><span class="header-note">RESEARCH WORKSPACE</span></header>
+  <main>
+    <section class="heading"><div><p class="eyebrow">RECURSIVE SELF-IMPROVEMENT</p><h1>迭代运行台<span class="heading-dot">.</span></h1><p class="subtitle">跟踪自主改进，核对每一次收益。</p></div><div class="snapshot"><p id="freshness">正在读取快照…</p><p id="snapshot-time">—</p><button id="refresh" type="button">↻ 刷新快照</button><a href="./data/rsi.json" download="precision-rsi.json">下载数据 ↓</a></div></section>
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+    <section class="overview" aria-label="运行概览" id="overview"></section>
+    <div class="workspace" id="workspace">
+      <aside class="run-list"><div class="section-label"><span>运行记录</span><span id="run-count">—</span></div><label class="sr-only" for="run-search">搜索运行记录</label><input id="run-search" type="search" placeholder="搜索运行 ID…"><div id="runs"></div><p class="aside-note">每个运行独立保存候选与启用版本。历史接受不代表本轮启用。</p></aside>
+      <article class="run-detail"><div class="section-label"><span>SELECTED RUN</span><span id="run-status">—</span></div><h2 id="run-title">正在读取运行…</h2><p id="run-id" class="mono muted"></p><div id="run-meta" class="meta"></div>
+        <section class="loop-panel"><div class="small-heading"><h3>两个闭环</h3><span>任务执行 × 系统改进</span></div><div class="loop-row"><span class="loop-label">任务</span><p>配环境 <b>→</b> 复现库 <b>→</b> 精度检验 <b>→</b> 精度修复 <b>→</b> <span class="muted">算子优化 · 预留</span></p></div><div class="loop-row"><span class="loop-label">迭代</span><p>经验与反馈 <b>→</b> 构建候选 <b>→</b> 独立评测 <b>→</b> 接受 / 拒绝 <b>↺</b></p></div><p class="scope" id="scope"></p></section>
+        <section class="cost-panel"><div class="small-heading"><h3>开销账本</h3><span>本次运行累计 · 原始 token</span></div><div id="costs"></div><p id="baseline-note" class="footnote"></p></section>
+        <section class="round-panel"><div class="small-heading"><h3>迭代轨迹</h3><label for="round-filter" class="sr-only">筛选候选</label><select id="round-filter"><option value="all">全部轮次</option><option value="accepted">已接受</option><option value="rejected">未接受</option></select></div><div id="rounds"></div></section>
+        <section class="audit-panel" id="audit"></section>
+      </article>
+    </div>
+    <section class="reading-note"><span>关于这些数字</span><p>当前试跑使用留存的真实模型采集，构建与评测任务族分离。它是反复开发评测；接受候选、实际工具复用、正确完成和成本改善分别记录。未测量的数据保留为空。</p></section>
+  </main>
+  <footer><span>PrecisionRSI <span class="muted">/ 自主迭代的可核查记录</span></span><span>公开摘要 · 完整执行轨迹私有保存</span></footer>
+  <noscript>请启用 JavaScript，或查看 <a href="./data/rsi.json">看板数据</a>。</noscript>
+</body>
+</html>

@@ -133,3 +133,5 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 ## 评测与修复历史
 
 [历史网页](https://satsuki2486441738.github.io/PrecisionRSI/)包含两个标签页：**精度评测**展示推理 / SFT / RL 的比较配置、数值指标、覆盖率和证据；**精度修复**保留按库分组的修复、问题归因及前后验证。记录及公开证据维护在 [site/](site/README.md)。
+
+[RSI 迭代看板](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html)展示当前运行、候选变更、独立评测结果和分阶段时间/token 开销，单独记录基线复用。
