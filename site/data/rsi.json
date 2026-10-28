@@ -1,9 +1,76 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T04:11:57.668694+00:00",
-  "observed_at": "2026-10-28T04:11:57.668694+00:00",
-  "current_run": "npu-rsi-continuation-20261028T023838Z",
+  "generated_at": "2026-10-28T04:51:48.783786+00:00",
+  "observed_at": "2026-10-28T04:51:48.783786+00:00",
+  "current_run": "npu-rsi-longrun-20261028T044615Z",
   "runs": [
+    {
+      "id": "npu-rsi-longrun-20261028T044615Z",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "commit": "96a1d3d008e65ebfaad70524ec857268334aede3",
+      "status": "running",
+      "phase": "construction",
+      "stop_reason": "",
+      "accepted": 0,
+      "active_version": "empty",
+      "budget_seconds": 10800,
+      "elapsed_seconds": 32.545724,
+      "live_activity": {
+        "tool_calls": 4,
+        "tools": {
+          "bash": 4
+        }
+      },
+      "baseline": {
+        "correct": true,
+        "reused": true,
+        "historical": {
+          "seconds": 480.40121045010164,
+          "usage": {
+            "input_tokens": 711760,
+            "output_tokens": 17424,
+            "total_tokens": 729184,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "phases": {
+        "baseline": {
+          "seconds": 0,
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "cached_input_tokens": null
+          }
+        },
+        "construction": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": 17996,
+            "output_tokens": 795,
+            "total_tokens": 18791,
+            "cached_input_tokens": null
+          }
+        },
+        "evaluation": {
+          "seconds": null,
+          "usage": {
+            "input_tokens": null,
+            "output_tokens": null,
+            "total_tokens": null,
+            "cached_input_tokens": null
+          }
+        }
+      },
+      "rounds": [],
+      "maintenance_notes": [],
+      "scope": "留存真实模型采集 · 开发集反复评测",
+      "evidence": {
+        "archive_sha256": null
+      },
+      "observed_at": "2026-10-28T04:51:48.783786+00:00"
+    },
     {
       "id": "npu-rsi-continuation-20261028T023838Z",
       "model": "DeepSeek-V4.1-Flash-1017",
