@@ -63854,7 +63854,8 @@
         "Each device has three within-side run pairs; all recorded target MAE and maximum errors and coarsened JS are zero, with top-1 agreement 32/32 in each pair. This is a one-input observation, not a general determinism guarantee.",
         "Only the 32 paired target scores and their MAE, P99, max and NLL are publicly replayable; top-1 and distribution summaries rely on retained private derived rows.",
         "Not covered: H200 or four-GPU/distributed execution; other discovery inputs; held-out or representative evaluation; multilingual, code, math, long context, batch/padding, alternative attention or cache modes, image/audio/video, model quality, performance and layer/operator attribution.",
-        "Snapshot verification covered eight pinned files. Runtime checked the receipt and file sizes but did not rehash weights at each load; runtime configuration commit was null."
+        "Snapshot verification covered eight pinned files. Runtime checked the receipt and file sizes but did not rehash weights at each load; runtime configuration commit was null.",
+        "A later separate task ran four independent H100 workers on discovery samples 001-004; see the scoped follow-up at commit a7cff928a61aec2742446f45aad9b8662d863542. The original H100/RTX 5090 single-sample comparison and its one target-score replay remain unchanged; this follow-up is not model-parallel execution or a cross-platform comparison."
       ],
       "evidence": [
         {
@@ -63868,6 +63869,10 @@
         {
           "label": "Target-score replay script",
           "url": "evidence/gemma4-h100-rtx5090-pilot-20261105/replay-target-logprobs.py"
+        },
+        {
+          "label": "Follow-up: four independent H100 discovery captures (a7cff928)",
+          "url": "evidence/gemma4-h100-four-independent-20261105.md"
         }
       ],
       "archive": {
