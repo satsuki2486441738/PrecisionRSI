@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25",
+  "updated_at": "2026-11-05",
   "evaluations": [
     {
       "id": "trl-sfttrainer-checkpoint-20261021",
@@ -63696,6 +63696,185 @@
           ]
         }
       ]
+    },
+    {
+      "id": "gemma4-h100-rtx5090-20261105",
+      "date": "2026-11-05",
+      "title": "Gemma 4 12B text pilot: H100 vs RTX 5090",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "google/gemma-4-12B",
+        "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+      },
+      "summary": "One fixed-history discovery request; each device completed three serial single-GPU runs, with the first run per side compared. This is not representative model-wide acceptance.",
+      "sides": [
+        {
+          "id": "h100",
+          "label": "H100 80GB HBM3",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.7.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "cuda_runtime": "12.8",
+            "driver": "580.95.05",
+            "device_count": 1
+          }
+        },
+        {
+          "id": "rtx5090",
+          "label": "GeForce RTX 5090",
+          "hardware": "NVIDIA GeForce RTX 5090",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.7.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "cuda_runtime": "12.8",
+            "driver": "580.95.05",
+            "device_count": 1
+          }
+        }
+      ],
+      "common": [
+        "Same pinned model and input; one English WikiText-2 discovery sample, batch 1, 128 prompt tokens including BOS and 32 predetermined targets.",
+        "BF16 parameters and native logits, eager attention, seed 0; one prefill and 31 cached single-token forwards. Offline NumPy FP64 log-softmax of native values; raw logits were not retained.",
+        "Float32 matmul highest, CUDA matmul TF32 false, cuDNN TF32 true; deterministic algorithms, cuDNN deterministic and benchmark false; PYTHONHASHSEED 0 and CUBLAS_WORKSPACE_CONFIG unset."
+      ],
+      "differences": [
+        "GPU hardware and architecture; each side used one separately allocated GPU."
+      ],
+      "comparisons": [
+        {
+          "id": "h100-vs-rtx5090-first",
+          "title": "H100 vs RTX 5090: first captures",
+          "side_ids": [
+            "h100",
+            "rtx5090"
+          ],
+          "scope": "First capture on each side; one discovery input and fixed continuation history. Target positions 128-159; distribution prediction positions 127-158. P99 is linear at 0.99*(N-1). JS compares the top-100 union plus a merged tail; probability RMSE is over union tokens only.",
+          "metrics": [
+            {
+              "id": "nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0011508313824242222,
+              "unit": "nat/token",
+              "side_values": {
+                "h100": 2.7127718954732023,
+                "rtx5090": 2.7139227268556265
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03537468167585757,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.1444637830610983,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.14637308806804405,
+              "unit": "nat",
+              "coordinate": {
+                "target_position": 153
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus tail JS mean",
+              "value": 0.0002510469876534106,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus tail JS max",
+              "value": 0.001018400289233065,
+              "unit": "nat"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union probability RMSE mean",
+              "value": 0.0009674997146439246,
+              "unit": "probability"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Thresholds and numerical acceptance are null; completion of these measurements is not a pass/fail decision or causal diagnosis.",
+        "Each device has three within-side run pairs; all recorded target MAE and maximum errors and coarsened JS are zero, with top-1 agreement 32/32 in each pair. This is a one-input observation, not a general determinism guarantee.",
+        "Only the 32 paired target scores and their MAE, P99, max and NLL are publicly replayable; top-1 and distribution summaries rely on retained private derived rows.",
+        "Not covered: H200 or four-GPU/distributed execution; other discovery inputs; held-out or representative evaluation; multilingual, code, math, long context, batch/padding, alternative attention or cache modes, image/audio/video, model quality, performance and layer/operator attribution.",
+        "Snapshot verification covered eight pinned files. Runtime checked the receipt and file sizes but did not rehash weights at each load; runtime configuration commit was null."
+      ],
+      "evidence": [
+        {
+          "label": "Scoped report",
+          "url": "evidence/gemma4-h100-rtx5090-pilot-20261105/report.md"
+        },
+        {
+          "label": "Anonymized paired target scores",
+          "url": "evidence/gemma4-h100-rtx5090-pilot-20261105/target-logprob-evidence.json"
+        },
+        {
+          "label": "Target-score replay script",
+          "url": "evidence/gemma4-h100-rtx5090-pilot-20261105/replay-target-logprobs.py"
+        }
+      ],
+      "archive": {
+        "revision": "0ab4ddb9e8545755eac4511f0365c81cd84ab608",
+        "prefix": "site/evidence/gemma4-h100-rtx5090-pilot-20261105/",
+        "replay_cases": 1
+      }
     }
   ]
 }
