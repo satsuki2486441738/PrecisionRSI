@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "scope": "one discovery input; first H100 run paired with first RTX 5090 run; target log probabilities in nats",
+  "coverage": {
+    "expected": 32,
+    "paired": 32
+  },
+  "p99_method": "linear interpolation at 0.99*(N-1)",
+  "thresholds": null,
+  "acceptance": null,
+  "pairs": [
+    {
+      "pair_index_zero_based": 0,
+      "h100_logprob_nat": -1.8979351091718595,
+      "rtx5090_logprob_nat": -1.8972546989021992
+    },
+    {
+      "pair_index_zero_based": 1,
+      "h100_logprob_nat": -10.337147571314109,
+      "rtx5090_logprob_nat": -10.196933531655567
+    },
+    {
+      "pair_index_zero_based": 2,
+      "h100_logprob_nat": -1.2435061810211945,
+      "rtx5090_logprob_nat": -1.2421919981924616
+    },
+    {
+      "pair_index_zero_based": 3,
+      "h100_logprob_nat": -0.08989801412011879,
+      "rtx5090_logprob_nat": -0.09102619955132095
+    },
+    {
+      "pair_index_zero_based": 4,
+      "h100_logprob_nat": -4.621463632511392,
+      "rtx5090_logprob_nat": -4.517644193534859
+    },
+    {
+      "pair_index_zero_based": 5,
+      "h100_logprob_nat": -1.842175817264501,
+      "rtx5090_logprob_nat": -1.839740422702242
+    },
+    {
+      "pair_index_zero_based": 6,
+      "h100_logprob_nat": -3.0667739844997652,
+      "rtx5090_logprob_nat": -3.0710937181247373
+    },
+    {
+      "pair_index_zero_based": 7,
+      "h100_logprob_nat": -0.09269372639494827,
+      "rtx5090_logprob_nat": -0.07908420798292828
+    },
+    {
+      "pair_index_zero_based": 8,
+      "h100_logprob_nat": -0.16488744697087812,
+      "rtx5090_logprob_nat": -0.1647255374887678
+    },
+    {
+      "pair_index_zero_based": 9,
+      "h100_logprob_nat": -0.3704825567917108,
+      "rtx5090_logprob_nat": -0.37190041148987646
+    },
+    {
+      "pair_index_zero_based": 10,
+      "h100_logprob_nat": -0.7459605895472771,
+      "rtx5090_logprob_nat": -0.7494306758510791
+    },
+    {
+      "pair_index_zero_based": 11,
+      "h100_logprob_nat": -1.7992988066644624,
+      "rtx5090_logprob_nat": -1.8433960485497847
+    },
+    {
+      "pair_index_zero_based": 12,
+      "h100_logprob_nat": -8.077301335735653,
+      "rtx5090_logprob_nat": -8.177817010143485
+    },
+    {
+      "pair_index_zero_based": 13,
+      "h100_logprob_nat": -0.2322068114803492,
+      "rtx5090_logprob_nat": -0.21396010495870504
+    },
+    {
+      "pair_index_zero_based": 14,
+      "h100_logprob_nat": -2.904191658431598,
+      "rtx5090_logprob_nat": -2.892173461972331
+    },
+    {
+      "pair_index_zero_based": 15,
+      "h100_logprob_nat": -3.8934742729898617,
+      "rtx5090_logprob_nat": -3.850905594730202
+    },
+    {
+      "pair_index_zero_based": 16,
+      "h100_logprob_nat": -5.824311037138018,
+      "rtx5090_logprob_nat": -5.870832916208228
+    },
+    {
+      "pair_index_zero_based": 17,
+      "h100_logprob_nat": -0.03201281231691945,
+      "rtx5090_logprob_nat": -0.031424879030058556
+    },
+    {
+      "pair_index_zero_based": 18,
+      "h100_logprob_nat": -7.376278659565402,
+      "rtx5090_logprob_nat": -7.362007759341566
+    },
+    {
+      "pair_index_zero_based": 19,
+      "h100_logprob_nat": -1.1299629346501834,
+      "rtx5090_logprob_nat": -1.1215252023857012
+    },
+    {
+      "pair_index_zero_based": 20,
+      "h100_logprob_nat": -5.195011553007372,
+      "rtx5090_logprob_nat": -5.326221552059261
+    },
+    {
+      "pair_index_zero_based": 21,
+      "h100_logprob_nat": -0.31836322959048285,
+      "rtx5090_logprob_nat": -0.324648153647617
+    },
+    {
+      "pair_index_zero_based": 22,
+      "h100_logprob_nat": -0.5778599081178061,
+      "rtx5090_logprob_nat": -0.5946852875068926
+    },
+    {
+      "pair_index_zero_based": 23,
+      "h100_logprob_nat": -3.3405852013112574,
+      "rtx5090_logprob_nat": -3.4529530563222046
+    },
+    {
+      "pair_index_zero_based": 24,
+      "h100_logprob_nat": -0.045882169342079976,
+      "rtx5090_logprob_nat": -0.04641488224567488
+    },
+    {
+      "pair_index_zero_based": 25,
+      "h100_logprob_nat": -8.682429646348002,
+      "rtx5090_logprob_nat": -8.536056558279958
+    },
+    {
+      "pair_index_zero_based": 26,
+      "h100_logprob_nat": -9.541874410220226,
+      "rtx5090_logprob_nat": -9.561037370342717
+    },
+    {
+      "pair_index_zero_based": 27,
+      "h100_logprob_nat": -0.6372414922087692,
+      "rtx5090_logprob_nat": -0.6609237164800092
+    },
+    {
+      "pair_index_zero_based": 28,
+      "h100_logprob_nat": -0.8672842983273408,
+      "rtx5090_logprob_nat": -0.8244408229060595
+    },
+    {
+      "pair_index_zero_based": 29,
+      "h100_logprob_nat": -0.760105371662483,
+      "rtx5090_logprob_nat": -0.7608701906931663
+    },
+    {
+      "pair_index_zero_based": 30,
+      "h100_logprob_nat": -0.018213389961854197,
+      "rtx5090_logprob_nat": -0.019770979362250557
+    },
+    {
+      "pair_index_zero_based": 31,
+      "h100_logprob_nat": -1.0818870264645932,
+      "rtx5090_logprob_nat": -1.1524361167381338
+    }
+  ],
+  "expected_metrics": {
+    "mae_nat": 0.03537468167585757,
+    "p99_nat": 0.1444637830610983,
+    "max_abs_nat": 0.14637308806804405,
+    "h100_nll_nat_per_token": 2.7127718954732023,
+    "rtx5090_nll_nat_per_token": 2.7139227268556265,
+    "max_pair_index_zero_based": 25
+  },
+  "source_sha256": {
+    "h100_target_manifest": "659f32c5bc070aabe9ee7881abcd29af36cf1883bf6699676fe87f51524f9b29",
+    "rtx5090_target_manifest": "8444f8a661c94c9b36475ce629fb18f36bc6940c04d69a7579fd864086d36afe",
+    "shared_target_comparison": "786b24ce314efd9fa6e9949c82917a14eb6a5c9108333157b924da70aff2b3c0"
+  }
+}
