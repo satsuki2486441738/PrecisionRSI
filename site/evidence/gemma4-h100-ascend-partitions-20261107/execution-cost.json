@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "kind": "selected_I03_execution_accounting",
+  "source_metadata_map_sha256": "f37e4c5e40160de007e4f156f3dcaa4f53d49b4563e9a1d8b17a7af9c0618e7f",
+  "scope": "Two new I03 instrumented model children and their distinct CPU numerical admission; a measured subset of evaluation work.",
+  "model_children": {
+    "GPU": {
+      "recorder_receipt_sha256": "a97d6dfa0978817068f29539b2c913f92b095c34009eda971ff6ce840ca8f26d",
+      "status": "completed",
+      "returncode": 0,
+      "recorded_wall_seconds": 287.38445000350475,
+      "recorded_start_utc_on_source_host": "2026-11-06T15:21:41.570648+00:00",
+      "recorded_end_utc_on_source_host": "2026-11-06T15:26:28.969633+00:00",
+      "native_model_processes": 1,
+      "loaded_models": 1,
+      "native_forward_calls": 70,
+      "scope": "Instrumented model child process: imports, loading, capture and validation; excludes its parent preparation and transfer.",
+      "uninstrumented_latency_seconds": null,
+      "active_device_seconds": null,
+      "allocated_instance_seconds": null,
+      "currency_cost": null
+    },
+    "NPU": {
+      "recorder_receipt_sha256": "0e762eb4a4c70c2f89e650a7d92d447b6670d45b7579c72d03be5b917bc32e79",
+      "status": "completed",
+      "returncode": 0,
+      "recorded_wall_seconds": 94.66554082464427,
+      "recorded_start_utc_on_source_host": "2026-11-06T15:39:51.761828+00:00",
+      "recorded_end_utc_on_source_host": "2026-11-06T15:41:26.429289+00:00",
+      "native_model_processes": 1,
+      "loaded_models": 1,
+      "native_forward_calls": 70,
+      "scope": "Instrumented model child process: imports, loading, capture and validation; excludes its parent preparation and transfer.",
+      "uninstrumented_latency_seconds": null,
+      "active_device_seconds": null,
+      "allocated_instance_seconds": null,
+      "currency_cost": null
+    }
+  },
+  "cpu_numerical_admission": {
+    "controller_sha256": "03552c47162cb92195785b4ae63b9567ef331e6187f84754e3b8bbb4e409d24c",
+    "status": "completed",
+    "returncode": 0,
+    "recorded_wall_seconds": 299.86336386110634,
+    "native_executions_started": 0,
+    "scope": "Distinct offline comparison controller including its child; do not add nested child duration again."
+  },
+  "total_evaluation_cost_complete": false,
+  "P01_complete": false,
+  "headline_speed_comparison_supported": false,
+  "total_allocated_device_seconds": null,
+  "total_currency_cost": null,
+  "unknown_or_excluded": [
+    "Platform queue and allocated-instance lifetime, rates and billing.",
+    "Complete historical preparation, retries, transfers, CPU verification and cleanup accounting.",
+    "Uninstrumented warmup, synchronized latency/throughput and peak-memory comparisons.",
+    "Source-host timestamps use different clocks; no cross-host interval is subtracted."
+  ],
+  "acceptance": null
+}
