@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05",
+  "updated_at": "2026-11-06",
   "evaluations": [
     {
       "id": "trl-sfttrainer-checkpoint-20261021",
@@ -63879,6 +63879,324 @@
         "revision": "0ab4ddb9e8545755eac4511f0365c81cd84ab608",
         "prefix": "site/evidence/gemma4-h100-rtx5090-pilot-20261105/",
         "replay_cases": 1
+      }
+    },
+    {
+      "id": "gemma4-ascend-tp1-repeat-20261106",
+      "date": "2026-11-06",
+      "title": "Gemma 4 12B: same-NPU three-repeat TP1 text pilot",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "google/gemma-4-12B",
+        "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+      },
+      "summary": "Three fresh serial processes on the same selected Ascend NPU completed one fixed-history discovery request. This is a within-NPU repeatability result; matched H100 Torch 2.9 capture and GPU/NPU comparison are pending.",
+      "sides": [
+        {
+          "id": "npu-r1",
+          "label": "Same NPU / repeat 1",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null
+          }
+        },
+        {
+          "id": "npu-r2",
+          "label": "Same NPU / repeat 2",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null
+          }
+        },
+        {
+          "id": "npu-r3",
+          "label": "Same NPU / repeat 3",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null
+          }
+        }
+      ],
+      "common": [
+        "Same verified eight-file base checkpoint, selected physical NPU and frozen input SHA256 643d29f23d00f97665c5c72d73c63bc20525950b2ca5c50b435140b6066214f0.",
+        "One unpadded 128-token prompt including BOS and 32 predetermined continuation targets; one prefill plus 31 cached single-token forwards. BF16 parameters/native logits, eager attention, seed 0.",
+        "Offline FP64 log-softmax of copied native BF16 values; native logits not retained. Highest FP32 matmul precision; matmul HF32 false, convolution HF32 true; deterministic algorithms false; PYTHONHASHSEED 0."
+      ],
+      "differences": [
+        "Only fresh process/repetition index; these are not different hardware platforms or independent corpus samples."
+      ],
+      "comparisons": [
+        {
+          "id": "repeat-pair-1",
+          "title": "npu-r1 vs npu-r2",
+          "side_ids": [
+            "npu-r1",
+            "npu-r2"
+          ],
+          "scope": "Same selected NPU, distinct fresh processes; one fixed discovery request. Public replay covers the recorded 32 target logprobs; complete distribution rows remain private.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-r1": 2.704256948418421,
+                "npu-r2": 2.704256948418421
+              }
+            },
+            {
+              "id": "mae-nat",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "p99-nat",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "max-abs-nat",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target scores",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            }
+          ]
+        },
+        {
+          "id": "repeat-pair-2",
+          "title": "npu-r1 vs npu-r3",
+          "side_ids": [
+            "npu-r1",
+            "npu-r3"
+          ],
+          "scope": "Same selected NPU, distinct fresh processes; one fixed discovery request. Public replay covers the recorded 32 target logprobs; complete distribution rows remain private.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-r1": 2.704256948418421,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "mae-nat",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "p99-nat",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "max-abs-nat",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target scores",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            }
+          ]
+        },
+        {
+          "id": "repeat-pair-3",
+          "title": "npu-r2 vs npu-r3",
+          "side_ids": [
+            "npu-r2",
+            "npu-r3"
+          ],
+          "scope": "Same selected NPU, distinct fresh processes; one fixed discovery request. Public replay covers the recorded 32 target logprobs; complete distribution rows remain private.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-r2": 2.704256948418421,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "mae-nat",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "p99-nat",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "max-abs-nat",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target scores",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "All three target pair replays produced 32/32 coverage and zero MAE/P99/max; both target NLLs were 2.704256948418421 nat/token.",
+        "The hash-checked archived remote summary reports 96 full-vocabulary rows validated, with top-1 agreement 32/32 and zero coarsened top-100-union-plus-tail JS/probability error in each repeat pair. Zero full-vocabulary rows were transferred or numerically replayed locally.",
+        "One independent input, three correlated repeat pairs; no representative or general determinism claim. Thresholds and acceptance remain null.",
+        "TP1 within an eight-visible-NPU instance; no TP8, distributed-model or eight-device precision claim.",
+        "Reserved validation, additional input families/lengths, cache-off/chunk/batch modes, operator attribution, quality, performance, multimodal paths and full core completion remain open. H100 Torch 2.9 GPU/NPU evidence is not yet available."
+      ],
+      "evidence": [
+        {
+          "label": "Scoped NPU report",
+          "url": "evidence/gemma4-ascend-tp1-repeat-20261106/report.md"
+        },
+        {
+          "label": "Anonymous three-repeat target scores and archived distribution summary",
+          "url": "evidence/gemma4-ascend-tp1-repeat-20261106/selected-targets.json"
+        },
+        {
+          "label": "Standard-library target replay",
+          "url": "evidence/gemma4-ascend-tp1-repeat-20261106/replay-targets.py"
+        }
+      ],
+      "archive": {
+        "revision": "bbe2506a76bf1f7d060cedd30308fa00bba6f3fe",
+        "prefix": "site/evidence/gemma4-ascend-tp1-repeat-20261106/",
+        "replay_cases": 3
       }
     }
   ]
