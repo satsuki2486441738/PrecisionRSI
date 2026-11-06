@@ -76232,6 +76232,5130 @@
           "independent-checks.json": "2a5c96f228594ba07ad281da153384a053ae0c71c3b37f61936e9daf10f98994"
         }
       }
+    },
+    {
+      "id": "gemma4-h100-ascend-batch-padding-20261107",
+      "date": "2026-11-07",
+      "title": "Gemma 4 12B: H100 vs Ascend batch and padding",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "thresholds": null,
+      "full_core_complete": false,
+      "model": {
+        "name": "google/gemma-4-12B",
+        "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+      },
+      "summary": "One discovery article plus its 96-token prefix shape stress: two unequal 160/96-token requests, six logical observations per backend and 18 request-preserving contrasts. Cache-off BF16 capture and selected independent E02 checks are complete at this scope; acceptance and the full plan remain open.",
+      "common": [
+        "Same pinned base checkpoint; BF16 parameters/native logits, FP64 exported log probabilities, eager attention, seed 0 andTP1.",
+        "One loaded model per backend performs four native calls: alone A, alone B, left-padded batch and right-padded batch. Six logical observations per backend remain separate.",
+        "All 1792 physical raw predictor rows are retained;1536 valid rows are finite-checked and 256 pad-only rows are separately counted. Offline reconstruction checks 1524 target scores and 564 full-vocabulary rows."
+      ],
+      "differences": [
+        "Hardware and backend software/math policies differ and are recorded separately from actual I04 conditions; no operator cause is established.",
+        "A has 160 tokens/159 targets; its derived prefix B has 96 tokens/95 targets. Left padding offsets B by 64; right padding uses offset 0. Validity comes from lengths and offsets, preserving valid token ID 0.",
+        "Alone and batched execution share one loaded process. Batch/padding and fresh-process repeatability, scheduler behavior and cache modes are unmeasured."
+      ],
+      "sides": [
+        {
+          "id": "gpu-alone-a-a",
+          "label": "H100 / alone-A / request A",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 1,
+            "parallelism": "tp1",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "alone-A",
+              "request": "A",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 1,
+              "physical_width": 160,
+              "logical_sequence_length": 160,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "aa4a681a8dd2a899030dc49bfde90ad1fa4d7bf1a14a31e87b74773f0c0e607e",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "gpu-alone-b-b",
+          "label": "H100 / alone-B / request B",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 1,
+            "parallelism": "tp1",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "alone-B",
+              "request": "B",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 1,
+              "physical_width": 96,
+              "logical_sequence_length": 96,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "aa4a681a8dd2a899030dc49bfde90ad1fa4d7bf1a14a31e87b74773f0c0e607e",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "gpu-batch-left-a",
+          "label": "H100 / batch-left / request A",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 1,
+            "parallelism": "tp1",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "batch-left",
+              "request": "A",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 160,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "aa4a681a8dd2a899030dc49bfde90ad1fa4d7bf1a14a31e87b74773f0c0e607e",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "gpu-batch-left-b",
+          "label": "H100 / batch-left / request B",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 1,
+            "parallelism": "tp1",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "batch-left",
+              "request": "B",
+              "slot": 1,
+              "physical_offset": 64,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 96,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "aa4a681a8dd2a899030dc49bfde90ad1fa4d7bf1a14a31e87b74773f0c0e607e",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "gpu-batch-right-a",
+          "label": "H100 / batch-right / request A",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 1,
+            "parallelism": "tp1",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "batch-right",
+              "request": "A",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 160,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "aa4a681a8dd2a899030dc49bfde90ad1fa4d7bf1a14a31e87b74773f0c0e607e",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "gpu-batch-right-b",
+          "label": "H100 / batch-right / request B",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 1,
+            "parallelism": "tp1",
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "batch-right",
+              "request": "B",
+              "slot": 1,
+              "physical_offset": 0,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 96,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "aa4a681a8dd2a899030dc49bfde90ad1fa4d7bf1a14a31e87b74773f0c0e607e",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "npu-alone-a-a",
+          "label": "Ascend / alone-A / request A",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 8,
+            "parallelism": "tp1",
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "execution": {
+              "mode": "alone-A",
+              "request": "A",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 1,
+              "physical_width": 160,
+              "logical_sequence_length": 160,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "576bde902492acf2023030a00e65ddb68342233642638b39ad59ea61e72a1328",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "npu-alone-b-b",
+          "label": "Ascend / alone-B / request B",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 8,
+            "parallelism": "tp1",
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "execution": {
+              "mode": "alone-B",
+              "request": "B",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 1,
+              "physical_width": 96,
+              "logical_sequence_length": 96,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "576bde902492acf2023030a00e65ddb68342233642638b39ad59ea61e72a1328",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "npu-batch-left-a",
+          "label": "Ascend / batch-left / request A",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 8,
+            "parallelism": "tp1",
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "execution": {
+              "mode": "batch-left",
+              "request": "A",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 160,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "576bde902492acf2023030a00e65ddb68342233642638b39ad59ea61e72a1328",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "npu-batch-left-b",
+          "label": "Ascend / batch-left / request B",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 8,
+            "parallelism": "tp1",
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "execution": {
+              "mode": "batch-left",
+              "request": "B",
+              "slot": 1,
+              "physical_offset": 64,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 96,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "576bde902492acf2023030a00e65ddb68342233642638b39ad59ea61e72a1328",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "npu-batch-right-a",
+          "label": "Ascend / batch-right / request A",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 8,
+            "parallelism": "tp1",
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "execution": {
+              "mode": "batch-right",
+              "request": "A",
+              "slot": 0,
+              "physical_offset": 0,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 160,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "576bde902492acf2023030a00e65ddb68342233642638b39ad59ea61e72a1328",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        },
+        {
+          "id": "npu-batch-right-b",
+          "label": "Ascend / batch-right / request B",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "visible_device_alias_count": 8,
+            "parallelism": "tp1",
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "execution": {
+              "mode": "batch-right",
+              "request": "B",
+              "slot": 1,
+              "physical_offset": 0,
+              "native_batch_size": 2,
+              "physical_width": 160,
+              "logical_sequence_length": 96,
+              "use_cache": false,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "loaded_model_state_sha256": "576bde902492acf2023030a00e65ddb68342233642638b39ad59ea61e72a1328",
+              "implementation_sha256": {
+                "modeling": "e356db9089642559f227c0bc1134986bdd5274066431be91a5400d38355818fb",
+                "masking_utils": "af1b0bae2ae9d50122c4ca6d0749afc6f09716bb4c05917fb2ef4495b31d4a73"
+              }
+            },
+            "batch_padding_repeatability_measured": false,
+            "fresh_process_repeatability_measured": false
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "gpu-alone-a-a-vs-npu-alone-a-a",
+          "title": "GPU/NPU matched condition: gpu-alone-a-a vs npu-alone-a-a",
+          "side_ids": [
+            "gpu-alone-a-a",
+            "npu-alone-a-a"
+          ],
+          "kind": "cross_backend_matched",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.007021719894192646,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-alone-a-a": 3.2764746913920972,
+                "npu-alone-a-a": 3.2694529714979046
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.033320404862961756,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1683911049445629,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18670247219334346,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.981063829787234,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0003657482150722142,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0020443340674282896,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.003106331972200098,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0012939709694624343,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.004181225818556207,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.00470915635838022,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.01062894345565911,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.03453185549612704,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.034838059131311216,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-alone-a-a Top-100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-alone-a-a Top-100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-alone-a-a Top-100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-alone-a-a Top-100 probability mass MEAN",
+              "value": 0.9125014599909561,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-alone-a-a Top-100 probability mass P1",
+              "value": 0.5728960493048332,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-alone-a-a Top-100 probability mass MIN",
+              "value": 0.5489330240770213,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-alone-a-a union probability mass MEAN",
+              "value": 0.913131007680071,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-alone-a-a union probability mass P1",
+              "value": 0.5711653896792357,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-alone-a-a union probability mass MIN",
+              "value": 0.552603488038957,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-alone-a-a union probability mass MEAN",
+              "value": 0.913175305272822,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-alone-a-a union probability mass P1",
+              "value": 0.5747069060557931,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-alone-a-a union probability mass MIN",
+              "value": 0.5503695365763137,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-batch-left-a-vs-npu-batch-left-a",
+          "title": "GPU/NPU matched condition: gpu-batch-left-a vs npu-batch-left-a",
+          "side_ids": [
+            "gpu-batch-left-a",
+            "npu-batch-left-a"
+          ],
+          "kind": "cross_backend_matched",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.005491440502106926,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-batch-left-a": 3.2723496375963306,
+                "npu-batch-left-a": 3.2668581970942236
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03481040934801931,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.13804556883236646,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.3398118101119194,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 96
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9797872340425531,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.00023010576642086352,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0005740175797944527,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0005885163367802788,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 67
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0009838882345570544,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0035012794035353427,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0037055185748446216,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 129
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.007865707891650416,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.028974000542845366,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.031137676185125085,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 132
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-batch-left-a Top-100 probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-batch-left-a Top-100 probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-batch-left-a Top-100 probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-left-a Top-100 probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-left-a Top-100 probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-left-a Top-100 probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-batch-left-a union probability mass MEAN",
+              "value": 0.91359771481736,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-batch-left-a union probability mass P1",
+              "value": 0.5780278545570147,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-batch-left-a union probability mass MIN",
+              "value": 0.5575314823763713,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-left-a union probability mass MEAN",
+              "value": 0.9136059672312222,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-left-a union probability mass P1",
+              "value": 0.5792202505900581,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-left-a union probability mass MIN",
+              "value": 0.5596821213330156,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-batch-right-a-vs-npu-batch-right-a",
+          "title": "GPU/NPU matched condition: gpu-batch-right-a vs npu-batch-right-a",
+          "side_ids": [
+            "gpu-batch-right-a",
+            "npu-batch-right-a"
+          ],
+          "kind": "cross_backend_matched",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.005491440502106926,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-batch-right-a": 3.2723496375963306,
+                "npu-batch-right-a": 3.2668581970942236
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03481040934801931,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.13804556883236646,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.3398118101119194,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 96
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9797872340425531,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.00023010576642086352,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0005740175797944527,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0005885163367802788,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 67
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0009838882345570544,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0035012794035353427,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0037055185748446216,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 129
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.007865707891650416,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.028974000542845366,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.031137676185125085,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 132
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-batch-right-a Top-100 probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-batch-right-a Top-100 probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-batch-right-a Top-100 probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-right-a Top-100 probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-right-a Top-100 probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-right-a Top-100 probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-batch-right-a union probability mass MEAN",
+              "value": 0.91359771481736,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-batch-right-a union probability mass P1",
+              "value": 0.5780278545570147,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-batch-right-a union probability mass MIN",
+              "value": 0.5575314823763713,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-right-a union probability mass MEAN",
+              "value": 0.9136059672312222,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-right-a union probability mass P1",
+              "value": 0.5792202505900581,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-right-a union probability mass MIN",
+              "value": 0.5596821213330156,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-alone-b-b-vs-npu-alone-b-b",
+          "title": "GPU/NPU matched condition: gpu-alone-b-b vs npu-alone-b-b",
+          "side_ids": [
+            "gpu-alone-b-b",
+            "npu-alone-b-b"
+          ],
+          "kind": "cross_backend_matched",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.00833358270469553,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-alone-b-b": 3.610274745544462,
+                "npu-alone-b-b": 3.6019411628397666
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03505970429405074,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1551944103931855,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.2478476750605889,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 43
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9800000000000001,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0003068183275679317,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0008148536201152065,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.00085359539194364,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 82
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011621832573504008,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0028264415335661082,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.002948967968428467,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.009351524139300491,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.02623190313462589,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.026854871927549206,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-alone-b-b Top-100 probability mass MEAN",
+              "value": 0.885115569094077,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-alone-b-b Top-100 probability mass P1",
+              "value": 0.5818186440792501,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-alone-b-b Top-100 probability mass MIN",
+              "value": 0.540136276115429,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-alone-b-b Top-100 probability mass MEAN",
+              "value": 0.8857769722591834,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-alone-b-b Top-100 probability mass P1",
+              "value": 0.5850692171334435,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-alone-b-b Top-100 probability mass MIN",
+              "value": 0.5415115664640496,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-alone-b-b union probability mass MEAN",
+              "value": 0.8863197196707129,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-alone-b-b union probability mass P1",
+              "value": 0.5879171442474866,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-alone-b-b union probability mass MIN",
+              "value": 0.5458875280092025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-alone-b-b union probability mass MEAN",
+              "value": 0.8869661849807298,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-alone-b-b union probability mass P1",
+              "value": 0.5909289519924482,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-alone-b-b union probability mass MIN",
+              "value": 0.5473698338903096,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-batch-left-b-vs-npu-batch-left-b",
+          "title": "GPU/NPU matched condition: gpu-batch-left-b vs npu-batch-left-b",
+          "side_ids": [
+            "gpu-batch-left-b",
+            "npu-batch-left-b"
+          ],
+          "kind": "cross_backend_matched",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.006765209720105858,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-batch-left-b": 3.609673925981207,
+                "npu-batch-left-b": 3.6029087162611013
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03206222864149264,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.12977852892511055,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.15136468868294628,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9795744680851064,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0003006218896034156,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001754074961299611,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0017693782183469977,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.001071414460401154,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.005446434425023659,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.005528965283488701,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.00904113266091693,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.051801382867938776,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.05384838881960052,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-batch-left-b Top-100 probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-batch-left-b Top-100 probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-batch-left-b Top-100 probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-left-b Top-100 probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-left-b Top-100 probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-left-b Top-100 probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-batch-left-b union probability mass MEAN",
+              "value": 0.8871121793624928,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-batch-left-b union probability mass P1",
+              "value": 0.5861240530348765,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-batch-left-b union probability mass MIN",
+              "value": 0.5418232951817281,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-left-b union probability mass MEAN",
+              "value": 0.8872807332171035,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-left-b union probability mass P1",
+              "value": 0.5893001378539403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-left-b union probability mass MIN",
+              "value": 0.5483247800036278,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-batch-right-b-vs-npu-batch-right-b",
+          "title": "GPU/NPU matched condition: gpu-batch-right-b vs npu-batch-right-b",
+          "side_ids": [
+            "gpu-batch-right-b",
+            "npu-batch-right-b"
+          ],
+          "kind": "cross_backend_matched",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.006765209720105858,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-batch-right-b": 3.609673925981207,
+                "npu-batch-right-b": 3.6029087162611013
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03206222864149264,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.12977852892511055,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.15136468868294628,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9795744680851064,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0003006218896034156,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001754074961299611,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0017693782183469977,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.001071414460401154,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.005446434425023659,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.005528965283488701,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.00904113266091693,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.051801382867938776,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.05384838881960052,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-batch-right-b Top-100 probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-batch-right-b Top-100 probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-batch-right-b Top-100 probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-right-b Top-100 probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-right-b Top-100 probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-right-b Top-100 probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-batch-right-b union probability mass MEAN",
+              "value": 0.8871121793624928,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-batch-right-b union probability mass P1",
+              "value": 0.5861240530348765,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-batch-right-b union probability mass MIN",
+              "value": 0.5418232951817281,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-right-b union probability mass MEAN",
+              "value": 0.8872807332171035,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-right-b union probability mass P1",
+              "value": 0.5893001378539403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-right-b union probability mass MIN",
+              "value": 0.5483247800036278,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-alone-a-a-vs-gpu-batch-left-a",
+          "title": "Within-backend control: gpu-alone-a-a vs gpu-batch-left-a",
+          "side_ids": [
+            "gpu-alone-a-a",
+            "gpu-batch-left-a"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.004125053795766664,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-alone-a-a": 3.2764746913920972,
+                "gpu-batch-left-a": 3.2723496375963306
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03425370865701369,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.18035557564902227,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.2236662168884913,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 107
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9800000000000001,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0003127135845562757,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0020281078330921035,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0031485420274516593,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0010247832999734944,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0042609162263357305,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.004945227668197398,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008066393899684988,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0341227200610452,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.03759293518028717,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-alone-a-a Top-100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-alone-a-a Top-100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-alone-a-a Top-100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "gpu-batch-left-a Top-100 probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "gpu-batch-left-a Top-100 probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "gpu-batch-left-a Top-100 probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-alone-a-a union probability mass MEAN",
+              "value": 0.9132196889529746,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-alone-a-a union probability mass P1",
+              "value": 0.5717288059962049,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-alone-a-a union probability mass MIN",
+              "value": 0.5536468515889,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "gpu-batch-left-a union probability mass MEAN",
+              "value": 0.9136650849373542,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "gpu-batch-left-a union probability mass P1",
+              "value": 0.5775310248515213,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "gpu-batch-left-a union probability mass MIN",
+              "value": 0.5561177598449798,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-alone-a-a-vs-gpu-batch-right-a",
+          "title": "Within-backend control: gpu-alone-a-a vs gpu-batch-right-a",
+          "side_ids": [
+            "gpu-alone-a-a",
+            "gpu-batch-right-a"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.004125053795766664,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-alone-a-a": 3.2764746913920972,
+                "gpu-batch-right-a": 3.2723496375963306
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03425370865701369,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.18035557564902227,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.2236662168884913,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 107
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9800000000000001,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0003127135845562757,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0020281078330921035,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0031485420274516593,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0010247832999734944,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0042609162263357305,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.004945227668197398,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008066393899684988,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0341227200610452,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.03759293518028717,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 134
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-alone-a-a Top-100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-alone-a-a Top-100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-alone-a-a Top-100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "gpu-batch-right-a Top-100 probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "gpu-batch-right-a Top-100 probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "gpu-batch-right-a Top-100 probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-alone-a-a union probability mass MEAN",
+              "value": 0.9132196889529746,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-alone-a-a union probability mass P1",
+              "value": 0.5717288059962049,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-alone-a-a union probability mass MIN",
+              "value": 0.5536468515889,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "gpu-batch-right-a union probability mass MEAN",
+              "value": 0.9136650849373542,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "gpu-batch-right-a union probability mass P1",
+              "value": 0.5775310248515213,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "gpu-batch-right-a union probability mass MIN",
+              "value": 0.5561177598449798,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-batch-left-a-vs-gpu-batch-right-a",
+          "title": "Within-backend control: gpu-batch-left-a vs gpu-batch-right-a",
+          "side_ids": [
+            "gpu-batch-left-a",
+            "gpu-batch-right-a"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-batch-left-a": 3.2723496375963306,
+                "gpu-batch-right-a": 3.2723496375963306
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-batch-left-a Top-100 probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-batch-left-a Top-100 probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-batch-left-a Top-100 probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "gpu-batch-right-a Top-100 probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "gpu-batch-right-a Top-100 probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "gpu-batch-right-a Top-100 probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-batch-left-a union probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-batch-left-a union probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-batch-left-a union probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "gpu-batch-right-a union probability mass MEAN",
+              "value": 0.9128857607576993,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "gpu-batch-right-a union probability mass P1",
+              "value": 0.5749141976864363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "gpu-batch-right-a union probability mass MIN",
+              "value": 0.5532903147821969,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-alone-b-b-vs-gpu-batch-left-b",
+          "title": "Within-backend control: gpu-alone-b-b vs gpu-batch-left-b",
+          "side_ids": [
+            "gpu-alone-b-b",
+            "gpu-batch-left-b"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0006008195632549729,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-alone-b-b": 3.610274745544462,
+                "gpu-batch-left-b": 3.609673925981207
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03363982892753034,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.12539867171320357,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18025127042089606,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 59
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9765957446808511,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002621168529259192,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0007405983963682166,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0008026753831408531,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.000999763751372612,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003274666916003827,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003614688464430201,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.00822992384665812,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.030995379533339786,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.03526134759574456,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-alone-b-b Top-100 probability mass MEAN",
+              "value": 0.885115569094077,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-alone-b-b Top-100 probability mass P1",
+              "value": 0.5818186440792501,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-alone-b-b Top-100 probability mass MIN",
+              "value": 0.540136276115429,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "gpu-batch-left-b Top-100 probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "gpu-batch-left-b Top-100 probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "gpu-batch-left-b Top-100 probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-alone-b-b union probability mass MEAN",
+              "value": 0.8863679079141884,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-alone-b-b union probability mass P1",
+              "value": 0.5861752709777,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-alone-b-b union probability mass MIN",
+              "value": 0.542377104311363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "gpu-batch-left-b union probability mass MEAN",
+              "value": 0.8873340016848563,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "gpu-batch-left-b union probability mass P1",
+              "value": 0.5875076568268296,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "gpu-batch-left-b union probability mass MIN",
+              "value": 0.5419702934332828,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-alone-b-b-vs-gpu-batch-right-b",
+          "title": "Within-backend control: gpu-alone-b-b vs gpu-batch-right-b",
+          "side_ids": [
+            "gpu-alone-b-b",
+            "gpu-batch-right-b"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0006008195632549729,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-alone-b-b": 3.610274745544462,
+                "gpu-batch-right-b": 3.609673925981207
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03363982892753034,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.12539867171320357,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18025127042089606,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 59
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9765957446808511,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002621168529259192,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0007405983963682166,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0008026753831408531,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.000999763751372612,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003274666916003827,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003614688464430201,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.00822992384665812,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.030995379533339786,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.03526134759574456,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 66
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-alone-b-b Top-100 probability mass MEAN",
+              "value": 0.885115569094077,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-alone-b-b Top-100 probability mass P1",
+              "value": 0.5818186440792501,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-alone-b-b Top-100 probability mass MIN",
+              "value": 0.540136276115429,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "gpu-batch-right-b Top-100 probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "gpu-batch-right-b Top-100 probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "gpu-batch-right-b Top-100 probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-alone-b-b union probability mass MEAN",
+              "value": 0.8863679079141884,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-alone-b-b union probability mass P1",
+              "value": 0.5861752709777,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-alone-b-b union probability mass MIN",
+              "value": 0.542377104311363,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "gpu-batch-right-b union probability mass MEAN",
+              "value": 0.8873340016848563,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "gpu-batch-right-b union probability mass P1",
+              "value": 0.5875076568268296,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "gpu-batch-right-b union probability mass MIN",
+              "value": 0.5419702934332828,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "gpu-batch-left-b-vs-gpu-batch-right-b",
+          "title": "Within-backend control: gpu-batch-left-b vs gpu-batch-right-b",
+          "side_ids": [
+            "gpu-batch-left-b",
+            "gpu-batch-right-b"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-batch-left-b": 3.609673925981207,
+                "gpu-batch-right-b": 3.609673925981207
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "gpu-batch-left-b Top-100 probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "gpu-batch-left-b Top-100 probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "gpu-batch-left-b Top-100 probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "gpu-batch-right-b Top-100 probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "gpu-batch-right-b Top-100 probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "gpu-batch-right-b Top-100 probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "gpu-batch-left-b union probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "gpu-batch-left-b union probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "gpu-batch-left-b union probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "gpu-batch-right-b union probability mass MEAN",
+              "value": 0.886085164826468,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "gpu-batch-right-b union probability mass P1",
+              "value": 0.583797722784025,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "gpu-batch-right-b union probability mass MIN",
+              "value": 0.5394682614904985,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-alone-a-a-vs-npu-batch-left-a",
+          "title": "Within-backend control: npu-alone-a-a vs npu-batch-left-a",
+          "side_ids": [
+            "npu-alone-a-a",
+            "npu-batch-left-a"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.002594774403680944,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-alone-a-a": 3.2694529714979046,
+                "npu-batch-left-a": 3.2668581970942236
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03595952682629169,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.16573574105512584,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.23159509676427348,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9785106382978724,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002636472715515306,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0005360062730868137,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0005686002603052246,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 118
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011357026403958134,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0032232616448183205,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.00366345404747631,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 129
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.009031223378011016,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.026202324947041174,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.026204698590553854,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 129
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-alone-a-a Top-100 probability mass MEAN",
+              "value": 0.9125014599909561,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-alone-a-a Top-100 probability mass P1",
+              "value": 0.5728960493048332,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-alone-a-a Top-100 probability mass MIN",
+              "value": 0.5489330240770213,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-left-a Top-100 probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-left-a Top-100 probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-left-a Top-100 probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-alone-a-a union probability mass MEAN",
+              "value": 0.9132748267537505,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-alone-a-a union probability mass P1",
+              "value": 0.5756143646680423,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-alone-a-a union probability mass MIN",
+              "value": 0.5518060490756062,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-left-a union probability mass MEAN",
+              "value": 0.9136823604060716,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-left-a union probability mass P1",
+              "value": 0.5789840120009965,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-left-a union probability mass MIN",
+              "value": 0.5585066853023357,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-alone-a-a-vs-npu-batch-right-a",
+          "title": "Within-backend control: npu-alone-a-a vs npu-batch-right-a",
+          "side_ids": [
+            "npu-alone-a-a",
+            "npu-batch-right-a"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.002594774403680944,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-alone-a-a": 3.2694529714979046,
+                "npu-batch-right-a": 3.2668581970942236
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03595952682629169,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.16573574105512584,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.23159509676427348,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 46,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 0.9787234042553191,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9785106382978724,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002636472715515306,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0005360062730868137,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0005686002603052246,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 118
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011357026403958134,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0032232616448183205,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.00366345404747631,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 129
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.009031223378011016,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.026202324947041174,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.026204698590553854,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 129
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-alone-a-a Top-100 probability mass MEAN",
+              "value": 0.9125014599909561,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-alone-a-a Top-100 probability mass P1",
+              "value": 0.5728960493048332,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-alone-a-a Top-100 probability mass MIN",
+              "value": 0.5489330240770213,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-right-a Top-100 probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-right-a Top-100 probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-right-a Top-100 probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-alone-a-a union probability mass MEAN",
+              "value": 0.9132748267537505,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-alone-a-a union probability mass P1",
+              "value": 0.5756143646680423,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-alone-a-a union probability mass MIN",
+              "value": 0.5518060490756062,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-right-a union probability mass MEAN",
+              "value": 0.9136823604060716,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-right-a union probability mass P1",
+              "value": 0.5789840120009965,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-right-a union probability mass MIN",
+              "value": 0.5585066853023357,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-batch-left-a-vs-npu-batch-right-a",
+          "title": "Within-backend control: npu-batch-left-a vs npu-batch-right-a",
+          "side_ids": [
+            "npu-batch-left-a",
+            "npu-batch-right-a"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request A: 159 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-batch-left-a": 3.2668581970942236,
+                "npu-batch-right-a": 3.2668581970942236
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-batch-left-a Top-100 probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-batch-left-a Top-100 probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-batch-left-a Top-100 probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-right-a Top-100 probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-right-a Top-100 probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-right-a Top-100 probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-batch-left-a union probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-batch-left-a union probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-batch-left-a union probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-right-a union probability mass MEAN",
+              "value": 0.912901162659061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-right-a union probability mass P1",
+              "value": 0.5761758934746413,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-right-a union probability mass MIN",
+              "value": 0.5554336250429264,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-alone-b-b-vs-npu-batch-left-b",
+          "title": "Within-backend control: npu-alone-b-b vs npu-batch-left-b",
+          "side_ids": [
+            "npu-alone-b-b",
+            "npu-batch-left-b"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0009675534213346992,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-alone-b-b": 3.6019411628397666,
+                "npu-batch-left-b": 3.6029087162611013
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.034641477808567356,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1488943890116906,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.16126263773741023,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9785106382978724,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.00034842732472905783,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.00240125216641843,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0036885797234016728,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011188300395468974,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.005911158068094628,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.008332924102239847,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.009077552951276486,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.05125508474268315,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.07478513803667014,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-alone-b-b Top-100 probability mass MEAN",
+              "value": 0.8857769722591834,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-alone-b-b Top-100 probability mass P1",
+              "value": 0.5850692171334435,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-alone-b-b Top-100 probability mass MIN",
+              "value": 0.5415115664640496,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-left-b Top-100 probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-left-b Top-100 probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-left-b Top-100 probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-alone-b-b union probability mass MEAN",
+              "value": 0.8869307599595536,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-alone-b-b union probability mass P1",
+              "value": 0.5893111897231537,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-alone-b-b union probability mass MIN",
+              "value": 0.5473698338903096,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-left-b union probability mass MEAN",
+              "value": 0.8874145402542019,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-left-b union probability mass P1",
+              "value": 0.5911593094966905,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-left-b union probability mass MIN",
+              "value": 0.5517676904531652,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-alone-b-b-vs-npu-batch-right-b",
+          "title": "Within-backend control: npu-alone-b-b vs npu-batch-right-b",
+          "side_ids": [
+            "npu-alone-b-b",
+            "npu-batch-right-b"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0009675534213346992,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-alone-b-b": 3.6019411628397666,
+                "npu-batch-right-b": 3.6029087162611013
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.034641477808567356,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1488943890116906,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.16126263773741023,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 56
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9785106382978724,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.00034842732472905783,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.00240125216641843,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0036885797234016728,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011188300395468974,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.005911158068094628,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.008332924102239847,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.009077552951276486,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.05125508474268315,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.07478513803667014,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 88
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-alone-b-b Top-100 probability mass MEAN",
+              "value": 0.8857769722591834,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-alone-b-b Top-100 probability mass P1",
+              "value": 0.5850692171334435,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-alone-b-b Top-100 probability mass MIN",
+              "value": 0.5415115664640496,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-right-b Top-100 probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-right-b Top-100 probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-right-b Top-100 probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-alone-b-b union probability mass MEAN",
+              "value": 0.8869307599595536,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-alone-b-b union probability mass P1",
+              "value": 0.5893111897231537,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-alone-b-b union probability mass MIN",
+              "value": 0.5473698338903096,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-right-b union probability mass MEAN",
+              "value": 0.8874145402542019,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-right-b union probability mass P1",
+              "value": 0.5911593094966905,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-right-b union probability mass MIN",
+              "value": 0.5517676904531652,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-batch-left-b-vs-npu-batch-right-b",
+          "title": "Within-backend control: npu-batch-left-b vs npu-batch-right-b",
+          "side_ids": [
+            "npu-batch-left-b",
+            "npu-batch-right-b"
+          ],
+          "kind": "within_backend_batch_padding",
+          "scope": "Request B: 95 targets and 47 selected distributions; one parent article and a derived prefix shape stress request.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-batch-left-b": 3.6029087162611013,
+                "npu-batch-right-b": 3.6029087162611013
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-batch-left-b Top-100 probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-batch-left-b Top-100 probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-batch-left-b Top-100 probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-batch-right-b Top-100 probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-batch-right-b Top-100 probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-batch-right-b Top-100 probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-batch-left-b union probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-batch-left-b union probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-batch-left-b union probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-batch-right-b union probability mass MEAN",
+              "value": 0.886259481089596,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-batch-right-b union probability mass P1",
+              "value": 0.587635245284183,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-batch-right-b union probability mass MIN",
+              "value": 0.5462561680772487,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 95,
+              "expected": 95,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired selected distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent parent inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        }
+      ],
+      "scope": {
+        "independent_parent_inputs": 1,
+        "parent_input_scope": "one frozen English discovery article",
+        "derived_prefix_shape_stress_requests": 1,
+        "requests": {
+          "A": {
+            "sequence_length": 160,
+            "prompt_length": 128,
+            "continuation_length": 32,
+            "target_count": 159,
+            "distribution_predictor_positions": [
+              0,
+              8,
+              16,
+              25,
+              33,
+              42,
+              50,
+              59,
+              67,
+              76,
+              84,
+              93,
+              101,
+              110,
+              118,
+              127,
+              128,
+              129,
+              130,
+              131,
+              132,
+              133,
+              134,
+              135,
+              136,
+              137,
+              138,
+              139,
+              140,
+              141,
+              142,
+              143,
+              144,
+              145,
+              146,
+              147,
+              148,
+              149,
+              150,
+              151,
+              152,
+              153,
+              154,
+              155,
+              156,
+              157,
+              158
+            ],
+            "distribution_rows_per_observation": 47
+          },
+          "B": {
+            "sequence_length": 96,
+            "prompt_length": 64,
+            "continuation_length": 32,
+            "target_count": 95,
+            "distribution_predictor_positions": [
+              0,
+              4,
+              8,
+              12,
+              16,
+              21,
+              25,
+              29,
+              33,
+              37,
+              42,
+              46,
+              50,
+              54,
+              58,
+              63,
+              64,
+              65,
+              66,
+              67,
+              68,
+              69,
+              70,
+              71,
+              72,
+              73,
+              74,
+              75,
+              76,
+              77,
+              78,
+              79,
+              80,
+              81,
+              82,
+              83,
+              84,
+              85,
+              86,
+              87,
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94
+            ],
+            "distribution_rows_per_observation": 47
+          }
+        },
+        "new_model_processes_per_backend": 1,
+        "model_loads_per_backend": 1,
+        "native_calls_per_backend": 4,
+        "logical_observations_per_backend": 6,
+        "native_modes_per_backend": 4,
+        "use_cache": false,
+        "vocabulary_size": 262144,
+        "target_scores_rederived": 1524,
+        "full_vocabulary_rows_rederived": 564,
+        "raw_physical_rows_retained": 1792,
+        "valid_raw_rows_finite_checked": 1536,
+        "pad_only_rows_separately_counted": 256,
+        "target_distribution_pairs": 18,
+        "fresh_process_repeatability_measured": false,
+        "batch_padding_repeatability_measured": false,
+        "cache_eviction_tested": false,
+        "validity_from_lengths_only": true,
+        "valid_token_ID0_preserved": true,
+        "pad_only_payload_retained_losslessly": true,
+        "target_only_replay_pairs": 18,
+        "public_replay_arrays_read": 0,
+        "selected_E02_distribution_pair_rows": 283,
+        "selected_E02_matched_cross_backend_rows": 282,
+        "native_KV_comparisons": 0,
+        "operator_cause_established": false
+      },
+      "plan_coverage": {
+        "task_count": 49,
+        "core_task_count": 28,
+        "counts": {
+          "partial": 6,
+          "complete": 9,
+          "pending": 11,
+          "deferred": 21,
+          "not_applicable": 2
+        },
+        "full_core_complete": false,
+        "original_49_task_scope_complete": false
+      },
+      "instrumented_execution_accounting": {
+        "schema_version": 1,
+        "kind": "selected_I04_execution_accounting",
+        "source_metadata_map_sha256": "865d3025cc30c1997e37372474e91b7f9037f7032248ef3d6e1c381bcdb968c3",
+        "scope": "Two instrumented native model children and distinct offline controllers; a measured subset of evaluation work.",
+        "model_children": {
+          "GPU": {
+            "recorder_receipt_sha256": "869d39060282756a1a161e30098daa2694abe7da7fa56788be0d13d17254ce5e",
+            "status": "completed",
+            "returncode": 0,
+            "recorded_wall_seconds": 298.557943277061,
+            "recorded_start_utc_on_source_host": "2026-11-06T19:17:45.270577+00:00",
+            "recorded_end_utc_on_source_host": "2026-11-06T19:22:43.842014+00:00",
+            "native_model_processes": 1,
+            "loaded_models": 1,
+            "native_forward_calls": 4,
+            "scope": "Instrumented model child: imports, loading, capture and validation; parent preparation/transfer excluded.",
+            "uninstrumented_latency_seconds": null,
+            "active_device_seconds": null,
+            "allocated_instance_seconds": null,
+            "currency_cost": null
+          },
+          "NPU": {
+            "recorder_receipt_sha256": "fb337cb7013d5aa81b687c69686b5ec31684cd2510b0e992adbf955876f0468d",
+            "status": "completed",
+            "returncode": 0,
+            "recorded_wall_seconds": 85.6662234030664,
+            "recorded_start_utc_on_source_host": "2026-11-06T18:57:48.278516+00:00",
+            "recorded_end_utc_on_source_host": "2026-11-06T18:59:13.946536+00:00",
+            "native_model_processes": 1,
+            "loaded_models": 1,
+            "native_forward_calls": 4,
+            "scope": "Instrumented model child: imports, loading, capture and validation; parent preparation/transfer excluded.",
+            "uninstrumented_latency_seconds": null,
+            "active_device_seconds": null,
+            "allocated_instance_seconds": null,
+            "currency_cost": null
+          }
+        },
+        "cpu_numerical_admission": {
+          "controller_sha256": "5d18a78e14433e5b1e812ca4335704182cbeac1f18ce5fd5ceee30d0ad1cd3f0",
+          "status": "completed",
+          "returncode": 0,
+          "recorded_wall_seconds": 240.48395719006658,
+          "native_executions_started": 0,
+          "scope": "Whole offline controller including child; never add nested child time again."
+        },
+        "cpu_selected_E02": {
+          "controller_sha256": "0129c269f8732d93303cb026468735144cc9b97f29aa0e2170958b5b48a837a9",
+          "status": "completed",
+          "returncode": 0,
+          "recorded_wall_seconds": 197.6121320873499,
+          "native_executions_started": 0,
+          "scope": "Selected CPU verification plus metadata packaging; includes its numeric child."
+        },
+        "total_evaluation_cost_complete": false,
+        "P01_complete": false,
+        "headline_speed_comparison_supported": false,
+        "total_allocated_device_seconds": null,
+        "total_currency_cost": null,
+        "unknown_or_excluded": [
+          "Queue and allocated-instance lifetime/rates/billing.",
+          "Complete preparation, retries, transfers, CPU validation and cleanup cost.",
+          "Uninstrumented synchronized latency, throughput, warmup and peak memory.",
+          "Source-host clocks differ; no cross-host interval is subtracted."
+        ],
+        "acceptance": null
+      },
+      "independent_checks": {
+        "status": "independent_i04_selected_e02_checks_matched",
+        "source_controller_sha256": "0129c269f8732d93303cb026468735144cc9b97f29aa0e2170958b5b48a837a9",
+        "source_report_sha256": "fc664f2fd6e78905edd2e8ee1a9a47d59ce7d723f4107527bb32a5cc094d4b15",
+        "original_I04_report_sha256": "b65819037bacac5d9098834a364c3512defb0f77435160f53a0a340a5a8d0c48",
+        "verifier_sha256": "2cdb98c37f2e3690ed9b7918ff0b223f4f662d90014c0bbd649c2dc76ecc639c",
+        "source_selection_sha256": "77ae35aa07f2b70b3db1206f456ce107eac831018003f061bcd54061c66377a3",
+        "scope": {
+          "target_pairs": 18,
+          "request_target_counts": {
+            "A": 159,
+            "B": 95
+          },
+          "independent_distribution_pair_rows": 283,
+          "matched_cross_backend_distribution_pair_rows": 282,
+          "all_distribution_pair_rows_in_original_report": 846,
+          "admitted_large_sources_final_bytehash_checked": 572,
+          "native_KV_checks": 0,
+          "independent_parent_inputs": 1,
+          "derived_prefix_shape_stress_requests": 1,
+          "validity_uses_lengths_and_offsets": true,
+          "pad_only_rows_numerically_replayed": 0,
+          "all_raw_valid_rows_independently_replayed": false
+        },
+        "verification": {
+          "absolute_metric_tolerance": 1e-12,
+          "relative_metric_tolerance": 5e-12,
+          "raw_logprob_derivation_absolute_tolerance": 1e-12,
+          "model_acceptance_thresholds": false,
+          "CPU_seconds": 900,
+          "full_pool_bytehash_passes": 1,
+          "independent_scalar_dependency_sha256": "863019a1bd9875d418630c4c5e547576232e225fd66a98d63d51f3023701a44e"
+        },
+        "all_native_array_hashes_checked": 572
+      },
+      "notes": [
+        "The first six comparisons are matched GPU/NPU contrasts. Twelve within-backend controls follow. These 18 pairs do not add independent quality examples.",
+        "All metrics remain per request and pair; NLL and percentiles are never pooled across 159/95 unequal target counts.",
+        "Top 100-union probability errors and exact-complement-merged JS retain their coarsened definitions, rather than full-vocabulary probability error or divergence.",
+        "Public standard-library replay checks 18 target reductions with 0 array reads. Actual source-side E02 checks 18 target pairs and 283 selected distribution contrasts, including 282 matched cross-backend rows and one additional reported extreme; it does not independently repeat all 846 contrasts.",
+        "All 572 native files are freshly hashed in the source-side checks. These metadata exports contain 0 native arrays; the separate complete GPU transfer contains 286 array files. No native KV comparison is made.",
+        "Instrumented child wall durations are accounting observations, without a speed ratio, synchronized latency/throughput, allocated lifetime or billed-cost conclusion. Nested intervals are not summed and cross-host clocks are not subtracted.",
+        "Thresholds and acceptance are null. Evidence-reconstruction tolerances are not model-accuracy acceptance thresholds. Operator cause and the full 49-task/28 core plan remain unresolved."
+      ],
+      "evidence": [
+        {
+          "label": "Scoped batch/padding report",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/report.md"
+        },
+        {
+          "label": "Original 49 task scoped coverage ledger",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/coverage.json"
+        },
+        {
+          "label": "Twelve anonymous target vectors",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/selected-targets.json"
+        },
+        {
+          "label": "All 18 target and sampled-distribution summaries",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/selected-metrics.json"
+        },
+        {
+          "label": "18 pair standard-library target replay",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/replay-targets.py"
+        },
+        {
+          "label": "Selected instrumented execution accounting",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/execution-cost.json"
+        },
+        {
+          "label": "Selected independent scalar E02 checks",
+          "url": "evidence/gemma4-h100-ascend-batch-padding-20261107/independent-checks.json"
+        }
+      ],
+      "archive": {
+        "revision": "b9f0ce6ec3d930df6fe251c847685ab65402e8c5",
+        "prefix": "site/evidence/gemma4-h100-ascend-batch-padding-20261107/",
+        "replay_cases": 18,
+        "file_sha256": {
+          "report.md": "9f470dfead3ef263151fe5035d172a83a713aec64e0eb68027d41e91cdd2d696",
+          "coverage.json": "0c76093988ed7a5b63bb53b0d69db39307780dd99574288c2f53ee1ee2949492",
+          "selected-targets.json": "39d15fa7c8312c6783ce02dfda039352dd36f58e8c790fb21ace5f9c9b14bf61",
+          "selected-metrics.json": "7f9b478c857d0e7002d1893338d2e37b15fc6b9a3bfb770ea88b060cc5e4e61b",
+          "replay-targets.py": "9bbf83cf96d1d2d231a8f43b3de155cf9aac2bfc423172532bc40e98cec76b69",
+          "execution-cost.json": "468b2d85ea44389ef12a107d6d9432675e3451f6730a4137a4345157e054853c",
+          "independent-checks.json": "79d7987715b3c5aa718499cec6bc99dd1579d7d0fcc2302f6f72b26ac971cbd4"
+        }
+      }
     }
   ]
 }
