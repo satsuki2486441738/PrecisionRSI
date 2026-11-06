@@ -1,0 +1,420 @@
+{
+  "schema_version": 1,
+  "kind": "anonymous_npu_repeat_target_replay",
+  "status": "scoped_measured_repeatability_pilot",
+  "date_utc": "2026-11-06",
+  "model": {
+    "repository": "google/gemma-4-12B",
+    "variant": "base",
+    "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+  },
+  "input_sha256": "643d29f23d00f97665c5c72d73c63bc20525950b2ca5c50b435140b6066214f0",
+  "workload": {
+    "parameter_dtype": "BF16",
+    "attention": "eager",
+    "seed": 0,
+    "parallelism": "TP1",
+    "independent_inputs": 1,
+    "prompt_tokens_including_bos": 128,
+    "fixed_continuation_tokens": 32,
+    "fresh_process_repeats": 3,
+    "prefill_calls_per_capture": 1,
+    "single_token_decode_calls_per_capture": 31,
+    "target_positions_per_capture": 32,
+    "score_derivation": "Offline FP64 log-softmax of native BF16 logits",
+    "native_logits_retained": false
+  },
+  "repeats": [
+    {
+      "id": "npu-r1",
+      "target_logprobs_nat": [
+        -1.9000714783327635,
+        -10.23239787575423,
+        -1.24298695393867,
+        -0.10220042628167088,
+        -4.617764169108578,
+        -1.8464906413330402,
+        -3.0719121746013607,
+        -0.08682385551521313,
+        -0.17874307043420107,
+        -0.3412384917185581,
+        -0.743815936000895,
+        -1.8607396467818558,
+        -7.987701439017794,
+        -0.20779237005224976,
+        -2.9074879265345803,
+        -3.8676643613340884,
+        -5.86466745292227,
+        -0.03233746648524955,
+        -7.223823007231606,
+        -1.112135765632986,
+        -5.31285165634883,
+        -0.3230432826878628,
+        -0.5842819407055408,
+        -3.442330311819461,
+        -0.05177830661458163,
+        -8.501049531901284,
+        -9.483594873719257,
+        -0.5979864080984564,
+        -0.8838743674285892,
+        -0.7540785568908291,
+        -0.021349274857329573,
+        -1.1512093293055885
+      ]
+    },
+    {
+      "id": "npu-r2",
+      "target_logprobs_nat": [
+        -1.9000714783327635,
+        -10.23239787575423,
+        -1.24298695393867,
+        -0.10220042628167088,
+        -4.617764169108578,
+        -1.8464906413330402,
+        -3.0719121746013607,
+        -0.08682385551521313,
+        -0.17874307043420107,
+        -0.3412384917185581,
+        -0.743815936000895,
+        -1.8607396467818558,
+        -7.987701439017794,
+        -0.20779237005224976,
+        -2.9074879265345803,
+        -3.8676643613340884,
+        -5.86466745292227,
+        -0.03233746648524955,
+        -7.223823007231606,
+        -1.112135765632986,
+        -5.31285165634883,
+        -0.3230432826878628,
+        -0.5842819407055408,
+        -3.442330311819461,
+        -0.05177830661458163,
+        -8.501049531901284,
+        -9.483594873719257,
+        -0.5979864080984564,
+        -0.8838743674285892,
+        -0.7540785568908291,
+        -0.021349274857329573,
+        -1.1512093293055885
+      ]
+    },
+    {
+      "id": "npu-r3",
+      "target_logprobs_nat": [
+        -1.9000714783327635,
+        -10.23239787575423,
+        -1.24298695393867,
+        -0.10220042628167088,
+        -4.617764169108578,
+        -1.8464906413330402,
+        -3.0719121746013607,
+        -0.08682385551521313,
+        -0.17874307043420107,
+        -0.3412384917185581,
+        -0.743815936000895,
+        -1.8607396467818558,
+        -7.987701439017794,
+        -0.20779237005224976,
+        -2.9074879265345803,
+        -3.8676643613340884,
+        -5.86466745292227,
+        -0.03233746648524955,
+        -7.223823007231606,
+        -1.112135765632986,
+        -5.31285165634883,
+        -0.3230432826878628,
+        -0.5842819407055408,
+        -3.442330311819461,
+        -0.05177830661458163,
+        -8.501049531901284,
+        -9.483594873719257,
+        -0.5979864080984564,
+        -0.8838743674285892,
+        -0.7540785568908291,
+        -0.021349274857329573,
+        -1.1512093293055885
+      ]
+    }
+  ],
+  "target_pairs": [
+    {
+      "sides": [
+        "npu-r1",
+        "npu-r2"
+      ],
+      "coverage": {
+        "expected": 32,
+        "paired": 32
+      },
+      "metrics": {
+        "target_count": 32,
+        "side_a_nll_nat_per_token": 2.704256948418421,
+        "side_b_nll_nat_per_token": 2.704256948418421,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "max_abs_nat": 0.0,
+        "max_anonymous_row_index_zero_based": 0
+      }
+    },
+    {
+      "sides": [
+        "npu-r1",
+        "npu-r3"
+      ],
+      "coverage": {
+        "expected": 32,
+        "paired": 32
+      },
+      "metrics": {
+        "target_count": 32,
+        "side_a_nll_nat_per_token": 2.704256948418421,
+        "side_b_nll_nat_per_token": 2.704256948418421,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "max_abs_nat": 0.0,
+        "max_anonymous_row_index_zero_based": 0
+      }
+    },
+    {
+      "sides": [
+        "npu-r2",
+        "npu-r3"
+      ],
+      "coverage": {
+        "expected": 32,
+        "paired": 32
+      },
+      "metrics": {
+        "target_count": 32,
+        "side_a_nll_nat_per_token": 2.704256948418421,
+        "side_b_nll_nat_per_token": 2.704256948418421,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "max_abs_nat": 0.0,
+        "max_anonymous_row_index_zero_based": 0
+      }
+    }
+  ],
+  "p99_method": "linear interpolation at0.99*(N-1)",
+  "local_replay": {
+    "scope": "metadata and recorded target scores only",
+    "target_pairs_replayed": 3,
+    "full_vocabulary_rows_checked": 0,
+    "full_vocabulary_rows_transferred": 0,
+    "metadata_summary_sha256": "e0512f4e7923108f6a4bcd555fc95dec258ae96f67021c79d99ec0e7e5a16a5f"
+  },
+  "archived_remote_distributions": {
+    "scope": "Archived source-side results; not independently recomputed from this public artifact or the local metadata-only transfer",
+    "archived_summary_sha256": "95a32147b36d6ae350af58b04c8b733f0279f245916ddc8850e131aa0ef3f5bf",
+    "import_archive_sha256": "b5070f95c7543a56072a71a5450b01db1112923a7931e7a317f1e561226ed886",
+    "remote_status": "npu_repeat_artifacts_checked",
+    "remote_full_vocabulary_rows_checked": 96,
+    "positions_per_capture": 32,
+    "vocabulary_size": 262144,
+    "pairs": [
+      {
+        "sides": [
+          "npu-r1",
+          "npu-r2"
+        ],
+        "positions": 32,
+        "aggregate": {
+          "probability_rmse": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "max_probability_error": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "tail_merged_js": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "top1_agreement": {
+            "count": 32,
+            "total": 32,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 1.0
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_b_top100": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_a_union": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_b_union": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            }
+          }
+        }
+      },
+      {
+        "sides": [
+          "npu-r1",
+          "npu-r3"
+        ],
+        "positions": 32,
+        "aggregate": {
+          "probability_rmse": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "max_probability_error": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "tail_merged_js": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "top1_agreement": {
+            "count": 32,
+            "total": 32,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 1.0
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_b_top100": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_a_union": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_b_union": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            }
+          }
+        }
+      },
+      {
+        "sides": [
+          "npu-r2",
+          "npu-r3"
+        ],
+        "positions": 32,
+        "aggregate": {
+          "probability_rmse": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "max_probability_error": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "tail_merged_js": {
+            "mean": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "top1_agreement": {
+            "count": 32,
+            "total": 32,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 1.0
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_b_top100": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_a_union": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            },
+            "side_b_union": {
+              "mean": 0.9294786390914107,
+              "p1": 0.5634957276558861,
+              "min": 0.5470973325399145
+            }
+          }
+        }
+      }
+    ],
+    "divergence_scope": "Top100 union plus one merged complement category; coarsened JS, not full-vocabulary JS"
+  },
+  "thresholds": null,
+  "acceptance": null,
+  "full_core_complete": false,
+  "h100_torch29_comparison": "pending",
+  "limitations": [
+    "One discovery input on one NPU; no general determinism or representative quality claim",
+    "Eight visible instance devices do not imply TP8 or eight-device coverage",
+    "No completed GPU/NPU comparison or operator attribution",
+    "Validation,cache-off/chunk/batch,operator,quality,performance and remaining core work are incomplete",
+    "Recorded receipts and hashes do not independently attest physical allocation,execution or loader-consumed bytes",
+    "This artifact contains anonymous derived target values and archived aggregates,not tokens,prompt text,native logits or full distributions"
+  ],
+  "environment": {
+    "hardware": {
+      "category": "NPU",
+      "model": "Ascend910_9382"
+    },
+    "software": {
+      "framework": "torch",
+      "torch": "2.9.0+cpu",
+      "torch_npu": "2.9.0.post2",
+      "transformers": "5.10.1",
+      "cann": "9.1.0",
+      "driver": "25.5.2"
+    },
+    "backend_policy": {
+      "float32_matmul_precision": "highest",
+      "matmul_allow_hf32": false,
+      "conv_allow_hf32": true,
+      "deterministic_algorithms": false,
+      "deterministic_warn_only": false,
+      "pythonhashseed": "0",
+      "jit_compile_false": true,
+      "cube_math_type": null
+    }
+  }
+}
