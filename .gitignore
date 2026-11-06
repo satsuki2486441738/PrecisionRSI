@@ -1,6 +1,7 @@
 # Publish the portable skill and maintainer files; keep private projects local.
 /*
 !/.gitignore
+!/.gitattributes
 !/README.md
 !/README.zh-CN.md
 !/AGENTS.md
@@ -38,6 +39,7 @@
 !/tests/test_tree_compare.py
 !/tests/test_tool_help.py
 !/tests/test_evidence_bundle.py
+!/tests/test_evidence_line_endings.py
 !/tests/test_replay_bundle.py
 !/tests/test_nonfinite.py
 __pycache__/
