@@ -1,0 +1,761 @@
+{
+  "schema_version": 1,
+  "kind": "scoped_model_precision_plan_coverage",
+  "model": {
+    "repository": "google/gemma-4-12B",
+    "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+  },
+  "scope": "One fixed text input; H100 and Ascend TP1; three captures per backend. Complete status applies only to each explicitly stated pilot scope.",
+  "source_plan_sha256": "95d0e9bea53d9ee11c23b383def33b6af4bd05bea3741aab65f64ae6e66dfa31",
+  "full_core_complete": false,
+  "original_49_task_scope_complete": false,
+  "current_gpu_npu_pilot_complete": true,
+  "task_count": 49,
+  "core_task_count": 28,
+  "counts": {
+    "partial": 7,
+    "complete": 5,
+    "pending": 14,
+    "deferred": 21,
+    "not_applicable": 2
+  },
+  "thresholds": null,
+  "acceptance": null,
+  "tasks": [
+    {
+      "task_id": "M01",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Resolve model/config/tokenizer/processor identities and inspect the loaded module/parameter inventory",
+        "plan_completion_evidence": "Identity receipts; conversion, tied-weight and modality mappings"
+      },
+      "observed_scope": "Eight snapshot-file hashes/revision/config/tokenizer/processor plus actual runtime class/BF16 parameter dtypes are bound for six runs.",
+      "gap": "Loaded module/parameter/tie/conversion/modality inventory and loader-consumed bytes are not independently proven.",
+      "next_action": "Inventory the loaded complete class, ties, parameter roles, modality mappings and executed branch ownership."
+    },
+    {
+      "task_id": "M02",
+      "profile": "core",
+      "status": "complete",
+      "completion_scope": "one fixed input TP1 pilot only",
+      "pilot_complete": true,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Initialize actual native runtime, import the model class and selected interfaces, verify assigned device binding, run the smallest model call",
+        "plan_completion_evidence": "Successful terminal receipt and actual imported configuration"
+      },
+      "observed_scope": "All six native captures completed RC0 on their recorded GPU/NPU devices, with actual class/import paths and software/device metadata.",
+      "gap": "Completion covers this frozen single-input TP1 initialization/execution pilot; scheduler ownership and binary attestation are outside the receipt.",
+      "next_action": "Preserve terminal/device/source evidence and repeat compatibility checks for newly added modes."
+    },
+    {
+      "task_id": "M03",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Execute the selected native framework entrypoint on the complete in-scope model",
+        "plan_completion_evidence": "Native execution/source identity; output shapes and branch/kernel inventory"
+      },
+      "observed_scope": "The complete Gemma4UnifiedForConditionalGeneration text path executed natively on both backends and exported32 BF16-derived prediction rows per capture.",
+      "gap": "Complete executed branch/kernel inventory, loaded tie inventory and non-text branch captures are absent.",
+      "next_action": "Record in-scope branch/kernel/output coverage while preserving complete-class loader semantics."
+    },
+    {
+      "task_id": "D01",
+      "profile": "core",
+      "status": "complete",
+      "completion_scope": "one fixed input TP1 pilot only",
+      "pilot_complete": true,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Validate identical logical inputs, positions, masks, label shifts and expected coordinates",
+        "plan_completion_evidence": "Input hashes and independently derived inventory"
+      },
+      "observed_scope": "The identical hashed128+32-token input, all-ones mask, zero-based positions and independently expected32 targets/full262144 vocabulary passed six-side admission.",
+      "gap": "Completion is discovery input001 TP1/cache-on only; other inputs, padding, labels/layouts are untested.",
+      "next_action": "Derive a fresh independent inventory for every added input, mode and target shift."
+    },
+    {
+      "task_id": "D02",
+      "profile": "core",
+      "status": "complete",
+      "completion_scope": "one fixed input TP1 pilot only",
+      "pilot_complete": true,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Run one fixed same-state workload 3 times sequentially on each side",
+        "plan_completion_evidence": "Within-side error/variance baseline, seeds and deterministic settings"
+      },
+      "observed_scope": "Three distinct serial captures per backend; six within-backend pairs have zero reported errors, and32 derived NPY row SHA lists match within each backend.",
+      "gap": "One input and seed0 only; no global determinism or raw native-logit byte-equality claim.",
+      "next_action": "Retain repeat baseline and collect variability only for newly frozen conditions that need it."
+    },
+    {
+      "task_id": "D03",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Compare collector disabled/enabled from the same state and RNG",
+        "plan_completion_evidence": "Output/update differences, fired-boundary inventory and payload size"
+      },
+      "observed_scope": "No collector-disabled versus enabled same-state experiment has run.",
+      "gap": "Instrumentation transparency, fired-boundary inventory and overhead are unmeasured.",
+      "next_action": "Freeze paired state/RNG and compare raw outputs, fired boundaries and payload size."
+    },
+    {
+      "task_id": "I01",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Cache-off full forward through the complete in-scope model",
+        "plan_completion_evidence": "Raw prediction scores, full-vocabulary-normalized targets/distributions and all valid-target inventory"
+      },
+      "observed_scope": "A160-token cache-off full-forward design exists; zero native I01 executions.",
+      "gap": "All159 valid target scores, raw complete logits and47 selected deduplicated distributions are proposed only.",
+      "next_action": "Use a new bounded task/collector/claim and one full-forward capture per backend with an independent159-target inventory."
+    },
+    {
+      "task_id": "I02",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "One native prefill followed by 32 fixed single-token decode steps",
+        "plan_completion_evidence": "Final prefill/first-decode/later-decode rows, absolute positions, cache and recurrent-state metadata"
+      },
+      "observed_scope": "Each run uses one128-token prefill plus31 one-token decode calls to score32 fixed targets; absolute coordinates and cache-class/events are retained.",
+      "gap": "Literal plan asks prefill+32 decode calls;16 selected prompt rows and complete cache/recurrent-state inventory are missing.",
+      "next_action": "Freeze the extra target/call and prompt selection; capture declared state/cache shapes/dtypes without relabeling the shorter pilot."
+    },
+    {
+      "task_id": "I03",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Replay the same complete token sequence using full forward, token decode and chunked prefill/decode",
+        "plan_completion_evidence": "Matched prediction rows across partitions; native state evolution"
+      },
+      "observed_scope": "Current cache-on token-decode rows provide just one partition of the fixed sequence.",
+      "gap": "No full-forward anchor, declared chunked partitions or matched native state evolution.",
+      "next_action": "Complete I01 and its32-row intersection, then add bounded chunk partitions/state inventory."
+    },
+    {
+      "task_id": "I04",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Compare each request alone with variable-length batches and left/right padding where supported",
+        "plan_completion_evidence": "Logical positions/masks; batch membership and padding side; per-request differences"
+      },
+      "observed_scope": "Only one unpadded request on one selected device was executed.",
+      "gap": "No variable-length batches, padding sides or alone-versus-batch contrast.",
+      "next_action": "Freeze supported batch/padding modes and compare identical per-request logical coordinates."
+    },
+    {
+      "task_id": "I05",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Repeat I01–I03 across frozen context bins within resource limits",
+        "plan_completion_evidence": "Metrics by input and length; memory, failure/OOM and uncovered-bin records"
+      },
+      "observed_scope": "Only one128-token discovery prompt plus32 forced continuation tokens was executed.",
+      "gap": "Other discovery inputs/lengths, reserved48 examples and supported/funded32K long-context6 are unexecuted.",
+      "next_action": "Freeze bounded length bins and resources, then run I01-I03 with uncovered/OOM cells explicit."
+    },
+    {
+      "task_id": "I06",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Contrast native production backend with a controlled higher-precision or alternate-backend path",
+        "plan_completion_evidence": "Exact changed settings; same-input results and original-path identity"
+      },
+      "observed_scope": "Two native production hardware backends were compared at BF16/eager.",
+      "gap": "No controlled higher-precision or alternate-path diagnostic contrast; peers alone do not isolate one setting.",
+      "next_action": "Declare a justified reference/alternate path and exact changed settings, then replay identical inputs."
+    },
+    {
+      "task_id": "I07",
+      "profile": "core",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "In a claimed serving engine, compare cache cold/warm and available chunk/scheduling modes",
+        "plan_completion_evidence": "Native request path, cache-hit evidence, fixed histories and preprocessor scores"
+      },
+      "observed_scope": "The mm_inference instance provided a native framework environment; no serving-engine request-path claim was made.",
+      "gap": "No serving scheduler, cache-hit/cold-warm or chunking/preprocessor-score evidence.",
+      "next_action": "If serving behavior is selected, identify the engine/API and freeze bounded request/cache modes."
+    },
+    {
+      "task_id": "O01",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Inventory all executed operator families, variants, dtypes and shapes",
+        "plan_completion_evidence": "Applicable families, actual implementation mapping and explicit gaps"
+      },
+      "observed_scope": "Model config and complete-class execution are known; executed operator inventory is not captured.",
+      "gap": "Family/variant/dtype/shape/native implementation coverage is missing.",
+      "next_action": "Inventory actual executed operator families/implementations before selecting replay cases."
+    },
+    {
+      "task_id": "O02",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Screen every backbone block boundary on bounded real inputs; sample fixed tokens/channels within payload limits",
+        "plan_completion_evidence": "Per-block error trajectory, sample inventory and transparent collector check"
+      },
+      "observed_scope": "Current captures cover prediction boundaries only.",
+      "gap": "Per-block trajectories across48 blocks, fixed token/channel samples and collector-transparency checks are absent.",
+      "next_action": "After D03, add bounded per-block real-input samples with explicit coordinates/byte limits."
+    },
+    {
+      "task_id": "O03",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Capture real inputs/parameters and incoming gradients for each selected family/variant",
+        "plan_completion_evidence": "Same-input replay inventory with source hashes and semantic mappings"
+      },
+      "observed_scope": "No operator input/parameter or incoming-gradient operand bundle exists.",
+      "gap": "Same-input replay inventory and semantic mappings are absent.",
+      "next_action": "Select families from O01 and retain real operands/source hashes; gradients need a concrete training scope."
+    },
+    {
+      "task_id": "O04",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Replay identical captured operands on both native implementations and a validated reference",
+        "plan_completion_evidence": "Local forward/backward metrics separated from propagated-state differences"
+      },
+      "observed_scope": "No same-operand operator/reference native replay has run.",
+      "gap": "Local arithmetic error is not separated from propagated-state differences.",
+      "next_action": "Replay O03 operands on both native implementations and a validated reference with explicit dtype/layout semantics."
+    },
+    {
+      "task_id": "O05",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Test real-shape/layout and selected numerical/size boundaries",
+        "plan_completion_evidence": "Declared stress grid, finite/nonfinite counts and per-cell results"
+      },
+      "observed_scope": "No numerical/shape/layout stress grid has been executed.",
+      "gap": "Stress-cell outcomes and finite/nonfinite counts are absent.",
+      "next_action": "Freeze bounded real-shape/numerical boundaries from operator findings and record every cell."
+    },
+    {
+      "task_id": "O06",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Isolate a selected model-level finding and intervene on one variable",
+        "plan_completion_evidence": "Reproduced finding, intervention, original-workload revalidation and reserved-input result"
+      },
+      "observed_scope": "A scoped end-to-end cross-backend difference is measured; driver/environment fixes are operational.",
+      "gap": "No isolated arithmetic finding, one-variable numerical intervention or reserved-input revalidation.",
+      "next_action": "Isolate a finding using O02-O05, freeze one intervention and revalidate original/reserved workloads."
+    },
+    {
+      "task_id": "S01",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Align initial model/adapters, optimizer/master state, scheduler and data position",
+        "plan_completion_evidence": "Exact logical values or explicitly justified per-side representation; tied/frozen inventories"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S02",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Execute one aligned-state update with complete trainable coverage",
+        "plan_completion_evidence": "Effective labels/denominators, native loss, accumulated/synchronized gradients, stored before/after and optimizer state"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S03",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Use two microbatches with unequal valid-target counts and compare declared accumulation semantics",
+        "plan_completion_evidence": "Raw/backward losses, effective denominators, masks and optimizer-step boundaries"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S04",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Exercise clipping and mixed-precision scaling if selected",
+        "plan_completion_evidence": "Native norm/coefficient, postclip/unscaled gradients, overflow and applied/skipped update events"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S05",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Execute 2-step pilot then 10-step independent trajectories from identical initial state",
+        "plan_completion_evidence": "Per-step scores/loss, gradient/update norms and drift; complete snapshots at steps 1, 2 and 10"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S06",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Run the next update on both sides from one verified common checkpoint",
+        "plan_completion_evidence": "Same-start state evidence, per-side update and state differences separated from cumulative drift"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S07",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Compare continuous execution against each side's native save/load continuation",
+        "plan_completion_evidence": "Model/optimizer/scheduler/RNG/data-state checks and resumed-step outputs/updates"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "S08",
+      "profile": "training",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Validate chosen policy on reserved training batches and initial adapter seeds 0, 1 and 2",
+        "plan_completion_evidence": "Frozen policy, paired per-seed results, input-level spread and execution cost"
+      },
+      "observed_scope": "No native training state/optimizer/labels/update/accumulation/checkpoint/trajectory workload was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze a concrete aligned-state training workload and bounded resources before enabling."
+    },
+    {
+      "task_id": "R01",
+      "profile": "rl",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Freeze trajectory/group/action identities and old/reference policy versions",
+        "plan_completion_evidence": "Prompts/responses, action masks, EOS/truncation, groups and policy/state version mappings"
+      },
+      "observed_scope": "No frozen trajectory/objective/reward/reference policy or actor/critic/online RL loop was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze native RL identities/objectives and a bounded workload before enabling."
+    },
+    {
+      "task_id": "R02",
+      "profile": "rl",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Recompute native current action scores and objective from shared dependencies",
+        "plan_completion_evidence": "Old/reference scores, rewards, advantages/returns/values, normalization and effective denominators"
+      },
+      "observed_scope": "No frozen trajectory/objective/reward/reference policy or actor/critic/online RL loop was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze native RL identities/objectives and a bounded workload before enabling."
+    },
+    {
+      "task_id": "R03",
+      "profile": "rl",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Cover active objective branches on native device workloads",
+        "plan_completion_evidence": "Clipped/unclipped decisions, KL placement, value clipping if present, zero-variance group handling and masks"
+      },
+      "observed_scope": "No frozen trajectory/objective/reward/reference policy or actor/critic/online RL loop was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze native RL identities/objectives and a bounded workload before enabling."
+    },
+    {
+      "task_id": "R04",
+      "profile": "rl",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Run one aligned actor/critic update and a short fixed-trajectory continuation",
+        "plan_completion_evidence": "Training-stage coverage, optimizer/state identity, ordering and stored updates"
+      },
+      "observed_scope": "No frozen trajectory/objective/reward/reference policy or actor/critic/online RL loop was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze native RL identities/objectives and a bounded workload before enabling."
+    },
+    {
+      "task_id": "R05",
+      "profile": "rl",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "When online RL claims are made, run controlled rollout/reward/training with repeated seeds",
+        "plan_completion_evidence": "Native loop completion, versions/staleness, reward/task outcomes and total cost"
+      },
+      "observed_scope": "No frozen trajectory/objective/reward/reference policy or actor/critic/online RL loop was selected or executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze native RL identities/objectives and a bounded workload before enabling."
+    },
+    {
+      "task_id": "X01",
+      "profile": "distributed",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Distributed: compare a declared single-device or logical baseline with each claimed TP/PP/DP/FSDP/ZeRO/CP/EP layout",
+        "plan_completion_evidence": "Shard/replica ownership, logical reconstruction, native reductions and complete rank receipts"
+      },
+      "observed_scope": "Only TP1/DP1 executed; eight visible NPUs do not establish distributed coverage.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze an explicit layout/rank/state reconstruction baseline and native all-rank evidence."
+    },
+    {
+      "task_id": "X02",
+      "profile": "distributed",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Distributed: execute accumulation, save/load and native update at selected layouts",
+        "plan_completion_evidence": "State mapping, synchronization, optimizer ownership and continuation"
+      },
+      "observed_scope": "Only TP1/DP1 executed; eight visible NPUs do not establish distributed coverage.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze an explicit layout/rank/state reconstruction baseline and native all-rank evidence."
+    },
+    {
+      "task_id": "Z01",
+      "profile": "quantized",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Quantized: pin calibration data/method, converted bytes, scales/zeros/groups and quantized tensor coverage",
+        "plan_completion_evidence": "Conversion identity and same-input dequantized/reference contrast"
+      },
+      "observed_scope": "Native BF16 weights were used; no quantization/calibration/conversion/quantized operator workload was executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze calibration/conversion/tensor coverage and a bounded native quantized workload."
+    },
+    {
+      "task_id": "Z02",
+      "profile": "quantized",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Quantized: compare native quantized operator and complete model prefill/decode/training where claimed",
+        "plan_completion_evidence": "Error and quality/cost deltas; weight/activation/KV/state quantization separated"
+      },
+      "observed_scope": "Native BF16 weights were used; no quantization/calibration/conversion/quantized operator workload was executed.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Freeze calibration/conversion/tensor coverage and a bounded native quantized workload."
+    },
+    {
+      "task_id": "A-MOE01",
+      "profile": "moe",
+      "status": "not_applicable",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "MoE: capture router scores, top-k expert IDs/weights, ties/margins, load and dropped/rerouted tokens",
+        "plan_completion_evidence": "Routing agreement and expert/dispatch/combine mappings"
+      },
+      "observed_scope": "Pinned text_config declares enable_moe_block=false,num_experts=null,top_k_experts=null; no routed experts are declared. Loaded module inventory is still incomplete under M01.",
+      "gap": "No task completion evidence; profile retained explicitly. Configuration exclusion is provisional on M01 loaded inventory.",
+      "next_action": "Retain config evidence and reopen if actual loaded module/operator inventory contradicts the non-routed text configuration."
+    },
+    {
+      "task_id": "A-MOE02",
+      "profile": "moe",
+      "status": "not_applicable",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "MoE: compare natural routing and diagnostic fixed-routing replay",
+        "plan_completion_evidence": "Routing versus expert-arithmetic contributions; native unfixed model verification"
+      },
+      "observed_scope": "Pinned text_config declares enable_moe_block=false,num_experts=null,top_k_experts=null; no routed experts are declared. Loaded module inventory is still incomplete under M01.",
+      "gap": "No task completion evidence; profile retained explicitly. Configuration exclusion is provisional on M01 loaded inventory.",
+      "next_action": "Retain config evidence and reopen if actual loaded module/operator inventory contradicts the non-routed text configuration."
+    },
+    {
+      "task_id": "A-MM01",
+      "profile": "multimodal",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Multimodal: freeze raw assets and exact processor outputs for every claimed modality",
+        "plan_completion_evidence": "Processor/version identity, shapes, resolution/rate and token/tensor mappings"
+      },
+      "observed_scope": "Vision/audio configs and a video token exist, but text-only pilot has no raw media/processor tensors/modality-boundary outputs.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Resolve supported image/audio/video paths; freeze concrete assets, processor outputs and bounded native workloads. Do not call these structurally inapplicable."
+    },
+    {
+      "task_id": "A-MM02",
+      "profile": "multimodal",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Multimodal: compare encoder/frontend, projector and fused backbone outputs on paired tasks",
+        "plan_completion_evidence": "Modality-boundary coverage and task outputs; image/audio/video length/resolution strata"
+      },
+      "observed_scope": "Vision/audio configs and a video token exist, but text-only pilot has no raw media/processor tensors/modality-boundary outputs.",
+      "gap": "No task completion evidence; profile retained explicitly. Outside the selected text TP1 inference pilot.",
+      "next_action": "Resolve supported image/audio/video paths; freeze concrete assets, processor outputs and bounded native workloads. Do not call these structurally inapplicable."
+    },
+    {
+      "task_id": "Q01",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Evaluate frozen validation examples with teacher-forced target scores and distribution metrics",
+        "plan_completion_evidence": "Input-level and length/family summaries; mismatch examples and top-1 margins"
+      },
+      "observed_scope": "Teacher-forced target/distribution metrics exist for one discovery input; all32 compared top1 predictions agree.",
+      "gap": "No frozen reserved validation, family/length summaries, held-out mismatch analysis or input-level uncertainty.",
+      "next_action": "Evaluate a frozen reserved set with unchanged policies and per-input/length/family metrics."
+    },
+    {
+      "task_id": "Q02",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Execute native free generation or the architecture's native output task on the same reserved inputs",
+        "plan_completion_evidence": "Generated tokens/outputs, exact task metric implementation and qualitative failures"
+      },
+      "observed_scope": "All32 continuation tokens were predetermined and forced.",
+      "gap": "No native free generation, task metric or reserved-input qualitative evaluation.",
+      "next_action": "Freeze native generation/output semantics and task metrics, then evaluate the same reserved inputs."
+    },
+    {
+      "task_id": "Q03",
+      "profile": "core",
+      "status": "deferred",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "For a claimed policy improvement, compare native baseline and frozen candidate on the same reserved workload",
+        "plan_completion_evidence": "Paired quality/precision deltas and uncertainty; no policy selection on these inputs"
+      },
+      "observed_scope": "No numerical-policy improvement is claimed or selected.",
+      "gap": "No baseline/candidate paired reserved evaluation or uncertainty.",
+      "next_action": "Freeze any justified numerical policy before reserved evaluation; compare paired precision/quality/cost."
+    },
+    {
+      "task_id": "P01",
+      "profile": "core",
+      "status": "pending",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Time uninstrumented baseline and candidate on matched hardware allocations and workloads",
+        "plan_completion_evidence": "Prefill/decode or train-step latency, throughput, peak memory, warmup and synchronization policy"
+      },
+      "observed_scope": "Six recorder wall intervals are retained and include setup/hash/load/capture/export.",
+      "gap": "No matched uninstrumented performance experiment,2warmups+5measured runs, synchronization policy or peak-memory comparison.",
+      "next_action": "Separate setup and steady state; measure the plan warmup/repetition policy on a frozen workload."
+    },
+    {
+      "task_id": "P02",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Record total evaluation cost separately",
+        "plan_completion_evidence": "Preparation, compilation, captures, retries, transfer, diagnosis and cleanup"
+      },
+      "observed_scope": "Capture/comparison/E02 timing, import/export receipts and stopped-resource evidence are retained.",
+      "gap": "Preparation, failures/retries, compile, transfer, diagnosis, cleanup and allocated-device/currency totals are unreconciled.",
+      "next_action": "Aggregate all receipts and allocation lifetime including failures; retain unknown rates/times as unknown."
+    },
+    {
+      "task_id": "E01",
+      "profile": "core",
+      "status": "complete",
+      "completion_scope": "one fixed input TP1 pilot only",
+      "pilot_complete": true,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Validate both sides against an independent expected inventory",
+        "plan_completion_evidence": "Identity, dtype, semantic coordinate, mask, rank and coverage checks"
+      },
+      "observed_scope": "The actual frozen gate binds model/input/policies/source maps, validates six sides/all192 full rows and computes six within+nine cross pairs.",
+      "gap": "Completion is independent inventory for this one-input32-target pilot, not model-wide/full-plan coverage; local metadata omits192 arrays.",
+      "next_action": "Preserve frozen admission/source hashes; derive new expected inventory for expanded scope."
+    },
+    {
+      "task_id": "E02",
+      "profile": "core",
+      "status": "complete",
+      "completion_scope": "one fixed input TP1 pilot only",
+      "pilot_complete": true,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Independently check selected maximum-error coordinates and representative reductions",
+        "plan_completion_evidence": "Original retained values/hashes and reproduced metric checks"
+      },
+      "observed_scope": "Independent CPU-only verifier RC0 reproduces15 target-pair reductions and32 selected r1/r1 distribution rows including deduplicated global maxima.",
+      "gap": "Complete192-row admission is delegated to frozen gate; E02 does not independently replay192 distributions or unavailable native logits. Tolerances check software, not acceptance.",
+      "next_action": "Retain original arrays/hashes and independent verifier closure; extend coordinate checks for new modes."
+    },
+    {
+      "task_id": "E03",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Replay selected validators/comparisons from a portable evidence bundle",
+        "plan_completion_evidence": "Source/export hashes, replay specification and matching expected report fields"
+      },
+      "observed_scope": "A complete portable GPU array bundle was hash-checked/imported on the NPU source host; gate/E02 consumed actual source-host arrays.",
+      "gap": "A self-contained six-side clean off-host replay is not proven; metadata export omits192 NPY rows and NPU arrays remain source-retained.",
+      "next_action": "Stage/package necessary NPU arrays and frozen tools, then replay selected reports from a clean bounded location."
+    },
+    {
+      "task_id": "E04",
+      "profile": "core",
+      "status": "partial",
+      "completion_scope": "no full task completion claimed",
+      "pilot_complete": false,
+      "full_plan_task_complete": false,
+      "expected_coverage": {
+        "plan_procedure": "Audit final claims and evidence retention",
+        "plan_completion_evidence": "Complete ledger, unresolved gaps, acceptance status and readable artifact locations"
+      },
+      "observed_scope": "This49-task/28-core ledger records checked pilot evidence/gaps/cleanup/unknown acceptance and preserves historical drafts.",
+      "gap": "Full core, final sanitized public reporting/evidence retention and complete cost/claim audit remain unfinished.",
+      "next_action": "Publish scoped claims with every gap retained and reconcile final reports against raw evidence."
+    }
+  ]
+}
