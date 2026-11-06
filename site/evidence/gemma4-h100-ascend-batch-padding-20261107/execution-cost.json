@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "selected_I04_execution_accounting",
+  "source_metadata_map_sha256": "865d3025cc30c1997e37372474e91b7f9037f7032248ef3d6e1c381bcdb968c3",
+  "scope": "Two instrumented native model children and distinct offline controllers; a measured subset of evaluation work.",
+  "model_children": {
+    "GPU": {
+      "recorder_receipt_sha256": "869d39060282756a1a161e30098daa2694abe7da7fa56788be0d13d17254ce5e",
+      "status": "completed",
+      "returncode": 0,
+      "recorded_wall_seconds": 298.557943277061,
+      "recorded_start_utc_on_source_host": "2026-11-06T19:17:45.270577+00:00",
+      "recorded_end_utc_on_source_host": "2026-11-06T19:22:43.842014+00:00",
+      "native_model_processes": 1,
+      "loaded_models": 1,
+      "native_forward_calls": 4,
+      "scope": "Instrumented model child: imports, loading, capture and validation; parent preparation/transfer excluded.",
+      "uninstrumented_latency_seconds": null,
+      "active_device_seconds": null,
+      "allocated_instance_seconds": null,
+      "currency_cost": null
+    },
+    "NPU": {
+      "recorder_receipt_sha256": "fb337cb7013d5aa81b687c69686b5ec31684cd2510b0e992adbf955876f0468d",
+      "status": "completed",
+      "returncode": 0,
+      "recorded_wall_seconds": 85.6662234030664,
+      "recorded_start_utc_on_source_host": "2026-11-06T18:57:48.278516+00:00",
+      "recorded_end_utc_on_source_host": "2026-11-06T18:59:13.946536+00:00",
+      "native_model_processes": 1,
+      "loaded_models": 1,
+      "native_forward_calls": 4,
+      "scope": "Instrumented model child: imports, loading, capture and validation; parent preparation/transfer excluded.",
+      "uninstrumented_latency_seconds": null,
+      "active_device_seconds": null,
+      "allocated_instance_seconds": null,
+      "currency_cost": null
+    }
+  },
+  "cpu_numerical_admission": {
+    "controller_sha256": "5d18a78e14433e5b1e812ca4335704182cbeac1f18ce5fd5ceee30d0ad1cd3f0",
+    "status": "completed",
+    "returncode": 0,
+    "recorded_wall_seconds": 240.48395719006658,
+    "native_executions_started": 0,
+    "scope": "Whole offline controller including child; never add nested child time again."
+  },
+  "cpu_selected_E02": {
+    "controller_sha256": "0129c269f8732d93303cb026468735144cc9b97f29aa0e2170958b5b48a837a9",
+    "status": "completed",
+    "returncode": 0,
+    "recorded_wall_seconds": 197.6121320873499,
+    "native_executions_started": 0,
+    "scope": "Selected CPU verification plus metadata packaging; includes its numeric child."
+  },
+  "total_evaluation_cost_complete": false,
+  "P01_complete": false,
+  "headline_speed_comparison_supported": false,
+  "total_allocated_device_seconds": null,
+  "total_currency_cost": null,
+  "unknown_or_excluded": [
+    "Queue and allocated-instance lifetime/rates/billing.",
+    "Complete preparation, retries, transfers, CPU validation and cleanup cost.",
+    "Uninstrumented synchronized latency, throughput, warmup and peak memory.",
+    "Source-host clocks differ; no cross-host interval is subtracted."
+  ],
+  "acceptance": null
+}
