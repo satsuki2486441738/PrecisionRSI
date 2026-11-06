@@ -61,6 +61,23 @@ class EvaluationPresentationTests(unittest.TestCase):
         self.assertIn('CPU ↔ CANN 缓存推理', cann)
         self.assertIn('CUDA TRTLLM 缓存推理', trt)
 
+    def test_batch_padding_names_require_both_recorded_native_modes(self):
+        result = self.evaluate("""(() => {
+          const record={framework:'Transformers',task:'inference',title:'Batch inference',
+            sides:[{hardware:'NVIDIA H100',settings:{execution:{mode:'batch-left',native_batch_size:2}}},
+                   {hardware:'Ascend',settings:{execution:{mode:'batch-right',native_batch_size:2}}}]};
+          const before=JSON.stringify(record), paired=titleFor(record,'Gemma-4-12B');
+          const oneSide=JSON.parse(before);oneSide.sides[1].settings.execution.mode='alone';
+          const unexecuted=JSON.parse(before);unexecuted.summary='left/right padding planned';
+          unexecuted.sides.forEach(s=>s.settings.execution.native_batch_size=1);
+          return {paired,unchanged:before===JSON.stringify(record),
+            oneSide:titleFor(oneSide,'Gemma-4-12B'),unexecuted:titleFor(unexecuted,'Gemma-4-12B')};
+        })()""")
+        self.assertTrue(result['unchanged'])
+        self.assertEqual(result['paired'], 'Transformers · CUDA ↔ Ascend 批处理 / 左右填充 · Gemma-4-12B')
+        self.assertNotIn('左右填充', result['oneSide'])
+        self.assertNotIn('左右填充', result['unexecuted'])
+
     def test_sft_checkpoint_ddp_component_and_training_kind_are_distinct(self):
         names = self.evaluate("""[
           'trl-sfttrainer-checkpoint-20261021',
