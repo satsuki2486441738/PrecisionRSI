@@ -64198,6 +64198,3671 @@
         "prefix": "site/evidence/gemma4-ascend-tp1-repeat-20261106/",
         "replay_cases": 3
       }
+    },
+    {
+      "id": "gemma4-h100-ascend-fixed-20261106",
+      "date": "2026-11-06",
+      "title": "Gemma 4 12B: H100 vs Ascend TP1 text pilot (one input)",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "thresholds": null,
+      "full_core_complete": false,
+      "model": {
+        "name": "google/gemma-4-12B",
+        "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+      },
+      "summary": "One fixed text input; three serial TP1 captures per backend, nine GPU/NPU pairs and six within-backend controls. Full-row source-side checks and independent selected-row checks matched; numerical acceptance and the full-core plan remain open.",
+      "sides": [
+        {
+          "id": "h100-r1",
+          "label": "H100 / repeat r1",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "instance_visible_devices": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "cuda_runtime": "12.8",
+            "supplementary_driver": "580.95.05",
+            "driver_evidence_scope": "Separate pre-capture native inventory; original collector runtime unchanged"
+          }
+        },
+        {
+          "id": "h100-r2",
+          "label": "H100 / repeat r2",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "instance_visible_devices": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "cuda_runtime": "12.8",
+            "supplementary_driver": "580.95.05",
+            "driver_evidence_scope": "Separate pre-capture native inventory; original collector runtime unchanged"
+          }
+        },
+        {
+          "id": "h100-r3",
+          "label": "H100 / repeat r3",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "instance_visible_devices": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "cuda_runtime": "12.8",
+            "supplementary_driver": "580.95.05",
+            "driver_evidence_scope": "Separate pre-capture native inventory; original collector runtime unchanged"
+          }
+        },
+        {
+          "id": "npu-r1",
+          "label": "Ascend / repeat r1",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "instance_visible_devices": 8,
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null
+          }
+        },
+        {
+          "id": "npu-r2",
+          "label": "Ascend / repeat r2",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "instance_visible_devices": 8,
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null
+          }
+        },
+        {
+          "id": "npu-r3",
+          "label": "Ascend / repeat r3",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            },
+            {
+              "name": "Driver package metadata",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "dtype": "BF16",
+            "attention": "eager",
+            "mode": "eval/inference",
+            "seed": 0,
+            "device_count": 1,
+            "instance_visible_devices": 8,
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null
+          }
+        }
+      ],
+      "common": [
+        "Same pinned base checkpoint and frozen input SHA256 643d29f23d00f97665c5c72d73c63bc20525950b2ca5c50b435140b6066214f0; one independent unpadded 128-token conditioning history including BOS and 32 predetermined continuation targets.",
+        "BF16 parameters/native logits, eager attention, seed 0, cache-on TP1; one prefill plus 31 single-token cached forwards per capture. Offline FP64 log-softmax of copied BF16 values; original native logits were not retained.",
+        "Three fresh serial processes per backend. Source comparison checked 96 complete 262144-entry rows per backend and all 15 capture-pair comparisons."
+      ],
+      "differences": [
+        "NVIDIA H100 80GB HBM3 versus Ascend910_9382. GPU instance exposed one device; NPU instance exposed eight, with only one used per capture. No TP8 or distributed-model claim.",
+        "PyTorch 2.9.0+cu128/CUDA 12.8 versus PyTorch 2.9.0+cpu with TorchNPU 2.9.0.post2/CANN 9.1.0; Transformers 5.10.1 on both. GPU driver 580.95.05 is separate supplementary inventory; NPU driver 25.5.2 is pinned installed-package metadata after the recorded metadata API decode failure.",
+        "Highest FP32 matmul precision with matmul TF32/HF32 disabled and convolution TF32/HF32 enabled. GPU cuDNN deterministic/benchmark flags were false; NPU JIT compilation was disabled and cube math type was unavailable. Exact per-backend policies remain recorded; differences do not identify a causal operator defect."
+      ],
+      "comparisons": [
+        {
+          "id": "h100-r1-vs-npu-r1",
+          "title": "GPU/NPU: h100-r1 vs npu-r1",
+          "side_ids": [
+            "h100-r1",
+            "npu-r1"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r1": 2.7127718954732023,
+                "npu-r1": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r1 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r1 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r1 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r1 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r1 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r1 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r1 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r1 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r1 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r1 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r1 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r1 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r1-vs-npu-r2",
+          "title": "GPU/NPU: h100-r1 vs npu-r2",
+          "side_ids": [
+            "h100-r1",
+            "npu-r2"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r1": 2.7127718954732023,
+                "npu-r2": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r1 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r1 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r1 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r2 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r2 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r2 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r1 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r1 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r1 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r2 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r2 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r2 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r1-vs-npu-r3",
+          "title": "GPU/NPU: h100-r1 vs npu-r3",
+          "side_ids": [
+            "h100-r1",
+            "npu-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r1": 2.7127718954732023,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r1 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r1 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r1 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r3 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r3 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r3 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r1 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r1 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r1 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r3 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r3 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r3 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r2-vs-npu-r1",
+          "title": "GPU/NPU: h100-r2 vs npu-r1",
+          "side_ids": [
+            "h100-r2",
+            "npu-r1"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r2": 2.7127718954732023,
+                "npu-r1": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r2 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r2 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r2 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r1 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r1 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r1 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r2 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r2 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r2 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r1 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r1 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r1 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r2-vs-npu-r2",
+          "title": "GPU/NPU: h100-r2 vs npu-r2",
+          "side_ids": [
+            "h100-r2",
+            "npu-r2"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r2": 2.7127718954732023,
+                "npu-r2": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r2 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r2 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r2 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r2 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r2 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r2 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r2 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r2 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r2 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r2 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r2 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r2 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r2-vs-npu-r3",
+          "title": "GPU/NPU: h100-r2 vs npu-r3",
+          "side_ids": [
+            "h100-r2",
+            "npu-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r2": 2.7127718954732023,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r2 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r2 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r2 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r3 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r3 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r3 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r2 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r2 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r2 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r3 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r3 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r3 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r3-vs-npu-r1",
+          "title": "GPU/NPU: h100-r3 vs npu-r1",
+          "side_ids": [
+            "h100-r3",
+            "npu-r1"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r3": 2.7127718954732023,
+                "npu-r1": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r3 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r3 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r3 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r1 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r1 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r1 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r3 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r3 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r3 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r1 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r1 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r1 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r3-vs-npu-r2",
+          "title": "GPU/NPU: h100-r3 vs npu-r2",
+          "side_ids": [
+            "h100-r3",
+            "npu-r2"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r3": 2.7127718954732023,
+                "npu-r2": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r3 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r3 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r3 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r2 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r2 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r2 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r3 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r3 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r3 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r2 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r2 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r2 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r3-vs-npu-r3",
+          "title": "GPU/NPU: h100-r3 vs npu-r3",
+          "side_ids": [
+            "h100-r3",
+            "npu-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.008514947054781175,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r3": 2.7127718954732023,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.03781477772814792,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.1724135311917122,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.18138011444671776,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 25
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.9790625,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0002999089056918081,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.001345160891414444,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0016177028986291012,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 26
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0011347052750865418,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.003096469377968323,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.003175990430861354,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.008945239077034027,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.022226189329265525,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.02270122144985781,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 31
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r3 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r3 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r3 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r3 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r3 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r3 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r3 Union probability mass mean",
+              "value": 0.930893213154842,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r3 Union probability mass P1",
+              "value": 0.5703752372423142,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r3 Union probability mass min",
+              "value": 0.5502880421732061,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r3 Union probability mass mean",
+              "value": 0.9302556427477394,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r3 Union probability mass P1",
+              "value": 0.5657245112371267,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r3 Union probability mass min",
+              "value": 0.548619376040095,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r1-vs-h100-r2",
+          "title": "Within GPU: h100-r1 vs h100-r2",
+          "side_ids": [
+            "h100-r1",
+            "h100-r2"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r1": 2.7127718954732023,
+                "h100-r2": 2.7127718954732023
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r1 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r1 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r1 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "h100-r2 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "h100-r2 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "h100-r2 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r1 Union probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r1 Union probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r1 Union probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "h100-r2 Union probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "h100-r2 Union probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "h100-r2 Union probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r1-vs-h100-r3",
+          "title": "Within GPU: h100-r1 vs h100-r3",
+          "side_ids": [
+            "h100-r1",
+            "h100-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r1": 2.7127718954732023,
+                "h100-r3": 2.7127718954732023
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r1 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r1 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r1 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "h100-r3 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "h100-r3 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "h100-r3 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r1 Union probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r1 Union probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r1 Union probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "h100-r3 Union probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "h100-r3 Union probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "h100-r3 Union probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "h100-r2-vs-h100-r3",
+          "title": "Within GPU: h100-r2 vs h100-r3",
+          "side_ids": [
+            "h100-r2",
+            "h100-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "h100-r2": 2.7127718954732023,
+                "h100-r3": 2.7127718954732023
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "h100-r2 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "h100-r2 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "h100-r2 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "h100-r3 Top-100 probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "h100-r3 Top-100 probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "h100-r3 Top-100 probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "h100-r2 Union probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "h100-r2 Union probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "h100-r2 Union probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "h100-r3 Union probability mass mean",
+              "value": 0.9301219003023368,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "h100-r3 Union probability mass P1",
+              "value": 0.5680510977224446,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "h100-r3 Union probability mass min",
+              "value": 0.548896442480818,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-r1-vs-npu-r2",
+          "title": "Within NPU: npu-r1 vs npu-r2",
+          "side_ids": [
+            "npu-r1",
+            "npu-r2"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-r1": 2.704256948418421,
+                "npu-r2": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-r1 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-r1 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-r1 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r2 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r2 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r2 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-r1 Union probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-r1 Union probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-r1 Union probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r2 Union probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r2 Union probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r2 Union probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-r1-vs-npu-r3",
+          "title": "Within NPU: npu-r1 vs npu-r3",
+          "side_ids": [
+            "npu-r1",
+            "npu-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-r1": 2.704256948418421,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-r1 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-r1 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-r1 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r3 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r3 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r3 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-r1 Union probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-r1 Union probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-r1 Union probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r3 Union probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r3 Union probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r3 Union probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        },
+        {
+          "id": "npu-r2-vs-npu-r3",
+          "title": "Within NPU: npu-r2 vs npu-r3",
+          "side_ids": [
+            "npu-r2",
+            "npu-r3"
+          ],
+          "scope": "One fixed input, two distinct serial TP1 captures; 32 paired targets and 32 complete-vocabulary prediction rows. Anonymous target and prediction indices start separately at zero. Pair repetitions share the same input.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-r2": 2.704256948418421,
+                "npu-r3": 2.704256948418421
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 32,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS mean",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS max",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error mean",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error max",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "anonymous_prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "npu-r2 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "npu-r2 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "npu-r2 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "npu-r3 Top-100 probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "npu-r3 Top-100 probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "npu-r3 Top-100 probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "npu-r2 Union probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "npu-r2 Union probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "npu-r2 Union probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "npu-r3 Union probability mass mean",
+              "value": 0.9294786390914107,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "npu-r3 Union probability mass P1",
+              "value": 0.5634957276558861,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "npu-r3 Union probability mass min",
+              "value": 0.5470973325399145,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 32,
+              "expected": 32,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired distribution positions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "positions"
+            },
+            {
+              "label": "Vocabulary entries per retained row",
+              "observed": 262144,
+              "expected": 262144,
+              "unit": "entries/row"
+            },
+            {
+              "label": "Independent fixed text inputs",
+              "observed": 1,
+              "expected": 1,
+              "unit": "inputs"
+            }
+          ]
+        }
+      ],
+      "scope": {
+        "independent_inputs": 1,
+        "captures_per_backend": 3,
+        "cross_backend_pairs": 9,
+        "within_gpu_pairs": 3,
+        "within_npu_pairs": 3,
+        "source_full_rows_checked": {
+          "GPU": 96,
+          "NPU": 96
+        },
+        "local_full_rows_available": {
+          "GPU": 96,
+          "NPU": 0
+        },
+        "metadata_export_full_rows_transferred": 0,
+        "public_target_replay_full_rows_read": 0,
+        "independent_e02_target_pairs": 15,
+        "independent_e02_distribution_pair_positions": 32
+      },
+      "notes": [
+        "Thresholds and numerical acceptance remain null. This is a partial single-input integration pilot; full-core completion is false.",
+        "Nine cross pairs reuse the same input and only three captures per backend; they are not nine independent examples. All six within-backend pairs had equal recorded target values and equal full-row hash vectors for this request, without a general determinism claim.",
+        "The source-side gate checked all 192 full rows. The separate standard-library E02 check reconstructed all 15 target comparisons and only the 32 distribution positions of the prespecified h100-r1/npu-r1 pair; deduplicated global maxima already lay in that pair. It did not independently replay all 192 distribution rows.",
+        "The delivery machine separately holds 96 GPU full rows and zero NPU full rows. The imported metadata export contains zero NPY files. Public replay reads zero full rows and reproduces only the 15 recorded target comparisons; distribution summaries are archived source-side results.",
+        "JS is natural-log divergence on the top-100 union plus one exact complement category. Probability RMSE and maximum probability error cover union tokens only. Quantiles are linear across 32 positions. Arithmetic tolerance 1e-12 and normalization tolerance 1e-5 are verification tolerances, not accuracy acceptance thresholds.",
+        "Target maximum uses anonymous target index 25; JS maximum uses anonymous prediction index 26; probability RMSE/maximum-error maxima use prediction index 31. Target and prediction offsets are distinct.",
+        "Archive replay_cases=15 counts capture-pair target reductions, not independent inputs.",
+        "The coverage ledger retains all 49 original tasks and 28 core tasks. Cache-off/chunk/batch/padding contrasts, representative/reserved inputs, internal/operator attribution, generation quality, performance and complete cost accounting remain open. Driver metadata handling is not a numerical repair."
+      ],
+      "evidence": [
+        {
+          "label": "Scoped GPU/NPU report",
+          "url": "evidence/gemma4-h100-ascend-fixed-20261106/report.md"
+        },
+        {
+          "label": "All 15 target and distribution summaries with conditions/source pins",
+          "url": "evidence/gemma4-h100-ascend-fixed-20261106/selected-metrics.json"
+        },
+        {
+          "label": "Six anonymous target vectors and all 15 target-pair metrics",
+          "url": "evidence/gemma4-h100-ascend-fixed-20261106/selected-targets.json"
+        },
+        {
+          "label": "Standard-library target replay (no full-row reads)",
+          "url": "evidence/gemma4-h100-ascend-fixed-20261106/replay-targets.py"
+        },
+        {
+          "label": "Original 49-task coverage ledger",
+          "url": "evidence/gemma4-h100-ascend-fixed-20261106/coverage.json"
+        }
+      ],
+      "archive": {
+        "revision": "797d0aa299f682383f2e92d6c2d85186149d0aa9",
+        "prefix": "site/evidence/gemma4-h100-ascend-fixed-20261106/",
+        "replay_cases": 15,
+        "file_sha256": {
+          "report.md": "7641e9429b142b47e2d1dc9d3d7c4b15a8256d436384c50b2641b2c227bdaaa2",
+          "coverage.json": "090ff4b35889636b11bcc58b58da221fa9b2b230f8d8fd4a4bb7ae38c3918e37",
+          "selected-metrics.json": "6f63c2356fa8951e2181aaecdc9136826c76befb2d141cb95da40384c74bf4cc",
+          "selected-targets.json": "d3436c2eff533ccd2b866b10839ab8ab21170f8456312c925a9b8dae6d1b5876",
+          "replay-targets.py": "9336f825eea92d82f851108c72062417e56c63b13713127fadc8442cc1c9b495"
+        }
+      }
     }
   ]
 }
