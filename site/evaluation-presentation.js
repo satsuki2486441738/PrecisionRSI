@@ -72,6 +72,12 @@
   function inferencePurpose(record, framework, platform, facts) {
     const { title, context, rows } = facts;
     if (/BF16/i.test(title) && /FP16/i.test(title)) return 'BF16 ↔ FP16 完整前向 / 缓存推理';
+    const batched = rows.some((row) => /(?:^|\.)native_batch_size$/.test(row.path) && Number.isInteger(row.value) && row.value > 1);
+    const paddingModes = rows.filter((row) => /(?:^|\.)(?:mode|padding_side)$/.test(row.path)).map((row) => text(row.value));
+    const paddingSide = (side) => paddingModes.some((mode) => new RegExp(`(?:^|[-_\\s])${side}(?:$|[-_\\s])`, 'i').test(mode));
+    if (batched && paddingSide('left') && paddingSide('right')) {
+      return [platform, '批处理 / 左右填充'].filter(Boolean).join(' ');
+    }
     const cold = /冷上下文/.test(title) || (rows.some((row) => /cross_forward_cached_decode$/.test(row.path) && row.value === false) && /clear native memory|prefix.*清空/i.test(context));
     if (cold) return [platform, '冷上下文推理'].filter(Boolean).join(' ');
     const repeated = /repeated.prefill|重复.?prefill|重复预填充|fresh full-prefix|fresh full.prefix|fresh full-prefix requests/i.test(context);
