@@ -86666,6 +86666,1818 @@
           "e02-summary.json": "bb0597edb1a0a968c59fc4e823a7f3cc4cf3a61beffd6dcee7a359d53e479a20"
         }
       }
+    },
+    {
+      "id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "date": "2026-11-07",
+      "title": "Transformers · H100/Ascend observer transparency · Gemma-4-12B",
+      "framework": {
+        "name": "Transformers"
+      },
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "thresholds": null,
+      "full_core_complete": false,
+      "model": {
+        "name": "Gemma-4-12B",
+        "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+      },
+      "summary": "One fixed input, four cache-off observer modes on each backend, 16 score/distribution pairs and 392 paired boundary reductions.",
+      "common": [
+        "Same frozen model and input, BF16, eager, seed 0 and TP1."
+      ],
+      "differences": [
+        "Separate H100 CUDA and Ascend CANN stacks with recorded policies."
+      ],
+      "sides": [
+        {
+          "id": "gpu-off-before",
+          "label": "GPU / off-before",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "cuda_runtime",
+              "version": "12.8"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            }
+          ],
+          "settings": {
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "off-before",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": false,
+              "frontend_dispatcher_metadata_enabled": false
+            }
+          }
+        },
+        {
+          "id": "gpu-hooks-only",
+          "label": "GPU / hooks-only",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "cuda_runtime",
+              "version": "12.8"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            }
+          ],
+          "settings": {
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "hooks-only",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": true,
+              "frontend_dispatcher_metadata_enabled": false
+            }
+          }
+        },
+        {
+          "id": "gpu-off-after",
+          "label": "GPU / off-after",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "cuda_runtime",
+              "version": "12.8"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            }
+          ],
+          "settings": {
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "off-after",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": false,
+              "frontend_dispatcher_metadata_enabled": false
+            }
+          }
+        },
+        {
+          "id": "gpu-hooks-plus-dispatch-metadata",
+          "label": "GPU / hooks-plus-dispatch-metadata",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "cuda_runtime",
+              "version": "12.8"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            }
+          ],
+          "settings": {
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "hooks-plus-dispatch-metadata",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": true,
+              "frontend_dispatcher_metadata_enabled": true
+            }
+          }
+        },
+        {
+          "id": "npu-off-before",
+          "label": "NPU / off-before",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "cann",
+              "version": "9.1.0"
+            },
+            {
+              "name": "driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "off-before",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": false,
+              "frontend_dispatcher_metadata_enabled": false
+            }
+          }
+        },
+        {
+          "id": "npu-hooks-only",
+          "label": "NPU / hooks-only",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "cann",
+              "version": "9.1.0"
+            },
+            {
+              "name": "driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "hooks-only",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": true,
+              "frontend_dispatcher_metadata_enabled": false
+            }
+          }
+        },
+        {
+          "id": "npu-off-after",
+          "label": "NPU / off-after",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "cann",
+              "version": "9.1.0"
+            },
+            {
+              "name": "driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "off-after",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": false,
+              "frontend_dispatcher_metadata_enabled": false
+            }
+          }
+        },
+        {
+          "id": "npu-hooks-plus-dispatch-metadata",
+          "label": "NPU / hooks-plus-dispatch-metadata",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.9.0.post2"
+            },
+            {
+              "name": "transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "cann",
+              "version": "9.1.0"
+            },
+            {
+              "name": "driver",
+              "version": "25.5.2"
+            }
+          ],
+          "settings": {
+            "float32_matmul_precision": "highest",
+            "matmul_allow_hf32": false,
+            "conv_allow_hf32": true,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "pythonhashseed": "0",
+            "jit_compile_false": true,
+            "cube_math_type": null,
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "execution": {
+              "mode": "hooks-plus-dispatch-metadata",
+              "use_cache": false,
+              "sequence_length": 160,
+              "module_hooks_enabled": true,
+              "frontend_dispatcher_metadata_enabled": true
+            }
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "gpu-off-before-vs-gpu-hooks-only",
+          "title": "Observer modes gpu-off-before vs gpu-hooks-only",
+          "side_ids": [
+            "gpu-off-before",
+            "gpu-hooks-only"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-before-vs-gpu-off-after",
+          "title": "Observer modes gpu-off-before vs gpu-off-after",
+          "side_ids": [
+            "gpu-off-before",
+            "gpu-off-after"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-before-vs-gpu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes gpu-off-before vs gpu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-off-before",
+            "gpu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-hooks-only-vs-gpu-off-after",
+          "title": "Observer modes gpu-hooks-only vs gpu-off-after",
+          "side_ids": [
+            "gpu-hooks-only",
+            "gpu-off-after"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-hooks-only-vs-gpu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes gpu-hooks-only vs gpu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-hooks-only",
+            "gpu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "sample-global-rmse",
+              "label": "Sampled global rmse",
+              "value": 0.0,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-max-abs",
+              "label": "Sampled global max_abs",
+              "value": 0.0,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-cosine",
+              "label": "Sampled global cosine",
+              "value": 1.0,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Paired sampled boundaries",
+              "observed": 98,
+              "expected": 98,
+              "unit": "boundary tensors"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-after-vs-gpu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes gpu-off-after vs gpu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-off-after",
+            "gpu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "npu-off-before-vs-npu-hooks-only",
+          "title": "Observer modes npu-off-before vs npu-hooks-only",
+          "side_ids": [
+            "npu-off-before",
+            "npu-hooks-only"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "npu-off-before-vs-npu-off-after",
+          "title": "Observer modes npu-off-before vs npu-off-after",
+          "side_ids": [
+            "npu-off-before",
+            "npu-off-after"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "npu-off-before-vs-npu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes npu-off-before vs npu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "npu-off-before",
+            "npu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "npu-hooks-only-vs-npu-off-after",
+          "title": "Observer modes npu-hooks-only vs npu-off-after",
+          "side_ids": [
+            "npu-hooks-only",
+            "npu-off-after"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "npu-hooks-only-vs-npu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes npu-hooks-only vs npu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "npu-hooks-only",
+            "npu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "sample-global-rmse",
+              "label": "Sampled global rmse",
+              "value": 0.0,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-max-abs",
+              "label": "Sampled global max_abs",
+              "value": 0.0,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-cosine",
+              "label": "Sampled global cosine",
+              "value": 0.9999999999999998,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Paired sampled boundaries",
+              "observed": 98,
+              "expected": 98,
+              "unit": "boundary tensors"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "npu-off-after-vs-npu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes npu-off-after vs npu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "npu-off-after",
+            "npu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_backend_observer_modes",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-before-vs-npu-off-before",
+          "title": "Observer modes gpu-off-before vs npu-off-before",
+          "side_ids": [
+            "gpu-off-before",
+            "npu-off-before"
+          ],
+          "kind": "matched_cross_backend_mode",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.033320404862961756,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.1683911049445629,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.18670247219334346,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.007021719894192646,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.981063829787234,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0003657482150722142,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-hooks-only-vs-npu-hooks-only",
+          "title": "Observer modes gpu-hooks-only vs npu-hooks-only",
+          "side_ids": [
+            "gpu-hooks-only",
+            "npu-hooks-only"
+          ],
+          "kind": "matched_cross_backend_mode",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.033320404862961756,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.1683911049445629,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.18670247219334346,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.007021719894192646,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.981063829787234,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0003657482150722142,
+              "unit": "nat"
+            },
+            {
+              "id": "sample-global-rmse",
+              "label": "Sampled global rmse",
+              "value": 0.021232136984821168,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-max-abs",
+              "label": "Sampled global max_abs",
+              "value": 0.5625,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-cosine",
+              "label": "Sampled global cosine",
+              "value": 0.9998007897474797,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Paired sampled boundaries",
+              "observed": 98,
+              "expected": 98,
+              "unit": "boundary tensors"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-after-vs-npu-off-after",
+          "title": "Observer modes gpu-off-after vs npu-off-after",
+          "side_ids": [
+            "gpu-off-after",
+            "npu-off-after"
+          ],
+          "kind": "matched_cross_backend_mode",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.033320404862961756,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.1683911049445629,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.18670247219334346,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.007021719894192646,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.981063829787234,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0003657482150722142,
+              "unit": "nat"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-hooks-plus-dispatch-metadata-vs-npu-hooks-plus-dispatch-metadata",
+          "title": "Observer modes gpu-hooks-plus-dispatch-metadata vs npu-hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-hooks-plus-dispatch-metadata",
+            "npu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "matched_cross_backend_mode",
+          "scope": "One fixed input, 159 targets and 47 sampled full vocabulary positions.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.033320404862961756,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob absolute difference P99",
+              "value": 0.1683911049445629,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target logprob maximum absolute difference",
+              "value": 0.18670247219334346,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.007021719894192646,
+              "unit": "nat/token"
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 0.981063829787234,
+              "unit": "fraction"
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Mean complement-merged JS",
+              "value": 0.0003657482150722142,
+              "unit": "nat"
+            },
+            {
+              "id": "sample-global-rmse",
+              "label": "Sampled global rmse",
+              "value": 0.021232136984821168,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-max-abs",
+              "label": "Sampled global max_abs",
+              "value": 0.5625,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-cosine",
+              "label": "Sampled global cosine",
+              "value": 0.9998007897474797,
+              "unit": "1"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Paired sampled boundaries",
+              "observed": 98,
+              "expected": 98,
+              "unit": "boundary tensors"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        }
+      ],
+      "scope": {
+        "independent_inputs": 1,
+        "same_loaded_model_processes_per_backend": 1,
+        "native_calls_per_backend": 4,
+        "finite_raw_rows_checked": 1280,
+        "targets_rederived": 1272,
+        "full_vocabulary_rows_rederived": 376,
+        "target_distribution_pairs": 16,
+        "distribution_pair_rows": 752,
+        "boundary_tensor_comparisons": 4,
+        "boundary_tensor_pairs": 392,
+        "primary_cross_backend_boundary_pairs": 98,
+        "original_large_sources_final_bytehash_checked": 388,
+        "new_comparison_documents": 188,
+        "loaded_parameter_or_full_buffer_byte_attestation": false,
+        "native_kernel_identity_attested": false
+      },
+      "plan_coverage": {
+        "task_count": 49,
+        "core_task_count": 28,
+        "counts": {
+          "partial": 9,
+          "complete": 9,
+          "pending": 8,
+          "deferred": 21,
+          "not_applicable": 2
+        },
+        "full_core_complete": false,
+        "original_49_task_scope_complete": false
+      },
+      "execution_census": {
+        "GPU": {
+          "off-before": {
+            "execution_census_measured": false
+          },
+          "hooks-only": {
+            "execution_census_measured": true,
+            "static_modules": 875,
+            "fired_modules": 863,
+            "total_module_invocations": 864,
+            "frontend_dispatcher_enabled": false,
+            "frontend_invocations": 0,
+            "frontend_unique_signatures": 0
+          },
+          "off-after": {
+            "execution_census_measured": false
+          },
+          "hooks-plus-dispatch-metadata": {
+            "execution_census_measured": true,
+            "static_modules": 875,
+            "fired_modules": 863,
+            "total_module_invocations": 864,
+            "frontend_dispatcher_enabled": true,
+            "frontend_invocations": 5604,
+            "frontend_unique_signatures": 4922
+          }
+        },
+        "NPU": {
+          "off-before": {
+            "execution_census_measured": false
+          },
+          "hooks-only": {
+            "execution_census_measured": true,
+            "static_modules": 875,
+            "fired_modules": 863,
+            "total_module_invocations": 864,
+            "frontend_dispatcher_enabled": false,
+            "frontend_invocations": 0,
+            "frontend_unique_signatures": 0
+          },
+          "off-after": {
+            "execution_census_measured": false
+          },
+          "hooks-plus-dispatch-metadata": {
+            "execution_census_measured": true,
+            "static_modules": 875,
+            "fired_modules": 863,
+            "total_module_invocations": 864,
+            "frontend_dispatcher_enabled": true,
+            "frontend_invocations": 5604,
+            "frontend_unique_signatures": 4922
+          }
+        }
+      },
+      "instrumented_execution_accounting": {
+        "schema_version": 1,
+        "record_id": "gemma4-h100-ascend-observer-transparency-20261107",
+        "seconds": {
+          "NPU_prior_failed_pre_model_controller": 1.5486807376146317,
+          "NPU_completed_native_controller": 102.22924477700144,
+          "GPU_completed_native_entry_to_controller": 430.898498,
+          "dual_formal_prior_failed_CPU_controller": 15.919233362190425,
+          "dual_formal_completed_CPU_controller": 214.0556467063725,
+          "independent_E02_completed_CPU_controller": 192.9052398353815
+        },
+        "CPU_formal_original_work_limit_seconds": 900,
+        "CPU_formal_failed_interval_conservative_charge_seconds": 16,
+        "CPU_formal_recovery_work_limit_seconds": 884,
+        "setup_and_transfer_total_known": false,
+        "P01_measured": false,
+        "billing_cost_known": false,
+        "acceptance": null
+      },
+      "independent_checks": {
+        "scope": {
+          "target_pairs": 16,
+          "distribution_pair_rows": 752,
+          "boundary_tensor_pairs": 392,
+          "large_sources": 388,
+          "large_hash_passes": 2
+        },
+        "formal_report_sha256": "2cec40e7e8954364b5fceda5037fc81544fbc8c3051a341372647b05124985e1",
+        "report_sha256": "d0cefbc71e28a471bd56289e8e852d98c456cdf53e807a7d97aedd52d834c69f",
+        "controller_sha256": "f14d8b3335f3600151acebee003288d37696b1e04ba1cc0f3a8b6d08537a1795"
+      },
+      "notes": [
+        "The observer capture covers one input and selected boundary coordinates.",
+        "Frontend metadata leaves kernel identity and complete operand values unresolved.",
+        "Numerical acceptance thresholds are unset."
+      ],
+      "evidence": [
+        {
+          "label": "report.md",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/report.md"
+        },
+        {
+          "label": "selected-targets.json",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/selected-targets.json"
+        },
+        {
+          "label": "selected-metrics.json",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/selected-metrics.json"
+        },
+        {
+          "label": "replay-targets.py",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/replay-targets.py"
+        },
+        {
+          "label": "coverage.json",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/coverage.json"
+        },
+        {
+          "label": "cost.json",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/cost.json"
+        },
+        {
+          "label": "e02-summary.json",
+          "url": "evidence/gemma4-h100-ascend-observer-transparency-20261107/e02-summary.json"
+        }
+      ],
+      "archive": {
+        "revision": "ddacd22eaaf371d6f6e40e39949d9a56c6ce7912",
+        "prefix": "site/evidence/gemma4-h100-ascend-observer-transparency-20261107",
+        "replay_cases": 16,
+        "file_sha256": {
+          "report.md": "222bfae8f73ad641913ced692cf0299673b26f3c330b9f6d5a926e6fb0fab87c",
+          "selected-targets.json": "630f9ba47d29d31ba58630ca04c5c261c0ca2d4ed10fa84f687e982a1d0add84",
+          "selected-metrics.json": "02ab51df93f11cbe6e11ea031674a08745843ff8955391bb9bad07dab5c2bc0a",
+          "replay-targets.py": "4f3c0ab03f944b1e1ecffb0b5e43cc6a89c5b0b4259962fc13d65e99b8a1427a",
+          "coverage.json": "e3b138e0db824045b84c4ad1ce428735bc95ed71f3b3548178ca0693354df422",
+          "cost.json": "85ab1030253558f038c6c744c63455282916a3ad90d16823a110656ab5822696",
+          "e02-summary.json": "be94c4a40dab1670688aaaae90bd1aebb959fa9c0f4f0d3b93a0df607bdab936"
+        }
+      }
     }
   ]
 }
