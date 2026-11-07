@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "record_id": "gemma4-h100-reserved48-three-bins-20261107",
+  "scope": "Within-H100 partition contrasts from three Reserved48 English prompt-length bins",
+  "source_digests": {
+    "cohort_report_sha256": "ca974c8d5ec0f7f2c2cd0ed44e13ac6f9c971deca6e6cf9d4eaea753df405011",
+    "cohort_provenance_sha256": "4557a49b92af3572964379d641707038d6cd1911f19b6e2ee0c206c90cd8f107",
+    "bin_report_sha256_by_prompt_length": {
+      "128": "efd943b4c7a472af786a5844c0d01e50676e81293532a56b1c758c77b6ca0ca2",
+      "512": "a7bec1059e776ca647633edf2aa0011848b1a8766c5e3a0902c0b1af6b30182e",
+      "2048": "c5277cd4f3d506b04f9ee99f73930a8c2d3f62f2ff9d4bd1535be643ca7710e8"
+    },
+    "pair_report_refs_verified": 108
+  },
+  "counts": {
+    "planned_articles": 48,
+    "completed_articles": 36,
+    "planned_input_pair_contrasts": 432,
+    "completed_within_gpu_input_pair_contrasts": 108,
+    "completed_cross_backend_input_pair_contrasts": 0,
+    "planned_distribution_pair_positions": 20304,
+    "completed_distribution_pair_positions": 5076,
+    "new_cpu_fp64_matrices": 108,
+    "source_target_scalars_checked": 100116,
+    "fresh_native_or_derived_array_reads_by_aggregation": 0
+  },
+  "bins": [
+    {
+      "prompt_length": 128,
+      "articles": 12,
+      "within_gpu_contrasts": 36,
+      "distribution_pair_positions": 1692
+    },
+    {
+      "prompt_length": 512,
+      "articles": 12,
+      "within_gpu_contrasts": 36,
+      "distribution_pair_positions": 1692
+    },
+    {
+      "prompt_length": 2048,
+      "articles": 12,
+      "within_gpu_contrasts": 36,
+      "distribution_pair_positions": 1692
+    }
+  ],
+  "selected_within_gpu_metrics": [
+    {
+      "modes": [
+        "full",
+        "token"
+      ],
+      "articles": 36,
+      "per_article_all_target_logprob_MAE_range_nat": [
+        0.000507902892537041,
+        0.04729150586986821
+      ],
+      "maximum_absolute_target_logprob_difference_nat": 2.710450534080655,
+      "sampled_top1_agreement": {
+        "count": 1671,
+        "total": 1692
+      }
+    },
+    {
+      "modes": [
+        "full",
+        "chunk"
+      ],
+      "articles": 36,
+      "per_article_all_target_logprob_MAE_range_nat": [
+        0.021210144780459916,
+        0.05361472084615446
+      ],
+      "maximum_absolute_target_logprob_difference_nat": 2.0263910643026737,
+      "sampled_top1_agreement": {
+        "count": 1663,
+        "total": 1692
+      }
+    },
+    {
+      "modes": [
+        "token",
+        "chunk"
+      ],
+      "articles": 36,
+      "per_article_all_target_logprob_MAE_range_nat": [
+        0.021807656696168003,
+        0.047208328516030205
+      ],
+      "maximum_absolute_target_logprob_difference_nat": 2.406507943317516,
+      "sampled_top1_agreement": {
+        "count": 1668,
+        "total": 1692
+      }
+    }
+  ],
+  "p8192_attempts": [
+    {
+      "attempt": 1,
+      "terminal_status": "cleanup_failed",
+      "returncode": 1,
+      "numeric_observations_admitted": 0,
+      "original_controller_sha256": "11f134d88c666a19c9a496730142284bd5fd49ee9683224f5aed2141c085f16b",
+      "attributed_cause": null
+    },
+    {
+      "attempt": 2,
+      "terminal_status": "cleanup_failed",
+      "returncode": 1,
+      "numeric_observations_admitted": 0,
+      "original_controller_sha256": "03667d1bbf8efdb0afb0d32846b96d7f71b003adb35ce199e79a7ffa243967da",
+      "attributed_cause": null
+    }
+  ],
+  "whole_cohort_complete": false,
+  "full_core_complete": false,
+  "full_cohort_NLL": null,
+  "quality": null,
+  "thresholds": null,
+  "acceptance": null,
+  "independent_all_target_normalizers": false,
+  "independent_algorithm_scalar_E02_executed": false,
+  "full_unselected_raw_audit": false,
+  "Q02_executed": false,
+  "P01_executed": false,
+  "native_executions_started_by_cpu_reduction": 0
+}
