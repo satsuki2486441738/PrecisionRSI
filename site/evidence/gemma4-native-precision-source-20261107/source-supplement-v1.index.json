@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "kind": "derived_precision_CPU_source_supplement_v1",
+  "archive": {
+    "filename": "source-supplement-v1.zip",
+    "size_bytes": 41733,
+    "sha256": "11374a7a36eeb5c164554ce342f6999d1bacc6d8c84d6ec7c73ae2432a538079"
+  },
+  "baseline_source_release_v1": {
+    "index_sha256": "cd594dcb8f3bd14ba1c86e997820bfe392b3edb0cb7db222eef274237c35ed1c",
+    "archive_sha256": "44b52feaacb5c2cdc2f591fd9f2717d53b3b8c8f220df60c49578461cd612227",
+    "duplicate_sources": 0
+  },
+  "owning_format": "evidence_bundle indexed ZIP with EXPORT.json",
+  "owning_tool_sha256": "b0d7282a78000ae58e8f8fd70e11504bff1212ae9a2efa2e0ee996f09c808bc8",
+  "limits": {
+    "source_files": 6,
+    "archive_members": 7,
+    "max_expanded_bytes": 1048576,
+    "max_single_source_bytes": 65536
+  },
+  "files": [
+    {
+      "path": "projects/gemma4-pilot/cases/text-native/adapters/admit_observer_transparency_v4.py",
+      "role": "Dual observer admission",
+      "original_sha256": "5d379108146456f512029484ffeadd5527aaae56ba2ab3b169e4b7bae26b30eb",
+      "exported_sha256": "81a0dce156baf029aaef456744c6e18ed7ceaa97870d60d425ae9a578fe8a2de",
+      "original_bytes": 46622,
+      "exported_bytes": 46460,
+      "per_change": [
+        {
+          "rule": "private_observer_deployment_basename",
+          "original_literal_sha256": "e866436b54f2621a2b40603d263f5081dabc2af3ae15775b00ce952934a4157a",
+          "exported_literal": "observer-example-gpu-v1",
+          "count": 1
+        },
+        {
+          "rule": "private_observer_deployment_basename",
+          "original_literal_sha256": "14160af14f5da0a23f939d9c7e0ca97513ff52974941b41f04a852aceec381f9",
+          "exported_literal": "observer-example-gpu-v2",
+          "count": 1
+        },
+        {
+          "rule": "observer_actual_endpoint_activation_reset",
+          "original_expression_sha256": "e1aaf773825ca5d916050150b627eecc3feed9c05a17a2644b9a864f68f788a5",
+          "count": 1
+        },
+        {
+          "rule": "reference_copy_CLI_disabled_before_imports",
+          "count": 1,
+          "default_execution_enabled": null
+        }
+      ]
+    },
+    {
+      "path": "projects/gemma4-pilot/cases/text-native/adapters/verify_observer_dual_e02_v1.py",
+      "role": "Independent dual observer verification",
+      "original_sha256": "b7f514881fa97bb1da8ad8f19113cca906cd2699f7500a62588e00fa73d9168f",
+      "exported_sha256": "ad329650ffcafaae44f6e202dd20d5048a0ff094b8dd711d89eb1a1ec11abba2",
+      "original_bytes": 19662,
+      "exported_bytes": 19909,
+      "per_change": [
+        {
+          "rule": "reference_copy_CLI_disabled_before_imports",
+          "count": 1,
+          "default_execution_enabled": null
+        }
+      ]
+    },
+    {
+      "path": "projects/gemma4-pilot/cases/text-native/adapters/derive_compare_reserved48_cpu_v3.py",
+      "role": "Reserved48 mixed-profile CPU driver",
+      "original_sha256": "767f1515d7653ed6f8b28a37ef72223756d4965fb916a494fd3a4ec228332ffd",
+      "exported_sha256": "97492c3b87d43096a47fb8ae134a5e327a62b51db5ac9c730935af8ae04854cf",
+      "original_bytes": 7125,
+      "exported_bytes": 7372,
+      "per_change": [
+        {
+          "rule": "reference_copy_CLI_disabled_before_imports",
+          "count": 1,
+          "default_execution_enabled": null
+        }
+      ]
+    },
+    {
+      "path": "projects/gemma4-pilot/cases/text-native/adapters/reserved48_cpu_profiles_v1.py",
+      "role": "Reserved48 profile and evidence binding",
+      "original_sha256": "126ea9cc16b4b84fc9593a2c1e9d120236ee392b6e7cd517134be99280a4a9a7",
+      "exported_sha256": "49ea8b71d64d8613f2d12f5c7c05cc592f20ece32a10962ccf9f52a865942aac",
+      "original_bytes": 25708,
+      "exported_bytes": 25912,
+      "per_change": [
+        {
+          "rule": "AFS_task_root",
+          "original_literal_sha256": "ddc2ace1030fccdcfd8d4570f00d1e26a6634b4bada9dd9c381b12352dbfcf83",
+          "exported_literal": "/srv/precision-task",
+          "count": 1
+        },
+        {
+          "rule": "actual_app_identifier",
+          "original_literal_sha256": "43748a2ba9006f5f6e4fcaa8d1f42d2c159f6ba38409e929abebfd10b57e4822",
+          "exported_literal": "REDACTED_APP_ID",
+          "count": 1
+        },
+        {
+          "rule": "reference_copy_CLI_disabled_before_imports",
+          "count": 1,
+          "default_execution_enabled": null
+        }
+      ]
+    },
+    {
+      "path": "projects/gemma4-pilot/cases/text-native/transfer/run_reserved48_p128_cross_cpu_v1.py",
+      "role": "P128 paired CPU driver",
+      "original_sha256": "5270c6f02cdadb36eaa0ed3154fb0a5935ca3cfc71293b9d9c1f0ba609cbf6a7",
+      "exported_sha256": "499de35f18b92640a48a42a4d31202b460f7b14be7e48c0da9606b5215267dc2",
+      "original_bytes": 16590,
+      "exported_bytes": 16837,
+      "per_change": [
+        {
+          "rule": "reference_copy_CLI_disabled_before_imports",
+          "count": 1,
+          "default_execution_enabled": null
+        }
+      ]
+    },
+    {
+      "path": "projects/gemma4-pilot/cases/text-native/transfer/stage_reserved48_p128_npu_metadata_v2.py",
+      "role": "P128 metadata copy budgeting",
+      "original_sha256": "5d0f0c99b60c82085dfb2f91c46c3bd9b1b664c57df2fc46336f06c469c3a250",
+      "exported_sha256": "c24c51e2918539856eb5e52abef479e363754188f40533290912db14fd58f3ec",
+      "original_bytes": 6187,
+      "exported_bytes": 6434,
+      "per_change": [
+        {
+          "rule": "reference_copy_CLI_disabled_before_imports",
+          "count": 1,
+          "default_execution_enabled": null
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "original_and_exported_entries_verified": 6,
+    "AST_parsed": 6,
+    "CLI_refusals_before_import_checked": 6,
+    "framework_imports": 0,
+    "native_executions_started": 0
+  },
+  "execution_enabled": null,
+  "exact_observed_executable_equivalence_claimed": false
+}

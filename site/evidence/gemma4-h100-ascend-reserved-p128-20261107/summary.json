@@ -1,0 +1,765 @@
+{
+  "schema_version": 1,
+  "status": "completed_p128_scope",
+  "model": {
+    "name": "Gemma-4-12B",
+    "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+  },
+  "dataset": "WikiText-2 English training-reserved articles",
+  "hardware": {
+    "GPU": "NVIDIA H100 80GB HBM3",
+    "NPU": "Ascend910_9382"
+  },
+  "backend_software": {
+    "GPU": {
+      "torch": "2.9.0+cu128",
+      "transformers": "5.10.1",
+      "cuda_runtime": "12.8",
+      "numpy": "1.26.4"
+    },
+    "NPU": {
+      "torch": "2.9.0+cpu",
+      "torch_npu": "2.9.0.post2",
+      "transformers": "5.10.1",
+      "numpy": "1.26.4",
+      "cann": "9.1.0",
+      "driver": "25.5.2"
+    }
+  },
+  "settings": {
+    "parameter_dtype": "BF16",
+    "native_logits_dtype": "BF16",
+    "attention": "eager",
+    "tensor_parallel_size": 1,
+    "seed": 0
+  },
+  "scope": {
+    "prompt_tokens": 128,
+    "continuation_tokens": 32,
+    "paired_articles": 12,
+    "planned_articles": 48,
+    "cross_backend_article_pairs": 36,
+    "within_backend_article_pairs": 72,
+    "distribution_pair_positions": 5076,
+    "full48_cohort_complete": false,
+    "independent_all_target_normalizers": false,
+    "full_unselected_raw_audit": false,
+    "native_executions_started_by_carrier": 0,
+    "array_files_opened_by_carrier": 0,
+    "thresholds": null,
+    "acceptance": null,
+    "native_forward_calls_per_backend": 816,
+    "selected_original_rows_per_backend": 1692,
+    "independent_e02_p128_performed": false,
+    "q02_executed": false,
+    "p01_measured": false
+  },
+  "source_scalar_scope": "Token-weighted target logprobs admitted from source. Independent normalization covers the selected full-vocabulary BF16 rows.",
+  "distribution_scope": "FP64 normalization on a common CPU for the selected rows. Complement-merged JS includes the probability mass outside the selected union.",
+  "pair_families": [
+    {
+      "pair": {
+        "a_backend": "GPU",
+        "a_mode": "full",
+        "b_backend": "NPU",
+        "b_mode": "full",
+        "kind": "cross_backend_matched"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.273199580333704,
+        "side_b_nll_nat_per_token": 2.2706368436401574,
+        "nll_abs_diff_nat_per_token": 0.0025627366935467855,
+        "mae_nat": 0.03721338110105829,
+        "p99_nat": 0.2937796812357485,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.9404847488702126
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.2249912500822244,
+        "side_b_nll_nat_per_token": 2.223137223384681,
+        "nll_abs_diff_nat_per_token": 0.0018540266975435316,
+        "mae_nat": 0.03328602863726362,
+        "p99_nat": 0.19528628517540536,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.8591319305830405
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.001252185238783531,
+          "p99": 0.007856388973085089,
+          "max": 0.01940267240457523
+        },
+        "max_probability_error": {
+          "mean": 0.009852022776956992,
+          "p99": 0.06335437529296609,
+          "max": 0.13816109635272372
+        },
+        "tail_merged_js": {
+          "mean": 0.0003684083820714987,
+          "p99": 0.0033074304936389675,
+          "max": 0.01397604161995572
+        },
+        "top1_agreement": {
+          "count": 550,
+          "total": 564,
+          "fraction": 0.975177304964539
+        },
+        "top100_overlap": {
+          "mean": 0.9803723404255318
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536281891263046,
+            "p1": 0.6323388083928557,
+            "min": 0.3940578810412339
+          },
+          "side_b_top100": {
+            "mean": 0.9536733326692448,
+            "p1": 0.6342538201737778,
+            "min": 0.40291150733796377
+          },
+          "side_a_union": {
+            "mean": 0.9541059662275005,
+            "p1": 0.6346856736667263,
+            "min": 0.39635398294297697
+          },
+          "side_b_union": {
+            "mean": 0.9541521890162616,
+            "p1": 0.6366109254375423,
+            "min": 0.40510472852231916
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "GPU",
+        "a_mode": "token",
+        "b_backend": "NPU",
+        "b_mode": "token",
+        "kind": "cross_backend_matched"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.272180605841679,
+        "side_b_nll_nat_per_token": 2.2723371390378464,
+        "nll_abs_diff_nat_per_token": 0.00015653319616726336,
+        "mae_nat": 0.0370568614319282,
+        "p99_nat": 0.31233075653169184,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.6549483731237586
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.2247564660608323,
+        "side_b_nll_nat_per_token": 2.2191104545831064,
+        "nll_abs_diff_nat_per_token": 0.005646011477725921,
+        "mae_nat": 0.03729230363814778,
+        "p99_nat": 0.22869073949352156,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.4843500680886028
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0014356098695150537,
+          "p99": 0.007231095891917751,
+          "max": 0.04845698024362173
+        },
+        "max_probability_error": {
+          "mean": 0.011480537243781638,
+          "p99": 0.05465224596276239,
+          "max": 0.3490732423948652
+        },
+        "tail_merged_js": {
+          "mean": 0.0006413757636155694,
+          "p99": 0.003153579336432909,
+          "max": 0.10558487910854253
+        },
+        "top1_agreement": {
+          "count": 551,
+          "total": 564,
+          "fraction": 0.9769503546099291
+        },
+        "top100_overlap": {
+          "mean": 0.9810638297872339
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536776828536384,
+            "p1": 0.630388895019905,
+            "min": 0.39353052826724727
+          },
+          "side_b_top100": {
+            "mean": 0.9535349343526988,
+            "p1": 0.6309482968871521,
+            "min": 0.39492460770715265
+          },
+          "side_a_union": {
+            "mean": 0.9541419388674339,
+            "p1": 0.6326842857488024,
+            "min": 0.3968311758596252
+          },
+          "side_b_union": {
+            "mean": 0.9539971145998335,
+            "p1": 0.6333114351282976,
+            "min": 0.3983221635197393
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "GPU",
+        "a_mode": "chunk",
+        "b_backend": "NPU",
+        "b_mode": "chunk",
+        "kind": "cross_backend_matched"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.2739328993672188,
+        "side_b_nll_nat_per_token": 2.273637869497237,
+        "nll_abs_diff_nat_per_token": 0.00029502986998197755,
+        "mae_nat": 0.03763907662252549,
+        "p99_nat": 0.2904925988425935,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.4935881835958114
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.22907748922127,
+        "side_b_nll_nat_per_token": 2.222535367398097,
+        "nll_abs_diff_nat_per_token": 0.0065421218231729306,
+        "mae_nat": 0.03477081212605979,
+        "p99_nat": 0.19879162804370878,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.7029092713974752
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0013443056578668325,
+          "p99": 0.0066304590721644055,
+          "max": 0.06511074872076282
+        },
+        "max_probability_error": {
+          "mean": 0.010540421746832214,
+          "p99": 0.054449941689948586,
+          "max": 0.4652737080766131
+        },
+        "tail_merged_js": {
+          "mean": 0.0005754783749593707,
+          "p99": 0.003224451652860964,
+          "max": 0.11300078114764055
+        },
+        "top1_agreement": {
+          "count": 559,
+          "total": 564,
+          "fraction": 0.9911347517730497
+        },
+        "top100_overlap": {
+          "mean": 0.9804255319148937
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536339339674424,
+            "p1": 0.6291524164601862,
+            "min": 0.39706553435655617
+          },
+          "side_b_top100": {
+            "mean": 0.9536628004151806,
+            "p1": 0.6377228508364481,
+            "min": 0.3940937379985713
+          },
+          "side_a_union": {
+            "mean": 0.9541069198037111,
+            "p1": 0.6322145986244754,
+            "min": 0.39923028328655064
+          },
+          "side_b_union": {
+            "mean": 0.9541361880436889,
+            "p1": 0.6411036632905948,
+            "min": 0.39632212200840666
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "GPU",
+        "a_mode": "full",
+        "b_backend": "GPU",
+        "b_mode": "token",
+        "kind": "within_backend_partition"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.273199580333704,
+        "side_b_nll_nat_per_token": 2.272180605841679,
+        "nll_abs_diff_nat_per_token": 0.0010189744920250376,
+        "mae_nat": 0.035991346774847055,
+        "p99_nat": 0.30089517833669127,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.148450452951698
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.2249912500822244,
+        "side_b_nll_nat_per_token": 2.2247564660608323,
+        "nll_abs_diff_nat_per_token": 0.0002347840213920982,
+        "mae_nat": 0.03507092270392566,
+        "p99_nat": 0.20383668169029884,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.1090021088512385
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0013003338791088108,
+          "p99": 0.006563885579055743,
+          "max": 0.03555552514268057
+        },
+        "max_probability_error": {
+          "mean": 0.010234923539965963,
+          "p99": 0.05410884977652167,
+          "max": 0.25542056312232886
+        },
+        "tail_merged_js": {
+          "mean": 0.0005536833311511724,
+          "p99": 0.002132181689370755,
+          "max": 0.0982584128346472
+        },
+        "top1_agreement": {
+          "count": 551,
+          "total": 564,
+          "fraction": 0.9769503546099291
+        },
+        "top100_overlap": {
+          "mean": 0.9803723404255318
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536281891263046,
+            "p1": 0.6323388083928557,
+            "min": 0.3940578810412339
+          },
+          "side_b_top100": {
+            "mean": 0.9536776828536384,
+            "p1": 0.630388895019905,
+            "min": 0.39353052826724727
+          },
+          "side_a_union": {
+            "mean": 0.9540954541790174,
+            "p1": 0.6335473675664426,
+            "min": 0.39635398294297697
+          },
+          "side_b_union": {
+            "mean": 0.9541464273902404,
+            "p1": 0.6315748049423955,
+            "min": 0.39580191782234886
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "GPU",
+        "a_mode": "full",
+        "b_backend": "GPU",
+        "b_mode": "chunk",
+        "kind": "within_backend_partition"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.273199580333704,
+        "side_b_nll_nat_per_token": 2.2739328993672188,
+        "nll_abs_diff_nat_per_token": 0.00073331903351459,
+        "mae_nat": 0.03709565803498355,
+        "p99_nat": 0.24990959487858988,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.4308352691324302
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.2249912500822244,
+        "side_b_nll_nat_per_token": 2.22907748922127,
+        "nll_abs_diff_nat_per_token": 0.004086239139045489,
+        "mae_nat": 0.03558386773207039,
+        "p99_nat": 0.20892360199917773,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.9059975943291629
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0012962343730977299,
+          "p99": 0.006736388469950606,
+          "max": 0.034703686937359264
+        },
+        "max_probability_error": {
+          "mean": 0.010168662177630898,
+          "p99": 0.0538436908538325,
+          "max": 0.24801407815292692
+        },
+        "tail_merged_js": {
+          "mean": 0.00038952233776229687,
+          "p99": 0.0032968136226280242,
+          "max": 0.03249825962600211
+        },
+        "top1_agreement": {
+          "count": 550,
+          "total": 564,
+          "fraction": 0.975177304964539
+        },
+        "top100_overlap": {
+          "mean": 0.9803191489361702
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536281891263046,
+            "p1": 0.6323388083928557,
+            "min": 0.3940578810412339
+          },
+          "side_b_top100": {
+            "mean": 0.9536339339674424,
+            "p1": 0.6291524164601862,
+            "min": 0.39706553435655617
+          },
+          "side_a_union": {
+            "mean": 0.9541062897121739,
+            "p1": 0.6340047441552563,
+            "min": 0.39628442605212955
+          },
+          "side_b_union": {
+            "mean": 0.9541120364221833,
+            "p1": 0.6309542745278561,
+            "min": 0.39929790967824663
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "GPU",
+        "a_mode": "token",
+        "b_backend": "GPU",
+        "b_mode": "chunk",
+        "kind": "within_backend_partition"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.272180605841679,
+        "side_b_nll_nat_per_token": 2.2739328993672188,
+        "nll_abs_diff_nat_per_token": 0.0017522935255396277,
+        "mae_nat": 0.03552430235280898,
+        "p99_nat": 0.24542720527005019,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.8078398893866385
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.2247564660608323,
+        "side_b_nll_nat_per_token": 2.22907748922127,
+        "nll_abs_diff_nat_per_token": 0.004321023160437587,
+        "mae_nat": 0.033243720604726135,
+        "p99_nat": 0.17286959291371418,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.3643213681393469
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0013472787222213267,
+          "p99": 0.008414464504206142,
+          "max": 0.07025822831388417
+        },
+        "max_probability_error": {
+          "mean": 0.010658224970130447,
+          "p99": 0.06520418916105308,
+          "max": 0.5030738955565462
+        },
+        "tail_merged_js": {
+          "mean": 0.0007426657165252134,
+          "p99": 0.0031491807148190344,
+          "max": 0.13410211488160734
+        },
+        "top1_agreement": {
+          "count": 555,
+          "total": 564,
+          "fraction": 0.9840425531914894
+        },
+        "top100_overlap": {
+          "mean": 0.9802304964539007
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536776828536384,
+            "p1": 0.630388895019905,
+            "min": 0.39353052826724727
+          },
+          "side_b_top100": {
+            "mean": 0.9536339339674424,
+            "p1": 0.6291524164601862,
+            "min": 0.39706553435655617
+          },
+          "side_a_union": {
+            "mean": 0.9541730778409238,
+            "p1": 0.632645737955206,
+            "min": 0.39580191782234886
+          },
+          "side_b_union": {
+            "mean": 0.9541270293044691,
+            "p1": 0.6315679129094353,
+            "min": 0.39923028328655064
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "NPU",
+        "a_mode": "full",
+        "b_backend": "NPU",
+        "b_mode": "token",
+        "kind": "within_backend_partition"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.2706368436401574,
+        "side_b_nll_nat_per_token": 2.2723371390378464,
+        "nll_abs_diff_nat_per_token": 0.0017002953976890112,
+        "mae_nat": 0.038111560372121184,
+        "p99_nat": 0.29646225339733434,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.9999999878968104
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.223137223384681,
+        "side_b_nll_nat_per_token": 2.2191104545831064,
+        "nll_abs_diff_nat_per_token": 0.004026768801574487,
+        "mae_nat": 0.037983406219821166,
+        "p99_nat": 0.21761285896167684,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.8498770780514171
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0013180397621741302,
+          "p99": 0.006501411307425202,
+          "max": 0.013885266202762462
+        },
+        "max_probability_error": {
+          "mean": 0.010545253904505282,
+          "p99": 0.05315458780471973,
+          "max": 0.10087642959666976
+        },
+        "tail_merged_js": {
+          "mean": 0.00035662254088549353,
+          "p99": 0.0023488165536218438,
+          "max": 0.007883961646719874
+        },
+        "top1_agreement": {
+          "count": 558,
+          "total": 564,
+          "fraction": 0.9893617021276596
+        },
+        "top100_overlap": {
+          "mean": 0.9807624113475177
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536733326692448,
+            "p1": 0.6342538201737778,
+            "min": 0.40291150733796377
+          },
+          "side_b_top100": {
+            "mean": 0.9535349343526988,
+            "p1": 0.6309482968871521,
+            "min": 0.39492460770715265
+          },
+          "side_a_union": {
+            "mean": 0.9541301102886497,
+            "p1": 0.6360091857592332,
+            "min": 0.40609856532431216
+          },
+          "side_b_union": {
+            "mean": 0.9539929311555712,
+            "p1": 0.6327574644329598,
+            "min": 0.3983221635197393
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "NPU",
+        "a_mode": "full",
+        "b_backend": "NPU",
+        "b_mode": "chunk",
+        "kind": "within_backend_partition"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.2706368436401574,
+        "side_b_nll_nat_per_token": 2.273637869497237,
+        "nll_abs_diff_nat_per_token": 0.003001025857079398,
+        "mae_nat": 0.03685063437538776,
+        "p99_nat": 0.34107024306368955,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.0592651771831951
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.223137223384681,
+        "side_b_nll_nat_per_token": 2.222535367398097,
+        "nll_abs_diff_nat_per_token": 0.0006018559865839102,
+        "mae_nat": 0.03699733495964954,
+        "p99_nat": 0.23784008611045132,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.6560436076513527
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.0013344776688587582,
+          "p99": 0.00686191981082335,
+          "max": 0.04964033356696689
+        },
+        "max_probability_error": {
+          "mean": 0.010571187489553182,
+          "p99": 0.05573674076735042,
+          "max": 0.3557814719951195
+        },
+        "tail_merged_js": {
+          "mean": 0.0004628109084588167,
+          "p99": 0.0029821051252546856,
+          "max": 0.0663551591728204
+        },
+        "top1_agreement": {
+          "count": 556,
+          "total": 564,
+          "fraction": 0.9858156028368794
+        },
+        "top100_overlap": {
+          "mean": 0.9806028368794325
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9536733326692448,
+            "p1": 0.6342538201737778,
+            "min": 0.40291150733796377
+          },
+          "side_b_top100": {
+            "mean": 0.9536628004151806,
+            "p1": 0.6377228508364481,
+            "min": 0.3940937379985713
+          },
+          "side_a_union": {
+            "mean": 0.9541257206575704,
+            "p1": 0.6353036960254417,
+            "min": 0.40404237586020303
+          },
+          "side_b_union": {
+            "mean": 0.9541157642943433,
+            "p1": 0.6408872669938842,
+            "min": 0.3952427371739211
+          }
+        }
+      }
+    },
+    {
+      "pair": {
+        "a_backend": "NPU",
+        "a_mode": "token",
+        "b_backend": "NPU",
+        "b_mode": "chunk",
+        "kind": "within_backend_partition"
+      },
+      "independent_articles": 12,
+      "all_target_metrics": {
+        "target_count": 1908,
+        "side_a_nll_nat_per_token": 2.2723371390378464,
+        "side_b_nll_nat_per_token": 2.273637869497237,
+        "nll_abs_diff_nat_per_token": 0.0013007304593903868,
+        "mae_nat": 0.03785408392221956,
+        "p99_nat": 0.29154934050532666,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 1.709918569803282
+      },
+      "continuation_only_metrics": {
+        "target_count": 384,
+        "side_a_nll_nat_per_token": 2.2191104545831064,
+        "side_b_nll_nat_per_token": 2.222535367398097,
+        "nll_abs_diff_nat_per_token": 0.003424912814990577,
+        "mae_nat": 0.03675873276481931,
+        "p99_nat": 0.25227678253861585,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.7809923417830644
+      },
+      "distribution_positions": 564,
+      "distribution_aggregate": {
+        "probability_rmse": {
+          "mean": 0.001305187880915007,
+          "p99": 0.007822187888247177,
+          "max": 0.04319669909635912
+        },
+        "max_probability_error": {
+          "mean": 0.010323563815201638,
+          "p99": 0.0567556739646296,
+          "max": 0.30875399223829797
+        },
+        "tail_merged_js": {
+          "mean": 0.0004384161970175039,
+          "p99": 0.0028636156207081064,
+          "max": 0.05056163348462792
+        },
+        "top1_agreement": {
+          "count": 553,
+          "total": 564,
+          "fraction": 0.9804964539007093
+        },
+        "top100_overlap": {
+          "mean": 0.9810106382978723
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9535349343526988,
+            "p1": 0.6309482968871521,
+            "min": 0.39492460770715265
+          },
+          "side_b_top100": {
+            "mean": 0.9536628004151806,
+            "p1": 0.6377228508364481,
+            "min": 0.3940937379985713
+          },
+          "side_a_union": {
+            "mean": 0.9539604106731897,
+            "p1": 0.6333114351282976,
+            "min": 0.3983221635197393
+          },
+          "side_b_union": {
+            "mean": 0.954087473692066,
+            "p1": 0.6422147688659203,
+            "min": 0.3973318925020279
+          }
+        }
+      }
+    }
+  ],
+  "instrumented_paired_cpu_seconds": 810.735335550271,
+  "carrier_sha256": "b4f1df4c2c8095e92fe0e8b2c770b3a05cf17851ef9271d1ad6ac1e26c7d7681"
+}
