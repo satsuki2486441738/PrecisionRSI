@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "record_id": "gemma4-h100-ascend-observer-transparency-20261107",
+  "seconds": {
+    "NPU_prior_failed_pre_model_controller": 1.5486807376146317,
+    "NPU_completed_native_controller": 102.22924477700144,
+    "GPU_completed_native_entry_to_controller": 430.898498,
+    "dual_formal_prior_failed_CPU_controller": 15.919233362190425,
+    "dual_formal_completed_CPU_controller": 214.0556467063725,
+    "independent_E02_completed_CPU_controller": 192.9052398353815
+  },
+  "CPU_formal_original_work_limit_seconds": 900,
+  "CPU_formal_failed_interval_conservative_charge_seconds": 16,
+  "CPU_formal_recovery_work_limit_seconds": 884,
+  "setup_and_transfer_total_known": false,
+  "P01_measured": false,
+  "billing_cost_known": false,
+  "acceptance": null
+}

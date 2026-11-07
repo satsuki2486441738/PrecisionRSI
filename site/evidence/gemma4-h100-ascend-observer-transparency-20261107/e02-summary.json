@@ -1,0 +1,635 @@
+{
+  "schema_version": 1,
+  "record_id": "gemma4-h100-ascend-observer-transparency-20261107",
+  "formal_report_sha256": "2cec40e7e8954364b5fceda5037fc81544fbc8c3051a341372647b05124985e1",
+  "source_report_sha256": "d0cefbc71e28a471bd56289e8e852d98c456cdf53e807a7d97aedd52d834c69f",
+  "source_controller_sha256": "f14d8b3335f3600151acebee003288d37696b1e04ba1cc0f3a8b6d08537a1795",
+  "scope": {
+    "target_pairs": 16,
+    "distribution_pair_rows": 752,
+    "boundary_tensor_pairs": 392,
+    "large_sources": 388,
+    "large_hash_passes": 2
+  },
+  "payload_identity": {
+    "within_backend": {
+      "GPU": {
+        "raw_logits": {
+          "all_equal": true,
+          "physical_data_payloads_equal": true,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "off-before": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "hooks-only": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "off-after": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "hooks-plus-dispatch-metadata": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            }
+          }
+        },
+        "boundary_samples": {
+          "all_equal": true,
+          "physical_data_payloads_equal": true,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "hooks-only": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "29aab7548fa09866ecd2e717ec141a4ff6ee4c103c13caa4974c37bb99b8575b",
+              "canonical_framed_sha256": "15020eb31864d67fa1f0482a1061cb050c9ddc7ac9d793f7d1a760c5dcf9e452"
+            },
+            "hooks-plus-dispatch-metadata": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "29aab7548fa09866ecd2e717ec141a4ff6ee4c103c13caa4974c37bb99b8575b",
+              "canonical_framed_sha256": "15020eb31864d67fa1f0482a1061cb050c9ddc7ac9d793f7d1a760c5dcf9e452"
+            }
+          }
+        }
+      },
+      "NPU": {
+        "raw_logits": {
+          "all_equal": true,
+          "physical_data_payloads_equal": true,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "off-before": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            },
+            "hooks-only": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            },
+            "off-after": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            },
+            "hooks-plus-dispatch-metadata": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            }
+          }
+        },
+        "boundary_samples": {
+          "all_equal": true,
+          "physical_data_payloads_equal": true,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "hooks-only": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "fdabd00afffb1860a327a7462276d633d0aa6b6c5a7409a203c01f8f3390e4e3",
+              "canonical_framed_sha256": "f2f5f8b949b6361e4048d64e2d41a47bf8266384007ea2e334c33ee0b5620360"
+            },
+            "hooks-plus-dispatch-metadata": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "fdabd00afffb1860a327a7462276d633d0aa6b6c5a7409a203c01f8f3390e4e3",
+              "canonical_framed_sha256": "f2f5f8b949b6361e4048d64e2d41a47bf8266384007ea2e334c33ee0b5620360"
+            }
+          }
+        }
+      }
+    },
+    "matched_cross_modes": {
+      "off-before": {
+        "raw_logits": {
+          "all_equal": false,
+          "physical_data_payloads_equal": false,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "GPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "NPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            }
+          }
+        },
+        "boundary_samples": null
+      },
+      "hooks-only": {
+        "raw_logits": {
+          "all_equal": false,
+          "physical_data_payloads_equal": false,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "GPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "NPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            }
+          }
+        },
+        "boundary_samples": {
+          "all_equal": false,
+          "physical_data_payloads_equal": false,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "GPU": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "29aab7548fa09866ecd2e717ec141a4ff6ee4c103c13caa4974c37bb99b8575b",
+              "canonical_framed_sha256": "15020eb31864d67fa1f0482a1061cb050c9ddc7ac9d793f7d1a760c5dcf9e452"
+            },
+            "NPU": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "fdabd00afffb1860a327a7462276d633d0aa6b6c5a7409a203c01f8f3390e4e3",
+              "canonical_framed_sha256": "f2f5f8b949b6361e4048d64e2d41a47bf8266384007ea2e334c33ee0b5620360"
+            }
+          }
+        }
+      },
+      "off-after": {
+        "raw_logits": {
+          "all_equal": false,
+          "physical_data_payloads_equal": false,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "GPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "NPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            }
+          }
+        },
+        "boundary_samples": null
+      },
+      "hooks-plus-dispatch-metadata": {
+        "raw_logits": {
+          "all_equal": false,
+          "physical_data_payloads_equal": false,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "GPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+              "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c"
+            },
+            "NPU": {
+              "tensor_count": 1,
+              "BF16_values": 41943040,
+              "physical_data_payload_sha256": "eab708d4d835dc2a42c1b9b6ed49050afcd16192fb7b17208a999a86999988b8",
+              "canonical_framed_sha256": "b1eafa660e6398a1d4d0269c4ca4ec338863b20d60ccaa98d7a0b5120065ae2d"
+            }
+          }
+        },
+        "boundary_samples": {
+          "all_equal": false,
+          "physical_data_payloads_equal": false,
+          "file_headers_excluded": true,
+          "numeric_zero_was_not_used_as_bit_equality_evidence": true,
+          "files": {
+            "GPU": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "29aab7548fa09866ecd2e717ec141a4ff6ee4c103c13caa4974c37bb99b8575b",
+              "canonical_framed_sha256": "15020eb31864d67fa1f0482a1061cb050c9ddc7ac9d793f7d1a760c5dcf9e452"
+            },
+            "NPU": {
+              "tensor_count": 98,
+              "BF16_values": 294784,
+              "physical_data_payload_sha256": "fdabd00afffb1860a327a7462276d633d0aa6b6c5a7409a203c01f8f3390e4e3",
+              "canonical_framed_sha256": "f2f5f8b949b6361e4048d64e2d41a47bf8266384007ea2e334c33ee0b5620360"
+            }
+          }
+        }
+      }
+    }
+  },
+  "distribution_arithmetic_diagnostics": [
+    {
+      "id": "within/GPU/off-before/hooks-only",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 144,
+          "independent_unrounded_max_value": 4.7021875179805497e-17,
+          "independent_value_at_formal_coordinate": 0.0
+        }
+      }
+    },
+    {
+      "id": "within/GPU/off-before/off-after",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 144,
+          "independent_unrounded_max_value": 4.7021875179805497e-17,
+          "independent_value_at_formal_coordinate": 0.0
+        }
+      }
+    },
+    {
+      "id": "within/GPU/off-before/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 144,
+          "independent_unrounded_max_value": 4.7021875179805497e-17,
+          "independent_value_at_formal_coordinate": 0.0
+        }
+      }
+    },
+    {
+      "id": "within/GPU/hooks-only/off-after",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 144,
+          "independent_unrounded_max_value": 4.7021875179805497e-17,
+          "independent_value_at_formal_coordinate": 0.0
+        }
+      }
+    },
+    {
+      "id": "within/GPU/hooks-only/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 144,
+          "independent_unrounded_max_value": 4.7021875179805497e-17,
+          "independent_value_at_formal_coordinate": 0.0
+        }
+      }
+    },
+    {
+      "id": "within/GPU/off-after/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 144,
+          "independent_unrounded_max_value": 4.7021875179805497e-17,
+          "independent_value_at_formal_coordinate": 0.0
+        }
+      }
+    },
+    {
+      "id": "within/NPU/off-before/hooks-only",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 50,
+          "independent_unrounded_max_value": 7.385821571743976e-17,
+          "independent_value_at_formal_coordinate": 3.03342110163422e-17
+        }
+      }
+    },
+    {
+      "id": "within/NPU/off-before/off-after",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 50,
+          "independent_unrounded_max_value": 7.385821571743976e-17,
+          "independent_value_at_formal_coordinate": 3.03342110163422e-17
+        }
+      }
+    },
+    {
+      "id": "within/NPU/off-before/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 50,
+          "independent_unrounded_max_value": 7.385821571743976e-17,
+          "independent_value_at_formal_coordinate": 3.03342110163422e-17
+        }
+      }
+    },
+    {
+      "id": "within/NPU/hooks-only/off-after",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 50,
+          "independent_unrounded_max_value": 7.385821571743976e-17,
+          "independent_value_at_formal_coordinate": 3.03342110163422e-17
+        }
+      }
+    },
+    {
+      "id": "within/NPU/hooks-only/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 50,
+          "independent_unrounded_max_value": 7.385821571743976e-17,
+          "independent_value_at_formal_coordinate": 3.03342110163422e-17
+        }
+      }
+    },
+    {
+      "id": "within/NPU/off-after/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 0,
+          "independent_unrounded_max_value": 0.0,
+          "independent_value_at_formal_coordinate": 0.0
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 0,
+          "independent_prediction_index": 50,
+          "independent_unrounded_max_value": 7.385821571743976e-17,
+          "independent_value_at_formal_coordinate": 3.03342110163422e-17
+        }
+      }
+    },
+    {
+      "id": "cross/off-before",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.00470915635838022,
+          "independent_value_at_formal_coordinate": 0.00470915635838022
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.034838059131311216,
+          "independent_value_at_formal_coordinate": 0.034838059131311216
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.0031063319722001988,
+          "independent_value_at_formal_coordinate": 0.0031063319722001988
+        }
+      }
+    },
+    {
+      "id": "cross/hooks-only",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.00470915635838022,
+          "independent_value_at_formal_coordinate": 0.00470915635838022
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.034838059131311216,
+          "independent_value_at_formal_coordinate": 0.034838059131311216
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.0031063319722001988,
+          "independent_value_at_formal_coordinate": 0.0031063319722001988
+        }
+      }
+    },
+    {
+      "id": "cross/off-after",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.00470915635838022,
+          "independent_value_at_formal_coordinate": 0.00470915635838022
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.034838059131311216,
+          "independent_value_at_formal_coordinate": 0.034838059131311216
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.0031063319722001988,
+          "independent_value_at_formal_coordinate": 0.0031063319722001988
+        }
+      }
+    },
+    {
+      "id": "cross/hooks-plus-dispatch-metadata",
+      "distribution_maxima": {
+        "probability_rmse": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.00470915635838022,
+          "independent_value_at_formal_coordinate": 0.00470915635838022
+        },
+        "max_probability_error": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.034838059131311216,
+          "independent_value_at_formal_coordinate": 0.034838059131311216
+        },
+        "tail_merged_js": {
+          "formal_prediction_index": 134,
+          "independent_prediction_index": 134,
+          "independent_unrounded_max_value": 0.0031063319722001988,
+          "independent_value_at_formal_coordinate": 0.0031063319722001988
+        }
+      }
+    }
+  ],
+  "diagnostic_tolerances": {
+    "absolute": 1e-12,
+    "relative": 5e-12,
+    "model_acceptance_threshold": null
+  },
+  "all_metrics_matched": true,
+  "acceptance": null
+}
