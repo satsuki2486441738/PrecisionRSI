@@ -81359,6 +81359,5313 @@
       "framework": {
         "name": "Transformers"
       }
+    },
+    {
+      "id": "gemma4-h100-observer-transparency-20261107",
+      "date": "2026-11-07",
+      "title": "Transformers · observer transparency · Gemma-4-12B",
+      "framework": {
+        "name": "Transformers"
+      },
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "thresholds": null,
+      "full_core_complete": false,
+      "model": {
+        "name": "Gemma-4-12B",
+        "revision": "1a2c7729392586f5ecddae8807ee2ef741eabb9a"
+      },
+      "summary": "One H100 loaded-model observer check: four cache-off modes, six target/distribution contrasts and 98 sampled boundaries. Native BF16 payloads match bitwise in this scope. The NPU attempt failed before model load at the shared-instance idle guard.",
+      "common": [
+        "One fixed 128+32-token input, one loaded eval model, BF16 parameters/native logits, eager attention, seed0 and TP1.",
+        "Four 160-token forwards use_cache=false/logits_to_keep=0; 159 scores include127 prompt and32 continuation targets. Final prediction159 is retained but unscored.",
+        "Same complete RNG and available observed model-state controls; one scalar BF16 buffer fingerprint gap remains explicit.",
+        "Public target replay covers six pairs with zero arrays. Actual E02 independently replays all282 distribution contrasts and98 sampled boundary reductions."
+      ],
+      "differences": [
+        "The observer mode changes only owned module hooks and frontend dispatch metadata collection; all sides share the same loaded GPU model.",
+        "Frontend overload/shape/dtype census is not native-kernel/fusion/accumulation identity or full operand capture.",
+        "No NPU observer numeric side exists. The spent NPU attempt failed its first busy-process guard; occupant workload ownership remains unknown and no other process was stopped."
+      ],
+      "sides": [
+        {
+          "id": "gpu-off-before",
+          "label": "GPU / off-before",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "off-before",
+              "use_cache": false,
+              "sequence_length": 160,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "eval": true,
+              "logits_to_keep": 0,
+              "module_hooks_enabled": false,
+              "frontend_dispatcher_metadata_enabled": false
+            },
+            "fresh_process_repeatability_measured": false,
+            "P01_measured": false
+          }
+        },
+        {
+          "id": "gpu-hooks-only",
+          "label": "GPU / hooks-only",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "hooks-only",
+              "use_cache": false,
+              "sequence_length": 160,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "eval": true,
+              "logits_to_keep": 0,
+              "module_hooks_enabled": true,
+              "frontend_dispatcher_metadata_enabled": false
+            },
+            "fresh_process_repeatability_measured": false,
+            "P01_measured": false
+          }
+        },
+        {
+          "id": "gpu-off-after",
+          "label": "GPU / off-after",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "off-after",
+              "use_cache": false,
+              "sequence_length": 160,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "eval": true,
+              "logits_to_keep": 0,
+              "module_hooks_enabled": false,
+              "frontend_dispatcher_metadata_enabled": false
+            },
+            "fresh_process_repeatability_measured": false,
+            "P01_measured": false
+          }
+        },
+        {
+          "id": "gpu-hooks-plus-dispatch-metadata",
+          "label": "GPU / hooks-plus-dispatch-metadata",
+          "hardware": "NVIDIA H100 80GB HBM3",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu128"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.10.1"
+            },
+            {
+              "name": "NumPy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "CUDA runtime",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "parameter_dtype": "BF16",
+            "native_logits_dtype": "BF16",
+            "offline_logprob_dtype": "FP64",
+            "attention": "eager",
+            "seed": 0,
+            "parallelism": "tp1",
+            "device_count": 1,
+            "deterministic_algorithms": false,
+            "deterministic_warn_only": false,
+            "cudnn_deterministic": false,
+            "cudnn_benchmark": false,
+            "cuda_matmul_allow_tf32": false,
+            "cudnn_allow_tf32": true,
+            "float32_matmul_precision": "highest",
+            "cublas_workspace_config": null,
+            "pythonhashseed": "0",
+            "execution": {
+              "mode": "hooks-plus-dispatch-metadata",
+              "use_cache": false,
+              "sequence_length": 160,
+              "native_forward_calls": 1,
+              "same_process_model_loads": 1,
+              "eval": true,
+              "logits_to_keep": 0,
+              "module_hooks_enabled": true,
+              "frontend_dispatcher_metadata_enabled": true
+            },
+            "fresh_process_repeatability_measured": false,
+            "P01_measured": false
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "gpu-off-before-vs-gpu-hooks-only",
+          "title": "Observer controls: off-before vs hooks-only",
+          "side_ids": [
+            "gpu-off-before",
+            "gpu-hooks-only"
+          ],
+          "kind": "within_GPU_same_loaded_model_observer_control",
+          "scope": "One fixed input: 159 targets (127 prompt plus 32 continuation), 47 sampled distributions; one loaded GPU model.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-off-before": 3.2764746913920972,
+                "gpu-hooks-only": 3.2764746913920972
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS MEAN",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS MAX",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "side a top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "side a top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "side a top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "side b top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "side b top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "side b top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "side a union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "side a union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "side a union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "side b union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "side b union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "side b union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-before-vs-gpu-off-after",
+          "title": "Observer controls: off-before vs off-after",
+          "side_ids": [
+            "gpu-off-before",
+            "gpu-off-after"
+          ],
+          "kind": "within_GPU_same_loaded_model_observer_control",
+          "scope": "One fixed input: 159 targets (127 prompt plus 32 continuation), 47 sampled distributions; one loaded GPU model.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-off-before": 3.2764746913920972,
+                "gpu-off-after": 3.2764746913920972
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS MEAN",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS MAX",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "side a top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "side a top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "side a top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "side b top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "side b top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "side b top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "side a union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "side a union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "side a union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "side b union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "side b union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "side b union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-off-before-vs-gpu-hooks-plus-dispatch-metadata",
+          "title": "Observer controls: off-before vs hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-off-before",
+            "gpu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_GPU_same_loaded_model_observer_control",
+          "scope": "One fixed input: 159 targets (127 prompt plus 32 continuation), 47 sampled distributions; one loaded GPU model.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-off-before": 3.2764746913920972,
+                "gpu-hooks-plus-dispatch-metadata": 3.2764746913920972
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS MEAN",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS MAX",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "side a top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "side a top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "side a top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "side b top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "side b top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "side b top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "side a union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "side a union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "side a union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "side b union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "side b union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "side b union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-hooks-only-vs-gpu-off-after",
+          "title": "Observer controls: hooks-only vs off-after",
+          "side_ids": [
+            "gpu-hooks-only",
+            "gpu-off-after"
+          ],
+          "kind": "within_GPU_same_loaded_model_observer_control",
+          "scope": "One fixed input: 159 targets (127 prompt plus 32 continuation), 47 sampled distributions; one loaded GPU model.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-hooks-only": 3.2764746913920972,
+                "gpu-off-after": 3.2764746913920972
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS MEAN",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS MAX",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "side a top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "side a top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "side a top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "side b top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "side b top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "side b top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "side a union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "side a union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "side a union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "side b union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "side b union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "side b union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        },
+        {
+          "id": "gpu-hooks-only-vs-gpu-hooks-plus-dispatch-metadata",
+          "title": "Observer controls: hooks-only vs hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-hooks-only",
+            "gpu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_GPU_same_loaded_model_observer_control",
+          "scope": "One fixed input: 159 targets (127 prompt plus 32 continuation), 47 sampled distributions; one loaded GPU model.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-hooks-only": 3.2764746913920972,
+                "gpu-hooks-plus-dispatch-metadata": 3.2764746913920972
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS MEAN",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS MAX",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "side a top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "side a top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "side a top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "side b top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "side b top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "side b top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "side a union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "side a union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "side a union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "side b union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "side b union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "side b union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "sample-global-rmse",
+              "label": "Sampled boundary global rmse",
+              "value": 0.0,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-max-abs",
+              "label": "Sampled boundary global max abs",
+              "value": 0.0,
+              "unit": "activation value"
+            },
+            {
+              "id": "sample-global-cosine",
+              "label": "Sampled boundary global cosine",
+              "value": 1.0,
+              "unit": "1"
+            },
+            {
+              "id": "sample-global-error-norm",
+              "label": "Sampled boundary global error norm",
+              "value": 0.0,
+              "unit": "activation L2"
+            },
+            {
+              "id": "sample-global-side-norm-absolute-difference",
+              "label": "Absolute difference of sampled side L2 norms",
+              "value": 0.0,
+              "unit": "activation L2",
+              "side_values": {
+                "gpu-hooks-only": 577.1515429296231,
+                "gpu-hooks-plus-dispatch-metadata": 577.1515429296231
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            },
+            {
+              "label": "Paired sampled boundaries",
+              "observed": 98,
+              "expected": 98,
+              "unit": "boundary tensors"
+            },
+            {
+              "label": "Paired selected boundary elements",
+              "observed": 294784,
+              "expected": 294784,
+              "unit": "elements"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null,
+          "sampled_boundary_summary": {
+            "sides": [
+              "gpu-hooks-only",
+              "gpu-hooks-plus-dispatch-metadata"
+            ],
+            "sample_shape": [
+              1,
+              47,
+              64
+            ],
+            "selected_positions": [
+              0,
+              8,
+              16,
+              25,
+              33,
+              42,
+              50,
+              59,
+              67,
+              76,
+              84,
+              93,
+              101,
+              110,
+              118,
+              127,
+              128,
+              129,
+              130,
+              131,
+              132,
+              133,
+              134,
+              135,
+              136,
+              137,
+              138,
+              139,
+              140,
+              141,
+              142,
+              143,
+              144,
+              145,
+              146,
+              147,
+              148,
+              149,
+              150,
+              151,
+              152,
+              153,
+              154,
+              155,
+              156,
+              157,
+              158
+            ],
+            "selected_channels": [
+              0,
+              60,
+              121,
+              182,
+              243,
+              304,
+              365,
+              426,
+              487,
+              548,
+              609,
+              670,
+              731,
+              792,
+              853,
+              914,
+              974,
+              1035,
+              1096,
+              1157,
+              1218,
+              1279,
+              1340,
+              1401,
+              1462,
+              1523,
+              1584,
+              1645,
+              1706,
+              1767,
+              1828,
+              1889,
+              1949,
+              2010,
+              2071,
+              2132,
+              2193,
+              2254,
+              2315,
+              2376,
+              2437,
+              2498,
+              2559,
+              2620,
+              2681,
+              2742,
+              2803,
+              2864,
+              2924,
+              2985,
+              3046,
+              3107,
+              3168,
+              3229,
+              3290,
+              3351,
+              3412,
+              3473,
+              3534,
+              3595,
+              3656,
+              3717,
+              3778,
+              3839
+            ],
+            "per_boundary": {
+              "embedding.scaled.output": {
+                "count": 3008,
+                "side_a_norm": 73.31683330979943,
+                "side_b_norm": 73.31683330979943,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.00.input": {
+                "count": 3008,
+                "side_a_norm": 73.31683330979943,
+                "side_b_norm": 73.31683330979943,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.00.output": {
+                "count": 3008,
+                "side_a_norm": 79.34177636706453,
+                "side_b_norm": 79.34177636706453,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.01.input": {
+                "count": 3008,
+                "side_a_norm": 79.34177636706453,
+                "side_b_norm": 79.34177636706453,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.01.output": {
+                "count": 3008,
+                "side_a_norm": 66.54128813182751,
+                "side_b_norm": 66.54128813182751,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.02.input": {
+                "count": 3008,
+                "side_a_norm": 66.54128813182751,
+                "side_b_norm": 66.54128813182751,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.02.output": {
+                "count": 3008,
+                "side_a_norm": 67.37804599163287,
+                "side_b_norm": 67.37804599163287,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.03.input": {
+                "count": 3008,
+                "side_a_norm": 67.37804599163287,
+                "side_b_norm": 67.37804599163287,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.03.output": {
+                "count": 3008,
+                "side_a_norm": 54.54918278905901,
+                "side_b_norm": 54.54918278905901,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.04.input": {
+                "count": 3008,
+                "side_a_norm": 54.54918278905901,
+                "side_b_norm": 54.54918278905901,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.04.output": {
+                "count": 3008,
+                "side_a_norm": 29.12210441649152,
+                "side_b_norm": 29.12210441649152,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.05.input": {
+                "count": 3008,
+                "side_a_norm": 29.12210441649152,
+                "side_b_norm": 29.12210441649152,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.05.output": {
+                "count": 3008,
+                "side_a_norm": 47.685851915950394,
+                "side_b_norm": 47.685851915950394,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.06.input": {
+                "count": 3008,
+                "side_a_norm": 47.685851915950394,
+                "side_b_norm": 47.685851915950394,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.06.output": {
+                "count": 3008,
+                "side_a_norm": 44.25147521554416,
+                "side_b_norm": 44.25147521554416,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.07.input": {
+                "count": 3008,
+                "side_a_norm": 44.25147521554416,
+                "side_b_norm": 44.25147521554416,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.07.output": {
+                "count": 3008,
+                "side_a_norm": 38.20389569875642,
+                "side_b_norm": 38.20389569875642,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.08.input": {
+                "count": 3008,
+                "side_a_norm": 38.20389569875642,
+                "side_b_norm": 38.20389569875642,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.08.output": {
+                "count": 3008,
+                "side_a_norm": 61.90402771362184,
+                "side_b_norm": 61.90402771362184,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.09.input": {
+                "count": 3008,
+                "side_a_norm": 61.90402771362184,
+                "side_b_norm": 61.90402771362184,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.09.output": {
+                "count": 3008,
+                "side_a_norm": 54.37440784812379,
+                "side_b_norm": 54.37440784812379,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.10.input": {
+                "count": 3008,
+                "side_a_norm": 54.37440784812379,
+                "side_b_norm": 54.37440784812379,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.10.output": {
+                "count": 3008,
+                "side_a_norm": 33.25528214136808,
+                "side_b_norm": 33.25528214136808,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.11.input": {
+                "count": 3008,
+                "side_a_norm": 33.25528214136808,
+                "side_b_norm": 33.25528214136808,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.11.output": {
+                "count": 3008,
+                "side_a_norm": 30.517480067815725,
+                "side_b_norm": 30.517480067815725,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.12.input": {
+                "count": 3008,
+                "side_a_norm": 30.517480067815725,
+                "side_b_norm": 30.517480067815725,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.12.output": {
+                "count": 3008,
+                "side_a_norm": 25.594500450682702,
+                "side_b_norm": 25.594500450682702,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.13.input": {
+                "count": 3008,
+                "side_a_norm": 25.594500450682702,
+                "side_b_norm": 25.594500450682702,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.13.output": {
+                "count": 3008,
+                "side_a_norm": 21.902773286381898,
+                "side_b_norm": 21.902773286381898,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.14.input": {
+                "count": 3008,
+                "side_a_norm": 21.902773286381898,
+                "side_b_norm": 21.902773286381898,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.14.output": {
+                "count": 3008,
+                "side_a_norm": 23.317354271563776,
+                "side_b_norm": 23.317354271563776,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.15.input": {
+                "count": 3008,
+                "side_a_norm": 23.317354271563776,
+                "side_b_norm": 23.317354271563776,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.15.output": {
+                "count": 3008,
+                "side_a_norm": 24.582838262401715,
+                "side_b_norm": 24.582838262401715,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.16.input": {
+                "count": 3008,
+                "side_a_norm": 24.582838262401715,
+                "side_b_norm": 24.582838262401715,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.16.output": {
+                "count": 3008,
+                "side_a_norm": 39.081292145782456,
+                "side_b_norm": 39.081292145782456,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.17.input": {
+                "count": 3008,
+                "side_a_norm": 39.081292145782456,
+                "side_b_norm": 39.081292145782456,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.17.output": {
+                "count": 3008,
+                "side_a_norm": 29.368548641230852,
+                "side_b_norm": 29.368548641230852,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.18.input": {
+                "count": 3008,
+                "side_a_norm": 29.368548641230852,
+                "side_b_norm": 29.368548641230852,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.18.output": {
+                "count": 3008,
+                "side_a_norm": 37.685644339393576,
+                "side_b_norm": 37.685644339393576,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.19.input": {
+                "count": 3008,
+                "side_a_norm": 37.685644339393576,
+                "side_b_norm": 37.685644339393576,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.19.output": {
+                "count": 3008,
+                "side_a_norm": 38.454111875061976,
+                "side_b_norm": 38.454111875061976,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.20.input": {
+                "count": 3008,
+                "side_a_norm": 38.454111875061976,
+                "side_b_norm": 38.454111875061976,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.20.output": {
+                "count": 3008,
+                "side_a_norm": 42.229122932217145,
+                "side_b_norm": 42.229122932217145,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.21.input": {
+                "count": 3008,
+                "side_a_norm": 42.229122932217145,
+                "side_b_norm": 42.229122932217145,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.21.output": {
+                "count": 3008,
+                "side_a_norm": 44.961103637343,
+                "side_b_norm": 44.961103637343,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.22.input": {
+                "count": 3008,
+                "side_a_norm": 44.961103637343,
+                "side_b_norm": 44.961103637343,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.22.output": {
+                "count": 3008,
+                "side_a_norm": 50.493782975223525,
+                "side_b_norm": 50.493782975223525,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.23.input": {
+                "count": 3008,
+                "side_a_norm": 50.493782975223525,
+                "side_b_norm": 50.493782975223525,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.23.output": {
+                "count": 3008,
+                "side_a_norm": 44.98702294551059,
+                "side_b_norm": 44.98702294551059,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.24.input": {
+                "count": 3008,
+                "side_a_norm": 44.98702294551059,
+                "side_b_norm": 44.98702294551059,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.24.output": {
+                "count": 3008,
+                "side_a_norm": 49.69060814825803,
+                "side_b_norm": 49.69060814825803,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.25.input": {
+                "count": 3008,
+                "side_a_norm": 49.69060814825803,
+                "side_b_norm": 49.69060814825803,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.25.output": {
+                "count": 3008,
+                "side_a_norm": 52.00025496753952,
+                "side_b_norm": 52.00025496753952,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.26.input": {
+                "count": 3008,
+                "side_a_norm": 52.00025496753952,
+                "side_b_norm": 52.00025496753952,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.26.output": {
+                "count": 3008,
+                "side_a_norm": 57.82501307786661,
+                "side_b_norm": 57.82501307786661,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.27.input": {
+                "count": 3008,
+                "side_a_norm": 57.82501307786661,
+                "side_b_norm": 57.82501307786661,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.27.output": {
+                "count": 3008,
+                "side_a_norm": 61.14932167681618,
+                "side_b_norm": 61.14932167681618,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.28.input": {
+                "count": 3008,
+                "side_a_norm": 61.14932167681618,
+                "side_b_norm": 61.14932167681618,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.28.output": {
+                "count": 3008,
+                "side_a_norm": 69.64122225064155,
+                "side_b_norm": 69.64122225064155,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.29.input": {
+                "count": 3008,
+                "side_a_norm": 69.64122225064155,
+                "side_b_norm": 69.64122225064155,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.29.output": {
+                "count": 3008,
+                "side_a_norm": 59.50771297768325,
+                "side_b_norm": 59.50771297768325,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.30.input": {
+                "count": 3008,
+                "side_a_norm": 59.50771297768325,
+                "side_b_norm": 59.50771297768325,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.30.output": {
+                "count": 3008,
+                "side_a_norm": 64.30949976355431,
+                "side_b_norm": 64.30949976355431,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.31.input": {
+                "count": 3008,
+                "side_a_norm": 64.30949976355431,
+                "side_b_norm": 64.30949976355431,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.31.output": {
+                "count": 3008,
+                "side_a_norm": 72.03195004217555,
+                "side_b_norm": 72.03195004217555,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.32.input": {
+                "count": 3008,
+                "side_a_norm": 72.03195004217555,
+                "side_b_norm": 72.03195004217555,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.32.output": {
+                "count": 3008,
+                "side_a_norm": 82.359298852183,
+                "side_b_norm": 82.359298852183,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.33.input": {
+                "count": 3008,
+                "side_a_norm": 82.359298852183,
+                "side_b_norm": 82.359298852183,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.33.output": {
+                "count": 3008,
+                "side_a_norm": 73.11075667355654,
+                "side_b_norm": 73.11075667355654,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.34.input": {
+                "count": 3008,
+                "side_a_norm": 73.11075667355654,
+                "side_b_norm": 73.11075667355654,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.34.output": {
+                "count": 3008,
+                "side_a_norm": 73.41615646746274,
+                "side_b_norm": 73.41615646746274,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.35.input": {
+                "count": 3008,
+                "side_a_norm": 73.41615646746274,
+                "side_b_norm": 73.41615646746274,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.35.output": {
+                "count": 3008,
+                "side_a_norm": 71.30218419447822,
+                "side_b_norm": 71.30218419447822,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.36.input": {
+                "count": 3008,
+                "side_a_norm": 71.30218419447822,
+                "side_b_norm": 71.30218419447822,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.36.output": {
+                "count": 3008,
+                "side_a_norm": 66.6388471183707,
+                "side_b_norm": 66.6388471183707,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.37.input": {
+                "count": 3008,
+                "side_a_norm": 66.6388471183707,
+                "side_b_norm": 66.6388471183707,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.37.output": {
+                "count": 3008,
+                "side_a_norm": 67.79183898551206,
+                "side_b_norm": 67.79183898551206,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.38.input": {
+                "count": 3008,
+                "side_a_norm": 67.79183898551206,
+                "side_b_norm": 67.79183898551206,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.38.output": {
+                "count": 3008,
+                "side_a_norm": 69.10010051344933,
+                "side_b_norm": 69.10010051344933,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.39.input": {
+                "count": 3008,
+                "side_a_norm": 69.10010051344933,
+                "side_b_norm": 69.10010051344933,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.39.output": {
+                "count": 3008,
+                "side_a_norm": 66.41049577787629,
+                "side_b_norm": 66.41049577787629,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.40.input": {
+                "count": 3008,
+                "side_a_norm": 66.41049577787629,
+                "side_b_norm": 66.41049577787629,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.40.output": {
+                "count": 3008,
+                "side_a_norm": 69.9022867469258,
+                "side_b_norm": 69.9022867469258,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.41.input": {
+                "count": 3008,
+                "side_a_norm": 69.9022867469258,
+                "side_b_norm": 69.9022867469258,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.41.output": {
+                "count": 3008,
+                "side_a_norm": 61.434914040877665,
+                "side_b_norm": 61.434914040877665,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.42.input": {
+                "count": 3008,
+                "side_a_norm": 61.434914040877665,
+                "side_b_norm": 61.434914040877665,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.42.output": {
+                "count": 3008,
+                "side_a_norm": 60.34195987739205,
+                "side_b_norm": 60.34195987739205,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.43.input": {
+                "count": 3008,
+                "side_a_norm": 60.34195987739205,
+                "side_b_norm": 60.34195987739205,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.43.output": {
+                "count": 3008,
+                "side_a_norm": 64.14526355163696,
+                "side_b_norm": 64.14526355163696,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.44.input": {
+                "count": 3008,
+                "side_a_norm": 64.14526355163696,
+                "side_b_norm": 64.14526355163696,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.44.output": {
+                "count": 3008,
+                "side_a_norm": 56.33848442022191,
+                "side_b_norm": 56.33848442022191,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.45.input": {
+                "count": 3008,
+                "side_a_norm": 56.33848442022191,
+                "side_b_norm": 56.33848442022191,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.45.output": {
+                "count": 3008,
+                "side_a_norm": 59.4001000172317,
+                "side_b_norm": 59.4001000172317,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.46.input": {
+                "count": 3008,
+                "side_a_norm": 59.4001000172317,
+                "side_b_norm": 59.4001000172317,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999998,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.46.output": {
+                "count": 3008,
+                "side_a_norm": 50.88163289174249,
+                "side_b_norm": 50.88163289174249,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.47.input": {
+                "count": 3008,
+                "side_a_norm": 50.88163289174249,
+                "side_b_norm": 50.88163289174249,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "block.47.output": {
+                "count": 3008,
+                "side_a_norm": 2.666682056382856,
+                "side_b_norm": 2.666682056382856,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 1.0,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "norm.final.output": {
+                "count": 3008,
+                "side_a_norm": 173.8745473885594,
+                "side_b_norm": 173.8745473885594,
+                "error_norm": 0.0,
+                "rmse": 0.0,
+                "cosine": 0.9999999999999999,
+                "max_abs": 0.0,
+                "max_flat_index": 0,
+                "max_selected_coordinate": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "global": {
+              "count": 294784,
+              "side_a_norm": 577.1515429296231,
+              "side_b_norm": 577.1515429296231,
+              "error_norm": 0.0,
+              "rmse": 0.0,
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "max_flat_index": 0
+            },
+            "cosine_min": 0.9999999999999998,
+            "cosine_max": 1.0
+          }
+        },
+        {
+          "id": "gpu-off-after-vs-gpu-hooks-plus-dispatch-metadata",
+          "title": "Observer controls: off-after vs hooks-plus-dispatch-metadata",
+          "side_ids": [
+            "gpu-off-after",
+            "gpu-hooks-plus-dispatch-metadata"
+          ],
+          "kind": "within_GPU_same_loaded_model_observer_control",
+          "scope": "One fixed input: 159 targets (127 prompt plus 32 continuation), 47 sampled distributions; one loaded GPU model.",
+          "metrics": [
+            {
+              "id": "target-nll-abs-diff",
+              "label": "Target NLL absolute difference",
+              "value": 0.0,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-off-after": 3.2764746913920972,
+                "gpu-hooks-plus-dispatch-metadata": 3.2764746913920972
+              }
+            },
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target absolute difference linear P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Target maximum absolute difference",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "anonymous_target_index_zero_based": 0
+              }
+            },
+            {
+              "id": "top1-agreements",
+              "label": "Top-1 agreements",
+              "value": 47,
+              "unit": "positions"
+            },
+            {
+              "id": "top1-agreement-fraction",
+              "label": "Top-1 agreement fraction",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "top100-overlap-mean",
+              "label": "Top-100 overlap mean",
+              "value": 1.0,
+              "unit": "fraction"
+            },
+            {
+              "id": "union-probability-rmse-mean",
+              "label": "Union-token probability RMSE MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-p99",
+              "label": "Union-token probability RMSE P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-probability-rmse-max",
+              "label": "Union-token probability RMSE MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "union-max-probability-error-mean",
+              "label": "Union-token maximum probability error MEAN",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-p99",
+              "label": "Union-token maximum probability error P99",
+              "value": 0.0,
+              "unit": "probability"
+            },
+            {
+              "id": "union-max-probability-error-max",
+              "label": "Union-token maximum probability error MAX",
+              "value": 0.0,
+              "unit": "probability",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "tail-merged-js-mean",
+              "label": "Top-100 union plus complement JS MEAN",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-p99",
+              "label": "Top-100 union plus complement JS P99",
+              "value": 0.0,
+              "unit": "nat"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Top-100 union plus complement JS MAX",
+              "value": 0.0,
+              "unit": "nat",
+              "coordinate": {
+                "prediction_index_zero_based": 0
+              }
+            },
+            {
+              "id": "side-a-top100-mean",
+              "label": "side a top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-p1",
+              "label": "side a top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-top100-min",
+              "label": "side a top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-mean",
+              "label": "side b top100 probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-p1",
+              "label": "side b top100 probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-top100-min",
+              "label": "side b top100 probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-mean",
+              "label": "side a union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-p1",
+              "label": "side a union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-a-union-min",
+              "label": "side a union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-mean",
+              "label": "side b union probability mass MEAN",
+              "value": 0.9124500694081614,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-p1",
+              "label": "side b union probability mass P1",
+              "value": 0.5691841521032085,
+              "unit": "probability mass"
+            },
+            {
+              "id": "side-b-union-min",
+              "label": "side b union probability mass MIN",
+              "value": 0.5510257363356403,
+              "unit": "probability mass"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired target logprobs",
+              "observed": 159,
+              "expected": 159,
+              "unit": "targets"
+            },
+            {
+              "label": "Paired sampled distributions",
+              "observed": 47,
+              "expected": 47,
+              "unit": "positions"
+            }
+          ],
+          "acceptance": null,
+          "thresholds": null
+        }
+      ],
+      "scope": {
+        "independent_inputs": 1,
+        "same_loaded_model_processes": 1,
+        "native_cacheoff_forwards": 4,
+        "scored_targets_per_mode": 159,
+        "unique_source_target_scores": 636,
+        "unique_source_full_vocabulary_rows": 188,
+        "target_distribution_pairs": 6,
+        "distribution_pair_rows": 282,
+        "sampled_boundary_pairs": 98,
+        "sampled_global_elements": 294784,
+        "source_large_objects": 194,
+        "GPU_NPU_observer_comparison_complete": false,
+        "fresh_process_repeatability_measured": false,
+        "P01_measured": false
+      },
+      "plan_coverage": {
+        "task_count": 49,
+        "core_task_count": 28,
+        "counts": {
+          "partial": 9,
+          "complete": 9,
+          "pending": 8,
+          "deferred": 21,
+          "not_applicable": 2
+        },
+        "full_core_complete": false,
+        "original_49_task_scope_complete": false
+      },
+      "execution_census": {
+        "off-before": {
+          "execution_census_measured": false
+        },
+        "hooks-only": {
+          "execution_census_measured": true,
+          "static_modules": 875,
+          "fired_modules": 863,
+          "zero_fired_modules": [
+            "model.language_model.layers",
+            "model.embed_vision",
+            "model.embed_vision.patch_ln1",
+            "model.embed_vision.patch_dense",
+            "model.embed_vision.patch_ln2",
+            "model.embed_vision.pos_norm",
+            "model.embed_vision.multimodal_embedder",
+            "model.embed_vision.multimodal_embedder.embedding_projection",
+            "model.embed_vision.multimodal_embedder.embedding_pre_projection_norm",
+            "model.embed_audio",
+            "model.embed_audio.embedding_projection",
+            "model.embed_audio.embedding_pre_projection_norm"
+          ],
+          "total_module_invocations": 864,
+          "frontend_dispatcher_enabled": false,
+          "frontend_invocations": 0,
+          "frontend_unique_signatures": 0,
+          "native_kernel_identity_attested": false,
+          "full_operand_values_attested": false
+        },
+        "off-after": {
+          "execution_census_measured": false
+        },
+        "hooks-plus-dispatch-metadata": {
+          "execution_census_measured": true,
+          "static_modules": 875,
+          "fired_modules": 863,
+          "zero_fired_modules": [
+            "model.language_model.layers",
+            "model.embed_vision",
+            "model.embed_vision.patch_ln1",
+            "model.embed_vision.patch_dense",
+            "model.embed_vision.patch_ln2",
+            "model.embed_vision.pos_norm",
+            "model.embed_vision.multimodal_embedder",
+            "model.embed_vision.multimodal_embedder.embedding_projection",
+            "model.embed_vision.multimodal_embedder.embedding_pre_projection_norm",
+            "model.embed_audio",
+            "model.embed_audio.embedding_projection",
+            "model.embed_audio.embedding_pre_projection_norm"
+          ],
+          "total_module_invocations": 864,
+          "frontend_dispatcher_enabled": true,
+          "frontend_invocations": 5604,
+          "frontend_unique_signatures": 4922,
+          "native_kernel_identity_attested": false,
+          "full_operand_values_attested": false
+        }
+      },
+      "state_control": {
+        "same_loaded_eval_model": true,
+        "complete_RNG_equal": true,
+        "available_observed_model_state_equal": true,
+        "scalar_BF16_buffer_content_gap_count": 1,
+        "complete_parameter_buffer_byte_attestation": false
+      },
+      "NPU_observer": {
+        "status": "failed_pre_model_shared_instance_busy_guard",
+        "owned_model_loads": 0,
+        "owned_observer_forwards": 0,
+        "workload_ownership_of_busy_processes_established": false,
+        "other_processes_stopped": false
+      },
+      "instrumented_execution_accounting": {
+        "schema_version": 1,
+        "record_id": "gemma4-h100-observer-transparency-20261107",
+        "monetary_cost": null,
+        "currency": null,
+        "rate": null,
+        "invoice_or_billed_GPU_hours_known": false,
+        "recorded_CPU_intervals": [
+          {
+            "phase": "formal_GPU_only_CPU_admission_v1_failed",
+            "status": "failed",
+            "seconds": 33.90709985199999,
+            "source_controller_sha256": "401a764631636298488f456b68eb61a355e10edcc7524ca188d43cfa3089e86b"
+          },
+          {
+            "phase": "formal_GPU_only_CPU_admission_v2_failed",
+            "status": "failed",
+            "seconds": 41.989743333999996,
+            "source_controller_sha256": "39f99e20485efb014bdf23b73981ede485f93f17254bf3420b014059862365b6"
+          },
+          {
+            "phase": "formal_GPU_only_CPU_admission",
+            "status": "completed",
+            "seconds": 108.886204903,
+            "source_controller_sha256": "37ecba17be9b03d306c21c3ba3de40efd926dde1e63f822420989c4a0f6d5fad"
+          },
+          {
+            "phase": "independent_E02_v1_failed",
+            "status": "failed",
+            "seconds": 64.957891484,
+            "source_controller_sha256": "d9aea7e3326bf672443726d1449074ed02f9e96b7327d019b01957a02d19f51c"
+          },
+          {
+            "phase": "independent_E02_v2_failed",
+            "status": "failed",
+            "seconds": 74.37737502700001,
+            "source_controller_sha256": "f8cd42a3bea24f8330e6d4258f5e5267021f77902acf79448660d1b19bc9fe21"
+          },
+          {
+            "phase": "independent_E02_v3_completed",
+            "status": "completed",
+            "seconds": 125.92737418899999,
+            "source_controller_sha256": "4e6ce1506dcbc51a8678376d5f75ff2927e2583376b39b1fbd26daa20401f9af"
+          }
+        ],
+        "complete_executed_CPU_setup_failure_and_transfer_time_known": false,
+        "recorded_intervals_are_not_a_total_and_may_overlap": true,
+        "CPU_intervals_are_not_GPU_billing_or_P01": true,
+        "native_capture_repeated_after_CPU_failures": false,
+        "original_data_bytes": 730988032,
+        "large_file_bytes_including_headers": 731029648,
+        "logical_export_bytes": 752633169,
+        "original_archive_bytes": 355832914,
+        "NPU_failed_pre_model_wall_seconds": 1.5486807376146317,
+        "NPU_shared_instance_occupant_workload_or_owner_known": false,
+        "acceptance": null,
+        "P01_measured": false,
+        "instrumented_native_source_intervals": [
+          {
+            "phase": "original GPU source controller including preconditions and instrumented capture",
+            "seconds_from_source_UTC": 344.778097,
+            "P01_latency": false,
+            "GPU_billing_interval": false
+          },
+          {
+            "phase": "original four-forward instrumented capture outer interval",
+            "seconds_from_source_UTC": 275.679691,
+            "P01_latency": false,
+            "GPU_billing_interval": false
+          }
+        ],
+        "previous_cost_candidate_sha256": "4740545319811a9d2c8ee203a5a9d8ed935f47812472f639f73ba38e7566819e",
+        "known_formal_CPU_failure_intervals_included": true
+      },
+      "independent_checks": {
+        "report_sha256": "2ac29b72ef6bee066b5d0bb692e6f0558b21ea44b900f2bd870381428a2a97db",
+        "controller_sha256": "4e6ce1506dcbc51a8678376d5f75ff2927e2583376b39b1fbd26daa20401f9af",
+        "formal_report_sha256": "7953d80271966156792c0e956aaec25d6cee27b4e3d22cbcc6cb5ed64245f7b8",
+        "scope": {
+          "target_pairs": 6,
+          "targets_per_pair": 159,
+          "distribution_pair_rows": 282,
+          "distribution_rows_per_pair": 47,
+          "boundary_tensor_pairs": 98,
+          "global_sample_elements": 294784,
+          "large_sources": 194,
+          "large_hash_passes": 2,
+          "raw_logits_files": 4,
+          "BF16_values_per_raw_file": 41943040,
+          "sample_pack_files": 2
+        },
+        "payload_identity": {
+          "raw_logits": {
+            "all_equal": true,
+            "physical_data_payloads_equal": true,
+            "files": {
+              "off-before": {
+                "tensor_count": 1,
+                "BF16_values": 41943040,
+                "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+                "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c",
+                "header_bytes_excluded": 224,
+                "per_tensor": {
+                  "logits": {
+                    "shape": [
+                      1,
+                      160,
+                      262144
+                    ],
+                    "values": 41943040,
+                    "data_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac"
+                  }
+                },
+                "original_file_sha256": "3222b291a6f569e86601495dadd20dc90afbd600de8e7817face0ab4171a4fb0"
+              },
+              "hooks-only": {
+                "tensor_count": 1,
+                "BF16_values": 41943040,
+                "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+                "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c",
+                "header_bytes_excluded": 224,
+                "per_tensor": {
+                  "logits": {
+                    "shape": [
+                      1,
+                      160,
+                      262144
+                    ],
+                    "values": 41943040,
+                    "data_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac"
+                  }
+                },
+                "original_file_sha256": "df72c1f9b03fc5a635b2f8a3e619f48f42f652ce721dcf761016a54e6c42967a"
+              },
+              "off-after": {
+                "tensor_count": 1,
+                "BF16_values": 41943040,
+                "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+                "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c",
+                "header_bytes_excluded": 224,
+                "per_tensor": {
+                  "logits": {
+                    "shape": [
+                      1,
+                      160,
+                      262144
+                    ],
+                    "values": 41943040,
+                    "data_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac"
+                  }
+                },
+                "original_file_sha256": "ba15a235a6f61639fd72b005a61905440d02b76e34df357b8efbf4facf70168e"
+              },
+              "hooks-plus-dispatch-metadata": {
+                "tensor_count": 1,
+                "BF16_values": 41943040,
+                "physical_data_payload_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac",
+                "canonical_framed_sha256": "1013ae89c191784d3c97e37c678651648e7d1dbc3974cb125b2bc01e73bc477c",
+                "header_bytes_excluded": 240,
+                "per_tensor": {
+                  "logits": {
+                    "shape": [
+                      1,
+                      160,
+                      262144
+                    ],
+                    "values": 41943040,
+                    "data_sha256": "3dc0e5023d7a43a47dd21a31b61fac57a247f152da8c8486701011335392beac"
+                  }
+                },
+                "original_file_sha256": "eedfe3c9e47e95e12af4f752bfb726befd00a652374ed512646b7f93d37b0b5e"
+              }
+            },
+            "file_headers_excluded": true,
+            "numeric_zero_was_not_used_as_bit_equality_evidence": true
+          },
+          "boundary_samples": {
+            "all_equal": true,
+            "physical_data_payloads_equal": true,
+            "files": {
+              "hooks-only": {
+                "tensor_count": 98,
+                "BF16_values": 294784,
+                "physical_data_payload_sha256": "29aab7548fa09866ecd2e717ec141a4ff6ee4c103c13caa4974c37bb99b8575b",
+                "canonical_framed_sha256": "15020eb31864d67fa1f0482a1061cb050c9ddc7ac9d793f7d1a760c5dcf9e452",
+                "header_bytes_excluded": 8312,
+                "per_tensor": {
+                  "block.00.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "942f3f605f6aa59e8d52e382999a31cccddc778214e2f22cfb0e1dab45ec719b"
+                  },
+                  "block.00.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ec57db57d0655139d02fe8f39e7716f14898aa56e82676d2ccbecc0d8cf875f3"
+                  },
+                  "block.01.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ec57db57d0655139d02fe8f39e7716f14898aa56e82676d2ccbecc0d8cf875f3"
+                  },
+                  "block.01.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "55e5535cc704781ce8076cedb27e9ae5254c9a52a881ca4c089dda0b0c365b10"
+                  },
+                  "block.02.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "55e5535cc704781ce8076cedb27e9ae5254c9a52a881ca4c089dda0b0c365b10"
+                  },
+                  "block.02.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4ec7b103365f43ba8a3bff1e85cab5f50ed1b980393da7feece587ad0b45c736"
+                  },
+                  "block.03.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4ec7b103365f43ba8a3bff1e85cab5f50ed1b980393da7feece587ad0b45c736"
+                  },
+                  "block.03.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4f6179ff5c6ded7e4d32552a8604dab1d1e55e9cd5a59080e141de2279a1126b"
+                  },
+                  "block.04.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4f6179ff5c6ded7e4d32552a8604dab1d1e55e9cd5a59080e141de2279a1126b"
+                  },
+                  "block.04.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1db8bcec64f912113953dcbc57a56ed5a2f50846606df772d93d0fb35d72b8de"
+                  },
+                  "block.05.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1db8bcec64f912113953dcbc57a56ed5a2f50846606df772d93d0fb35d72b8de"
+                  },
+                  "block.05.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "20633377a6e3d6dd69ce1e97f19cc53c10d82ba3a4dcb744e5cc830d9f188f0e"
+                  },
+                  "block.06.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "20633377a6e3d6dd69ce1e97f19cc53c10d82ba3a4dcb744e5cc830d9f188f0e"
+                  },
+                  "block.06.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6f8ee5e5a1789084a26293a2e7387e74b71d7401f4717c0834510239bef22825"
+                  },
+                  "block.07.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6f8ee5e5a1789084a26293a2e7387e74b71d7401f4717c0834510239bef22825"
+                  },
+                  "block.07.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dfce6d1d80520fce6846890a9840e3aa3bdf9b5de2b17da20049d38dac5354c1"
+                  },
+                  "block.08.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dfce6d1d80520fce6846890a9840e3aa3bdf9b5de2b17da20049d38dac5354c1"
+                  },
+                  "block.08.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a52937860cf9629f156ae566e36e273efb294eef12dc3c6eb6f6446a991ac790"
+                  },
+                  "block.09.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a52937860cf9629f156ae566e36e273efb294eef12dc3c6eb6f6446a991ac790"
+                  },
+                  "block.09.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ac0136b12c3580927da97aa3ab5c88b0ce7670874a91fd389882d7268859462c"
+                  },
+                  "block.10.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ac0136b12c3580927da97aa3ab5c88b0ce7670874a91fd389882d7268859462c"
+                  },
+                  "block.10.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e3656dff61b1d61c8072f185e06b6528be086a99a43d0e4913a3148a72d0cd94"
+                  },
+                  "block.11.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e3656dff61b1d61c8072f185e06b6528be086a99a43d0e4913a3148a72d0cd94"
+                  },
+                  "block.11.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "688c843cd123877245373abc8987f79e06b5fa4ce8271af85f409afc1d3572ad"
+                  },
+                  "block.12.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "688c843cd123877245373abc8987f79e06b5fa4ce8271af85f409afc1d3572ad"
+                  },
+                  "block.12.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "7f77a39541cfafb3f3fa00b0dbbf1a3eb6e68cc75af48fc42bfae75113be0cbb"
+                  },
+                  "block.13.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "7f77a39541cfafb3f3fa00b0dbbf1a3eb6e68cc75af48fc42bfae75113be0cbb"
+                  },
+                  "block.13.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "84c02426faa41a4b3554fda13eaf5371edda8ddb1fad7b06ae0b4cbdae4f0743"
+                  },
+                  "block.14.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "84c02426faa41a4b3554fda13eaf5371edda8ddb1fad7b06ae0b4cbdae4f0743"
+                  },
+                  "block.14.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "daba9b806251b95f404a7edaa26b273ca2c4fadf4355bc2c85dbff766d80b93f"
+                  },
+                  "block.15.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "daba9b806251b95f404a7edaa26b273ca2c4fadf4355bc2c85dbff766d80b93f"
+                  },
+                  "block.15.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b6cee3046ef6e2f4bd43d2185adab8a329b14677726d15bd75ca5a9eb148f283"
+                  },
+                  "block.16.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b6cee3046ef6e2f4bd43d2185adab8a329b14677726d15bd75ca5a9eb148f283"
+                  },
+                  "block.16.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1c9e7f1322b50e582fe1f689ad20f96817f8fa7ad029bd5c08fed5ac33bfd4f5"
+                  },
+                  "block.17.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1c9e7f1322b50e582fe1f689ad20f96817f8fa7ad029bd5c08fed5ac33bfd4f5"
+                  },
+                  "block.17.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4dedff36a1846ca692ab56101bda6056d5ddd4c463df70543d9d0f0ff127bb57"
+                  },
+                  "block.18.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4dedff36a1846ca692ab56101bda6056d5ddd4c463df70543d9d0f0ff127bb57"
+                  },
+                  "block.18.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dd32eed4893411a34754fc191adb6b281ccaf1bbf4d662fad5fec000c59c2c35"
+                  },
+                  "block.19.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dd32eed4893411a34754fc191adb6b281ccaf1bbf4d662fad5fec000c59c2c35"
+                  },
+                  "block.19.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "de076d7538a85375c734902a427ee25925df65b09dafca40ffe384b67c3724e2"
+                  },
+                  "block.20.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "de076d7538a85375c734902a427ee25925df65b09dafca40ffe384b67c3724e2"
+                  },
+                  "block.20.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b209a68aeb4eac359b90f9845d053e739b41237bde6237a21d4e9d609de8adba"
+                  },
+                  "block.21.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b209a68aeb4eac359b90f9845d053e739b41237bde6237a21d4e9d609de8adba"
+                  },
+                  "block.21.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c8878de2e7a4f9ecea125c727e5cd8611c391b9c8868c11c4e6fb0d5a5ddb87c"
+                  },
+                  "block.22.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c8878de2e7a4f9ecea125c727e5cd8611c391b9c8868c11c4e6fb0d5a5ddb87c"
+                  },
+                  "block.22.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "2d50a5d761f4c7e5e97ad5de9942ea7fc51281cf39daf1ac11c3aaa54ffda541"
+                  },
+                  "block.23.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "2d50a5d761f4c7e5e97ad5de9942ea7fc51281cf39daf1ac11c3aaa54ffda541"
+                  },
+                  "block.23.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "f8638c7a81548e4a4515e498cb30bbc37a4e24d17451f2e17aff09dad5f216e5"
+                  },
+                  "block.24.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "f8638c7a81548e4a4515e498cb30bbc37a4e24d17451f2e17aff09dad5f216e5"
+                  },
+                  "block.24.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6ebe9517e37db3a4a79d7feac506f128ae81a20e7a16c4c59bfe5e846fa19882"
+                  },
+                  "block.25.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6ebe9517e37db3a4a79d7feac506f128ae81a20e7a16c4c59bfe5e846fa19882"
+                  },
+                  "block.25.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "da3f418457128f29dc0e48ca089e988ebe9493c107810642ee219c28504e79ea"
+                  },
+                  "block.26.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "da3f418457128f29dc0e48ca089e988ebe9493c107810642ee219c28504e79ea"
+                  },
+                  "block.26.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b9c97d55ea78ab8e8caa21f51998b228ce0f57f6cff05c4a343728af232397d2"
+                  },
+                  "block.27.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b9c97d55ea78ab8e8caa21f51998b228ce0f57f6cff05c4a343728af232397d2"
+                  },
+                  "block.27.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "456cadbcabf34690667d062d7761352111ff21b182cb5b0ba77ebb1582fda1ad"
+                  },
+                  "block.28.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "456cadbcabf34690667d062d7761352111ff21b182cb5b0ba77ebb1582fda1ad"
+                  },
+                  "block.28.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "54ce993d6069b2d3e7e560bef26648fa7c1b225a6b5cd287745ddcfd06f21454"
+                  },
+                  "block.29.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "54ce993d6069b2d3e7e560bef26648fa7c1b225a6b5cd287745ddcfd06f21454"
+                  },
+                  "block.29.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "3ac3aabd0123243a9000fcd08d5ef0ca46e492bcfda02b2bef85e589d535c8a4"
+                  },
+                  "block.30.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "3ac3aabd0123243a9000fcd08d5ef0ca46e492bcfda02b2bef85e589d535c8a4"
+                  },
+                  "block.30.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "d98d1362cc124ac3f3025a92b1dc865d2a1187a7036e13e45c8e1a079edcf4ff"
+                  },
+                  "block.31.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "d98d1362cc124ac3f3025a92b1dc865d2a1187a7036e13e45c8e1a079edcf4ff"
+                  },
+                  "block.31.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "53cb1264f3cb67067485766eb962136e3bc65cff2c2797ab4474969f2af83917"
+                  },
+                  "block.32.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "53cb1264f3cb67067485766eb962136e3bc65cff2c2797ab4474969f2af83917"
+                  },
+                  "block.32.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "32f60942ac032871e8d4e99dca16ca8c1668b386ca255e26039408bd0df7ca56"
+                  },
+                  "block.33.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "32f60942ac032871e8d4e99dca16ca8c1668b386ca255e26039408bd0df7ca56"
+                  },
+                  "block.33.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c82f38dc2208989557cdfbd9ebea6233e4af70ca83671d1368044eef97420b6e"
+                  },
+                  "block.34.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c82f38dc2208989557cdfbd9ebea6233e4af70ca83671d1368044eef97420b6e"
+                  },
+                  "block.34.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b0442c04926b0582c7202c9eeacde8fbe9664a04124c037ac9bd95233eb1f5d3"
+                  },
+                  "block.35.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b0442c04926b0582c7202c9eeacde8fbe9664a04124c037ac9bd95233eb1f5d3"
+                  },
+                  "block.35.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "14f56321ca961f8f16e203371afdd9af5322f130853acef36c67b1484109a413"
+                  },
+                  "block.36.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "14f56321ca961f8f16e203371afdd9af5322f130853acef36c67b1484109a413"
+                  },
+                  "block.36.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "323e71707ce683cda6f3425d295cbd4b6c5b4c1b647d20a7498fdbf57975a259"
+                  },
+                  "block.37.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "323e71707ce683cda6f3425d295cbd4b6c5b4c1b647d20a7498fdbf57975a259"
+                  },
+                  "block.37.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "aaecad21ca2c6d528796ba031aba6b507595be20c9a27d57ce1843b1c7e1e72c"
+                  },
+                  "block.38.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "aaecad21ca2c6d528796ba031aba6b507595be20c9a27d57ce1843b1c7e1e72c"
+                  },
+                  "block.38.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e777a3a55c49c9afa2fc784ad5fe38da99dc8ef6f95766e635aab4d18d5871f2"
+                  },
+                  "block.39.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e777a3a55c49c9afa2fc784ad5fe38da99dc8ef6f95766e635aab4d18d5871f2"
+                  },
+                  "block.39.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "0635332469c2ff8c1fd3eb577ef250057135d74c08da4f55632c7cb41f49f55f"
+                  },
+                  "block.40.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "0635332469c2ff8c1fd3eb577ef250057135d74c08da4f55632c7cb41f49f55f"
+                  },
+                  "block.40.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ff512e47dd06a352a9ee344cd2bc1ba135d06902fe80f20627d529bb826802fe"
+                  },
+                  "block.41.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ff512e47dd06a352a9ee344cd2bc1ba135d06902fe80f20627d529bb826802fe"
+                  },
+                  "block.41.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "43f21352749749280de0d5d49b9e52ad9673e48bbf2a51e25071a76061cd5842"
+                  },
+                  "block.42.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "43f21352749749280de0d5d49b9e52ad9673e48bbf2a51e25071a76061cd5842"
+                  },
+                  "block.42.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "8dc9c4c2cdb22f664a00d55855428b20ae333e3c5a6c5628b685970e98ffe4cc"
+                  },
+                  "block.43.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "8dc9c4c2cdb22f664a00d55855428b20ae333e3c5a6c5628b685970e98ffe4cc"
+                  },
+                  "block.43.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "70768b1c09542dbca7dcf95567239333947d4a0c887f2e3047e1d911790881ec"
+                  },
+                  "block.44.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "70768b1c09542dbca7dcf95567239333947d4a0c887f2e3047e1d911790881ec"
+                  },
+                  "block.44.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "350fa31defd52b94f791c657a3019e91c28bd50a25fb9e040916c68fffeabaaf"
+                  },
+                  "block.45.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "350fa31defd52b94f791c657a3019e91c28bd50a25fb9e040916c68fffeabaaf"
+                  },
+                  "block.45.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a238bba06bb9700682389e94d8e33435c5299510aca114486fec9cc78029233e"
+                  },
+                  "block.46.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a238bba06bb9700682389e94d8e33435c5299510aca114486fec9cc78029233e"
+                  },
+                  "block.46.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e54e39b7727a5d22b4d134c22f100d2d260308e861ca99f1ce60727593235be6"
+                  },
+                  "block.47.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e54e39b7727a5d22b4d134c22f100d2d260308e861ca99f1ce60727593235be6"
+                  },
+                  "block.47.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "01519ae93597a8e69173233d2e192d241ccab49c460e46e5d9325168d175b64d"
+                  },
+                  "embedding.scaled.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "942f3f605f6aa59e8d52e382999a31cccddc778214e2f22cfb0e1dab45ec719b"
+                  },
+                  "norm.final.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "169b8a44b7722910c602e525327979cece90123b4e2ac966a0c510d66bddf869"
+                  }
+                },
+                "original_file_sha256": "8527e91d1bde2745588e16a9ed03bfdfe0591209b6443d8b3475b2202b9b8e9c"
+              },
+              "hooks-plus-dispatch-metadata": {
+                "tensor_count": 98,
+                "BF16_values": 294784,
+                "physical_data_payload_sha256": "29aab7548fa09866ecd2e717ec141a4ff6ee4c103c13caa4974c37bb99b8575b",
+                "canonical_framed_sha256": "15020eb31864d67fa1f0482a1061cb050c9ddc7ac9d793f7d1a760c5dcf9e452",
+                "header_bytes_excluded": 8328,
+                "per_tensor": {
+                  "block.00.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "942f3f605f6aa59e8d52e382999a31cccddc778214e2f22cfb0e1dab45ec719b"
+                  },
+                  "block.00.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ec57db57d0655139d02fe8f39e7716f14898aa56e82676d2ccbecc0d8cf875f3"
+                  },
+                  "block.01.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ec57db57d0655139d02fe8f39e7716f14898aa56e82676d2ccbecc0d8cf875f3"
+                  },
+                  "block.01.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "55e5535cc704781ce8076cedb27e9ae5254c9a52a881ca4c089dda0b0c365b10"
+                  },
+                  "block.02.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "55e5535cc704781ce8076cedb27e9ae5254c9a52a881ca4c089dda0b0c365b10"
+                  },
+                  "block.02.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4ec7b103365f43ba8a3bff1e85cab5f50ed1b980393da7feece587ad0b45c736"
+                  },
+                  "block.03.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4ec7b103365f43ba8a3bff1e85cab5f50ed1b980393da7feece587ad0b45c736"
+                  },
+                  "block.03.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4f6179ff5c6ded7e4d32552a8604dab1d1e55e9cd5a59080e141de2279a1126b"
+                  },
+                  "block.04.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4f6179ff5c6ded7e4d32552a8604dab1d1e55e9cd5a59080e141de2279a1126b"
+                  },
+                  "block.04.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1db8bcec64f912113953dcbc57a56ed5a2f50846606df772d93d0fb35d72b8de"
+                  },
+                  "block.05.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1db8bcec64f912113953dcbc57a56ed5a2f50846606df772d93d0fb35d72b8de"
+                  },
+                  "block.05.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "20633377a6e3d6dd69ce1e97f19cc53c10d82ba3a4dcb744e5cc830d9f188f0e"
+                  },
+                  "block.06.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "20633377a6e3d6dd69ce1e97f19cc53c10d82ba3a4dcb744e5cc830d9f188f0e"
+                  },
+                  "block.06.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6f8ee5e5a1789084a26293a2e7387e74b71d7401f4717c0834510239bef22825"
+                  },
+                  "block.07.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6f8ee5e5a1789084a26293a2e7387e74b71d7401f4717c0834510239bef22825"
+                  },
+                  "block.07.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dfce6d1d80520fce6846890a9840e3aa3bdf9b5de2b17da20049d38dac5354c1"
+                  },
+                  "block.08.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dfce6d1d80520fce6846890a9840e3aa3bdf9b5de2b17da20049d38dac5354c1"
+                  },
+                  "block.08.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a52937860cf9629f156ae566e36e273efb294eef12dc3c6eb6f6446a991ac790"
+                  },
+                  "block.09.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a52937860cf9629f156ae566e36e273efb294eef12dc3c6eb6f6446a991ac790"
+                  },
+                  "block.09.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ac0136b12c3580927da97aa3ab5c88b0ce7670874a91fd389882d7268859462c"
+                  },
+                  "block.10.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ac0136b12c3580927da97aa3ab5c88b0ce7670874a91fd389882d7268859462c"
+                  },
+                  "block.10.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e3656dff61b1d61c8072f185e06b6528be086a99a43d0e4913a3148a72d0cd94"
+                  },
+                  "block.11.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e3656dff61b1d61c8072f185e06b6528be086a99a43d0e4913a3148a72d0cd94"
+                  },
+                  "block.11.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "688c843cd123877245373abc8987f79e06b5fa4ce8271af85f409afc1d3572ad"
+                  },
+                  "block.12.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "688c843cd123877245373abc8987f79e06b5fa4ce8271af85f409afc1d3572ad"
+                  },
+                  "block.12.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "7f77a39541cfafb3f3fa00b0dbbf1a3eb6e68cc75af48fc42bfae75113be0cbb"
+                  },
+                  "block.13.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "7f77a39541cfafb3f3fa00b0dbbf1a3eb6e68cc75af48fc42bfae75113be0cbb"
+                  },
+                  "block.13.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "84c02426faa41a4b3554fda13eaf5371edda8ddb1fad7b06ae0b4cbdae4f0743"
+                  },
+                  "block.14.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "84c02426faa41a4b3554fda13eaf5371edda8ddb1fad7b06ae0b4cbdae4f0743"
+                  },
+                  "block.14.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "daba9b806251b95f404a7edaa26b273ca2c4fadf4355bc2c85dbff766d80b93f"
+                  },
+                  "block.15.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "daba9b806251b95f404a7edaa26b273ca2c4fadf4355bc2c85dbff766d80b93f"
+                  },
+                  "block.15.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b6cee3046ef6e2f4bd43d2185adab8a329b14677726d15bd75ca5a9eb148f283"
+                  },
+                  "block.16.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b6cee3046ef6e2f4bd43d2185adab8a329b14677726d15bd75ca5a9eb148f283"
+                  },
+                  "block.16.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1c9e7f1322b50e582fe1f689ad20f96817f8fa7ad029bd5c08fed5ac33bfd4f5"
+                  },
+                  "block.17.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "1c9e7f1322b50e582fe1f689ad20f96817f8fa7ad029bd5c08fed5ac33bfd4f5"
+                  },
+                  "block.17.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4dedff36a1846ca692ab56101bda6056d5ddd4c463df70543d9d0f0ff127bb57"
+                  },
+                  "block.18.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "4dedff36a1846ca692ab56101bda6056d5ddd4c463df70543d9d0f0ff127bb57"
+                  },
+                  "block.18.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dd32eed4893411a34754fc191adb6b281ccaf1bbf4d662fad5fec000c59c2c35"
+                  },
+                  "block.19.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "dd32eed4893411a34754fc191adb6b281ccaf1bbf4d662fad5fec000c59c2c35"
+                  },
+                  "block.19.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "de076d7538a85375c734902a427ee25925df65b09dafca40ffe384b67c3724e2"
+                  },
+                  "block.20.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "de076d7538a85375c734902a427ee25925df65b09dafca40ffe384b67c3724e2"
+                  },
+                  "block.20.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b209a68aeb4eac359b90f9845d053e739b41237bde6237a21d4e9d609de8adba"
+                  },
+                  "block.21.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b209a68aeb4eac359b90f9845d053e739b41237bde6237a21d4e9d609de8adba"
+                  },
+                  "block.21.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c8878de2e7a4f9ecea125c727e5cd8611c391b9c8868c11c4e6fb0d5a5ddb87c"
+                  },
+                  "block.22.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c8878de2e7a4f9ecea125c727e5cd8611c391b9c8868c11c4e6fb0d5a5ddb87c"
+                  },
+                  "block.22.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "2d50a5d761f4c7e5e97ad5de9942ea7fc51281cf39daf1ac11c3aaa54ffda541"
+                  },
+                  "block.23.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "2d50a5d761f4c7e5e97ad5de9942ea7fc51281cf39daf1ac11c3aaa54ffda541"
+                  },
+                  "block.23.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "f8638c7a81548e4a4515e498cb30bbc37a4e24d17451f2e17aff09dad5f216e5"
+                  },
+                  "block.24.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "f8638c7a81548e4a4515e498cb30bbc37a4e24d17451f2e17aff09dad5f216e5"
+                  },
+                  "block.24.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6ebe9517e37db3a4a79d7feac506f128ae81a20e7a16c4c59bfe5e846fa19882"
+                  },
+                  "block.25.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "6ebe9517e37db3a4a79d7feac506f128ae81a20e7a16c4c59bfe5e846fa19882"
+                  },
+                  "block.25.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "da3f418457128f29dc0e48ca089e988ebe9493c107810642ee219c28504e79ea"
+                  },
+                  "block.26.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "da3f418457128f29dc0e48ca089e988ebe9493c107810642ee219c28504e79ea"
+                  },
+                  "block.26.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b9c97d55ea78ab8e8caa21f51998b228ce0f57f6cff05c4a343728af232397d2"
+                  },
+                  "block.27.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b9c97d55ea78ab8e8caa21f51998b228ce0f57f6cff05c4a343728af232397d2"
+                  },
+                  "block.27.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "456cadbcabf34690667d062d7761352111ff21b182cb5b0ba77ebb1582fda1ad"
+                  },
+                  "block.28.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "456cadbcabf34690667d062d7761352111ff21b182cb5b0ba77ebb1582fda1ad"
+                  },
+                  "block.28.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "54ce993d6069b2d3e7e560bef26648fa7c1b225a6b5cd287745ddcfd06f21454"
+                  },
+                  "block.29.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "54ce993d6069b2d3e7e560bef26648fa7c1b225a6b5cd287745ddcfd06f21454"
+                  },
+                  "block.29.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "3ac3aabd0123243a9000fcd08d5ef0ca46e492bcfda02b2bef85e589d535c8a4"
+                  },
+                  "block.30.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "3ac3aabd0123243a9000fcd08d5ef0ca46e492bcfda02b2bef85e589d535c8a4"
+                  },
+                  "block.30.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "d98d1362cc124ac3f3025a92b1dc865d2a1187a7036e13e45c8e1a079edcf4ff"
+                  },
+                  "block.31.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "d98d1362cc124ac3f3025a92b1dc865d2a1187a7036e13e45c8e1a079edcf4ff"
+                  },
+                  "block.31.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "53cb1264f3cb67067485766eb962136e3bc65cff2c2797ab4474969f2af83917"
+                  },
+                  "block.32.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "53cb1264f3cb67067485766eb962136e3bc65cff2c2797ab4474969f2af83917"
+                  },
+                  "block.32.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "32f60942ac032871e8d4e99dca16ca8c1668b386ca255e26039408bd0df7ca56"
+                  },
+                  "block.33.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "32f60942ac032871e8d4e99dca16ca8c1668b386ca255e26039408bd0df7ca56"
+                  },
+                  "block.33.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c82f38dc2208989557cdfbd9ebea6233e4af70ca83671d1368044eef97420b6e"
+                  },
+                  "block.34.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "c82f38dc2208989557cdfbd9ebea6233e4af70ca83671d1368044eef97420b6e"
+                  },
+                  "block.34.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b0442c04926b0582c7202c9eeacde8fbe9664a04124c037ac9bd95233eb1f5d3"
+                  },
+                  "block.35.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "b0442c04926b0582c7202c9eeacde8fbe9664a04124c037ac9bd95233eb1f5d3"
+                  },
+                  "block.35.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "14f56321ca961f8f16e203371afdd9af5322f130853acef36c67b1484109a413"
+                  },
+                  "block.36.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "14f56321ca961f8f16e203371afdd9af5322f130853acef36c67b1484109a413"
+                  },
+                  "block.36.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "323e71707ce683cda6f3425d295cbd4b6c5b4c1b647d20a7498fdbf57975a259"
+                  },
+                  "block.37.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "323e71707ce683cda6f3425d295cbd4b6c5b4c1b647d20a7498fdbf57975a259"
+                  },
+                  "block.37.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "aaecad21ca2c6d528796ba031aba6b507595be20c9a27d57ce1843b1c7e1e72c"
+                  },
+                  "block.38.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "aaecad21ca2c6d528796ba031aba6b507595be20c9a27d57ce1843b1c7e1e72c"
+                  },
+                  "block.38.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e777a3a55c49c9afa2fc784ad5fe38da99dc8ef6f95766e635aab4d18d5871f2"
+                  },
+                  "block.39.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e777a3a55c49c9afa2fc784ad5fe38da99dc8ef6f95766e635aab4d18d5871f2"
+                  },
+                  "block.39.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "0635332469c2ff8c1fd3eb577ef250057135d74c08da4f55632c7cb41f49f55f"
+                  },
+                  "block.40.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "0635332469c2ff8c1fd3eb577ef250057135d74c08da4f55632c7cb41f49f55f"
+                  },
+                  "block.40.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ff512e47dd06a352a9ee344cd2bc1ba135d06902fe80f20627d529bb826802fe"
+                  },
+                  "block.41.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "ff512e47dd06a352a9ee344cd2bc1ba135d06902fe80f20627d529bb826802fe"
+                  },
+                  "block.41.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "43f21352749749280de0d5d49b9e52ad9673e48bbf2a51e25071a76061cd5842"
+                  },
+                  "block.42.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "43f21352749749280de0d5d49b9e52ad9673e48bbf2a51e25071a76061cd5842"
+                  },
+                  "block.42.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "8dc9c4c2cdb22f664a00d55855428b20ae333e3c5a6c5628b685970e98ffe4cc"
+                  },
+                  "block.43.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "8dc9c4c2cdb22f664a00d55855428b20ae333e3c5a6c5628b685970e98ffe4cc"
+                  },
+                  "block.43.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "70768b1c09542dbca7dcf95567239333947d4a0c887f2e3047e1d911790881ec"
+                  },
+                  "block.44.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "70768b1c09542dbca7dcf95567239333947d4a0c887f2e3047e1d911790881ec"
+                  },
+                  "block.44.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "350fa31defd52b94f791c657a3019e91c28bd50a25fb9e040916c68fffeabaaf"
+                  },
+                  "block.45.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "350fa31defd52b94f791c657a3019e91c28bd50a25fb9e040916c68fffeabaaf"
+                  },
+                  "block.45.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a238bba06bb9700682389e94d8e33435c5299510aca114486fec9cc78029233e"
+                  },
+                  "block.46.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "a238bba06bb9700682389e94d8e33435c5299510aca114486fec9cc78029233e"
+                  },
+                  "block.46.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e54e39b7727a5d22b4d134c22f100d2d260308e861ca99f1ce60727593235be6"
+                  },
+                  "block.47.input": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "e54e39b7727a5d22b4d134c22f100d2d260308e861ca99f1ce60727593235be6"
+                  },
+                  "block.47.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "01519ae93597a8e69173233d2e192d241ccab49c460e46e5d9325168d175b64d"
+                  },
+                  "embedding.scaled.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "942f3f605f6aa59e8d52e382999a31cccddc778214e2f22cfb0e1dab45ec719b"
+                  },
+                  "norm.final.output": {
+                    "shape": [
+                      1,
+                      47,
+                      64
+                    ],
+                    "values": 3008,
+                    "data_sha256": "169b8a44b7722910c602e525327979cece90123b4e2ac966a0c510d66bddf869"
+                  }
+                },
+                "original_file_sha256": "4c7125efa9b7e32e5f45526f85c6cb5bb5f9dd6ec85667b96f24b35e06f78658"
+              }
+            },
+            "file_headers_excluded": true,
+            "numeric_zero_was_not_used_as_bit_equality_evidence": true
+          }
+        },
+        "diagnostic_verification": {
+          "absolute_tolerance": 1e-12,
+          "relative_tolerance": 5e-12,
+          "meaning": "independent arithmetic/serialization verification; no model acceptance threshold"
+        },
+        "formal_metrics_rewritten": false
+      },
+      "notes": [
+        "This is one independent fixed input and one loaded process, not fresh-process repeatability or a completed GPU/NPU observer comparison.",
+        "Top100-union probability errors and complement-merged JS retain their coarsened definitions. Full-precision boundary cosines remain unclamped.",
+        "Formal JS remains zero/tied maximum0. Independent scalar arithmetic preserves its4.7021875179805497e-17 residual at predictor144 separately; diagnostic tolerances are not model acceptance thresholds.",
+        "Four raw BF16 logits payloads and two enabled boundary sample payloads are bit-identical by actual source-bound hashes excluding mode metadata headers.",
+        "The original scalar BF16 buffer content gap remains; there is no complete parameter/buffer byte attestation, full hidden trajectory, full operand value, native-kernel cause, quality or P01 performance claim.",
+        "Known failed and successful CPU checks are included in accounting; nested source intervals are not billing/P01 and unknown full setup/transfer time remains unknown.",
+        "Full 49-task/28-core completion remains false and numerical acceptance/thresholds remain null."
+      ],
+      "evidence": [
+        {
+          "label": "Scoped GPU observer report",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/report.md"
+        },
+        {
+          "label": "Original49 task coverage ledger",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/coverage.json"
+        },
+        {
+          "label": "Four anonymous159-target vectors",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/selected-targets.json"
+        },
+        {
+          "label": "Six target/distribution and98 sampled-boundary metrics",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/selected-metrics.json"
+        },
+        {
+          "label": "Six-pair stdlib target replay",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/replay-targets.py"
+        },
+        {
+          "label": "Recorded instrumented execution and CPU failure accounting",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/cost.json"
+        },
+        {
+          "label": "Independent full-scope E02 and BF16 payload checks",
+          "url": "evidence/gemma4-h100-observer-transparency-20261107/e02-summary.json"
+        }
+      ],
+      "archive": {
+        "revision": "002224501d995b43be4e27e3c09e15347c5d6897",
+        "prefix": "site/evidence/gemma4-h100-observer-transparency-20261107/",
+        "replay_cases": 6,
+        "file_sha256": {
+          "selected-targets.json": "cc8004ae8d6aac211647aa2dc8a15d6757ef46db0474e87ee4b9db621c99ca9d",
+          "selected-metrics.json": "883c325d560efcad1ed9cb75c9e3c740a6ff67f83b8bee3e6619d7f65cf8d813",
+          "replay-targets.py": "9a6b9ef5aa75a00f39c9b2c1fcbe42dabe90ef7b4aa6b68dade3ecfb8b1544a9",
+          "report.md": "dd4328fbc0ae7d4371bc43999d010a961dd318d634ca5fbbaf9bdaa160c5446a",
+          "coverage.json": "b9bd9e0e1de99eb4944e983ee7c1bb5b767313057ebfc02c10051e66d668000e",
+          "cost.json": "fcac4530bc52c6ed13d76d0f7cf3e40f36f8427a9c8352f5fec59d346819cf9d",
+          "e02-summary.json": "bb0597edb1a0a968c59fc4e823a7f3cc4cf3a61beffd6dcee7a359d53e479a20"
+        }
+      }
     }
   ]
 }
