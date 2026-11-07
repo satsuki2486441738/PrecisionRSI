@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "record_id": "gemma4-h100-observer-transparency-20261107",
+  "monetary_cost": null,
+  "currency": null,
+  "rate": null,
+  "invoice_or_billed_GPU_hours_known": false,
+  "recorded_CPU_intervals": [
+    {
+      "phase": "formal_GPU_only_CPU_admission_v1_failed",
+      "status": "failed",
+      "seconds": 33.90709985199999,
+      "source_controller_sha256": "401a764631636298488f456b68eb61a355e10edcc7524ca188d43cfa3089e86b"
+    },
+    {
+      "phase": "formal_GPU_only_CPU_admission_v2_failed",
+      "status": "failed",
+      "seconds": 41.989743333999996,
+      "source_controller_sha256": "39f99e20485efb014bdf23b73981ede485f93f17254bf3420b014059862365b6"
+    },
+    {
+      "phase": "formal_GPU_only_CPU_admission",
+      "status": "completed",
+      "seconds": 108.886204903,
+      "source_controller_sha256": "37ecba17be9b03d306c21c3ba3de40efd926dde1e63f822420989c4a0f6d5fad"
+    },
+    {
+      "phase": "independent_E02_v1_failed",
+      "status": "failed",
+      "seconds": 64.957891484,
+      "source_controller_sha256": "d9aea7e3326bf672443726d1449074ed02f9e96b7327d019b01957a02d19f51c"
+    },
+    {
+      "phase": "independent_E02_v2_failed",
+      "status": "failed",
+      "seconds": 74.37737502700001,
+      "source_controller_sha256": "f8cd42a3bea24f8330e6d4258f5e5267021f77902acf79448660d1b19bc9fe21"
+    },
+    {
+      "phase": "independent_E02_v3_completed",
+      "status": "completed",
+      "seconds": 125.92737418899999,
+      "source_controller_sha256": "4e6ce1506dcbc51a8678376d5f75ff2927e2583376b39b1fbd26daa20401f9af"
+    }
+  ],
+  "complete_executed_CPU_setup_failure_and_transfer_time_known": false,
+  "recorded_intervals_are_not_a_total_and_may_overlap": true,
+  "CPU_intervals_are_not_GPU_billing_or_P01": true,
+  "native_capture_repeated_after_CPU_failures": false,
+  "original_data_bytes": 730988032,
+  "large_file_bytes_including_headers": 731029648,
+  "logical_export_bytes": 752633169,
+  "original_archive_bytes": 355832914,
+  "NPU_failed_pre_model_wall_seconds": 1.5486807376146317,
+  "NPU_shared_instance_occupant_workload_or_owner_known": false,
+  "acceptance": null,
+  "P01_measured": false,
+  "instrumented_native_source_intervals": [
+    {
+      "phase": "original GPU source controller including preconditions and instrumented capture",
+      "seconds_from_source_UTC": 344.778097,
+      "P01_latency": false,
+      "GPU_billing_interval": false
+    },
+    {
+      "phase": "original four-forward instrumented capture outer interval",
+      "seconds_from_source_UTC": 275.679691,
+      "P01_latency": false,
+      "GPU_billing_interval": false
+    }
+  ],
+  "previous_cost_candidate_sha256": "4740545319811a9d2c8ee203a5a9d8ed935f47812472f639f73ba38e7566819e",
+  "known_formal_CPU_failure_intervals_included": true
+}
