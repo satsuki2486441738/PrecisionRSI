@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-07",
+  "updated_at": "2026-11-11",
   "evaluations": [
     {
       "id": "trl-sfttrainer-checkpoint-20261021",
@@ -88481,6 +88481,1413 @@
           "cost.json": "85ab1030253558f038c6c744c63455282916a3ad90d16823a110656ab5822696",
           "e02-summary.json": "be94c4a40dab1670688aaaae90bd1aebb959fa9c0f4f0d3b93a0df607bdab936"
         }
+      }
+    },
+    {
+      "id": "gemma-3-27b-it-cuda-precision-20261110",
+      "date": "2026-11-11",
+      "title": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H20Z",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "google/gemma-3-27b-it",
+        "revision": "005ad3404e59d6023443cb575daa05336842228a"
+      },
+      "summary": "Same-device native and reference inference on CUDA on NVIDIA H20Z, using frozen paired inputs.",
+      "sides": [
+        {
+          "id": "native",
+          "label": "Native",
+          "hardware": "1 × NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.11.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "triton",
+              "version": "3.6.0"
+            },
+            {
+              "name": "kernels",
+              "version": "0.14.1"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "huggingface_hub",
+              "version": "1.33.0"
+            },
+            {
+              "name": "CUDA",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "Inference backend": "SDPA"
+          }
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "hardware": "1 × NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.11.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "triton",
+              "version": "3.6.0"
+            },
+            {
+              "name": "kernels",
+              "version": "0.14.1"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "huggingface_hub",
+              "version": "1.33.0"
+            },
+            {
+              "name": "CUDA",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "Inference backend": "eager attention"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "discovery-full",
+          "title": "12 frozen discovery requests with cache disabled",
+          "scope": "12 frozen discovery requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.010906911397278396,
+              "side_values": {
+                "native": 2.4421047607071844,
+                "reference": 2.431197849309906
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.07260184375904273
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.7430741810798656
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.96875
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 11124,
+              "expected": 11124
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 576,
+              "expected": 576
+            }
+          ]
+        },
+        {
+          "id": "reserved-full",
+          "title": "Held-out full-forward NLL",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "scope": "48 requests evenly divided among the 128, 512, 2048 and 8192 token bins.",
+          "metrics": [
+            {
+              "id": "native-minus-reference",
+              "label": "Mean native minus reference NLL",
+              "value": 0.003209797675526087,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-lower",
+              "label": "95% stratified bootstrap lower bound",
+              "value": -0.003743341555846902,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-upper",
+              "label": "95% stratified bootstrap upper bound",
+              "value": 0.010251748152259304,
+              "unit": "nats/token"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Reserved requests",
+              "observed": 48,
+              "expected": 48,
+              "unit": "requests"
+            }
+          ]
+        },
+        {
+          "id": "long-full",
+          "title": "6 reserved 32K requests with cache disabled",
+          "scope": "6 reserved 32K requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 7.545241631401467e-05,
+              "side_values": {
+                "native": 2.358764596823769,
+                "reference": 2.358840049240083
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.03710352964000226
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.24535485267639162
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.9965277777777778
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 196794,
+              "expected": 196794
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 288,
+              "expected": 288
+            }
+          ]
+        }
+      ],
+      "common": [
+        "Same checkpoint revision, assigned devices, token histories and scoring coordinates within each pair.",
+        "The inference plan uses full, cached and chunked paths. Coverage of each stage is in the linked archive."
+      ],
+      "differences": [
+        "Native uses SDPA.",
+        "Reference uses eager attention."
+      ],
+      "notes": [],
+      "evidence": [
+        {
+          "label": "Campaign report",
+          "url": "evidence/model-precision-gpu-npu-20261110/README.md"
+        },
+        {
+          "label": "Metrics, coverage, source hashes and grouped NLL replay",
+          "url": "evidence/model-precision-gpu-npu-20261110/results.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
+        "replay_cases": 6
+      }
+    },
+    {
+      "id": "gpt-oss-120b-cuda-precision-20261110",
+      "date": "2026-11-11",
+      "title": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H20Z",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "openai/gpt-oss-120b",
+        "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a"
+      },
+      "summary": "Same-device native and reference inference on CUDA on NVIDIA H20Z, using frozen paired inputs.",
+      "sides": [
+        {
+          "id": "native",
+          "label": "Native",
+          "hardware": "4 × NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.11.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "triton",
+              "version": "3.6.0"
+            },
+            {
+              "name": "kernels",
+              "version": "0.14.1"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "huggingface_hub",
+              "version": "1.33.0"
+            },
+            {
+              "name": "CUDA",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "Inference backend": "Triton packed MXFP4 expert GEMM"
+          }
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "hardware": "4 × NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.11.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "triton",
+              "version": "3.6.0"
+            },
+            {
+              "name": "kernels",
+              "version": "0.14.1"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "huggingface_hub",
+              "version": "1.33.0"
+            },
+            {
+              "name": "CUDA",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "Inference backend": "eager BF16 expert GEMM after MXFP4 decode"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "discovery-full",
+          "title": "12 frozen discovery requests with cache disabled",
+          "scope": "12 frozen discovery requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.0509692032656579,
+              "side_values": {
+                "native": 4.141188182693541,
+                "reference": 4.192157385959199
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.21210103785028067
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 1.9376307715475571
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.9149305555555556
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 11124,
+              "expected": 11124
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 576,
+              "expected": 576
+            }
+          ]
+        },
+        {
+          "id": "reserved-full",
+          "title": "Held-out full-forward NLL",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "scope": "48 requests evenly divided among the 128, 512, 2048 and 8192 token bins.",
+          "metrics": [
+            {
+              "id": "native-minus-reference",
+              "label": "Mean native minus reference NLL",
+              "value": 0.007729939637582149,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-lower",
+              "label": "95% stratified bootstrap lower bound",
+              "value": -0.005521907153516571,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-upper",
+              "label": "95% stratified bootstrap upper bound",
+              "value": 0.02159293125823611,
+              "unit": "nats/token"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Reserved requests",
+              "observed": 48,
+              "expected": 48,
+              "unit": "requests"
+            }
+          ]
+        },
+        {
+          "id": "long-full",
+          "title": "6 reserved 32K requests with cache disabled",
+          "scope": "6 reserved 32K requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.015787396931221664,
+              "side_values": {
+                "native": 6.010824025497293,
+                "reference": 5.995036628566071
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.15899704686338267
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 1.2872698754072218
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.8680555555555556
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 196794,
+              "expected": 196794
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 288,
+              "expected": 288
+            }
+          ]
+        }
+      ],
+      "common": [
+        "Same checkpoint revision, assigned devices, token histories and scoring coordinates within each pair.",
+        "The inference plan uses full, cached and chunked paths. Coverage of each stage is in the linked archive."
+      ],
+      "differences": [
+        "Native uses Triton packed MXFP4 expert GEMM.",
+        "Reference uses eager BF16 expert GEMM after MXFP4 decode."
+      ],
+      "notes": [
+        "Both peers use the same original MXFP4 checkpoint bytes.",
+        "The 32K runs use 256-query blocks of the owning eager attention with sink semantics."
+      ],
+      "evidence": [
+        {
+          "label": "Campaign report",
+          "url": "evidence/model-precision-gpu-npu-20261110/README.md"
+        },
+        {
+          "label": "Metrics, coverage, source hashes and grouped NLL replay",
+          "url": "evidence/model-precision-gpu-npu-20261110/results.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
+        "replay_cases": 6
+      }
+    },
+    {
+      "id": "nemotron-bolt-cuda-precision-20261110",
+      "date": "2026-11-11",
+      "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H20Z",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+        "revision": "e09a4cedb1787db1760375ee5539f222cae0c672"
+      },
+      "summary": "Same-device native and reference inference on CUDA on NVIDIA H20Z, using frozen paired inputs.",
+      "sides": [
+        {
+          "id": "native",
+          "label": "Native",
+          "hardware": "2 × NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.11.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "triton",
+              "version": "3.6.0"
+            },
+            {
+              "name": "kernels",
+              "version": "0.14.1"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "huggingface_hub",
+              "version": "1.33.0"
+            },
+            {
+              "name": "mamba-ssm",
+              "version": "2.3.2.post1"
+            },
+            {
+              "name": "causal-conv1d",
+              "version": "1.7.0"
+            },
+            {
+              "name": "CUDA",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "Inference backend": "SDPA"
+          }
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "hardware": "2 × NVIDIA H20Z",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.11.0+cu128"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "triton",
+              "version": "3.6.0"
+            },
+            {
+              "name": "kernels",
+              "version": "0.14.1"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "huggingface_hub",
+              "version": "1.33.0"
+            },
+            {
+              "name": "mamba-ssm",
+              "version": "2.3.2.post1"
+            },
+            {
+              "name": "causal-conv1d",
+              "version": "1.7.0"
+            },
+            {
+              "name": "CUDA",
+              "version": "12.8"
+            }
+          ],
+          "settings": {
+            "Inference backend": "eager attention"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "discovery-full",
+          "title": "12 frozen discovery requests with cache disabled",
+          "scope": "12 frozen discovery requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.0007333267210318795,
+              "side_values": {
+                "native": 1.3816926685052406,
+                "reference": 1.3824259952262725
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.05138244112490243
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.458249251842499
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.96875
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 11124,
+              "expected": 11124
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 576,
+              "expected": 576
+            }
+          ]
+        },
+        {
+          "id": "reserved-full",
+          "title": "Held-out full-forward NLL",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "scope": "48 requests evenly divided among the 128, 512, 2048 and 8192 token bins.",
+          "metrics": [
+            {
+              "id": "native-minus-reference",
+              "label": "Mean native minus reference NLL",
+              "value": 0.0011481114833065108,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-lower",
+              "label": "95% stratified bootstrap lower bound",
+              "value": -0.000525542787618137,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-upper",
+              "label": "95% stratified bootstrap upper bound",
+              "value": 0.0027267619181795813,
+              "unit": "nats/token"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Reserved requests",
+              "observed": 48,
+              "expected": 48,
+              "unit": "requests"
+            }
+          ]
+        },
+        {
+          "id": "long-full",
+          "title": "6 reserved 32K requests with cache disabled",
+          "scope": "6 reserved 32K requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.0008376951888338091,
+              "side_values": {
+                "native": 1.9817222669876962,
+                "reference": 1.98255996217653
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.06719057002752826
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.43092395782470727
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.9652777777777778
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 196794,
+              "expected": 196794
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 288,
+              "expected": 288
+            }
+          ]
+        }
+      ],
+      "common": [
+        "Same checkpoint revision, assigned devices, token histories and scoring coordinates within each pair.",
+        "The inference plan uses full, cached and chunked paths. Coverage of each stage is in the linked archive."
+      ],
+      "differences": [
+        "Native uses SDPA.",
+        "Reference uses eager attention."
+      ],
+      "notes": [],
+      "evidence": [
+        {
+          "label": "Campaign report",
+          "url": "evidence/model-precision-gpu-npu-20261110/README.md"
+        },
+        {
+          "label": "Metrics, coverage, source hashes and grouped NLL replay",
+          "url": "evidence/model-precision-gpu-npu-20261110/results.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
+        "replay_cases": 6
+      }
+    },
+    {
+      "id": "gemma-3-27b-it-ascend-precision-20261110",
+      "date": "2026-11-11",
+      "title": "Gemma 3 27B IT native and reference precision on TorchNPU on Ascend 910",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "google/gemma-3-27b-it",
+        "revision": "005ad3404e59d6023443cb575daa05336842228a"
+      },
+      "summary": "Same-device native and reference inference on TorchNPU on Ascend 910, using frozen paired inputs.",
+      "sides": [
+        {
+          "id": "native",
+          "label": "Native",
+          "hardware": "2 × Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            }
+          ],
+          "settings": {
+            "Inference backend": "SDPA"
+          }
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "hardware": "2 × Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            }
+          ],
+          "settings": {
+            "Inference backend": "eager attention"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "discovery-full",
+          "title": "12 frozen discovery requests with cache disabled",
+          "scope": "12 frozen discovery requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.004890867107616881,
+              "side_values": {
+                "native": 2.438995926333898,
+                "reference": 2.434105059226281
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.0651030874017329
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.6137687289714822
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.9722222222222222
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 11124,
+              "expected": 11124
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 576,
+              "expected": 576
+            }
+          ]
+        },
+        {
+          "id": "reserved-full",
+          "title": "Held-out full-forward NLL",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "scope": "48 requests evenly divided among the 128, 512, 2048 and 8192 token bins.",
+          "metrics": [
+            {
+              "id": "native-minus-reference",
+              "label": "Mean native minus reference NLL",
+              "value": -0.007520275950948956,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-lower",
+              "label": "95% stratified bootstrap lower bound",
+              "value": -0.022117404210254227,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-upper",
+              "label": "95% stratified bootstrap upper bound",
+              "value": 0.007377629012611984,
+              "unit": "nats/token"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Reserved requests",
+              "observed": 48,
+              "expected": 48,
+              "unit": "requests"
+            }
+          ]
+        },
+        {
+          "id": "long-full",
+          "title": "6 reserved 32K requests with cache disabled",
+          "scope": "6 reserved 32K requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.0003475202355640583,
+              "side_values": {
+                "native": 2.3583978963703482,
+                "reference": 2.3587454166059123
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.03659656778363609
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.24596101999282843
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.9861111111111112
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 196794,
+              "expected": 196794
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 288,
+              "expected": 288
+            }
+          ]
+        }
+      ],
+      "common": [
+        "Same checkpoint revision, assigned devices, token histories and scoring coordinates within each pair.",
+        "The inference plan uses full, cached and chunked paths. Coverage of each stage is in the linked archive."
+      ],
+      "differences": [
+        "Native uses SDPA.",
+        "Reference uses eager attention."
+      ],
+      "notes": [
+        "The 32K path projects logits in 256-row tiles and retains all valid target positions."
+      ],
+      "evidence": [
+        {
+          "label": "Campaign report",
+          "url": "evidence/model-precision-gpu-npu-20261110/README.md"
+        },
+        {
+          "label": "Metrics, coverage, source hashes and grouped NLL replay",
+          "url": "evidence/model-precision-gpu-npu-20261110/results.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
+        "replay_cases": 6
+      }
+    },
+    {
+      "id": "gpt-oss-120b-ascend-precision-20261110",
+      "date": "2026-11-11",
+      "title": "gpt-oss-120b native and reference precision on TorchNPU on Ascend 910",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "openai/gpt-oss-120b",
+        "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a"
+      },
+      "summary": "Same-device native and reference inference on TorchNPU on Ascend 910, using frozen paired inputs.",
+      "sides": [
+        {
+          "id": "native",
+          "label": "Native",
+          "hardware": "2 × Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            }
+          ],
+          "settings": {
+            "Inference backend": "CANN grouped BF16 GEMM after MXFP4 decode"
+          }
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "hardware": "2 × Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            }
+          ],
+          "settings": {
+            "Inference backend": "per-expert TorchNPU eager BF16 GEMM after MXFP4 decode"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "discovery-full",
+          "title": "12 frozen discovery requests with cache disabled",
+          "scope": "12 frozen discovery requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.009509143888228877,
+              "side_values": {
+                "native": 4.1584225572964675,
+                "reference": 4.167931701184696
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.19436088099497037
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 1.7481395673751852
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.8871527777777778
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 11124,
+              "expected": 11124
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 576,
+              "expected": 576
+            }
+          ]
+        }
+      ],
+      "common": [
+        "Same checkpoint revision, assigned devices, token histories and scoring coordinates within each pair.",
+        "The inference plan uses full, cached and chunked paths. Coverage of each stage is in the linked archive."
+      ],
+      "differences": [
+        "Native uses CANN grouped BF16 GEMM after MXFP4 decode.",
+        "Reference uses per-expert TorchNPU eager BF16 GEMM after MXFP4 decode."
+      ],
+      "notes": [
+        "Both peers use the same original MXFP4 checkpoint bytes. Ascend executes BF16 expert arithmetic.",
+        "The task ledger lists pending work. A held-out delta is reported after all four bins finish."
+      ],
+      "evidence": [
+        {
+          "label": "Campaign report",
+          "url": "evidence/model-precision-gpu-npu-20261110/README.md"
+        },
+        {
+          "label": "Metrics, coverage, source hashes and grouped NLL replay",
+          "url": "evidence/model-precision-gpu-npu-20261110/results.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
+        "replay_cases": 1
+      }
+    },
+    {
+      "id": "nemotron-bolt-ascend-precision-20261110",
+      "date": "2026-11-11",
+      "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on TorchNPU on Ascend 910",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+        "revision": "e09a4cedb1787db1760375ee5539f222cae0c672"
+      },
+      "summary": "Same-device native and reference inference on TorchNPU on Ascend 910, using frozen paired inputs.",
+      "sides": [
+        {
+          "id": "native",
+          "label": "Native",
+          "hardware": "2 × Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            }
+          ],
+          "settings": {
+            "Inference backend": "SDPA"
+          }
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "hardware": "2 × Ascend910_9382",
+          "libraries": [
+            {
+              "name": "torch",
+              "version": "2.10.0"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0"
+            },
+            {
+              "name": "transformers",
+              "version": "5.12.1"
+            },
+            {
+              "name": "accelerate",
+              "version": "1.13.0"
+            },
+            {
+              "name": "safetensors",
+              "version": "0.8.0"
+            },
+            {
+              "name": "CANN",
+              "version": "9.1.0"
+            }
+          ],
+          "settings": {
+            "Inference backend": "eager attention"
+          }
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "discovery-full",
+          "title": "12 frozen discovery requests with cache disabled",
+          "scope": "12 frozen discovery requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 9.640008592648464e-05,
+              "side_values": {
+                "native": 1.7656086547079732,
+                "reference": 1.7657050547938997
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.09603784084244593
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 0.7276860094070436
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.9739583333333334
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 11124,
+              "expected": 11124
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 576,
+              "expected": 576
+            }
+          ]
+        }
+      ],
+      "common": [
+        "Same checkpoint revision, assigned devices, token histories and scoring coordinates within each pair.",
+        "The inference plan uses full, cached and chunked paths. Coverage of each stage is in the linked archive."
+      ],
+      "differences": [
+        "Native uses SDPA.",
+        "Reference uses eager attention."
+      ],
+      "notes": [
+        "Accelerate streams offloaded weights to the assigned NPUs. The Torch Mamba recurrence retains the released multiply-and-sum axes in bounded tiles. The short same-role raw logits matched byte for byte.",
+        "The task ledger lists pending work. A held-out delta is reported after all four bins finish."
+      ],
+      "evidence": [
+        {
+          "label": "Campaign report",
+          "url": "evidence/model-precision-gpu-npu-20261110/README.md"
+        },
+        {
+          "label": "Metrics, coverage, source hashes and grouped NLL replay",
+          "url": "evidence/model-precision-gpu-npu-20261110/results.json"
+        }
+      ],
+      "archive": {
+        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
+        "replay_cases": 1
       }
     }
   ]
