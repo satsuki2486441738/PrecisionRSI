@@ -3,61 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#f5f7f8">
-  <meta name="description" content="PrecisionRSI 精度评测与修复历史：查看比较配置、数值指标、修复过程与验证证据。">
-  <title>精度历史 · PrecisionRSI</title>
-  <link rel="stylesheet" href="./styles.css">
+  <meta name="theme-color" content="#f6f8fa">
+  <meta name="description" content="按硬件、软件栈与训推需求查找精度问题、评测证据和修复记录。">
+  <title>生态看板 · PrecisionRSI</title>
+  <link rel="stylesheet" href="./community.css">
   <script src="./history.js" defer></script>
   <script src="./repair-presentation.js" defer></script>
-  <script src="./evaluation-settings.js" defer></script>
-  <script src="./evaluation-presentation.js" defer></script>
-  <script src="./evaluations.js" defer></script>
-  <script src="./app.js" defer></script>
+  <script src="./community.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#history">跳至历史记录</a>
-  <header class="site-header wrap">
-    <a class="brand" href="./" aria-label="PrecisionRSI 首页"><span class="brand-mark" aria-hidden="true">P<span>·</span></span><span>PrecisionRSI<span class="brand-sub">PRECISION ENGINEERING</span></span></a>
-    <a class="header-label" href="./rsi.html"><span class="live-dot" aria-hidden="true"></span> RSI 迭代运行台 ↗</a>
-  </header>
-  <main class="wrap">
-    <nav class="history-tabs" role="tablist" aria-label="历史类型">
-      <button id="tab-repairs" role="tab" aria-selected="true" aria-controls="archive-panel" type="button">精度修复历史<span>REPAIRS</span></button>
-      <button id="tab-evaluations" role="tab" aria-selected="false" aria-controls="archive-panel" tabindex="-1" type="button">精度评测历史<span>EVALUATIONS</span></button>
-    </nav>
-    <div id="archive-panel" role="tabpanel" aria-labelledby="tab-repairs">
-    <section class="hero" aria-labelledby="page-title">
-      <div><p class="eyebrow" id="hero-kind">REPAIR HISTORY / 精度工程记录</p><h1 id="page-title">精度修复</h1><p class="intro" id="page-intro">按库、版本和任务查看修复结果，展开了解问题与解决方式。</p></div>
-      <aside class="hero-note" id="method"><span class="note-index">01 — METHOD</span><p>发现偏差 <span aria-hidden="true">↗</span> 定位根因<br>实施修复 <span aria-hidden="true">↗</span> 原始负载验证</p><span class="note-caption">真实记录 · 修复过程 · 验证证据</span></aside>
-    </section>
-    <section class="stats" aria-label="档案概览">
-      <div><span class="stat-label" id="stat-label-0">独立修复</span><strong id="total-count">—</strong><span class="stat-foot" id="stat-foot-0">REPAIRS</span></div>
-      <div><span class="stat-label" id="stat-label-1">验证轮次</span><strong id="verification-count">—</strong><span class="stat-foot" id="stat-foot-1">VERIFICATIONS</span></div>
-      <div><span class="stat-label" id="stat-label-2">库分组</span><strong id="group-count">—</strong><span class="stat-foot" id="stat-foot-2">LIBRARY GROUPS</span></div>
-      <div><span class="stat-label" id="stat-label-3">数据更新</span><strong class="date-stat" id="updated-at">—</strong><span class="stat-foot" id="stat-foot-3">LAST UPDATED</span></div>
-    </section>
-    <section class="archive" aria-labelledby="history-title">
-      <div class="section-heading"><div><p class="eyebrow">THE ARCHIVE</p><h2 id="history-title">按库查看修复</h2></div><button class="text-button" id="download" type="button" disabled>下载 JSON <span aria-hidden="true">↗</span></button></div>
-      <form class="filters" id="filters" role="search" aria-label="筛选修复记录">
-        <div class="search-field"><label for="search">关键词</label><input id="search" type="search" placeholder="搜索问题、根因或修复…" autocomplete="off"></div>
-        <div id="task-filter" hidden><label for="task">任务</label><select id="task"><option value="">全部任务</option><option value="inference">推理</option><option value="sft">SFT</option><option value="rl">RL</option></select></div>
-        <div><label for="library">涉及的库</label><select id="library"><option value="">全部库</option></select></div>
-        <details id="extra-filters" class="extra-filters">
-          <summary>更多筛选</summary>
-          <div class="advanced-filter-fields">
-            <div><label for="model">模型</label><select id="model"><option value="">全部模型</option></select></div>
-            <div><label for="hardware">硬件</label><select id="hardware"><option value="">全部硬件</option></select></div>
-          </div>
-        </details>
-      </form>
-      <div class="results-meta"><p id="result-count" role="status" aria-live="polite">正在读取修复档案…</p><button class="text-button" id="reset" type="button" hidden>清除筛选</button></div>
-      <div id="state" class="state" role="status"><span class="loading-mark" aria-hidden="true"></span><h3>正在加载记录</h3><p>准备修复过程与验证证据。</p></div>
-      <div id="history" class="timeline" tabindex="-1"></div>
-    </section>
-    </div>
-  </main>
-  <footer class="wrap"><span>PrecisionRSI <span class="footer-divider">/</span> 精度评测与修复历史</span><span>记录数值与验证证据。</span></footer>
-  <noscript><p class="wrap">请启用 JavaScript 以加载历史记录，或直接查看 <a href="./data/evaluations.json">评测数据</a>与 <a href="./data/repairs.json">修复数据</a>。</p></noscript>
+<a class="skip" href="#results">跳至记录列表</a>
+<header class="header shell">
+  <a class="brand" href="./"><span class="mark">P<span>·</span></span> PrecisionRSI</a>
+  <nav aria-label="主导航"><a class="active" href="#board">生态看板</a><a href="#results">问题与验证</a><a href="#contribute">参与贡献</a></nav>
+  <a class="github" href="https://github.com/satsuki2486441738/PrecisionRSI">GitHub ↗</a>
+</header>
+<main class="shell">
+<section class="hero">
+  <div><p class="eyebrow">OPEN PRECISION COMMUNITY</p><h1>找到你的硬件，<br>看清训推中的精度问题。</h1><p class="intro">按卡、软件栈与任务索引已知问题、数值观测和修复证据。</p></div>
+  <aside class="hero-aside"><span class="small">从使用需求出发</span><p>选择硬件 <b>→</b> 选择训推任务<br>定位相关库 <b>→</b> 查看问题与证据</p><a href="./history.html#evaluations">查看完整评测历史 ↗</a></aside>
+</section>
+<section id="stats" class="stats" aria-label="社区记录概览"></section>
+<section id="board" class="panel">
+  <div class="section-head"><div><p class="eyebrow">EXPLORE THE ECOSYSTEM</p><h2>硬件与训推看板</h2></div><span class="version">基于现有公开记录 · 预览版</span></div>
+  <form id="filters" role="search" aria-label="筛选硬件、任务与软件">
+    <div class="search"><label for="query">搜索</label><input id="query" type="search" placeholder="问题、模型、版本、dtype、TP、cache…" autocomplete="off"></div>
+    <div><label for="hardware">硬件 / 卡</label><select id="hardware"><option value="">全部已记录硬件</option></select></div>
+    <div><label for="task">训推需求</label><select id="task"><option value="">全部任务</option><option value="inference">推理</option><option value="sft">SFT / 微调</option><option value="rl">RL / 强化学习</option><option value="other">其他 / 未标注</option></select></div>
+    <div><label for="library">软件组件</label><select id="library"><option value="">全部组件</option></select></div>
+    <div><label for="model">模型</label><select id="model"><option value="">全部模型</option></select></div>
+    <div><label for="kind">记录类型</label><select id="kind"><option value="">评测与修复</option><option value="repair">问题 / 修复档案</option><option value="evaluation">评测 / 数值观测</option></select></div>
+    <button id="reset" type="reset" class="reset">清除筛选 ↺</button>
+  </form>
+  <div id="chips" class="chips" aria-live="polite"></div>
+  <div class="board-intro"><p>库 × 任务 <span>点击单元格，查看对应环境的记录</span></p><div class="legend"><span><i class="dot repair"></i>问题 / 修复档案</span><span><i class="dot evaluation"></i>评测记录</span><span><i class="dot empty"></i>暂无记录</span></div></div>
+  <div id="matrix" class="matrix-wrap" aria-live="polite"><p class="loading">正在读取公开记录…</p></div>
+  <p class="scope-note">看板按观测环境索引。评测记录不等于已确认缺陷，修复记录不代表所有配置均通过；空白组合不代表支持或兼容。任务标签描述工作流，实际验证范围以原记录为准。</p>
+</section>
+<section id="results" class="results-section">
+  <div class="section-head"><div><p class="eyebrow">ISSUES & EVIDENCE</p><h2>问题与验证记录 <span id="count"></span></h2></div><label class="sort">排序 <select id="sort"><option value="date">最近记录</option><option value="repair">修复记录优先</option></select></label></div>
+  <p id="selection" class="selection" role="status"></p>
+  <div id="records"></div>
+  <button id="more" class="more" type="button" hidden>加载更多记录</button>
+  <p class="scope-note">问题 / 修复档案按独立条目计数，验证轮次在详情中保留；评测按实验计数。评测按环境依赖索引，问题 / 修复档案按涉及实现索引；调查中条目不代表已确认库缺陷。</p>
+</section>
+<section id="contribute" class="contribute"><div><p class="eyebrow">BUILD THE MAP TOGETHER</p><h2>补一条记录，让下一个人少走弯路。</h2><p>欢迎贡献新的卡与生态、复现记录、修复方案或回归验证。请附设备型号、软件版本、模型与关键配置，以及复现方法和数值证据。</p></div><a class="primary" href="https://github.com/satsuki2486441738/PrecisionRSI/issues/new">报告问题 / 补充验证 ↗</a></section>
+</main>
+<footer class="shell"><span>PrecisionRSI · 跨硬件精度社区</span><div><a href="./history.html#repairs">修复历史</a><a href="./history.html#evaluations">评测历史</a><a href="./rsi.html">RSI 运行台</a></div></footer>
+<noscript><p class="shell">请启用 JavaScript，或查看<a href="./history.html">历史页面</a>及<a href="./data/evaluations.json">原始评测数据</a>。</p></noscript>
 </body>
 </html>
