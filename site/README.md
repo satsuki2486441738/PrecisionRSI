@@ -63,3 +63,14 @@ python -B .github/rsi_snapshot.py --monitor projects/rsi-system/monitor.json --o
 Omit `--refresh` to export archived local evidence. The optional refresh reads the current remote run through the monitor's SSH declaration; it does not change the run or model service. The exporter returns allowlisted summaries, strips paths from diagnostics, and keeps full traces, task inputs, SSH settings and credentials private. The page polls the published JSON every minute and shows its observation time; publication is a snapshot, not a direct connection to the model server. Publish `site/data/rsi.json` through the existing Pages workflow.
 
 Run exporter regressions with `python -B -m unittest discover -s tests -p 'test_rsi_dashboard.py' -v`. Optional page checks use `node tests/browser_rsi.cjs` with Playwright and an installed Chromium.
+
+
+## Community landing page
+
+`index.html`, `community.js`, and `community.css` provide a read-only hardware × workflow × library dashboard and a linked record list. `history.html` retains the full evaluation and repair renderers. Historical hashes entering the landing page redirect to the corresponding history page; query parameters retain the dashboard filters for sharing.
+
+The projection groups repair follow-ups under the original repair ID and indexes each recorded environment separately. Hardware and library filters must match the same environment, never independent peers of an experiment. Repairs are indexed by their declared affected implementation; evaluations are indexed by recorded dependencies. Library aliases are presentation-only. Unknown hardware names remain selectable, and raw hardware/version/settings remain visible in disclosures.
+
+Dashboard counts are record counts, not pass rates, independent measurement counts, or compatibility claims. Investigating repairs remain investigations; evaluation completion never implies numerical acceptance. Workflow labels on repairs describe affected workflows rather than additional verified workloads. Existing records currently support inference, SFT, and RL; unrecognized tasks appear under Other instead of being inferred from prose. Do not add unverified scenario or support labels.
+
+Run `python3 -B -m unittest discover -s tests -p 'test_community.py' -v` for source immutability, side-specific joins, attribution, aliases, and historical status regressions.
