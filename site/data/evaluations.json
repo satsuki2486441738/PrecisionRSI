@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-11",
+  "updated_at": "2026-11-12",
   "evaluations": [
     {
       "id": "trl-sfttrainer-checkpoint-20261021",
@@ -88485,7 +88485,7 @@
     },
     {
       "id": "gemma-3-27b-it-cuda-precision-20261110",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "title": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H20Z",
       "task": "inference",
       "status": "completed",
@@ -88746,14 +88746,14 @@
         }
       ],
       "archive": {
-        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
     },
     {
       "id": "gpt-oss-120b-cuda-precision-20261110",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "title": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H20Z",
       "task": "inference",
       "status": "completed",
@@ -89017,14 +89017,14 @@
         }
       ],
       "archive": {
-        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
     },
     {
       "id": "nemotron-bolt-cuda-precision-20261110",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H20Z",
       "task": "inference",
       "status": "completed",
@@ -89301,14 +89301,14 @@
         }
       ],
       "archive": {
-        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
     },
     {
       "id": "gemma-3-27b-it-ascend-precision-20261110",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "title": "Gemma 3 27B IT native and reference precision on TorchNPU on Ascend 910",
       "task": "inference",
       "status": "completed",
@@ -89555,14 +89555,14 @@
         }
       ],
       "archive": {
-        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
     },
     {
       "id": "gpt-oss-120b-ascend-precision-20261110",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "title": "gpt-oss-120b native and reference precision on TorchNPU on Ascend 910",
       "task": "inference",
       "status": "partial",
@@ -89720,14 +89720,14 @@
         }
       ],
       "archive": {
-        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
-        "replay_cases": 1
+        "replay_cases": 4
       }
     },
     {
       "id": "nemotron-bolt-ascend-precision-20261110",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on TorchNPU on Ascend 910",
       "task": "inference",
       "status": "partial",
@@ -89872,6 +89872,7 @@
       ],
       "notes": [
         "Accelerate streams offloaded weights to the assigned NPUs. The Torch Mamba recurrence retains the released multiply-and-sum axes in bounded tiles. The short same-role raw logits matched byte for byte.",
+        "Discovery uses released expert dispatch. Later stages skip empty bias-free experts. Same-input paired pilots preserved every compared logit and cache byte.",
         "The task ledger lists pending work. A held-out delta is reported after all four bins finish."
       ],
       "evidence": [
@@ -89885,9 +89886,9 @@
         }
       ],
       "archive": {
-        "revision": "4dbd7b72559e9f64fdf8434afff7d1ac97841cd1",
+        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
-        "replay_cases": 1
+        "replay_cases": 4
       }
     }
   ]
