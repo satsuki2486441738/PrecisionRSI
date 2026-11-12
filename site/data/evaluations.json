@@ -88746,7 +88746,7 @@
         }
       ],
       "archive": {
-        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
+        "revision": "872135cae7f3b564b5b800d5e8e24d07faf4d14d",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89017,7 +89017,7 @@
         }
       ],
       "archive": {
-        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
+        "revision": "872135cae7f3b564b5b800d5e8e24d07faf4d14d",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89301,7 +89301,7 @@
         }
       ],
       "archive": {
-        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
+        "revision": "872135cae7f3b564b5b800d5e8e24d07faf4d14d",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89555,7 +89555,7 @@
         }
       ],
       "archive": {
-        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
+        "revision": "872135cae7f3b564b5b800d5e8e24d07faf4d14d",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89697,6 +89697,43 @@
           ]
         },
         {
+          "id": "reserved-full",
+          "title": "Held-out full-forward NLL",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "scope": "48 requests evenly divided among the 128, 512, 2048 and 8192 token bins.",
+          "metrics": [
+            {
+              "id": "native-minus-reference",
+              "label": "Mean native minus reference NLL",
+              "value": 0.008509430223831738,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-lower",
+              "label": "95% stratified bootstrap lower bound",
+              "value": -0.006255742559503669,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-upper",
+              "label": "95% stratified bootstrap upper bound",
+              "value": 0.02289024152759038,
+              "unit": "nats/token"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Reserved requests",
+              "observed": 48,
+              "expected": 48,
+              "unit": "requests"
+            }
+          ]
+        },
+        {
           "id": "long-full",
           "title": "6 reserved 32K requests with cache disabled",
           "scope": "6 reserved 32K requests",
@@ -89761,6 +89798,8 @@
       "notes": [
         "Both peers use the same original MXFP4 checkpoint bytes. Ascend executes BF16 expert arithmetic.",
         "The 32K runs use 256-query blocks of the owning eager attention with sink semantics.",
+        "At 8192 tokens, eager attention used 256-query blocks after the original full attention exceeded device memory.",
+        "The 32K path projects logits in 256-row tiles and retains all valid target positions.",
         "The task ledger lists pending work. A held-out delta is reported after all four bins finish."
       ],
       "evidence": [
@@ -89774,9 +89813,9 @@
         }
       ],
       "archive": {
-        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
+        "revision": "872135cae7f3b564b5b800d5e8e24d07faf4d14d",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
-        "replay_cases": 5
+        "replay_cases": 6
       }
     },
     {
@@ -89914,6 +89953,43 @@
               "expected": 576
             }
           ]
+        },
+        {
+          "id": "reserved-full",
+          "title": "Held-out full-forward NLL",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "scope": "48 requests evenly divided among the 128, 512, 2048 and 8192 token bins.",
+          "metrics": [
+            {
+              "id": "native-minus-reference",
+              "label": "Mean native minus reference NLL",
+              "value": -0.0005109341726805572,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-lower",
+              "label": "95% stratified bootstrap lower bound",
+              "value": -0.004032365005052202,
+              "unit": "nats/token"
+            },
+            {
+              "id": "bootstrap-upper",
+              "label": "95% stratified bootstrap upper bound",
+              "value": 0.002884957587913445,
+              "unit": "nats/token"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Reserved requests",
+              "observed": 48,
+              "expected": 48,
+              "unit": "requests"
+            }
+          ]
         }
       ],
       "common": [
@@ -89926,6 +90002,7 @@
       ],
       "notes": [
         "Accelerate streams offloaded weights to the assigned NPUs. The Torch Mamba recurrence retains the released multiply-and-sum axes in bounded tiles. The short same-role raw logits matched byte for byte.",
+        "At 8192 tokens, eager attention used 256-query blocks after the original full attention exceeded device memory.",
         "Discovery uses released expert dispatch. Later stages skip empty bias-free experts. Same-input paired pilots preserved every compared logit and cache byte.",
         "The task ledger lists pending work. A held-out delta is reported after all four bins finish."
       ],
@@ -89940,9 +90017,9 @@
         }
       ],
       "archive": {
-        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
+        "revision": "872135cae7f3b564b5b800d5e8e24d07faf4d14d",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
-        "replay_cases": 4
+        "replay_cases": 5
       }
     }
   ]
