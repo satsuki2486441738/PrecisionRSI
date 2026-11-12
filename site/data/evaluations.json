@@ -88746,7 +88746,7 @@
         }
       ],
       "archive": {
-        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
+        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89017,7 +89017,7 @@
         }
       ],
       "archive": {
-        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
+        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89301,7 +89301,7 @@
         }
       ],
       "archive": {
-        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
+        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89555,7 +89555,7 @@
         }
       ],
       "archive": {
-        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
+        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 6
       }
@@ -89695,6 +89695,59 @@
               "expected": 576
             }
           ]
+        },
+        {
+          "id": "long-full",
+          "title": "6 reserved 32K requests with cache disabled",
+          "scope": "6 reserved 32K requests",
+          "side_ids": [
+            "native",
+            "reference"
+          ],
+          "metrics": [
+            {
+              "id": "absolute-nll-difference",
+              "label": "Absolute pooled NLL difference",
+              "unit": "nats/token",
+              "value": 0.0008257655278525178,
+              "side_values": {
+                "native": 5.997249813247792,
+                "reference": 5.998075578775644
+              }
+            },
+            {
+              "id": "target-logprob-mae",
+              "label": "Target logprob MAE",
+              "unit": "nats",
+              "value": 0.15556895272356924
+            },
+            {
+              "id": "target-logprob-p99",
+              "label": "P99 absolute target logprob difference",
+              "unit": "nats",
+              "value": 1.248025482855738
+            },
+            {
+              "id": "top-1-agreement",
+              "label": "Top-1 agreement on selected vocabulary rows",
+              "unit": "fraction",
+              "value": 0.8472222222222222
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Valid prediction targets",
+              "unit": "targets",
+              "observed": 196794,
+              "expected": 196794
+            },
+            {
+              "label": "Full-vocabulary distribution rows",
+              "unit": "rows",
+              "observed": 288,
+              "expected": 288
+            }
+          ]
         }
       ],
       "common": [
@@ -89707,6 +89760,7 @@
       ],
       "notes": [
         "Both peers use the same original MXFP4 checkpoint bytes. Ascend executes BF16 expert arithmetic.",
+        "The 32K runs use 256-query blocks of the owning eager attention with sink semantics.",
         "The task ledger lists pending work. A held-out delta is reported after all four bins finish."
       ],
       "evidence": [
@@ -89720,9 +89774,9 @@
         }
       ],
       "archive": {
-        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
+        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
-        "replay_cases": 4
+        "replay_cases": 5
       }
     },
     {
@@ -89886,7 +89940,7 @@
         }
       ],
       "archive": {
-        "revision": "d38550c4db03f13a1604c74c8a9b7c32ba1ab99b",
+        "revision": "2394a1616ca2b1226001ee5e42968df377785c5e",
         "prefix": "site/evidence/model-precision-gpu-npu-20261110/",
         "replay_cases": 4
       }
