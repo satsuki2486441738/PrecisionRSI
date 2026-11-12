@@ -1,6 +1,6 @@
 # GPU and Ascend model precision evaluation
 
-Snapshot 2026-11-12T03:26:13.347099+00:00. PrecisionRSI tools at `118b50032dabd6f771b3a8391e24cef1d02e9a1a`.
+Snapshot 2026-11-12T08:26:12.965216+00:00. PrecisionRSI tools at `118b50032dabd6f771b3a8391e24cef1d02e9a1a`.
 The native and reference peers run on the same assigned accelerator set within each platform. The comparison uses the same checkpoint revisions and frozen inputs across the campaign.
 Numerical acceptance is undetermined because the protocol supplied no tolerance.
 
@@ -20,13 +20,13 @@ Numerical acceptance is undetermined because the protocol supplied no tolerance.
 | cuda · gpt-oss-120b | 4 × NVIDIA H20Z | 11,124 | 0.212101 | 1.93763 | 8/12 vs 8/12 | 15.401 |
 | cuda · Nemotron 3.5 Bolt 74B-A9B BF16 | 2 × NVIDIA H20Z | 11,124 | 0.0513824 | 0.458249 | 5/12 vs 6/12 | 41.021 |
 | ascend · Gemma 3 27B IT | 2 × Ascend910_9382 | 11,124 | 0.0651031 | 0.613769 | 8/12 vs 9/12 | 3.930 |
-| ascend · gpt-oss-120b | 2 × Ascend910_9382 | 11,124 | 0.194361 | 1.74814 | 9/12 vs 8/12 | 40.353 |
-| ascend · Nemotron 3.5 Bolt 74B-A9B BF16 | 2 × Ascend910_9382 | 11,124 | 0.0960378 | 0.727686 | 5/12 vs 6/12 | 23.266 |
+| ascend · gpt-oss-120b | 2 × Ascend910_9382 | 11,124 | 0.194361 | 1.74814 | 9/12 vs 8/12 | 49.324 |
+| ascend · Nemotron 3.5 Bolt 74B-A9B BF16 | 2 × Ascend910_9382 | 11,124 | 0.0960378 | 0.727686 | 5/12 vs 6/12 | 26.634 |
 
 Device hours cover closed intervals at the recorded audit times. The paired measurement files include sampled vocabulary agreement, every completed text mode, operator and modality coverage, paired quality and performance, and source hashes.
 
 - ascend · gpt-oss-120b pending tasks D01, I01, I02, I03, I06, I05, O06, Q01, P02, E01, X01, Z02, E04.
-- ascend · Nemotron 3.5 Bolt 74B-A9B BF16 pending tasks D01, I01, I02, I03, I06, I05, O06, Q01, P02, E01, X01, A-MM02, E04.
+- ascend · Nemotron 3.5 Bolt 74B-A9B BF16 pending tasks D01, I01, I02, I03, I06, I05, O06, Q01, P02, E01, X01, E04.
 
 ## Replay and provenance
 
