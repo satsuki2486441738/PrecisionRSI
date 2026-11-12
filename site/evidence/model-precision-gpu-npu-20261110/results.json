@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_at": "2026-11-12T08:26:12.965216+00:00",
+  "observed_at": "2026-11-12T13:47:02.871278+00:00",
   "protocol_sha256": "95d0e9bea53d9ee11c23b383def33b6af4bd05bea3741aab65f64ae6e66dfa31",
   "precision_rsi_revision": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
   "platforms": {
@@ -4823,7 +4823,7 @@
           }
         },
         "status": "partial",
-        "audited_at": "2026-11-12T07:36:21.636512+00:00",
+        "audited_at": "2026-11-12T12:23:01.360163+00:00",
         "acceptance": null,
         "tasks": {
           "M01": {
@@ -4850,10 +4850,11 @@
             "scope": "Complete model through the native inference interface."
           },
           "D01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -4876,10 +4877,11 @@
             "scope": "Exact scores with and without instrumentation."
           },
           "I01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -4887,10 +4889,11 @@
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
           "I02": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -4898,10 +4901,11 @@
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
           "I03": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -4909,10 +4913,11 @@
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
           "I06": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -4927,9 +4932,10 @@
             "scope": "Unequal-length batches against solo inputs, both padding sides."
           },
           "I05": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -4978,8 +4984,9 @@
             "scope": "One controlled operator substitution and reserved input revalidation."
           },
           "Q01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -5001,17 +5008,18 @@
             "scope": "2 warmups and 5 measured samples per side."
           },
           "P02": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
-              "778f7910a5b74f2c6240802f8b72b5b588ddb3755e2eecfb52abae727b9bf806"
+              "f6fe336d4eab119594230da557a59e19f72a2c5fdcabda214fd58cf3de912410"
             ],
             "scope": "Device and CPU stage time, attempts, preparation receipts and retained bytes."
           },
           "E01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0",
@@ -5060,11 +5068,12 @@
             "scope": "Original packed weights and independent BF16 conversion on both devices."
           },
           "Z02": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "19875bae4ff38de1aa39d33f66ff0033e842d69e22167202543253a62a7f6a88",
               "344f2731892a768528a7609515c37c37fd277541dad29329c14a392530a23751",
               "5deb252af81d29d9710f20fe29c0a8d5fdffbf2c66fcdf276c878c572c66a886",
+              "79b8bd9ad4c0a5e6b1549503218c882241593f72530b2f921f61d6e3f83c64ff",
               "83d4d785218577bfa963d420b65f6edbe6e923d53adbba6deb0b6890599a44f2",
               "a0eee384e88148fdaaa7f90c4891bd46bd4746f5d1cd7ce2cbfc80a3eaa560b0",
               "e5266fce2040f61ab102668bc8023a49d02832ec2ac7cdddc12b2968772ce4d0"
@@ -5304,6 +5313,54 @@
             },
             "source_sha256": "a0281a58ba44fa031fb280291c0b8b4dfde713d72c8106b1aef1fcf2c5f2e4a9"
           },
+          "validation-8192/full": {
+            "target_count": 98676,
+            "side_a_nll_nat_per_token": 5.108887609028218,
+            "side_b_nll_nat_per_token": 5.106194303261242,
+            "nll_abs_diff_nat_per_token": 0.0026933057669760174,
+            "mae_nat": 0.26704650095524785,
+            "p99_nat": 2.3983249068260193,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 17.707745790481567,
+            "top1": {
+              "count": 513,
+              "total": 576,
+              "fraction": 0.890625
+            },
+            "source_sha256": "0385a319da6236b9d5c0892a3ef23269f9d50b04747087b2ccade3bd0ddca165"
+          },
+          "validation-8192/cached": {
+            "target_count": 98676,
+            "side_a_nll_nat_per_token": 5.110048239526272,
+            "side_b_nll_nat_per_token": 5.121959535649308,
+            "nll_abs_diff_nat_per_token": 0.011911296123036763,
+            "mae_nat": 0.2675603471521518,
+            "p99_nat": 2.3672462701797485,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 13.84643006324768,
+            "top1": {
+              "count": 509,
+              "total": 576,
+              "fraction": 0.8836805555555556
+            },
+            "source_sha256": "e232e62f6e846fd3a9b2a2e09a8177ff3f2ca3736fc07962dc5b482c55e3a15e"
+          },
+          "validation-8192/chunked": {
+            "target_count": 98676,
+            "side_a_nll_nat_per_token": 5.124065761710294,
+            "side_b_nll_nat_per_token": 5.132427320196201,
+            "nll_abs_diff_nat_per_token": 0.008361558485907139,
+            "mae_nat": 0.263324710359051,
+            "p99_nat": 2.40313982963562,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 19.662590980529785,
+            "top1": {
+              "count": 509,
+              "total": 576,
+              "fraction": 0.8836805555555556
+            },
+            "source_sha256": "690dc77cfe7223da8ea5b9306dcf691ec2c2946c5ae06bdba7bf6f2cb4abaf89"
+          },
           "long/full": {
             "target_count": 196794,
             "side_a_nll_nat_per_token": 5.997249813247792,
@@ -5353,23 +5410,34 @@
             "source_sha256": "6949e66a91815c475b7dfe9dcc8823ec92a63e644e47a8e9c9c9be62f96202fe"
           }
         },
-        "heldout": null,
+        "heldout": {
+          "samples": 48,
+          "equal_input_delta_nat_per_token": 0.008509430223831738,
+          "stratified_percentile_95_interval": [
+            -0.006255742559503669,
+            0.02289024152759038
+          ],
+          "bootstrap_replicates": 5000,
+          "seed": 0
+        },
         "notes": [
           "Both peers use the same original MXFP4 checkpoint bytes. Ascend executes BF16 expert arithmetic.",
-          "The 32K runs use 256-query blocks of the owning eager attention with sink semantics."
+          "The 32K runs use 256-query blocks of the owning eager attention with sink semantics.",
+          "At 8192 tokens, eager attention used 256-query blocks after the original full attention exceeded device memory.",
+          "The 32K path projects logits in 256-row tiles and retains all valid target positions."
         ],
         "source_sha256": {
-          "matrix_results": "4364895a0a76b8c495f7841d16691737ae4ff312b690eaffa6dfd457bb8b2b99",
-          "evaluation_cost": "778f7910a5b74f2c6240802f8b72b5b588ddb3755e2eecfb52abae727b9bf806"
+          "matrix_results": "c005591d78f85f54c616601fd1a7bcd8d8cee3dd8e647dcaaed2451def3137e8",
+          "evaluation_cost": "f6fe336d4eab119594230da557a59e19f72a2c5fdcabda214fd58cf3de912410"
         },
         "private_selected_evidence": {
           "bytes": 2154773,
           "sha256": "6bc9121a7e8c9641cccfcce132d65d20a964a1ad77bb9100b92ddd170707c0ef"
         },
         "cost": {
-          "accelerator_hours": 49.32395627990675,
+          "accelerator_hours": 57.27712703059725,
           "unclosed_intervals": 0,
-          "retained_run_bytes": 32201122766
+          "retained_run_bytes": 38354377464
         },
         "replay": {
           "discovery": {
@@ -5632,6 +5700,71 @@
               ]
             ]
           },
+          "validation-8192": {
+            "source_sha256": "da0b2c017ed08284268be1358b354ea7751b4a5371d4bf21cdaf6ce23baa187b",
+            "samples": [
+              [
+                8223,
+                3.0906338038933265,
+                3.112084270559661
+              ],
+              [
+                8223,
+                4.8107873049232275,
+                4.761785039642338
+              ],
+              [
+                8223,
+                3.7632054305276563,
+                3.782935896826309
+              ],
+              [
+                8223,
+                6.174045649563723,
+                6.226239696893865
+              ],
+              [
+                8223,
+                4.3860717104481255,
+                4.2534721924619445
+              ],
+              [
+                8223,
+                3.2712588914047895,
+                3.290481449580544
+              ],
+              [
+                8223,
+                6.3961422340483445,
+                6.35852441578858
+              ],
+              [
+                8223,
+                5.9926441962081,
+                6.0497770937247
+              ],
+              [
+                8223,
+                6.743106464203345,
+                6.717897585951739
+              ],
+              [
+                8223,
+                5.601829923622986,
+                5.610079556271422
+              ],
+              [
+                8223,
+                5.617976188985304,
+                5.59717268452901
+              ],
+              [
+                8223,
+                5.458949510509689,
+                5.5138817569048
+              ]
+            ]
+          },
           "long": {
             "source_sha256": "99cdd77852a9fb75c54cd4da1f4ba79dae6e865645cd0fa403f6904189a66228",
             "samples": [
@@ -5777,7 +5910,7 @@
           }
         },
         "status": "partial",
-        "audited_at": "2026-11-12T08:11:40.253100+00:00",
+        "audited_at": "2026-11-12T13:09:55.597194+00:00",
         "acceptance": null,
         "tasks": {
           "M01": {
@@ -5809,7 +5942,8 @@
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Frozen logical histories and all expected target coordinates."
           },
@@ -5834,7 +5968,8 @@
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
@@ -5844,7 +5979,8 @@
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
@@ -5854,7 +5990,8 @@
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
@@ -5864,7 +6001,8 @@
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
@@ -5880,7 +6018,8 @@
             "evidence_sha256": [
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "128, 512, 2048, 8192 and 32768 tokens."
           },
@@ -5926,11 +6065,12 @@
             "scope": "One controlled operator substitution and reserved input revalidation."
           },
           "Q01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "48 input-level paired results and stratified bootstrap interval."
           },
@@ -5952,7 +6092,7 @@
           "P02": {
             "status": "pending",
             "evidence_sha256": [
-              "2b3e8815943cc776449351b4537fccbac05003b4b4abcb6e4c2ef46174415e4b"
+              "6417d6771556abfb043d5c07b546f765dfd8bcaf27a4e3e79d8d88d4d48bc29d"
             ],
             "scope": "Device and CPU stage time, attempts, preparation receipts and retained bytes."
           },
@@ -5963,7 +6103,8 @@
               "01a4bb86ed706667d3dc06646a2e904ab6f7a0e459034ea62d8b33c19ad75155",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
-              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a"
+              "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Independent expected inventories and row checks."
           },
@@ -6246,25 +6387,83 @@
               "fraction": 0.9479166666666666
             },
             "source_sha256": "95a10656ccc118a3a703c66a3c4bd8bdf6ccdf932b34798ed7b456cd6cf50d82"
+          },
+          "validation-8192/full": {
+            "target_count": 98676,
+            "side_a_nll_nat_per_token": 1.8743106611652953,
+            "side_b_nll_nat_per_token": 1.879060868142516,
+            "nll_abs_diff_nat_per_token": 0.004750206977220728,
+            "mae_nat": 0.16518435143922258,
+            "p99_nat": 1.2826167196035385,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 7.338318824768066,
+            "top1": {
+              "count": 542,
+              "total": 576,
+              "fraction": 0.9409722222222222
+            },
+            "source_sha256": "b61db7be6354d6fb1ae23bb742ce681cfc3ee91471a026fcb617ba9af2db7bb2"
+          },
+          "validation-8192/cached": {
+            "target_count": 98676,
+            "side_a_nll_nat_per_token": 1.877171943174264,
+            "side_b_nll_nat_per_token": 1.8791049598172802,
+            "nll_abs_diff_nat_per_token": 0.001933016643016261,
+            "mae_nat": 0.15680754716608108,
+            "p99_nat": 1.2065436244010925,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 6.833278924226761,
+            "top1": {
+              "count": 543,
+              "total": 576,
+              "fraction": 0.9427083333333334
+            },
+            "source_sha256": "35e92a009a4b926a1e4de651668de2d810d106c2b162ba22d36d0290c8f151ab"
+          },
+          "validation-8192/chunked": {
+            "target_count": 98676,
+            "side_a_nll_nat_per_token": 1.8715059782225576,
+            "side_b_nll_nat_per_token": 1.8738199432089364,
+            "nll_abs_diff_nat_per_token": 0.0023139649863788136,
+            "mae_nat": 0.16143168417605497,
+            "p99_nat": 1.2242603302001953,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 6.562273740768433,
+            "top1": {
+              "count": 547,
+              "total": 576,
+              "fraction": 0.9496527777777778
+            },
+            "source_sha256": "7e292200505868ac8d90c724f637c98d253085d7b8b76f8de2189c6359ad3ae6"
           }
         },
-        "heldout": null,
+        "heldout": {
+          "samples": 48,
+          "equal_input_delta_nat_per_token": -0.0005109341726805572,
+          "stratified_percentile_95_interval": [
+            -0.004032365005052202,
+            0.002884957587913445
+          ],
+          "bootstrap_replicates": 5000,
+          "seed": 0
+        },
         "notes": [
           "Accelerate streams offloaded weights to the assigned NPUs. The Torch Mamba recurrence retains the released multiply-and-sum axes in bounded tiles. The short same-role raw logits matched byte for byte.",
+          "At 8192 tokens, eager attention used 256-query blocks after the original full attention exceeded device memory.",
           "Discovery uses released expert dispatch. Later stages skip empty bias-free experts. Same-input paired pilots preserved every compared logit and cache byte."
         ],
         "source_sha256": {
-          "matrix_results": "e42d8a1a01438c8dc0f5321de37317fcbeb6bc3623af1b97e9bf619dad35703e",
-          "evaluation_cost": "2b3e8815943cc776449351b4537fccbac05003b4b4abcb6e4c2ef46174415e4b"
+          "matrix_results": "6dbd517ac53893e57e72504cd42b1b483ffd684e346d31314ad69435ca973f5d",
+          "evaluation_cost": "6417d6771556abfb043d5c07b546f765dfd8bcaf27a4e3e79d8d88d4d48bc29d"
         },
         "private_selected_evidence": {
           "bytes": 997247,
           "sha256": "b81425c11bb7144990589f98a30f86b2228d5480b9f7ef03b81b41c6e89e5f7a"
         },
         "cost": {
-          "accelerator_hours": 26.634133940132646,
+          "accelerator_hours": 28.47509634571939,
           "unclosed_intervals": 0,
-          "retained_run_bytes": 36097632720
+          "retained_run_bytes": 38555582954
         },
         "replay": {
           "discovery": {
@@ -6524,6 +6723,71 @@
                 2079,
                 1.1145519552457128,
                 1.0986279402010228
+              ]
+            ]
+          },
+          "validation-8192": {
+            "source_sha256": "5d69f79e0cb4b76da7c2b8a17b379be368852bf894dc63abcff8a62bbd45b283",
+            "samples": [
+              [
+                8223,
+                1.1184368709526988,
+                1.1224497232314612
+              ],
+              [
+                8223,
+                1.462605939518749,
+                1.4265391134352636
+              ],
+              [
+                8223,
+                0.9315409556710259,
+                0.9710961730274169
+              ],
+              [
+                8223,
+                2.7403972277759654,
+                2.7360242976434797
+              ],
+              [
+                8223,
+                2.7411652982409116,
+                2.7473399739360893
+              ],
+              [
+                8223,
+                2.6958408672562073,
+                2.681466572420589
+              ],
+              [
+                8223,
+                2.2587199676957783,
+                2.2632616830315047
+              ],
+              [
+                8223,
+                2.4041110973802358,
+                2.403878773469083
+              ],
+              [
+                8223,
+                2.477815369914824,
+                2.478453661053478
+              ],
+              [
+                8223,
+                1.2667516100874632,
+                1.2620485501803718
+              ],
+              [
+                8223,
+                1.222091774949798,
+                1.2687153882959077
+              ],
+              [
+                8223,
+                1.172250954539887,
+                1.1874565079855472
               ]
             ]
           }
