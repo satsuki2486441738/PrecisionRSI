@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_at": "2026-11-12T13:47:02.871278+00:00",
+  "observed_at": "2026-11-12T17:28:08.162990+00:00",
   "protocol_sha256": "95d0e9bea53d9ee11c23b383def33b6af4bd05bea3741aab65f64ae6e66dfa31",
   "precision_rsi_revision": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
   "platforms": {
@@ -1151,7 +1151,14 @@
             "paired_boundaries": 124,
             "expected_boundaries": 124,
             "routing_observations": 0,
-            "matching_expert_sets": 0
+            "matching_expert_sets": 0,
+            "text_boundary_metrics": {
+              "rmse": 5.906839802283038,
+              "max_abs": 56.0,
+              "cosine": 0.9993034877811843,
+              "elements": 15872,
+              "exact": false
+            }
           },
           "modalities": {
             "source_sha256": "ab064ab9ea39325cdb4e6338177d0c231055e3a9a9a23eb83cd671ff6a231b18",
@@ -1160,7 +1167,16 @@
               6,
               6
             ],
-            "paired_prefill_histories": 6
+            "paired_prefill_histories": 6,
+            "by_modality": {
+              "image": {
+                "cases": 6,
+                "exact_answers": [
+                  6,
+                  6
+                ]
+              }
+            }
           },
           "quality": {
             "source_sha256": "73a525f1724fdf154ea8b9438b36d24df4a41e7eceaf9ac19bef0a246da823b5",
@@ -1217,13 +1233,150 @@
             "measured": 5
           },
           "intervention": {
-            "source_sha256": "1e3e1370706a22378d3d790880698a413c1ee12626cd58408346f34ed9ec757f"
+            "source_sha256": "1e3e1370706a22378d3d790880698a413c1ee12626cd58408346f34ed9ec757f",
+            "sides": [
+              {
+                "target": "model.language_model.layers.59.self_attn",
+                "change": "SDPA to eager at one attention layer"
+              },
+              {
+                "target": "model.language_model.layers.59.self_attn",
+                "change": "SDPA to eager at one attention layer"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.04541749006026256,
+                  "max_abs": 0.19939136505126953,
+                  "cosine": 0.9999849793541523,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.13492796463680762,
+                  "max_abs": 0.4635639190673828,
+                  "cosine": 0.9998668339456414,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.14128230135688497,
+                  "max_abs": 0.5468473434448242,
+                  "cosine": 0.9998536995082734,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.045682847352496656,
+                  "max_abs": 0.12363147735595703,
+                  "cosine": 0.9999847938262905,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.15278605046523774,
+                  "max_abs": 0.7383594512939453,
+                  "cosine": 0.9998293124773968,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.14986997747980899,
+                  "max_abs": 0.7019681930541992,
+                  "cosine": 0.9998358075331136,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.04929114856693868,
+                  "max_abs": 0.2250065803527832,
+                  "cosine": 0.999977139478234,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.2708197927072707,
+                  "max_abs": 0.9598941802978516,
+                  "cosine": 0.9993302659843492,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.268245885322346,
+                  "max_abs": 0.9665689468383789,
+                  "cosine": 0.9993378357744749,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.04548088497832256,
+                  "max_abs": 0.21567344665527344,
+                  "cosine": 0.9999805756472788,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.14175610955264162,
+                  "max_abs": 0.483750581741333,
+                  "cosine": 0.999811135617951,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.14235338475948411,
+                  "max_abs": 0.48305726051330566,
+                  "cosine": 0.9998085348478222,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           },
           "operator-replay": {
             "source_sha256": "666eeda8da2aca7e7609e25bf45398106e8a57bad99d5318db5080736697cd53",
             "same_operand_comparison": {
               "paired_arrays": 80,
-              "expected_arrays": 80
+              "expected_arrays": 80,
+              "rmse": 0.046268504456868594,
+              "max_abs": 16.0,
+              "cosine": 0.9999991497425864,
+              "elements": 97734528,
+              "exact": false
             }
           }
         }
@@ -2389,7 +2542,14 @@
             "paired_boundaries": 72,
             "expected_boundaries": 72,
             "routing_observations": 4644,
-            "matching_expert_sets": 4276
+            "matching_expert_sets": 4276,
+            "text_boundary_metrics": {
+              "rmse": 17.482311608558028,
+              "max_abs": 144.0,
+              "cosine": 0.9996004586016997,
+              "elements": 9216,
+              "exact": false
+            }
           },
           "quality": {
             "source_sha256": "f067fa37dac5730263b2a30863504043c767a1a853c4e65ad9929cd90a05cdde",
@@ -2446,20 +2606,294 @@
             "measured": 5
           },
           "intervention": {
-            "source_sha256": "e88c4a583e5006a4f696ec9eb2d14c33561eeb820ee468589959be82f4495894"
+            "source_sha256": "e88c4a583e5006a4f696ec9eb2d14c33561eeb820ee468589959be82f4495894",
+            "sides": [
+              {
+                "target": "model.layers.20.mlp.experts",
+                "change": "fixed native expert slots and weights, dequantized execution"
+              },
+              {
+                "target": "model.layers.20.mlp.experts",
+                "change": "fixed native expert slots and weights, dequantized execution"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.03366223213330169,
+                  "max_abs": 0.18929219245910645,
+                  "cosine": 0.9999759180820668,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.11261400019630907,
+                  "max_abs": 0.7450900077819824,
+                  "cosine": 0.9997577985648306,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11433331963385768,
+                  "max_abs": 0.7740645408630371,
+                  "cosine": 0.9997441119005835,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.0398844218064508,
+                  "max_abs": 0.26342785358428955,
+                  "cosine": 0.9999660147810924,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.09418897241900817,
+                  "max_abs": 0.4161810874938965,
+                  "cosine": 0.9998170124490557,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.0858681015298562,
+                  "max_abs": 0.4151937961578369,
+                  "cosine": 0.9998457241845999,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.03310036218392263,
+                  "max_abs": 0.18897056579589844,
+                  "cosine": 0.9999690192453476,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.10157136426647198,
+                  "max_abs": 0.5420694351196289,
+                  "cosine": 0.9997083657461261,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.10333067910229894,
+                  "max_abs": 0.5167703628540039,
+                  "cosine": 0.9996983538117722,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.04322332561438465,
+                  "max_abs": 0.38285255432128906,
+                  "cosine": 0.9999473560679778,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.07685738306847463,
+                  "max_abs": 0.5694670677185059,
+                  "cosine": 0.9998345257221206,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.08591815558278265,
+                  "max_abs": 0.5441679954528809,
+                  "cosine": 0.9997920494513366,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           },
           "layout": {
-            "source_sha256": "a529cfed91acfe33305478a6efb3538f44539984bfef634e7b480fc229c62396"
+            "source_sha256": "a529cfed91acfe33305478a6efb3538f44539984bfef634e7b480fc229c62396",
+            "sides": [
+              {
+                "moved_module": "model.layers.9",
+                "layout_kind": "single-process layer ownership and native device transfers"
+              },
+              {
+                "moved_module": "model.layers.9",
+                "layout_kind": "single-process layer ownership and native device transfers"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999998,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.11261400019630907,
+                  "max_abs": 0.7450900077819824,
+                  "cosine": 0.9997577985648306,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11261400019630907,
+                  "max_abs": 0.7450900077819824,
+                  "cosine": 0.9997577985648306,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.09418897241900817,
+                  "max_abs": 0.4161810874938965,
+                  "cosine": 0.9998170124490557,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.09418897241900817,
+                  "max_abs": 0.4161810874938965,
+                  "cosine": 0.9998170124490557,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.10157136426647198,
+                  "max_abs": 0.5420694351196289,
+                  "cosine": 0.9997083657461261,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.10157136426647198,
+                  "max_abs": 0.5420694351196289,
+                  "cosine": 0.9997083657461261,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.07685738306847463,
+                  "max_abs": 0.5694670677185059,
+                  "cosine": 0.9998345257221206,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.07685738306847463,
+                  "max_abs": 0.5694670677185059,
+                  "cosine": 0.9998345257221206,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           },
           "operator-replay": {
             "source_sha256": "00b93a56fda67915d174977a8d7b55fb6e78e93cf4e12e9c93b6039d0669efe7",
             "same_operand_comparison": {
               "paired_arrays": 60,
-              "expected_arrays": 60
+              "expected_arrays": 60,
+              "rmse": 0.0007426975824525988,
+              "max_abs": 0.5,
+              "cosine": 0.9999999698153251,
+              "elements": 59930304,
+              "exact": false
             },
             "fixed_routing": {
               "paired_arrays": 4,
-              "expected_arrays": 4
+              "expected_arrays": 4,
+              "rmse": 0.004716438283577159,
+              "max_abs": 0.5,
+              "cosine": 0.9999878445304187,
+              "elements": 743040,
+              "exact": false
             }
           }
         }
@@ -3623,7 +4057,14 @@
             "paired_boundaries": 176,
             "expected_boundaries": 176,
             "routing_observations": 5160,
-            "matching_expert_sets": 4134
+            "matching_expert_sets": 4134,
+            "text_boundary_metrics": {
+              "rmse": 0.881332467798024,
+              "max_abs": 44.0,
+              "cosine": 0.9999270049483425,
+              "elements": 22528,
+              "exact": false
+            }
           },
           "modalities": {
             "source_sha256": "7daa0b2cd80de9b6dd24b537b2049ecf9f8a15e92c4ea8bc0541808328353a21",
@@ -3632,7 +4073,23 @@
               0,
               0
             ],
-            "paired_prefill_histories": 12
+            "paired_prefill_histories": 12,
+            "by_modality": {
+              "image": {
+                "cases": 6,
+                "exact_answers": [
+                  0,
+                  0
+                ]
+              },
+              "video": {
+                "cases": 6,
+                "exact_answers": [
+                  0,
+                  0
+                ]
+              }
+            }
           },
           "quality": {
             "source_sha256": "17c2fbc84b7aa753067e8af17ebe442b94e02cac8a0256fada244034c6dc52bd",
@@ -3689,20 +4146,294 @@
             "measured": 5
           },
           "intervention": {
-            "source_sha256": "d47114839f61520b75b588d90468af7e757df7dd9242decb73333a0a31d48038"
+            "source_sha256": "d47114839f61520b75b588d90468af7e757df7dd9242decb73333a0a31d48038",
+            "sides": [
+              {
+                "target": "language_model.model.layers.78.mixer",
+                "change": "SDPA to eager at one attention layer"
+              },
+              {
+                "target": "language_model.model.layers.78.mixer",
+                "change": "SDPA to eager at one attention layer"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.07650690154512044,
+                  "max_abs": 0.46870899200439453,
+                  "cosine": 0.9998061715600979,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.12427722916395,
+                  "max_abs": 0.3742966651916504,
+                  "cosine": 0.9994897370546745,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12130092541705895,
+                  "max_abs": 0.40877485275268555,
+                  "cosine": 0.9995139507772343,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.06295331959481204,
+                  "max_abs": 0.24395465850830078,
+                  "cosine": 0.9998679744658889,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1331445260351729,
+                  "max_abs": 0.6119966506958008,
+                  "cosine": 0.999417488551778,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12790477855027954,
+                  "max_abs": 0.6193461418151855,
+                  "cosine": 0.9994599069074194,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.07298637948425372,
+                  "max_abs": 0.518002986907959,
+                  "cosine": 0.9997560868608018,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.11577258920072828,
+                  "max_abs": 0.5356249809265137,
+                  "cosine": 0.9993936583203801,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11138216103151734,
+                  "max_abs": 0.6668829917907715,
+                  "cosine": 0.9994490931437612,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.06198469750120148,
+                  "max_abs": 0.42311906814575195,
+                  "cosine": 0.9998224860670483,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1102487824570938,
+                  "max_abs": 0.7074487209320068,
+                  "cosine": 0.9994417881797703,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.10837316535649663,
+                  "max_abs": 0.6958396434783936,
+                  "cosine": 0.9994620731235904,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           },
           "layout": {
-            "source_sha256": "28f27b90c825487902f9e4f8298e930c95a581994ddbb22cd14f9c4339631212"
+            "source_sha256": "28f27b90c825487902f9e4f8298e930c95a581994ddbb22cd14f9c4339631212",
+            "sides": [
+              {
+                "moved_module": "language_model.model.layers.45",
+                "layout_kind": "single-process layer ownership and native device transfers"
+              },
+              {
+                "moved_module": "language_model.model.layers.45",
+                "layout_kind": "single-process layer ownership and native device transfers"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.12427722916395,
+                  "max_abs": 0.3742966651916504,
+                  "cosine": 0.9994897370546745,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12427722916395,
+                  "max_abs": 0.3742966651916504,
+                  "cosine": 0.9994897370546745,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1331445260351729,
+                  "max_abs": 0.6119966506958008,
+                  "cosine": 0.999417488551778,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1331445260351729,
+                  "max_abs": 0.6119966506958008,
+                  "cosine": 0.999417488551778,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999998,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.11577258920072828,
+                  "max_abs": 0.5356249809265137,
+                  "cosine": 0.9993936583203801,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11577258920072828,
+                  "max_abs": 0.5356249809265137,
+                  "cosine": 0.9993936583203801,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1102487824570938,
+                  "max_abs": 0.7074487209320068,
+                  "cosine": 0.9994417881797703,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1102487824570938,
+                  "max_abs": 0.7074487209320068,
+                  "cosine": 0.9994417881797703,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           },
           "operator-replay": {
             "source_sha256": "760a6b946a24b724308b9ae0e137dbef6d15d5c08fe7f91059bf2c3ef9c9b784",
             "same_operand_comparison": {
               "paired_arrays": 164,
-              "expected_arrays": 164
+              "expected_arrays": 164,
+              "rmse": 2.6145956130989254e-06,
+              "max_abs": 0.0009765625,
+              "cosine": 0.9999999999999941,
+              "elements": 64721880,
+              "exact": false
             },
             "fixed_routing": {
               "paired_arrays": 48,
-              "expected_arrays": 48
+              "expected_arrays": 48,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "cosine": 1.0,
+              "elements": 12681216,
+              "exact": true
             }
           }
         }
@@ -4709,13 +5440,25 @@
             "paired_boundaries": 124,
             "expected_boundaries": 124,
             "routing_observations": 0,
-            "matching_expert_sets": 0
+            "matching_expert_sets": 0,
+            "text_boundary_metrics": {
+              "rmse": 7.226409817073232,
+              "max_abs": 75.5,
+              "cosine": 0.998947844953443,
+              "elements": 15872,
+              "exact": false
+            }
           },
           "local-replay": {
             "source_sha256": "f2a993c2752c64f3afef18bca7d69f2dbf055bac5f03423dc38ca4f47d850569",
             "same_operand_comparison": {
               "paired_arrays": 80,
-              "expected_arrays": 80
+              "expected_arrays": 80,
+              "rmse": 0.04675151801875371,
+              "max_abs": 16.0,
+              "cosine": 0.9999991319611525,
+              "elements": 97734528,
+              "exact": false
             }
           },
           "quality": {
@@ -4779,13 +5522,286 @@
               6,
               6
             ],
-            "paired_prefill_histories": 6
+            "paired_prefill_histories": 6,
+            "by_modality": {
+              "image": {
+                "cases": 6,
+                "exact_answers": [
+                  6,
+                  6
+                ]
+              }
+            }
           },
           "intervention": {
-            "source_sha256": "18f4fc5901ea268435855dd9229b08ead2c0cf4620b9758834267d0762947ca0"
+            "source_sha256": "18f4fc5901ea268435855dd9229b08ead2c0cf4620b9758834267d0762947ca0",
+            "sides": [
+              {
+                "target": "model.language_model.layers.53.self_attn",
+                "change": "SDPA to eager at one attention layer"
+              },
+              {
+                "target": "model.language_model.layers.53.self_attn",
+                "change": "SDPA to eager at one attention layer"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.04280170148696303,
+                  "max_abs": 0.12164115905761719,
+                  "cosine": 0.9999867122547222,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1556223279673052,
+                  "max_abs": 1.0531158447265625,
+                  "cosine": 0.9998282881329424,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1602043397915858,
+                  "max_abs": 1.0957775115966797,
+                  "cosine": 0.999817785389662,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.04540384278534783,
+                  "max_abs": 0.137542724609375,
+                  "cosine": 0.9999848798954007,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.13368248333364613,
+                  "max_abs": 0.8124589920043945,
+                  "cosine": 0.9998716264847735,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.13713466476597996,
+                  "max_abs": 0.8411636352539062,
+                  "cosine": 0.9998648631245702,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.04886386092380864,
+                  "max_abs": 0.1870098114013672,
+                  "cosine": 0.9999772363718635,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.5065486049102956,
+                  "max_abs": 3.373678207397461,
+                  "cosine": 0.9978534558978693,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.5056305549843848,
+                  "max_abs": 3.3713622093200684,
+                  "cosine": 0.9978642034141786,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0503758428290596,
+                  "max_abs": 0.20415019989013672,
+                  "cosine": 0.9999764129435238,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.2879344991047815,
+                  "max_abs": 1.904982566833496,
+                  "cosine": 0.9992201740372565,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.28073515020618606,
+                  "max_abs": 1.7008323669433594,
+                  "cosine": 0.9992544004789519,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           },
           "layout": {
-            "source_sha256": "7d604cbd42cdd6891fa816c71ab870a824c009934e8ba3257aff196e8ff2351b"
+            "source_sha256": "7d604cbd42cdd6891fa816c71ab870a824c009934e8ba3257aff196e8ff2351b",
+            "sides": [
+              {
+                "moved_module": "model.language_model.layers.29",
+                "layout_kind": "single-process layer ownership across the two assigned NPUs"
+              },
+              {
+                "moved_module": "model.language_model.layers.29",
+                "layout_kind": "single-process layer ownership across the two assigned NPUs"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1556223279673052,
+                  "max_abs": 1.0531158447265625,
+                  "cosine": 0.9998282881329424,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1556223279673052,
+                  "max_abs": 1.0531158447265625,
+                  "cosine": 0.9998282881329424,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.13368248333364613,
+                  "max_abs": 0.8124589920043945,
+                  "cosine": 0.9998716264847735,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.13368248333364613,
+                  "max_abs": 0.8124589920043945,
+                  "cosine": 0.9998716264847735,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.5065486049102956,
+                  "max_abs": 3.373678207397461,
+                  "cosine": 0.9978534558978693,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.5065486049102956,
+                  "max_abs": 3.373678207397461,
+                  "cosine": 0.9978534558978693,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.2879344991047815,
+                  "max_abs": 1.904982566833496,
+                  "cosine": 0.9992201740372565,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.2879344991047815,
+                  "max_abs": 1.904982566833496,
+                  "cosine": 0.9992201740372565,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           }
         }
       },
@@ -4822,8 +5838,8 @@
             "backend": "per-expert TorchNPU eager BF16 GEMM after MXFP4 decode"
           }
         },
-        "status": "partial",
-        "audited_at": "2026-11-12T12:23:01.360163+00:00",
+        "status": "completed",
+        "audited_at": "2026-11-12T16:42:29.423006+00:00",
         "acceptance": null,
         "tasks": {
           "M01": {
@@ -4979,8 +5995,10 @@
             "scope": "Finite checks and stress-scale cases."
           },
           "O06": {
-            "status": "pending",
-            "evidence_sha256": [],
+            "status": "measured",
+            "evidence_sha256": [
+              "7f0274bc06347a11682e7b2eceb2294d827f019ed8f64190f9fa067f557b3c6c"
+            ],
             "scope": "One controlled operator substitution and reserved input revalidation."
           },
           "Q01": {
@@ -5010,7 +6028,7 @@
           "P02": {
             "status": "measured",
             "evidence_sha256": [
-              "f6fe336d4eab119594230da557a59e19f72a2c5fdcabda214fd58cf3de912410"
+              "8297cb86a1cdddaccb8d70f325d4fd9a52e27c789fe850b827d3eae238fe5dc2"
             ],
             "scope": "Device and CPU stage time, attempts, preparation receipts and retained bytes."
           },
@@ -5042,8 +6060,10 @@
             "scope": "Portable selected reserved evidence with source hashes and repeatable comparison."
           },
           "X01": {
-            "status": "pending",
-            "evidence_sha256": [],
+            "status": "measured",
+            "evidence_sha256": [
+              "f79694bc47724a49c8b503ac53b64a7c45c88f24f0f2effc96a7423e6ff9acfb"
+            ],
             "scope": "One logical layer moves across chips. Rank 0 owns the single process."
           },
           "A-MOE01": {
@@ -5056,7 +6076,8 @@
           "A-MOE02": {
             "status": "measured",
             "evidence_sha256": [
-              "19875bae4ff38de1aa39d33f66ff0033e842d69e22167202543253a62a7f6a88"
+              "19875bae4ff38de1aa39d33f66ff0033e842d69e22167202543253a62a7f6a88",
+              "7f0274bc06347a11682e7b2eceb2294d827f019ed8f64190f9fa067f557b3c6c"
             ],
             "scope": "Same saved routing slots and weights and a separate natural-route run."
           },
@@ -5081,7 +6102,7 @@
             "scope": "End-to-end grouped and eager BF16 arithmetic after exact MXFP4 decode. Direct packed arithmetic is outside this NPU path."
           },
           "E04": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "3cda4fa376cef1cc20e28e28c644619b879618aaee5a29491ad71caa9d95f56d"
             ],
@@ -5427,17 +6448,17 @@
           "The 32K path projects logits in 256-row tiles and retains all valid target positions."
         ],
         "source_sha256": {
-          "matrix_results": "c005591d78f85f54c616601fd1a7bcd8d8cee3dd8e647dcaaed2451def3137e8",
-          "evaluation_cost": "f6fe336d4eab119594230da557a59e19f72a2c5fdcabda214fd58cf3de912410"
+          "matrix_results": "8197dfda666d920b9e8bf70623754e5223f7d42cd03eb0aafd7dbc59663e0b06",
+          "evaluation_cost": "8297cb86a1cdddaccb8d70f325d4fd9a52e27c789fe850b827d3eae238fe5dc2"
         },
         "private_selected_evidence": {
           "bytes": 2154773,
           "sha256": "6bc9121a7e8c9641cccfcce132d65d20a964a1ad77bb9100b92ddd170707c0ef"
         },
         "cost": {
-          "accelerator_hours": 57.27712703059725,
+          "accelerator_hours": 60.33595471249609,
           "unclosed_intervals": 0,
-          "retained_run_bytes": 38354377464
+          "retained_run_bytes": 40828893497
         },
         "replay": {
           "discovery": {
@@ -5807,17 +6828,34 @@
             "paired_boundaries": 72,
             "expected_boundaries": 72,
             "routing_observations": 4644,
-            "matching_expert_sets": 4091
+            "matching_expert_sets": 4091,
+            "text_boundary_metrics": {
+              "rmse": 17.563509936719196,
+              "max_abs": 168.0,
+              "cosine": 0.9995740121184922,
+              "elements": 9216,
+              "exact": false
+            }
           },
           "local-replay": {
             "source_sha256": "19875bae4ff38de1aa39d33f66ff0033e842d69e22167202543253a62a7f6a88",
             "same_operand_comparison": {
               "paired_arrays": 60,
-              "expected_arrays": 60
+              "expected_arrays": 60,
+              "rmse": 6.128766222673894e-06,
+              "max_abs": 0.0078125,
+              "cosine": 0.9999999999979305,
+              "elements": 59930304,
+              "exact": false
             },
             "fixed_routing": {
               "paired_arrays": 4,
-              "expected_arrays": 4
+              "expected_arrays": 4,
+              "rmse": 3.8920212380735184e-05,
+              "max_abs": 0.0078125,
+              "cosine": 0.9999999991723797,
+              "elements": 743040,
+              "exact": false
             }
           },
           "quality": {
@@ -5873,6 +6911,276 @@
             ],
             "warmup": 2,
             "measured": 5
+          },
+          "intervention": {
+            "source_sha256": "7f0274bc06347a11682e7b2eceb2294d827f019ed8f64190f9fa067f557b3c6c",
+            "sides": [
+              {
+                "target": "model.layers.34.mlp.experts",
+                "change": "CANN grouped to eager GEMMs at one MoE layer with original routing"
+              },
+              {
+                "target": "model.layers.34.mlp.experts",
+                "change": "CANN grouped to eager GEMMs at one MoE layer with original routing"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.008739627813592806,
+                  "max_abs": 0.0623779296875,
+                  "cosine": 0.9999983985704363,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.14969557542159342,
+                  "max_abs": 0.8622465133666992,
+                  "cosine": 0.9995904949741776,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.14923145399252014,
+                  "max_abs": 0.8627471923828125,
+                  "cosine": 0.9995918582474191,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.011522303034331032,
+                  "max_abs": 0.06205034255981445,
+                  "cosine": 0.9999971392902084,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.12872479171883935,
+                  "max_abs": 0.5594005584716797,
+                  "cosine": 0.9996711390708346,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12884509492573465,
+                  "max_abs": 0.559422492980957,
+                  "cosine": 0.9996695680016734,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.009261639742555039,
+                  "max_abs": 0.07963037490844727,
+                  "cosine": 0.9999975442296428,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.11063341276733873,
+                  "max_abs": 0.8320693969726562,
+                  "cosine": 0.9996562034476154,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11159434733071033,
+                  "max_abs": 0.8315725326538086,
+                  "cosine": 0.9996502397329411,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.008447319320846958,
+                  "max_abs": 0.059366464614868164,
+                  "cosine": 0.9999979810579904,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1363371430383898,
+                  "max_abs": 1.1304776668548584,
+                  "cosine": 0.9994751089195086,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.13608284540161464,
+                  "max_abs": 1.1296920776367188,
+                  "cosine": 0.9994765042944836,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
+          },
+          "layout": {
+            "source_sha256": "f79694bc47724a49c8b503ac53b64a7c45c88f24f0f2effc96a7423e6ff9acfb",
+            "sides": [
+              {
+                "moved_module": "model.layers.18",
+                "layout_kind": "single-process layer ownership across the two assigned NPUs"
+              },
+              {
+                "moved_module": "model.layers.18",
+                "layout_kind": "single-process layer ownership across the two assigned NPUs"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999998,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.14969557542159342,
+                  "max_abs": 0.8622465133666992,
+                  "cosine": 0.9995904949741776,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.14969557542159342,
+                  "max_abs": 0.8622465133666992,
+                  "cosine": 0.9995904949741776,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.12872479171883935,
+                  "max_abs": 0.5594005584716797,
+                  "cosine": 0.9996711390708346,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12872479171883935,
+                  "max_abs": 0.5594005584716797,
+                  "cosine": 0.9996711390708346,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.11063341276733873,
+                  "max_abs": 0.8320693969726562,
+                  "cosine": 0.9996562034476154,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11063341276733873,
+                  "max_abs": 0.8320693969726562,
+                  "cosine": 0.9996562034476154,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1363371430383898,
+                  "max_abs": 1.1304776668548584,
+                  "cosine": 0.9994751089195086,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1363371430383898,
+                  "max_abs": 1.1304776668548584,
+                  "cosine": 0.9994751089195086,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           }
         }
       },
@@ -5909,8 +7217,8 @@
             "backend": "eager attention"
           }
         },
-        "status": "partial",
-        "audited_at": "2026-11-12T13:09:55.597194+00:00",
+        "status": "completed",
+        "audited_at": "2026-11-12T17:09:39.028463+00:00",
         "acceptance": null,
         "tasks": {
           "M01": {
@@ -5937,12 +7245,13 @@
             "scope": "Complete model through the native inference interface."
           },
           "D01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Frozen logical histories and all expected target coordinates."
@@ -5963,45 +7272,49 @@
             "scope": "Exact scores with and without instrumentation."
           },
           "I01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
           "I02": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
           "I03": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
           },
           "I06": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Full, cached 32-step and chunked scores across frozen text workloads."
@@ -6014,11 +7327,12 @@
             "scope": "Unequal-length batches against solo inputs, both padding sides."
           },
           "I05": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "128, 512, 2048, 8192 and 32768 tokens."
@@ -6060,8 +7374,10 @@
             "scope": "Finite checks and stress-scale cases."
           },
           "O06": {
-            "status": "pending",
-            "evidence_sha256": [],
+            "status": "measured",
+            "evidence_sha256": [
+              "4d5a964e85b001f0d9e0b7c785839414e2e3d5e842824205bcb99c25bd756801"
+            ],
             "scope": "One controlled operator substitution and reserved input revalidation."
           },
           "Q01": {
@@ -6090,20 +7406,21 @@
             "scope": "2 warmups and 5 measured samples per side."
           },
           "P02": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
-              "6417d6771556abfb043d5c07b546f765dfd8bcaf27a4e3e79d8d88d4d48bc29d"
+              "143aba2a4dedc1a94564472f4f6d78c743ff277b04bfc571ed33702c4bb81719"
             ],
             "scope": "Device and CPU stage time, attempts, preparation receipts and retained bytes."
           },
           "E01": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "01a27ce4945f1ad94e760ef9f2afb07ce4fb1e5b3cf4d782a72b5724942952c4",
               "01a4bb86ed706667d3dc06646a2e904ab6f7a0e459034ea62d8b33c19ad75155",
               "255867e8ffdd50f594669045924d713af6dbc122fffefe29997439b4c0add52b",
               "2c916d80fa2a6a3e343acde1f4f8551b0465414fd0d21ff5dc076e271b93b387",
               "3bf1eede55c56e08eed7035771fffd54f781a98ebf93f339bfaa72f2ca5e270a",
+              "6c57dbe87adbcfed925a10eea556130e45660fe1b025c8fca3dd83b0f6fff719",
               "ec11a45b1b0ef7ac1f72974cacd8d0905771a80e9a3426af93a933d52e2f184f"
             ],
             "scope": "Independent expected inventories and row checks."
@@ -6123,8 +7440,10 @@
             "scope": "Portable selected reserved evidence with source hashes and repeatable comparison."
           },
           "X01": {
-            "status": "pending",
-            "evidence_sha256": [],
+            "status": "measured",
+            "evidence_sha256": [
+              "9396ef64d83bab03e8d90e17f0c9cfed29fb0a69b56dc5c2e546e0e23980b22a"
+            ],
             "scope": "One logical layer moves across chips. Rank 0 owns the single process."
           },
           "A-MOE01": {
@@ -6137,7 +7456,8 @@
           "A-MOE02": {
             "status": "measured",
             "evidence_sha256": [
-              "2bb57e9a23a152fe46c464a4807e8d2e8a0e169ebc6c484182981627283c7a2b"
+              "2bb57e9a23a152fe46c464a4807e8d2e8a0e169ebc6c484182981627283c7a2b",
+              "4d5a964e85b001f0d9e0b7c785839414e2e3d5e842824205bcb99c25bd756801"
             ],
             "scope": "Same saved routing slots and weights and a separate natural-route run."
           },
@@ -6156,7 +7476,7 @@
             "scope": "Encoder, projection, fusion and free generation on declared media samples."
           },
           "E04": {
-            "status": "pending",
+            "status": "measured",
             "evidence_sha256": [
               "da1c3c59736e15b0fb0f5dabc30da83f679d8951a17045b4aaf96c2332248d7e"
             ],
@@ -6435,6 +7755,54 @@
               "fraction": 0.9496527777777778
             },
             "source_sha256": "7e292200505868ac8d90c724f637c98d253085d7b8b76f8de2189c6359ad3ae6"
+          },
+          "long/full": {
+            "target_count": 196794,
+            "side_a_nll_nat_per_token": 2.333553255174703,
+            "side_b_nll_nat_per_token": 2.3333201572865474,
+            "nll_abs_diff_nat_per_token": 0.00023309788815550903,
+            "mae_nat": 0.1301872871965446,
+            "p99_nat": 0.8480791974067704,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 5.7732879519462585,
+            "top1": {
+              "count": 271,
+              "total": 288,
+              "fraction": 0.9409722222222222
+            },
+            "source_sha256": "e0c0b7c18882343dfe7c33e73ee06e07f98c12413eb97f174fc1f4631f6c0504"
+          },
+          "long/cached": {
+            "target_count": 196794,
+            "side_a_nll_nat_per_token": 2.332201298810007,
+            "side_b_nll_nat_per_token": 2.3333939919418034,
+            "nll_abs_diff_nat_per_token": 0.001192693131796485,
+            "mae_nat": 0.13445766882007426,
+            "p99_nat": 0.8903330075740844,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 6.666465699672699,
+            "top1": {
+              "count": 273,
+              "total": 288,
+              "fraction": 0.9479166666666666
+            },
+            "source_sha256": "bbefa7ae6280bb80ab3b09bc9ad2ea16d8853ecc7bc4cfc06e4ede2561531f60"
+          },
+          "long/chunked": {
+            "target_count": 196794,
+            "side_a_nll_nat_per_token": 2.3321770039298433,
+            "side_b_nll_nat_per_token": 2.332892641593452,
+            "nll_abs_diff_nat_per_token": 0.0007156376636086037,
+            "mae_nat": 0.145521386477603,
+            "p99_nat": 1.0027746546268463,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "max_abs_nat": 7.412184715270996,
+            "top1": {
+              "count": 269,
+              "total": 288,
+              "fraction": 0.9340277777777778
+            },
+            "source_sha256": "d823bbba7f68eaa408b9418dab1f37bdf47c44521eb73c26d8cc6043dde006ab"
           }
         },
         "heldout": {
@@ -6449,21 +7817,23 @@
         },
         "notes": [
           "Accelerate streams offloaded weights to the assigned NPUs. The Torch Mamba recurrence retains the released multiply-and-sum axes in bounded tiles. The short same-role raw logits matched byte for byte.",
+          "The 32K run frees Mamba temporaries after their last use and sets a 44 GiB model-weight limit on each NPU for both peers. Its reference attention uses 256-query blocks.",
           "At 8192 tokens, eager attention used 256-query blocks after the original full attention exceeded device memory.",
+          "The 32K path projects logits in 256-row tiles and retains all valid target positions.",
           "Discovery uses released expert dispatch. Later stages skip empty bias-free experts. Same-input paired pilots preserved every compared logit and cache byte."
         ],
         "source_sha256": {
-          "matrix_results": "6dbd517ac53893e57e72504cd42b1b483ffd684e346d31314ad69435ca973f5d",
-          "evaluation_cost": "6417d6771556abfb043d5c07b546f765dfd8bcaf27a4e3e79d8d88d4d48bc29d"
+          "matrix_results": "a7f16601a7624f7a763ffc1f7a6e60041fbe35de397df16ed1d2e78dfca8ef9e",
+          "evaluation_cost": "143aba2a4dedc1a94564472f4f6d78c743ff277b04bfc571ed33702c4bb81719"
         },
         "private_selected_evidence": {
           "bytes": 997247,
           "sha256": "b81425c11bb7144990589f98a30f86b2228d5480b9f7ef03b81b41c6e89e5f7a"
         },
         "cost": {
-          "accelerator_hours": 28.47509634571939,
+          "accelerator_hours": 33.51222197301841,
           "unclosed_intervals": 0,
-          "retained_run_bytes": 38555582954
+          "retained_run_bytes": 43365744838
         },
         "replay": {
           "discovery": {
@@ -6790,6 +8160,41 @@
                 1.1874565079855472
               ]
             ]
+          },
+          "long": {
+            "source_sha256": "6f310be33a917af1c4e5eb2d8dd0723434404147a4dfe2da53a1a616333d15a7",
+            "samples": [
+              [
+                32799,
+                2.377528332181618,
+                2.3769635262362274
+              ],
+              [
+                32799,
+                2.329574955306634,
+                2.326659513931522
+              ],
+              [
+                32799,
+                2.3507127303872286,
+                2.3517124750695806
+              ],
+              [
+                32799,
+                2.3209009896696484,
+                2.3257110059426402
+              ],
+              [
+                32799,
+                2.3032225926552203,
+                2.2998216379987335
+              ],
+              [
+                32799,
+                2.3193799308478678,
+                2.31905278454058
+              ]
+            ]
           }
         },
         "auxiliary": {
@@ -6798,17 +8203,34 @@
             "paired_boundaries": 176,
             "expected_boundaries": 176,
             "routing_observations": 5160,
-            "matching_expert_sets": 4100
+            "matching_expert_sets": 4100,
+            "text_boundary_metrics": {
+              "rmse": 0.6648372760655815,
+              "max_abs": 28.0,
+              "cosine": 0.9999576385854083,
+              "elements": 22528,
+              "exact": false
+            }
           },
           "local-replay": {
             "source_sha256": "2bb57e9a23a152fe46c464a4807e8d2e8a0e169ebc6c484182981627283c7a2b",
             "same_operand_comparison": {
               "paired_arrays": 89,
-              "expected_arrays": 89
+              "expected_arrays": 89,
+              "rmse": 2.2736331214666126e-06,
+              "max_abs": 0.00048828125,
+              "cosine": 0.9999999999999949,
+              "elements": 39516652,
+              "exact": false
             },
             "fixed_routing": {
               "paired_arrays": 24,
-              "expected_arrays": 24
+              "expected_arrays": 24,
+              "rmse": 0.0,
+              "max_abs": 0.0,
+              "cosine": 1.0,
+              "elements": 6340608,
+              "exact": true
             }
           },
           "quality": {
@@ -6872,7 +8294,293 @@
               0,
               0
             ],
-            "paired_prefill_histories": 12
+            "paired_prefill_histories": 12,
+            "by_modality": {
+              "image": {
+                "cases": 6,
+                "exact_answers": [
+                  0,
+                  0
+                ]
+              },
+              "video": {
+                "cases": 6,
+                "exact_answers": [
+                  0,
+                  0
+                ]
+              }
+            }
+          },
+          "intervention": {
+            "source_sha256": "4d5a964e85b001f0d9e0b7c785839414e2e3d5e842824205bcb99c25bd756801",
+            "sides": [
+              {
+                "target": "language_model.model.layers.78.mixer",
+                "change": "SDPA to eager at one attention layer"
+              },
+              {
+                "target": "language_model.model.layers.78.mixer",
+                "change": "SDPA to eager at one attention layer"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.07224902642128744,
+                  "max_abs": 0.37545955181121826,
+                  "cosine": 0.9998268286023578,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.12113999833423518,
+                  "max_abs": 0.5112171173095703,
+                  "cosine": 0.9995222783379495,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12295500415872711,
+                  "max_abs": 0.5194883346557617,
+                  "cosine": 0.9994947987293202,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.06756976556843268,
+                  "max_abs": 0.24863147735595703,
+                  "cosine": 0.9998481842972902,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1013469139390721,
+                  "max_abs": 0.42259931564331055,
+                  "cosine": 0.9996602003898224,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11764772774946422,
+                  "max_abs": 0.48584508895874023,
+                  "cosine": 0.9995445649429353,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.058671748722292014,
+                  "max_abs": 0.23743152618408203,
+                  "cosine": 0.9998421482809956,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.13243476090722933,
+                  "max_abs": 0.9969296455383301,
+                  "cosine": 0.9991897279633342,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12168187407963077,
+                  "max_abs": 0.759498119354248,
+                  "cosine": 0.999328779992492,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0708504262242948,
+                  "max_abs": 0.305173397064209,
+                  "cosine": 0.9997720129620925,
+                  "elements": 159,
+                  "exact": false
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1290440572827155,
+                  "max_abs": 0.5392491817474365,
+                  "cosine": 0.9992573656720759,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.11831907391106501,
+                  "max_abs": 0.6572227478027344,
+                  "cosine": 0.999388054443837,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
+          },
+          "layout": {
+            "source_sha256": "9396ef64d83bab03e8d90e17f0c9cfed29fb0a69b56dc5c2e546e0e23980b22a",
+            "sides": [
+              {
+                "moved_module": "language_model.model.layers.32",
+                "layout_kind": "single-process layer ownership across the two assigned NPUs"
+              },
+              {
+                "moved_module": "language_model.model.layers.32",
+                "layout_kind": "single-process layer ownership across the two assigned NPUs"
+              }
+            ],
+            "target_logprob": {
+              "discovery/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.12113999833423518,
+                  "max_abs": 0.5112171173095703,
+                  "cosine": 0.9995222783379495,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.12113999833423518,
+                  "max_abs": 0.5112171173095703,
+                  "cosine": 0.9995222783379495,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "discovery/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 0.9999999999999999,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1013469139390721,
+                  "max_abs": 0.42259931564331055,
+                  "cosine": 0.9996602003898224,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1013469139390721,
+                  "max_abs": 0.42259931564331055,
+                  "cosine": 0.9996602003898224,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/full": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.13243476090722933,
+                  "max_abs": 0.9969296455383301,
+                  "cosine": 0.9991897279633342,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.13243476090722933,
+                  "max_abs": 0.9969296455383301,
+                  "cosine": 0.9991897279633342,
+                  "elements": 159,
+                  "exact": false
+                }
+              },
+              "validation/cached": {
+                "native-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "reference-change": {
+                  "rmse": 0.0,
+                  "max_abs": 0.0,
+                  "cosine": 1.0,
+                  "elements": 159,
+                  "exact": true
+                },
+                "before-versus-reference": {
+                  "rmse": 0.1290440572827155,
+                  "max_abs": 0.5392491817474365,
+                  "cosine": 0.9992573656720759,
+                  "elements": 159,
+                  "exact": false
+                },
+                "after-versus-reference": {
+                  "rmse": 0.1290440572827155,
+                  "max_abs": 0.5392491817474365,
+                  "cosine": 0.9992573656720759,
+                  "elements": 159,
+                  "exact": false
+                }
+              }
+            }
           }
         }
       }
