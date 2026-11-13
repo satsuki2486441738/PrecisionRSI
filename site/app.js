@@ -1,11 +1,13 @@
 'use strict';
 
 const $ = (id) => document.getElementById(id);
-const controls = ['search', 'task', 'library', 'model', 'hardware'];
+const controls = ['search', 'task', 'library', 'model', 'hardware', 'comparison-kind'];
+const archiveKinds = ['repairs', 'evaluations', 'differences'];
 let archive = null;
 let repairs = [];
 let catalog = [];
 let evaluations = [];
+let differences = [];
 let activeKind = 'repairs';
 let requestSerial = 0;
 let pendingRequest = null;
@@ -264,7 +266,11 @@ const pageCopy = {
   evaluations: { title: ['跨环境比较，', '留下数值证据。'], intro: '记录推理、SFT 与 RL 的精度采集与比较。查看各侧实际配置、比较条件、指标和覆盖范围。',
     eyebrow: 'EVALUATION HISTORY / 精度工程记录', heading: '按任务查看评测', noun: '评测',
     labels: ['评测实验', '比较组', '硬件平台', '数据更新'], feet: ['EXPERIMENTS', 'COMPARISONS', 'HARDWARE', 'LAST UPDATED'],
-    method: ['对齐条件 ↗ 原生采集', '坐标配对 ↗ 输出指标'], caption: '实际配置 · 数值差异 · 覆盖与证据' }
+    method: ['对齐条件 ↗ 原生采集', '坐标配对 ↗ 输出指标'], caption: '实际配置 · 数值差异 · 覆盖与证据' },
+  differences: { title: ['精度差异', ''], intro: '汇集 Survey 分支的 GPU / NPU 数值证据。按模型查看差异，展开比较指标、两侧配置和原始来源。',
+    eyebrow: 'PRECISION DIFFERENCES / SURVEY', heading: '按模型查看差异', noun: '差异',
+    labels: ['模型 / 算子组', '测量记录', 'Survey 分支', '数据更新'], feet: ['MODELS', 'COMPARISONS', 'BRANCHES', 'LAST UPDATED'],
+    method: ['固定证据 ↗ 合并去重', '保留条件 ↗ 展示差异'], caption: '模型分组 · 比较范围 · 原始证据' }
 };
 function configurePage() {
   const copy = pageCopy[activeKind];
@@ -279,10 +285,16 @@ function configurePage() {
   $('history-title').textContent = copy.heading;
   copy.labels.forEach((value, index) => { $(`stat-label-${index}`).textContent = value; });
   copy.feet.forEach((value, index) => { $(`stat-foot-${index}`).textContent = value; });
-  $('task-filter').hidden = false;
+  const isDifferences = activeKind === 'differences';
+  $('task-filter').hidden = isDifferences;
+  $('library-filter').hidden = isDifferences;
+  $('comparison-kind-filter').hidden = !isDifferences;
+  $('search').placeholder = isDifferences ? '搜索模型、配置、指标或证据…' : '搜索问题、根因或修复…';
+  document.querySelector('label[for=hardware]').textContent = isDifferences ? '平台' : '硬件';
+  $('hardware').options[0].textContent = isDifferences ? '全部平台' : '全部硬件';
   $('extra-filters').open = false;
   $('filters').setAttribute('aria-label', `筛选${copy.noun}记录`);
-  for (const kind of ['repairs', 'evaluations']) {
+  for (const kind of archiveKinds) {
     $(`tab-${kind}`).setAttribute('aria-selected', String(kind === activeKind));
     $(`tab-${kind}`).tabIndex = kind === activeKind ? 0 : -1;
   }
@@ -307,9 +319,15 @@ function renderEvaluationGroup(group, groupIndex) {
 }
 function render() {
   const filters = { query: $('search').value, task: $('task').value,
-    library: $('library').value, model: $('model').value, hardware: $('hardware').value };
+    library: $('library').value, model: $('model').value, hardware: $('hardware').value, comparison_kind: $('comparison-kind').value };
   let visible;
-  if (activeKind === 'evaluations') {
+  if (activeKind === 'differences') {
+    const api = globalThis.PrecisionDifferences;
+    const filtered = api.filterRecords(differences, filters);
+    $('history').replaceChildren(...api.renderArchive(archive, filtered, { node, list, text, paragraph, section, bulletList, publicURL, formatNumber, libraryLabel }));
+    $('result-count').textContent = `显示 ${api.groups(filtered).length} 个模型 / 算子组 · ${filtered.length} / ${differences.length} 条测量记录` ;
+    visible = filtered.length;
+  } else if (activeKind === 'evaluations') {
     const filtered = historyAPI.filterEvaluations(evaluations, filters);
     $('history').replaceChildren(...historyAPI.evaluationGroups(filtered).map(renderEvaluationGroup));
     const shown = historyAPI.evaluationCounts(filtered), total = historyAPI.evaluationCounts(evaluations);
@@ -341,13 +359,15 @@ function followHash() {
   const route = historyAPI.routeForHash(location.hash);
   if (!route) return;
   if (route.kind !== activeKind) { selectTab(route.kind); return; }
-  if (!archive || !route.id || ['repairs', 'evaluations'].includes(route.id)) return;
+  if (!archive || !route.id || archiveKinds.includes(route.id)) return;
   const id = route.id;
-  const known = activeKind === 'evaluations' ? evaluations.some((record) => `evaluation-${record.id}` === id) :
+  const known = activeKind === 'differences' ? differences.some((record) => `difference-${record.id}` === id) : activeKind === 'evaluations' ? evaluations.some((record) => `evaluation-${record.id}` === id) :
     repairs.some((record) => `repair-${record.id}` === id) || catalog.some((group) =>
       `library-${group.id}` === id || group.fixes.some((fix) => `fix-${fix.root.id}` === id));
   if (!known) return;
+  if (activeKind === 'differences') globalThis.PrecisionDifferences.revealRecord(id);
   if (!document.getElementById(id)) resetFilters();
+  if (activeKind === 'differences') globalThis.PrecisionDifferences.revealRecord(id);
   const card = document.getElementById(id);
   if (card) {
     openAncestors(card);
@@ -368,20 +388,29 @@ async function load() {
   showState('正在加载记录', `准备${copy.noun}指标与验证证据。`);
   const controller = new AbortController();
   pendingRequest = controller;
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const timeout = setTimeout(() => controller.abort(), kind === 'differences' ? 45000 : 15000);
   try {
     const response = await fetch(`./data/${kind}.json`, { signal: controller.signal });
     if (!response.ok) throw new Error('HTTP');
     const data = await response.json();
     if (serial !== requestSerial) return;
-    if (data.schema_version !== 1 || !Array.isArray(data[kind])) throw new Error('schema');
+    const rows = kind === 'differences' ? data.records : data[kind];
+    if (data.schema_version !== 1 || !Array.isArray(rows)) throw new Error('schema');
     const ids = new Set();
-    for (const record of data[kind]) {
+    for (const record of rows) {
       if (!record || typeof record.id !== 'string' || !record.id.trim() || ids.has(record.id)) throw new Error('id');
       ids.add(record.id);
     }
     let options;
-    if (kind === 'evaluations') {
+    if (kind === 'differences') {
+      differences = rows;
+      const api = globalThis.PrecisionDifferences;
+      const facets = api.facets(differences);
+      $('total-count').textContent = facets.models.length;
+      $('verification-count').textContent = differences.length;
+      $('group-count').textContent = list(data.branches).length || list(data.generated_from).length;
+      options = [['library', facets.libraries], ['model', facets.models], ['hardware', facets.platforms], ['comparison-kind', facets.kinds]];
+    } else if (kind === 'evaluations') {
       evaluations = historyAPI.filterEvaluations(historyAPI.publicEvaluations(data.evaluations));
       const totals = historyAPI.evaluationCounts(evaluations);
       $('total-count').textContent = totals.experiments;
@@ -405,7 +434,7 @@ async function load() {
       const select = $(id);
       select.replaceChildren(select.options[0]);
       [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b)).forEach((value) => {
-        const option = node('option', '', value);
+        const option = node('option', '', id === 'comparison-kind' ? globalThis.PrecisionDifferences.kindLabel(value) : value);
         option.value = value;
         select.append(option);
       });
@@ -424,15 +453,17 @@ async function load() {
 $('filters').addEventListener('submit', (event) => event.preventDefault());
 controls.forEach((id) => $(id).addEventListener(id === 'search' ? 'input' : 'change', () => { if (archive) render(); }));
 $('reset').addEventListener('click', resetFilters);
-for (const kind of ['repairs', 'evaluations']) $('tab-' + kind).addEventListener('click', () => {
+for (const kind of archiveKinds) $('tab-' + kind).addEventListener('click', () => {
   if (location.hash !== '#' + kind) location.hash = kind;
 });
 document.querySelector('[role="tablist"]').addEventListener('keydown', (event) => {
   const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
   if (!keys.includes(event.key)) return;
   event.preventDefault();
-  const kind = event.key === 'Home' ? 'repairs' : event.key === 'End' ? 'evaluations' :
-    event.target.id === 'tab-repairs' ? 'evaluations' : 'repairs';
+  const current = archiveKinds.indexOf(event.target.id.replace('tab-', ''));
+  const index = event.key === 'Home' ? 0 : event.key === 'End' ? archiveKinds.length - 1 :
+    (current + (event.key === 'ArrowRight' ? 1 : -1) + archiveKinds.length) % archiveKinds.length;
+  const kind = archiveKinds[index];
   $('tab-' + kind).focus();
   $('tab-' + kind).click();
 });
