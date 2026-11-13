@@ -1,0 +1,92 @@
+/* Survey follows the compact Repairs layout and the existing gray/green palette. */
+body[data-archive="differences"] .hero{padding:23px 0 20px}
+body[data-archive="differences"] .hero>div{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px 24px}
+body[data-archive="differences"] h1{font-size:34px;letter-spacing:-.8px}
+body[data-archive="differences"] .hero .eyebrow,body[data-archive="differences"] .hero-note{display:none}
+body[data-archive="differences"] .intro{font-size:12px;line-height:1.9;margin:0;max-width:780px}
+body[data-archive="differences"] .stats{padding:8px 0;border:0;background:transparent;gap:12px 20px}
+body[data-archive="differences"] .stats>div{display:flex;flex-direction:row;align-items:baseline;gap:10px;padding:0;border:0}
+body[data-archive="differences"] .stats strong{font-size:19px}
+body[data-archive="differences"] .stats .date-stat{font-size:13px;padding-top:0}
+body[data-archive="differences"] .stat-foot{display:none}
+body[data-archive="differences"] .archive{padding-top:24px}
+body[data-archive="differences"] .section-heading{margin-bottom:14px}
+body[data-archive="differences"] .section-heading h2{font-size:18px}
+body[data-archive="differences"] .section-heading .eyebrow{display:none}
+body[data-archive="differences"] .filters{grid-template-columns:minmax(0,1.8fr) minmax(0,1fr) auto}
+body[data-archive="differences"] .advanced-filter-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+.difference-overview{border:1px solid var(--line);border-radius:var(--radius);padding:22px;background:var(--paper);margin:0 0 32px}
+.difference-overview-title{display:flex;align-items:baseline;gap:12px 24px;flex-wrap:wrap}
+.difference-overview-title h3{font-size:15px;margin:0}
+.difference-overview-title p,.difference-overview-note,.difference-chart-note{font-size:11px;line-height:1.9;color:var(--muted);margin:0}
+.difference-distribution{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px 24px;margin:20px 0}
+.difference-distribution-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;font-size:11px}
+.difference-distribution-row strong{color:var(--accent);font-size:12px;font-variant-numeric:tabular-nums}
+.difference-track{position:relative;height:7px;border-radius:2px;background:#e8eef0;grid-column:1/-1;min-width:0}
+.difference-bar{position:absolute;display:block;background:var(--before);height:100%;border-radius:2px}
+.difference-bar-peer{background:var(--accent)}
+.difference-zero{position:absolute;top:0;width:1px;height:100%;background:var(--ink);opacity:.35;transform:translateX(-50%)}
+.difference-model .library-group-header{align-items:center;padding:0 0 14px}
+.difference-model .library-group-header .eyebrow{font-size:9px;margin:0 0 6px;letter-spacing:1.2px}
+.difference-model .library-group-header h3{font-size:21px;margin:0;overflow-wrap:anywhere}
+.difference-model .group-count{padding:0;font-size:11px}
+.difference-kind{display:inline-block;padding:3px 8px;border-radius:5px;color:#526772;background:#eef2f4;font-size:10px;white-space:nowrap}
+.difference-kind-cross-backend{color:var(--accent);background:var(--accent-soft)}
+.difference-card .overview-title{font-size:17px;margin:13px 0 16px}
+.difference-headline-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;background:#f4f7f8;padding:14px;border-radius:9px}
+.difference-headline-metrics>div{min-width:0;display:flex;flex-direction:column;gap:5px}
+.difference-headline-metrics span{font-size:10px;color:var(--muted);line-height:1.6;overflow-wrap:anywhere}
+.difference-headline-metrics strong{font:600 20px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);overflow-wrap:anywhere}
+.difference-headline-metrics small{font-size:9px;color:var(--muted);overflow-wrap:anywhere}
+.difference-headline-metrics p{font-size:12px;grid-column:1/-1;color:var(--muted)}
+.difference-card-content{padding-bottom:20px!important}
+.difference-record-toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-top:20px;font-size:11px;color:var(--muted)}
+.difference-record-toolbar a{color:var(--accent)}
+.difference-card-content>.difference-scope-note{font-size:12px;line-height:1.9;margin:14px 0 8px;padding:0}
+.difference-card-content>.difference-kind-note{font-size:11px;line-height:1.9;color:var(--muted);border-left:2px solid #c9ddd6;padding:5px 0 5px 12px;margin:0 0 18px}
+.difference-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 24px;margin:20px 0}
+.difference-metric{min-width:0;border-top:1px solid var(--line);padding-top:14px}
+.difference-metric dt{font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+.difference-metric dd{margin-left:0;min-width:0}
+.difference-metric-value{font:15px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--ink);overflow-wrap:anywhere;margin-top:6px}
+.difference-metric-unit,.difference-metric-detail{font-size:10px;line-height:1.8;color:var(--muted);overflow-wrap:anywhere}
+.difference-side-value{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 12px;margin-top:10px;font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+.difference-side-value strong{text-align:right;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:500}
+.difference-configuration{margin:0!important;border:0!important;padding:0!important;box-shadow:none!important;background:transparent!important}
+.difference-evidence .detail-grid{margin-top:18px}
+.difference-evidence .detail-section{min-width:0}
+.difference-side-title{margin-top:20px!important}
+.difference-source{margin:0 0 14px;min-width:0}
+.difference-source a{font-size:11px;overflow-wrap:anywhere;color:var(--accent);line-height:1.9}
+.difference-source p,.difference-source code,.difference-acceptance{font-size:10px;line-height:1.9;overflow-wrap:anywhere;white-space:pre-wrap;color:var(--muted);margin:4px 0}
+.difference-evidence li{font-size:11px;line-height:1.9;overflow-wrap:anywhere}
+.difference-explorer{margin:0 0 16px;border:1px solid var(--line);border-radius:9px;background:var(--paper)}
+.difference-explorer>summary,.difference-source-index>summary{padding:13px 18px;font-size:11px;color:var(--accent);cursor:pointer}
+.difference-explorer-body{padding:4px 18px 18px}
+.difference-explorer-control{display:flex;align-items:center;gap:16px;margin:8px 0 12px;font-size:11px;color:var(--muted)}
+.difference-explorer-control select{font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink);max-width:100%;min-width:0}
+.difference-plot{margin:18px 0 0;max-height:460px;overflow:auto;overscroll-behavior:contain;padding-right:9px}
+.difference-plot-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.6fr);gap:4px 18px;padding:12px 0;border-top:1px solid #edf1f3;align-items:baseline}
+.difference-plot-label{font-size:11px;color:var(--ink);line-height:1.7;overflow-wrap:anywhere;grid-column:1}
+.difference-plot-kind{font-size:9px;color:var(--muted);line-height:1.8;grid-column:1}
+.difference-chart-value{font:11px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;text-align:right;grid-column:2;grid-row:1/3;overflow-wrap:anywhere}
+.difference-plot-row .difference-track{margin-top:5px}
+.difference-axis{display:flex;justify-content:space-between;gap:16px;font:9px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted);margin-top:7px}
+.difference-axis span{min-width:0;overflow-wrap:anywhere}
+.difference-source-index{border-top:1px solid var(--line);margin-top:12px}
+.difference-source-index-body{padding:4px 18px 18px}
+.difference-branch-list{padding-left:18px;font-size:11px;line-height:1.8}
+.difference-branch-list li{padding:7px 0;overflow-wrap:anywhere}
+.difference-branch-list code{display:block;font-size:10px;color:var(--muted);overflow-wrap:anywhere}
+.difference-raw-link{display:inline-block;margin:12px 0 20px;font-size:12px;color:var(--accent)}
+.difference-source-table{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 25px}
+.difference-source-table .difference-source{border-top:1px solid var(--line);padding-top:10px}
+@media(max-width:850px){body[data-archive="differences"] .filters{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-archive="differences"] .search-field{grid-column:1/-1}.difference-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.difference-headline-metrics strong{font-size:17px}}
+@media(max-width:650px){.history-tabs{gap:0}.history-tabs button{flex:1;padding:13px 7px;justify-content:center;flex-direction:column;gap:4px;font-size:12px}.history-tabs button span{font-size:8px}.difference-model .library-group-header{display:block}.difference-model .group-count{display:block;padding-top:8px}.difference-overview{padding:17px}.difference-overview-title{gap:8px}.difference-distribution{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.difference-metrics{grid-template-columns:minmax(0,1fr)}.difference-headline-metrics{gap:10px;padding:12px}.difference-headline-metrics strong{font-size:18px}.difference-explorer-control{display:block}.difference-explorer-control>span{display:block;margin-bottom:7px}.difference-explorer-control select{width:100%}.difference-plot-row{grid-template-columns:minmax(0,1fr)}.difference-chart-value{grid-column:1;grid-row:auto;text-align:left}.difference-source-table{grid-template-columns:minmax(0,1fr)}body[data-archive="differences"] .stats{padding:0;grid-template-columns:repeat(2,minmax(0,1fr))}body[data-archive="differences"] .hero{padding:24px 0}body[data-archive="differences"] h1{font-size:29px}}
+
+.difference-pagination{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0;font-size:11px;color:var(--muted)}
+.difference-pagination>span{margin-right:auto}
+.difference-pagination button,.difference-pagination select{font:inherit;background:white;border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--ink);min-width:0;max-width:100%}
+.difference-pagination button:disabled{opacity:.45;cursor:default}
+.difference-pagination button:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:450px){.difference-pagination{gap:7px}.difference-pagination>span{width:100%}.difference-pagination select{flex:1;padding-inline:7px}.difference-pagination button{padding-inline:8px}}

@@ -2,6 +2,50 @@
 
 GitHub Pages serves this directory. Preview from the repository root with `python3 -m http.server 8000 --directory site`, then open `http://localhost:8000`.
 
+## Survey differences
+
+The **Differences** tab (`#differences`) collects the five `survey/*` deliveries in
+`data/differences.json`, with the original public JSON payloads retained separately
+in `data/differences-raw.json`. It groups measurement views by model, including a
+separate operator-reference group. Keyword, comparison-type, model and platform
+filters, paginated cards, per-metric charts, configuration details and immutable
+source links keep the complete collection browsable. `#difference-<id>` opens the
+matching card even when it is on a later page. Downloads preserve the full archive.
+
+Direct GPU–NPU comparisons, within-platform native/reference comparisons,
+within-platform configuration comparisons, operator references and diagnostic
+views remain distinct. Shared checkpoints or inputs do not make differing
+precision, parallelism, placement or software stacks hardware-only comparisons.
+Counts describe recorded views, including overlapping aggregate/detail views,
+not independent experiments or statistical samples. Collection completion does
+not grant numerical acceptance; deferred task coverage remains explicit.
+
+The collector pins every branch to a full commit SHA, verifies downloaded Git
+blob hashes and the shared archive manifest, and deduplicates identical source
+content. Every numeric metric and paired value retains its JSON Pointer into a
+frozen public source. Private tensors, checkpoints and full execution stores are
+not copied into the website. Metadata remains in the source payload; it is not
+presented as a precision error. Charts preserve signed values and use a common
+linear zero baseline within the displayed series. Different comparison types,
+source paths and stages are kept separate; no model ranking or pooled error is
+computed across heterogeneous protocols.
+
+Regenerate the snapshot with the standard-library collector:
+
+```sh
+python3 -B .github/collect_differences.py --output site/data/differences.json --raw-output site/data/differences-raw.json
+python3 -B .github/validate_differences.py
+python3 -B -m unittest discover -s tests -p 'test_difference_history.py' -v
+```
+
+To collect a later delivery, review and update the collector's pinned `PINS` and
+archive digest explicitly, then regenerate and verify the output. This is a
+reproducible published snapshot, not a live polling service. The optional
+`node tests/browser_differences.cjs` regression uses Playwright and an installed
+Chromium (`PRECISION_BROWSER_EXECUTABLE`) to check filters, pagination, deep links,
+exact values, downloads, failure/retry behavior and mobile layout. The Pages
+workflow validates the survey archive against its frozen sources before deployment.
+
 ## Record an evaluation
 
 The **Evaluations** tab reads `data/evaluations.json` and groups experiments by inference, SFT and RL. Each experiment has a stable ID/date, model revision, common conditions, comparison variables, actual per-side hardware/libraries/settings, and an immutable archive revision. A comparison references two declared side IDs and owns its scope, numerical metrics and observed/expected coverage. An experiment can contain multiple steps or execution modes without becoming multiple history entries.

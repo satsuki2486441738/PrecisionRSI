@@ -132,6 +132,7 @@
   function routeForHash(hash) {
     let id;
     try { id = decodeURIComponent(hash.replace(/^#/, '')); } catch { return null; }
+    if (id === 'differences' || id.startsWith('difference-')) return { kind: 'differences', id };
     if (id === 'evaluations' || id.startsWith('evaluation-')) return { kind: 'evaluations', id };
     if (!id || id === 'repairs' || /^(repair|fix|library)-/.test(id)) return { kind: 'repairs', id };
     return null;

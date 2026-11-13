@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#f5f7f8">
-  <meta name="description" content="PrecisionRSI 精度评测与修复历史：查看比较配置、数值指标、修复过程与验证证据。">
+  <meta name="description" content="PrecisionRSI 精度差异、评测与修复历史：查看 GPU / NPU 比较配置、数值指标、修复过程与验证证据。">
   <title>精度历史 · PrecisionRSI</title>
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./differences.css">
   <script src="./history.js" defer></script>
   <script src="./repair-presentation.js" defer></script>
   <script src="./evaluation-settings.js" defer></script>
   <script src="./evaluation-presentation.js" defer></script>
   <script src="./evaluations.js" defer></script>
+  <script src="./differences.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
 <body>
@@ -25,6 +27,7 @@
     <nav class="history-tabs" role="tablist" aria-label="历史类型">
       <button id="tab-repairs" role="tab" aria-selected="true" aria-controls="archive-panel" type="button">精度修复历史<span>REPAIRS</span></button>
       <button id="tab-evaluations" role="tab" aria-selected="false" aria-controls="archive-panel" tabindex="-1" type="button">精度评测历史<span>EVALUATIONS</span></button>
+      <button id="tab-differences" role="tab" aria-selected="false" aria-controls="archive-panel" tabindex="-1" type="button">精度差异<span>DIFFERENCES</span></button>
     </nav>
     <div id="archive-panel" role="tabpanel" aria-labelledby="tab-repairs">
     <section class="hero" aria-labelledby="page-title">
@@ -42,7 +45,8 @@
       <form class="filters" id="filters" role="search" aria-label="筛选修复记录">
         <div class="search-field"><label for="search">关键词</label><input id="search" type="search" placeholder="搜索问题、根因或修复…" autocomplete="off"></div>
         <div id="task-filter" hidden><label for="task">任务</label><select id="task"><option value="">全部任务</option><option value="inference">推理</option><option value="sft">SFT</option><option value="rl">RL</option></select></div>
-        <div><label for="library">涉及的库</label><select id="library"><option value="">全部库</option></select></div>
+        <div id="library-filter"><label for="library">涉及的库</label><select id="library"><option value="">全部库</option></select></div>
+        <div id="comparison-kind-filter" hidden><label for="comparison-kind">比较类型</label><select id="comparison-kind"><option value="">全部类型</option></select></div>
         <details id="extra-filters" class="extra-filters">
           <summary>更多筛选</summary>
           <div class="advanced-filter-fields">
@@ -57,7 +61,7 @@
     </section>
     </div>
   </main>
-  <footer class="wrap"><span>PrecisionRSI <span class="footer-divider">/</span> 精度评测与修复历史</span><span>记录数值与验证证据。</span></footer>
-  <noscript><p class="wrap">请启用 JavaScript 以加载历史记录，或直接查看 <a href="./data/evaluations.json">评测数据</a>与 <a href="./data/repairs.json">修复数据</a>。</p></noscript>
+  <footer class="wrap"><span>PrecisionRSI <span class="footer-divider">/</span> 精度差异、评测与修复历史</span><span>记录数值与验证证据。</span></footer>
+  <noscript><p class="wrap">请启用 JavaScript 以加载历史记录，或直接查看 <a href="./data/evaluations.json">评测数据</a>与 <a href="./data/repairs.json">修复数据</a>、<a href="./data/differences.json">差异数据</a>。</p></noscript>
 </body>
 </html>

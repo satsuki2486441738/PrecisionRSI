@@ -2,7 +2,7 @@ name: Publish precision history
 on:
   push:
     branches: [main]
-    paths: ['site/**', '.github/workflows/pages.yml', '.github/validate_history.py']
+    paths: ['site/**', '.github/workflows/pages.yml', '.github/validate_history.py', '.github/validate_differences.py']
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,6 +23,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -B .github/validate_history.py
+      - run: python -B .github/validate_differences.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
