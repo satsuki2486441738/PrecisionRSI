@@ -48,3 +48,32 @@ establish a confirmed Repair or hardware causality. Preserve unknown acceptance.
 Before proposing a catalog update, run the history, differences and immutability
 validators, the full public unit suite and repository validation. Frontend
 integration is a separate task; this planner changes no page or UI contract.
+
+## Statistics-only evidence
+
+`export_statistics.py` derives a separate evidence bundle from source records
+whose IDs are absent from the base catalog. Existing conflicting IDs are
+rejected. It retains comparison metrics, coordinates, coverage, settings,
+historical dates/status/acceptance, conditions and limitations. The owner's
+confirmed GPU display name is normalized to H200 in derived string values.
+Source record hashes bind the original inputs; original bytes remain unchanged.
+
+```sh
+python -B .github/export_statistics.py --base site/data/evaluations.json \
+  --source /private/staging/site/data/evaluations.json \
+  --output /private/new-statistics.json
+```
+
+The bundle has `kind: "statistics-only"`, a source catalog hash and snapshot
+date, and `evaluations`. Each record has `provenance` instead of the source's
+`archive` and `evidence` links. Its `raw_artifacts_public` and
+`independent_replay_provided` fields are false. Optional original replay scope
+text is retained as a limitation, without claiming replay files are public.
+Unknown top-level fields and selected private execution details require manual
+review rather than being silently dropped. This scan is not a privacy guarantee.
+
+This evidence format is deliberately separate from the existing replay-backed
+history contract. Do not pass it to the live evaluation catalog or imply that
+its source Git revisions are publicly reachable. A future frontend/data migration
+can consume statistics-only evidence explicitly. A successful export establishes
+faithful statistics projection, not independent numerical recomputation.
