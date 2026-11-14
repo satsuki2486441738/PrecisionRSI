@@ -2,7 +2,7 @@ name: Publish precision history
 on:
   push:
     branches: [main]
-    paths: ['site/**', '.github/workflows/pages.yml', '.github/validate_history.py', '.github/validate_differences.py']
+    paths: ['site/**', '.github/workflows/pages.yml', '.github/validate_history.py', '.github/validate_differences.py', '.github/validate_immutability.py']
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,11 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12'
       - run: python -B .github/validate_history.py
       - run: python -B .github/validate_differences.py
+      - name: Keep published history append-only
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "$BEFORE" ] && ! [[ "$BEFORE" =~ ^0+$ ]] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            python -B .github/validate_immutability.py --base "$BEFORE"
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
