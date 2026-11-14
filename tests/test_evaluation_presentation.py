@@ -35,6 +35,24 @@ class EvaluationPresentationTests(unittest.TestCase):
                 self.assertLessEqual(len(row['title']), 65)
                 self.assertNotRegex(row['title'], r'20\d{6}|seed|种子|原生|已完成|精度评测|9382|RTX|H100|H200')
 
+    def test_model_precision_campaign_names_keep_framework_and_same_platform_scope(self):
+        result = self.evaluate("""(() => {
+          const {evaluationModel}=require('./site/history.js');
+          const cases=['gemma-3-27b-it','gpt-oss-120b','nemotron-bolt'];
+          const rows=cases.flatMap(model=>['cuda','ascend'].map(platform=>{
+            const record=byId(`${model}-${platform}-precision-20261110`);
+            const label=evaluationModel(record);
+            return {id:record.id,platform,label,title:titleFor(record,label)};
+          }));
+          return rows;
+        })()""")
+        self.assertEqual(len(result), 6)
+        for row in result:
+            with self.subTest(record=row['id']):
+                platform = {'cuda': 'CUDA', 'ascend': 'Ascend'}[row['platform']]
+                self.assertEqual(row['title'],
+                                 f"Transformers · {platform} 完整前向推理 · {row['label']}")
+
     def test_distinct_inference_execution_modes_survive_shortening(self):
         names = self.evaluate("""[
           'llamacpp-luna-smollm2-135m-20261019',
