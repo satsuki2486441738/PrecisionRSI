@@ -80,10 +80,6 @@ header.site .wrap{display:flex;align-items:center;justify-content:space-between;
 .nav a{font-size:13px;color:var(--muted);padding:6px 12px;border-radius:7px;text-decoration:none}
 .nav a:hover{color:var(--ink);background:var(--hair)}
 .nav a[aria-current="page"]{background:var(--accent);color:#fff}
-/* The survey-differences dashboard and the RSI console are separate pages, so
-   they are marked as leaving this view rather than looking like tabs of it. */
-.nav .ext{color:var(--faint);font-size:12.5px}
-.nav .sep{align-self:center;width:1px;height:15px;background:var(--line);margin:0 7px}
 .doors{padding:10px 0 46px}
 /* Home group cards — AccelMark's suite grid: a category is not a menu entry,
    it is a box with its own worst readings already showing. Each group owns a
@@ -304,8 +300,6 @@ select.sort{height:36px;border:1px solid var(--line);border-radius:8px;backgroun
   <nav class="nav" id="nav">
     <a href="#/" data-route="">首页</a><a href="#/compare" data-route="compare">对比</a>
     <a href="#/list" data-route="list">明细</a><a href="#/repairs" data-route="repairs">修复</a>
-    <i class="sep" aria-hidden="true"></i>
-    <a class="ext" href="./archive.html">精度差异 ↗</a><a class="ext" href="./rsi.html">RSI ↗</a>
   </nav>
   <div style="display:flex;gap:9px">
     <button class="ghost" id="theme">◐</button>
