@@ -1,0 +1,3343 @@
+{
+  "schema_version": 1,
+  "kind": "statistics-only",
+  "source_snapshot_date": "2026-11-09",
+  "source_catalog_sha256": "6465de4c5bbedb8adf06c3ecec0fdb94826d4337778474f3a256954844dd4a3f",
+  "source_access": "Public reachability is not established by this export.",
+  "scope": [
+    "Historical evaluation snapshots; completion and acceptance retain their original scope.",
+    "Statistics and declared coverage only; original arrays and execution traces remain private.",
+    "No independently downloadable numerical replay is provided by this bundle.",
+    "Comparison differences do not establish implementation defects or hardware causality.",
+    "Historical partial records are not updated using later experiments."
+  ],
+  "evaluations": [
+    {
+      "id": "qwen38-native-inference-20261106",
+      "date": "2026-11-06",
+      "title": "Qwen3.8-Flash-Next: native TP8 and structured text",
+      "task": "inference",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.8-Flash-Next",
+        "revision": "de4b8e4d43b917e7706784d8bb445c9af86a3540"
+      },
+      "summary": "All final core inference captures and 32K pairs completed; numerical differences remain substantial on selected structured and fixed-history rows.",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA / automatic placement",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "automatic placement"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "Ascend910_9382 / TorchNPU / native TP8",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "native TP8",
+            "tp_size": 8,
+            "cpu_parameters": 0,
+            "allocator": "expandable_segments:True"
+          }
+        }
+      ],
+      "common": [
+        "Original BF16 checkpoint; frozen token coordinates and model source; thresholds unspecified.",
+        "Bounded synthetic text workload; no representative benchmark-accuracy claim."
+      ],
+      "differences": [
+        "NPU native TP8 changes reductions/placement relative to GPU automatic placement.",
+        "Original automatic-placement scoring/causal/performance results remain a separate configuration."
+      ],
+      "comparisons": [
+        {
+          "id": "full",
+          "title": "Selected full forward",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "GPU automatic placement versus NPU native TP8; unchanged recipe and frozen full-vocabulary rows.",
+          "metrics": [
+            {
+              "id": "top1",
+              "label": "Top-1 agreement",
+              "value": 0.9621212121212122,
+              "unit": "ratio"
+            },
+            {
+              "id": "js-mean",
+              "label": "Mean tail-merged JS",
+              "value": 0.06604468492778584,
+              "unit": "nats"
+            },
+            {
+              "id": "js-p99",
+              "label": "P99 tail-merged JS",
+              "value": 0.5229203643042616,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired selected distributions",
+              "observed": 264,
+              "expected": 264,
+              "unit": "rows"
+            }
+          ]
+        },
+        {
+          "id": "fixed-history",
+          "title": "Later identical forced history",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "GPU automatic placement versus NPU native TP8; unchanged recipe and frozen full-vocabulary rows.",
+          "metrics": [
+            {
+              "id": "top1",
+              "label": "Top-1 agreement",
+              "value": 0.0625,
+              "unit": "ratio"
+            },
+            {
+              "id": "js-mean",
+              "label": "Mean tail-merged JS",
+              "value": 0.49130442873485575,
+              "unit": "nats"
+            },
+            {
+              "id": "js-p99",
+              "label": "P99 tail-merged JS",
+              "value": 0.6328136410064691,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired selected distributions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "rows"
+            }
+          ]
+        },
+        {
+          "id": "structured",
+          "title": "Nonrepeating structured supplement",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "GPU automatic placement versus NPU native TP8; unchanged recipe and frozen full-vocabulary rows.",
+          "metrics": [
+            {
+              "id": "top1",
+              "label": "Top-1 agreement",
+              "value": 0.4791666666666667,
+              "unit": "ratio"
+            },
+            {
+              "id": "js-mean",
+              "label": "Mean tail-merged JS",
+              "value": 0.1956410517894309,
+              "unit": "nats"
+            },
+            {
+              "id": "js-p99",
+              "label": "P99 tail-merged JS",
+              "value": 0.6582740501615394,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired selected distributions",
+              "observed": 48,
+              "expected": 48,
+              "unit": "rows"
+            }
+          ]
+        },
+        {
+          "id": "structured-scores",
+          "title": "Structured selected target scores",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "576 targets across 12 inputs, including three 32K inputs.",
+          "metrics": [
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL gap",
+              "value": 1.4426494530253606,
+              "unit": "nats/token"
+            },
+            {
+              "id": "mae",
+              "label": "Target logprob MAE",
+              "value": 1.6511512967920814,
+              "unit": "nats"
+            },
+            {
+              "id": "p99",
+              "label": "Target logprob P99",
+              "value": 8.960046193400451,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired targets",
+              "observed": 576,
+              "expected": 576,
+              "unit": "targets"
+            },
+            {
+              "label": "32K full/chunk input pairs",
+              "observed": 3,
+              "expected": 3,
+              "unit": "pairs"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Top-1 counts: full 254/264, forced history 2/32, structured 23/48.",
+        "Six repeated-corpus 32K pairs and three nonrepeating 32K pairs actually completed.",
+        "Strict gate:26 successful core captures,1033 exported files;1071 frozen replay identities;zero findings.",
+        "Local unpublished measurement archive; full traces and datasets remain private.",
+        "Archive replay count is the shared 26-capture gate, not an additional per-record count."
+      ],
+      "provenance": {
+        "source_record_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true
+      }
+    },
+    {
+      "id": "qwen38-native-lora-frameworks-20261106",
+      "date": "2026-11-06",
+      "title": "PyTorch: LoRA SFT, determinism and trainers",
+      "task": "sft",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.8-Flash-Next",
+        "revision": "de4b8e4d43b917e7706784d8bb445c9af86a3540"
+      },
+      "summary": "Ten-update core LoRA plus actual Trainer.train/SFTTrainer.train completed; own-checkpoint continuations match exactly within each peer.",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA / original automatic placement",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "original automatic placement"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "Ascend910_9382 / TorchNPU / original automatic placement",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "original automatic placement",
+            "cpu_ple_parameters": 51200245760
+          }
+        }
+      ],
+      "common": [
+        "Original BF16 checkpoint; frozen token coordinates and model source; thresholds unspecified.",
+        "Bounded synthetic text workload; no representative benchmark-accuracy claim."
+      ],
+      "differences": [
+        "Core NPU includes CPU PLE residency; this is not TP8 training.",
+        "NPU native deterministic levels0/1 both have24/24 exact repeat comparisons in this scope."
+      ],
+      "comparisons": [
+        {
+          "id": "update-0",
+          "title": "Original LoRA update 0",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Rank2 alpha4 dropout0 FP32 adapters; AdamW1e-4,clip1; complete adapter coordinates.",
+          "metrics": [
+            {
+              "id": "gradient-cosine",
+              "label": "Gradient cosine",
+              "value": 0.8024069462563387,
+              "unit": "ratio"
+            },
+            {
+              "id": "stored-update-cosine",
+              "label": "Stored-update cosine",
+              "value": 0.5721399580730676,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Gradient arrays",
+              "observed": 120,
+              "expected": 120,
+              "unit": "arrays"
+            },
+            {
+              "label": "Trainable coordinates",
+              "observed": 1056768,
+              "expected": 1056768,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "update-9",
+          "title": "Original LoRA update 9",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Rank2 alpha4 dropout0 FP32 adapters; AdamW1e-4,clip1; complete adapter coordinates.",
+          "metrics": [
+            {
+              "id": "gradient-cosine",
+              "label": "Gradient cosine",
+              "value": 0.7995730233116144,
+              "unit": "ratio"
+            },
+            {
+              "id": "stored-update-cosine",
+              "label": "Stored-update cosine",
+              "value": 0.7584509914300961,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Gradient arrays",
+              "observed": 120,
+              "expected": 120,
+              "unit": "arrays"
+            },
+            {
+              "label": "Trainable coordinates",
+              "observed": 1056768,
+              "expected": 1056768,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "framework-scores",
+          "title": "Actual Trainer/SFTTrainer selected scores",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Each native family:two updates with two microbatches,checkpoint-1 continuation;denominator20,targets8/12.",
+          "metrics": [
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL gap",
+              "value": 0.0029306535473367923,
+              "unit": "nats/token"
+            },
+            {
+              "id": "mae",
+              "label": "Target logprob MAE",
+              "value": 0.05498481093925731,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired scores per family",
+              "observed": 40,
+              "expected": 40,
+              "unit": "targets"
+            },
+            {
+              "label": "Exact own-checkpoint side comparisons per family",
+              "observed": 2,
+              "expected": 2,
+              "unit": "sides"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Core own-checkpoint gradient/after continuation10/10 and reset4/4 exact per peer;level1 full continuation also10/10/reset4/4.",
+        "120 FP32 adapter arrays;1056768 coordinates;no frozen mutations/nonfinite gradients.",
+        "Actual Trainer/SFTTrainer use the complete text model;vision/MTP and full-parameter SFT are excluded.",
+        "Local unpublished measurement archive; full traces and datasets remain private.",
+        "Archive replay count is the shared 26-capture gate, not an additional per-record count."
+      ],
+      "provenance": {
+        "source_record_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true
+      }
+    },
+    {
+      "id": "qwen38-native-rl-components-20261106",
+      "date": "2026-11-06",
+      "title": "Qwen3.8-Flash-Next: native TRL/verl objective components",
+      "task": "rl",
+      "status": "completed",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.8-Flash-Next",
+        "revision": "de4b8e4d43b917e7706784d8bb445c9af86a3540"
+      },
+      "summary": "Both native component integrations completed with frozen common trajectories and deliberate clipping controls; cross-peer gradient/update disagreement is retained.",
+      "sides": [
+        {
+          "id": "gpu",
+          "label": "H200 / CUDA / original automatic placement",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "original automatic placement",
+            "trl": "0.29.0",
+            "verl": "0.8.0.dev"
+          }
+        },
+        {
+          "id": "npu",
+          "label": "Ascend910_9382 / TorchNPU / original automatic placement",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "TorchNPU",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "original automatic placement",
+            "trl": "0.29.0",
+            "verl": "0.8.0.dev",
+            "cpu_ple_parameters": 51200245760
+          }
+        }
+      ],
+      "common": [
+        "Original BF16 checkpoint; frozen token coordinates and model source; thresholds unspecified.",
+        "Bounded synthetic text workload; no representative benchmark-accuracy claim."
+      ],
+      "differences": [
+        "TRL native selective log-softmax remains BF16;explicit verl model-score adapter uses FP32.",
+        "Clipping control shifts selected old scores deliberately;not a sampled old policy."
+      ],
+      "comparisons": [
+        {
+          "id": "trl-native-old",
+          "title": "trl native-old",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Four fixed64+8 trajectories,26 active actions;native objective/backward/clip/AdamW components.",
+          "metrics": [
+            {
+              "id": "gradient-cosine",
+              "label": "Gradient cosine",
+              "value": 0.5832013702935446,
+              "unit": "ratio"
+            },
+            {
+              "id": "stored-update-cosine",
+              "label": "Stored-update cosine",
+              "value": 0.3721059675488097,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired active actions",
+              "observed": 26,
+              "expected": 26,
+              "unit": "actions"
+            },
+            {
+              "label": "Paired adapter gradients",
+              "observed": 120,
+              "expected": 120,
+              "unit": "arrays"
+            }
+          ]
+        },
+        {
+          "id": "trl-clipping-control",
+          "title": "trl clipping-control",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Four fixed64+8 trajectories,26 active actions;native objective/backward/clip/AdamW components.",
+          "metrics": [
+            {
+              "id": "gradient-cosine",
+              "label": "Gradient cosine",
+              "value": 0.6091461228348701,
+              "unit": "ratio"
+            },
+            {
+              "id": "stored-update-cosine",
+              "label": "Stored-update cosine",
+              "value": 0.3843981083284067,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired active actions",
+              "observed": 26,
+              "expected": 26,
+              "unit": "actions"
+            },
+            {
+              "label": "Paired adapter gradients",
+              "observed": 120,
+              "expected": 120,
+              "unit": "arrays"
+            }
+          ]
+        },
+        {
+          "id": "verl-native-old",
+          "title": "verl native-old",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Four fixed64+8 trajectories,26 active actions;native objective/backward/clip/AdamW components.",
+          "metrics": [
+            {
+              "id": "gradient-cosine",
+              "label": "Gradient cosine",
+              "value": 0.5817265314003007,
+              "unit": "ratio"
+            },
+            {
+              "id": "stored-update-cosine",
+              "label": "Stored-update cosine",
+              "value": 0.37206261387014855,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired active actions",
+              "observed": 26,
+              "expected": 26,
+              "unit": "actions"
+            },
+            {
+              "label": "Paired adapter gradients",
+              "observed": 120,
+              "expected": 120,
+              "unit": "arrays"
+            }
+          ]
+        },
+        {
+          "id": "verl-clipping-control",
+          "title": "verl clipping-control",
+          "side_ids": [
+            "gpu",
+            "npu"
+          ],
+          "scope": "Four fixed64+8 trajectories,26 active actions;native objective/backward/clip/AdamW components.",
+          "metrics": [
+            {
+              "id": "gradient-cosine",
+              "label": "Gradient cosine",
+              "value": 0.6156749553459008,
+              "unit": "ratio"
+            },
+            {
+              "id": "stored-update-cosine",
+              "label": "Stored-update cosine",
+              "value": 0.38814827896871235,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired active actions",
+              "observed": 26,
+              "expected": 26,
+              "unit": "actions"
+            },
+            {
+              "label": "Paired adapter gradients",
+              "observed": 120,
+              "expected": 120,
+              "unit": "arrays"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "No GRPOTrainer.train,online RL,full-parameter training or distributed verl worker/rollout claim.",
+        "Post-step whole-adapter cosine near0.99972 does not establish stored-update agreement.",
+        "Local unpublished measurement archive; full traces and datasets remain private.",
+        "Archive replay count is the shared 26-capture gate, not an additional per-record count."
+      ],
+      "provenance": {
+        "source_record_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true
+      }
+    },
+    {
+      "id": "qwen38-native-serving-admissions-20261106",
+      "date": "2026-11-06",
+      "title": "PyTorch: serving admissions with NPU gaps",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "Qwen3.8-Flash-Next",
+        "revision": "de4b8e4d43b917e7706784d8bb445c9af86a3540"
+      },
+      "summary": "Both references and both GPU native engines completed;NPU vLLM/SGLang failed before scoring.All six terminal captures and owned-worker cleanup were audited.",
+      "sides": [
+        {
+          "id": "gpu-serving-reference",
+          "label": "H200 / CUDA / automatic placement",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0+cu126"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "automatic placement",
+            "status": "completed",
+            "returncode": 0,
+            "cleanup_verified": true
+          }
+        },
+        {
+          "id": "gpu-serving-vllm",
+          "label": "H200 / CUDA / native TP4",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "vllm",
+              "version": "0.30.0"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "native TP4",
+            "status": "completed",
+            "returncode": 0,
+            "cleanup_verified": true
+          }
+        },
+        {
+          "id": "gpu-serving-sglang",
+          "label": "H200 / CUDA / native TP4",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.14.1"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "sglang",
+              "version": "0.5.22"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "native TP4",
+            "status": "completed",
+            "returncode": 0,
+            "cleanup_verified": true
+          }
+        },
+        {
+          "id": "npu-serving-reference",
+          "label": "Ascend910_9382 / TorchNPU / automatic placement",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.9.0"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.9.0.post2"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "automatic placement",
+            "status": "completed",
+            "returncode": 0,
+            "cleanup_verified": true
+          }
+        },
+        {
+          "id": "npu-serving-vllm",
+          "label": "Ascend910_9382 / TorchNPU / native TP8",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0.post4"
+            },
+            {
+              "name": "vllm",
+              "version": "0.30.0+empty"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "native TP8",
+            "status": "failed",
+            "returncode": 1,
+            "cleanup_verified": true
+          }
+        },
+        {
+          "id": "npu-serving-sglang",
+          "label": "Ascend910_9382 / TorchNPU / native TP8",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            },
+            {
+              "name": "torch-npu",
+              "version": "2.10.0.post6"
+            },
+            {
+              "name": "sglang",
+              "version": "0.5.22"
+            }
+          ],
+          "settings": {
+            "base_dtype": "BF16",
+            "placement": "native TP8",
+            "status": "failed",
+            "returncode": 137,
+            "cleanup_verified": true
+          }
+        }
+      ],
+      "common": [
+        "Original BF16 checkpoint; frozen token coordinates and model source; thresholds unspecified.",
+        "Bounded synthetic text workload; no representative benchmark-accuracy claim."
+      ],
+      "differences": [
+        "Serving runtimes differ from core Torch2.9 environments;actual versions are declared per side.",
+        "NPU vLLM pinned QSA constructor requires FlashAttention in its selected NVIDIA path.",
+        "NPU SGLang reaches CUDA JIT for grouped norm and missing nvcc;exit137 alone is not evidence of OOM."
+      ],
+      "comparisons": [
+        {
+          "id": "prompt-0",
+          "title": "Native prompt target scores",
+          "side_ids": [
+            "gpu-serving-reference",
+            "gpu-serving-vllm"
+          ],
+          "scope": "128/256-token common prompts;normalized native logprobs;equal-prefix decode only.",
+          "metrics": [
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL gap",
+              "value": 0.03534463002056243,
+              "unit": "nats/token"
+            },
+            {
+              "id": "mae",
+              "label": "Target logprob MAE",
+              "value": 0.08886316929597396,
+              "unit": "nats"
+            },
+            {
+              "id": "p99",
+              "label": "Target logprob P99",
+              "value": 1.368918305065028,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired prompt targets",
+              "observed": 382,
+              "expected": 382,
+              "unit": "targets"
+            },
+            {
+              "label": "Matching eight-token generated histories",
+              "observed": 2,
+              "expected": 2,
+              "unit": "prompts"
+            },
+            {
+              "label": "Terminal admissions with cleanup",
+              "observed": 6,
+              "expected": 6,
+              "unit": "admissions"
+            },
+            {
+              "label": "NPU native engines with numerical captures",
+              "observed": 0,
+              "expected": 2,
+              "unit": "engines"
+            }
+          ]
+        },
+        {
+          "id": "prompt-1",
+          "title": "Native prompt target scores",
+          "side_ids": [
+            "gpu-serving-reference",
+            "gpu-serving-sglang"
+          ],
+          "scope": "128/256-token common prompts;normalized native logprobs;equal-prefix decode only.",
+          "metrics": [
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL gap",
+              "value": 0.029049999565565532,
+              "unit": "nats/token"
+            },
+            {
+              "id": "mae",
+              "label": "Target logprob MAE",
+              "value": 0.09352927254991923,
+              "unit": "nats"
+            },
+            {
+              "id": "p99",
+              "label": "Target logprob P99",
+              "value": 1.5447333498514895,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired prompt targets",
+              "observed": 382,
+              "expected": 382,
+              "unit": "targets"
+            },
+            {
+              "label": "Matching eight-token generated histories",
+              "observed": 2,
+              "expected": 2,
+              "unit": "prompts"
+            }
+          ]
+        },
+        {
+          "id": "prompt-2",
+          "title": "Native prompt target scores",
+          "side_ids": [
+            "gpu-serving-reference",
+            "npu-serving-reference"
+          ],
+          "scope": "128/256-token common prompts;normalized native logprobs;equal-prefix decode only.",
+          "metrics": [
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL gap",
+              "value": 0.018284345736721663,
+              "unit": "nats/token"
+            },
+            {
+              "id": "mae",
+              "label": "Target logprob MAE",
+              "value": 0.08889448469219088,
+              "unit": "nats"
+            },
+            {
+              "id": "p99",
+              "label": "Target logprob P99",
+              "value": 1.521306950424141,
+              "unit": "nats"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired prompt targets",
+              "observed": 382,
+              "expected": 382,
+              "unit": "targets"
+            },
+            {
+              "label": "Matching eight-token generated histories",
+              "observed": 2,
+              "expected": 2,
+              "unit": "prompts"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Failed native engine calls are compatibility evidence,not numerical coverage.",
+        "No common NPU-vLLM or NPU-SGLang target-score comparison exists.",
+        "No new second-host NPU execution,model math replacement or public push.",
+        "Local unpublished measurement archive; full traces and datasets remain private.",
+        "Archive replay count is the shared 26-capture gate, not an additional per-record count."
+      ],
+      "provenance": {
+        "source_record_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true
+      }
+    },
+    {
+      "id": "deepseek41-original-vs-adapted-core-20261106",
+      "date": "2026-11-06",
+      "title": "PyTorch: DeepSeek original vs adapted inference",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "Pinned original-checkpoint GPU TP4 vs adapted BF16 NPU TP8/EP8/offload48 inference: 191/275 paired tensor cells and all3168targets. Numerical training, some operators and rejected native chains remain explicit gaps.",
+      "sides": [
+        {
+          "id": "gpu-original-reference",
+          "label": "H200 / CUDA / original TP4",
+          "hardware": "NVIDIA H200",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0+cu130"
+            },
+            {
+              "name": "CUDA",
+              "version": "13.0"
+            },
+            {
+              "name": "TileLang",
+              "version": "0.1.12"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "engine": "official standalone original reference",
+            "tp": 4,
+            "routed_experts": "96of384 perrank on same four-rank world; no separate EP mesh flag",
+            "arithmetic": "original FP8/FP4 quantized activation/native GEMM paths, with BF16/FP32 control paths",
+            "TF32": false,
+            "engram": "original-storage CPU mmap rows; native CUDA lookup/dequant",
+            "execution_interpreter": "actual retained core interpreter; not workload default",
+            "python_version": null,
+            "cleanup_verified": true
+          }
+        },
+        {
+          "id": "npu-adapted-vllm",
+          "label": "Ascend / adapted BF16 / TP8 EP8 offload48",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "engine": "adapted native vLLM text path",
+            "tp": 8,
+            "ep": 8,
+            "pp": 1,
+            "dp": 1,
+            "cpu_offload_gb": 48,
+            "arithmetic": "original-storage expansion to BF16 native GEMM/MoE; FP32 controls remain",
+            "engram": "original-storage mmap aliases; FP32 decode then BF16",
+            "prefix_caching": false,
+            "async_scheduling": false,
+            "max_model_len": 32769,
+            "weight_UVA": false,
+            "weight_pinned_offload": false,
+            "python_exact_version": null,
+            "Ascend_installed_distribution_build": null,
+            "hardware_string_scope": "same source-environment bounded native receipt; actual core retains NPU tensor execution",
+            "cleanup_verified": true
+          }
+        }
+      ],
+      "common": [
+        "Only original model revision1bae0e1088993b9b82de08f59de5be5a34e42170;84resource files510311045870bytes.",
+        "Frozen tokenizer IDs, predictions, target/candidate coordinates and fixed teacher histories.",
+        "Full-vocabulary FP64 normalization and shared metrics; no top-k renormalization; acceptance unspecified.",
+        "Selected stress/procedural probes and dependent ranks are not independent benchmark examples."
+      ],
+      "differences": [
+        "Original GPU FP8/FP4 kernels vs NPU explicitly expanded BF16 arithmetic; coordinate-exact weight conversion does not establish backend arithmetic equivalence.",
+        "GPU TP4 original routed-expert layout vs NPU TP8/EP8/offload48 and different runtime versions.",
+        "GPU78native multi-token-cache gaps; both peers6masked-padding gaps remain missing.",
+        "NPU32Kfull/exactsplit inference succeeds, but standalone operator, fresh-process determinism and training scopes remain bounded or absent."
+      ],
+      "comparisons": [
+        {
+          "id": "paired-target-scores",
+          "title": "Frozen full-vocabulary target log-probabilities",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-vllm"
+          ],
+          "scope": "191pairedtensorcells plus independent all3168targetcoordinates/18completecandidate scores; configuration comparison without hardware attribution.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.28031510898782447,
+              "unit": "nat"
+            },
+            {
+              "id": "target-p99",
+              "label": "Target logprob P99 absolute error",
+              "value": 3.593113928549911,
+              "unit": "nat"
+            },
+            {
+              "id": "target-max",
+              "label": "Maximum target logprob absolute error",
+              "value": 10.43242393266321,
+              "unit": "nat",
+              "coordinate": {
+                "group": "quality",
+                "sample": "reserved-18-512",
+                "position": 0,
+                "token": 16
+              }
+            },
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL difference",
+              "value": 0.005357432449655253,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-original-reference": 1.9395359408692914,
+                "npu-adapted-vllm": 1.9448933733189466
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired tensor observations",
+              "observed": 191,
+              "expected": 275,
+              "unit": "cells"
+            },
+            {
+              "label": "Paired target log-probabilities",
+              "observed": 3168,
+              "expected": 3168,
+              "unit": "coordinates"
+            },
+            {
+              "label": "Whole controlled candidate likelihoods",
+              "observed": 18,
+              "expected": 18,
+              "unit": "candidates"
+            },
+            {
+              "label": "First candidate choice agreement",
+              "observed": 6,
+              "expected": 6,
+              "unit": "questions"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Actual original GPU/NPU complete-model backward rejects inference-mode/no-grad outputs;0LoRAupdates and no checkpoint/RL numerical trajectory.",
+        "Trainer/SFTTrainer/GRPOTrainer/verl CPU registration rejections are separate pinned training bundles, not accelerator numerical results.",
+        "Official standalone,vLLM,SGLang are native entrypoint chains; no HTTP lifecycle. GPUvLLM/SGLang resource bounds,NPUofficial tilelang gap,NPUSGLang CUDA host-registration rejection.",
+        "Bounded real-head same-hidden controls identify NPU M49 shape sensitivity for one long00/logprobs8/seed0 configuration, not all originalcore or a hardware defect.",
+        "GPU/NPU timer boundaries, arithmetic and layout differ; no clean hardware speed ratio.",
+        "all_agreed_numerical_chains_complete=false. Full traces/datasets/arrays remain private; public package only checks aggregates and renders the figure.",
+        "Uninstrumented performance completes9cells/63requests per side. NPU all-rank receipt/source/terminal cleanup independently verified;45measured requests,18warmups,959forwards and63untimed cleanup ticks perrank. Local immutable archive; no push/publication."
+      ],
+      "provenance": {
+        "source_record_sha256": "15e6307938dae893a8ada8b40b0adcbf84a742dfad6131e1cc1ee5f6e6ef48b5",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "One complete private paired-result numerical replay with eleven frozen tools; public archive checks aggregates and renders only"
+      }
+    },
+    {
+      "id": "deepseek41-upstream-compressor-key-local-vjp-20261108",
+      "date": "2026-11-08",
+      "title": "DeepSeek: actual upstream compressor, native key-cache and local derivative supplement",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "32K selected compressor forward and seven local gradient arrays; 2K/32K native key projection/norm/RoPE/private-cache scatter; retained L2 per-target graph diagnostic. Strict whole-task ledger remains191/275.",
+      "sides": [
+        {
+          "id": "gpu-original-stage",
+          "label": "H200 / original GPU selected stage capture",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0+cu130"
+            },
+            {
+              "name": "CUDA",
+              "version": "13.0"
+            },
+            {
+              "name": "TileLang",
+              "version": "0.1.12"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "source_model_tp": 4,
+            "scope": "actual upstream original complete-model capture; rank0 replicated compressor boundaries; selected key tail4",
+            "selected_compressor_weights": "L2 FP32 projection/gate; L20 BF16 projection; BF16 norm",
+            "key_logical_cache": "original post-FP4 BF16 logical values",
+            "model_arithmetic_untouched": true
+          }
+        },
+        {
+          "id": "npu-native-stage",
+          "label": "Ascend / native selected-stage single-device fixtures",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "full_model_loaded": false,
+            "scope": "installed native compressor and key/norm/RoPE/private paged-cache components",
+            "selected_compressor_weights": "same actual original L2 FP32 projection/gate; L20 BF16 projection; BF16 norm",
+            "key_cache": "INT8 with FP16 stored scales",
+            "key_input": "actual GPU-captured compressor latent, not a composed native compressor-to-key chain",
+            "cleanup_verified": true,
+            "device_count": 1,
+            "tp_collectives": false,
+            "ep_scope": "not exercised",
+            "compressor_native_source_pins": 71,
+            "key_native_source_pins": 73
+          }
+        }
+      ],
+      "common": [
+        "Pinned original model revision; actual original upstream hidden states, selected raw weights and phase arrays.",
+        "Same frozen input family at2K/32K; lengths, layers and tails are dependent observations.",
+        "Native source/capture controls, actual arrays, independent mathematical references and exact process cleanup are separately audited."
+      ],
+      "differences": [
+        "GPU original FP4 logical cache versus native INT8/FP16-scale cache are different arithmetic configurations.",
+        "Native key consumes GPU compressor latent; no composed native compressor-to-key chain or whole-model alias coverage.",
+        "Local derivative objectives do not establish full-model backward, optimizer, Trainer/TRL/verl numerical coverage."
+      ],
+      "comparisons": [
+        {
+          "id": "compressor-32k-l2-latent",
+          "title": "32K compressor L2 completed latent",
+          "side_ids": [
+            "gpu-original-stage",
+            "npu-native-stage"
+          ],
+          "scope": "Actual same input/raw weights; two dependent layers of one frozen history family. Descriptive configuration comparison; no numerical acceptance.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum absolute difference",
+              "value": 0.0078125,
+              "unit": "latent units"
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 3.230894698810172e-05,
+              "unit": "latent units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Compared completed latent elements",
+              "observed": 8388608,
+              "expected": 8388608,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "compressor-32k-l20-latent",
+          "title": "32K compressor L20 completed latent",
+          "side_ids": [
+            "gpu-original-stage",
+            "npu-native-stage"
+          ],
+          "scope": "Actual same input/raw weights; two dependent layers of one frozen history family. Descriptive configuration comparison; no numerical acceptance.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum absolute difference",
+              "value": 0.03125,
+              "unit": "latent units"
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.00021204892882090967,
+              "unit": "latent units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Compared completed latent elements",
+              "observed": 16777216,
+              "expected": 16777216,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "83 scoped comparison rows and1694 numeric fields in writing snapshot are not independent samples.",
+        "L2 strict VJP rejects; separate retained same-point diagnostic returnsNone for projected-kv/scores and valid norm.weight gradient,512/512 exact BF16RNE prediction.",
+        "Actual native cache scatter/guards/unwritten bytes reproduce exactly. Simple quantizer-reference discrepancies localize to source half-row-max ties; native internal operation order is not emulated.",
+        "Original GPU78multi-token-cache and both-side6padding gaps remain. No numerical acceptance, hardware-only attribution or publication."
+      ],
+      "provenance": {
+        "source_record_sha256": "d1ed5bca07cee5c96b4b5ff1bcfc0cea9b88e1b07c892873f71a7efd95cc9b99",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Public aggregate byte and exhaustive numeric-binding verification only; native numerical replay remains private"
+      }
+    },
+    {
+      "id": "deepseek41-native-query-tail-20261108",
+      "date": "2026-11-08",
+      "title": "DeepSeek: actual all32-head tail query, head weights and native RoPE",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "Four actual tail4/all32-head query records with direct original GPU pre-RoPE/pre-scale references, independent native BF16 and RoPE references, native controls and cleanup; strict whole-task ledger remains 191/275.",
+      "sides": [
+        {
+          "id": "gpu-original-query",
+          "label": "H200 / actual original TP4 query capture",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0+cu130"
+            },
+            {
+              "name": "CUDA",
+              "version": "13.0"
+            },
+            {
+              "name": "TileLang",
+              "version": "0.1.12"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "source_model_tp": 4,
+            "scope": "Actual TP4 ranks0..3 reassembled tail4/all32 heads at L2/L20 and 2048/32768 history lengths",
+            "query_weights": "FP8 E4M3 / E8M0 block32 scales",
+            "query_arithmetic": "FP8 activation quantization and FP8 GEMM",
+            "captured_references": [
+              "query pre-RoPE",
+              "head weights pre-scale"
+            ],
+            "post_scale_reference": "derived using explicit FP32 scale; not captured",
+            "post_rope_reference_available": false
+          }
+        },
+        {
+          "id": "npu-native-query",
+          "label": "Ascend / actual native BF16 query fixture",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "device_count": 1,
+            "tp_collectives": false,
+            "ep_scope": "not exercised",
+            "full_model_loaded": false,
+            "group": {
+              "backend": "gloo",
+              "rank": 0,
+              "world_size": 1,
+              "device_communicator_present": false
+            },
+            "native_source_pins": 76,
+            "constructor": "DeepseekV41Indexer owns_k=False",
+            "projection": "registered AscendReplicatedLinear / AscendUnquantizedLinearMethod / CustomReplicatedOp",
+            "quant_config": null,
+            "query_arithmetic": "FP32 dequantized original weight then BF16 RNE, unquantized BF16 GEMM",
+            "observed_weight_format_id": 2,
+            "official_default_weight_nz_mode": 1,
+            "official_config_initialized_and_cleared": true,
+            "cleanup_verified": true
+          }
+        }
+      ],
+      "common": [
+        "Pinned original revision and actual original four-rank inputs, phase and raw weight/scales.",
+        "Actual native methods, postload logical weights and raw capture controls independently replayed.",
+        "Same frozen input family; lengths, layers, heads and positions are dependent observations."
+      ],
+      "differences": [
+        "GPU FP8 query activation/GEMM versus unquantized native BF16 projection.",
+        "GPU post-scale head weights are derived; no captured GPU post-RoPE reference.",
+        "Singleton Gloo group with no device communicator; no TP8 or EP execution coverage."
+      ],
+      "comparisons": [
+        {
+          "id": "query-n2048-l2",
+          "title": "History 2048 L2: tail4, all32 heads query pre-RoPE",
+          "side_ids": [
+            "gpu-original-query",
+            "npu-native-query"
+          ],
+          "scope": "Original captured FP8 GPU versus BF16 native projection; dependent observations from a frozen input family; no acceptance threshold or hardware-only attribution.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum absolute difference",
+              "value": 0.5,
+              "unit": "query units"
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.058381358879019164,
+              "unit": "query units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Tail-query elements",
+              "observed": 16384,
+              "expected": 16384,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "query-n2048-l20",
+          "title": "History 2048 L20: tail4, all32 heads query pre-RoPE",
+          "side_ids": [
+            "gpu-original-query",
+            "npu-native-query"
+          ],
+          "scope": "Original captured FP8 GPU versus BF16 native projection; dependent observations from a frozen input family; no acceptance threshold or hardware-only attribution.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum absolute difference",
+              "value": 0.6875,
+              "unit": "query units"
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.062478687596806484,
+              "unit": "query units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Tail-query elements",
+              "observed": 16384,
+              "expected": 16384,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "query-n32768-l2",
+          "title": "History 32768 L2: tail4, all32 heads query pre-RoPE",
+          "side_ids": [
+            "gpu-original-query",
+            "npu-native-query"
+          ],
+          "scope": "Original captured FP8 GPU versus BF16 native projection; dependent observations from a frozen input family; no acceptance threshold or hardware-only attribution.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum absolute difference",
+              "value": 0.46875,
+              "unit": "query units"
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.058168534675876016,
+              "unit": "query units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Tail-query elements",
+              "observed": 16384,
+              "expected": 16384,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "query-n32768-l20",
+          "title": "History 32768 L20: tail4, all32 heads query pre-RoPE",
+          "side_ids": [
+            "gpu-original-query",
+            "npu-native-query"
+          ],
+          "scope": "Original captured FP8 GPU versus BF16 native projection; dependent observations from a frozen input family; no acceptance threshold or hardware-only attribution.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum absolute difference",
+              "value": 0.4453125,
+              "unit": "query units"
+            },
+            {
+              "id": "rmse",
+              "label": "RMSE",
+              "value": 0.06260335249477975,
+              "unit": "query units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Tail-query elements",
+              "observed": 16384,
+              "expected": 16384,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "40 descriptive metric rows and 843 numeric fields are not independent task samples.",
+        "Head-weight projection three records bitwise exact; one value differs in the fourth, maximum 7.62939453125e-6.",
+        "All four native RoPE BF16RNE predictions exact. Native query prediction exact at 65533/65536 values; three adjacent BF16 differences remain, with exact-dyadic reference checked and native accumulation order not emulated.",
+        "Initial official configuration lifecycle setup failure remains preserved; successor uses official init/get/clear. Observed weight format2 differs from inferring NZ layout from default mode1.",
+        "No fullN query, quantized native query, scores/top-k, attention, composed compressor-to-key/query chain, whole-model cache alias or full-model training coverage. Original 78 cache and 6 padding gaps remain."
+      ],
+      "provenance": {
+        "source_record_sha256": "af3223ff2ca25d3e93e35864c2ea7ed35bfa9ce16fd73b92b74799785296c0bb",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Aggregate byte and exhaustive numeric-binding verification only; native numerical replay private"
+      }
+    },
+    {
+      "id": "deepseek41-adapted-core275-20261109",
+      "date": "2026-11-09",
+      "title": "DeepSeek: adapted core275 and GPU online output-head trajectories",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "Separate adapted core reaches275/275 paired observations with actual global array reductions. GPU380fresh complete frozen-backbone forwards support output-head-only training; NPU training and service scope remain incomplete.",
+      "sides": [
+        {
+          "id": "gpu-original-reference",
+          "label": "H200 / TP4 reviewed cache adapter",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0+cu130"
+            },
+            {
+              "name": "CUDA",
+              "version": "13.0"
+            },
+            {
+              "name": "TileLang",
+              "version": "0.1.12"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "engine": "official standalone original reference",
+            "tp": 4,
+            "routed_experts": "96of384 perrank on same four-rank world; no separate EP mesh flag",
+            "arithmetic": "original FP8/FP4 quantized activation/native GEMM paths, with BF16/FP32 control paths",
+            "TF32": false,
+            "engram": "original-storage CPU mmap rows; native CUDA lookup/dequant",
+            "execution_interpreter": "actual retained core interpreter; not workload default",
+            "python_version": null,
+            "cleanup_verified": true,
+            "cache_adapter": "reviewed multi-token state and explicit-mask-to-packed requests"
+          }
+        },
+        {
+          "id": "npu-adapted-vllm",
+          "label": "Ascend / adapted BF16 / TP8 EP8 offload48",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "engine": "adapted native vLLM text path",
+            "tp": 8,
+            "ep": 8,
+            "pp": 1,
+            "dp": 1,
+            "cpu_offload_gb": 48,
+            "arithmetic": "original-storage expansion to BF16 native GEMM/MoE; FP32 controls remain",
+            "engram": "original-storage mmap aliases; FP32 decode then BF16",
+            "prefix_caching": false,
+            "async_scheduling": false,
+            "max_model_len": 32769,
+            "weight_UVA": false,
+            "weight_pinned_offload": false,
+            "python_exact_version": null,
+            "Ascend_installed_distribution_build": null,
+            "hardware_string_scope": "same source-environment bounded native receipt; actual core retains NPU tensor execution",
+            "cleanup_verified": true
+          }
+        }
+      ],
+      "common": [
+        "Only original model revision1bae0e1088993b9b82de08f59de5be5a34e42170;84resource files510311045870bytes.",
+        "Frozen tokenizer IDs, predictions, target/candidate coordinates and fixed teacher histories.",
+        "Full-vocabulary FP64 normalization and shared metrics; no top-k renormalization; acceptance unspecified.",
+        "Selected stress/procedural probes and dependent ranks are not independent benchmark examples."
+      ],
+      "differences": [
+        "Original FP8/FP4 GPU arithmetic with reviewed cache adapter versus expanded BF16 native NPU TP8/EP8/offload48.",
+        "191 observations and3168targets reused under immutable identity guards;84 new cache/packed-mask observations.",
+        "This is a separately adapted configuration; original unadapted191/275 ledger remains frozen."
+      ],
+      "comparisons": [
+        {
+          "id": "adapted275-actual-arrays",
+          "title": "Adapted 275 paired tensor observations",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-vllm"
+          ],
+          "scope": "Actual550 arrays: heterogeneous element-weighted logits and mHC diagnostics, not accuracy; 191 identity-guarded reused observations plus84 new. Original frozen ledger stays191/275.",
+          "metrics": [
+            {
+              "id": "rmse",
+              "label": "Mixed tensor RMSE",
+              "value": 0.5179211371655907,
+              "unit": "mixed tensor units"
+            },
+            {
+              "id": "cosine",
+              "label": "Mixed tensor cosine",
+              "value": 0.9912055998715815,
+              "unit": "ratio"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired tensor observations",
+              "observed": 275,
+              "expected": 275,
+              "unit": "cells"
+            },
+            {
+              "label": "Compared scalar elements",
+              "observed": 110062080,
+              "expected": 110062080,
+              "unit": "elements"
+            }
+          ]
+        },
+        {
+          "id": "frozen-targets-reused",
+          "title": "Reused frozen full-vocabulary target scores",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-vllm"
+          ],
+          "scope": "Unchanged SHA-bound original3168targets and18complete candidate scores; no new quality experiment implied.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Target logprob MAE",
+              "value": 0.28031510898782447,
+              "unit": "nat"
+            },
+            {
+              "id": "nll-gap",
+              "label": "Absolute mean NLL difference",
+              "value": 0.005357432449655253,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-original-reference": 1.9395359408692914,
+                "npu-adapted-vllm": 1.9448933733189466
+              }
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Target coordinates",
+              "observed": 3168,
+              "expected": 3168,
+              "unit": "coordinates"
+            },
+            {
+              "label": "Complete candidate likelihoods",
+              "observed": 18,
+              "expected": 18,
+              "unit": "candidates"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "All275 arrays differ; no nonfinite values, shape incompatibility or dtype differences. Coverage does not imply numerical acceptance.",
+        "GPU output-head FP32 rank2/alpha4 LoRA with AdamW:95fresh complete frozen-backbone forwards perrank,4ranks;83rank-zero updates and12reserved evaluations.",
+        "GPU allrank leaves, checkpoint/resume and three offset-zero trajectories match exactly; three initialization offsets differ. These are dependent trajectories, not task-level accuracy.",
+        "No backbone autograd or native Trainer/TRL/verl coverage is supplied by output-head training. NPU strict frozen-base identity rejection remains unaccepted; real service matrices remain pending."
+      ],
+      "provenance": {
+        "source_record_sha256": "37e3f92795b599d2f55ebd5266d060bb2e1e5187b1337aecbb85e97d40b9ac7a",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Aggregate bytes and numeric binding only; independent native array replay private"
+      }
+    },
+    {
+      "id": "deepseek41-full40-attention-20261109",
+      "date": "2026-11-09",
+      "title": "DeepSeek: actual full40-layer attention tail replay",
+      "task": "inference",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "All8rank native caller/raw integrity audited; independent math replay covers480rank-zero layer-forwards across40layers and1920saved tail-query rows. No hardware-only or native rounding equivalence claim.",
+      "sides": [
+        {
+          "id": "npu-actual-attention",
+          "label": "Ascend / actual TP8 complete-model attention caller",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "actual_query_dtype": "BF16",
+            "formula_dtype": "FP64",
+            "layout_q": "TND",
+            "layout_kv": "PA_BBND",
+            "query_heads_per_rank": 8,
+            "latent_kv_heads": 1,
+            "latent_dimension": 512,
+            "original_window": 128,
+            "original_mask_mode": 4,
+            "original_left": 127,
+            "original_right": 0,
+            "original_sparse_indices": null,
+            "original_topk_length": null,
+            "compressed_ratio": [
+              1,
+              2
+            ],
+            "normalization": "softmax denominator includes native sink logit; sink has zero value",
+            "cache": "Actual native physical block tables and saved active pages; producer/consumer storage aliases checked",
+            "tp": 8,
+            "ep": true
+          }
+        },
+        {
+          "id": "independent-fp64-formula",
+          "label": "Independent FP64 QK/sink-softmax/PV",
+          "hardware": "CPU mathematical reference; not hardware oracle",
+          "libraries": [
+            {
+              "name": "NumPy",
+              "version": "2.3.5"
+            }
+          ],
+          "settings": {
+            "arithmetic": "FP64 direct formula on actual retained native operands",
+            "native_rounding_emulation": false,
+            "scope": "rank-zero selected tail queries only"
+          }
+        }
+      ],
+      "common": [
+        "Same actual native BF16 Q/KV, physical block pages, masks, scale, sink and compressed ratio.",
+        "All193872 native raw NPY files SHA-verified and decoded before review.",
+        "Layers, forwards, heads and query rows are dependent observations."
+      ],
+      "differences": [
+        "Actual native BF16 arithmetic versus FP64 formula; accumulation/rounding order not emulated.",
+        "Independent numerical replay is rank-zero selected tail queries; all-rank byte/event coverage is a distinct integrity result.",
+        "Unsaved queries, other-rank mathematics and compressor/indexer/projection mathematics remain outside this replay."
+      ],
+      "comparisons": [
+        {
+          "id": "attention-tail-formula",
+          "title": "Actual native attention versus independent formula",
+          "side_ids": [
+            "npu-actual-attention",
+            "independent-fp64-formula"
+          ],
+          "scope": "480layer-forwards: selected saved query rows over actual full physical history pages; 40layers,12rank-zero actual forwards. Maximum RMSE is a maximum over480 separate reductions, not a global RMSE.",
+          "metrics": [
+            {
+              "id": "max-abs",
+              "label": "Maximum scalar absolute residual",
+              "value": 0.010597425985962694,
+              "unit": "attention units"
+            },
+            {
+              "id": "max-layer-forward-rmse",
+              "label": "Maximum layer-forward RMSE",
+              "value": 0.0008772552083595631,
+              "unit": "attention units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Rank-zero layer-forward comparisons",
+              "observed": 480,
+              "expected": 480,
+              "unit": "layer-forwards"
+            },
+            {
+              "label": "Retained tail-query rows",
+              "observed": 1920,
+              "expected": 1920,
+              "unit": "rows"
+            },
+            {
+              "label": "Scalar output coordinates",
+              "observed": 7864320,
+              "expected": 7864320,
+              "unit": "elements"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "80actual native chains,96actual forwards across8ranks,3840realcaller observations; these are not independent task samples.",
+        "Raw193872NPY/7405016488bytes independently SHA-verified and decoded; full raw remains private on original host.",
+        "No acceptance threshold, kernel defect attribution, full query coverage, full-model backward or service completion is established.",
+        "Local scientific figure shades min/max over12related forwards; not confidence intervals."
+      ],
+      "provenance": {
+        "source_record_sha256": "a7d1fe0bd29d38e6597b7ca22821e2bc22af7f539227eba0431cb2c4fd1e83f6",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Aggregate bytes and numeric binding only; independent native array replay private"
+      }
+    },
+    {
+      "id": "deepseek41-paired-output-head95-20261109",
+      "date": "2026-11-09",
+      "title": "DeepSeek: paired output-head LoRA and continuation",
+      "task": "sft",
+      "status": "partial",
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "Both runtimes complete95fresh complete frozen-backbone forwards perrank. Independently replayed83rank-zero updates/12reserved evaluations and exact within-runtime continuation/repeats. Cross-runtime adapter trajectories are descriptive; no backbone training pass.",
+      "sides": [
+        {
+          "id": "gpu-original-reference",
+          "label": "GPU TP4 / FP32 output-head LoRA",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0+cu130"
+            },
+            {
+              "name": "CUDA",
+              "version": "13.0"
+            },
+            {
+              "name": "TileLang",
+              "version": "0.1.12"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "engine": "official standalone original reference",
+            "tp": 4,
+            "routed_experts": "96of384 perrank on same four-rank world; no separate EP mesh flag",
+            "arithmetic": "original FP8/FP4 quantized activation/native GEMM paths, with BF16/FP32 control paths",
+            "TF32": false,
+            "engram": "original-storage CPU mmap rows; native CUDA lookup/dequant",
+            "execution_interpreter": "actual retained core interpreter; not workload default",
+            "python_version": null,
+            "cleanup_verified": true,
+            "backbone": "complete frozen original model forward each call",
+            "trainable": "output-head rank2 alpha4 LoRA",
+            "adapter_arithmetic": "FP32",
+            "optimizer": "AdamW lr1e-4 clip1",
+            "native_Trainer_coverage": false
+          }
+        },
+        {
+          "id": "npu-adapted-vllm",
+          "label": "Ascend TP8 / FP32 output-head LoRA",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "engine": "adapted native vLLM text path",
+            "tp": 8,
+            "ep": 8,
+            "pp": 1,
+            "dp": 1,
+            "cpu_offload_gb": 48,
+            "arithmetic": "original-storage expansion to BF16 native GEMM/MoE; FP32 controls remain",
+            "engram": "original-storage mmap aliases; FP32 decode then BF16",
+            "prefix_caching": false,
+            "async_scheduling": false,
+            "max_model_len": 32769,
+            "weight_UVA": false,
+            "weight_pinned_offload": false,
+            "python_exact_version": null,
+            "Ascend_installed_distribution_build": null,
+            "hardware_string_scope": "same source-environment bounded native receipt; actual core retains NPU tensor execution",
+            "cleanup_verified": true,
+            "backbone": "complete frozen original model forward each call",
+            "trainable": "output-head rank2 alpha4 LoRA",
+            "adapter_arithmetic": "FP32",
+            "optimizer": "AdamW lr1e-4 clip1",
+            "native_Trainer_coverage": false
+          }
+        }
+      ],
+      "common": [
+        "Exact paired history SHA,teacher,phase,initialization offset,repeat,cold/restored branch and update/reserved cursor.",
+        "FP32 rank2 alpha4 dropout0 output-head LoRA,AdamW lr1e-4 clip1;129280full-vocabulary normalization.",
+        "Independent per-side formula,optimizer,strict frozen-base identity and continuation reviews."
+      ],
+      "differences": [
+        "Underlying original mixed FP8/FP4 GPU TP4 versus adapted NPU BF16 TP8 runtime/offload/collectives.",
+        "Same declared initializer seed/policy gives near-equal but unequal initialA; initialB exactzero.",
+        "Later hidden states,adapter parameters and AdamW states evolve separately; no same-parameter arithmetic attribution."
+      ],
+      "comparisons": [
+        {
+          "id": "paired95-output-head",
+          "title": "Same-coordinate dependent output-head trajectories",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-vllm"
+          ],
+          "scope": "Counts include pilot,threeoffset0 repeats,otheroffsets and cold/restored branches; not independent input samples or backbone autograd.",
+          "metrics": [
+            {
+              "id": "native-rank-calls",
+              "label": "Fresh complete-backbone rank calls",
+              "value": 760,
+              "unit": "rank calls",
+              "side_values": {
+                "gpu-original-reference": 380,
+                "npu-adapted-vllm": 760
+              }
+            },
+            {
+              "id": "initial-a-maxabs",
+              "label": "Offset0 initial A maximum absolute difference",
+              "value": 1.6763806343078613e-08,
+              "unit": "adapter units"
+            },
+            {
+              "id": "first-b-gradient-rmse",
+              "label": "First-update clipped B gradient RMSE",
+              "value": 0.0001628763831725592,
+              "unit": "gradient units"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Paired rank-zero call coordinates",
+              "observed": 95,
+              "expected": 95,
+              "unit": "dependent calls"
+            },
+            {
+              "label": "Update call coordinates per side",
+              "observed": 83,
+              "expected": 83,
+              "unit": "dependent calls"
+            },
+            {
+              "label": "Reserved evaluation coordinates per side",
+              "observed": 12,
+              "expected": 12,
+              "unit": "dependent calls"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Within each tested runtime,cold/resumed allarrayleaves and threeoffset0 repeated trajectories are exact. Different initialization offsets remain distinct.",
+        "The displayed760 rank-call value is NPU; GPU380. Eight/four ranks and repeated branches are dependent replicas.",
+        "No backbone autograd,Trainer,TRL,verl,numerical acceptance or hardware-only causal conclusion. Real service scopes remain separately incomplete."
+      ],
+      "provenance": {
+        "source_record_sha256": "66bd3d9b3c96b77efc66930dba04afc1461361118598d54e266f21f28641ec37",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Aggregate bytes/numeric consistency only; private numerical replay separate"
+      }
+    },
+    {
+      "id": "deepseek41-http128-20261109",
+      "date": "2026-11-09",
+      "title": "DeepSeek: adapted HTTP128 final rows and fixed-history core contrasts",
+      "task": "inference",
+      "status": "partial",
+      "scope_status": "completed",
+      "whole_task_completed": false,
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "One adapted TP8 HTTP server completed128 fresh-prefill requests.128 full-vocabulary generated rows and3192 scalar values independently reviewed; historical comparisons separate78 ordinary prefills,32 fresh-versus-cached teacher histories and18 unpaired candidate last rows.",
+      "sides": [
+        {
+          "id": "gpu-original-reference",
+          "label": "Original GPU TP4 core reference",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.13.0+cu130"
+            },
+            {
+              "name": "CUDA",
+              "version": "13.0"
+            },
+            {
+              "name": "TileLang",
+              "version": "0.1.12"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.20.2"
+            }
+          ],
+          "settings": {
+            "engine": "official standalone original reference",
+            "tp": 4,
+            "routed_experts": "96of384 perrank on same four-rank world; no separate EP mesh flag",
+            "arithmetic": "original FP8/FP4 quantized activation/native GEMM paths, with BF16/FP32 control paths",
+            "TF32": false,
+            "engram": "original-storage CPU mmap rows; native CUDA lookup/dequant",
+            "execution_interpreter": "actual retained core interpreter; not workload default",
+            "python_version": null,
+            "cleanup_verified": true,
+            "weights": "original frozen model",
+            "reference_reused": true
+          }
+        },
+        {
+          "id": "npu-adapted-vllm",
+          "label": "Historical adapted NPU TP8 core reference",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "engine": "adapted native vLLM text path",
+            "tp": 8,
+            "ep": 8,
+            "pp": 1,
+            "dp": 1,
+            "cpu_offload_gb": 48,
+            "arithmetic": "original-storage expansion to BF16 native GEMM/MoE; FP32 controls remain",
+            "engram": "original-storage mmap aliases; FP32 decode then BF16",
+            "prefix_caching": false,
+            "async_scheduling": false,
+            "max_model_len": 32769,
+            "weight_UVA": false,
+            "weight_pinned_offload": false,
+            "python_exact_version": null,
+            "Ascend_installed_distribution_build": null,
+            "hardware_string_scope": "same source-environment bounded native receipt; actual core retains NPU tensor execution",
+            "cleanup_verified": true,
+            "weights": "original frozen model",
+            "reference_reused": true
+          }
+        },
+        {
+          "id": "npu-adapted-http128",
+          "label": "Adapted NPU TP8 HTTP fresh-prefill cohort",
+          "hardware": "Ascend910_9382",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "vLLM",
+              "version": "0.30.0+empty"
+            },
+            {
+              "name": "vLLM-Ascend selected source",
+              "version": "0.30.0rc2"
+            },
+            {
+              "name": "Transformers",
+              "version": "5.14.1"
+            }
+          ],
+          "settings": {
+            "engine": "adapted native vLLM Ascend HTTP selected cohort",
+            "tp": 8,
+            "ep": 8,
+            "pp": 1,
+            "dp": 1,
+            "cpu_offload_gb": 48,
+            "arithmetic": "original-storage expansion to BF16 native GEMM/MoE; FP32 controls remain",
+            "engram": "original-storage mmap aliases; FP32 decode then BF16",
+            "prefix_caching": false,
+            "async_scheduling": false,
+            "max_model_len": 32769,
+            "weight_UVA": false,
+            "weight_pinned_offload": false,
+            "python_exact_version": null,
+            "Ascend_installed_distribution_build": null,
+            "hardware_string_scope": "HTTP128 native selected-cohort receipts; eight live NPU workers",
+            "cleanup_verified": true,
+            "weights": "original frozen model",
+            "reference_reused": false,
+            "prompt_head_max_rows": 128,
+            "gpu_memory_utilization": 0.94,
+            "max_num_batched_tokens": 32768,
+            "fresh_prefill": true,
+            "max_tokens": 1,
+            "temperature": 0,
+            "seed": 0,
+            "ignore_eos": true,
+            "native_head_logits_dtype": "BF16 as independently recorded by native head receipts",
+            "API_logprob_storage_dtype": "float64 serialized values",
+            "runtime_API_floor": -9999,
+            "raw_logits": false,
+            "original_default_32K": false,
+            "original_partition_modes": false,
+            "cached_reference_teacher_trajectory": false,
+            "configuration_authority": "Actual terminal-reviewed HTTP128 scope and lifecycle; library versions are pinned source-environment declarations rather than output-head training settings"
+          }
+        }
+      ],
+      "common": [
+        "Original model revision and frozen token/input authorities.",
+        "Shared FP64 full-vocabulary normalization for retained core logits; HTTP native serialized probabilities retained without top-k renormalization.",
+        "3168 planned target coordinates and18 controlled candidates using24 token terms; original requests reused."
+      ],
+      "differences": [
+        "Original GPU mixedFP8/FP4 TP4, historical adapted NPU BF16 TP8, and adapted HTTP prompt-head batching at most128 rows.",
+        "HTTP teacher inputs are fresh full prefills; historical teacher outputs use cached decoding. Same consumed history does not establish identical partitions.",
+        "HTTP normalized API rows use Float64 storage with runtime floor-9999; native compute dtype remains separately recorded."
+      ],
+      "comparisons": [
+        {
+          "id": "original-gpu-ordinary",
+          "title": "Ordinary full-prefill final rows",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-http128"
+          ],
+          "scope": "Same token history; 78 full-prefill histories.",
+          "metrics": [
+            {
+              "id": "top1-count",
+              "label": "Top1 matching rows",
+              "value": 75,
+              "unit": "rows"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Maximum top100-union-plus-tail JS from normalized full-vocabulary rows",
+              "value": 0.0031016563504584487,
+              "unit": "nat"
+            },
+            {
+              "id": "probability-rmse-mean",
+              "label": "Mean full-vocabulary probability RMSE",
+              "value": 8.609252366979953e-05,
+              "unit": "probability"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Historical paired final distributions",
+              "observed": 78,
+              "expected": 78,
+              "unit": "dependent rows"
+            }
+          ]
+        },
+        {
+          "id": "original-gpu-teacher",
+          "title": "Fresh HTTP versus cached reference teacher rows",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-http128"
+          ],
+          "scope": "Same token history; 32 fresh HTTP prefills versus historical cached calls; execution partitions differ.",
+          "metrics": [
+            {
+              "id": "top1-count",
+              "label": "Top1 matching rows",
+              "value": 26,
+              "unit": "rows"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Maximum top100-union-plus-tail JS from normalized full-vocabulary rows",
+              "value": 0.05239992330183129,
+              "unit": "nat"
+            },
+            {
+              "id": "probability-rmse-mean",
+              "label": "Mean full-vocabulary probability RMSE",
+              "value": 0.006201298718143558,
+              "unit": "probability"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Historical paired final distributions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "dependent rows"
+            }
+          ]
+        },
+        {
+          "id": "original-gpu-targets",
+          "title": "Planned causal target scalars and controlled candidate choices",
+          "side_ids": [
+            "gpu-original-reference",
+            "npu-adapted-http128"
+          ],
+          "scope": "3168 planned target scalars;24 candidate terms/18 sequences remain separately reported in exact JSON.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Planned target logprob MAE",
+              "value": 0.2803154567828166,
+              "unit": "nat"
+            },
+            {
+              "id": "target-maxabs",
+              "label": "Maximum planned target logprob difference",
+              "value": 10.432424378714865,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll",
+              "label": "Absolute difference of planned target NLL",
+              "value": 0.005356216404012182,
+              "unit": "nat/token",
+              "side_values": {
+                "gpu-original-reference": 1.9395359408692914,
+                "npu-adapted-http128": 1.9448921572733036
+              }
+            },
+            {
+              "id": "candidate-top-choice",
+              "label": "Matching top candidates",
+              "value": 6,
+              "unit": "groups"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Planned target scalar coordinates",
+              "observed": 3168,
+              "expected": 3168,
+              "unit": "scalars"
+            },
+            {
+              "label": "Controlled candidate scalar terms",
+              "observed": 24,
+              "expected": 24,
+              "unit": "terms"
+            },
+            {
+              "label": "Controlled candidate sequences",
+              "observed": 18,
+              "expected": 18,
+              "unit": "sequences"
+            }
+          ]
+        },
+        {
+          "id": "adapted-npu-reference-ordinary",
+          "title": "Ordinary full-prefill final rows",
+          "side_ids": [
+            "npu-adapted-vllm",
+            "npu-adapted-http128"
+          ],
+          "scope": "Same token history; 78 full-prefill histories.",
+          "metrics": [
+            {
+              "id": "top1-count",
+              "label": "Top1 matching rows",
+              "value": 78,
+              "unit": "rows"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Maximum top100-union-plus-tail JS from normalized full-vocabulary rows",
+              "value": 1.4268220011713432e-13,
+              "unit": "nat"
+            },
+            {
+              "id": "probability-rmse-mean",
+              "label": "Mean full-vocabulary probability RMSE",
+              "value": 1.6102601091207403e-08,
+              "unit": "probability"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Historical paired final distributions",
+              "observed": 78,
+              "expected": 78,
+              "unit": "dependent rows"
+            }
+          ]
+        },
+        {
+          "id": "adapted-npu-reference-teacher",
+          "title": "Fresh HTTP versus cached reference teacher rows",
+          "side_ids": [
+            "npu-adapted-vllm",
+            "npu-adapted-http128"
+          ],
+          "scope": "Same token history; 32 fresh HTTP prefills versus historical cached calls; execution partitions differ.",
+          "metrics": [
+            {
+              "id": "top1-count",
+              "label": "Top1 matching rows",
+              "value": 27,
+              "unit": "rows"
+            },
+            {
+              "id": "tail-merged-js-max",
+              "label": "Maximum top100-union-plus-tail JS from normalized full-vocabulary rows",
+              "value": 0.03209886705453027,
+              "unit": "nat"
+            },
+            {
+              "id": "probability-rmse-mean",
+              "label": "Mean full-vocabulary probability RMSE",
+              "value": 0.005165228315088827,
+              "unit": "probability"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Historical paired final distributions",
+              "observed": 32,
+              "expected": 32,
+              "unit": "dependent rows"
+            }
+          ]
+        },
+        {
+          "id": "adapted-npu-reference-targets",
+          "title": "Planned causal target scalars and controlled candidate choices",
+          "side_ids": [
+            "npu-adapted-vllm",
+            "npu-adapted-http128"
+          ],
+          "scope": "3168 planned target scalars;24 candidate terms/18 sequences remain separately reported in exact JSON.",
+          "metrics": [
+            {
+              "id": "target-mae",
+              "label": "Planned target logprob MAE",
+              "value": 1.924259257603722e-06,
+              "unit": "nat"
+            },
+            {
+              "id": "target-maxabs",
+              "label": "Maximum planned target logprob difference",
+              "value": 0.0028981400788721245,
+              "unit": "nat"
+            },
+            {
+              "id": "target-nll",
+              "label": "Absolute difference of planned target NLL",
+              "value": 1.2160456430709843e-06,
+              "unit": "nat/token",
+              "side_values": {
+                "npu-adapted-vllm": 1.9448933733189466,
+                "npu-adapted-http128": 1.9448921572733036
+              }
+            },
+            {
+              "id": "candidate-top-choice",
+              "label": "Matching top candidates",
+              "value": 6,
+              "unit": "groups"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Planned target scalar coordinates",
+              "observed": 3168,
+              "expected": 3168,
+              "unit": "scalars"
+            },
+            {
+              "label": "Controlled candidate scalar terms",
+              "observed": 24,
+              "expected": 24,
+              "unit": "terms"
+            },
+            {
+              "label": "Controlled candidate sequences",
+              "observed": 18,
+              "expected": 18,
+              "unit": "sequences"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "JS values use the top100 union plus one merged tail bucket derived from full-vocabulary normalized rows; they are not full-coordinate JS.",
+        "All128 original HTTP requests were reused for CPU review/export; no request was rerun. Each retained generated row has129280 entries; rank replicas and repeated teacher histories are dependent observations.",
+        "3168 planned target scalars and24 controlled-candidate token terms are separate sets;3192 is their retained scalar sum. Eighteen candidate sequences comprise six sets of three. Top candidate agrees6/6 against both historical configurations, while complete candidate ordering can differ.",
+        "Only110 generated rows have a historical final-prompt reference:78 ordinary full prefills plus32 fixed-teacher fresh prefills. The18 candidate last rows have no historical distribution reference and are excluded from paired-distribution metrics.",
+        "Fresh HTTP teacher prefixes consume the same tokens as the historical cached trajectory but use different execution partitions. The ordinary78 cohort and teacher32 cohort remain separate; this is not cached-trajectory equivalence.",
+        "Serialized normalized logprobs are stored in Float64; native head receipts record BF16 logits. Neither Float64 storage nor a small normalization residual establishes native compute precision or numerical acceptance. API floor-9999 is retained without renormalization.",
+        "The portable ZIP independently replays128 generated rows and3192 retained scalars. It excludes raw response JSON and historical GPU/NPU reference arrays; raw JSON equality and cross-configuration metrics rely on separately SHA-bound independent native reviews.",
+        "Original191/275 and separate adapted275/275 core histories remain unchanged. Original default unchunked32K, cached-reference teacher equivalence, original partition modes, GPU vLLM/SGLang service outcomes, backbone autograd and native Trainer/TRL/verl remain incomplete. No hardware-only causal conclusion, task-accuracy claim or whole-task completion."
+      ],
+      "provenance": {
+        "source_record_sha256": "c7b8ed95ce925fa926f6a6f00d45432757fc25e007117dfb559982622b96a166",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Included 128 generated full-vocabulary rows, 3192 scalar pointers and 18 candidate sums; native prompt/raw-response and historical core comparisons remain separately SHA-bound"
+      }
+    },
+    {
+      "id": "deepseek41-native-producer-key-cache-20261109",
+      "date": "2026-11-09",
+      "title": "DeepSeek retained native compressor outputs to selected native key/cache",
+      "task": "inference",
+      "status": "partial",
+      "scope_status": "completed",
+      "whole_task_completed": false,
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "Four cross-run serialized completed BF16 native producer capsules consumed by a selected native key/cache stage. Full private arithmetic and byte review, sampled portable projection and full downstream replay are distinct. No same-live tensor or whole-model claim.",
+      "sides": [
+        {
+          "id": "native-selected-key-cache",
+          "label": "Actual retained-output native selected key/cache stage",
+          "hardware": "Ascend910 as reported by retained native npu-smi; one logical device 0",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.10.0.post4"
+            }
+          ],
+          "settings": {
+            "configuration": {
+              "backend": "installed Ascend vLLM native selected key/cache components",
+              "devices": 1,
+              "visible_logical_device": "0",
+              "model_constructed": false,
+              "compressor_rerun": false,
+              "wk_weight_dtype": "BF16",
+              "wk_input_dtype": "BF16",
+              "norm_weight_dtype": "BF16",
+              "norm_eps": 1e-20,
+              "rope_partial_width": 64,
+              "rope_mode": "interleave",
+              "phase_source": "unchanged captured complex64, real/imag repeated twice",
+              "quantized_dtype": "INT8",
+              "exported_quant_scale_dtype": "FP32",
+              "cache_scale_dtype": "FP16",
+              "sentinel_byte": 165,
+              "cache_block_size": 128,
+              "geometry": [
+                {
+                  "length": 2048,
+                  "layer": 2,
+                  "ratio": 2,
+                  "rows": 1024,
+                  "storage_block": 64,
+                  "pages": 17
+                },
+                {
+                  "length": 2048,
+                  "layer": 20,
+                  "ratio": 1,
+                  "rows": 2048,
+                  "storage_block": 128,
+                  "pages": 17
+                },
+                {
+                  "length": 32768,
+                  "layer": 2,
+                  "ratio": 2,
+                  "rows": 16384,
+                  "storage_block": 64,
+                  "pages": 257
+                },
+                {
+                  "length": 32768,
+                  "layer": 20,
+                  "ratio": 1,
+                  "rows": 32768,
+                  "storage_block": 128,
+                  "pages": 257
+                }
+              ],
+              "ratio2_adapter": "native token-aligned pooling completed slice to dense M rows; whole-model N-row/cache geometry not replayed"
+            },
+            "actual_norm_dispatch": {
+              "registry_class": "vllm_ascend.ops.layernorm.AscendRMSNorm",
+              "actual_class": "vllm_ascend.ops.layernorm.AscendRMSNorm",
+              "forward_method": "AscendRMSNorm.forward_oot"
+            },
+            "installed_selected_source_SHA": {
+              "sources/upstream_native_compressor.py": "f1dc10b8898403b029436f876b3cc8ef433c0f52ebb44ef2c051d9f8bf7c7a05",
+              "sources/indexer_native_keys.py": "470a2061fb0d45f796f6112fa9585e382168fb640816f1fea15cc798955aa299",
+              "sources/compressor_key_successor.py": "b59bb7af00ac584f8e092b106e3f385415e201fdda5cc7cc818534ab05cf7fe4",
+              "sources/tests/test_compressor_key_successor.py": "e428383cbbabed920c1f098ebe2a25aad6c71e1dd28831dcb1c3b66bac4bd658"
+            },
+            "extension_sha256": "5664c8cf6ae684cf4fa40bacc3342af195524481caf307757952b63ed8427ab7",
+            "config_sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879",
+            "source_and_environment_authority": "actual native result and actual source-admission capture; no versions borrowed from other cohorts"
+          }
+        },
+        {
+          "id": "cpu-independent-formula",
+          "label": "Independent CPU same-input formula reference",
+          "hardware": "Local CPU arm64; no model or accelerator",
+          "libraries": [
+            {
+              "name": "NumPy",
+              "version": "2.3.5"
+            },
+            {
+              "name": "Python",
+              "version": "3.12.14"
+            }
+          ],
+          "settings": {
+            "reference_definitions": {
+              "continuous": "FP64 formula on same actual retained native inputs; no exact native accumulator emulation",
+              "BF16_RNE": "FP64 formula -> FP32 -> BF16 round-to-nearest-even; not exact dyadic dot directly rounded to BF16",
+              "quantization": "actual native post-RoPE / actual exported rounded FP32 scale using FP64 division, followed by RNE and INT8 clipping; native reciprocal/reduction order not emulated",
+              "reconstruction_using_exported_FP32_scale": "actual post-RoPE versus native INT8 multiplied by actual exported FP32 quantizer scale, using FP64 multiplication; distinct from cache dequantization",
+              "cache_dequantization_using_actual_FP16_scale": "actual post-RoPE versus reconstructed actual cache INT8 multiplied by actual stored FP16 scale, using FP64 multiplication; matches unchanged private full-review cache_dequantized_vs_actual_postrope metrics",
+              "cache": "every byte reconstructed from actual native INT8, actual slots, FP16-cast actual FP32 scales and original sentinel; whole-buffer and view SHA equality",
+              "acceptance_threshold": null
+            },
+            "full_private_review_coordinates": 6684672,
+            "portable_projection_rows": 256,
+            "portable_projection_output_coordinates": 32768,
+            "portable_downstream_coordinates": 6684672,
+            "source_inputs": "Actual serialized native arrays and declared deterministic projection samples; full private inputs omitted from portable ZIP",
+            "current_CPU_preparation_environment": {
+              "python": "3.12.14",
+              "NumPy": "2.3.5",
+              "machine": "arm64",
+              "system": "Darwin",
+              "reference": "FP64 formula -> FP32 -> BF16 RNE, separate from continuous FP64 formula and quantizer/cache diagnostics",
+              "observed_in_this_CPU_preparation": true,
+              "portable_model_device_invoked": false
+            }
+          }
+        }
+      ],
+      "common": [
+        "Actual retained native BF16 inputs, selected weights and captured complex64 phases.",
+        "Four dependent capsules: lengths2048/32768 and layers2/20.",
+        "Continuous FP64 and FP64->FP32->BF16 RNE are separately defined formula references; no numerical acceptance threshold."
+      ],
+      "differences": [
+        "Native BF16 arithmetic and actual INT8/cache kernels versus independent CPU formulas do not share an exact accumulation implementation.",
+        "Private full projection has6684672 coordinates; portable projection has256 actual selected input rows/32768 output coordinates. Full downstream has52224 rows/6684672 coordinates.",
+        "Exported FP32 quantizer scale reconstruction differs from actual stored FP16 cache-scale dequantization.",
+        "Ratio2 uses completed-M adapter rather than whole-model N geometry or cache aliases."
+      ],
+      "comparisons": [
+        {
+          "id": "projection-bf16-rne",
+          "title": "Full private projection versus independent BF16 boundary prediction",
+          "side_ids": [
+            "native-selected-key-cache",
+            "cpu-independent-formula"
+          ],
+          "scope": "Four dependent actual capsules. FP64 formula -> FP32 -> BF16 RNE. Full private metrics; portable projection is sampled separately.",
+          "metrics": [
+            {
+              "id": "unequal-coordinates",
+              "label": "Unequal coordinates",
+              "value": 336,
+              "unit": "coordinates"
+            },
+            {
+              "id": "maximum-absolute-residual",
+              "label": "Maximum absolute residual over four capsules",
+              "value": 0.0078125,
+              "unit": "value"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Actual full private output coordinates",
+              "observed": 6684672,
+              "expected": 6684672,
+              "unit": "dependent coordinates"
+            }
+          ]
+        },
+        {
+          "id": "norm-bf16-rne",
+          "title": "Full normalization versus independent BF16 boundary prediction",
+          "side_ids": [
+            "native-selected-key-cache",
+            "cpu-independent-formula"
+          ],
+          "scope": "Four dependent actual capsules. FP64 formula -> FP32 -> BF16 RNE. Full private metrics; portable projection is sampled separately.",
+          "metrics": [
+            {
+              "id": "unequal-coordinates",
+              "label": "Unequal coordinates",
+              "value": 64,
+              "unit": "coordinates"
+            },
+            {
+              "id": "maximum-absolute-residual",
+              "label": "Maximum absolute residual over four capsules",
+              "value": 0.0078125,
+              "unit": "value"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Actual full private output coordinates",
+              "observed": 6684672,
+              "expected": 6684672,
+              "unit": "dependent coordinates"
+            }
+          ]
+        },
+        {
+          "id": "rope-bf16-rne",
+          "title": "Full RoPE versus independent BF16 boundary prediction",
+          "side_ids": [
+            "native-selected-key-cache",
+            "cpu-independent-formula"
+          ],
+          "scope": "Four dependent actual capsules. FP64 formula -> FP32 -> BF16 RNE. Full private metrics; portable projection is sampled separately.",
+          "metrics": [
+            {
+              "id": "unequal-coordinates",
+              "label": "Unequal coordinates",
+              "value": 44,
+              "unit": "coordinates"
+            },
+            {
+              "id": "maximum-absolute-residual",
+              "label": "Maximum absolute residual over four capsules",
+              "value": 0.00390625,
+              "unit": "value"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Actual full private output coordinates",
+              "observed": 6684672,
+              "expected": 6684672,
+              "unit": "dependent coordinates"
+            }
+          ]
+        },
+        {
+          "id": "reconstruction-using-exported-fp32-scale",
+          "title": "FP32 exported-scale reconstruction versus actual post-RoPE",
+          "side_ids": [
+            "native-selected-key-cache",
+            "cpu-independent-formula"
+          ],
+          "scope": "actual post-RoPE versus native INT8 multiplied by actual exported FP32 quantizer scale, using FP64 multiplication; distinct from cache dequantization; full downstream four dependent capsules, not full-model execution.",
+          "metrics": [
+            {
+              "id": "maximum-absolute-residual",
+              "label": "Maximum absolute residual over four capsules",
+              "value": 0.01273374818265438,
+              "unit": "value"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Actual downstream key coordinates",
+              "observed": 6684672,
+              "expected": 6684672,
+              "unit": "dependent coordinates"
+            }
+          ]
+        },
+        {
+          "id": "cache-dequantization-using-actual-fp16-scale",
+          "title": "Actual FP16 cache-scale dequantization versus actual post-RoPE",
+          "side_ids": [
+            "native-selected-key-cache",
+            "cpu-independent-formula"
+          ],
+          "scope": "actual post-RoPE versus reconstructed actual cache INT8 multiplied by actual stored FP16 scale, using FP64 multiplication; matches unchanged private full-review cache_dequantized_vs_actual_postrope metrics; full downstream four dependent capsules, not full-model execution.",
+          "metrics": [
+            {
+              "id": "maximum-absolute-residual",
+              "label": "Maximum absolute residual over four capsules",
+              "value": 0.0127716064453125,
+              "unit": "value"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Actual downstream key coordinates",
+              "observed": 6684672,
+              "expected": 6684672,
+              "unit": "dependent coordinates"
+            }
+          ]
+        },
+        {
+          "id": "int8-rne-and-cache-integrity",
+          "title": "INT8 formula residual and separate exact raw-cache integrity",
+          "side_ids": [
+            "native-selected-key-cache",
+            "cpu-independent-formula"
+          ],
+          "scope": "INT8 versus FP64 division by actual exported FP32 scale then RNE; all differences at source exact half-rowmax. Cache integrity is an independent byte check.",
+          "metrics": [
+            {
+              "id": "unequal-int8",
+              "label": "INT8 unequal coordinates",
+              "value": 5847,
+              "unit": "coordinates"
+            },
+            {
+              "id": "max-int8-distance",
+              "label": "Maximum integer distance",
+              "value": 1,
+              "unit": "integer"
+            },
+            {
+              "id": "exact-cache-bytes",
+              "label": "Every reconstructed raw-cache byte matches native SHA",
+              "value": 60709632,
+              "unit": "bytes"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "INT8 coordinates",
+              "observed": 6684672,
+              "expected": 6684672,
+              "unit": "dependent coordinates"
+            },
+            {
+              "label": "Reconstructed private raw-cache bytes",
+              "observed": 60709632,
+              "expected": 60709632,
+              "unit": "bytes"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Cross-run serialized completed BF16 handoff, not same live tensor or complete upstream composition.",
+        "Portable projection uses 256 dependent selected actual input rows; full private projection coordinates are not independently replayed from this package.",
+        "Ratio2 completed-M adapter and private strided sentinel cache differ from whole-model N-row/cache aliases.",
+        "Original strict L2 VJP rejection, backbone/training, original-default 32K and reference teacher/cache gaps remain.",
+        "Numerical residuals are descriptive; exact raw-cache SHA replay does not imply all arithmetic arrays equal.",
+        "Four capsules and selected rows are dependent observations. Original strict L2 VJP rejection is preserved at both lengths.",
+        "Exact60709632 raw-cache bytes do not imply every arithmetic array is equal;5847 INT8 formula residuals have maximum integer difference1.",
+        "Portable ZIP omits complete projection input and raw-cache buffers; sample membership and full input byte identity depend on SHA-bound full private review.",
+        "The scoped stage does not establish GPU/NPU parity, full upstream composition, query/top-k, TP, backbone or Trainer/TRL/verl completion.",
+        "Native torch/torch_npu versions are from actual native capture; selected source/extension/configuration hashes are from source admission. CPU NumPy/Python versions were observed during this preparation."
+      ],
+      "provenance": {
+        "source_record_sha256": "4455116ac9ef0c044088616b7758ef9dfa95f1b8a1f4db162dba6caf9f57382c",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Four dependent bounded capsules:256 sampled projection rows/32768 output coordinates plus full52224 downstream rows/6684672 coordinates; original full producer inputs/raw-cache buffers omitted"
+      }
+    },
+    {
+      "id": "deepseek41-native-query-key-selection-20261109",
+      "date": "2026-11-09",
+      "title": "DeepSeek serialized retained Q/K→QLI",
+      "task": "inference",
+      "status": "partial",
+      "scope_status": "completed",
+      "whole_task_completed": false,
+      "acceptance": null,
+      "model": {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+      },
+      "summary": "Four dependent serialized retained native query and producer-key capsules consumed by a new native QLI selector. Full retained-stage NumPy replay and byte integrity passed. Mathematical set differences are descriptive; native own full scores unavailable.",
+      "sides": [
+        {
+          "id": "native-retained-qli",
+          "label": "Actual native retained-query/key QLI selected stage",
+          "hardware": "Ascend910 as reported by retained native npu-smi; one logical device 0",
+          "libraries": [
+            {
+              "name": "PyTorch",
+              "version": "2.10.0+cpu"
+            },
+            {
+              "name": "torch_npu",
+              "version": "2.10.0.post4"
+            }
+          ],
+          "settings": {
+            "configuration": {
+              "backend": "installed Ascend vLLM native quantized QLI selection",
+              "native_versions": {
+                "torch": "2.10.0+cpu",
+                "torch_npu": "2.10.0.post4"
+              },
+              "devices": 1,
+              "model_constructed": false,
+              "query_dtype": "BF16",
+              "query_quantized_dtype": "INT8",
+              "query_scale_dtype": "FP16",
+              "key_dtype": "INT8",
+              "exported_key_scale_dtype": "FP32",
+              "actual_cache_scale_dtype": "FP16",
+              "actual_scaled_weights_dtype": "FP16",
+              "candidate_mode_L2": 3,
+              "candidate_mode_L20": 1,
+              "candidate_consumer_mode2": false,
+              "candidate_block_size": 8,
+              "selected_topk": 512,
+              "candidate_topk": 2048,
+              "page0_protected": true,
+              "geometry": [
+                {
+                  "length": 2048,
+                  "layer": 2,
+                  "ratio": 2,
+                  "rows": 1024,
+                  "storage_block": 64,
+                  "pages": 17,
+                  "prefix_bytes": 65536,
+                  "page_bytes": 73856,
+                  "positions": [
+                    2044,
+                    2045,
+                    2046,
+                    2047
+                  ],
+                  "causal_key_lens": [
+                    1022,
+                    1023,
+                    1023,
+                    1024
+                  ]
+                },
+                {
+                  "length": 2048,
+                  "layer": 20,
+                  "ratio": 1,
+                  "rows": 2048,
+                  "storage_block": 128,
+                  "pages": 17,
+                  "prefix_bytes": 131072,
+                  "page_bytes": 147712,
+                  "positions": [
+                    2044,
+                    2045,
+                    2046,
+                    2047
+                  ],
+                  "causal_key_lens": [
+                    2045,
+                    2046,
+                    2047,
+                    2048
+                  ]
+                },
+                {
+                  "length": 32768,
+                  "layer": 2,
+                  "ratio": 2,
+                  "rows": 16384,
+                  "storage_block": 64,
+                  "pages": 257,
+                  "prefix_bytes": 65536,
+                  "page_bytes": 73856,
+                  "positions": [
+                    32764,
+                    32765,
+                    32766,
+                    32767
+                  ],
+                  "causal_key_lens": [
+                    16382,
+                    16383,
+                    16383,
+                    16384
+                  ]
+                },
+                {
+                  "length": 32768,
+                  "layer": 20,
+                  "ratio": 1,
+                  "rows": 32768,
+                  "storage_block": 128,
+                  "pages": 257,
+                  "prefix_bytes": 131072,
+                  "page_bytes": 147712,
+                  "positions": [
+                    32764,
+                    32765,
+                    32766,
+                    32767
+                  ],
+                  "causal_key_lens": [
+                    32765,
+                    32766,
+                    32767,
+                    32768
+                  ]
+                }
+              ],
+              "selector_scaffold": "__new__ + nn.Module init; native full constructor not executed"
+            },
+            "native_actual_dispatch": {
+              "selector": "DeepseekV41Indexer.select_projected",
+              "query_quantizer": "vllm_ascend.ops.triton.quantize_indexer_query",
+              "packed_cache_ops": null,
+              "component_constructor_executed": false,
+              "selector_scaffold": "__new__ + nn.Module init; selected post-projection wrapper only",
+              "schemas": {
+                "npu_quant_lightning_indexer_v2_metadata": "_C_ascend::npu_quant_lightning_indexer_v2_metadata(int num_heads_q, int num_heads_k, int head_dim, int topk, int quant_mode, *, Tensor? cu_seqlens_q=None, Tensor? cu_seqlens_k=None, Tensor? seqused_q=None, Tensor? seqused_k=None, Tensor? cmp_residual_k=None, int batch_size=0, int max_seqlen_q=0, int max_seqlen_k=0, str layout_q=\"TND\", str layout_k=\"PA_BBND\", int mask_mode=3, int cmp_ratio=1, str device=\"npu\") -> Tensor",
+                "npu_quant_lightning_indexer_v3": "_C_ascend::npu_quant_lightning_indexer_v3(Tensor query, Tensor key, Tensor weights, Tensor query_dequant_scale, Tensor key_dequant_scale, int topk, int quant_mode, *, Tensor? candidate_topk_index=None, Tensor? cu_seqlens_q=None, Tensor? cu_seqlens_k=None, Tensor? seqused_q=None, Tensor? seqused_k=None, Tensor? cmp_residual_k=None, Tensor? block_table=None, Tensor? output_idx_offset=None, Tensor? metadata=None, int max_seqlen_q=-1, str layout_q=\"TND\", str layout_k=\"PA_BBND\", int mask_mode=3, int cmp_ratio=1, int candidate_mode=3, int candidate_topk_blocks=2048, int candidate_block_size=8) -> (Tensor, Tensor, Tensor)"
+              }
+            },
+            "source_SHA": {
+              "candidate-review.json": "7b65a1a66f6343da87e30d800a7a5d599faa3a8e9b19a3c70dcbcbfa51462737",
+              "independent-CPU-gate.json": "c325eeb91600b56575361a1f9282bf007a894a22df53cc661bf4a9b3a706996f",
+              "admission.json": "f6c2618ecfd746e70d10c9718aba752b480a8e033c19713716a7aa5111bbffc0",
+              "pack/manifest.json": "bbc752dce17f5403577ba342caee00669542ffe72d6f7d9210f583531f46204c",
+              "sources/indexer_native_composed.py": "0fc8529887edd6ea72e929f57702642c17e3d79cb02ee6d143981b4e7ba80def",
+              "pack/arrays/ec7c48e31aca59aef133ecfd9d6a43bd29678fdd65ad230766de7ec7d9f6ca6a.npy": "ec7c48e31aca59aef133ecfd9d6a43bd29678fdd65ad230766de7ec7d9f6ca6a",
+              "pack/arrays/f9e2b740b3e29b23bbba610a9ff499a8c3c030c31e3c1fd5b68335a8db163aa8.npy": "f9e2b740b3e29b23bbba610a9ff499a8c3c030c31e3c1fd5b68335a8db163aa8",
+              "pack/arrays/b817f86946b1d5d943b897e11c08aa55fc0fd9f9bc5f47b64a44bb78a46bac29.npy": "b817f86946b1d5d943b897e11c08aa55fc0fd9f9bc5f47b64a44bb78a46bac29",
+              "pack/arrays/d6231b286fc529d0599ca3d38a8f2e438022d70cba6affb881df643431fbf180.npy": "d6231b286fc529d0599ca3d38a8f2e438022d70cba6affb881df643431fbf180",
+              "pack/arrays/c70bb92ae342cf5385bcfd768037271a2e716f0243981805da0182d25dc65031.npy": "c70bb92ae342cf5385bcfd768037271a2e716f0243981805da0182d25dc65031",
+              "pack/arrays/ddcc5229a1a63eb5bef5d713b5512960e5c303c0228fbb4dfdee6089d7bbb6ff.npy": "ddcc5229a1a63eb5bef5d713b5512960e5c303c0228fbb4dfdee6089d7bbb6ff",
+              "pack/arrays/cff09e3376d82dadaee0862fa9320ef415a4320063b14ec4c5d3135942e16621.npy": "cff09e3376d82dadaee0862fa9320ef415a4320063b14ec4c5d3135942e16621",
+              "pack/arrays/4b25d1fbf41398d6cae41f7a49e9e59821c677875269c0573c13173ee8904802.npy": "4b25d1fbf41398d6cae41f7a49e9e59821c677875269c0573c13173ee8904802",
+              "pack/arrays/ebf911689639448504ebaeb5dd7e5dc6938944ed1253e481d6a341a273480d98.npy": "ebf911689639448504ebaeb5dd7e5dc6938944ed1253e481d6a341a273480d98",
+              "pack/arrays/de36e669e48677ff6f02429a3897e91f21ae452602f212f6e5fe4b695b998773.npy": "de36e669e48677ff6f02429a3897e91f21ae452602f212f6e5fe4b695b998773",
+              "pack/arrays/af8a67e3e840b50d4603476c1286a78a29a83a17a212dafc984a58e7b68e6e70.npy": "af8a67e3e840b50d4603476c1286a78a29a83a17a212dafc984a58e7b68e6e70",
+              "pack/arrays/d48dcabcda77221ade26cd31e05c44b2cae98605e5a58f0a894b40120d7ef671.npy": "d48dcabcda77221ade26cd31e05c44b2cae98605e5a58f0a894b40120d7ef671",
+              "pack/arrays/befbc287d120c96e6ac29bf0fde10c8098f041fa49610eb587a9f48dc5498a76.npy": "befbc287d120c96e6ac29bf0fde10c8098f041fa49610eb587a9f48dc5498a76",
+              "pack/arrays/0d9d5f0f7924ed89239fd46e7caacbbba1364d3ddfbf6762017c2b9d4cac8ab2.npy": "0d9d5f0f7924ed89239fd46e7caacbbba1364d3ddfbf6762017c2b9d4cac8ab2",
+              "pack/arrays/bc00f52348acddf2e4b59132c2cfac8dc4eca8b6a490192561117cbeb7a72b2a.npy": "bc00f52348acddf2e4b59132c2cfac8dc4eca8b6a490192561117cbeb7a72b2a",
+              "pack/arrays/57018fe35dbb1d563d3c3fbd5841d5cce37d19b7f01efca492645ec03625af2f.npy": "57018fe35dbb1d563d3c3fbd5841d5cce37d19b7f01efca492645ec03625af2f",
+              "pack/arrays/e3d137f76e8d448de82d66c0902e96afc7f1a3c3a217cdc7365eb1dd5ca77cdd.npy": "e3d137f76e8d448de82d66c0902e96afc7f1a3c3a217cdc7365eb1dd5ca77cdd",
+              "pack/arrays/3c2bde053697fa5bfcadaa0de4c99080c1161bc3f9380c92698c8d2f0e1b837f.npy": "3c2bde053697fa5bfcadaa0de4c99080c1161bc3f9380c92698c8d2f0e1b837f",
+              "pack/arrays/71ab1228e33c0feb8e9275c8935240fed2e80966281750b630ce2b0d7127c75f.npy": "71ab1228e33c0feb8e9275c8935240fed2e80966281750b630ce2b0d7127c75f",
+              "pack/arrays/7843557797fb033f6717033fe6e9006a88779d16edf229d7549d7cf35d6063be.npy": "7843557797fb033f6717033fe6e9006a88779d16edf229d7549d7cf35d6063be",
+              "sources/tests/test_indexer_native_composed.py": "0bd21a5c322cdae6c90d0749e5f0e8b85318704d93196f41ce8d46ae3b13ffea"
+            },
+            "extension_sha256": "5664c8cf6ae684cf4fa40bacc3342af195524481caf307757952b63ed8427ab7",
+            "config_sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879",
+            "authority": "Actual native capture/source admission; one selected device, no model constructor"
+          }
+        },
+        {
+          "id": "cpu-independent-integerdot",
+          "label": "Independent exact integer-dot and FP64 CPU reference",
+          "hardware": "Local CPU arm64; no model or accelerator",
+          "libraries": [
+            {
+              "name": "NumPy",
+              "version": "2.3.5"
+            },
+            {
+              "name": "Python",
+              "version": "3.12.14"
+            }
+          ],
+          "settings": {
+            "reference_definitions": {
+              "query_quantization": "FP32 max(abs(query))/127 -> FP16 scale; FP32 divide by max(FP16scale,2^-24), RNE, INT8 clipping",
+              "scores": "exact INT64 dot of actual INT8 q/k -> FP64 times actual FP16 query/cache scales -> ReLU -> actual FP16 scaled weights -> FP64 head sum; not native accumulation emulation",
+              "candidate_scores": "max token score per 8-key block; forced last visible block to +infinity",
+              "overlap": "native chosen IDs against stable independent FP64 top-k set; not native-own-score correctness",
+              "replay_float_tolerance": {
+                "relative": 2e-12,
+                "absolute": 2e-12,
+                "purpose": "CPU replay portability only; no acceptance threshold"
+              },
+              "numerical_acceptance": null
+            },
+            "retained_query_coordinates": 65536,
+            "completed_key_rows": 52224,
+            "completed_key_coordinates": 6684672,
+            "all_score_coordinates": 208896,
+            "finite_score_coordinates": 208876,
+            "masked_score_coordinates": 20,
+            "full_native_scores_available": false,
+            "CPU_preparation_environment": {
+              "python": "3.12.14",
+              "NumPy": "2.3.5",
+              "machine": "arm64",
+              "system": "Darwin",
+              "reference": "exact INT64 dot of actual INT8 q/k -> FP64 times actual FP16 query/cache scales -> ReLU -> actual FP16 scaled weights -> FP64 head sum; not native accumulation emulation",
+              "observed_in_this_CPU_preparation": true,
+              "portable_model_device_invoked": false
+            }
+          }
+        }
+      ],
+      "common": [
+        "Four dependent tail4/all32logical-head capsules at lengths2048/32768 and layers2/20.",
+        "All20retained source arrays and74actual numeric/rawpairs are portable; no projection/compressor/model rerun.",
+        "ExactINT64 dot then actualFP16scales/weights in FP64, separate from native accumulation and own-score correctness."
+      ],
+      "differences": [
+        "Native QLI accumulation/top-k differs from the CPU mathematical reference; no acceptance or hardware-only attribution.",
+        "L2mode3ordinary and L20mode1candidate source, no mode2consumer equivalence.",
+        "Ratio2 dense completed-M adapter and selector scaffold __new__+Moduleinit, not full native constructor or same-live tensor chain."
+      ],
+      "comparisons": [
+        {
+          "id": "selected-top512-reference-diagnostics",
+          "title": "Native selected IDs versus independent reference top512",
+          "side_ids": [
+            "native-retained-qli",
+            "cpu-independent-integerdot"
+          ],
+          "scope": "16 dependent tail queries over four capsules; actual native INT8 operands and FP16 scales/weights. Independent reference scores are not native own scores.",
+          "metrics": [
+            {
+              "id": "exact-stable-reference-sets",
+              "label": "Queries with all512 IDs overlapping stable reference",
+              "value": 11,
+              "unit": "dependent queries"
+            },
+            {
+              "id": "overlap511-sets",
+              "label": "Queries with511 ID overlap",
+              "value": 4,
+              "unit": "dependent queries"
+            },
+            {
+              "id": "overlap510-sets",
+              "label": "Queries with510 ID overlap",
+              "value": 1,
+              "unit": "dependent queries"
+            },
+            {
+              "id": "reference-boundary-inconsistent",
+              "label": "Selected sets inconsistent with independent reference boundary",
+              "value": 5,
+              "unit": "dependent queries"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Dependent tail queries, not full-history query inventory",
+              "observed": 16,
+              "expected": 16,
+              "unit": "dependent queries"
+            },
+            {
+              "label": "Derived reference score coordinates including20causal masked",
+              "observed": 208896,
+              "expected": 208896,
+              "unit": "dependent coordinates"
+            }
+          ]
+        },
+        {
+          "id": "candidate-source-mode1-reference-diagnostics",
+          "title": "L20 mode1 candidate-source chosen blocks",
+          "side_ids": [
+            "native-retained-qli",
+            "cpu-independent-integerdot"
+          ],
+          "scope": "32K top2048 overlaps2048/2047/2047/2047; 2K all256visible is trivial. Last visible block forced to infinity. No mode2 consumer equivalence.",
+          "metrics": [
+            {
+              "id": "32k-min-overlap",
+              "label": "Minimum32K top2048 candidate overlap",
+              "value": 2047,
+              "unit": "blocks/query"
+            },
+            {
+              "id": "32k-exact-set-queries",
+              "label": "32K queries with full2048 overlap",
+              "value": 1,
+              "unit": "dependent queries"
+            },
+            {
+              "id": "2k-visible-blocks",
+              "label": "2K visible blocks all selected",
+              "value": 256,
+              "unit": "blocks/query"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "32K L20 dependent candidate-source queries",
+              "observed": 4,
+              "expected": 4,
+              "unit": "dependent queries"
+            }
+          ]
+        },
+        {
+          "id": "source-raw-array-cache-integrity",
+          "title": "Retained source arrays and actual native cache byte integrity",
+          "side_ids": [
+            "native-retained-qli",
+            "cpu-independent-integerdot"
+          ],
+          "scope": "Full20source arrays and74actual numeric/rawpairs; cache reconstructed using native slots/INT8 keys/actualFP16 scales/page0 protection. Prepared IDs and traced/untraced selected/candidates exact. Not full-model cache alias proof.",
+          "metrics": [
+            {
+              "id": "native-pairs",
+              "label": "Actual numeric/native-byte pairs verified",
+              "value": 74,
+              "unit": "pairs"
+            },
+            {
+              "id": "source-arrays",
+              "label": "Retained source arrays",
+              "value": 20,
+              "unit": "arrays"
+            },
+            {
+              "id": "exact-cache-bytes",
+              "label": "All reconstructed raw-cache bytes match original nativeSHA",
+              "value": 60709632,
+              "unit": "bytes"
+            }
+          ],
+          "coverage": [
+            {
+              "label": "Complete private capsule raw-cache bytes",
+              "observed": 60709632,
+              "expected": 60709632,
+              "unit": "bytes"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Serialized retained native branches, not same-live tensor or complete upstream composition.",
+        "Tail4 queries and all32 logical heads only; full history query inventory unavailable.",
+        "Ratio2 dense completed-M adapter and private sentinel cache geometry; no reference physical cache alias proof.",
+        "L2 ordinary mode3 and L20 candidate-source mode1; no mode2 consumer equivalence.",
+        "Native own full scores unavailable; FP64 set disagreement does not establish native top-k defect or numerical acceptance.",
+        "2K L20 candidates all256visible; trivial branch distinct from 32K discriminating top2048.",
+        "No full model, TP, backbone autograd/Trainer/TRL/verl, original-default32K or complete service coverage.",
+        "Original driver birth ticks unrecorded, kept unknown in private evidence.",
+        "New separately reviewed retained-query/key QLI evidence closes only this bounded serialized selected-stage gap; earlier producer-key evaluation/query-score gap statements retain their historical observation meaning.",
+        "Selected overlaps11x512/4x511/1x510 and five independent-reference boundary mismatches do not establish a native top-k defect; native own fullscores unavailable.",
+        "2Kcandidate all256visible is trivial, separately stated from discriminating32Ktop2048.",
+        "Instrumented native wall40.43474229704589s and peak158717952B are not steady-state model performance;512MiB is a postallocation guard."
+      ],
+      "provenance": {
+        "source_record_sha256": "8f07c4784278406893eb81ff843b774ef37a244b665199ed2a24893d0f4ec093",
+        "raw_artifacts_public": false,
+        "independent_replay_provided": false,
+        "hardware_display_normalized": true,
+        "retained_source_scope": "Four dependent tail4/all32head capsules; all20source arrays/74actual numeric-rawpairs,208896derived reference coordinates,60709632reconstructedcachebytes; no full model or native-own scores"
+      }
+    }
+  ]
+}
