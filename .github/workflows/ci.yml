@@ -22,6 +22,38 @@ jobs:
       - run: python -m pip install -r .github/requirements.txt
       - run: python -B -m unittest discover -s tests -v
       - run: python -B .github/validate.py
+  history:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - run: python -B .github/validate_history.py
+      - run: python -B .github/validate_differences.py
+      - name: Keep published history append-only
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "$BASE_REF" ]; then base="origin/$BASE_REF"
+          elif [ -n "$BEFORE" ] && ! [[ "$BEFORE" =~ ^0+$ ]] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then base="$BEFORE"
+          else base="origin/main"; fi
+          python -B .github/validate_immutability.py --base "$base"
+      - name: Keep published files small
+        run: |
+          large=$(find site -type f -size +50M)
+          if [ -n "$large" ]; then echo "Files over 50 MB belong in release or dataset storage:"; echo "$large"; exit 1; fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Browser regressions
+        run: |
+          npm install --prefix "$RUNNER_TEMP/browser" playwright@1.49.1
+          "$RUNNER_TEMP/browser/node_modules/.bin/playwright" install --with-deps chromium
+          for test in tests/browser_*.cjs; do NODE_PATH="$RUNNER_TEMP/browser/node_modules" node "$test"; done
   clean-install:
     runs-on: ubuntu-latest
     steps:
