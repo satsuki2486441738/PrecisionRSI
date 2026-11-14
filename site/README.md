@@ -2,9 +2,31 @@
 
 GitHub Pages serves this directory. Preview from the repository root with `python3 -m http.server 8000 --directory site`, then open `http://localhost:8000`.
 
+## Pages
+
+| Path | What it is |
+| --- | --- |
+| `index.html` | NumericForge — the comparison board: exploration swarm, question groups, detail list, platform compare and repair figure. |
+| `archive.html` | The repair / evaluation / differences dashboard this directory served previously. Reached from the board's navigation. |
+| `rsi.html` | RSI iteration console, driven by `data/rsi.json`. |
+
+`index.html` derives everything it shows from `data/evaluations.json` and
+`data/repairs.json` at load time through `board-data.js`; nothing is baked into
+the page, so adding a record to those files updates the board with no build
+step. Because it reads sibling files, it needs a static server — opening it
+through `file://` is blocked by the browser and the page says so.
+
+`board-data.js` normalises free-text hardware strings into platforms, maps
+bilingual metric labels onto one canonical id per quantity, and classifies each
+comparison by subject and by the single axis it isolates, reporting what stays
+unclassified rather than forcing a bucket. Readings that disagree in direction
+are never ranked together: cosine similarity and Top-1 agreement are ordered by
+deviation from agreement, and no total is computed across groups whose units
+differ.
+
 ## Survey differences
 
-The **Differences** tab (`#differences`) collects the five `survey/*` deliveries in
+The **Differences** tab (`#differences`) of `archive.html` collects the five `survey/*` deliveries in
 `data/differences.json`, with the original public JSON payloads retained separately
 in `data/differences-raw.json`. It groups measurement views by model, including a
 separate operator-reference group. Keyword, comparison-type, model and platform
@@ -41,7 +63,7 @@ python3 -B -m unittest discover -s tests -p 'test_difference_history.py' -v
 To collect a later delivery, review and update the collector's pinned `PINS` and
 archive digest explicitly, then regenerate and verify the output. This is a
 reproducible published snapshot, not a live polling service. The optional
-`node tests/browser_differences.cjs` regression uses Playwright and an installed
+`node tests/browser_differences.cjs` regression drives `archive.html` with Playwright and an installed
 Chromium (`PRECISION_BROWSER_EXECUTABLE`) to check filters, pagination, deep links,
 exact values, downloads, failure/retry behavior and mobile layout. The Pages
 workflow validates the survey archive against its frozen sources before deployment.
