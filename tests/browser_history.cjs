@@ -30,7 +30,7 @@ const presentationModel = require('../site/evaluation-presentation.js');
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    const url = `http://127.0.0.1:${port}/`;
+    const url = `http://127.0.0.1:${port}/archive.html`;
     const cards = page.locator('.evaluation-card');
     async function compactFilterLayout() {
       assert.equal(await page.locator('#extra-filters').evaluate((element) => element.open), false);

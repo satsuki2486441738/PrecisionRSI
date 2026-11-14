@@ -20,7 +20,7 @@ const model = require('../site/differences.js');
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    const url = `http://127.0.0.1:${port}/`;
+    const url = `http://127.0.0.1:${port}/archive.html`;
     await page.goto(url + '#differences');
     await page.waitForSelector('.difference-card');
     assert.equal(await page.locator('#verification-count').innerText(), String(data.records.length));
