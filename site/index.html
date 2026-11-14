@@ -1,67 +1,1072 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#f5f7f8">
-  <meta name="description" content="PrecisionRSI 精度差异、评测与修复历史：查看 GPU / NPU 比较配置、数值指标、修复过程与验证证据。">
-  <title>精度历史 · PrecisionRSI</title>
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./differences.css">
-  <script src="./history.js" defer></script>
-  <script src="./repair-presentation.js" defer></script>
-  <script src="./evaluation-settings.js" defer></script>
-  <script src="./evaluation-presentation.js" defer></script>
-  <script src="./evaluations.js" defer></script>
-  <script src="./differences.js" defer></script>
-  <script src="./app.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f6f4">
+<title>NumericForge · 跨栈数值一致性</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* inference-rsi typography and its one red, on paper instead of black. */
+  --bg:#f7f6f4; --paper:#fff; --ink:#17181c; --muted:#5f6168; --faint:#8b8d95;
+  --line:#e3e1dc; --hair:#efedea; --accent:#d8212f; --accent-soft:#d8212f0f;
+  /* Agreement ramp: unremarkable when it agrees, escalating to the brand red
+     when it does not — so red always means "look here". */
+  --t0:#3f7a6c; --t1:#6a7d73; --t2:#9a7520; --t3:#bb5324; --t4:#d8212f; --none:#c9c7c2;
+  --display:'Space Grotesk',Inter,"PingFang SC",system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0b0c0e; --paper:#131417; --ink:#f1efed; --muted:#98999f; --faint:#74767e;
+  --line:#28292e; --hair:#1c1d21; --accent:#f33143; --accent-soft:#f3314314;
+  --t0:#5f9488; --t1:#7d8f86; --t2:#b08a3c; --t3:#d1673a; --t4:#f33143; --none:#3a3c42;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+#bootmsg{padding:70px 0;color:var(--muted);font-size:13px;line-height:1.9}
+#bootmsg code{font:11.5px var(--mono);background:var(--hair);border-radius:4px;padding:1px 5px}
+body.ready #bootmsg{display:none}
+body:not(.ready) section.wrap{display:none}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;background:none;cursor:pointer}
+a{color:var(--accent);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:min(1180px,calc(100% - 56px));margin-inline:auto}
+.eyebrow{font:600 10px/1.5 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.note{color:var(--muted);font-size:12.5px;line-height:1.8}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;flex:none}
+
+header.site{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;font-weight:700;letter-spacing:-.3px}
+.brand-mark{display:grid;place-content:center;width:31px;height:31px;background:var(--paper);border:1px solid var(--line);color:var(--ink);border-radius:9px;font-size:17px;font-weight:600;position:relative}
+.brand-mark i{position:absolute;right:5px;bottom:2px;color:var(--accent);font-style:normal;font-size:11px}
+.brand small{display:block;font:500 8px var(--mono);letter-spacing:.18em;color:var(--muted);margin-top:2px}
+.ghost{border:1px solid var(--line);border-radius:6px;padding:6px 11px;font-size:12px;color:var(--muted)}
+.ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+.intro{padding:44px 0 6px}
+.herogrid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);gap:46px;align-items:center}
+.cta{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:7px;padding:10px 17px;font-size:13px;font-weight:500;background:var(--paper)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.07);color:#fff}
+.proof{margin:0;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:18px 20px}
+.proof .ptitle{font:600 9px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);text-align:center}
+.proof .pmodel{font:10px var(--mono);color:var(--faint);text-align:center;margin-top:3px}
+.pbars{display:grid;gap:11px;margin-top:16px}
+.pbar{display:grid;grid-template-columns:1fr 74px;gap:12px;align-items:center}
+.pbar .lab{font-size:11.5px;line-height:1.35;color:var(--muted)}
+.pbar .lab b{display:block;color:var(--ink);font-weight:500;font-size:12.5px}
+.pbar .track{grid-column:1/-1;height:9px;background:var(--hair);border-radius:3px;overflow:hidden;margin-top:-4px}
+.pbar .track i{display:block;height:100%;border-radius:3px}
+.pbar .val{font:600 14px var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.pbar.same .val{color:var(--t0)} .pbar.same .track i{background:var(--t0)}
+.pbar.cross .val{color:var(--t3)} .pbar.cross .track i{background:var(--t3)}
+.pbar.worse .val{color:var(--t4)} .pbar.worse .track i{background:var(--t4)}
+.proof figcaption{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;line-height:1.7;color:var(--muted)}
+.strip{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:34px;padding:16px 0}
+.strip div{flex:1 1 120px;text-align:center;border-left:1px solid var(--line)}
+.strip div:first-child{border-left:0}
+.strip b{display:block;font-size:24px;font-weight:600;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.strip span{display:block;margin-top:4px;font:9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.nav{display:flex;gap:4px;margin-left:26px;flex:1}
+.nav a{font-size:13px;color:var(--muted);padding:6px 12px;border-radius:7px;text-decoration:none}
+.nav a:hover{color:var(--ink);background:var(--hair)}
+.nav a[aria-current="page"]{background:var(--accent);color:#fff}
+/* The survey-differences dashboard and the RSI console are separate pages, so
+   they are marked as leaving this view rather than looking like tabs of it. */
+.nav .ext{color:var(--faint);font-size:12.5px}
+.nav .sep{align-self:center;width:1px;height:15px;background:var(--line);margin:0 7px}
+.doors{padding:10px 0 46px}
+/* Home group cards — AccelMark's suite grid: a category is not a menu entry,
+   it is a box with its own worst readings already showing. Each group owns a
+   hue so seven boxes read as seven things, not one thing seven times. */
+.gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(318px,1fr));gap:14px;margin-top:18px}
+.gcard{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;
+  background:var(--paper);overflow:hidden;transition:border-color .15s,transform .15s}
+.gcard:hover{border-color:var(--c);transform:translateY(-1px)}
+.ghead{display:flex;gap:12px;padding:16px 17px 13px;border-top:3px solid var(--c)}
+.gl{flex:none;display:grid;place-content:center;width:27px;height:27px;border-radius:8px;
+  background:var(--c);color:#fff;font:600 13px var(--mono)}
+.ghead h3{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.ghead p{margin-top:4px;font-size:12px;line-height:1.6;color:var(--muted)}
+.gmeta{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap;padding:0 17px 11px;
+  font:10.5px var(--mono);color:var(--faint)}
+.gmeta b{font-weight:500;color:var(--ink);font-size:12px}
+.gcard .spark{margin:0 17px 2px}
+.gtop{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--hair)}
+.gtop li{display:grid;grid-template-columns:minmax(0,1fr) 38px auto;gap:10px;align-items:center;
+  padding:7px 17px;border-bottom:1px solid var(--hair);font-size:12px}
+.gtop li span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.gtop li b{font:11px var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.gbar{display:block;height:3px;border-radius:2px;background:var(--hair);overflow:hidden}
+.gbar u{display:block;height:100%;background:var(--c);opacity:.75}
+.grank{padding:11px 17px 0;font:10px var(--mono);line-height:1.6;color:var(--faint)}
+.grank b{font-weight:500;color:var(--muted)}
+.grank s{text-decoration:none;color:var(--c)}
+.gtop li:hover{background:var(--hair)}
+.gtop li:hover span{color:var(--ink)}
+.gmore{width:100%;margin-top:auto;padding:12px 17px;text-align:left;font-size:12px;
+  color:var(--c);border-top:1px solid var(--hair)}
+.gmore:hover{background:var(--hair)}
+.gempty{padding:14px 17px;font-size:12px;color:var(--faint)}
+.cmp{padding:40px 0 60px}
+.cloudbox{border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:22px 20px;margin-top:26px}
+.cloudhead{text-align:center;font-size:15px;font-weight:600}
+.cloudsub{text-align:center;font-size:12px;color:var(--muted);margin-top:4px}
+.chip-cloud{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:18px}
+.chip-tile{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:999px;
+  padding:7px 15px;font-weight:600;letter-spacing:-.01em;background:var(--paper);color:var(--ink);transition:transform .12s,border-color .12s}
+.chip-tile:hover{transform:translateY(-1px);border-color:currentColor}
+.chip-tile .cnt{font:11px var(--mono);font-weight:400;color:var(--muted);padding-left:9px;border-left:1px solid var(--line)}
+.chip-tile.size-sm{font-size:12px;padding:5px 12px}
+.chip-tile.size-md{font-size:14px}
+.chip-tile.size-lg{font-size:17px;padding:9px 19px}
+.chip-tile[aria-pressed="true"]{color:#fff}
+.chip-tile[aria-pressed="true"] .cnt{color:#ffffffbb;border-left-color:#ffffff44}
+.chip-tile.npu{border-color:#f3314355;color:#f3314} .chip-tile.npu[aria-pressed="true"]{background:#b4492f;border-color:#b4492f}
+.chip-tile.gpu{border-color:#5f948855;color:#5f9488} .chip-tile.gpu[aria-pressed="true"]{background:#44705f;border-color:#44705f}
+.chip-tile.cpu{border-color:var(--line);color:var(--muted)} .chip-tile.cpu[aria-pressed="true"]{background:#4c4f58;border-color:#4c4f58}
+.basket{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;
+  background:var(--paper);padding:12px 16px;margin-top:14px}
+.basket .lb{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.bitem{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:13px}
+.bitem small{font:10px var(--mono);color:var(--muted)}
+.bitem button{color:var(--faint);line-height:1}.bitem button:hover{color:var(--accent)}
+.basket .acts{margin-left:auto;display:flex;gap:8px}
+.suites{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.suite{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-size:13px;color:var(--muted);background:var(--paper)}
+.suite i{display:grid;place-content:center;width:21px;height:21px;border-radius:50%;background:var(--hair);
+  font:600 10px var(--mono);font-style:normal;color:var(--muted)}
+.suite:hover{border-color:var(--accent);color:var(--ink)}
+.suite[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.suite[aria-pressed="true"] i{background:#ffffff28;color:#fff}
+.cmptable{border:1px solid var(--line);border-radius:12px;background:var(--paper);margin-top:18px;overflow:hidden}
+.cmprow{display:grid;align-items:center;gap:0;border-bottom:1px solid var(--hair)}
+.cmprow:last-child{border-bottom:0}
+.cmprow.head{border-bottom:1px solid var(--line)}
+.cmprow .mcell{padding:14px 16px}
+.cmprow.head .mcell{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.cmprow.head .pcell b{display:block;font-size:13.5px;font-weight:600}
+.cmprow.head .pcell small{display:block;font:10px var(--mono);color:var(--muted);margin-top:2px}
+.cmprow .mname{font-size:14px;font-weight:600}
+.cmprow .munit{font:10px var(--mono);color:var(--muted);margin-top:3px}
+.cmprow .mdir{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:2px}
+.pcell{padding:14px 16px;border-left:1px solid var(--hair)}
+.pbarline{height:7px;background:var(--hair);border-radius:3px;overflow:hidden;margin-bottom:7px}
+.pbarline i{display:block;height:100%;background:var(--t3);border-radius:3px}
+.pcell.best .pbarline i{background:var(--t0)}
+.pcell .pv{font:600 15px var(--mono);font-variant-numeric:tabular-nums}
+.pcell .pu{font:10px var(--mono);color:var(--muted);margin-left:5px}
+.pcell .star{color:var(--t0);margin-left:5px}
+.pcell .nod{color:var(--faint);font:12px var(--mono)}
+.pcell .pn{font:9px var(--mono);color:var(--faint);margin-top:3px}
+.cmpempty{padding:46px 20px;text-align:center;color:var(--muted)}
+.secnum{font:600 10px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.sech{font-size:21px;font-weight:600;letter-spacing:-.03em;margin-top:8px}
+.intro h1{font-size:clamp(28px,3.2vw,42px);line-height:1.15;letter-spacing:-.04em;font-weight:600;margin-top:13px;max-width:17em}
+.intro h1 em{font-style:normal;color:var(--accent)}
+.intro .lead{margin-top:16px;font-size:14px;line-height:1.9;color:var(--muted);max-width:620px}
+
+/* collections — the only navigation */
+.collections{padding:26px 0 8px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(246px,1fr));gap:12px}
+.col{display:block;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:17px 18px;transition:border-color .15s,transform .15s}
+.col:hover{border-color:var(--accent);transform:translateY(-1px)}
+.col[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.col .n{font:600 26px/1.1 var(--display);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.col .n span{font-size:12px;font-weight:400;color:var(--muted);margin-left:6px;letter-spacing:0}
+.col h3{font-size:15px;font-weight:600;margin-top:9px;letter-spacing:-.01em}
+.col p{margin-top:5px;font-size:12px;line-height:1.65;color:var(--muted)}
+.spark{display:flex;gap:1px;height:4px;margin-top:12px;border-radius:2px;overflow:hidden}
+.spark i{display:block}
+
+/* list */
+.list{padding:30px 0 60px}
+.listhead{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:6px}
+.listhead h2{font-size:20px;font-weight:600;letter-spacing:-.025em}
+.listhead .back{font-size:12px;color:var(--accent)}
+.sub{font-size:12.5px;color:var(--muted);margin-top:4px;max-width:70ch}
+.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0 10px}
+.search{flex:1 1 230px;min-width:190px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:0 11px;height:36px;background:var(--paper)}
+.search input{flex:1;min-width:0;border:0;background:none;outline:0;color:inherit;font:inherit;font-size:13px}
+.search kbd{font:10px var(--mono);color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+select.sort{height:36px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-size:13px;padding:0 10px}
+.count{font:11px var(--mono);color:var(--muted);margin-left:auto}
+
+.rows{border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
+.row{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(130px,.85fr) minmax(128px,.75fr) 92px;gap:16px;
+  align-items:center;padding:13px 18px;border-bottom:1px solid var(--hair);cursor:pointer;text-align:left;width:100%}
+.row:last-of-type{border-bottom:0}
+.row:hover{background:var(--hair)}
+.row.open{background:var(--accent-soft)}
+.row .main{min-width:0;display:flex;gap:10px;align-items:baseline}
+.row .title{font-size:14px;line-height:1.45;font-weight:500;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.tag{font:10px var(--mono);letter-spacing:.04em;border:1px solid var(--line);border-radius:4px;padding:2px 6px;color:var(--muted);white-space:nowrap}
+.tag.k{border-color:var(--accent);color:var(--accent)}
+.tag.warn{border-color:var(--t2);color:var(--t2)}
+.row .pair{font:11.5px var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .metric{text-align:right}
+.row .metric b{display:block;font:600 14px var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.row .metric small{display:block;font:9.5px var(--mono);color:var(--faint);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .date{font:11px var(--mono);color:var(--faint);text-align:right}
+.detail{padding:4px 18px 20px;background:var(--accent-soft);border-bottom:1px solid var(--hair)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;padding-top:12px;border-top:1px solid var(--line)}
+.dgrid h4{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.side{border:1px solid var(--line);border-radius:8px;padding:11px 13px;background:var(--paper);margin-bottom:8px}
+.side b{font-size:13px}
+.side .hw{font:10px var(--mono);color:var(--faint);margin-top:3px;word-break:break-all}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin-top:8px;font:11px var(--mono)}
+.kv span:nth-child(odd){color:var(--muted)}
+.kv .sval{word-break:break-all;line-height:1.55}
+.sgroup{margin-top:10px;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);
+  border-top:1px solid var(--hair);padding-top:8px}
+.libs{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px}
+.empty{padding:44px 20px;text-align:center;color:var(--muted)}
+.more{display:block;width:100%;padding:13px;border-top:1px solid var(--hair);font-size:13px;color:var(--accent)}
+.more:hover{background:var(--hair)}
+
+/* repairs — one log figure carries every reading; prose folds into the row */
+/* exploration swarm */
+.explore{border-top:1px solid var(--line);padding:30px 0 6px}
+.swarmbox{margin:16px 0 0;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:12px 14px 6px}
+.swarmbox svg{display:block;width:100%;height:auto}
+.sw-pt{cursor:pointer}
+.sw-pt:hover{stroke:var(--ink);stroke-width:1.3}
+.sw-ax{fill:var(--faint);font:9px var(--mono)}
+.sw-col{fill:var(--ink);font:600 10.5px var(--display)}
+.sw-sub{fill:var(--faint);font:9px var(--mono)}
+.sw-grid{stroke:var(--hair);stroke-width:1}
+.sw-sep{stroke:var(--line);stroke-width:1;stroke-dasharray:3 3}
+
+.repairs{border-top:1px solid var(--line);padding:38px 0 64px}
+.rlegend{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;margin-top:18px;font:10.5px var(--mono);color:var(--muted)}
+.rlegend span{display:inline-flex;align-items:center;gap:7px}
+.rfig{--rlab:20rem;--rfac:5.8rem;margin-top:13px;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding-bottom:6px}
+.rhead{display:grid;grid-template-columns:var(--rlab) minmax(0,1fr) var(--rfac);gap:0 16px;padding:13px 18px 5px;align-items:end}
+.rhead>b{font:600 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.rhead>b:last-child{text-align:right}
+.rticks{position:relative;height:14px}
+.rticks i{position:absolute;bottom:0;transform:translateX(-50%);font:9px var(--mono);color:var(--faint);white-space:nowrap}
+.rgrp{display:flex;align-items:baseline;gap:11px;padding:14px 18px 6px;border-top:1px solid var(--hair);margin-top:5px}
+.rgrp b{font-size:12.5px;font-weight:600;white-space:nowrap}
+.rgrp s{text-decoration:none;font:10.5px var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rrow{display:grid;width:100%;grid-template-columns:var(--rlab) minmax(0,1fr) var(--rfac);gap:0 16px;
+      align-items:center;padding:4px 18px;text-align:left;border:0;transition:background .1s}
+.rrow:hover,.rrow[aria-expanded="true"]{background:var(--hair)}
+.rlab{display:flex;align-items:center;gap:8px;min-width:0}
+.rlab b{font-weight:500;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtrk{position:relative;height:22px;background-image:var(--grad)}
+.rtrk i{position:absolute;top:50%}
+.rtrk .seg{height:1.5px;background:var(--line);transform:translateY(-50%)}
+.rtrk .pb{width:8px;height:8px;border-radius:50%;background:var(--none);transform:translate(-50%,-50%)}
+.rtrk .pa{width:9px;height:9px;border-radius:50%;background:var(--t0);transform:translate(-50%,-50%)}
+.rtrk .pa.zero{border-radius:2px;transform:translate(-50%,-50%) rotate(45deg)}
+.rtrk .pa.part{background:var(--t2)}
+.rfac{font:11px var(--mono);font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;white-space:nowrap}
+.rfac.zero{color:var(--t0)}
+.rrow.bare .rtrk{background:none}
+.rrow.bare .rfac{color:var(--faint)}
+.rdet{padding:2px 18px 18px}
+.rdet dl{display:grid;grid-template-columns:4.4rem minmax(0,1fr);gap:8px 15px;margin:0;
+         border-left:2px solid var(--line);padding:11px 0 11px 17px}
+.rdet dt{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+.rdet dd{margin:0;font-size:12.5px;line-height:1.75;color:var(--muted)}
+.rdet dd.m{font:11px var(--mono);line-height:1.7;word-break:break-all;color:var(--ink)}
+.rdet dd b{color:var(--ink);font-weight:500}
+.rdet ul{margin:0;padding-left:17px}
+.rdet li{margin-bottom:3px}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:14px;font:11px var(--mono);color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+@media(max-width:980px){.herogrid{grid-template-columns:1fr;gap:26px}}
+@media(max-width:900px){.wrap{width:calc(100% - 28px)}
+  .row{grid-template-columns:1fr auto;gap:8px}.row .pair,.row .date{display:none}
+  .rfig{--rlab:9.5rem;--rfac:4.6rem}.rlab b{font-size:12px}
+  /* Every decade keeps its gridline; only the labels thin out, so the
+     axis stays readable instead of collapsing into one smear. */
+  .rticks i:nth-child(odd):not(:first-child),.rticks i:nth-child(2){display:none}
+  .rgrp s{font-size:9.5px}
+  #csv{display:none}}
+</style>
 </head>
 <body>
-  <a class="skip-link" href="#history">跳至历史记录</a>
-  <header class="site-header wrap">
-    <a class="brand" href="./" aria-label="PrecisionRSI 首页"><span class="brand-mark" aria-hidden="true">P<span>·</span></span><span>PrecisionRSI<span class="brand-sub">PRECISION ENGINEERING</span></span></a>
-    <a class="header-label" href="./rsi.html"><span class="live-dot" aria-hidden="true"></span> RSI 迭代运行台 ↗</a>
-  </header>
-  <main class="wrap">
-    <nav class="history-tabs" role="tablist" aria-label="历史类型">
-      <button id="tab-repairs" role="tab" aria-selected="true" aria-controls="archive-panel" type="button">精度修复历史<span>REPAIRS</span></button>
-      <button id="tab-evaluations" role="tab" aria-selected="false" aria-controls="archive-panel" tabindex="-1" type="button">精度评测历史<span>EVALUATIONS</span></button>
-      <button id="tab-differences" role="tab" aria-selected="false" aria-controls="archive-panel" tabindex="-1" type="button">精度差异<span>DIFFERENCES</span></button>
-    </nav>
-    <div id="archive-panel" role="tabpanel" aria-labelledby="tab-repairs">
-    <section class="hero" aria-labelledby="page-title">
-      <div><p class="eyebrow" id="hero-kind">REPAIR HISTORY / 精度工程记录</p><h1 id="page-title">精度修复</h1><p class="intro" id="page-intro">按库、版本和任务查看修复结果，展开了解问题与解决方式。</p></div>
-      <aside class="hero-note" id="method"><span class="note-index">01 — METHOD</span><p>发现偏差 <span aria-hidden="true">↗</span> 定位根因<br>实施修复 <span aria-hidden="true">↗</span> 原始负载验证</p><span class="note-caption">真实记录 · 修复过程 · 验证证据</span></aside>
-    </section>
-    <section class="stats" aria-label="档案概览">
-      <div><span class="stat-label" id="stat-label-0">独立修复</span><strong id="total-count">—</strong><span class="stat-foot" id="stat-foot-0">REPAIRS</span></div>
-      <div><span class="stat-label" id="stat-label-1">验证轮次</span><strong id="verification-count">—</strong><span class="stat-foot" id="stat-foot-1">VERIFICATIONS</span></div>
-      <div><span class="stat-label" id="stat-label-2">库分组</span><strong id="group-count">—</strong><span class="stat-foot" id="stat-foot-2">LIBRARY GROUPS</span></div>
-      <div><span class="stat-label" id="stat-label-3">数据更新</span><strong class="date-stat" id="updated-at">—</strong><span class="stat-foot" id="stat-foot-3">LAST UPDATED</span></div>
-    </section>
-    <section class="archive" aria-labelledby="history-title">
-      <div class="section-heading"><div><p class="eyebrow">THE ARCHIVE</p><h2 id="history-title">按库查看修复</h2></div><button class="text-button" id="download" type="button" disabled>下载 JSON <span aria-hidden="true">↗</span></button></div>
-      <form class="filters" id="filters" role="search" aria-label="筛选修复记录">
-        <div class="search-field"><label for="search">关键词</label><input id="search" type="search" placeholder="搜索问题、根因或修复…" autocomplete="off"></div>
-        <div id="task-filter" hidden><label for="task">任务</label><select id="task"><option value="">全部任务</option><option value="inference">推理</option><option value="sft">SFT</option><option value="rl">RL</option></select></div>
-        <div id="library-filter"><label for="library">涉及的库</label><select id="library"><option value="">全部库</option></select></div>
-        <div id="comparison-kind-filter" hidden><label for="comparison-kind">比较类型</label><select id="comparison-kind"><option value="">全部类型</option></select></div>
-        <details id="extra-filters" class="extra-filters">
-          <summary>更多筛选</summary>
-          <div class="advanced-filter-fields">
-            <div><label for="model">模型</label><select id="model"><option value="">全部模型</option></select></div>
-            <div><label for="hardware">硬件</label><select id="hardware"><option value="">全部硬件</option></select></div>
-          </div>
-        </details>
-      </form>
-      <div class="results-meta"><p id="result-count" role="status" aria-live="polite">正在读取修复档案…</p><button class="text-button" id="reset" type="button" hidden>清除筛选</button></div>
-      <div id="state" class="state" role="status"><span class="loading-mark" aria-hidden="true"></span><h3>正在加载记录</h3><p>准备修复过程与验证证据。</p></div>
-      <div id="history" class="timeline" tabindex="-1"></div>
-    </section>
+<header class="site"><div class="wrap">
+  <span class="brand"><span class="brand-mark">N<i>▸</i></span><span>NumericForge<small>CROSS-STACK NUMERICS</small></span></span>
+  <nav class="nav" id="nav">
+    <a href="#/" data-route="">首页</a><a href="#/compare" data-route="compare">对比</a>
+    <a href="#/list" data-route="list">明细</a><a href="#/repairs" data-route="repairs">修复</a>
+    <i class="sep" aria-hidden="true"></i>
+    <a class="ext" href="./archive.html">精度差异 ↗</a><a class="ext" href="./rsi.html">RSI ↗</a>
+  </nav>
+  <div style="display:flex;gap:9px">
+    <button class="ghost" id="theme">◐</button>
+    <button class="ghost" id="csv">导出当前列表</button>
+  </div>
+</div></header>
+<p class="wrap" id="bootmsg">正在读取 <code>data/evaluations.json</code> 与 <code>data/repairs.json</code>…</p>
+
+<section class="wrap intro" id="view-home">
+  <div class="herogrid">
+    <div>
+      <p class="eyebrow">The finding</p>
+      <h1>NumericForge</h1>
+      <p class="lead">【todo】</p>
+      <div class="cta">
+        <button class="btn primary" id="ctaBrowse">浏览全部比较 →</button>
+        <button class="btn" id="ctaCompare">并排对比平台</button>
+      </div>
     </div>
-  </main>
-  <footer class="wrap"><span>PrecisionRSI <span class="footer-divider">/</span> 精度差异、评测与修复历史</span><span>记录数值与验证证据。</span></footer>
-  <noscript><p class="wrap">请启用 JavaScript 以加载历史记录，或直接查看 <a href="./data/evaluations.json">评测数据</a>与 <a href="./data/repairs.json">修复数据</a>、<a href="./data/differences.json">差异数据</a>。</p></noscript>
+    <figure class="proof" id="proof"></figure>
+  </div>
+  <div class="strip" id="strip"></div>
+</section>
+
+<section class="wrap explore" id="view-explore" hidden>
+  <p class="secnum">01 · 探索</p>
+  <h2 class="sech">配方格局</h2>
+  <p class="sub" style="margin-bottom:2px">每个点是一次读数——某套框架、精度与硬件组合下的一个量。纵轴是<b>偏离一致的程度</b>，越高越不一致。同一列里点铺得越开，说明这个量越吃配置。点任意一点可以跳到那条记录。</p>
+  <figure class="swarmbox"><svg id="swarm" viewBox="0 0 1000 360" role="img" aria-label="按指标分列的偏离分布"></svg></figure>
+  <div class="legend" id="swarmLegend"></div>
+</section>
+
+<section class="wrap doors" id="view-doors" hidden>
+  <p class="secnum">02 · 分组</p>
+  <h2 class="sech">按问题分好的比较</h2>
+  <p class="sub" style="margin-bottom:2px">每组回答一个具体问题，组内量纲一致。卡片里先列出该组偏差最大的几条——不用先选，直接看。</p>
+  <div class="gcards" id="doors"></div>
+  <p class="note" style="margin-top:16px">组之间不比大小：不同组的量纲不同，没有可比的总分。</p>
+</section>
+
+<section class="wrap collections" id="view-collections">
+  <p class="secnum">分组</p>
+  <h2 class="sech">挑一个问题开始</h2>
+  <p class="sub" style="margin-bottom:18px">每组回答一个具体问题。组内量纲一致，排序才有意义；组之间不比大小。</p>
+  <div class="cols" id="cols"></div>
+  <div class="legend" id="legend"></div>
+</section>
+
+<section class="wrap list" id="view-list">
+  <p class="secnum">02 · 明细</p>
+  <div class="listhead">
+    <div><h2 id="listTitle"></h2><p class="sub" id="listSub"></p></div>
+    <button class="back" id="back" hidden>← 换一组</button>
+  </div>
+  <div class="bar">
+    <label class="search"><span style="color:var(--faint)">⌕</span>
+      <input id="q" type="search" placeholder="搜索比较、模型…" autocomplete="off"><kbd>/</kbd></label>
+    <select class="sort" id="sort">
+      <option value="dev">偏差从大到小</option>
+      <option value="dev-asc">偏差从小到大</option>
+      <option value="date">最近优先</option>
+      <option value="cov">覆盖率优先</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="rows" id="rows"></div>
+</section>
+
+
+<section class="wrap cmp" id="view-compare" hidden>
+  <p class="secnum" style="text-align:center">Compare</p>
+  <h2 class="sech" id="cmpTitle" style="text-align:center;font-size:30px">并排对比</h2>
+  <p class="sub" id="cmpSub" style="text-align:center;margin:8px auto 0;max-width:62ch">
+    选两个或更多平台，看它们在同一类量上各自偏离对侧多少。数值描述的是<b>它参与的那些成对比较</b>，不是平台单独的准确度。</p>
+
+  <div class="cloudbox">
+    <div class="cloudhead">按平台快速添加</div>
+    <div class="cloudsub">点一下把该平台加入对比篮；至少选两个。大小＝参与的比较数。</div>
+    <div class="chip-cloud" id="cloud"></div>
+  </div>
+
+  <div class="basket" id="basket" hidden></div>
+
+  <p class="secnum" style="margin-top:26px">比较对象</p>
+  <div class="suites" id="suites"></div>
+
+  <div class="cmptable" id="cmpTable"></div>
+  <p class="note" id="cmpNote" style="margin-top:12px"></p>
+</section>
+<section class="wrap repairs" id="repairs">
+  <p class="secnum">03 · 结果</p>
+  <h2 style="font-size:20px;font-weight:600;letter-spacing:-.025em;margin-top:7px">被定位并修复的偏差</h2>
+  <p class="sub">比较只产生读数。归因到具体代码、打上补丁、并在原 workload 上复验之后，才会出现在这里。</p>
+  <div class="strip" id="repairStat" style="margin-top:26px"></div>
+  <div class="rlegend">
+    <span><i class="dot" style="background:var(--none)"></i>修复前</span>
+    <span><i class="dot" style="background:var(--t0)"></i>修复后</span>
+    <span><i class="dot" style="background:var(--t0);border-radius:1px;transform:rotate(45deg)"></i>精确为 0</span>
+    <span><i class="dot" style="background:var(--t2)"></i>仍可观测</span>
+    <span>横轴 = 误差量级，对数刻度</span>
+    <span style="color:var(--faint)">点任意一行展开出处与复验范围</span>
+  </div>
+  <div class="rfig" id="repairFig"></div>
+</section>
+
+
+<script src="./board-data.js"></script>
+<script>
+"use strict";
+function start(D){
+const S = D.summary, ROWS = D.rows, REPAIRS = (D.repairs.repairs || []);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const fmtInt = n => n.toLocaleString();
+const TASK = { sft:"SFT", inference:"推理", rl:"RL" };
+
+function fmtNum(v){
+  if (v == null || Number.isNaN(v)) return "—";
+  if (v === 0) return "0";
+  const a = Math.abs(v);
+  if (a >= 1e4 || a < 1e-4) return v.toExponential(2);
+  if (a >= 100) return v.toFixed(1);
+  if (a >= 1) return v.toFixed(3);
+  return v.toPrecision(3);
+}
+
+const SUPS = { "-": "⁻", "0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹" };
+const sup = n => String(n).split("").map(c => SUPS[c] || c).join("");
+
+/* One reading per row instead of a grid of columns: pick the metric that best
+   characterises this comparison, and always show which one it is. */
+const PRIORITY = ["max_abs","cosine","nll_abs","logprob_mae","rmse","l2","top1"];
+function headline(r){
+  for (const k of PRIORITY) if (r.metrics[k]) return { key:k, ...r.metrics[k] };
+  const any = Object.entries(r.metrics)[0];
+  return any ? { key:any[0], ...any[1] } : null;
+}
+/* Tiers come from the row's own 最大绝对误差 (or 余弦相似度). Units differ between
+   subjects, so a tier is a within-group reading aid, never a cross-table rank. */
+const TIERS = [
+  { key:"t0", label:"位级一致" }, { key:"t1", label:"≤1e-6" }, { key:"t2", label:"≤1e-3" },
+  { key:"t3", label:"≤1" }, { key:"t4", label:">1" },
+];
+function tierIndex(r){
+  const ma = r.metrics.max_abs?.value, cos = r.metrics.cosine?.value;
+  if (ma == null && cos == null) return null;
+  if (ma === 0 || cos === 1) return 0;
+  if ((ma != null && ma < 1e-6) || (cos != null && cos >= 0.999999)) return 1;
+  if ((ma != null && ma < 1e-3) || (cos != null && cos >= 0.999)) return 2;
+  if (ma != null && ma >= 1) return 4;
+  return 3;
+}
+const tierColor = i => i == null ? "var(--none)" : `var(--${TIERS[i].key})`;
+const tierLabel = i => i == null ? "无可比指标" : TIERS[i].label;
+
+const has = (r, f) => r.platforms.some(f);
+const isNPU = p => p.includes("Ascend"), isGPU = p => p.includes("NVIDIA") || p.includes("RTX"), isCPU = p => p === "CPU";
+
+/* Curated entry points. Overlapping on purpose: each answers one question, and
+   together they cover every row (见「其它」). */
+const COLLECTIONS = [
+  { id:"npugpu", title:"NPU ↔ GPU 直接对比", desc:"昇腾与 NVIDIA 两侧直接比对，没有第三方参考介入。",
+    test:r => has(r,isNPU) && has(r,isGPU) && !has(r,isCPU) },
+  { id:"cpuref", title:"对 CPU 独立参考", desc:"以独立 CPU 实现为基准，检查某一侧是否偏离。",
+    test:r => has(r,isCPU) && r.platforms.length > 1 },
+  { id:"train", title:"训练：梯度与参数更新", desc:"反向梯度、优化器状态与一步更新是否一致。",
+    test:r => ["gradient","update"].includes(r.subject_key) },
+  { id:"infer", title:"推理：分布与目标分数", desc:"完整词表分布、目标 logprob 与 NLL 的吻合程度。",
+    test:r => ["distribution","score"].includes(r.subject_key) && r.task === "inference" },
+  { id:"mode", title:"执行模式与检查点恢复", desc:"连续训练与 checkpoint 恢复、hooks 开关等同平台内对照。",
+    test:r => r.axis_key === "exec_mode" || r.subject_key === "checkpoint" },
+  { id:"partial", title:"partial：结论不完整", desc:"采集或比对未跑满，引用前先看清范围。", warn:true,
+    test:r => r.status === "partial" },
+];
+COLLECTIONS.forEach(c => c.rows = ROWS.filter(c.test));
+const covered = new Set(COLLECTIONS.flatMap(c => c.rows.map(r => r.eval_id + "|" + r.title)));
+const others = ROWS.filter(r => !covered.has(r.eval_id + "|" + r.title));
+if (others.length) COLLECTIONS.push({ id:"other", title:"其它比较", desc:"不属于上面任何一组的记录，一并列出，不丢弃。", rows:others, test:() => false });
+
+const state = { col:null, q:"", sort:"dev", open:null, openRepair:null, limit:40 };
+
+/* Hero proof: the worked example that overturns "cross-platform is the risk". */
+(function renderProof(){
+  const h = S.hero;
+  if (!h) return;
+  const max = Math.max(...h.bars.map(b => b.value ?? 0)) || 1;
+  $("proof").innerHTML = `<div class="ptitle">${esc(h.unit)}</div>`
+    + `<div class="pmodel">${esc(h.model)} · 同输入同权重</div><div class="pbars">`
+    + h.bars.map(b => `<div class="pbar ${b.kind}">
+        <span class="lab"><b>${esc(b.label)}</b>${esc(b.note)}</span>
+        <span class="val">${fmtNum(b.value)}</span>
+        <span class="track"><i style="width:${b.value ? Math.max(2, b.value / max * 100) : 2}%"></i></span>
+      </div>`).join("") + `</div>`
+    + `<figcaption>同卡重复跑是位级一致的，说明机器本身确定。但<b style="color:var(--ink)">同一张卡上换一种 KV 分块方式，
+       偏差比跨平台还大</b>——风险来自执行路径，不只来自硬件。</figcaption>`;
+})();
+$("strip").innerHTML = [
+  [fmtInt(S.comparisons), "成对比较"], [fmtInt(S.evaluations), "评测"],
+  [fmtInt(S.platforms.length), "平台"], [fmtInt(REPAIRS.length), "已修复"],
+  [fmtInt(S.partial), "partial"],
+].map(([n,l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("");
+
+/* Both the swarm and the group cards hand off to the detail list, so the jump
+   lives in one place. route() only toggles visibility and neither it nor the
+   hash change re-renders, so this does both. */
+function goToRow(col, row){
+  state.col = col; state.open = row || null; state.limit = 40; state.q = "";
+  if (row){
+    const i = visible().findIndex(r => r.eval_id + "|" + r.title === row);
+    if (i >= state.limit) state.limit = i + 1;
+  }
+  if (location.hash === "#/list") route(); else location.hash = "#/list";
+  render();
+  setTimeout(() => {
+    const el = row ? $("rows").querySelector(`[data-id="${CSS.escape(row)}"]`) : $("listTitle");
+    el?.scrollIntoView({ block: row ? "center" : "start" });
+  }, 60);
+}
+
+/* Home lays the groups out with their own worst readings already visible, so
+   the first screen is evidence rather than a seven-way choice. */
+const GCOL = { npugpu:"#3b5bdb", cpuref:"#0b7285", train:"#7048e8", infer:"#c2410c",
+               mode:"#15803d", partial:"#b45309", other:"#78716c" };
+const GLET = "ABCDEFG";
+/* Cosine and Top-1 are higher-is-better: sorting them descending surfaces the
+   group's BEST rows under a "worst first" heading. Rank on deviation from
+   agreement instead, and label every number with the quantity it is. */
+const MCOL = Object.fromEntries((S.metric_columns || []).map(m => [m.key, m]));
+const HIGHER_BETTER = new Set(Object.values(MCOL).filter(m => m.better === "higher").map(m => m.key));
+/* Deviation from agreement, so one ordering works for both directions. */
+const devBy = (r, k) => {
+  const v = r.metrics[k]?.value;
+  return v == null ? -1 : (HIGHER_BETTER.has(k) ? 1 - v : Math.abs(v));
+};
+/* A card ranks on ONE quantity — the group's most frequent reading. Ranking a
+   card across two different quantities would break the same rule the site
+   states about not ranking across groups. */
+function leadMetric(rows){
+  const n = {};
+  for (const r of rows) for (const k of Object.keys(r.metrics)) n[k] = (n[k] || 0) + 1;
+  const best = Object.entries(n).sort((a, b) => b[1] - a[1])[0];
+  return best ? best[0] : null;
+}
+
+function renderGroups(){
+  $("doors").innerHTML = COLLECTIONS.map((c, gi) => {
+    const plats = new Set(c.rows.flatMap(r => r.platforms)).size;
+    const mk = leadMetric(c.rows), meta = mk ? MCOL[mk] : null;
+    const pool = mk ? c.rows.filter(r => r.metrics[mk]) : [];
+    const top = [...pool].sort((a, b) => devBy(b, mk) - devBy(a, mk)).slice(0, 4);
+    const scored = c.rows.filter(r => tierIndex(r) != null);
+    // The bar is scaled inside this card only, against the group's own worst
+    // reading of the same quantity — the one comparison that is always valid.
+    const worst = Math.max(...pool.map(r => devBy(r, mk)), 0) || 1;
+    const entries = top.length ? top.map(r => {
+      const id = r.eval_id + "|" + r.title;
+      return `<li data-row="${esc(id)}" data-col="${c.id}" title="${esc(r.title)}">
+        <span>${esc(r.title)}</span>
+        <i class="gbar"><u style="width:${(devBy(r, mk) / worst * 100).toFixed(1)}%"></u></i>
+        <b>${fmtNum(r.metrics[mk].value)}</b></li>`;
+    }).join("") : `<li class="gempty" style="display:block">这组没有可比指标，只有定性记录。</li>`;
+    const rank = meta
+      ? `<div class="grank">偏离最大的 ${top.length} 条 · 按 <b>${esc(meta.label)}</b>
+         <s>${meta.better === "higher" ? "越大越一致" : "越小越一致"}</s> · 该组 ${fmtInt(pool.length)} 条有此读数</div>`
+      : "";
+    return `<article class="gcard" style="--c:${GCOL[c.id] || "#78716c"}">
+      <div class="ghead"><span class="gl">${GLET[gi] || "·"}</span>
+        <div><h3>${esc(c.title)}</h3><p>${esc(c.desc)}</p></div></div>
+      <div class="gmeta"><b>${fmtInt(c.rows.length)}</b> 条比较 · <b>${plats}</b> 个平台 ·
+        <b>${fmtInt(scored.length)}</b> 条有可比指标</div>
+      ${sparkOf(c.rows)}
+      ${rank}
+      <ul class="gtop">${entries}</ul>
+      <button class="gmore" data-col="${c.id}">查看全部 ${fmtInt(c.rows.length)} 条 →</button>
+    </article>`;
+  }).join("");
+
+  const go = goToRow;
+  $("doors").querySelectorAll("[data-row]").forEach(li =>
+    li.onclick = () => go(li.dataset.col, li.dataset.row));
+  $("doors").querySelectorAll(".gmore").forEach(b =>
+    b.onclick = () => go(b.dataset.col, null));
+}
+renderGroups();
+
+/* ---- 01 exploration: the whole corpus as one landscape -----------------
+   One column per quantity, because a column is the only place where a unit
+   is shared. The axis is deviation FROM agreement, so cosine and Top-1 —
+   where larger is better — are plotted as 1−value and point the same way as
+   an error. Exact agreement cannot sit on a log axis, so it gets its own
+   band under the dashed line instead of being nudged to a fake epsilon. */
+const SW_LO = -16, SW_HI = 1;
+const SWK = {
+  cross:  { c:"#c2410c", t:"NPU ↔ GPU" },
+  cpuref: { c:"#0b7285", t:"对 CPU 参考" },
+  same:   { c:"#3b5bdb", t:"同平台内" },
+  other:  { c:"#78716c", t:"其它" },
+};
+function swKind(r){
+  const ps = r.platforms, npu = ps.some(isNPU), gpu = ps.some(isGPU), cpu = ps.some(isCPU);
+  if (npu && gpu) return "cross";
+  if (cpu && new Set(ps).size > 1) return "cpuref";
+  if (new Set(ps).size <= 1) return "same";
+  return "other";
+}
+const swHash = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return Math.abs(h); };
+
+function renderSwarm(){
+  const cols = S.metric_columns.filter(m => m.count);
+  const L = 48, R = 10, T = 12, B = 46, W = 1000, H = 360;
+  const plotH = H - T - B, zoneH = 30, logH = plotH - zoneH;
+  const colW = (W - L - R) / cols.length, rad = 2.3;
+  const yLog = d => T + (1 - (Math.max(SW_LO, Math.min(SW_HI, Math.log10(d))) - SW_LO) / (SW_HI - SW_LO)) * logH;
+  const zeroY = T + logH + zoneH * 0.55;
+
+  let g = "";
+  for (const t of [-16, -12, -8, -4, 0]) {
+    const y = yLog(10 ** t).toFixed(1);
+    g += `<line class="sw-grid" x1="${L}" x2="${W - R}" y1="${y}" y2="${y}"/>`
+       + `<text class="sw-ax" x="${L - 6}" y="${y}" text-anchor="end" dominant-baseline="middle">10${sup(t)}</text>`;
+  }
+  const sepY = (T + logH + 4).toFixed(1);
+  g += `<line class="sw-sep" x1="${L}" x2="${W - R}" y1="${sepY}" y2="${sepY}"/>`
+     + `<text class="sw-ax" x="${L - 6}" y="${zeroY}" text-anchor="end" dominant-baseline="middle">0</text>`;
+
+  cols.forEach((m, ci) => {
+    const cx = L + colW * (ci + 0.5), half = colW / 2 - 5;
+    const pts = [];
+    for (const r of ROWS) {
+      const v = r.metrics[m.key]?.value;
+      if (v == null) continue;
+      pts.push({ r, dev: HIGHER_BETTER.has(m.key) ? 1 - v : Math.abs(v), v });
+    }
+    const zeros = pts.filter(p => p.dev <= 0), rest = pts.filter(p => p.dev > 0);
+    // Beeswarm: bin by y, then fan out from the centre so density is visible.
+    rest.sort((a, b) => a.dev - b.dev);
+    const bins = new Map();
+    for (const p of rest) {
+      p.y = yLog(p.dev);                       // exact reading; only x is arranged
+      const b = Math.round(p.y / (rad * 1.15));
+      if (!bins.has(b)) bins.set(b, []);
+      bins.get(b).push(p);
+    }
+    for (const arr of bins.values()) {
+      // Clamping a crowded bin to the column edge piles points into a false
+      // solid bar. Tighten the step instead: a dense row then reads as dense.
+      // Capped well inside the column: past the cap the dots overlap, so a
+      // tight cluster darkens instead of stretching into a full-width rule.
+      const span = 2 * half * 0.55;
+      const step = arr.length > 1 ? Math.min(rad * 1.9, span / (arr.length - 1)) : rad * 1.9;
+      arr.forEach((p, i) => {
+        const k = Math.ceil(i / 2) * (i % 2 ? 1 : -1);
+        p.x = cx + k * step;
+      });
+    }
+    for (const p of zeros) {
+      const h = swHash(p.r.eval_id + p.r.title);
+      p.x = cx + ((h % 1000) / 1000 - 0.5) * 2 * half;
+      p.y = zeroY + (((h >> 10) % 100) / 100 - 0.5) * (zoneH * 0.55);
+    }
+    for (const p of [...rest, ...zeros]) {
+      const k = SWK[swKind(p.r)];
+      g += `<circle class="sw-pt" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${rad}"
+        fill="${k.c}" fill-opacity=".5" data-row="${esc(p.r.eval_id + "|" + p.r.title)}"
+        ><title>${esc(p.r.title)}
+${esc(p.r.pair)}
+${esc(m.label)} ${fmtNum(p.v)}${p.dev > 0 ? `　偏离 ${fmtNum(p.dev)}` : "　完全一致"}</title></circle>`;
+    }
+    const by = H - B + 16;
+    g += `<text class="sw-col" x="${cx}" y="${by}" text-anchor="middle">${esc(m.label)}</text>`
+       + `<text class="sw-sub" x="${cx}" y="${by + 14}" text-anchor="middle">${pts.length} 读数 · ${zeros.length} 完全一致</text>`;
+  });
+  $("swarm").innerHTML = g;
+  $("swarm").querySelectorAll("[data-row]").forEach(c =>
+    c.onclick = () => goToRow(null, c.dataset.row));
+
+  $("swarmLegend").innerHTML = Object.values(SWK)
+    .map(k => `<span><i class="dot" style="background:${k.c}"></i>${k.t}</span>`).join("")
+    + `<span style="color:var(--faint)">纵轴＝偏离一致的程度（对数）；虚线下方＝读数完全一致。余弦相似度与 Top-1 一致率按 1−值 作图，方向才与误差一致。</span>`;
+}
+renderSwarm();
+$("ctaCompare").onclick = () => { location.hash = "#/compare"; };
+$("ctaBrowse").onclick = () => { location.hash = "#/list"; };
+
+
+function sparkOf(rows){
+  const counts = [0,0,0,0,0,0];
+  for (const r of rows){ const i = tierIndex(r); counts[i == null ? 5 : i]++; }
+  const total = rows.length || 1;
+  return `<span class="spark">` + counts.map((n,i) =>
+    n ? `<i style="flex:${n/total};background:${i<5?`var(--${TIERS[i].key})`:"var(--none)"}"></i>` : "").join("") + `</span>`;
+}
+function renderCollections(){
+  $("cols").innerHTML = COLLECTIONS.map(c => `
+    <button class="col" data-col="${c.id}" aria-pressed="${state.col === c.id}">
+      <span class="n">${fmtInt(c.rows.length)}<span>条比较</span></span>
+      <h3>${esc(c.title)}</h3><p>${esc(c.desc)}</p>${sparkOf(c.rows)}
+    </button>`).join("");
+  $("cols").querySelectorAll("[data-col]").forEach(b => b.onclick = () => {
+    state.col = state.col === b.dataset.col ? null : b.dataset.col;
+    state.open = null; state.limit = 40; render();
+    $("listTitle").scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+  $("legend").innerHTML = `<span style="color:var(--faint)">卡片底部色条＝该组的一致性分布</span>`
+    + TIERS.map(t => `<span><i class="dot" style="background:var(--${t.key})"></i>${t.label}</span>`).join("")
+    + `<span><i class="dot" style="background:var(--none)"></i>无可比指标</span>`;
+}
+
+const current = () => (state.col ? COLLECTIONS.find(c => c.id === state.col).rows : ROWS);
+function visible(){
+  const q = state.q.trim().toLowerCase();
+  let rows = current();
+  if (q) rows = rows.filter(r => (r.title+" "+r.eval_title+" "+r.model+" "+r.pair+" "+r.scope).toLowerCase().includes(q));
+  const dev = r => { const h = headline(r); if (!h) return null;
+    return h.better === "higher" ? (1 - h.value) : Math.abs(h.value); };
+  const by = {
+    dev:(a,b) => { const x = dev(a), y = dev(b);
+      if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1; return y - x; },
+    "dev-asc":(a,b) => { const x = dev(a), y = dev(b);
+      if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1; return x - y; },
+    date:(a,b) => String(b.date).localeCompare(String(a.date)),
+    cov:(a,b) => (b.coverage.ratio ?? -1) - (a.coverage.ratio ?? -1),
+  }[state.sort];
+  return rows.slice().sort(by);
+}
+
+function detailOf(r){
+  const sides = r.sides.map(s => `<div class="side"><b>${esc(s.platform)}</b>
+    <div class="hw">${esc(s.label||"")}${s.label&&s.hardware?" · ":""}${esc(s.hardware||"")}</div>
+    ${s.libraries.length?`<div class="libs">${s.libraries.map(l=>`<span class="tag">${esc(l)}</span>`).join("")}</div>`:""}
+    ${(s.settings||[]).map(g => `${g.group?`<div class="sgroup">${esc(g.group)}</div>`:""}
+       <div class="kv">${g.fields.map(([k,v])=>`<span>${esc(k)}</span><span class="sval">${esc(v)}</span>`).join("")}</div>`).join("")}</div>`).join("");
+  const metrics = Object.entries(r.metrics).map(([k,m]) => `<span>${esc(m.label)}</span><span>${fmtNum(m.value)} ${esc(m.unit)}</span>`).join("");
+  const ev = (r.evidence||[]).filter(e=>e.url).map(e =>
+    `<p class="note"><a href="https://satsuki2486441738.github.io/PrecisionRSI/${esc(e.url)}" target="_blank" rel="noopener">${esc(e.label||e.url)} ↗</a></p>`).join("");
+  return `<div class="detail"><div class="dgrid">
+    <div><h4>两侧配置</h4>${sides || '<p class="note">未记录</p>'}</div>
+    <div><h4>这次比较</h4><p class="note"><b style="color:var(--ink)">${esc(r.eval_title)}</b></p>
+      <p class="note" style="margin-top:6px">${esc(r.scope || "—")}</p>
+      <div class="kv" style="margin-top:9px"><span>模型</span><span>${esc(r.model||"—")}</span>
+        <span>比较对象</span><span>${esc(r.subject)}</span><span>对照轴</span><span>${esc(r.axis)}</span>
+        <span>覆盖</span><span>${r.coverage.expected?`${fmtInt(r.coverage.observed)} / ${fmtInt(r.coverage.expected)}`:"—"}</span></div></div>
+    <div><h4>全部归一指标</h4><div class="kv">${metrics || '<span class="note">无</span>'}</div>
+      ${(r.notes||[]).length?`<h4 style="margin-top:12px">备注</h4>${r.notes.map(n=>`<p class="note">${esc(n)}</p>`).join("")}`:""}
+      ${ev?`<h4 style="margin-top:12px">证据</h4>${ev}`:""}</div></div></div>`;
+}
+
+function render(){
+  renderCollections();
+  const col = state.col ? COLLECTIONS.find(c => c.id === state.col) : null;
+  $("listTitle").textContent = col ? col.title : "全部比较";
+  $("listSub").textContent = col ? col.desc : "没有选组时列出全部记录。上面挑一组可以缩小范围。";
+  $("back").hidden = !col;
+  const rows = visible();
+  $("count").textContent = `${fmtInt(rows.length)} 条`
+    + (state.col || state.q ? ` / 全部 ${fmtInt(ROWS.length)}` : "");
+  const shown = rows.slice(0, state.limit);
+  $("rows").innerHTML = shown.length ? shown.map(r => {
+    const id = r.eval_id + "|" + r.title, open = state.open === id;
+    const h = headline(r), ti = tierIndex(r);
+    const tags = [`<span class="tag">${TASK[r.task] ?? esc(r.task)}</span>`,
+      r.subject !== "未分类" ? `<span class="tag k">${esc(r.subject)}</span>` : "",
+      r.axis !== "未分类" ? `<span class="tag">${esc(r.axis)}</span>` : "",
+      ...r.frameworks.slice(0,2).map(f => `<span class="tag">${esc(f)}</span>`),
+      r.status === "partial" ? `<span class="tag warn">partial</span>` : ""].join("");
+    return `<button class="row${open?" open":""}" data-id="${esc(id)}">
+      <span class="main" style="flex-direction:column;align-items:flex-start">
+        <span style="display:flex;gap:9px;align-items:baseline">
+          <i class="dot" style="background:${tierColor(ti)};margin-top:5px" title="${tierLabel(ti)}"></i>
+          <span class="title">${esc(r.title)}</span></span>
+        <span class="tags">${tags}</span></span>
+      <span class="pair">${esc(r.pair)}</span>
+      <span class="metric">${h?`<b>${fmtNum(h.value)}</b><small>${esc(h.label)}</small>`:`<b style="color:var(--faint)">—</b><small>无可比指标</small>`}</span>
+      <span class="date">${esc(r.date)}</span>
+    </button>` + (open ? detailOf(r) : "");
+  }).join("") + (rows.length > state.limit
+      ? `<button class="more" id="more">还有 ${fmtInt(rows.length - state.limit)} 条 · 展开更多</button>` : "")
+    : `<div class="empty">没有符合条件的比较。</div>`;
+  $("rows").querySelectorAll("button.row").forEach(b => b.onclick = () => {
+    state.open = state.open === b.dataset.id ? null : b.dataset.id; render();
+  });
+  const more = $("more");
+  if (more) more.onclick = () => { state.limit += 60; render(); };
+}
+
+$("back").onclick = () => { state.col = null; state.open = null; state.limit = 40; render();
+  $("cols").scrollIntoView({ behavior:"smooth", block:"start" }); };
+$("q").addEventListener("input", e => { state.q = e.target.value; state.limit = 40; render(); });
+$("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
+window.addEventListener("keydown", e => {
+  if (e.key === "/" && !/input|textarea/i.test(e.target.tagName)) { e.preventDefault(); $("q").focus(); }
+  if (e.key === "Escape") { state.open = null; render(); }
+});
+
+/* ---- repairs ----------------------------------------------------------
+   19 orders of magnitude separate the largest before-reading from the
+   smallest after-reading, so the axis is log10. Eight repairs land on exactly
+   0, which a log axis cannot place: those get their own rail at the far left
+   and a square marker, never a fake epsilon. The one higher-is-better metric
+   is grouped apart so it is never read as a regression.                    */
+const R_LO = -16, R_HI = 4, R_ZERO = 3.4, R_AX = 8.5;
+const rpos = v => v === 0 ? R_ZERO
+  : R_AX + (Math.min(R_HI, Math.max(R_LO, Math.log10(Math.abs(v)))) - R_LO) / (R_HI - R_LO) * (98.5 - R_AX);
+const LIBC = { PEFT:"#3b5bdb", Transformers:"#0b7285", TRL:"#7048e8",
+               PyTorch:"#c2410c", MindSpeed:"#15803d" };
+const libColor = l => LIBC[l] || "var(--none)";
+
+function facOf(h) {
+  if (h.after === 0) return { text: "→ 0", cls: "zero" };
+  const f = h.better === "higher" ? h.after / h.before : h.before / h.after;
+  if (!isFinite(f) || f <= 0) return { text: "—", cls: "" };
+  if (f < 1000) return { text: `${f < 10 ? f.toFixed(2) : f.toFixed(1)}×`, cls: "" };
+  const e = Math.floor(Math.log10(f));
+  return { text: `${(f / 10 ** e).toFixed(1)}×10${sup(e)}`, cls: "" };
+}
+
+const R_GROUPS = [
+  { t:"完全消除", d:"修复后读数精确为 0", pick:h => h.better === "lower" && h.after === 0 },
+  { t:"降到机器精度", d:"残差落在浮点舍入量级，已无法归因到这段代码", pick:h => h.better === "lower" && h.after > 0 && h.after <= 1e-5 },
+  { t:"部分收敛", d:"量级下降但偏差仍可观测，补丁未闭合全部来源", pick:h => h.better === "lower" && h.after > 1e-5 },
+  { t:"方向性指标", d:"越大越好，与上面的误差轴方向相反", pick:h => h.better === "higher" },
+];
+
+function repairRow(rp, i) {
+  const h = rp.headline, open = state.openRepair === rp.id;
+  const chip = `<i class="dot" style="background:${libColor(rp.lib)}"></i>`;
+  let trk = "", fac = `<span class="rfac">仅定性</span>`, bare = " bare";
+  if (h) {
+    bare = "";
+    const b = rpos(h.before), a = rpos(h.after), f = facOf(h);
+    const cls = h.after === 0 ? " zero" : (h.better === "lower" && h.after > 1e-5 ? " part" : "");
+    trk = `<i class="seg" style="left:${Math.min(a,b)}%;width:${Math.abs(b-a)}%"></i>`
+        + `<i class="pb" style="left:${b}%"></i><i class="pa${cls}" style="left:${a}%"></i>`;
+    fac = `<span class="rfac ${f.cls}">${f.text}</span>`;
+  }
+  const title = esc(rp.title).replace(/^[^：]*：/, "");
+  return `<button class="rrow${bare}" data-rp="${esc(rp.id)}" aria-expanded="${open}"
+     title="${esc(rp.title)}"><span class="rlab">${chip}<b>${title}</b></span>
+     <span class="rtrk">${trk}</span>${fac}</button>` + (open ? repairDetail(rp) : "");
+}
+
+function repairDetail(rp) {
+  const h = rp.headline, v = rp.validation || {}, row = (k, val, cls) =>
+    val ? `<dt>${k}</dt><dd class="${cls || ""}">${val}</dd>` : "";
+  const reading = h ? `<b>${esc(h.label)}</b>　${fmtNum(h.before)} → ${fmtNum(h.after)}${h.unit ? " " + esc(h.unit) : ""}` : "";
+  const libs = ((rp.environment || {}).libraries || []).map(l => `${l.name} ${l.version || ""}`.trim()).join(" · ");
+  return `<div class="rdet"><dl>
+    ${row("读数", reading)}
+    ${row("来源", esc(rp.title.includes("：") ? rp.title.split("：")[0] : (rp.classification || "")))}
+    ${row("位置", esc(rp.problem?.location || ""), "m")}
+    ${row("现象", esc(rp.problem?.summary || ""))}
+    ${row("成因", esc(typeof rp.cause === "string" ? rp.cause : rp.cause?.summary || ""))}
+    ${row("修复", esc(rp.repair?.summary || ""))}
+    ${row("复验", esc(v.scope || ""))}
+    ${row("未覆盖", (v.remaining || []).length ? `<ul>${v.remaining.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "")}
+    ${row("环境", esc(libs), "m")}
+  </dl></div>`;
+}
+
+function renderRepairs() {
+  const fig = $("repairFig"), withH = REPAIRS.filter(r => r.headline);
+  const ticks = [-15, -12, -9, -6, -3, 0, 3];
+  const stops = ["transparent 0%", `transparent ${R_AX - 2.2}%`,
+                 `var(--line) ${R_AX - 2.2}%`, `var(--line) ${R_AX - 2.05}%`,
+                 `transparent ${R_AX - 2.05}%`];
+  for (const t of ticks) {
+    const x = rpos(10 ** t);
+    stops.push(`transparent ${x - 0.07}%`, `var(--hair) ${x - 0.07}%`,
+               `var(--hair) ${x + 0.07}%`, `transparent ${x + 0.07}%`);
+  }
+  fig.style.setProperty("--grad", `linear-gradient(90deg,${stops.join(",")},transparent 100%)`);
+
+  let html = `<div class="rhead"><b>修复</b><div class="rticks">
+    <i style="left:${R_ZERO}%">0</i>${ticks.map(t =>
+      `<i style="left:${rpos(10 ** t)}%">10${sup(t)}</i>`).join("")}</div><b>改善</b></div>`;
+  const used = new Set();
+  for (const g of R_GROUPS) {
+    const items = withH.filter(r => g.pick(r.headline));
+    items.forEach(r => used.add(r.id));
+    if (!items.length) continue;
+    items.sort((a, b) => rpos(b.headline.before) - rpos(a.headline.before));
+    html += `<div class="rgrp"><b>${g.t}</b><s>${items.length} 项 · ${g.d}</s></div>`
+         + items.map(repairRow).join("");
+  }
+  const rest = REPAIRS.filter(r => !used.has(r.id));
+  if (rest.length) html += `<div class="rgrp"><b>仅定性复验</b><s>${rest.length} 项 · 复验以通过/不通过记录，没有可比的前后数值</s></div>`
+                         + rest.map(repairRow).join("");
+  fig.innerHTML = html;
+
+  const zeroed = withH.filter(r => r.headline.after === 0).length;
+  const best = Math.max(...withH.filter(r => r.headline.after > 0 && r.headline.better === "lower")
+                                .map(r => r.headline.before / r.headline.after));
+  const e = Math.floor(Math.log10(best));
+  $("repairStat").innerHTML = [
+    [REPAIRS.length, "已修复缺陷"], [withH.length, "有前后读数"],
+    [zeroed, "偏差完全消除"], [`${(best / 10 ** e).toFixed(1)}×10${sup(e)}`, "最大改善倍数"],
+  ].map(([n, k]) => `<div><b>${n}</b><span>${k}</span></div>`).join("");
+}
+renderRepairs();
+$("repairFig").addEventListener("click", e => {
+  const b = e.target.closest("[data-rp]"); if (!b) return;
+  state.openRepair = state.openRepair === b.dataset.rp ? null : b.dataset.rp;
+  renderRepairs();
+});
+
+
+$("theme").onclick = () => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  dark ? document.documentElement.removeAttribute("data-theme") : document.documentElement.setAttribute("data-theme","dark");
+  try { localStorage.setItem("nf-theme", dark ? "light" : "dark"); } catch {}
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#f7f6f4" : "#0b0c0e");
+};
+try { if (localStorage.getItem("nf-theme") === "dark") document.documentElement.setAttribute("data-theme","dark"); } catch {}
+$("csv").onclick = () => {
+  const rows = visible();
+  const header = ["collection","axis","subject","task","evaluation","comparison","pair","headline_metric","value","coverage","date","eval_id"];
+  const body = rows.map(r => { const h = headline(r);
+    return [state.col||"all", r.axis, r.subject, r.task, r.eval_title, r.title, r.pair,
+      h?h.label:"", h?h.value:"", r.coverage.ratio==null?"":r.coverage.ratio.toFixed(4), r.date, r.eval_id]
+      .map(v => `"${String(v).replace(/"/g,'""')}"`).join(","); });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([[header.join(","),...body].join("\n")],{type:"text/csv;charset=utf-8"}));
+  a.download = "precisionrsi-list.csv"; a.click(); URL.revokeObjectURL(a.href);
+};
+
+/* ---------- Compare (AccelMark interaction, adapted) ---------- */
+const CMP = S.compare || {};
+const SUBJECT_ORDER = Object.keys(CMP).filter(k => k !== "未分类");
+const cmpState = { picks: [], subject: SUBJECT_ORDER[0] || null };
+const platKind = p => p.includes("Ascend") ? "npu" : (p.includes("NVIDIA") || p.includes("RTX")) ? "gpu" : "cpu";
+const platCount = p => ROWS.filter(r => r.platforms.includes(p)).length;
+
+function renderCloud(){
+  const plats = S.platforms.map(([name]) => name);
+  const counts = plats.map(platCount);
+  const max = Math.max(...counts, 1);
+  $("cloud").innerHTML = plats.map((name, i) => {
+    const n = counts[i], rel = n / max;
+    const size = rel > .5 ? "size-lg" : rel > .15 ? "size-md" : "size-sm";
+    const on = cmpState.picks.includes(name);
+    return `<button class="chip-tile ${size} ${platKind(name)}" data-plat="${esc(name)}" aria-pressed="${on}">
+      ${on ? "✓ " : ""}${esc(name)}<span class="cnt">${n}</span></button>`;
+  }).join("");
+  $("cloud").querySelectorAll("[data-plat]").forEach(b => b.onclick = () => {
+    const name = b.dataset.plat;
+    const i = cmpState.picks.indexOf(name);
+    i >= 0 ? cmpState.picks.splice(i, 1) : cmpState.picks.push(name);
+    renderCompare();
+  });
+}
+function renderBasket(){
+  const box = $("basket");
+  box.hidden = cmpState.picks.length === 0;
+  if (box.hidden) return;
+  box.innerHTML = `<span class="lb">对比中</span>` + cmpState.picks.map(p => {
+    const n = platCount(p);
+    return `<span class="bitem"><i class="dot" style="background:var(--${platKind(p)==="npu"?"t4":platKind(p)==="gpu"?"t0":"none"})"></i>
+      <b>${esc(p)}</b><small>${n} 条比较</small><button data-rm="${esc(p)}" title="移除">×</button></span>`;
+  }).join("") + `<span class="acts">
+      <button class="btn" id="cmpShare">↗ 复制链接</button><button class="btn" id="cmpClear">清空</button></span>`;
+  box.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => {
+    cmpState.picks = cmpState.picks.filter(x => x !== b.dataset.rm); renderCompare(); });
+  $("cmpClear").onclick = () => { cmpState.picks = []; renderCompare(); };
+  $("cmpShare").onclick = () => {
+    const url = location.origin + location.pathname + "#/compare?p=" + encodeURIComponent(cmpState.picks.join("|")) + "&s=" + encodeURIComponent(cmpState.subject || "");
+    navigator.clipboard?.writeText(url);
+    $("cmpShare").textContent = "已复制";
+    setTimeout(() => { $("cmpShare").textContent = "↗ 复制链接"; }, 1400);
+  };
+}
+function renderSuites(){
+  $("suites").innerHTML = SUBJECT_ORDER.map((name, i) => {
+    const n = ROWS.filter(r => r.subject === name).length;
+    return `<button class="suite" data-sub="${esc(name)}" aria-pressed="${cmpState.subject === name}">
+      <i>${String.fromCharCode(65 + i)}</i>${esc(name)} <span class="cnt" style="font:10px var(--mono);color:inherit;opacity:.7">${n}</span></button>`;
+  }).join("");
+  $("suites").querySelectorAll("[data-sub]").forEach(b => b.onclick = () => {
+    cmpState.subject = b.dataset.sub; renderCompare(); });
+}
+function renderCmpTable(){
+  const box = $("cmpTable");
+  if (cmpState.picks.length < 2){
+    box.innerHTML = `<div class="cmpempty">再选 ${Math.max(0, 2 - cmpState.picks.length)} 个平台开始对比。</div>`;
+    $("cmpNote").textContent = ""; return;
+  }
+  const bySub = CMP[cmpState.subject] || {};
+  const cols = `minmax(190px,1.1fr) repeat(${cmpState.picks.length}, minmax(150px,1fr))`;
+  const metrics = S.metric_columns.filter(m => cmpState.picks.some(p => bySub[p]?.[m.key]));
+  if (!metrics.length){
+    box.innerHTML = `<div class="cmpempty">所选平台在「${esc(cmpState.subject)}」上没有共同的归一指标。</div>`;
+    $("cmpNote").textContent = ""; return;
+  }
+  const head = `<div class="cmprow head" style="grid-template-columns:${cols}">
+    <div class="mcell">指标</div>` + cmpState.picks.map(p => {
+      const n = Object.values(bySub[p] || {}).reduce((a, m) => Math.max(a, m.n), 0);
+      return `<div class="pcell"><b><i class="dot" style="background:var(--${platKind(p)==="npu"?"t4":platKind(p)==="gpu"?"t0":"none"});margin-right:6px"></i>${esc(p)}</b>
+        <small>${n} 条比较参与</small></div>`; }).join("") + `</div>`;
+  const body = metrics.map(m => {
+    const cells = cmpState.picks.map(p => bySub[p]?.[m.key] ?? null);
+    const present = cells.filter(Boolean);
+    // Best = smallest worst-case for a lower-is-better metric, and the reverse otherwise.
+    const best = present.length ? present.reduce((a, b) =>
+      (m.better === "lower" ? (b.worst < a.worst ? b : a) : (b.worst > a.worst ? b : a))) : null;
+    const scale = Math.max(...present.map(c => Math.abs(c.worst)), 1e-12);
+    return `<div class="cmprow" style="grid-template-columns:${cols}">
+      <div class="mcell"><div class="mname">${esc(m.label)}</div>
+        <div class="mdir">${m.better === "lower" ? "越小越一致" : "越大越一致"}</div></div>`
+      + cells.map(c => c ? `<div class="pcell${c === best ? " best" : ""}">
+          <span class="pbarline"><i style="width:${Math.max(3, Math.min(100, Math.abs(c.worst) / scale * 100)).toFixed(1)}%"></i></span>
+          <span class="pv">${fmtNum(c.worst)}</span><span class="pu">最差</span>${c === best ? '<span class="star">★</span>' : ""}
+          <div class="pn">中位 ${fmtNum(c.median)} · n=${c.n}</div></div>`
+        : `<div class="pcell"><span class="nod">—</span><div class="pn">无该指标</div></div>`).join("") + `</div>`;
+  }).join("");
+  box.innerHTML = head + body;
+  $("cmpNote").innerHTML = `条形与 ★ 比较的是<b>最差情况</b>，括注里给出中位数与样本数。
+    这些数字来自该平台参与的成对比较，<b>描述的是那一对</b>——不能读成"这个平台更准"。
+    不同平台参与的比较集合不同，样本数差异很大时尤其不可直接相减。`;
+}
+function renderCompare(){ renderCloud(); renderBasket(); renderSuites(); renderCmpTable();
+  $("cmpTitle").textContent = cmpState.subject ? `并排对比 · ${cmpState.subject}` : "并排对比"; }
+
+/* ---------- router ---------- */
+const VIEWS = {
+  "": ["view-home","view-explore","view-doors"],
+  "compare": ["view-compare"],
+  "list": ["view-collections","view-list"],
+  "repairs": ["repairs"],
+};
+function route(){
+  const raw = (location.hash || "#/").replace(/^#\/?/, "");
+  const [path, query] = raw.split("?");
+  const key = VIEWS[path] ? path : "";
+  if (key === "compare" && query){
+    const q = new URLSearchParams(query);
+    const p = q.get("p"); const s2 = q.get("s");
+    if (p) cmpState.picks = p.split("|").filter(x => S.platforms.some(([n]) => n === x));
+    if (s2 && CMP[s2]) cmpState.subject = s2;
+  }
+  for (const id of ["view-home","view-explore","view-doors","view-collections","view-list","view-compare","repairs"])
+    $(id).hidden = !VIEWS[key].includes(id);
+  $("nav").querySelectorAll("a").forEach(a =>
+    a.dataset.route === key ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
+  if (key === "compare") renderCompare();
+  window.scrollTo({ top: 0 });
+}
+window.addEventListener("hashchange", route);
+
+  render();
+  route();
+  document.body.classList.add("ready");
+}
+
+/* The records are read from the site's own data files, so this page can never
+   show a copy that has drifted from what the rest of the site serves. */
+buildBoard("./data/").then(start).catch(err => {
+  const el = document.getElementById("bootmsg");
+  el.innerHTML = `读取 <code>data/evaluations.json</code> 与 <code>data/repairs.json</code> 失败：`
+    + `${esc0(err.message)}。<br>若在本地打开，请用静态服务器访问（<code>python3 -m http.server</code>），`
+    + `<code>file://</code> 下浏览器不允许读取同目录文件。`;
+});
+function esc0(s){ return String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+</script>
 </body>
 </html>
