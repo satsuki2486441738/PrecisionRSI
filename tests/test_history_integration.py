@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import math
 from pathlib import Path
 import tempfile
 import unittest
@@ -168,6 +169,36 @@ class IntegrationPlanTest(unittest.TestCase):
         base = self.source('base', [self.record])
         result = statistics.export(base, self.source('source', [self.record]))
         self.assertEqual(result['evaluations'], [])
+
+    def test_public_statistics_are_scoped_and_do_not_claim_replay_or_acceptance(self):
+        path = ROOT / 'site/evidence/supplemental-statistics-20261114/statistics.json'
+        text = path.read_text(encoding='utf-8')
+        data = json.loads(text)
+        self.assertEqual(data['kind'], 'statistics-only')
+        self.assertEqual(data['source_snapshot_date'], '2026-11-09')
+        self.assertEqual(len(data['evaluations']), 13)
+        self.assertIsNone(statistics.PRIVATE.search(text))
+        self.assertNotIn('H20Z', text)
+        self.assertNotIn('refs/precision-archives', text)
+        for record in data['evaluations']:
+            with self.subTest(record=record['id']):
+                self.assertIsNone(record['acceptance'])
+                self.assertNotIn('archive', record)
+                self.assertNotIn('evidence', record)
+                provenance = record['provenance']
+                self.assertFalse(provenance['raw_artifacts_public'])
+                self.assertFalse(provenance['independent_replay_provided'])
+                self.assertRegex(provenance['source_record_sha256'], r'^[a-f0-9]{64}$')
+                self.assertTrue(record['notes'])
+                sides = {side['id'] for side in record['sides']}
+                for comparison in record['comparisons']:
+                    self.assertEqual(len(set(comparison['side_ids'])), 2)
+                    self.assertTrue(set(comparison['side_ids']) <= sides)
+                    self.assertTrue(comparison['scope'])
+                    for metric in comparison['metrics']:
+                        self.assertTrue(math.isfinite(metric['value']))
+                    for coverage in comparison['coverage']:
+                        self.assertLessEqual(coverage['observed'], coverage['expected'])
 
 
 if __name__ == '__main__':
