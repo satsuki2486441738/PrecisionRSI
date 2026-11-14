@@ -8,6 +8,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location('integration', ROOT / '.github/plan_history_integration.py')
 integration = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(integration)
+EXPORT_SPEC = importlib.util.spec_from_file_location('statistics', ROOT / '.github/export_statistics.py')
+statistics = importlib.util.module_from_spec(EXPORT_SPEC)
+EXPORT_SPEC.loader.exec_module(statistics)
 
 
 class IntegrationPlanTest(unittest.TestCase):
@@ -125,6 +128,46 @@ class IntegrationPlanTest(unittest.TestCase):
         other.write_text(json.dumps(data))
         with self.assertRaisesRegex(ValueError, 'schema_version'):
             integration.plan(base, [('other', other)])
+
+    def test_statistics_keep_numbers_status_scope_and_unknown_acceptance(self):
+        base = self.source('base', [])
+        record = {**self.record, 'summary': 'H20Z bounded component only',
+                  'whole_task_completed': False,
+                  'notes': ['Not a backbone training workload.'],
+                  'evidence': [{'url': 'private.zip'}],
+                  'archive': {'local_ref': 'refs/private', 'replay_cases': 4,
+                              'replay_cases_scope': 'Dependent component cases only'}}
+        source = self.source('source', [record])
+        result = statistics.export(base, source)
+        output = result['evaluations'][0]
+        self.assertEqual(output['comparisons'], record['comparisons'])
+        self.assertEqual(output['status'], 'partial')
+        self.assertIsNone(output['acceptance'])
+        self.assertFalse(output['whole_task_completed'])
+        self.assertEqual(output['notes'], record['notes'])
+        self.assertEqual(output['summary'], 'H200 bounded component only')
+        self.assertEqual(output['provenance']['retained_source_scope'], 'Dependent component cases only')
+        self.assertFalse(output['provenance']['independent_replay_provided'])
+        self.assertNotIn('archive', output)
+        self.assertNotIn('evidence', output)
+        self.assertNotIn('refs/private', json.dumps(result))
+        self.assertEqual(statistics.export(base, source), result)
+
+    def test_statistics_reject_unknown_fields_private_details_and_conflicts(self):
+        base = self.source('base', [])
+        for record in [dict(self.record, raw_responses=['private']),
+                       dict(self.record, notes=['ssh lion']),
+                       dict(self.record, notes=['PodUID is private'])]:
+            with self.assertRaises(ValueError):
+                statistics.export(base, self.source('source', [record]))
+        base = self.source('base', [self.record])
+        with self.assertRaisesRegex(ValueError, 'conflicting'):
+            statistics.export(base, self.source('source', [dict(self.record, acceptance=True)]))
+
+    def test_statistics_skip_exact_existing_records(self):
+        base = self.source('base', [self.record])
+        result = statistics.export(base, self.source('source', [self.record]))
+        self.assertEqual(result['evaluations'], [])
 
 
 if __name__ == '__main__':
