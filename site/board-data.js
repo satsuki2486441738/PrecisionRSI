@@ -46,7 +46,10 @@
   // What single difference the comparison isolates.
   var AXES = [
     ["precision", rx("fp32|bf16|fp16|精度|dtype"), "跨精度"],
-    ["exec_mode", rx("连续训练|恢复|resume|continuous|modes?(?![\\p{L}\\p{N}_])|hooks|observer|on/?off|开关"), "跨执行模式"],
+    // KV partitioning is an execution difference, but "Native final KV: …" used to
+    // reach the reference axis first on the word "native", filing the two largest
+    // readings in the corpus under the wrong axis. Match the partitioning first.
+    ["exec_mode", rx("分块|chunk\\d|chunk[0-9-]|chunked|partition|paged|prefill|连续训练|恢复|resume|continuous|modes?(?![\\p{L}\\p{N}_])|hooks|observer|on/?off|开关"), "跨执行模式"],
     ["reference", rx("独立|参考|reference|原生|native"), "原生 ↔ 独立参考"],
     ["skills", rx("skills"), "Skills 开关"],
   ];
