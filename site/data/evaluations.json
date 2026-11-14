@@ -88487,6 +88487,7 @@
       "id": "gemma-3-27b-it-cuda-precision-20261110",
       "date": "2026-11-12",
       "title": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H20Z",
+      "framework": "Transformers",
       "task": "inference",
       "status": "completed",
       "acceptance": null,
@@ -88535,7 +88536,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "SDPA"
+            "Inference backend": "SDPA",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -88577,7 +88579,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "eager attention"
+            "Inference backend": "eager attention",
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
@@ -88755,6 +88758,7 @@
       "id": "gpt-oss-120b-cuda-precision-20261110",
       "date": "2026-11-12",
       "title": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H20Z",
+      "framework": "Transformers",
       "task": "inference",
       "status": "completed",
       "acceptance": null,
@@ -88803,7 +88807,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "Triton packed MXFP4 expert GEMM"
+            "Inference backend": "Triton packed MXFP4 expert GEMM",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -88845,7 +88850,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "eager BF16 expert GEMM after MXFP4 decode"
+            "Inference backend": "eager BF16 expert GEMM after MXFP4 decode",
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
@@ -89026,6 +89032,7 @@
       "id": "nemotron-bolt-cuda-precision-20261110",
       "date": "2026-11-12",
       "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H20Z",
+      "framework": "Transformers",
       "task": "inference",
       "status": "completed",
       "acceptance": null,
@@ -89082,7 +89089,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "SDPA"
+            "Inference backend": "SDPA",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -89132,7 +89140,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "eager attention"
+            "Inference backend": "eager attention",
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
@@ -89310,6 +89319,7 @@
       "id": "gemma-3-27b-it-ascend-precision-20261110",
       "date": "2026-11-12",
       "title": "Gemma 3 27B IT native and reference precision on TorchNPU on Ascend 910",
+      "framework": "Transformers",
       "task": "inference",
       "status": "completed",
       "acceptance": null,
@@ -89350,7 +89360,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "SDPA"
+            "Inference backend": "SDPA",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -89384,7 +89395,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "eager attention"
+            "Inference backend": "eager attention",
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
@@ -89564,6 +89576,7 @@
       "id": "gpt-oss-120b-ascend-precision-20261110",
       "date": "2026-11-12",
       "title": "gpt-oss-120b native and reference precision on TorchNPU on Ascend 910",
+      "framework": "Transformers",
       "task": "inference",
       "status": "completed",
       "acceptance": null,
@@ -89604,7 +89617,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "CANN grouped BF16 GEMM after MXFP4 decode"
+            "Inference backend": "CANN grouped BF16 GEMM after MXFP4 decode",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -89638,7 +89652,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "per-expert TorchNPU eager BF16 GEMM after MXFP4 decode"
+            "Inference backend": "per-expert TorchNPU eager BF16 GEMM after MXFP4 decode",
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
@@ -89821,6 +89836,7 @@
       "id": "nemotron-bolt-ascend-precision-20261110",
       "date": "2026-11-12",
       "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on TorchNPU on Ascend 910",
+      "framework": "Transformers",
       "task": "inference",
       "status": "completed",
       "acceptance": null,
@@ -89861,7 +89877,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "SDPA"
+            "Inference backend": "SDPA",
+            "scope": "full-forward fixed-history scoring"
           }
         },
         {
@@ -89895,7 +89912,8 @@
             }
           ],
           "settings": {
-            "Inference backend": "eager attention"
+            "Inference backend": "eager attention",
+            "scope": "full-forward fixed-history scoring"
           }
         }
       ],
