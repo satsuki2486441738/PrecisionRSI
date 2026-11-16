@@ -46,6 +46,10 @@ python -m precision_rsi iterate series.json --workspace projects/my-stream/sessi
 
 ## 使用
 
+[项目架构与四个整理边界](.github/project-architecture.md)说明当前实现与后续方向。
+
+[RL 精度诊断与修复方案（草案）](.github/rl-precision-workflow-proposal.md)基于本仓库已有能力，约定可复用的案例执行与交付流程。
+
 将 `framework-adapt`、`precision-compare` 和 `precision-repair` 并排安装到客户端的 skill 目录，执行时根据下一项缺失能力加载组件：
 
 | Skill | 进入条件与交付 |
