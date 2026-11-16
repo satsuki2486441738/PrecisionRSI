@@ -1,14 +1,16 @@
 # Evaluation integration planning
 
+The implementation lives in `precision_maintenance`; `.github/*.py` remains a compatibility interface.
+
 `plan_history_integration.py` builds a private append-only candidate from a base
 evaluation history and named source histories. It does not publish records,
 modify inputs, copy evidence, merge branches, or establish numerical acceptance.
 Use it before moving privately retained measurements into the public catalog.
 
 ```sh
-python -B skills/precision-compare/scripts/record_run.py \
+python -B -m precision_core.record_run \
   --output-root runs --side compare --task history-integration --timeout 600 \
-  -- python -B .github/plan_history_integration.py \
+  -- python -B -m precision_maintenance plan-history \
   --base site/data/evaluations.json \
   --source supplement=/private/staging/site/data/evaluations.json \
   --output /private/new-integration-plan
@@ -62,7 +64,7 @@ actually changed. Explicit framework metadata is retained as well.
 Source record hashes bind the original inputs; original bytes remain unchanged.
 
 ```sh
-python -B .github/export_statistics.py --base site/data/evaluations.json \
+python -B -m precision_maintenance export-statistics --base site/data/evaluations.json \
   --source /private/staging/site/data/evaluations.json \
   --output /private/new-statistics.json
 ```

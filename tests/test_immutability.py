@@ -4,9 +4,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location('validate_immutability', ROOT / '.github/validate_immutability.py')
-immutability = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(immutability)
+from precision_maintenance import validate_immutability as immutability
 
 
 class PublishedHistoryTest(unittest.TestCase):

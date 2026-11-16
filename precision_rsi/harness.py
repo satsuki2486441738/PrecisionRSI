@@ -138,10 +138,8 @@ def persistent(agent, prompt, run):
     Native cwd is stable; candidate output paths in prompt remain absolute.
     An interrupted turn blocks until an operator explicitly reconciles it.
     """
-    # Also works when invoked as a script by workflow.py.
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from precision_rsi.research import Research
-    from precision_rsi.memory import fingerprint, read, workspace_lock, write
+    from .research import Research
+    from .memory import fingerprint, read, workspace_lock, write
     info = agent['research']
     research = Research(info['root'], info['binding'])
     turn = info['turn']
@@ -233,6 +231,26 @@ def persistent(agent, prompt, run):
 
 
 if __name__ == '__main__':
+    # Legacy script execution resolves its own packages without changing sys.path.
+    if not __package__:
+        import importlib.util
+        root = Path(__file__).resolve().parents[1]
+        for name in ('precision_core', 'precision_rsi'):
+            if name not in sys.modules:
+                folder = root / name
+                spec = importlib.util.spec_from_file_location(name, folder / '__init__.py',
+                    submodule_search_locations=[str(folder)])
+                if name == 'precision_rsi':
+                    # RSI is a namespace package; it intentionally has no eager initializer.
+                    from types import ModuleType
+                    module = ModuleType(name)
+                    module.__path__ = [str(folder)]
+                    sys.modules[name] = module
+                else:
+                    module = importlib.util.module_from_spec(spec)
+                    sys.modules[name] = module
+                    spec.loader.exec_module(module)
+        __package__ = 'precision_rsi'
     agent = json.loads(Path(sys.argv[1]).read_text())
     run = Path(sys.argv[3]).resolve()
     prompt = Path(sys.argv[2]).read_text().replace('{run}', str(run))
