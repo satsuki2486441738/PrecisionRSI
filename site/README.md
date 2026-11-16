@@ -129,3 +129,24 @@ python -B .github/rsi_snapshot.py --monitor projects/rsi-system/monitor.json --o
 Omit `--refresh` to export archived local evidence. The optional refresh reads the current remote run through the monitor's SSH declaration; it does not change the run or model service. The exporter returns allowlisted summaries, strips paths from diagnostics, and keeps full traces, task inputs, SSH settings and credentials private. The page polls the published JSON every minute and shows its observation time; publication is a snapshot, not a direct connection to the model server. Publish `site/data/rsi.json` through the existing Pages workflow.
 
 Run exporter regressions with `python -B -m unittest discover -s tests -p 'test_rsi_dashboard.py' -v`. Optional page checks use `node tests/browser_rsi.cjs` with Playwright and an installed Chromium.
+
+## Results-only additions
+
+New DeepSeek/Qwen result deliveries publish aggregate JSON/CSV, reports,
+scientific figures, actual configurations, coverage and source hashes.
+Historical delivery ZIPs, raw tensors and full execution traces remain local.
+`data/local-evidence.json` identifies retained archives by name, size and SHA256;
+it supplies no download URL and does not imply numerical acceptance.
+Existing archives already tracked on main remain historical records.
+
+`paper.html` reads the public metrics snapshot. Local archive cards show scope
+and hashes without download links. `source_sha256` identifies retained original
+bytes; `export_sha256` identifies the current public source JSON encoding.
+The historical dates, failure states and unspecified acceptance remain intact.
+
+For later projections, run `python -B .github/prepare_public_results.py --input
+INPUT.json --archives site/data/local-evidence.json --output NEW.json` as one
+command. The helper refuses existing outputs, preserves numerical fields and
+converts local archive downloads to explicit availability metadata. Retain the
+input privately and validate pointers/hashes before replacing a public snapshot.
+The paper exporter remains a local archival tool and can require private cases.

@@ -1,0 +1,126 @@
+[
+  {
+    "scope": "strictcore",
+    "applicability": "actual model math on both peer configurations",
+    "covered": "275planned;GPU191,NPU269,paired191;3168targets;18candidates/24terms",
+    "numerical_gaps": [
+      "GPU66inferencechunk+12structuredchunk",
+      "both6maskedpadding"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "targetanddistribution",
+    "applicability": "full129280vocabulary logits;target nexttoken positions;allcandidate tokens;fixed teacherhistory",
+    "covered": "all3168targets bothsides;508pairedselectedlogitrows top1/tie independentlyrechecked;all18candidate fullscores",
+    "numerical_gaps": [
+      "only191pairedtensorcells",
+      "not taskaccuracy",
+      "not freerunning autoregressive trajectories",
+      "no acceptance threshold"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "routingandEngram",
+    "applicability": "bounded sameinput native operators",
+    "covered": "80routercalls/320positions;4Engramcapsules/98304distinctvalues;8dependentallgatherreplicas",
+    "numerical_gaps": [
+      "native transformedrouter scores notretained",
+      "Engram hashgeneration/fulltables not independentlyreplayed",
+      "NPUFP32 gateprojection differs originalGPUFP8activationpolicy"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "Indexerandcompressorandprojection",
+    "applicability": "actual integratednative32K model paths;separate GPU sampledreplay",
+    "covered": "GPU16Indexerrecords=8indexsourcelayers\u00d72samples withall4peers;64sampledqueryselection ownscorechecks;sourcebound integratedNPU compressor/indexer/projection in successful6full32Kcalls",
+    "numerical_gaps": [
+      "no separate sameinputNPU Indexer score/candidate/cache/value capsule",
+      "no separate sameinputNPU compressor construction or query/output projection replay",
+      "GPU compressedkeyconstruction not independentlyrecomputed"
+    ],
+    "admission_evidence_complete": "integratedexecution yes;standaloneprimitive receipts notcollected",
+    "unsupported": false,
+    "mandatory_new_device_action": false
+  },
+  {
+    "scope": "MLA",
+    "applicability": "one exact explicitoriginalindex BF16 direct SparseFlashMla ABI",
+    "covered": "actualmetadata success thenkernel rejection ori_sparse_indices onlysupportedA5",
+    "numerical_gaps": [
+      "nooutput",
+      "compressedL2/L20 notattempted dueL0failfast",
+      "not productionbranch or hardwarewide unsupported"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "mHC",
+    "applicability": "full40postFFNfourstreamcore;separateboundedlayer0operators",
+    "covered": "40pairedblocktails shape[4tokens,4streams,5120];4native layer0attention/FFNpreoperators on2samples",
+    "numerical_gaps": [
+      "NPUcollapsed-y finitebutGPUyabsent, no paired-y",
+      "not all40layers sameinputNPUoperatorcapsules",
+      "FP64 mathreference doesnotemulaterounding"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "trainingandRL",
+    "applicability": "actualGPU4/NPU8complete-modelbackward;8CPUframeworkconstructors",
+    "covered": "native train/finiteforward/loss.backward actualrejection no_grad_fn;Trainer/SFTTrainer/GRPO/verl actualregistrationrejection",
+    "numerical_gaps": [
+      "0LoRAupdates of10",
+      "nooptimizer/gradient/clipnumericstate",
+      "nocheckpointafterupdate4 continuation",
+      "no3initializationoffsets/trainingrepeats",
+      "noSFT/RLfixedtrajectorynumericalcomponents"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "determinism",
+    "applicability": "bounded inference configuration only",
+    "covered": "GPU8sameprocess+4rank0freshprocess exact;NPU16dependent-rank sameprocessrepeat comparisons exact;realhead sameprocess resetsseed0",
+    "numerical_gaps": [
+      "NPUfreshprocess exactsameconfig nottested",
+      "training/globaldeterminism notestablished",
+      "rankreplicas notindependenttrajectories"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "nativechains",
+    "applicability": "officialstandalone/vLLM/SGLang\u00d72peers",
+    "covered": "6actualnativeadmissions;GPUofficialstandalone+NPUvLLMinprocess numericalscope;7historicalGPUJobUID/podsabsence",
+    "numerical_gaps": [
+      "NPUofficial missingtilelang beforeconstruct",
+      "GPUvLLM/SGLang resourcebounded beforecompleteconstruct",
+      "NPUSGLang cudaHostRegister torch.cuda.cudartNone",
+      "noHTTPendpointlifecycle or requestgeneration fromrejectedservices"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "headtransparency",
+    "applicability": "long00/logprobs8/seed0 samebackend controls",
+    "covered": "sixreal32Kcontrols;B/Cnorm/nativeexact;M1/M4 nativeexact,M49 .03125/replayequalsselected49;fullvocab maxprob1.44756e-12;repeats exact",
+    "numerical_gaps": [
+      "not originalcorelogprobsNone or arbitraryhistories",
+      "doesnot explainall oldcore .0625 orcrossbackenddifferences"
+    ],
+    "admission_evidence_complete": true
+  },
+  {
+    "scope": "independentreplayandintegrity",
+    "applicability": "immutable artifacts/source closure pluscoordinate/hash receipts",
+    "covered": "11frozenselectorsources pairedreplay bytesexact;nativecore all35905NPY receipt/6013canonicalexport mapping;head122canonicalNPYs/976nativeNPYs",
+    "numerical_gaps": [
+      "not allnative rawpayload downloaded;allnativearrayreceipt boundtoexactinventory",
+      "no acceptance thresholds"
+    ],
+    "admission_evidence_complete": true
+  }
+]

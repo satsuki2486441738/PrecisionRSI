@@ -33,7 +33,10 @@
 !/tests/test_record_run.py
 !/tests/test_workflow.py
 !/tests/test_rsi.py
+!/tests/test_dsh_compaction.py
+!/tests/test_snapshots.py
 !/tests/test_evolve.py
+!/tests/test_research.py
 !/tests/test_resource_catalog.py
 !/tests/test_inference_capture.py
 !/tests/test_group_metrics.py
@@ -46,3 +49,11 @@
 !/tests/test_nonfinite.py
 __pycache__/
 *.pyc
+
+!/tests/test_paper_results.py
+!/tests/test_public_results.py
+
+# Historical local deliveries are not part of the results-only publication.
+/site/evidence/deepseek41-*.zip
+/site/evidence/paper-writing-results-*.zip
+/site/evidence/evaluation-metrics-results-*.zip*

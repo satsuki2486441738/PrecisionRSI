@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "id": "deepseek41-retained-mode2-20261109",
+  "model": {
+    "name": "DeepSeek-V4.1-Flash-1017",
+    "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+  },
+  "scope": {
+    "scope": "bounded-same-L20-retained-mode1-candidates-to-mode2-selector-only",
+    "original_crosslayer_chain": false,
+    "same_live_producer": false,
+    "attention": false,
+    "whole_model": false,
+    "TP": false,
+    "training": false,
+    "hardware_cause": false,
+    "numerical_acceptance": null,
+    "native_own_scores_available": false,
+    "whole_task_completed": false
+  },
+  "configuration": {
+    "backend": "installed Ascend vLLM native quantized QLI",
+    "devices": 1,
+    "model_constructed": false,
+    "candidate_mode": 2,
+    "query_shape": [
+      4,
+      32,
+      128
+    ],
+    "key_shape": [
+      32768,
+      128
+    ],
+    "candidate_shape": [
+      4,
+      1,
+      2048
+    ],
+    "candidate_block_size": 8,
+    "selected_topk": 512,
+    "query_key_dtype": "INT8",
+    "query_key_scales_dtype": "FP16",
+    "scaled_weights_dtype": "FP16",
+    "selector_scaffold": "__new__ + Module initialization; complete native constructor not run",
+    "original_native_mode2_index_sources": [
+      24,
+      28,
+      32,
+      36
+    ],
+    "retained_query_layer": 20
+  },
+  "reference_definitions": {
+    "scores": "exact INT8 q/k INT64 dot -> FP64 actual FP16 query/key scales -> ReLU -> actual scaled FP16 weights -> head sum -> candidate and causal mask; not native accumulation emulation",
+    "numerical_acceptance": null,
+    "replay_float_tolerance": {
+      "relative": 2e-12,
+      "absolute": 2e-12,
+      "purpose": "CPU replay portability only"
+    }
+  },
+  "numerics": {
+    "status": "PASS-offline-bounded-same-L20-mode2-21-pair-20-source-replay",
+    "source_arrays_verified": 20,
+    "actual_numeric_raw_pairs_verified": 21,
+    "consumer_inputs_verified": 5,
+    "full_cache_bytes_reconstructed": 37961984,
+    "cache_unchanged": true,
+    "candidate_input_unchanged": true,
+    "query_quantization_exact": true,
+    "prepared_native_ids_exact": true,
+    "baseline_and_traced_mode2_calls": 2,
+    "new_mode1_calls": 0,
+    "new_mode3_calls": 0,
+    "all_derived_score_coordinates": 131072,
+    "full_causal_finite_score_coordinates": 131066,
+    "restricted_causal_finite_score_coordinates": 65530,
+    "selection_diagnostics": [
+      {
+        "query": 0,
+        "visible_keys": 32765,
+        "candidate_allowed_causal_keys": 16381,
+        "selected_count": 512,
+        "selected_unique": true,
+        "chronological": true,
+        "candidate_containment": true,
+        "reference_boundary_score": -1.1852692949052646,
+        "reference_omitted_max": -1.1860842194047567,
+        "reference_boundary_margin": 0.0008149244994921645,
+        "reference_topk_consistent": true,
+        "reference_cutoff_ties": 1,
+        "selected_cutoff_ties": 1,
+        "strictly_above_cutoff": 511,
+        "stable_reference_set_overlap": 512,
+        "descriptive_only": true,
+        "native_own_score_correctness": null
+      },
+      {
+        "query": 1,
+        "visible_keys": 32766,
+        "candidate_allowed_causal_keys": 16382,
+        "selected_count": 512,
+        "selected_unique": true,
+        "chronological": true,
+        "candidate_containment": true,
+        "reference_boundary_score": -1.3766785825701788,
+        "reference_omitted_max": -1.377099960308204,
+        "reference_boundary_margin": 0.00042137773802508605,
+        "reference_topk_consistent": true,
+        "reference_cutoff_ties": 1,
+        "selected_cutoff_ties": 1,
+        "strictly_above_cutoff": 511,
+        "stable_reference_set_overlap": 512,
+        "descriptive_only": true,
+        "native_own_score_correctness": null
+      },
+      {
+        "query": 2,
+        "visible_keys": 32767,
+        "candidate_allowed_causal_keys": 16383,
+        "selected_count": 512,
+        "selected_unique": true,
+        "chronological": true,
+        "candidate_containment": true,
+        "reference_boundary_score": -1.2849769594603515,
+        "reference_omitted_max": -1.2846751787145294,
+        "reference_boundary_margin": -0.0003017807458221,
+        "reference_topk_consistent": false,
+        "reference_cutoff_ties": 1,
+        "selected_cutoff_ties": 1,
+        "strictly_above_cutoff": 512,
+        "stable_reference_set_overlap": 511,
+        "descriptive_only": true,
+        "native_own_score_correctness": null
+      },
+      {
+        "query": 3,
+        "visible_keys": 32768,
+        "candidate_allowed_causal_keys": 16384,
+        "selected_count": 512,
+        "selected_unique": true,
+        "chronological": true,
+        "candidate_containment": true,
+        "reference_boundary_score": -1.359111426293822,
+        "reference_omitted_max": -1.3586892265564066,
+        "reference_boundary_margin": -0.0004221997374154185,
+        "reference_topk_consistent": false,
+        "reference_cutoff_ties": 1,
+        "selected_cutoff_ties": 1,
+        "strictly_above_cutoff": 512,
+        "stable_reference_set_overlap": 511,
+        "descriptive_only": true,
+        "native_own_score_correctness": null
+      }
+    ],
+    "native_second_return_shape": [
+      0
+    ],
+    "native_third_return_shape": [
+      0
+    ],
+    "native_own_scores_available": false,
+    "numerical_acceptance": null,
+    "original_crosslayer_chain": false,
+    "attention_or_fullmodel_or_training": false,
+    "whole_task_completed": false
+  },
+  "native_measurements": {
+    "driver_returncode": 0,
+    "child_returncode": 0,
+    "wall_seconds": 35.076318957144395,
+    "instrumented": true,
+    "steady_state_performance": false,
+    "measured_peak_allocated_bytes": 158683136,
+    "postallocation_highwater_guard_bytes": 536870912,
+    "guard_is_reservation": false,
+    "performance_ratio_claimed": false
+  },
+  "cleanup": {
+    "owned_processes": 0,
+    "case_processes": 0,
+    "idle_exposed_chips": 16,
+    "OOM_count": 0,
+    "signals_sent": []
+  },
+  "source_SHA": {
+    "actual_review_sha256": "2afd48c6884b3020df922e1d65403e22c85bbd02a7e181579aa4708206d42495",
+    "peer_review_sha256": "a86680ac10e585f9d535fb099325f36643eea3f301ec7296cefd82444ce55472",
+    "packet_manifest_sha256": "bbc752dce17f5403577ba342caee00669542ffe72d6f7d9210f583531f46204c",
+    "consumer_manifest_sha256": "0d9cc3ea96028d89d256d3bd8ef343a78044f44409f220ae9b75d08af37dd947",
+    "native_result_sha256": "5fb7445d61740b4734438756fa69d59d594bce39ef484a23aa23ecf7a54c36c0",
+    "native_command_sha256": "ad382acfd1f4a36f9ef79beb367c8a7e72ed40e2759459f8eee511e0f76d023c",
+    "terminal_integrity_cleanup_sha256": "d03d1905a3b2581c88ef0873539a7eada9c73b50a2affbb21c432f3b4de6377b",
+    "early_driver_identity_sha256": "ff1d40e438d5f92b42d8b414e9169d268f84abf21fdadf59c2c5a7041ebb45cc",
+    "native_source_sha256": "4e6f99326d3c03dc6e39ee009d45c6bb4ca1c4e88e958d65728da217dea505b7",
+    "admission_sha256": "f6c2618ecfd746e70d10c9718aba752b480a8e033c19713716a7aa5111bbffc0",
+    "math_reference_sha256": "ee41d67a63fc01a638bd89256f1f8bd8ad6b3abe1dd640a818c609befcfb2351",
+    "original_QLI_portable_manifest_sha256": "40cc16ec0187d6fffc6b056ae443293378da6e4ab5f44f15429d64806985b374",
+    "original_QLI_review_sha256": "e7a08bb75c42d1295aee46ae0f46d5d5842e2c114467700543a8820db11d596e"
+  },
+  "source_artifact_SHA": {
+    "evidence.json": "e0dc1490c31a1f5f98d47a7c788e23f756d9a27be81566ec37cb60e254b282dc",
+    "math_reference.py": "ee41d67a63fc01a638bd89256f1f8bd8ad6b3abe1dd640a818c609befcfb2351",
+    "peer-review-summary.json": "cdc96c0f00d6c3ea699ac53f4577cc2022a078fad1704600fc01bd238e85fce1",
+    "REPORT.md": "2d4ae1145d93454f32a139774abfd0b209622ae4bf890307e2d01cf006c8aaf5",
+    "scope.json": "3131b9d49049bcd702f5b04ff118e1ba0b00b5f2185b6c5ee554d5fddf28b82f",
+    "source-commitments.json": "afac1b3ce03b96d44db2e6dddd16cb2dfab700ca22d9abc558620a9018929e72",
+    "metrics.csv": "727e13436b7493aeff2fd4c6e5c0b8ccb4c6d51906ba02653cfd58c8b30f363a",
+    "INDEX.zh-CN.md": "f6e549928028e2fca9769e9f6a286841482ea8041c8c0c9675c1686f63387116",
+    "cache_contract.py": "c0720268fce55aabe08e9c7b4a5659f25b41991b9c7c12162d33b0187299e329",
+    "negative_controls.py": "160c6188d43c6200794a63254e35444222a999769c12622b05cf07b7e188b40a",
+    "actual-review-summary.json": "70202ca40e205154c42ea849be9108a825c4f3ea515c7c0c6ac82d1a3256bbfd",
+    "INDEX.en.md": "2685c0144560159bda5d9d12f1cc1b1b7e6904fd57c4ba81a1d89263aef3deb1",
+    "mode2-selection-scientific.svg": "cd8fbb4f5205b7dca030e7065edbb9a56aaa866cd84781b978e30ceb092fcfab",
+    "mode2-selection-scientific.pdf": "a1c9ef846a1f741e2f8e5730f1e596b687c1e00425642f7328bd48cbf98a7624",
+    "verify.py": "1c1a7a7752c9d3dd77c09602d586d1c4c296a7af7f99e101fecabc3dcc678cbf",
+    "mode2-selection-scientific.png": "bbc3c071a9b4ca200ce52aecab125884e3818cf0d8ca4f70cbb306c9d1a28e32",
+    "portable-replay.json": "ae5149537e4c372c7650319f158383704738d67e9aa4c903b84f485871d0aaca"
+  },
+  "limitations": [
+    "Same L20 retained q/key and actual L20 mode1 candidates, not original native index-source layers24/28/32/36 crosslayer chain",
+    "Derived reference scores are not retained native own scores; set differences do not prove native topk defects",
+    "Two repeated mode2 wrapper outputs only; native raw intermediate returns retained on traced call only",
+    "No attention/fullmodel/same-live producer/TP/training/acceptance/hardware cause claim",
+    "Independent private reviewers replayed prior74pairs; this portable includes20original operands/21newpairs only.",
+    "The separate11th QLI supplement remains unchanged.",
+    "35.076318957144395s is instrumented bounded component wall time, not performance."
+  ],
+  "source_candidate_snapshot": {
+    "status": "CPU-only-private-portable-writing-candidate-pending-independent-review",
+    "zip": "deepseek-v41-flash-1017-retained-mode2-private-candidate.zip",
+    "zip_bytes": 16200486,
+    "zip_sha256": "e944809d8bf40c67011056dabf1cc37f2a3c64d9b1cb9fb364fcff8484e798a8",
+    "external_caller_pins": {
+      "manifest_sha256": "bf525d8b8e764347e99ca313d9ba03c2f4e001dd5674b7bc835d35ba512a6d97",
+      "actual_review_sha256": "2afd48c6884b3020df922e1d65403e22c85bbd02a7e181579aa4708206d42495",
+      "peer_review_sha256": "a86680ac10e585f9d535fb099325f36643eea3f301ec7296cefd82444ce55472",
+      "packet_manifest_sha256": "bbc752dce17f5403577ba342caee00669542ffe72d6f7d9210f583531f46204c",
+      "consumer_manifest_sha256": "0d9cc3ea96028d89d256d3bd8ef343a78044f44409f220ae9b75d08af37dd947"
+    },
+    "portable_payload_bytes": 19155248,
+    "source_arrays": 20,
+    "consumer_inputs": 5,
+    "actual_numeric_raw_pairs": 21,
+    "negative_controls": 17,
+    "installed": false,
+    "published": false,
+    "remote_model_device_calls": false
+  },
+  "writing_delivery": {
+    "status": "independently-reviewed-scoped-result-installed-locally",
+    "original_metrics_sha256": "1d5fe793661c1d3902886c11c926199295d1e97aed049e5ad2c790db615113ba",
+    "independent_isolated_zip_review_sha256": "a2ef5d2b9a24027cc6a5d6c91531e0a1d44f8e3395c5fccbb2353d933579cda1",
+    "source_zip_sha256": "e944809d8bf40c67011056dabf1cc37f2a3c64d9b1cb9fb364fcff8484e798a8",
+    "portable_zip": "deepseek41-retained-mode2-20261109.zip",
+    "source_candidate_snapshot_is_historical": true,
+    "installed": true,
+    "published": false,
+    "pushed": false,
+    "whole_task_completed": false
+  }
+}

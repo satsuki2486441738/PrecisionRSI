@@ -1,0 +1,74 @@
+[
+  {
+    "id": "original-core-84",
+    "classification": "actual-native-interface-rejections",
+    "evidence_scope": "Original GPU191/275 lacks78multi-token reference-cache observations and6masked-padding observations; original NPU269/275 lacks6padding. Separately adapted275/275 does not change original bytes.",
+    "continuation_meaning": "New adapter/config required for numerical extension; unchanged retry is not executable missing work."
+  },
+  {
+    "id": "backbone-autograd",
+    "classification": "actual-complete-model-backward-rejections",
+    "evidence_scope": "Actual finite128-token complete forwards and loss.backward reject inference/no-grad_fn paths onGPU4/NPU8; NPU798/1032floating gradflags enabled,234inference-parameter rejections.",
+    "continuation_meaning": "No full-backbone LoRA/update/clip/checkpoint/SFT/RL coverage; head95only frozen-backbone forward plus output-head adaptation."
+  },
+  {
+    "id": "trainer-trl-verl",
+    "classification": "actual-CPU-registration-rejections",
+    "evidence_scope": "8actual constructors across both peers reject deepseek_v41 Transformers registration.",
+    "continuation_meaning": "CPU compatibility evidence only, not accelerator execution or hardware-wide unsupportedness. Registration/model-autograd adaptation is prerequisite to numerical training."
+  },
+  {
+    "id": "official-npu-entrypoint",
+    "classification": "actual-exact-route-rejections",
+    "evidence_scope": "Original generate.py reaches torch.cuda.set_device rejection; actual NPU act_quant reaches TileLang target autodetection rejection.",
+    "continuation_meaning": "No officialfullmodelnativeNPU numeric result; exact invocation scope only."
+  },
+  {
+    "id": "npu-sglang-entrypoint",
+    "classification": "actual-exact-route-rejections",
+    "evidence_scope": "HostTable CUDAregistration and actual8argument NPUtensor Engramgather rejectCUDAassumptions.",
+    "continuation_meaning": "No fullEngine/device numerical result for this path; do not generalize to allSGLang/NPU."
+  },
+  {
+    "id": "indexed-sparseflashmla",
+    "classification": "actual-exact-ABI-rejection",
+    "evidence_scope": "Native metadata succeeds then indexed kernel rejects ori_sparse_indices A5-only branch; compressedL2/L20 not called afterfailfast.",
+    "continuation_meaning": "Integrated adapted MLA/attention evidence exists separately; not global MLAunsupportedness."
+  },
+  {
+    "id": "strict-layer2-vjp",
+    "classification": "actual-exact-local-derivative-rejection",
+    "evidence_scope": "StrictL2compressorpool/norm VJP rejection retained for2K/32K; bounded2Ktargetdiagnostics and other selected VJPs do not close original branch.",
+    "continuation_meaning": "New justified derivative implementation/config needed before unchanged rejected scope can advance."
+  },
+  {
+    "id": "original-default-npu32k",
+    "classification": "unexecuted-original-resource-admission-scope",
+    "evidence_scope": "Original-default unchunked32K densehead not actually executed in this cohort; source-derivedmemoryadmission is not observedphysicalOOM. Adaptedfull40/HTTP9long histories do not close it.",
+    "continuation_meaning": "Not actual unsupported/OOM evidence; any new physical trial needs separately justified resource admission."
+  },
+  {
+    "id": "physical-reference-cache-teacher",
+    "classification": "unmeasured-equivalence-scope",
+    "evidence_scope": "Original physical cachepartition/aliases and freshHTTP versus cachedteacher equivalence remain unproved; candidate18lastdistributions unpaired with priorcore.",
+    "continuation_meaning": "New source-bound collector/config needed; do not label successful adaptedteacher matching as physicalequivalence."
+  },
+  {
+    "id": "same-live-upstream-query-key-chain",
+    "classification": "unmeasured-composition-scope",
+    "evidence_scope": "Native compressor-to-key serializedcapsules and retainedquery-toQLI plus originalL20to24/28/32/36selectors exist; no same-live fullcompressor/key/query/native-own-scorechain.",
+    "continuation_meaning": "Potential newcollector expansion; not provedunsupported and not satisfied by cross-runretainedcapsules."
+  },
+  {
+    "id": "full-history-allTP-ownscore",
+    "classification": "unretained-coordinate-scope",
+    "evidence_scope": "Attention replay retains rank0tailqueries; selectors30cases/120queries use tail4; unsaved fullhistoryqueries, other-rank math and native-own-scorearrays unavailable.",
+    "continuation_meaning": "Existingrawcannot supply unsaved coordinates; newboundedcapturedesignneeded. SetdisagreementFP64 alone is not native topkdefect."
+  },
+  {
+    "id": "hardware-only-cause-acceptance",
+    "classification": "undeclared-or-confounded-claim",
+    "evidence_scope": "Arithmetic/TP/EP/offload/configuration differ; no numericalacceptancethreshold; GPU is not oracle.",
+    "continuation_meaning": "Further sameinput/sameparameter controlledwork requires explicit scope; do not invent acceptance or a hardware-onlycause."
+  }
+]

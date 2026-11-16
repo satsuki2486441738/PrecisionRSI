@@ -1,0 +1,3346 @@
+{
+  "schema_version": 1,
+  "status": "independently-reviewed-upstream-extension-actual-native-evidence",
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "prior_snapshot_preserved": "compare-ds41-compressor-2k-writing-supplement-20261108T135741Z",
+  "histories": {
+    "lengths": [
+      2048,
+      32768
+    ],
+    "fixed_history_count": 2,
+    "batch": 1,
+    "start_pos": 0,
+    "layers": [
+      2,
+      20
+    ],
+    "layers_and_lengths_are_dependent": true
+  },
+  "flat_metric_rows": [
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 2,
+      "stage": "wkv",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 1.8477439880371094e-06,
+      "rmse": 9.224019676055285e-08,
+      "cosine": 0.9999999999996319,
+      "error_norm": 0.00037781584593122447,
+      "compared_elements": 16777216,
+      "unequal_elements": 15819045,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 2,
+      "stage": "norm-input",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 0.001953125,
+      "rmse": 5.341393542102349e-06,
+      "cosine": 0.9999999984509307,
+      "error_norm": 0.015470328195508651,
+      "compared_elements": 8388608,
+      "unequal_elements": 3767,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 2,
+      "stage": "latent",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 0.0078125,
+      "rmse": 3.230894698810172e-05,
+      "cosine": 0.9999999965977732,
+      "error_norm": 0.09357670608192883,
+      "compared_elements": 8388608,
+      "unequal_elements": 4362,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 2,
+      "stage": "wgate",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 1.6927719116210938e-05,
+      "rmse": 7.935385246679112e-07,
+      "cosine": 0.9999999999990266,
+      "error_norm": 0.0032503337970397643,
+      "compared_elements": 16777216,
+      "unequal_elements": 16233494,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu-rmsnorm-last4",
+      "reference": "continuous_fp64",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0035249908677572606,
+      "rmse": 0.0006472928659485847,
+      "cosine": 0.9999986613644677,
+      "error_norm": 0.029293131195258823,
+      "compared_elements": 2048,
+      "unequal_elements": 2048,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu-rmsnorm-last4",
+      "reference": "bf16_rne",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 2048,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native-rmsnorm-last4",
+      "reference": "continuous_fp64",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0035249908677572606,
+      "rmse": 0.0006472928659485847,
+      "cosine": 0.9999986613644677,
+      "error_norm": 0.029293131195258823,
+      "compared_elements": 2048,
+      "unequal_elements": 2048,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native-rmsnorm-last4",
+      "reference": "bf16_rne",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 2048,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu-pairpool-last4tokens",
+      "reference": "continuous_fp64",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0009208915955116193,
+      "rmse": 0.0001618778491025296,
+      "cosine": 0.9999985319546754,
+      "error_norm": 0.005180091171280947,
+      "compared_elements": 1024,
+      "unequal_elements": 1024,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu-pairpool-last4tokens",
+      "reference": "bf16_rne",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 1024,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native-pairpool-last4tokens",
+      "reference": "continuous_fp64",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0009212040296860957,
+      "rmse": 0.0001618787103701447,
+      "cosine": 0.9999985319538326,
+      "error_norm": 0.00518011873184463,
+      "compared_elements": 1024,
+      "unequal_elements": 1024,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native-pairpool-last4tokens",
+      "reference": "bf16_rne",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 1024,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 2,
+      "stage": "projection-vjp:input",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 1.0263575589419816e-07,
+      "rmse": 1.2772197624860565e-08,
+      "cosine": 0.9999999999999822,
+      "error_norm": 1.8278081351199732e-06,
+      "compared_elements": 20480,
+      "unequal_elements": 20480,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 2,
+      "stage": "projection-vjp:input",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 1.043081283569336e-07,
+      "rmse": 1.285944182478019e-08,
+      "cosine": 0.9999999999999819,
+      "error_norm": 1.8402935086663961e-06,
+      "compared_elements": 20480,
+      "unequal_elements": 17233,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 2,
+      "stage": "projection-vjp:weight",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 1.4755642041563988e-08,
+      "rmse": 2.1044152089355568e-10,
+      "cosine": 0.9999999999999998,
+      "error_norm": 3.4072295439029676e-07,
+      "compared_elements": 2621440,
+      "unequal_elements": 2611195,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 2,
+      "stage": "projection-vjp:weight",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 2621440,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 20,
+      "stage": "wkv",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 0.001953125,
+      "rmse": 1.290923222680985e-05,
+      "cosine": 0.9999999860409222,
+      "error_norm": 0.05287621520101315,
+      "compared_elements": 16777216,
+      "unequal_elements": 33712,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 20,
+      "stage": "norm-input",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 0.001953125,
+      "rmse": 1.290923222680985e-05,
+      "cosine": 0.9999999860409222,
+      "error_norm": 0.05287621520101315,
+      "compared_elements": 16777216,
+      "unequal_elements": 33712,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-forward",
+      "length": 32768,
+      "layer": 20,
+      "stage": "latent",
+      "reference": "original-GPU-vs-actual-native",
+      "scope": "full retained history at corresponding token/compressed rows",
+      "max_abs": 0.03125,
+      "rmse": 0.00021204892882090967,
+      "cosine": 0.9999999693680595,
+      "error_norm": 0.868552412450446,
+      "compared_elements": 16777216,
+      "unequal_elements": 44364,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 20,
+      "stage": "gpu-rmsnorm-last4",
+      "reference": "continuous_fp64",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.007771656358809054,
+      "rmse": 0.001382862512802626,
+      "cosine": 0.999998693763007,
+      "error_norm": 0.06258121345608997,
+      "compared_elements": 2048,
+      "unequal_elements": 2048,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 20,
+      "stage": "gpu-rmsnorm-last4",
+      "reference": "bf16_rne",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 2048,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native-rmsnorm-last4",
+      "reference": "continuous_fp64",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0077809428208697184,
+      "rmse": 0.00138279136286925,
+      "cosine": 0.9999986939255352,
+      "error_norm": 0.0625779935776662,
+      "compared_elements": 2048,
+      "unequal_elements": 2048,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-bounded-operator",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native-rmsnorm-last4",
+      "reference": "bf16_rne",
+      "scope": "last4 retained token or dense normalization rows only",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 0.9999999999999998,
+      "error_norm": 0.0,
+      "compared_elements": 2048,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "projection-vjp:input",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 0.00045972584121045657,
+      "rmse": 6.926765620391973e-05,
+      "cosine": 0.9999986382197293,
+      "error_norm": 0.00991278002649917,
+      "compared_elements": 20480,
+      "unequal_elements": 20480,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "projection-vjp:input",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 20480,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "projection-vjp:weight",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 0.0001220703125,
+      "rmse": 8.176730597799128e-06,
+      "cosine": 0.9999986270583149,
+      "error_norm": 0.013238831361349337,
+      "compared_elements": 2621440,
+      "unequal_elements": 2613228,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "projection-vjp:weight",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 2621440,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "compressor-vjp:input",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 0.015543424698081232,
+      "rmse": 0.0028627074427871064,
+      "cosine": 0.9999973223407757,
+      "error_norm": 0.4096773402730598,
+      "compared_elements": 20480,
+      "unequal_elements": 20480,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "compressor-vjp:input",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 3.0517578125e-05,
+      "rmse": 2.132480599880018e-07,
+      "cosine": 0.999999999999985,
+      "error_norm": 3.0517578125e-05,
+      "compared_elements": 20480,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "compressor-vjp:projection-weight",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 0.015086643872146865,
+      "rmse": 0.0002894187032589871,
+      "cosine": 0.9999980447165042,
+      "error_norm": 0.46859381747240775,
+      "compared_elements": 2621440,
+      "unequal_elements": 2621440,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "compressor-vjp:projection-weight",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 2621440,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "compressor-vjp:norm-weight",
+      "reference": "continuous_fp64",
+      "scope": "four retained rows, actual saved arguments and output cotangent",
+      "max_abs": 0.05683610129899819,
+      "rmse": 0.008145851330356885,
+      "cosine": 0.9999987116125659,
+      "error_norm": 0.18431957485545006,
+      "compared_elements": 512,
+      "unequal_elements": 512,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "compressor-local-vjp",
+      "length": 32768,
+      "layer": 20,
+      "stage": "compressor-vjp:norm-weight",
+      "reference": "dtype_boundary_prediction",
+      "scope": "four retained rows, descriptive BF16/FP32 boundary arithmetic",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "gpu_vs_native_wk_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "gpu_vs_native_norm_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "projection_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.001953170169144869,
+      "rmse": 0.00046582357356160395,
+      "cosine": 0.9999985991210899,
+      "error_norm": 0.16864614794340388,
+      "compared_elements": 131072,
+      "unequal_elements": 131072,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "projection_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00390625,
+      "rmse": 1.2063426774527494e-05,
+      "cosine": 0.9999999990604846,
+      "error_norm": 0.0043674270088272646,
+      "compared_elements": 131072,
+      "unequal_elements": 7,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "norm_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0039060886894950464,
+      "rmse": 0.0007576758542206155,
+      "cosine": 0.9999986754359307,
+      "error_norm": 0.27430796004388214,
+      "compared_elements": 131072,
+      "unequal_elements": 131072,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "norm_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.001953125,
+      "rmse": 5.3947966093944364e-06,
+      "cosine": 0.9999999999328488,
+      "error_norm": 0.001953125,
+      "compared_elements": 131072,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "rope_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.003896302863722667,
+      "rmse": 0.0004792297773460999,
+      "cosine": 0.999999470653913,
+      "error_norm": 0.17349971215766863,
+      "compared_elements": 131072,
+      "unequal_elements": 65472,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "rope_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 131072,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "actual_scale_vs_fp64_maxabs_div127",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 5.13327403153796e-10,
+      "rmse": 2.714078017147597e-10,
+      "cosine": 0.9999999999999997,
+      "error_norm": 8.68504965487231e-09,
+      "compared_elements": 1024,
+      "unequal_elements": 1016,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "actual_quantized_vs_round_actual_postrope_div_actual_scale",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 1.0,
+      "rmse": 0.03013134496199514,
+      "cosine": 0.9999997549886872,
+      "error_norm": 10.908712114635714,
+      "compared_elements": 131072,
+      "unequal_elements": 119,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "actual_cache_dequantized_vs_actual_postrope",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00958251953125,
+      "rmse": 0.003325465542698514,
+      "cosine": 0.9999744820178305,
+      "error_norm": 1.2039471287522925,
+      "compared_elements": 131072,
+      "unequal_elements": 130608,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_INT8_cache_vs_gpu_logical_postFP4_BF16",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, unequal FP4-versus-INT8 cache arithmetic",
+      "max_abs": 0.422332763671875,
+      "rmse": 0.0546477983441492,
+      "cosine": 0.9931305859984593,
+      "error_norm": 19.784616338464197,
+      "compared_elements": 131072,
+      "unequal_elements": 129912,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "gpu_vs_native_wk_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 6.103515625e-05,
+      "rmse": 2.6973983046972182e-06,
+      "cosine": 0.9999999999747431,
+      "error_norm": 6.103515625e-05,
+      "compared_elements": 512,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "gpu_vs_native_norm_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0001220703125,
+      "rmse": 5.3947966093944364e-06,
+      "cosine": 0.9999999999701996,
+      "error_norm": 0.0001220703125,
+      "compared_elements": 512,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "projection_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.007604376893141307,
+      "rmse": 0.0006008646159952137,
+      "cosine": 0.9999986404810427,
+      "error_norm": 0.3076426833895494,
+      "compared_elements": 262144,
+      "unequal_elements": 262144,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "projection_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00048828125,
+      "rmse": 1.4330720065171324e-06,
+      "cosine": 0.9999999999922666,
+      "error_norm": 0.0007337328673367718,
+      "compared_elements": 262144,
+      "unequal_elements": 12,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "norm_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.007811653222629111,
+      "rmse": 0.001155201486081729,
+      "cosine": 0.9999986256979831,
+      "error_norm": 0.5914631608738452,
+      "compared_elements": 262144,
+      "unequal_elements": 262144,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "norm_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0078125,
+      "rmse": 1.8689644429460536e-05,
+      "cosine": 0.9999999996402572,
+      "error_norm": 0.009569097947883794,
+      "compared_elements": 262144,
+      "unequal_elements": 4,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "rope_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.005584326478128787,
+      "rmse": 0.0005795713540795122,
+      "cosine": 0.9999996540955828,
+      "error_norm": 0.29674053328871025,
+      "compared_elements": 262144,
+      "unequal_elements": 131008,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "rope_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0009765625,
+      "rmse": 1.9073486328125e-06,
+      "cosine": 0.9999999999962531,
+      "error_norm": 0.0009765625,
+      "compared_elements": 262144,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "actual_scale_vs_fp64_maxabs_div127",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 9.973218119407878e-10,
+      "rmse": 4.627120341786711e-10,
+      "cosine": 0.9999999999999997,
+      "error_norm": 2.093995629467903e-08,
+      "compared_elements": 2048,
+      "unequal_elements": 2035,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "actual_quantized_vs_round_actual_postrope_div_actual_scale",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 1.0,
+      "rmse": 0.030757843257858637,
+      "cosine": 0.9999997572845367,
+      "error_norm": 15.748015748023622,
+      "compared_elements": 262144,
+      "unequal_elements": 248,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "actual_cache_dequantized_vs_actual_postrope",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0125274658203125,
+      "rmse": 0.004717322375431746,
+      "cosine": 0.9999770831716354,
+      "error_norm": 2.415269056221054,
+      "compared_elements": 262144,
+      "unequal_elements": 261291,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_INT8_cache_vs_gpu_logical_postFP4_BF16",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, unequal FP4-versus-INT8 cache arithmetic",
+      "max_abs": 0.499847412109375,
+      "rmse": 0.08209225782550636,
+      "cosine": 0.9930469102550776,
+      "error_norm": 42.031236006659256,
+      "compared_elements": 262144,
+      "unequal_elements": 259067,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu_vs_native_wk_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu_vs_native_norm_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "projection_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0019532127043930814,
+      "rmse": 0.0004638423099620654,
+      "cosine": 0.9999985988209718,
+      "error_norm": 0.6717154156040375,
+      "compared_elements": 2097152,
+      "unequal_elements": 2097152,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "projection_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00390625,
+      "rmse": 5.64518047273811e-06,
+      "cosine": 0.999999999792457,
+      "error_norm": 0.008175094565468154,
+      "compared_elements": 2097152,
+      "unequal_elements": 104,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "norm_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.007613166327792076,
+      "rmse": 0.0007574957919911749,
+      "cosine": 0.999998679792606,
+      "error_norm": 1.0969710822138559,
+      "compared_elements": 2097152,
+      "unequal_elements": 2097152,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "norm_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00390625,
+      "rmse": 9.034898971237512e-06,
+      "cosine": 0.9999999998121831,
+      "error_norm": 0.013083931299629889,
+      "compared_elements": 2097152,
+      "unequal_elements": 23,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "rope_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0039060708695615176,
+      "rmse": 0.0005135552076748168,
+      "cosine": 0.9999993931774939,
+      "error_norm": 0.7437073814743628,
+      "compared_elements": 2097152,
+      "unequal_elements": 1048512,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "rope_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00390625,
+      "rmse": 4.774332141022677e-06,
+      "cosine": 0.9999999999475542,
+      "error_norm": 0.006913971471470639,
+      "compared_elements": 2097152,
+      "unequal_elements": 12,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "actual_scale_vs_fp64_maxabs_div127",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 8.066573485565609e-10,
+      "rmse": 2.9163599433434763e-10,
+      "cosine": 0.9999999999999996,
+      "error_norm": 3.73294072747965e-08,
+      "compared_elements": 16384,
+      "unequal_elements": 16309,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "actual_quantized_vs_round_actual_postrope_div_actual_scale",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 1.0,
+      "rmse": 0.029556144434417102,
+      "cosine": 0.999999757673265,
+      "error_norm": 42.80186911806539,
+      "compared_elements": 2097152,
+      "unequal_elements": 1832,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "actual_cache_dequantized_vs_actual_postrope",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0087432861328125,
+      "rmse": 0.003427032695143969,
+      "cosine": 0.9999729787028374,
+      "error_norm": 4.962873462956668,
+      "compared_elements": 2097152,
+      "unequal_elements": 2091321,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_INT8_cache_vs_gpu_logical_postFP4_BF16",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, unequal FP4-versus-INT8 cache arithmetic",
+      "max_abs": 0.2653656005859375,
+      "rmse": 0.05481288450682401,
+      "cosine": 0.9931129810485231,
+      "error_norm": 79.3775356542368,
+      "compared_elements": 2097152,
+      "unequal_elements": 2079366,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "gpu_vs_native_wk_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "gpu_vs_native_norm_tail4",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "last4 actual dense rows, common BF16 projection/normalization",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "projection_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.003906388227846946,
+      "rmse": 0.0006328806448586225,
+      "cosine": 0.9999986419741002,
+      "error_norm": 1.2961395606704589,
+      "compared_elements": 4194304,
+      "unequal_elements": 4194304,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "projection_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0078125,
+      "rmse": 7.212089712948615e-06,
+      "cosine": 0.9999999998236453,
+      "error_norm": 0.014770359732118763,
+      "compared_elements": 4194304,
+      "unequal_elements": 206,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "norm_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.007812035868409062,
+      "rmse": 0.0011576503505425074,
+      "cosine": 0.999998626839974,
+      "error_norm": 2.3708679179110552,
+      "compared_elements": 4194304,
+      "unequal_elements": 4194304,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "norm_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0078125,
+      "rmse": 1.1452481841637267e-05,
+      "cosine": 0.9999999998656106,
+      "error_norm": 0.023454682811673122,
+      "compared_elements": 4194304,
+      "unequal_elements": 38,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "rope_full_vs_continuous_fp64",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.007808784386725165,
+      "rmse": 0.0006691328895474529,
+      "cosine": 0.9999995412424669,
+      "error_norm": 1.3703841577931835,
+      "compared_elements": 4194304,
+      "unequal_elements": 2097088,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "rope_full_vs_bf16_rne_prediction",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.00390625,
+      "rmse": 3.2116606055056967e-06,
+      "cosine": 0.9999999999894311,
+      "error_norm": 0.006577480920075667,
+      "compared_elements": 4194304,
+      "unequal_elements": 30,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "actual_scale_vs_fp64_maxabs_div127",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 9.973218119407878e-10,
+      "rmse": 4.202978718107788e-10,
+      "cosine": 0.9999999999999998,
+      "error_norm": 7.608204167057303e-08,
+      "compared_elements": 32768,
+      "unequal_elements": 32266,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "actual_quantized_vs_round_actual_postrope_div_actual_scale",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 1.0,
+      "rmse": 0.02953597096647776,
+      "cosine": 0.999999778500905,
+      "error_norm": 60.489668539346454,
+      "compared_elements": 4194304,
+      "unequal_elements": 3659,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "actual_cache_dequantized_vs_actual_postrope",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, actual saved native operands",
+      "max_abs": 0.0127716064453125,
+      "rmse": 0.004696111895662963,
+      "cosine": 0.999977403398658,
+      "error_norm": 9.617637162317749,
+      "compared_elements": 4194304,
+      "unequal_elements": 4167782,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-key",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_INT8_cache_vs_gpu_logical_postFP4_BF16",
+      "reference": "actual-native-and-explicit-reference",
+      "scope": "full completed-only dense M rows, unequal FP4-versus-INT8 cache arithmetic",
+      "max_abs": 0.5103759765625,
+      "rmse": 0.08120748076345381,
+      "cosine": 0.993234329036836,
+      "error_norm": 166.3129206035534,
+      "compared_elements": 4194304,
+      "unequal_elements": 4146726,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "retained-dependency",
+      "length": 2048,
+      "layer": 2,
+      "stage": "norm-weight-vjp",
+      "reference": "continuous_fp64",
+      "scope": "same original failed fourrowpoint; independent pertarget observation",
+      "max_abs": 0.015197137756804757,
+      "rmse": 0.002201655103420073,
+      "cosine": 0.9999985111631345,
+      "error_norm": 0.049817768110793706,
+      "compared_elements": 512,
+      "unequal_elements": 512,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "retained-dependency",
+      "length": 2048,
+      "layer": 2,
+      "stage": "norm-weight-vjp",
+      "reference": "bf16_rne_boundary_prediction",
+      "scope": "same original failed fourrowpoint; independent pertarget observation",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 0.9999999999999999,
+      "error_norm": 0.0,
+      "compared_elements": 512,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    }
+  ],
+  "compressor_32k": {
+    "forward_stage_metrics": [
+      {
+        "length": 32768,
+        "layer": 2,
+        "ratio": 2,
+        "stage": "wkv",
+        "max_abs": 1.8477439880371094e-06,
+        "rmse": 9.224019676055285e-08,
+        "cosine": 0.9999999999996319,
+        "error_norm": 0.00037781584593122447,
+        "compared_elements": 16777216,
+        "unequal_elements": 15819045,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "ratio": 2,
+        "stage": "norm-input",
+        "max_abs": 0.001953125,
+        "rmse": 5.341393542102349e-06,
+        "cosine": 0.9999999984509307,
+        "error_norm": 0.015470328195508651,
+        "compared_elements": 8388608,
+        "unequal_elements": 3767,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "ratio": 2,
+        "stage": "latent",
+        "max_abs": 0.0078125,
+        "rmse": 3.230894698810172e-05,
+        "cosine": 0.9999999965977732,
+        "error_norm": 0.09357670608192883,
+        "compared_elements": 8388608,
+        "unequal_elements": 4362,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "ratio": 2,
+        "stage": "wgate",
+        "max_abs": 1.6927719116210938e-05,
+        "rmse": 7.935385246679112e-07,
+        "cosine": 0.9999999999990266,
+        "error_norm": 0.0032503337970397643,
+        "compared_elements": 16777216,
+        "unequal_elements": 16233494,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "ratio": 1,
+        "stage": "wkv",
+        "max_abs": 0.001953125,
+        "rmse": 1.290923222680985e-05,
+        "cosine": 0.9999999860409222,
+        "error_norm": 0.05287621520101315,
+        "compared_elements": 16777216,
+        "unequal_elements": 33712,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "ratio": 1,
+        "stage": "norm-input",
+        "max_abs": 0.001953125,
+        "rmse": 1.290923222680985e-05,
+        "cosine": 0.9999999860409222,
+        "error_norm": 0.05287621520101315,
+        "compared_elements": 16777216,
+        "unequal_elements": 33712,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "ratio": 1,
+        "stage": "latent",
+        "max_abs": 0.03125,
+        "rmse": 0.00021204892882090967,
+        "cosine": 0.9999999693680595,
+        "error_norm": 0.868552412450446,
+        "compared_elements": 16777216,
+        "unequal_elements": 44364,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    ],
+    "local_vjp_gradient_metrics": [
+      {
+        "length": 32768,
+        "layer": 2,
+        "gate": "projection-vjp",
+        "argument": "input",
+        "native_shape": [
+          4,
+          5120
+        ],
+        "native_dtype": "torch.float32",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 1.0263575589419816e-07,
+          "rmse": 1.2772197624860565e-08,
+          "cosine": 0.9999999999999822,
+          "error_norm": 1.8278081351199732e-06,
+          "compared_elements": 20480,
+          "unequal_elements": 20480,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 1.043081283569336e-07,
+          "rmse": 1.285944182478019e-08,
+          "cosine": 0.9999999999999819,
+          "error_norm": 1.8402935086663961e-06,
+          "compared_elements": 20480,
+          "unequal_elements": 17233,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "gate": "projection-vjp",
+        "argument": "weight",
+        "native_shape": [
+          512,
+          5120
+        ],
+        "native_dtype": "torch.float32",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 1.4755642041563988e-08,
+          "rmse": 2.1044152089355568e-10,
+          "cosine": 0.9999999999999998,
+          "error_norm": 3.4072295439029676e-07,
+          "compared_elements": 2621440,
+          "unequal_elements": 2611195,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 2621440,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "projection-vjp",
+        "argument": "input",
+        "native_shape": [
+          4,
+          5120
+        ],
+        "native_dtype": "torch.bfloat16",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 0.00045972584121045657,
+          "rmse": 6.926765620391973e-05,
+          "cosine": 0.9999986382197293,
+          "error_norm": 0.00991278002649917,
+          "compared_elements": 20480,
+          "unequal_elements": 20480,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 20480,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "projection-vjp",
+        "argument": "weight",
+        "native_shape": [
+          512,
+          5120
+        ],
+        "native_dtype": "torch.bfloat16",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 0.0001220703125,
+          "rmse": 8.176730597799128e-06,
+          "cosine": 0.9999986270583149,
+          "error_norm": 0.013238831361349337,
+          "compared_elements": 2621440,
+          "unequal_elements": 2613228,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 2621440,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "compressor-vjp",
+        "argument": "input",
+        "native_shape": [
+          4,
+          5120
+        ],
+        "native_dtype": "torch.bfloat16",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 0.015543424698081232,
+          "rmse": 0.0028627074427871064,
+          "cosine": 0.9999973223407757,
+          "error_norm": 0.4096773402730598,
+          "compared_elements": 20480,
+          "unequal_elements": 20480,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 3.0517578125e-05,
+          "rmse": 2.132480599880018e-07,
+          "cosine": 0.999999999999985,
+          "error_norm": 3.0517578125e-05,
+          "compared_elements": 20480,
+          "unequal_elements": 1,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "compressor-vjp",
+        "argument": "projection-weight",
+        "native_shape": [
+          512,
+          5120
+        ],
+        "native_dtype": "torch.bfloat16",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 0.015086643872146865,
+          "rmse": 0.0002894187032589871,
+          "cosine": 0.9999980447165042,
+          "error_norm": 0.46859381747240775,
+          "compared_elements": 2621440,
+          "unequal_elements": 2621440,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 2621440,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "compressor-vjp",
+        "argument": "norm-weight",
+        "native_shape": [
+          512
+        ],
+        "native_dtype": "torch.bfloat16",
+        "finite": true,
+        "nonzero": true,
+        "shape_exact": true,
+        "continuous_fp64": {
+          "max_abs": 0.05683610129899819,
+          "rmse": 0.008145851330356885,
+          "cosine": 0.9999987116125659,
+          "error_norm": 0.18431957485545006,
+          "compared_elements": 512,
+          "unequal_elements": 512,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "dtype_boundary_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 512,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      }
+    ],
+    "native_gate_statuses": [
+      {
+        "length": 32768,
+        "layer": 2,
+        "gate": "projection-vjp",
+        "native_status": "actual-local-gradients-produced-pending-independent-numerical-review",
+        "observed_gradient_arrays": 2,
+        "strict_allow_unused": false,
+        "inputs_outside_inference_mode": true,
+        "failure_type": null,
+        "failure": null,
+        "norm_input": null
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "gate": "pool-norm-vjp",
+        "native_status": "native-vjp-rejected",
+        "observed_gradient_arrays": 0,
+        "strict_allow_unused": false,
+        "inputs_outside_inference_mode": true,
+        "failure_type": "RuntimeError",
+        "failure": "One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.",
+        "norm_input": {
+          "shape": [
+            4,
+            512
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": false,
+          "grad_fn": null
+        }
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "projection-vjp",
+        "native_status": "actual-local-gradients-produced-pending-independent-numerical-review",
+        "observed_gradient_arrays": 2,
+        "strict_allow_unused": false,
+        "inputs_outside_inference_mode": true,
+        "failure_type": null,
+        "failure": null,
+        "norm_input": null
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "gate": "compressor-vjp",
+        "native_status": "actual-local-gradients-produced-pending-independent-numerical-review",
+        "observed_gradient_arrays": 3,
+        "strict_allow_unused": false,
+        "inputs_outside_inference_mode": true,
+        "failure_type": null,
+        "failure": null,
+        "norm_input": {
+          "shape": [
+            4,
+            512
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": "MatmulBackward0"
+        }
+      }
+    ],
+    "bounded_tail_operator_oracles": [
+      {
+        "length": 32768,
+        "layer": 2,
+        "oracle": "gpu-rmsnorm-last4",
+        "coordinates": {
+          "rows": [
+            16380,
+            16381,
+            16382,
+            16383
+          ]
+        },
+        "continuous_fp64": {
+          "max_abs": 0.0035249908677572606,
+          "rmse": 0.0006472928659485847,
+          "cosine": 0.9999986613644677,
+          "error_norm": 0.029293131195258823,
+          "compared_elements": 2048,
+          "unequal_elements": 2048,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "bf16_rne": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 2048,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "scope": "bounded actual tail only"
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "oracle": "native-rmsnorm-last4",
+        "coordinates": {
+          "rows": [
+            16380,
+            16381,
+            16382,
+            16383
+          ]
+        },
+        "continuous_fp64": {
+          "max_abs": 0.0035249908677572606,
+          "rmse": 0.0006472928659485847,
+          "cosine": 0.9999986613644677,
+          "error_norm": 0.029293131195258823,
+          "compared_elements": 2048,
+          "unequal_elements": 2048,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "bf16_rne": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 2048,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "scope": "bounded actual tail only"
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "oracle": "gpu-pairpool-last4tokens",
+        "coordinates": {
+          "token_positions": [
+            32764,
+            32765,
+            32766,
+            32767
+          ],
+          "compressed_positions": [
+            16382,
+            16383
+          ]
+        },
+        "continuous_fp64": {
+          "max_abs": 0.0009208915955116193,
+          "rmse": 0.0001618778491025296,
+          "cosine": 0.9999985319546754,
+          "error_norm": 0.005180091171280947,
+          "compared_elements": 1024,
+          "unequal_elements": 1024,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "bf16_rne": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 1024,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "scope": "bounded actual tail only"
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "oracle": "native-pairpool-last4tokens",
+        "coordinates": {
+          "token_positions": [
+            32764,
+            32765,
+            32766,
+            32767
+          ],
+          "compressed_positions": [
+            16382,
+            16383
+          ]
+        },
+        "continuous_fp64": {
+          "max_abs": 0.0009212040296860957,
+          "rmse": 0.0001618787103701447,
+          "cosine": 0.9999985319538326,
+          "error_norm": 0.00518011873184463,
+          "compared_elements": 1024,
+          "unequal_elements": 1024,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "bf16_rne": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 1024,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "scope": "bounded actual tail only"
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "oracle": "gpu-rmsnorm-last4",
+        "coordinates": {
+          "rows": [
+            32764,
+            32765,
+            32766,
+            32767
+          ]
+        },
+        "continuous_fp64": {
+          "max_abs": 0.007771656358809054,
+          "rmse": 0.001382862512802626,
+          "cosine": 0.999998693763007,
+          "error_norm": 0.06258121345608997,
+          "compared_elements": 2048,
+          "unequal_elements": 2048,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "bf16_rne": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 2048,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "scope": "bounded actual tail only"
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "oracle": "native-rmsnorm-last4",
+        "coordinates": {
+          "rows": [
+            32764,
+            32765,
+            32766,
+            32767
+          ]
+        },
+        "continuous_fp64": {
+          "max_abs": 0.0077809428208697184,
+          "rmse": 0.00138279136286925,
+          "cosine": 0.9999986939255352,
+          "error_norm": 0.0625779935776662,
+          "compared_elements": 2048,
+          "unequal_elements": 2048,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "bf16_rne": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 0.9999999999999998,
+          "error_norm": 0.0,
+          "compared_elements": 2048,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "scope": "bounded actual tail only"
+      }
+    ],
+    "controls": {
+      "native_capture_bitwise_exact": {
+        "N32768-L2": true,
+        "N32768-L20": true
+      },
+      "L2_private_ring": {
+        "shape": [
+          2,
+          32,
+          1,
+          1024
+        ],
+        "warm_before_after_bitwise_exact": true,
+        "protected_page0_allzero": true,
+        "page1_matches_actual_projection_tail_bitwise": true,
+        "gpu_two_row_state_not_compared": true
+      },
+      "actual_VJP_argument_bindings": 10,
+      "actual_gradient_arrays": 7,
+      "strict_L2_pool_norm_vjp_rejected": true
+    }
+  },
+  "retained_dependency": {
+    "length": 2048,
+    "layer": 2,
+    "retained_rows": 4,
+    "strict_request_status": "strict-native-vjp-rejected",
+    "strict_allow_unused": false,
+    "diagnostic_allow_unused": true,
+    "observations": [
+      {
+        "target": "projected-kv",
+        "returned_none": true
+      },
+      {
+        "target": "projected-scores",
+        "returned_none": true
+      },
+      {
+        "target": "norm.weight",
+        "returned_none": false
+      }
+    ],
+    "samepoint_norm_input_and_output_raw_exact": true,
+    "actual_normweight_gradient": {
+      "shape": [
+        512
+      ],
+      "dtype": "BF16",
+      "finite": true,
+      "nonzero": true
+    },
+    "gradient_metrics": {
+      "continuous_fp64": {
+        "max_abs": 0.015197137756804757,
+        "rmse": 0.002201655103420073,
+        "cosine": 0.9999985111631345,
+        "error_norm": 0.049817768110793706,
+        "compared_elements": 512,
+        "unequal_elements": 512,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne_boundary_prediction": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 0.9999999999999999,
+        "error_norm": 0.0,
+        "compared_elements": 512,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    "native_ring_exact_actual_tail_write": true,
+    "device_peak_allocated_bytes": 54822400,
+    "fixture_wall_seconds": 38.58132887003012,
+    "interpretation": "Strict graph request remains rejected: projected kv and scores return None under separate dependency observation; norm weight returns a real gradient. No zero fill or replacement derivatives."
+  },
+  "native_keys": {
+    "records": [
+      {
+        "key": "N2048-L2",
+        "length": 2048,
+        "layer": 2,
+        "ratio": 2,
+        "completed_rows": 1024,
+        "native_array_bindings": 17,
+        "controls": {
+          "actual_full_latent_source_exact": true,
+          "actual_phase_source_bits_exact": true,
+          "raw_cache_allbytes_exact_expected_scatter": true,
+          "cache_stride_storage_offsets_exact": true,
+          "all_unwritten_bytes_sentinel_exact": true,
+          "sameinput_untraced_captured_warmcache_exact": true,
+          "unrotated64channels_exact": true
+        },
+        "metrics": {
+          "gpu_vs_native_wk_tail4": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 512,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "gpu_vs_native_norm_tail4": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 512,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_continuous_fp64": {
+            "max_abs": 0.001953170169144869,
+            "rmse": 0.00046582357356160395,
+            "cosine": 0.9999985991210899,
+            "error_norm": 0.16864614794340388,
+            "compared_elements": 131072,
+            "unequal_elements": 131072,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.00390625,
+            "rmse": 1.2063426774527494e-05,
+            "cosine": 0.9999999990604846,
+            "error_norm": 0.0043674270088272646,
+            "compared_elements": 131072,
+            "unequal_elements": 7,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_continuous_fp64": {
+            "max_abs": 0.0039060886894950464,
+            "rmse": 0.0007576758542206155,
+            "cosine": 0.9999986754359307,
+            "error_norm": 0.27430796004388214,
+            "compared_elements": 131072,
+            "unequal_elements": 131072,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.001953125,
+            "rmse": 5.3947966093944364e-06,
+            "cosine": 0.9999999999328488,
+            "error_norm": 0.001953125,
+            "compared_elements": 131072,
+            "unequal_elements": 1,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_continuous_fp64": {
+            "max_abs": 0.003896302863722667,
+            "rmse": 0.0004792297773460999,
+            "cosine": 0.999999470653913,
+            "error_norm": 0.17349971215766863,
+            "compared_elements": 131072,
+            "unequal_elements": 65472,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 131072,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_scale_vs_fp64_maxabs_div127": {
+            "max_abs": 5.13327403153796e-10,
+            "rmse": 2.714078017147597e-10,
+            "cosine": 0.9999999999999997,
+            "error_norm": 8.68504965487231e-09,
+            "compared_elements": 1024,
+            "unequal_elements": 1016,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_quantized_vs_round_actual_postrope_div_actual_scale": {
+            "max_abs": 1.0,
+            "rmse": 0.03013134496199514,
+            "cosine": 0.9999997549886872,
+            "error_norm": 10.908712114635714,
+            "compared_elements": 131072,
+            "unequal_elements": 119,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_cache_dequantized_vs_actual_postrope": {
+            "max_abs": 0.00958251953125,
+            "rmse": 0.003325465542698514,
+            "cosine": 0.9999744820178305,
+            "error_norm": 1.2039471287522925,
+            "compared_elements": 131072,
+            "unequal_elements": 130608,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "native_INT8_cache_vs_gpu_logical_postFP4_BF16": {
+            "max_abs": 0.422332763671875,
+            "rmse": 0.0546477983441492,
+            "cosine": 0.9931305859984593,
+            "error_norm": 19.784616338464197,
+            "compared_elements": 131072,
+            "unequal_elements": 129912,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          }
+        }
+      },
+      {
+        "key": "N2048-L20",
+        "length": 2048,
+        "layer": 20,
+        "ratio": 1,
+        "completed_rows": 2048,
+        "native_array_bindings": 17,
+        "controls": {
+          "actual_full_latent_source_exact": true,
+          "actual_phase_source_bits_exact": true,
+          "raw_cache_allbytes_exact_expected_scatter": true,
+          "cache_stride_storage_offsets_exact": true,
+          "all_unwritten_bytes_sentinel_exact": true,
+          "sameinput_untraced_captured_warmcache_exact": true,
+          "unrotated64channels_exact": true
+        },
+        "metrics": {
+          "gpu_vs_native_wk_tail4": {
+            "max_abs": 6.103515625e-05,
+            "rmse": 2.6973983046972182e-06,
+            "cosine": 0.9999999999747431,
+            "error_norm": 6.103515625e-05,
+            "compared_elements": 512,
+            "unequal_elements": 1,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "gpu_vs_native_norm_tail4": {
+            "max_abs": 0.0001220703125,
+            "rmse": 5.3947966093944364e-06,
+            "cosine": 0.9999999999701996,
+            "error_norm": 0.0001220703125,
+            "compared_elements": 512,
+            "unequal_elements": 1,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_continuous_fp64": {
+            "max_abs": 0.007604376893141307,
+            "rmse": 0.0006008646159952137,
+            "cosine": 0.9999986404810427,
+            "error_norm": 0.3076426833895494,
+            "compared_elements": 262144,
+            "unequal_elements": 262144,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.00048828125,
+            "rmse": 1.4330720065171324e-06,
+            "cosine": 0.9999999999922666,
+            "error_norm": 0.0007337328673367718,
+            "compared_elements": 262144,
+            "unequal_elements": 12,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_continuous_fp64": {
+            "max_abs": 0.007811653222629111,
+            "rmse": 0.001155201486081729,
+            "cosine": 0.9999986256979831,
+            "error_norm": 0.5914631608738452,
+            "compared_elements": 262144,
+            "unequal_elements": 262144,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.0078125,
+            "rmse": 1.8689644429460536e-05,
+            "cosine": 0.9999999996402572,
+            "error_norm": 0.009569097947883794,
+            "compared_elements": 262144,
+            "unequal_elements": 4,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_continuous_fp64": {
+            "max_abs": 0.005584326478128787,
+            "rmse": 0.0005795713540795122,
+            "cosine": 0.9999996540955828,
+            "error_norm": 0.29674053328871025,
+            "compared_elements": 262144,
+            "unequal_elements": 131008,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.0009765625,
+            "rmse": 1.9073486328125e-06,
+            "cosine": 0.9999999999962531,
+            "error_norm": 0.0009765625,
+            "compared_elements": 262144,
+            "unequal_elements": 1,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_scale_vs_fp64_maxabs_div127": {
+            "max_abs": 9.973218119407878e-10,
+            "rmse": 4.627120341786711e-10,
+            "cosine": 0.9999999999999997,
+            "error_norm": 2.093995629467903e-08,
+            "compared_elements": 2048,
+            "unequal_elements": 2035,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_quantized_vs_round_actual_postrope_div_actual_scale": {
+            "max_abs": 1.0,
+            "rmse": 0.030757843257858637,
+            "cosine": 0.9999997572845367,
+            "error_norm": 15.748015748023622,
+            "compared_elements": 262144,
+            "unequal_elements": 248,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_cache_dequantized_vs_actual_postrope": {
+            "max_abs": 0.0125274658203125,
+            "rmse": 0.004717322375431746,
+            "cosine": 0.9999770831716354,
+            "error_norm": 2.415269056221054,
+            "compared_elements": 262144,
+            "unequal_elements": 261291,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "native_INT8_cache_vs_gpu_logical_postFP4_BF16": {
+            "max_abs": 0.499847412109375,
+            "rmse": 0.08209225782550636,
+            "cosine": 0.9930469102550776,
+            "error_norm": 42.031236006659256,
+            "compared_elements": 262144,
+            "unequal_elements": 259067,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          }
+        }
+      },
+      {
+        "key": "N32768-L2",
+        "length": 32768,
+        "layer": 2,
+        "ratio": 2,
+        "completed_rows": 16384,
+        "native_array_bindings": 17,
+        "controls": {
+          "actual_full_latent_source_exact": true,
+          "actual_phase_source_bits_exact": true,
+          "raw_cache_allbytes_exact_expected_scatter": true,
+          "cache_stride_storage_offsets_exact": true,
+          "all_unwritten_bytes_sentinel_exact": true,
+          "sameinput_untraced_captured_warmcache_exact": true,
+          "unrotated64channels_exact": true
+        },
+        "metrics": {
+          "gpu_vs_native_wk_tail4": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 512,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "gpu_vs_native_norm_tail4": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 512,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_continuous_fp64": {
+            "max_abs": 0.0019532127043930814,
+            "rmse": 0.0004638423099620654,
+            "cosine": 0.9999985988209718,
+            "error_norm": 0.6717154156040375,
+            "compared_elements": 2097152,
+            "unequal_elements": 2097152,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.00390625,
+            "rmse": 5.64518047273811e-06,
+            "cosine": 0.999999999792457,
+            "error_norm": 0.008175094565468154,
+            "compared_elements": 2097152,
+            "unequal_elements": 104,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_continuous_fp64": {
+            "max_abs": 0.007613166327792076,
+            "rmse": 0.0007574957919911749,
+            "cosine": 0.999998679792606,
+            "error_norm": 1.0969710822138559,
+            "compared_elements": 2097152,
+            "unequal_elements": 2097152,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.00390625,
+            "rmse": 9.034898971237512e-06,
+            "cosine": 0.9999999998121831,
+            "error_norm": 0.013083931299629889,
+            "compared_elements": 2097152,
+            "unequal_elements": 23,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_continuous_fp64": {
+            "max_abs": 0.0039060708695615176,
+            "rmse": 0.0005135552076748168,
+            "cosine": 0.9999993931774939,
+            "error_norm": 0.7437073814743628,
+            "compared_elements": 2097152,
+            "unequal_elements": 1048512,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.00390625,
+            "rmse": 4.774332141022677e-06,
+            "cosine": 0.9999999999475542,
+            "error_norm": 0.006913971471470639,
+            "compared_elements": 2097152,
+            "unequal_elements": 12,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_scale_vs_fp64_maxabs_div127": {
+            "max_abs": 8.066573485565609e-10,
+            "rmse": 2.9163599433434763e-10,
+            "cosine": 0.9999999999999996,
+            "error_norm": 3.73294072747965e-08,
+            "compared_elements": 16384,
+            "unequal_elements": 16309,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_quantized_vs_round_actual_postrope_div_actual_scale": {
+            "max_abs": 1.0,
+            "rmse": 0.029556144434417102,
+            "cosine": 0.999999757673265,
+            "error_norm": 42.80186911806539,
+            "compared_elements": 2097152,
+            "unequal_elements": 1832,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_cache_dequantized_vs_actual_postrope": {
+            "max_abs": 0.0087432861328125,
+            "rmse": 0.003427032695143969,
+            "cosine": 0.9999729787028374,
+            "error_norm": 4.962873462956668,
+            "compared_elements": 2097152,
+            "unequal_elements": 2091321,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "native_INT8_cache_vs_gpu_logical_postFP4_BF16": {
+            "max_abs": 0.2653656005859375,
+            "rmse": 0.05481288450682401,
+            "cosine": 0.9931129810485231,
+            "error_norm": 79.3775356542368,
+            "compared_elements": 2097152,
+            "unequal_elements": 2079366,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          }
+        }
+      },
+      {
+        "key": "N32768-L20",
+        "length": 32768,
+        "layer": 20,
+        "ratio": 1,
+        "completed_rows": 32768,
+        "native_array_bindings": 17,
+        "controls": {
+          "actual_full_latent_source_exact": true,
+          "actual_phase_source_bits_exact": true,
+          "raw_cache_allbytes_exact_expected_scatter": true,
+          "cache_stride_storage_offsets_exact": true,
+          "all_unwritten_bytes_sentinel_exact": true,
+          "sameinput_untraced_captured_warmcache_exact": true,
+          "unrotated64channels_exact": true
+        },
+        "metrics": {
+          "gpu_vs_native_wk_tail4": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 512,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "gpu_vs_native_norm_tail4": {
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "cosine": 1.0,
+            "error_norm": 0.0,
+            "compared_elements": 512,
+            "unequal_elements": 0,
+            "exact_equal": true,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_continuous_fp64": {
+            "max_abs": 0.003906388227846946,
+            "rmse": 0.0006328806448586225,
+            "cosine": 0.9999986419741002,
+            "error_norm": 1.2961395606704589,
+            "compared_elements": 4194304,
+            "unequal_elements": 4194304,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "projection_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.0078125,
+            "rmse": 7.212089712948615e-06,
+            "cosine": 0.9999999998236453,
+            "error_norm": 0.014770359732118763,
+            "compared_elements": 4194304,
+            "unequal_elements": 206,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_continuous_fp64": {
+            "max_abs": 0.007812035868409062,
+            "rmse": 0.0011576503505425074,
+            "cosine": 0.999998626839974,
+            "error_norm": 2.3708679179110552,
+            "compared_elements": 4194304,
+            "unequal_elements": 4194304,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "norm_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.0078125,
+            "rmse": 1.1452481841637267e-05,
+            "cosine": 0.9999999998656106,
+            "error_norm": 0.023454682811673122,
+            "compared_elements": 4194304,
+            "unequal_elements": 38,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_continuous_fp64": {
+            "max_abs": 0.007808784386725165,
+            "rmse": 0.0006691328895474529,
+            "cosine": 0.9999995412424669,
+            "error_norm": 1.3703841577931835,
+            "compared_elements": 4194304,
+            "unequal_elements": 2097088,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "rope_full_vs_bf16_rne_prediction": {
+            "max_abs": 0.00390625,
+            "rmse": 3.2116606055056967e-06,
+            "cosine": 0.9999999999894311,
+            "error_norm": 0.006577480920075667,
+            "compared_elements": 4194304,
+            "unequal_elements": 30,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_scale_vs_fp64_maxabs_div127": {
+            "max_abs": 9.973218119407878e-10,
+            "rmse": 4.202978718107788e-10,
+            "cosine": 0.9999999999999998,
+            "error_norm": 7.608204167057303e-08,
+            "compared_elements": 32768,
+            "unequal_elements": 32266,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_quantized_vs_round_actual_postrope_div_actual_scale": {
+            "max_abs": 1.0,
+            "rmse": 0.02953597096647776,
+            "cosine": 0.999999778500905,
+            "error_norm": 60.489668539346454,
+            "compared_elements": 4194304,
+            "unequal_elements": 3659,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "actual_cache_dequantized_vs_actual_postrope": {
+            "max_abs": 0.0127716064453125,
+            "rmse": 0.004696111895662963,
+            "cosine": 0.999977403398658,
+            "error_norm": 9.617637162317749,
+            "compared_elements": 4194304,
+            "unequal_elements": 4167782,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          },
+          "native_INT8_cache_vs_gpu_logical_postFP4_BF16": {
+            "max_abs": 0.5103759765625,
+            "rmse": 0.08120748076345381,
+            "cosine": 0.993234329036836,
+            "error_norm": 166.3129206035534,
+            "compared_elements": 4194304,
+            "unequal_elements": 4146726,
+            "exact_equal": false,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            }
+          }
+        }
+      }
+    ],
+    "quantization_boundary_diagnostics": [
+      {
+        "length": 2048,
+        "layer": 2,
+        "disagreement_cells": 119,
+        "all_disagreements_at_exact_source_half_rowmax": true,
+        "ideal_unrounded_scale_coordinate_magnitude": 63.5,
+        "maximum_distance_from_half_using_actual_exported_scale": 2.871299479068057e-06,
+        "actual_and_prediction_magnitudes": [
+          63,
+          64
+        ],
+        "nonhalf_cells_exact": true,
+        "total_native_key_cells": 131072
+      },
+      {
+        "length": 2048,
+        "layer": 20,
+        "disagreement_cells": 248,
+        "all_disagreements_at_exact_source_half_rowmax": true,
+        "ideal_unrounded_scale_coordinate_magnitude": 63.5,
+        "maximum_distance_from_half_using_actual_exported_scale": 2.871299479068057e-06,
+        "actual_and_prediction_magnitudes": [
+          63,
+          64
+        ],
+        "nonhalf_cells_exact": true,
+        "total_native_key_cells": 262144
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "disagreement_cells": 1832,
+        "all_disagreements_at_exact_source_half_rowmax": true,
+        "ideal_unrounded_scale_coordinate_magnitude": 63.5,
+        "maximum_distance_from_half_using_actual_exported_scale": 2.871299479068057e-06,
+        "actual_and_prediction_magnitudes": [
+          63,
+          64
+        ],
+        "nonhalf_cells_exact": true,
+        "total_native_key_cells": 2097152
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "disagreement_cells": 3659,
+        "all_disagreements_at_exact_source_half_rowmax": true,
+        "ideal_unrounded_scale_coordinate_magnitude": 63.5,
+        "maximum_distance_from_half_using_actual_exported_scale": 2.871299479068057e-06,
+        "actual_and_prediction_magnitudes": [
+          63,
+          64
+        ],
+        "nonhalf_cells_exact": true,
+        "total_native_key_cells": 4194304
+      }
+    ],
+    "source_input_geometry": "Actual GPU completed-only dense M latents; native whole-model token-aligned N geometry is not replayed",
+    "native_cache": "actual INT8 keys and FP16 scales in private strided MLA-prefixed cache",
+    "gpu_cache": "actual logical BF16 post-FP4 keys",
+    "quantization_boundary_interpretation": "Independent FP64 division by exported rounded FP32 scale followed by RNE differs only at exact source half-rowmax coordinates, ideal magnitude63.5. Native internal reciprocal/order not emulated; no defect or acceptance inferred."
+  },
+  "source_configuration": {
+    "compressor_runner_sha256": "f1dc10b8898403b029436f876b3cc8ef433c0f52ebb44ef2c051d9f8bf7c7a05",
+    "key_runner_sha256": "470a2061fb0d45f796f6112fa9585e382168fb640816f1fea15cc798955aa299",
+    "compressor_native_source_pins": 71,
+    "keys_native_source_pins": 73,
+    "keys_2k_and_32k_admission_same_sha256": "f6c2618ecfd746e70d10c9718aba752b480a8e033c19713716a7aa5111bbffc0",
+    "added_source_pins": {
+      "rope_dsv4.py": "9cbcd2cb2a1123dcbf5afc3999025035d155dfd3b160f186c36aebb5aa7c706b",
+      "ops/rotary_embedding.py": "403e1d0c0cac58a82898fa2596b923b60f19392d23560f4609967e4dfc8a411a"
+    },
+    "actual_norm_dispatch": "AscendRMSNorm.forward_oot",
+    "compressor_weights": {
+      "L2_wkv": "FP32",
+      "L2_wgate": "FP32",
+      "L20_wkv": "BF16",
+      "norm": "BF16"
+    },
+    "selected_compressor_quantized_weight_dequantization": false,
+    "key_wk_and_norm_weights": "BF16"
+  },
+  "native_execution_receipts": [
+    {
+      "family": "compressor-32k",
+      "native_run_id": "npu-secondary-ds41-upstream-compressor-32k-native-20261108T141150Z",
+      "command_sha256": "4c283965d9f4b9f49a49d45cec89eb2c76f19014fc28a7496e7e6008abcec832",
+      "result_sha256": "3d44b8d301f8ef30cc8f46f23ecf6a4a47f882de2e18c5912d73cfccb1175ab8",
+      "fixture_wall_seconds": 52.861442556837574,
+      "peak_allocated_bytes": {
+        "N32768-L2": 1279926784,
+        "N32768-L20": 542135808
+      },
+      "returncode": 0,
+      "terminal_status": "completed",
+      "verified_native_files": 43,
+      "verified_source_files": 16,
+      "cleanup_sha256": "8ae0ba121f86070e833a75be0379f970b13c81965a0f6ad2766d6183817cb785",
+      "original_host_boot_verified": true,
+      "case_processes_absent": true,
+      "eight_card_process_lists_empty": true,
+      "oom_kill_zero": true,
+      "signals_sent": []
+    },
+    {
+      "family": "keys-2k",
+      "native_run_id": "npu-secondary-ds41-indexer-native-keys-2k-native-20261108T141010Z",
+      "command_sha256": "ebadea851141cf468781d95bc66868625e261a7c762f397b0b7021270148301e",
+      "result_sha256": "5ed002997135cefd6a21e27e93c93155622ac45f37d7a83026c86fde172c8209",
+      "fixture_wall_seconds": 32.123437262838706,
+      "peak_allocated_bytes": {
+        "all_records": 27543040
+      },
+      "returncode": 0,
+      "terminal_status": "completed",
+      "verified_native_files": 73,
+      "verified_source_files": 15,
+      "cleanup_sha256": "293a251a08357962412bdff5a5f093db0b07d2a82a326376e3f939e3c977dace",
+      "original_host_boot_verified": true,
+      "case_processes_absent": true,
+      "eight_card_process_lists_empty": true,
+      "oom_kill_zero": true,
+      "signals_sent": []
+    },
+    {
+      "family": "keys-32k",
+      "native_run_id": "npu-secondary-ds41-indexer-native-keys-32k-native-20261108T141723Z",
+      "command_sha256": "0561303c492bc8521d79069a7daebf47435366f0af8f83e20d75e6eb763786e2",
+      "result_sha256": "25b52e4abadbc9131587d4394da433e04ba1b3d9d56dccf0d7af22ee86aae3d5",
+      "fixture_wall_seconds": 33.42210125201382,
+      "peak_allocated_bytes": {
+        "all_records": 213138432
+      },
+      "returncode": 0,
+      "terminal_status": "completed",
+      "verified_native_files": 73,
+      "verified_source_files": 15,
+      "cleanup_sha256": "5e68dcb6612a8adf854b7a352db9a7db62ff239706b721a16f6965881e7f4386",
+      "original_host_boot_verified": true,
+      "case_processes_absent": true,
+      "eight_card_process_lists_empty": true,
+      "oom_kill_zero": true,
+      "signals_sent": []
+    }
+  ],
+  "evidence": [
+    {
+      "id": "compare-ds41-compressor-32k-independent-numerical-vjp-replay-20261108T142355Z",
+      "artifact": "replay/review.json",
+      "sha256": "5949f5c0130ae30a912f0919a31620490523df016f153a9ce422108689834379"
+    },
+    {
+      "id": "compare-ds41-native-compressor-32k-terminal-independent-audit-20261108T142557Z",
+      "artifact": "review.json",
+      "sha256": "333f5bf5b645cb3bcdd8aa560397f7ce9a52b17ee23a9932572e116484dc302a"
+    },
+    {
+      "id": "compare-ds41-upstream-compressor-native-terminal-verified-export-cleanup-20261108T141819Z",
+      "artifact": "native/capture/result.json",
+      "sha256": "3d44b8d301f8ef30cc8f46f23ecf6a4a47f882de2e18c5912d73cfccb1175ab8"
+    },
+    {
+      "id": "compare-ds41-retained-dependency-terminal-independent-review-20261108T141131Z",
+      "artifact": "review.json",
+      "sha256": "eb3e6e0e621323ff2dcca61976b32b8906f690bab07630342514629e6a562980"
+    },
+    {
+      "id": "compare-ds41-native-keys-2k-independent-array-cache-numerical-review-20261108T141819Z",
+      "artifact": "review.json",
+      "sha256": "3a3e9ed2af4507148f6519aae394ad3ac46ad136080324ea3af65c4dc29c23fd"
+    },
+    {
+      "id": "compare-ds41-native-keys-32k-independent-array-cache-numerical-review-20261108T142656Z",
+      "artifact": "review.json",
+      "sha256": "795d2dcbf33ec4d9cc8af39328066c2d1aec15d12d3e4eae1e663bf982800c65"
+    },
+    {
+      "id": "compare-ds41-key-native-quant-half-boundary-independent-diagnostic-20261108T142217Z",
+      "artifact": "review.json",
+      "sha256": "0b773a6199cac1c3f3a6f617cd50cbc949bf9bd1068c412c05bd4a75f435ce0f"
+    },
+    {
+      "id": "compare-ds41-key-32k-native-quant-half-boundary-independent-diagnostic-20261108T142919Z",
+      "artifact": "review.json",
+      "sha256": "1923f1a1bc000dfcbd79c82ed4b49ef2f5b87cfc727693fd12e27c8353fbf40e"
+    },
+    {
+      "id": "compare-ds41-upstream-compressor-native-terminal-verified-export-cleanup-20261108T141438Z",
+      "artifact": "native/capture/result.json",
+      "sha256": "5ed002997135cefd6a21e27e93c93155622ac45f37d7a83026c86fde172c8209"
+    },
+    {
+      "id": "compare-ds41-upstream-compressor-native-terminal-verified-export-cleanup-20261108T142324Z",
+      "artifact": "native/capture/result.json",
+      "sha256": "25b52e4abadbc9131587d4394da433e04ba1b3d9d56dccf0d7af22ee86aae3d5"
+    }
+  ],
+  "metric_semantics": {
+    "shared_tool": "array_compare.py",
+    "reduction": "FP64",
+    "continuous_and_dtype_boundary_predictions_separate": true,
+    "no_acceptance_thresholds": true,
+    "fixture_timings_are_not_steady_state_performance": true
+  },
+  "coverage": {
+    "original_strict_ledger_paired_cells": 191,
+    "original_strict_ledger_expected_cells": 275,
+    "original_strict_ledger_changed": false,
+    "native_full_history_selected_compressor_lengths": [
+      2048,
+      32768
+    ],
+    "native_completed_only_key_history_lengths": [
+      2048,
+      32768
+    ],
+    "full_model_backward": false,
+    "optimizer_updates_covered": false,
+    "training_coverage": false,
+    "query_projection_coverage": false,
+    "whole_model_cache_alias_coverage": false,
+    "numerical_acceptance": null,
+    "hardware_only_causality": false
+  },
+  "limitations": [
+    "Two fixed dependent histories and two dependent layers, not independent task/sample families",
+    "Selected upstream compressor/key stages and fourrow local derivatives do not establish full native model inference or training",
+    "GPU two-row partial state and native 32-row ring differ; private native invariants only",
+    "Keys consume actual GPU compressor latents; this is not a composed native compressor-to-key full-model chain",
+    "Native INT8/FP16scale and original GPU FP4 arithmetic differ; cache errors cannot isolate hardware",
+    "Strict L2 pool/norm VJP rejection persists for both histories; retained pertarget diagnostic covers the2Kpoint only",
+    "Original broad agreed coverage gaps remain; no numerical acceptance or hardware-only causal claim"
+  ],
+  "id": "deepseek41-upstream-extension-20261108",
+  "model_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "writing_source_sha256": "f4a2b687b52e8493faabef16506a4ad4a10c0b1e66e975b154ae702b563e855a",
+  "writing_evidence_id": "compare-ds41-upstream-extension-writing-supplement-20261108T143651Z"
+}

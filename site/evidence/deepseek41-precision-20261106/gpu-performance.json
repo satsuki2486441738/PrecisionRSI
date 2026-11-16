@@ -1,0 +1,189 @@
+{
+  "scope": "GPU TP4 original mixed-format uninstrumented latency only",
+  "warmups_per_cell": 2,
+  "measurements_per_cell": 5,
+  "latency_definition": "maximum wall latency across four synchronized ranks; 32 cached teacher token calls exclude prefill",
+  "cold_cache_claim": false,
+  "cells": [
+    {
+      "prompt_length": 128,
+      "kind": "fixed32-cached-decode",
+      "sample": "discovery-00-128",
+      "measurements": [
+        8.902484263293445,
+        8.919797910377383,
+        8.899686238728464,
+        8.896572184748948,
+        8.921763238497078
+      ],
+      "unit": "seconds",
+      "median": 8.902484263293445,
+      "minimum": 8.896572184748948,
+      "maximum": 8.921763238497078,
+      "arithmetic_mean": 8.908060767129063,
+      "stdev": 0.01181879752014429,
+      "max_measured_peak_allocated_bytes": 80534678016,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 128,
+      "kind": "prefill",
+      "sample": "discovery-00-128",
+      "measurements": [
+        2.179504123516381,
+        2.181763932108879,
+        2.1793632097542286,
+        2.1864142529666424,
+        2.1776216458529234
+      ],
+      "unit": "seconds",
+      "median": 2.179504123516381,
+      "minimum": 2.1776216458529234,
+      "maximum": 2.1864142529666424,
+      "arithmetic_mean": 2.1809334328398107,
+      "stdev": 0.0033987342138530464,
+      "max_measured_peak_allocated_bytes": 80605479424,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 512,
+      "kind": "fixed32-cached-decode",
+      "sample": "discovery-06-512",
+      "measurements": [
+        8.987089729867876,
+        8.998887126334012,
+        8.9726627105847,
+        8.99248565081507,
+        8.988493815995753
+      ],
+      "unit": "seconds",
+      "median": 8.988493815995753,
+      "minimum": 8.9726627105847,
+      "maximum": 8.998887126334012,
+      "arithmetic_mean": 8.987923806719483,
+      "stdev": 0.009681508773523523,
+      "max_measured_peak_allocated_bytes": 80535909888,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 512,
+      "kind": "prefill",
+      "sample": "discovery-06-512",
+      "measurements": [
+        2.4552318966016173,
+        2.4549549547955394,
+        2.4586596256121993,
+        2.453341105952859,
+        2.454958474263549
+      ],
+      "unit": "seconds",
+      "median": 2.454958474263549,
+      "minimum": 2.453341105952859,
+      "maximum": 2.4586596256121993,
+      "arithmetic_mean": 2.4554292114451526,
+      "stdev": 0.0019545591733770187,
+      "max_measured_peak_allocated_bytes": 80843064832,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 2048,
+      "kind": "fixed32-cached-decode",
+      "sample": "reserved-24-2048",
+      "measurements": [
+        8.89802567102015,
+        8.922776954248548,
+        8.904979389160872,
+        8.910709855146706,
+        8.914038782007992
+      ],
+      "unit": "seconds",
+      "median": 8.910709855146706,
+      "minimum": 8.89802567102015,
+      "maximum": 8.922776954248548,
+      "arithmetic_mean": 8.910106130316853,
+      "stdev": 0.009335429607170377,
+      "max_measured_peak_allocated_bytes": 80543000064,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 2048,
+      "kind": "prefill",
+      "sample": "reserved-24-2048",
+      "measurements": [
+        3.5315467873588204,
+        3.5336036207154393,
+        3.5263799652457237,
+        3.5263331634923816,
+        3.52949364669621
+      ],
+      "unit": "seconds",
+      "median": 3.52949364669621,
+      "minimum": 3.5263331634923816,
+      "maximum": 3.5336036207154393,
+      "arithmetic_mean": 3.529471436701715,
+      "stdev": 0.00319329269159245,
+      "max_measured_peak_allocated_bytes": 81795569152,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 8192,
+      "kind": "fixed32-cached-decode",
+      "sample": "reserved-36-8192",
+      "measurements": [
+        8.995631543919444,
+        8.989662017673254,
+        8.993888387456536,
+        8.992839241400361,
+        8.981726808473468
+      ],
+      "unit": "seconds",
+      "median": 8.992839241400361,
+      "minimum": 8.981726808473468,
+      "maximum": 8.995631543919444,
+      "arithmetic_mean": 8.990749599784612,
+      "stdev": 0.005491938787002281,
+      "max_measured_peak_allocated_bytes": 80618546688,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 8192,
+      "kind": "prefill",
+      "sample": "reserved-36-8192",
+      "measurements": [
+        5.924619033932686,
+        5.928523434326053,
+        5.9294653087854385,
+        5.9299984415993094,
+        5.927717495709658
+      ],
+      "unit": "seconds",
+      "median": 5.928523434326053,
+      "minimum": 5.924619033932686,
+      "maximum": 5.9299984415993094,
+      "arithmetic_mean": 5.928064742870629,
+      "stdev": 0.002115695168386107,
+      "max_measured_peak_allocated_bytes": 85652772352,
+      "max_measured_peak_reserved_bytes": 128152764416
+    },
+    {
+      "prompt_length": 32768,
+      "kind": "prefill",
+      "sample": "long-00-32768",
+      "measurements": [
+        16.631740698590875,
+        16.641414891928434,
+        16.632318371906877,
+        16.632517552003264,
+        16.655749714002013
+      ],
+      "unit": "seconds",
+      "median": 16.632517552003264,
+      "minimum": 16.631740698590875,
+      "maximum": 16.655749714002013,
+      "arithmetic_mean": 16.638748245686294,
+      "stdev": 0.010312995005775842,
+      "max_measured_peak_allocated_bytes": 124944553472,
+      "max_measured_peak_reserved_bytes": 129641742336
+    }
+  ]
+}

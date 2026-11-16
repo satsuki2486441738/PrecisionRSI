@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "deepseek41-fresh-process-inference-20261108",
+  "status": "complete-at-bounded-scope",
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "configuration": {
+    "backend": "Ascend910C adapted BF16",
+    "tensor_parallel": 8,
+    "expert_parallel": true,
+    "cpu_offload_gb": 48,
+    "engram_placement": "original-shard mmap",
+    "seed": 33377335,
+    "prefix_cache_enabled": false,
+    "async_scheduling": false,
+    "native_last_head_dtype": "torch.bfloat16",
+    "export_dtype": "float32",
+    "runtime_versions": {
+      "torch": "2.10.0+cpu",
+      "vllm": "0.30.0+empty",
+      "transformers": "5.14.1"
+    }
+  },
+  "independent_model_lifetimes": 3,
+  "distinct_fixed_histories": 2,
+  "history_lengths": [
+    128,
+    2048
+  ],
+  "vocabulary_size": 129280,
+  "selected_position": "last token of each fixed history",
+  "measurements": {
+    "within_process": {
+      "comparisons": 48,
+      "exact": 48,
+      "max_abs": 0.0,
+      "unit": "logit"
+    },
+    "cross_process_rank0": {
+      "comparisons": 6,
+      "exact": 6,
+      "max_abs": 0.0,
+      "unit": "logit"
+    },
+    "dependent_allgather": {
+      "comparisons": 84,
+      "exact": 84,
+      "max_abs": 0.0,
+      "unit": "logit"
+    }
+  },
+  "corresponding_native_npy_bytes_equal_across_three": true,
+  "evidence": {
+    "original_native_files": 630,
+    "native_arrays": 96,
+    "selected_arrays": 96,
+    "source_helpers": 15,
+    "independent_replay": "PASS",
+    "exact_process_cleanup": "PASS",
+    "device_processes_after_cleanup": 0,
+    "host_oom_kill_count": 0,
+    "receipts": [
+      {
+        "id": "compare-ds41-three-fresh-lifetimes-independent-array-audit-20261108T101740Z",
+        "sha256": "5c48162b9b8f23ed320a24e5e5cccaa30c3a5c94935088cebe45bd889115c4a3"
+      },
+      {
+        "id": "compare-ds41-three-lifetimes-final-independent-replay-20261108T102115Z",
+        "sha256": "509a3b7ca67b40412b09e1e7b950a1069c58134f6e68ab8951f1df5363ebff0c"
+      },
+      {
+        "id": "compare-ds41-three-fresh-lifetimes-final-native-cleanup-integrity-20261108T101841Z",
+        "sha256": "fceed52f09bcc8b7d7b2c534fd0902f51e4c9a14d7f1b0910c56326755998266"
+      }
+    ]
+  },
+  "numerical_acceptance": null,
+  "training_coverage": false,
+  "global_determinism_established": false,
+  "writing_claim": "Under the adapted Ascend910C BF16 TP8/EP8 offload48 configuration with original-shard Engram mmap placement and controlled seed reset, three independently initialized model processes produced byte-identical full-vocabulary last-token logits for two fixed histories of 128 and 2048 tokens.",
+  "interpretation": "The two histories are the input units. Pairwise process contrasts and eight allgather rank replicas are dependent observations; their counts must not be pooled as independent samples.",
+  "existing_core_coverage_unchanged": {
+    "paired_tensor_cells": 191,
+    "expected_tensor_cells": 275,
+    "target_coordinates": 3168
+  },
+  "remaining_scope": "This supplement does not add training/RL, broader input coverage, cross-backend arithmetic equivalence, or Indexer/compressor/projection/cache numerical coverage. Those scopes remain separate."
+}

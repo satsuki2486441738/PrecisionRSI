@@ -71,6 +71,21 @@
   }
   function inferencePurpose(record, framework, platform, facts) {
     const { title, context, rows } = facts;
+    if (/retained.*compressor outputs.*key\/cache/i.test(title)) {
+      return [platform, '保留压缩器输出 → 键缓存'].filter(Boolean).join(' ');
+    }
+    if (/adapted core/i.test(title) && /output.head/i.test(title)) {
+      return [platform, '适配核心/冻结骨干输出头'].filter(Boolean).join(' ');
+    }
+    if (/full40.layer attention tail replay/i.test(title)) {
+      return [platform, '40层注意力尾部回放'].filter(Boolean).join(' ');
+    }
+    if (/compressor/i.test(title) && /local derivative|local.vjp/i.test(context)) {
+      return [platform, '压缩器 / 键缓存 / 局部导数'].filter(Boolean).join(' ');
+    }
+    if (/query/i.test(title) && /head weights/i.test(title) && /RoPE/i.test(title)) {
+      return [platform, 'Query / 头权重 / RoPE'].filter(Boolean).join(' ');
+    }
     if (/BF16/i.test(title) && /FP16/i.test(title)) return 'BF16 ↔ FP16 完整前向 / 缓存推理';
     const batched = rows.some((row) => /(?:^|\.)native_batch_size$/.test(row.path) && Number.isInteger(row.value) && row.value > 1);
     const paddingModes = rows.filter((row) => /(?:^|\.)(?:mode|padding_side)$/.test(row.path)).map((row) => text(row.value));

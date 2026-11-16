@@ -1,0 +1,1019 @@
+{
+  "schema_version": 1,
+  "status": "measured-bounded-native-compressor-and-local-VJP-evidence",
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "history": {
+    "length": 2048,
+    "count": 1,
+    "batch": 1,
+    "start_pos": 0,
+    "frozen": true,
+    "layers": [
+      2,
+      20
+    ],
+    "layers_are_dependent": true
+  },
+  "peer_scope": {
+    "gpu": "Original complete model TP4 full-prefill capture, rank0 replicated compressor stage",
+    "npu": "Original-host single-device installed DeepseekV41Compressor fixture; actual original hidden states and raw weights",
+    "selected_compressor_weights": {
+      "L2_wkv": "FP32",
+      "L2_wgate": "FP32",
+      "L20_wkv": "BF16",
+      "both_norm": "BF16"
+    },
+    "selected_stage_quantized_weight_dequantization": false,
+    "broader_model_runtime_layouts_differ": true
+  },
+  "forward_stage_metrics": [
+    {
+      "length": 2048,
+      "layer": 2,
+      "ratio": 2,
+      "stage": "wkv",
+      "max_abs": 8.344650268554688e-07,
+      "rmse": 6.07520660768499e-08,
+      "cosine": 0.9999999999998397,
+      "error_norm": 6.22101156626943e-05,
+      "compared_elements": 1048576,
+      "unequal_elements": 987943,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "ratio": 2,
+      "stage": "norm-input",
+      "max_abs": 0.0009765625,
+      "rmse": 4.882645226221422e-06,
+      "cosine": 0.9999999986988436,
+      "error_norm": 0.0035354127867794354,
+      "compared_elements": 524288,
+      "unequal_elements": 194,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "ratio": 2,
+      "stage": "latent",
+      "max_abs": 0.0078125,
+      "rmse": 3.0603116429882776e-05,
+      "cosine": 0.9999999969514611,
+      "error_norm": 0.022159023260683836,
+      "compared_elements": 524288,
+      "unequal_elements": 229,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "ratio": 2,
+      "stage": "wgate",
+      "max_abs": 7.62939453125e-06,
+      "rmse": 4.151771856779668e-07,
+      "cosine": 0.9999999999997404,
+      "error_norm": 0.000425141438134238,
+      "compared_elements": 1048576,
+      "unequal_elements": 995222,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "ratio": 1,
+      "stage": "wkv",
+      "max_abs": 0.0009765625,
+      "rmse": 1.2157412946463996e-05,
+      "cosine": 0.9999999871824907,
+      "error_norm": 0.012449190857179132,
+      "compared_elements": 1048576,
+      "unequal_elements": 2136,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "ratio": 1,
+      "stage": "norm-input",
+      "max_abs": 0.0009765625,
+      "rmse": 1.2157412946463996e-05,
+      "cosine": 0.9999999871824907,
+      "error_norm": 0.012449190857179132,
+      "compared_elements": 1048576,
+      "unequal_elements": 2136,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "ratio": 1,
+      "stage": "latent",
+      "max_abs": 0.015625,
+      "rmse": 0.00020527179617140065,
+      "cosine": 0.9999999705168107,
+      "error_norm": 0.21019831927951427,
+      "compared_elements": 1048576,
+      "unequal_elements": 2793,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    }
+  ],
+  "local_vjp_gradient_metrics": [
+    {
+      "length": 2048,
+      "layer": 2,
+      "gate": "projection-vjp",
+      "argument": "input",
+      "native_shape": [
+        4,
+        5120
+      ],
+      "native_dtype": "torch.float32",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 1.1417270223690323e-07,
+        "rmse": 1.324229115229346e-08,
+        "cosine": 0.9999999999999836,
+        "error_norm": 1.8950824444398207e-06,
+        "compared_elements": 20480,
+        "unequal_elements": 20480,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 1.1920928955078125e-07,
+        "rmse": 1.3352155709789655e-08,
+        "cosine": 0.9999999999999835,
+        "error_norm": 1.910804980048104e-06,
+        "compared_elements": 20480,
+        "unequal_elements": 17186,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "gate": "projection-vjp",
+      "argument": "weight",
+      "native_shape": [
+        512,
+        5120
+      ],
+      "native_dtype": "torch.float32",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 2.9132934287190437e-08,
+        "rmse": 2.5108915002334794e-10,
+        "cosine": 1.0,
+        "error_norm": 4.06534968232704e-07,
+        "compared_elements": 2621440,
+        "unequal_elements": 2611293,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 2621440,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "projection-vjp",
+      "argument": "input",
+      "native_shape": [
+        4,
+        5120
+      ],
+      "native_dtype": "torch.bfloat16",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 0.00048454993884661235,
+        "rmse": 7.209634809713583e-05,
+        "cosine": 0.999998632229415,
+        "error_norm": 0.010317589457579731,
+        "compared_elements": 20480,
+        "unequal_elements": 20480,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 3.0517578125e-05,
+        "rmse": 2.1324806634328912e-07,
+        "cosine": 0.9999999999880309,
+        "error_norm": 3.051757903449469e-05,
+        "compared_elements": 20480,
+        "unequal_elements": 2,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "projection-vjp",
+      "argument": "weight",
+      "native_shape": [
+        512,
+        5120
+      ],
+      "native_dtype": "torch.bfloat16",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 0.00012171268463134766,
+        "rmse": 7.980416636738227e-06,
+        "cosine": 0.9999986295264244,
+        "error_norm": 0.012920982143587004,
+        "compared_elements": 2621440,
+        "unequal_elements": 2613205,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 0.9999999999999998,
+        "error_norm": 0.0,
+        "compared_elements": 2621440,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "compressor-vjp",
+      "argument": "input",
+      "native_shape": [
+        4,
+        5120
+      ],
+      "native_dtype": "torch.bfloat16",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 0.03222662883454497,
+        "rmse": 0.003836182982958587,
+        "cosine": 0.9999976042654961,
+        "error_norm": 0.5489898191374923,
+        "compared_elements": 20480,
+        "unequal_elements": 20480,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 0.015625,
+        "rmse": 0.0002050096211617921,
+        "cosine": 0.9999999930073035,
+        "error_norm": 0.029338588733391777,
+        "compared_elements": 20480,
+        "unequal_elements": 91,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "compressor-vjp",
+      "argument": "projection-weight",
+      "native_shape": [
+        512,
+        5120
+      ],
+      "native_dtype": "torch.bfloat16",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 0.012647012336310937,
+        "rmse": 0.0002982927865884586,
+        "cosine": 0.9999979014504452,
+        "error_norm": 0.482961722991645,
+        "compared_elements": 2621440,
+        "unequal_elements": 2621440,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 0.000244140625,
+        "rmse": 1.8793220969637321e-06,
+        "cosine": 0.9999999999165228,
+        "error_norm": 0.0030427844011464717,
+        "compared_elements": 2621440,
+        "unequal_elements": 1730,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "compressor-vjp",
+      "argument": "norm-weight",
+      "native_shape": [
+        512
+      ],
+      "native_dtype": "torch.bfloat16",
+      "finite": true,
+      "nonzero": true,
+      "shape_exact": true,
+      "continuous_fp64": {
+        "max_abs": 0.04405656304384564,
+        "rmse": 0.007325871465078634,
+        "cosine": 0.999998852491598,
+        "error_norm": 0.1657655485138602,
+        "compared_elements": 512,
+        "unequal_elements": 512,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "dtype_boundary_prediction": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 512,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      }
+    }
+  ],
+  "native_gate_statuses": [
+    {
+      "length": 2048,
+      "layer": 2,
+      "gate": "projection-vjp",
+      "native_status": "actual-local-gradients-produced-pending-independent-numerical-review",
+      "inputs": [
+        {
+          "shape": [
+            4,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "parameters": [
+        {
+          "shape": [
+            512,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "output": {
+        "shape": [
+          4,
+          512
+        ],
+        "dtype": "torch.float32",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MatmulBackward0"
+      },
+      "objective": {
+        "shape": [],
+        "dtype": "torch.float32",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MulBackward0"
+      },
+      "observed_gradient_arrays": 2,
+      "failure_type": null,
+      "failure": null,
+      "norm_input": null
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "gate": "pool-norm-vjp",
+      "native_status": "native-vjp-rejected",
+      "inputs": [
+        {
+          "shape": [
+            4,
+            512
+          ],
+          "dtype": "torch.float32",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        },
+        {
+          "shape": [
+            4,
+            512
+          ],
+          "dtype": "torch.float32",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "parameters": [
+        {
+          "shape": [
+            512
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "output": {
+        "shape": [
+          4,
+          512
+        ],
+        "dtype": "torch.bfloat16",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "NpuRmsNormBackward0"
+      },
+      "objective": {
+        "shape": [],
+        "dtype": "torch.float32",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MulBackward0"
+      },
+      "observed_gradient_arrays": 0,
+      "failure_type": "RuntimeError",
+      "failure": "One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.",
+      "norm_input": {
+        "shape": [
+          4,
+          512
+        ],
+        "dtype": "torch.bfloat16",
+        "is_inference": false,
+        "requires_grad": false,
+        "grad_fn": null
+      }
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "projection-vjp",
+      "native_status": "actual-local-gradients-produced-pending-independent-numerical-review",
+      "inputs": [
+        {
+          "shape": [
+            4,
+            5120
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "parameters": [
+        {
+          "shape": [
+            512,
+            5120
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "output": {
+        "shape": [
+          4,
+          512
+        ],
+        "dtype": "torch.bfloat16",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MatmulBackward0"
+      },
+      "objective": {
+        "shape": [],
+        "dtype": "torch.float32",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MulBackward0"
+      },
+      "observed_gradient_arrays": 2,
+      "failure_type": null,
+      "failure": null,
+      "norm_input": null
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "gate": "compressor-vjp",
+      "native_status": "actual-local-gradients-produced-pending-independent-numerical-review",
+      "inputs": [
+        {
+          "shape": [
+            4,
+            5120
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "parameters": [
+        {
+          "shape": [
+            512,
+            5120
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        },
+        {
+          "shape": [
+            512
+          ],
+          "dtype": "torch.bfloat16",
+          "is_inference": false,
+          "requires_grad": true,
+          "grad_fn": null
+        }
+      ],
+      "output": {
+        "shape": [
+          4,
+          512
+        ],
+        "dtype": "torch.bfloat16",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "NpuRmsNormBackward0"
+      },
+      "objective": {
+        "shape": [],
+        "dtype": "torch.float32",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MulBackward0"
+      },
+      "observed_gradient_arrays": 3,
+      "failure_type": null,
+      "failure": null,
+      "norm_input": {
+        "shape": [
+          4,
+          512
+        ],
+        "dtype": "torch.bfloat16",
+        "is_inference": false,
+        "requires_grad": true,
+        "grad_fn": "MatmulBackward0"
+      }
+    }
+  ],
+  "bounded_tail_operator_oracles": [
+    {
+      "length": 2048,
+      "layer": 2,
+      "oracle": "gpu-rmsnorm-last4",
+      "coordinates": {
+        "rows": [
+          1020,
+          1021,
+          1022,
+          1023
+        ]
+      },
+      "continuous_fp64": {
+        "max_abs": 0.0036262243644282766,
+        "rmse": 0.0006523535022675302,
+        "cosine": 0.9999986107824124,
+        "error_norm": 0.029522149451786526,
+        "compared_elements": 2048,
+        "unequal_elements": 2048,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 0.9999999999999999,
+        "error_norm": 0.0,
+        "compared_elements": 2048,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "scope": "bounded actual tail only"
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "oracle": "native-rmsnorm-last4",
+      "coordinates": {
+        "rows": [
+          1020,
+          1021,
+          1022,
+          1023
+        ]
+      },
+      "continuous_fp64": {
+        "max_abs": 0.0036262243644282766,
+        "rmse": 0.000652353502266054,
+        "cosine": 0.9999986107824125,
+        "error_norm": 0.029522149451719715,
+        "compared_elements": 2048,
+        "unequal_elements": 2048,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 2048,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "scope": "bounded actual tail only"
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "oracle": "gpu-pairpool-last4tokens",
+      "coordinates": {
+        "token_positions": [
+          2044,
+          2045,
+          2046,
+          2047
+        ],
+        "compressed_positions": [
+          1022,
+          1023
+        ]
+      },
+      "continuous_fp64": {
+        "max_abs": 0.0009201841223251406,
+        "rmse": 0.0001678483755795203,
+        "cosine": 0.9999986149549992,
+        "error_norm": 0.005371148018544649,
+        "compared_elements": 1024,
+        "unequal_elements": 1024,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 1024,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "scope": "bounded actual tail only"
+    },
+    {
+      "length": 2048,
+      "layer": 2,
+      "oracle": "native-pairpool-last4tokens",
+      "coordinates": {
+        "token_positions": [
+          2044,
+          2045,
+          2046,
+          2047
+        ],
+        "compressed_positions": [
+          1022,
+          1023
+        ]
+      },
+      "continuous_fp64": {
+        "max_abs": 0.0009201193257935003,
+        "rmse": 0.00016784745691063343,
+        "cosine": 0.9999986149689455,
+        "error_norm": 0.00537111862114027,
+        "compared_elements": 1024,
+        "unequal_elements": 1024,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 1024,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "scope": "bounded actual tail only"
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "oracle": "gpu-rmsnorm-last4",
+      "coordinates": {
+        "rows": [
+          2044,
+          2045,
+          2046,
+          2047
+        ]
+      },
+      "continuous_fp64": {
+        "max_abs": 0.007759131022319288,
+        "rmse": 0.0014161882866210185,
+        "cosine": 0.9999986190326801,
+        "error_norm": 0.06408936581802752,
+        "compared_elements": 2048,
+        "unequal_elements": 2048,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 2048,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "scope": "bounded actual tail only"
+    },
+    {
+      "length": 2048,
+      "layer": 20,
+      "oracle": "native-rmsnorm-last4",
+      "coordinates": {
+        "rows": [
+          2044,
+          2045,
+          2046,
+          2047
+        ]
+      },
+      "continuous_fp64": {
+        "max_abs": 0.0077591231251776804,
+        "rmse": 0.0014161900584582787,
+        "cosine": 0.9999986190292394,
+        "error_norm": 0.0640894460022286,
+        "compared_elements": 2048,
+        "unequal_elements": 2048,
+        "exact_equal": false,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "bf16_rne": {
+        "max_abs": 0.0,
+        "rmse": 0.0,
+        "cosine": 1.0,
+        "error_norm": 0.0,
+        "compared_elements": 2048,
+        "unequal_elements": 0,
+        "exact_equal": true,
+        "nonfinite": {
+          "side_a": 0,
+          "side_b": 0
+        }
+      },
+      "scope": "bounded actual tail only"
+    }
+  ],
+  "controls": {
+    "native_capture_bitwise_exact": {
+      "N2048-L2": true,
+      "N2048-L20": true
+    },
+    "L2_private_ring": {
+      "shape": [
+        2,
+        32,
+        1,
+        1024
+      ],
+      "warm_before_after_bitwise_exact": true,
+      "protected_page0_allzero": true,
+      "page1_matches_actual_projection_tail_bitwise": true,
+      "gpu_two_row_state_not_compared": true
+    },
+    "VJP_actual_source_argument_bindings": 10,
+    "all_gradient_arrays_finite_nonzero_shape_exact": true,
+    "device_peak_allocated_bytes": {
+      "N2048-L2": 148295168,
+      "N2048-L20": 77167616
+    },
+    "norm_dispatch": "AscendRMSNorm.forward_oot",
+    "VJP_inputs_parameters_outside_inference_mode": true
+  },
+  "rejection_localization": "L2 actual native token-aligned BF16 pooled norm input has requires_grad=False and no grad_fn, while actual input tensors require gradients outside inference_mode. RMSNorm output has NpuRmsNormBackward0 through its weight; strict combined autograd.grad(allow_unused=False) rejects unused graph inputs. Per-target dependencies are pending a separate retained-input diagnostic.",
+  "metric_semantics": {
+    "shared_tool": "array_compare.py",
+    "reduction": "FP64",
+    "forward": "Original GPU values versus actual NPU values at explicitly corresponding token/compressed rows",
+    "local_VJP": "Independent analytic derivatives use actual saved arguments, same-call norm input and native output cotangent for one-half sum of squared outputs",
+    "dtype_boundary_prediction": "Separate BF16 RNE/FP32 boundary prediction; descriptive numerical reference, not an acceptance threshold or exact backward implementation claim",
+    "maximum_error_coordinates_retained_in_private_numerical_receipt": true
+  },
+  "evidence": [
+    {
+      "id": "compare-ds41-compressor-2k-independent-numerical-vjp-replay-20261108T134258Z",
+      "artifact": "replay/review.json",
+      "sha256": "c64db4b4a81429fccf128dfd45754e21bc5c2d2a9df61c7e9dffc83111e45067"
+    },
+    {
+      "id": "compare-ds41-native-compressor-2k-terminal-independent-audit-20261108T135005Z",
+      "artifact": "review.json",
+      "sha256": "14020043dc4a063a9b6362e853827107aaebfdfd7e18c2c19976aec43ff995e1"
+    },
+    {
+      "id": "compare-ds41-upstream-compressor-native-terminal-verified-export-cleanup-20261108T133820Z",
+      "artifact": "native/capture/result.json",
+      "sha256": "cf806d5ec944fb241b8f6a3e9632dda357446f716e171454c35611dbcf89f02b"
+    },
+    {
+      "id": "compare-ds41-compressor-independent-oracle-preparation-20261108T131636Z",
+      "artifact": "oracle.py",
+      "sha256": "464252039a8ee325b97df05a6926b728a205279a8e365b19d27745aee55adbb5"
+    }
+  ],
+  "cleanup": {
+    "verified_native_files": 43,
+    "verified_source_files": 17,
+    "original_host_boot_verified": true,
+    "case_processes_absent": true,
+    "eight_card_process_lists_empty": true,
+    "oom_kill_zero": true,
+    "signals_sent": []
+  },
+  "coverage": {
+    "original_strict_ledger_paired_cells": 191,
+    "original_strict_ledger_expected_cells": 275,
+    "original_strict_ledger_changed": false,
+    "full_32k_native_compressor_complete": false,
+    "full_model_backward": false,
+    "optimizer_updates_covered": false,
+    "training_coverage": false,
+    "query_attention_cache_alias_coverage": false,
+    "numerical_acceptance": null,
+    "hardware_only_causality": false
+  },
+  "limitations": [
+    "One fixed 2K history and two dependent layers; no independent task/sample family expansion",
+    "Only selected bounded native compressor stages/local derivatives; no full-model training or optimizer coverage",
+    "GPU two-slot partial state and native 32-row ring are distinct; only native private-ring invariants audited",
+    "32K native compressor, remaining upstream chains and broader agreed full coverage remain pending",
+    "No numerical acceptance thresholds were agreed or inferred"
+  ],
+  "id": "deepseek41-compressor-2k-20261108",
+  "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "writing_snapshot": "2026-11-08T13:53:39Z",
+  "source_metrics_sha256": "94cbd0a64db19ef287cb20fa36c6f9abbd875c281916ee7fda9c0d766c575881",
+  "writing_evidence_id": "compare-ds41-compressor-2k-writing-supplement-20261108T135741Z",
+  "device_description": {
+    "gpu": "H200 (raw reported H20Z; H200 identity confirmed by user)",
+    "npu": "Ascend native single-device fixture",
+    "native_wall_seconds": 45.598423006013036,
+    "wall_semantics": "Includes setup/capture/local derivative gates; not a cross-device performance comparison"
+  }
+}

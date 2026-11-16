@@ -12,9 +12,8 @@ from .memory import _entry, _unchanged, fingerprint, improvement, measure, read,
 
 def _runtime():
     root = Path(__file__).resolve().parents[1]
-    files = list((root/'precision_rsi').glob('*.py'))
-    files += list((root/'skills').glob('*/SKILL.md'))
-    files += list((root/'skills/precision-compare/scripts').glob('*.py'))
+    files = [p for folder in ('precision_rsi', 'skills') for p in (root/folder).rglob('*')
+             if p.is_file() and '__pycache__' not in p.parts and p.suffix != '.pyc']
     return {str(p.relative_to(root)):fingerprint(p) for p in sorted(files)}
 
 
@@ -45,6 +44,40 @@ def load(store, identity):
 
 def members(store, identity):
     return [_item(store, member) for member in load(store, identity)['members']]
+
+
+def consumers(values):
+    """Validate public consumer contracts, excluding private evaluator inputs."""
+    if not isinstance(values, list) or not values:
+        raise ValueError('consumers must be a nonempty list of public interfaces')
+    seen = set()
+    for value in values:
+        if (not isinstance(value, dict) or set(value)-{'id','tags','limit_chars','interface'} or
+                not isinstance(value.get('id'), str) or not value['id'] or value['id'] in seen or
+                not isinstance(value.get('tags'), list) or
+                not all(isinstance(tag, str) for tag in value['tags']) or
+                type(value.get('limit_chars')) is not int or value['limit_chars'] < 0 or
+                ('interface' in value and not isinstance(value['interface'], str))):
+            raise ValueError('consumer requires unique id, tags, nonnegative limit_chars and optional interface')
+        seen.add(value['id'])
+    return values
+
+
+def selection(store, identity, public_consumers):
+    """Check exact retrieval of every added member using the runtime selector."""
+    from .memory import select
+    version = load(store, identity)
+    additions = set(version['members'])-set(load(store, version['base_version'])['members'])
+    covered, cases = set(), []
+    for consumer in consumers(public_consumers):
+        rejected = []
+        selected = select(store, consumer['tags'], consumer['limit_chars'],
+                          version=identity, diagnostics=rejected)
+        identities = [item['id'] for item in selected]
+        covered.update(identities)
+        cases.append(dict(case=consumer['id'], selected=identities, rejected=rejected))
+    return dict(reason='candidate updates not selected by evaluation tasks',
+                missing_updates=sorted(additions-covered), cases=cases)
 
 
 def prepare(store, identities, base_version=None):
