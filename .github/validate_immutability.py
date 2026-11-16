@@ -1,6 +1,6 @@
 """Reject edits or removals of published history relative to a base revision.
 
-Usage: python -B .github/validate_immutability.py [--base REF]
+Usage: python -B .github/validate_immutability.py [--base REF | --ci]
 
 Recorded evaluations, repairs, library groups, survey measurement views and
 published evidence files are append-only. A change may add records or files,
@@ -10,6 +10,7 @@ content, and every evidence file must keep its bytes and path.
 """
 import argparse
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -102,10 +103,28 @@ def validate(base):
     return errors + compare_evidence(changes)
 
 
+def ci_base(event):
+    """Protect published history; a draft branch's previous tip is not a release."""
+    if event.get('BASE_REF'):
+        return 'origin/' + event['BASE_REF']
+    before = event.get('BEFORE', '')
+    if event.get('GITHUB_REF') == 'refs/heads/main' and before and set(before) != {'0'}:
+        try:
+            _git('cat-file', '-e', f'{before}^{{commit}}')
+        except subprocess.CalledProcessError:
+            pass
+        else:
+            return before
+    return 'origin/main'
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument('--base', default='origin/main', help='revision holding the published history')
-    base = parser.parse_args().base
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--base', help='revision holding the published history (default: origin/main)')
+    group.add_argument('--ci', action='store_true', help='select the published baseline from CI event variables')
+    args = parser.parse_args()
+    base = ci_base(os.environ) if args.ci else args.base or 'origin/main'
     try:
         _git('rev-parse', '--verify', f'{base}^{{commit}}')
     except subprocess.CalledProcessError:
