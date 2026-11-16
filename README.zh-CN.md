@@ -2,7 +2,20 @@
 
 [English](README.md) | 简体中文
 
-让 agent 完成不同硬件与执行环境中的框架适配、数值精度比较与修复。
+NumericForge 是面向 RL 的精度对比诊断与修复优化框架；PrecisionRSI 仓库承载其 skills、可选研究编排和公开社区记录。
+
+## 架构
+
+| 层 | 职责 |
+|---|---|
+| [Skills](skills/precision-compare/SKILL.md) | 负载适配、精度比较、诊断修复与原任务复验 |
+| [precision_core](precision_core/README.md) | 公共执行、资源与运行时身份、证据工具 |
+| [precision_community](precision_community/README.md) | 公开记录校验、同侧配置索引、绑定证据的显式关系 |
+| [precision_rsi](precision_rsi/README.md) | 可选的 Agent 研究、预算、候选评估与激活 |
+| [precision_maintenance](precision_maintenance/README.md) | 数据维护、公开导出、安装及 CI 命令 |
+| site/ | 基于已审查公开记录的静态社区页面 |
+
+RSI 依赖公共核心；社区记录不依赖 RSI。检索用于选择候选方案，实际组合的验证由任务负责。公开记录保留范围和不可变证据，完整轨迹与大数组留在本地。
 
 ## 方法
 
@@ -50,7 +63,13 @@ python -m precision_rsi iterate series.json --workspace projects/my-stream/sessi
 
 [RL 精度诊断与修复方案（草案）](.github/rl-precision-workflow-proposal.md)基于本仓库已有能力，约定可复用的案例执行与交付流程。
 
-将 `framework-adapt`、`precision-compare` 和 `precision-repair` 并排安装到客户端的 skill 目录，执行时根据下一项缺失能力加载组件：
+将 skills 导出到新的客户端 skill 目录；导出器会带上公共执行包，使 Compare 能脱离仓库运行：
+
+```sh
+python -B -m precision_maintenance install --output /path/to/client/skills
+```
+
+更新方式见[独立安装说明](precision_core/README.md#portable-skills)。执行时根据下一项缺失能力加载组件：
 
 | Skill | 进入条件与交付 |
 |---|---|

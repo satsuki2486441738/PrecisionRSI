@@ -6,12 +6,8 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location('integration', ROOT / '.github/plan_history_integration.py')
-integration = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(integration)
-EXPORT_SPEC = importlib.util.spec_from_file_location('statistics', ROOT / '.github/export_statistics.py')
-statistics = importlib.util.module_from_spec(EXPORT_SPEC)
-EXPORT_SPEC.loader.exec_module(statistics)
+from precision_maintenance import plan_history_integration as integration
+from precision_maintenance import export_statistics as statistics
 
 
 class IntegrationPlanTest(unittest.TestCase):

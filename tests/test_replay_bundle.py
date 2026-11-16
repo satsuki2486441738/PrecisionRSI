@@ -239,10 +239,10 @@ class ReplayBundleTests(unittest.TestCase):
         self.assertTrue(json.loads(completed.stdout)['matched'])
 
     def test_explicit_other_checkout_tools_are_selected(self):
-        selected = self.root / 'other-checkout' / 'scripts'
-        selected.mkdir(parents=True)
-        for name in ('compare_target_scores.py', 'conditions.py', 'score_metrics.py'):
-            shutil.copyfile(SCRIPTS / name, selected / name)
+        from precision_maintenance.install import install_skills
+        exported = self.root / 'other-checkout'
+        install_skills(REPO / 'skills', exported)
+        selected = exported / 'precision-compare/scripts'
         # Add a version marker only in the explicitly selected copy.
         tool = selected / 'compare_target_scores.py'
         text = tool.read_text(encoding='utf-8')

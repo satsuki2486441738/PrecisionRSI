@@ -2,7 +2,22 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Agent Skills for framework adaptation, numerical precision comparison and repair across devices and execution environments.
+NumericForge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks. PrecisionRSI hosts its skills, optional research runner and public community records.
+
+## Architecture
+
+| Layer | Responsibility |
+|---|---|
+| [Skills](skills/precision-compare/SKILL.md) | Adapt the workload, compare numerical behavior, diagnose and verify repairs |
+| [precision_core](precision_core/README.md) | Shared execution, resource/runtime identity and evidence tools |
+| [precision_community](precision_community/README.md) | Public record validation, exact-side indexing and explicit evidence-bound relationships |
+| [precision_rsi](precision_rsi/README.md) | Optional agent research, budgets, candidate evaluation and activation |
+| [precision_maintenance](precision_maintenance/README.md) | Data maintenance, public exports, installation and CI commands |
+| site/ | Static community pages over reviewed public records |
+
+RSI depends on the core; community records do not depend on RSI. Retrieval selects
+candidate solutions; actual-stack verification remains task-owned. Public records
+retain scope and immutable evidence, while full traces and arrays stay private.
 
 ## Method
 
@@ -51,7 +66,15 @@ See the [current architecture and four integration boundaries (Chinese)](.github
 The [RL diagnosis and repair proposal (Chinese)](.github/rl-precision-workflow-proposal.md)
 plans reusable case workflows on top of this repository’s existing capabilities.
 
-Install `framework-adapt`, `precision-compare` and `precision-repair` side by side in your client's skill directory. Load a component for the next missing capability:
+Export the skills side by side into a fresh client skill directory. The exporter
+includes the shared execution package so Compare remains standalone:
+
+```sh
+python -B -m precision_maintenance install --output /path/to/client/skills
+```
+
+See [portable installation](precision_core/README.md#portable-skills) when updating.
+Load a component for the next missing capability:
 
 | Skill | When to enter and result |
 |---|---|

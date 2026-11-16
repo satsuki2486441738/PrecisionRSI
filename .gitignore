@@ -8,6 +8,9 @@
 !/CLAUDE.md
 !/skills/
 !/precision_rsi/
+!/precision_core/
+!/precision_community/
+!/precision_maintenance/
 /skills/*
 !/skills/operator-optimize/
 !/skills/framework-adapt/
@@ -17,6 +20,7 @@
 !/.github/
 !/tests/
 /tests/*
+!/tests/test_architecture.py
 !/tests/test_compare_scores.py
 !/tests/test_artifact_tools.py
 !/tests/test_shared_tools.py

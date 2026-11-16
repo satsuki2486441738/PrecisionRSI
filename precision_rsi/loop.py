@@ -21,15 +21,11 @@ import json
 import math
 import os
 from pathlib import Path
-import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-TOOLS = ROOT / 'skills/precision-compare/scripts'
-sys.path.insert(0, str(TOOLS))
-
-from record_run import record_run
-from workflow import fingerprint, inspect_workflow, run_workflow, workspace_lock
+from precision_core.record_run import record_run
+from precision_core.workflow import fingerprint, inspect_workflow, run_workflow, workspace_lock
 from .memory import evaluate, propose, read, select, write
 from .harness import command as harness_command, usage as _usage
 from . import versions

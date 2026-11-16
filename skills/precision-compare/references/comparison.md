@@ -61,6 +61,13 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 
 ## Shared tasks
 
+Shared execution, resource/runtime identities and evidence transport are implemented
+in the task-independent `precision_core` package. The script paths below remain
+compatible entrypoints. From a repository checkout, export skills with
+`python -B -m precision_maintenance install --output NEW_SKILL_DIRECTORY`; the
+export includes the core so installed commands work without the checkout or RSI.
+Numerical comparison and task-specific collection remain in this skill.
+
 Keep full execution options and identity manifests in files consumed by adapters; expose their paths and compact check receipts to the agent. `runtime_probe.save_identity(paths, manifest_path, results=None)` retains selected file hashes and completed results in a new manifest. Include source/config/data/runtime identities and evidence files relevant to those results. `check_identity(manifest_path)` returns saved results only if every identity matches; it neither runs the workload nor recomputes metrics. CLI: `python scripts/runtime_probe.py --identity MANIFEST`. Existing manually prepared manifests may use retained metadata for large resources. Reuse one execution JSON across native preflight and capture:
 
 ```json

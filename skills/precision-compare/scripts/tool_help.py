@@ -23,7 +23,20 @@ from pathlib import Path
 
 
 def _parse(path):
-    return ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+    tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+    for node in tree.body:
+        if (isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and
+                t.id == 'CORE_MODULE' for t in node.targets)):
+            name = ast.literal_eval(node.value)
+            if not isinstance(name, str) or not name.isidentifier() or name.startswith('_'):
+                raise ValueError('invalid core module declaration')
+            sources = (path.parent / 'precision_core' / (name + '.py'),
+                       path.resolve().parents[3] / 'precision_core' / (name + '.py'))
+            source = next((p for p in sources if p.is_file()), None)
+            if source is None:
+                raise ValueError('missing core module source: ' + name)
+            return ast.parse(source.read_text(encoding='utf-8'), filename=str(source))
+    return tree
 
 
 def _public(tree):
