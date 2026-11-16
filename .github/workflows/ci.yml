@@ -37,11 +37,7 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
           BEFORE: ${{ github.event.before }}
-        run: |
-          if [ -n "$BASE_REF" ]; then base="origin/$BASE_REF"
-          elif [ -n "$BEFORE" ] && ! [[ "$BEFORE" =~ ^0+$ ]] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then base="$BEFORE"
-          else base="origin/main"; fi
-          python -B .github/validate_immutability.py --base "$base"
+        run: python -B .github/validate_immutability.py --ci
       - name: Keep published files small
         run: |
           large=$(find site -type f -size +50M)
