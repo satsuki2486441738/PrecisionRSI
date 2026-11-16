@@ -33,6 +33,37 @@ Task paths are relative to the task JSON. `plan` uses the existing [workflow int
 
 `family` groups related tasks for data separation. `{prompt_file}` supports adapters accepting a UTF-8 file. `agent.execution` selects a [record_run execution profile](../skills/precision-compare/scripts/record_run.py). Run the scheduler where the harness and workload paths are available; native remote stages retain their execution adapters.
 
+### DeepSeek context compaction
+
+DSH 0.2.1-rc.2 supplies automatic compaction, tool-result pruning and `/compact`.
+Add the checked-in [overlay](dsh-compaction.patch.json) after the model overlay
+for both task and improvement harness invocations:
+
+```sh
+dsh --profile headless --patch MODEL_PATCH --patch precision_rsi/dsh-compaction.patch.json --json "TASK"
+```
+
+The policy reserves 16,384 headroom tokens plus the routed output allowance,
+triggers at `floor(min(window * 0.8, window - output - 16384))`, retains the
+latest 12.5% of `window - output` and caps summary generation at 8,192 tokens,
+including reasoning. At a 1,048,576-token window and 262,144-token generation
+allowance, the trigger is 770,048 and the retained tail is 98,304. The adapter
+must declare the served capacity. Generation allowance includes reasoning and
+answer tokens; it is distinct from the auxiliary summary cap.
+DSH's default 65,536-token headroom leaves no proactive compaction budget on a
+65,536-token route. The overlay fixes that without changing server capacity.
+
+Pruning precedes summarization; one overflow recovery and one additional
+compaction attempt are allowed. Native checkpoints preserve goals, files,
+errors, constraints and pending work; full evidence stays on disk. Compaction
+cannot shrink the fixed prefix or split an indivisible history unit. Keep large
+artifacts in files. Compaction is an auxiliary model call; account for its usage
+from session evidence separately when the headless step stream omits it.
+
+Run the optional real-DSH regression with `DSH_BIN=/path/to/dsh python -B -m
+unittest discover -s tests -p test_dsh_compaction.py -v`. It uses an isolated
+session and a local mock provider; no inference service or credentials are needed.
+
 Tasks with private native checks supply `interface: {...}`: visible inputs, identifier mappings, invocation and required output fields. Delegation sends this object instead of host plan/protected paths. Keep those files outside the harness view; the host retains them for execution and integrity checks. Interface changes invalidate baseline reuse.
 
 `loop.json` retains time, calls, version, native receipts and raw harness output. Time/call budgets persist across invocations. Saved patches return to verification even after harness timeout or failure, within the remaining budget. Unchanged completion calls no model; unchanged failure after an action stops for lack of progress. The current system version is pinned for each new task; replay preserves that version. `status` inspects without executing.
@@ -66,6 +97,8 @@ An improvement configuration:
   "max_updates": 4,
   "summary_limit": 12,
   "held_out_families": ["independent-inference"],
+  "consumers": [{"id": "compare", "tags": ["inference", "precision-compare"], "limit_chars": 2200,
+                 "interface": "Declared capture JSON and tensors -> coverage and numerical differences"}],
   "evaluation_plan": "evaluate-template.json"
 }
 ```
@@ -75,6 +108,8 @@ A series supplies prior task states automatically. Standalone `improve` declares
 `evolve` repeats the independent improvement stage with aggregate evaluation feedback. Its configuration adds `round_seconds` (default 900), `max_rounds` (8) and `patience` (3); `budget_seconds` covers all construction and evaluation rounds. Each round records candidates, measurements, raw usage and the next round's feedback, including construction costs and the declared reuse horizon. The result separates `construction_usage` and `evaluation_usage`; `usage` sums both. Benchmark receipts expose raw evaluation `usage` excluding construction and reused baselines; missing evaluation measurements remain unknown. Complete proposals saved before harness timeout/failure are recovered after input/runtime integrity checks; malformed proposals or missing artifacts are rejected. Recovery preserves the harness outcome and full construction cost, and still requires independent evaluation before activation. Failed preparation retains candidate interfaces and artifacts for revision. Replays reuse finished rounds; interrupted calls consume their reserved budget. No update, a repeated candidate, consecutive rounds without measured progress, or the budget ends the run. Evaluation templates may use `{round_workspace}` for isolated candidate workloads. Repeated evaluation tasks provide development feedback; a final generalization claim needs fresh tasks.
 
 A measured baseline task failure is an outcome, not a prerequisite failure for improvement. Retain its receipt, pass aggregate failure feedback to the improver and evaluate fresh candidate workloads. Failed benchmark arms include the task reason and up to three failed native stages with bounded terminal errors; these facts reach the next round without source frames or full logs. Accept correctness recovery before comparing costs among successful runs; retain construction and failed-task costs. Source evidence and independent evaluation families remain disjoint.
+
+Declare `consumers` with public input/output semantics, actual tags and JSON character budgets; omit private captures, verifier inputs and baseline implementations. The improver receives these declarations before construction. The shared runtime selector rejects uncovered bundle members before launching evaluation; the benchmark rechecks against actual task configurations. Without declarations, selection is checked by the benchmark only. Harness launch failures and native `turn_end` errors stop evolution with `needs_action`; replay preserves that result. Task verification failures remain improvement feedback.
 
 The agent writes `{"updates": [...]}` at the supplied output path. Every update has `kind`, `content` (short rule/interface), `tags`, `artifacts` (absolute persistent paths), and optional `benefit`/`replaces` (base member IDs). The host records provenance and base version.
 
@@ -99,6 +134,127 @@ The exporter verifies source artifacts, assigns the source task outcome, dedupli
 
 ## Versions and evaluation
 
+### Durable research state
+
+`evolve` retains a full redacted round ledger in `research/view/ledger.json`.
+Only the latest three feedback records enter each prompt; older outcomes stay
+queryable. The prompt declares the memory CLI, so the researcher need not read
+its implementation:
+
+```sh
+python -m precision_rsi.research /work/run/research/view history --start 0 --count 5
+python -m precision_rsi.research /work/run/research/view state
+python -m precision_rsi.research /work/run/research/view history --newest --outcome incomplete
+python -m precision_rsi.research /work/run/research/view history --candidate CANDIDATE_ID
+python -m precision_rsi.research /work/run/research/view notes --set notes.json
+python -m precision_rsi.research /work/run/research/view plan --set plan.json
+```
+
+`state` returns counts, the last accepted round and current notes/plan in one
+bounded read. History filters accept `accepted`, `unaccepted` or `incomplete`;
+`unaccepted` includes incomplete rounds. Candidate IDs are full lowercase SHA-256
+IDs. Pagination offsets apply after filtering and ordering; original round numbers
+stay unchanged, so note references remain valid. No query changes memory or
+promotes a hypothesis. Use the attached state first, query older evidence when
+needed, and revise notes/plan when decisions change rather than on every tool call.
+
+The prompt includes valid minimal notes/plan schemas; `--set` replaces the whole
+document. Empty `evidence_rounds` is valid before any observed round exists.
+
+Notes accept `observations: [string]`, `uncertainties: [string]`, and
+`hypotheses: [{claim, evidence_rounds: [1]}]`. Plans accept
+`next_experiments: [{intervention, falsified_if, evidence_rounds: [1]}]`.
+Both are optional, bounded to 4096 UTF-8 bytes and at most 16 referenced rounds,
+and validate round references. Current judgments reattach to each new round;
+the round freezes its input context so replay survives subsequent note edits.
+These are researcher judgments; ledger outcomes remain controller observations.
+
+The researcher can include changed `handoff: {notes: ..., plan: ...}` beside
+`updates` in its normal proposal; the controller validates and saves both without
+another model or memory call. Invalid judgments leave earlier documents intact
+and do not invalidate a candidate. Replaying a cached result never overwrites
+newer memory. Without submitted judgments, their absence remains explicit.
+
+Independently, the controller saves `handoff.json` at completed model steps and
+construction/evaluation/review boundaries, including timeout. This bounded state
+contains observed usage, proposal presence, unverified artifact filenames and the
+next workflow action. It joins `state`, round context and snapshots. A hard kill
+retains the last saved checkpoint, possibly still marked running; it does not
+prove artifact correctness or bypass unfinished-session reconciliation.
+
+For native DSH conversation continuity, add `"persistence": {"kind": "dsh"}`
+to the improvement `agent` object. Its argv must forward DSH flags, use
+`usage_format: "dsh-jsonl"`, and end with a standalone `{prompt}` or
+`{prompt_file}`. Keep the compaction overlay configured as above. The adapter
+adds a JSONL persistence overlay and resumes the same `--session-id` across
+rounds, with a stable `research/view/work/` cwd and absolute per-round output
+paths. Generic harnesses retain turn receipts without native conversation resume.
+Standalone `improve` can join an explicitly supplied
+`research: {root, binding, turn}`; `evolve` supplies this automatically.
+
+Private `research/private/` holds the identity binding, native session logs,
+cursor and per-turn receipts. Completed turns replay stdout without calling the
+model; changed inputs or missing native state require explicit recovery. After
+confirming an unfinished process has stopped, an operator may abandon its turn:
+
+```sh
+python -m precision_rsi.research /work/run/research reconcile round-001 --reason "Process stopped; partial turn abandoned"
+```
+
+This records interruption, never retries that turn or grants more budget.
+The controller can then continue with the retained failure evidence. A process
+crash blocks automatic continuation until reconciled. Keep private state, host
+checks and snapshots outside the researcher filesystem view using the execution
+sandbox; the directory layout and CLI alone do not enforce filesystem isolation.
+The session binding pins configuration and runner/skill bytes. Declare external
+model/runtime settings in the frozen configuration; external services are not
+snapshotted. Raw native events remain private. Report auxiliary compaction usage
+as unknown when the headless stream does not account for it.
+
+### Research snapshots
+
+`evolve` and standalone `improve` seal private `.snapshots/` journals automatically:
+initialization (`checkpoint-000`), round/harness start, submitted candidates before
+evaluation, and committed results, including rejection and failure. Parent IDs
+link boundaries. Objects are SHA256-addressed and deduplicated; manifests retain
+exact bytes, executable flags, candidate provenance, active selection and admission
+receipts. Platform sources include runner code, skills, references, the harness
+overlay and maintenance dependency declarations. Model weights and datasets remain
+verified resource references requiring binding; snapshots do not back them up.
+
+```sh
+python -m precision_rsi.snapshots --journal /work/run/.snapshots list
+python -m precision_rsi.snapshots --journal /work/run/.snapshots verify SNAPSHOT_ID
+python -m precision_rsi.snapshots --journal /work/run/.snapshots restore SNAPSHOT_ID /work/new-fork
+python -m precision_rsi.snapshots --journal /work/run/.snapshots restore SNAPSHOT_ID /work/operator-archive --view operator
+python -m precision_rsi.snapshots --journal /work/run/.snapshots rollback SNAPSHOT_ID --store /work/memory
+```
+
+Researcher exports contain only declared `changes/` and `session/` files, including
+the ledger, notes and plan. Native sessions, cursor and turn receipts are bound
+under `audit/research/`; context coverage records whether native JSONL was exported. Operator
+exports additionally include `platform/` and `audit/`, including the original-to-local
+artifact mapping in `audit/bindings.json`. Keep journals/operator exports outside
+the task agent's filesystem view. Neither view executes code, resumes submissions
+or restores process/service readiness. Start/submitted boundaries require explicit
+`--evidence` export and are not recoverable checkpoints.
+
+`rollback` uses existing version admission checks and requires the same live
+platform and intact candidate artifacts. It changes the active bundle for future
+tasks; it does not rewind task workspaces or ongoing jobs. When original files or
+platform have changed, restore into a new directory, rebind paths/resources and
+prepare/evaluate a new version. Original IDs and absolute paths in archived JSON
+remain unchanged. This is a detached fork, not transparent execution replay.
+
+Automatic session coverage is the delivered prompt, submitted proposals and private
+controller feedback/state. Full native DSH messages, compaction coverage and session
+cursors are not yet exported automatically; `audit/context-coverage.json` records
+that limitation. `snapshots.Journal.capture` accepts explicit allowlisted files or
+JSON values in the four layers for future harness-native checkpoint exporters.
+Do not treat a round checkpoint as a complete model conversation checkpoint.
+Historical runs are not retroactively changed. Local rollback storage is not an
+independent backup; preserve resource bindings and separate durable copies.
+
 Versions bind tools, memory, procedure overlays, artifact hashes, evidence families and runner/skill source identities. `replaces` removes superseded base members. Evaluation compares that exact bundle with its parent on disjoint task families. Accepted versions become current for subsequent tasks. `activate` restores a previously admitted, unchanged version; `activate empty` clears active memory.
 
 An evaluator template uses `{version_id}`, `{baseline_version}`, `{store}` and `{construction_file}`. Pass `{evaluation_budget_seconds}` as an argv value to nested evaluators; it supplies the remaining round budget. Reserve time within that limit for native verification and receipt writing. Its workflow declares `workload: {purpose: "held_out_evaluation", version_id: "{version_id}", baseline_version: "{baseline_version}"}`. The final output named `evaluation` binds these IDs and contains `mode`, `scope`, `families`, `baseline` and `candidate` measurements. Existing task-owned evaluators can use [versions.evaluate](versions.py).
@@ -116,5 +272,7 @@ Suite JSON: `schema_version: 1`, `store`, and `cases: [{id, family, baseline: ta
 Update tags are applicability requirements: all must be present in the consumer task tags. Retrieved JSON interfaces, including artifact paths, share the task's `limit_chars`. If retrieval yields no runtime difference, `selection.json` records consumer tags/budget, selected IDs and rejection reasons (`unmatched_tags`, `interface_budget`, etc.); the evaluator error includes the same diagnostic. `memory.select(..., diagnostics=[])` exposes these reasons directly.
 
 Measurements include native completion, time and raw usage. Construction time is included once by default; `amortize_over_tasks` declares an explicit reuse horizon. Known token totals include allocated construction usage. Optional `pricing` uses `input_per_million`, `cached_input_per_million`, `output_per_million`; configure improvement and task pricing separately. Unknown cache attribution/cost stays unknown. Closed admission preserves correctness and avoids measured time/token/cost regressions with at least one strict gain, or improves correctness. Evaluators own task selection, coverage and measurement validity.
+
+Each benchmark arm separates `execution` (measured task seconds, raw usage/tokens and cost) from `including_construction` (amortized seconds/tokens/cost used for admission). Legacy scalar admission fields retain their meaning; improver feedback and durable numeric memory use the explicit groups. Old receipts without execution timing keep that value unknown. Construction receipts are bound by content; changes require a new workspace.
 
 The original optional single `proposal.json` from completed tasks and candidate-level `evaluate` CLI remain available. Versioned improvement evaluates the runtime bundle together. Operator search and agent-weight training are not implemented.

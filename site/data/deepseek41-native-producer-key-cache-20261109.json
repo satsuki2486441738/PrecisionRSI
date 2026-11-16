@@ -1,0 +1,944 @@
+{
+  "schema_version": 1,
+  "id": "deepseek41-retained-native-producer-key-cache-successor",
+  "model": {
+    "name": "DeepSeek-V4.1-Flash-1017",
+    "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+  },
+  "scope": {
+    "kind": "cross-run retained native compressor completed BF16 outputs consumed by a new native key/cache stage",
+    "four_dependent_capsules": true,
+    "same_live_tensor_chain": false,
+    "complete_upstream_composition": false,
+    "whole_model": false,
+    "whole_model_cache_alias": false,
+    "query_projection": false,
+    "score_topk": false,
+    "TP_collectives": false,
+    "training": false,
+    "whole_task_completed": false,
+    "numerical_acceptance": null,
+    "private_full_review": {
+      "records": 4,
+      "actual_arrays": 68,
+      "actual_numeric_raw_files": 136,
+      "key_coordinates": 6684672,
+      "all_full_projection_input_coordinates_private_only": true,
+      "producer_consumer_full_input_equality": "SHA-bound independent private native proof; not independently reconstructable from portable sampled inputs"
+    },
+    "portable_replay": {
+      "records": 4,
+      "sampled_projection_rows": 256,
+      "sampled_projection_output_coordinates": 32768,
+      "full_projection_replay": false,
+      "full_downstream_rows": 52224,
+      "full_downstream_key_coordinates": 6684672,
+      "full_slot_coordinates": true,
+      "raw_cache_reconstructed_and_compared_to_original_native_SHA256": true,
+      "raw_cache_original_buffers_included": false,
+      "full_producer_input_included": false,
+      "sampled_input_coordinates_and_original_full_array_SHA_included": true,
+      "samples_independent": false
+    }
+  },
+  "configuration": {
+    "backend": "installed Ascend vLLM native selected key/cache components",
+    "devices": 1,
+    "visible_logical_device": "0",
+    "model_constructed": false,
+    "compressor_rerun": false,
+    "wk_weight_dtype": "BF16",
+    "wk_input_dtype": "BF16",
+    "norm_weight_dtype": "BF16",
+    "norm_eps": 1e-20,
+    "rope_partial_width": 64,
+    "rope_mode": "interleave",
+    "phase_source": "unchanged captured complex64, real/imag repeated twice",
+    "quantized_dtype": "INT8",
+    "exported_quant_scale_dtype": "FP32",
+    "cache_scale_dtype": "FP16",
+    "sentinel_byte": 165,
+    "cache_block_size": 128,
+    "geometry": [
+      {
+        "length": 2048,
+        "layer": 2,
+        "ratio": 2,
+        "rows": 1024,
+        "storage_block": 64,
+        "pages": 17
+      },
+      {
+        "length": 2048,
+        "layer": 20,
+        "ratio": 1,
+        "rows": 2048,
+        "storage_block": 128,
+        "pages": 17
+      },
+      {
+        "length": 32768,
+        "layer": 2,
+        "ratio": 2,
+        "rows": 16384,
+        "storage_block": 64,
+        "pages": 257
+      },
+      {
+        "length": 32768,
+        "layer": 20,
+        "ratio": 1,
+        "rows": 32768,
+        "storage_block": 128,
+        "pages": 257
+      }
+    ],
+    "ratio2_adapter": "native token-aligned pooling completed slice to dense M rows; whole-model N-row/cache geometry not replayed"
+  },
+  "reference_definitions": {
+    "continuous": "FP64 formula on same actual retained native inputs; no exact native accumulator emulation",
+    "BF16_RNE": "FP64 formula -> FP32 -> BF16 round-to-nearest-even; not exact dyadic dot directly rounded to BF16",
+    "quantization": "actual native post-RoPE / actual exported rounded FP32 scale using FP64 division, followed by RNE and INT8 clipping; native reciprocal/reduction order not emulated",
+    "reconstruction_using_exported_FP32_scale": "actual post-RoPE versus native INT8 multiplied by actual exported FP32 quantizer scale, using FP64 multiplication; distinct from cache dequantization",
+    "cache_dequantization_using_actual_FP16_scale": "actual post-RoPE versus reconstructed actual cache INT8 multiplied by actual stored FP16 scale, using FP64 multiplication; matches unchanged private full-review cache_dequantized_vs_actual_postrope metrics",
+    "cache": "every byte reconstructed from actual native INT8, actual slots, FP16-cast actual FP32 scales and original sentinel; whole-buffer and view SHA equality",
+    "acceptance_threshold": null
+  },
+  "numerics": {
+    "private_full_review": {
+      "source_review_sha256": "ccaddaf091ae893a479aae2458e2b4b4e595114da0d4b8f72163d14fb2e64f2c",
+      "records": [
+        {
+          "key": "N2048-L2",
+          "geometry": {
+            "length": 2048,
+            "layer": 2,
+            "ratio": 2,
+            "rows": 1024,
+            "storage_block": 64,
+            "pages": 17
+          },
+          "metrics": {
+            "projection_continuous_FP64": {
+              "elements": 131072,
+              "unequal": 131072,
+              "max_abs": 0.001953170169144869,
+              "rmse": 0.00046581774891904797
+            },
+            "projection_BF16_RNE": {
+              "elements": 131072,
+              "unequal": 8,
+              "max_abs": 0.00390625,
+              "rmse": 1.206342706212794e-05
+            },
+            "norm_continuous_FP64": {
+              "elements": 131072,
+              "unequal": 131072,
+              "max_abs": 0.0038992152662216117,
+              "rmse": 0.0007576019793876638
+            },
+            "norm_BF16_RNE": {
+              "elements": 131072,
+              "unequal": 1,
+              "max_abs": 0.001953125,
+              "rmse": 5.3947966093944364e-06
+            },
+            "rope_continuous_FP64": {
+              "elements": 131072,
+              "unequal": 65472,
+              "max_abs": 0.003896302863722667,
+              "rmse": 0.00047920430071654477
+            },
+            "rope_BF16_RNE": {
+              "elements": 131072,
+              "unequal": 0,
+              "max_abs": 0.0,
+              "rmse": 0.0
+            },
+            "scale_FP64_maxabs_div127": {
+              "elements": 1024,
+              "unequal": 1016,
+              "max_abs": 5.13327403153796e-10,
+              "rmse": 2.714078017147597e-10
+            },
+            "INT8_RNE_actual_FP32_scale": {
+              "elements": 131072,
+              "unequal": 119,
+              "max_abs": 1.0,
+              "rmse": 0.03013134496199514
+            },
+            "cache_dequantized_vs_actual_postrope": {
+              "elements": 131072,
+              "unequal": 130608,
+              "max_abs": 0.00958251953125,
+              "rmse": 0.0033251867801543087
+            }
+          },
+          "quantization_boundary": {
+            "unequal": 119,
+            "all_disagreements_source_exact_halfrowmax": true,
+            "maximum_INT8_difference": 1
+          },
+          "all_cache_bytes_exact": true,
+          "producer_input_byteexact": true
+        },
+        {
+          "key": "N2048-L20",
+          "geometry": {
+            "length": 2048,
+            "layer": 20,
+            "ratio": 1,
+            "rows": 2048,
+            "storage_block": 128,
+            "pages": 17
+          },
+          "metrics": {
+            "projection_continuous_FP64": {
+              "elements": 262144,
+              "unequal": 262144,
+              "max_abs": 0.0076190431718714535,
+              "rmse": 0.0006007444852345762
+            },
+            "projection_BF16_RNE": {
+              "elements": 262144,
+              "unequal": 15,
+              "max_abs": 0.001953125,
+              "rmse": 7.689706913657567e-06
+            },
+            "norm_continuous_FP64": {
+              "elements": 262144,
+              "unequal": 262144,
+              "max_abs": 0.007811653222629111,
+              "rmse": 0.0011549065845796237
+            },
+            "norm_BF16_RNE": {
+              "elements": 262144,
+              "unequal": 3,
+              "max_abs": 0.00390625,
+              "rmse": 1.0792227075344348e-05
+            },
+            "rope_continuous_FP64": {
+              "elements": 262144,
+              "unequal": 131008,
+              "max_abs": 0.005584326478128787,
+              "rmse": 0.0005796475128762626
+            },
+            "rope_BF16_RNE": {
+              "elements": 262144,
+              "unequal": 1,
+              "max_abs": 0.0009765625,
+              "rmse": 1.9073486328125e-06
+            },
+            "scale_FP64_maxabs_div127": {
+              "elements": 2048,
+              "unequal": 2035,
+              "max_abs": 9.973218119407878e-10,
+              "rmse": 4.6260919501662814e-10
+            },
+            "INT8_RNE_actual_FP32_scale": {
+              "elements": 262144,
+              "unequal": 246,
+              "max_abs": 1.0,
+              "rmse": 0.030633568635465083
+            },
+            "cache_dequantized_vs_actual_postrope": {
+              "elements": 262144,
+              "unequal": 261289,
+              "max_abs": 0.0125274658203125,
+              "rmse": 0.0047177883586971255
+            }
+          },
+          "quantization_boundary": {
+            "unequal": 246,
+            "all_disagreements_source_exact_halfrowmax": true,
+            "maximum_INT8_difference": 1
+          },
+          "all_cache_bytes_exact": true,
+          "producer_input_byteexact": true
+        },
+        {
+          "key": "N32768-L2",
+          "geometry": {
+            "length": 32768,
+            "layer": 2,
+            "ratio": 2,
+            "rows": 16384,
+            "storage_block": 64,
+            "pages": 257
+          },
+          "metrics": {
+            "projection_continuous_FP64": {
+              "elements": 2097152,
+              "unequal": 2097152,
+              "max_abs": 0.0019532127043930814,
+              "rmse": 0.00046385406860375184
+            },
+            "projection_BF16_RNE": {
+              "elements": 2097152,
+              "unequal": 113,
+              "max_abs": 0.00390625,
+              "rmse": 5.843614259230299e-06
+            },
+            "norm_continuous_FP64": {
+              "elements": 2097152,
+              "unequal": 2097152,
+              "max_abs": 0.007613166327792076,
+              "rmse": 0.0007575118069102807
+            },
+            "norm_BF16_RNE": {
+              "elements": 2097152,
+              "unequal": 23,
+              "max_abs": 0.00390625,
+              "rmse": 8.675421302353832e-06
+            },
+            "rope_continuous_FP64": {
+              "elements": 2097152,
+              "unequal": 1048512,
+              "max_abs": 0.0039060708695615176,
+              "rmse": 0.0005135544494075583
+            },
+            "rope_BF16_RNE": {
+              "elements": 2097152,
+              "unequal": 12,
+              "max_abs": 0.00390625,
+              "rmse": 4.774332141022677e-06
+            },
+            "scale_FP64_maxabs_div127": {
+              "elements": 16384,
+              "unequal": 16309,
+              "max_abs": 8.066573485565609e-10,
+              "rmse": 2.9163975336113325e-10
+            },
+            "INT8_RNE_actual_FP32_scale": {
+              "elements": 2097152,
+              "unequal": 1831,
+              "max_abs": 1.0,
+              "rmse": 0.029548076700014195
+            },
+            "cache_dequantized_vs_actual_postrope": {
+              "elements": 2097152,
+              "unequal": 2091318,
+              "max_abs": 0.0087432861328125,
+              "rmse": 0.0034270276918986504
+            }
+          },
+          "quantization_boundary": {
+            "unequal": 1831,
+            "all_disagreements_source_exact_halfrowmax": true,
+            "maximum_INT8_difference": 1
+          },
+          "all_cache_bytes_exact": true,
+          "producer_input_byteexact": true
+        },
+        {
+          "key": "N32768-L20",
+          "geometry": {
+            "length": 32768,
+            "layer": 20,
+            "ratio": 1,
+            "rows": 32768,
+            "storage_block": 128,
+            "pages": 257
+          },
+          "metrics": {
+            "projection_continuous_FP64": {
+              "elements": 4194304,
+              "unequal": 4194304,
+              "max_abs": 0.003906388227846946,
+              "rmse": 0.0006329056785314812
+            },
+            "projection_BF16_RNE": {
+              "elements": 4194304,
+              "unequal": 200,
+              "max_abs": 0.0078125,
+              "rmse": 8.373685587784166e-06
+            },
+            "norm_continuous_FP64": {
+              "elements": 4194304,
+              "unequal": 4194304,
+              "max_abs": 0.007812488767323433,
+              "rmse": 0.0011577108260169063
+            },
+            "norm_BF16_RNE": {
+              "elements": 4194304,
+              "unequal": 37,
+              "max_abs": 0.0078125,
+              "rmse": 1.1267338656419165e-05
+            },
+            "rope_continuous_FP64": {
+              "elements": 4194304,
+              "unequal": 2097088,
+              "max_abs": 0.007808784386725165,
+              "rmse": 0.0006690976510064943
+            },
+            "rope_BF16_RNE": {
+              "elements": 4194304,
+              "unequal": 31,
+              "max_abs": 0.00390625,
+              "rmse": 3.211660740538913e-06
+            },
+            "scale_FP64_maxabs_div127": {
+              "elements": 32768,
+              "unequal": 32266,
+              "max_abs": 9.973218119407878e-10,
+              "rmse": 4.2029878550566146e-10
+            },
+            "INT8_RNE_actual_FP32_scale": {
+              "elements": 4194304,
+              "unequal": 3651,
+              "max_abs": 1.0,
+              "rmse": 0.029503664726603113
+            },
+            "cache_dequantized_vs_actual_postrope": {
+              "elements": 4194304,
+              "unequal": 4167727,
+              "max_abs": 0.0127716064453125,
+              "rmse": 0.0046957287797519
+            }
+          },
+          "quantization_boundary": {
+            "unequal": 3651,
+            "all_disagreements_source_exact_halfrowmax": true,
+            "maximum_INT8_difference": 1
+          },
+          "all_cache_bytes_exact": true,
+          "producer_input_byteexact": true
+        }
+      ],
+      "raw_array_replay_from_this_package": false
+    },
+    "portable_replay": {
+      "status": "PASS-portable-sampled-projection-full-downstream-formula-slot-quant-cache-SHA-replay",
+      "records": [
+        {
+          "key": "N2048-L2",
+          "rows": 1024,
+          "sampled_wk_rows": 64,
+          "projection_FP64": {
+            "elements": 8192,
+            "unequal": 8192,
+            "max_abs": 0.0019455482251942158,
+            "rmse": 0.0004667941710926959
+          },
+          "projection_BF16_RNE": {
+            "elements": 8192,
+            "unequal": 1,
+            "max_abs": 9.5367431640625e-07,
+            "rmse": 1.0536712127723509e-08
+          },
+          "norm_FP64": {
+            "elements": 131072,
+            "unequal": 131072,
+            "max_abs": 0.0038992152662213897,
+            "rmse": 0.0007576019793876638
+          },
+          "norm_BF16_RNE": {
+            "elements": 131072,
+            "unequal": 1,
+            "max_abs": 0.001953125,
+            "rmse": 5.3947966093944364e-06
+          },
+          "rope_FP64": {
+            "elements": 131072,
+            "unequal": 65472,
+            "max_abs": 0.003896302863722667,
+            "rmse": 0.0004792043007165447
+          },
+          "rope_BF16_RNE": {
+            "elements": 131072,
+            "unequal": 0,
+            "max_abs": 0.0,
+            "rmse": 0.0
+          },
+          "quantized_vs_exported_scale_RNE": {
+            "elements": 131072,
+            "unequal": 119,
+            "max_abs": 1.0,
+            "rmse": 0.03013134496199514
+          },
+          "scale_vs_maxabs_div127": {
+            "elements": 1024,
+            "unequal": 1016,
+            "max_abs": 5.13327403153796e-10,
+            "rmse": 2.714078017147597e-10
+          },
+          "reconstruction_using_exported_FP32_scale": {
+            "elements": 131072,
+            "unequal": 130786,
+            "max_abs": 0.00948880985379219,
+            "rmse": 0.003323826091937112
+          },
+          "cache_dequantization_using_actual_FP16_scale": {
+            "elements": 131072,
+            "unequal": 130608,
+            "max_abs": 0.00958251953125,
+            "rmse": 0.0033251867801543087
+          },
+          "all_cache_bytes_reconstructed": 1255552,
+          "complete_slots": 1024
+        },
+        {
+          "key": "N2048-L20",
+          "rows": 2048,
+          "sampled_wk_rows": 64,
+          "projection_FP64": {
+            "elements": 8192,
+            "unequal": 8192,
+            "max_abs": 0.0033765256230253726,
+            "rmse": 0.0005897875884789676
+          },
+          "projection_BF16_RNE": {
+            "elements": 8192,
+            "unequal": 0,
+            "max_abs": 0.0,
+            "rmse": 0.0
+          },
+          "norm_FP64": {
+            "elements": 262144,
+            "unequal": 262144,
+            "max_abs": 0.007811653222629111,
+            "rmse": 0.0011549065845796235
+          },
+          "norm_BF16_RNE": {
+            "elements": 262144,
+            "unequal": 3,
+            "max_abs": 0.00390625,
+            "rmse": 1.0792227075344348e-05
+          },
+          "rope_FP64": {
+            "elements": 262144,
+            "unequal": 131008,
+            "max_abs": 0.005584326478128787,
+            "rmse": 0.0005796475128762625
+          },
+          "rope_BF16_RNE": {
+            "elements": 262144,
+            "unequal": 1,
+            "max_abs": 0.0009765625,
+            "rmse": 1.9073486328125e-06
+          },
+          "quantized_vs_exported_scale_RNE": {
+            "elements": 262144,
+            "unequal": 246,
+            "max_abs": 1.0,
+            "rmse": 0.030633568635465083
+          },
+          "scale_vs_maxabs_div127": {
+            "elements": 2048,
+            "unequal": 2035,
+            "max_abs": 9.973218119407878e-10,
+            "rmse": 4.626091950166282e-10
+          },
+          "reconstruction_using_exported_FP32_scale": {
+            "elements": 262144,
+            "unequal": 261817,
+            "max_abs": 0.012180093675851822,
+            "rmse": 0.004715391453593353
+          },
+          "cache_dequantization_using_actual_FP16_scale": {
+            "elements": 262144,
+            "unequal": 261289,
+            "max_abs": 0.0125274658203125,
+            "rmse": 0.004717788358697126
+          },
+          "all_cache_bytes_reconstructed": 2511104,
+          "complete_slots": 2048
+        },
+        {
+          "key": "N32768-L2",
+          "rows": 16384,
+          "sampled_wk_rows": 64,
+          "projection_FP64": {
+            "elements": 8192,
+            "unequal": 8192,
+            "max_abs": 0.0019514384912326932,
+            "rmse": 0.0004626872583906966
+          },
+          "projection_BF16_RNE": {
+            "elements": 8192,
+            "unequal": 0,
+            "max_abs": 0.0,
+            "rmse": 0.0
+          },
+          "norm_FP64": {
+            "elements": 2097152,
+            "unequal": 2097152,
+            "max_abs": 0.007613166327792076,
+            "rmse": 0.0007575118069102806
+          },
+          "norm_BF16_RNE": {
+            "elements": 2097152,
+            "unequal": 23,
+            "max_abs": 0.00390625,
+            "rmse": 8.675421302353832e-06
+          },
+          "rope_FP64": {
+            "elements": 2097152,
+            "unequal": 1048512,
+            "max_abs": 0.0039060708695615176,
+            "rmse": 0.0005135544494075582
+          },
+          "rope_BF16_RNE": {
+            "elements": 2097152,
+            "unequal": 12,
+            "max_abs": 0.00390625,
+            "rmse": 4.774332141022677e-06
+          },
+          "quantized_vs_exported_scale_RNE": {
+            "elements": 2097152,
+            "unequal": 1831,
+            "max_abs": 1.0,
+            "rmse": 0.029548076700014195
+          },
+          "scale_vs_maxabs_div127": {
+            "elements": 16384,
+            "unequal": 16309,
+            "max_abs": 8.066573485565609e-10,
+            "rmse": 2.916397533611332e-10
+          },
+          "reconstruction_using_exported_FP32_scale": {
+            "elements": 2097152,
+            "unequal": 2094481,
+            "max_abs": 0.00870446301996708,
+            "rmse": 0.0034257280847564803
+          },
+          "cache_dequantization_using_actual_FP16_scale": {
+            "elements": 2097152,
+            "unequal": 2091318,
+            "max_abs": 0.0087432861328125,
+            "rmse": 0.003427027691898651
+          },
+          "all_cache_bytes_reconstructed": 18980992,
+          "complete_slots": 16384
+        },
+        {
+          "key": "N32768-L20",
+          "rows": 32768,
+          "sampled_wk_rows": 64,
+          "projection_FP64": {
+            "elements": 8192,
+            "unequal": 8192,
+            "max_abs": 0.003891632288286928,
+            "rmse": 0.0006116902160922268
+          },
+          "projection_BF16_RNE": {
+            "elements": 8192,
+            "unequal": 1,
+            "max_abs": 6.103515625e-05,
+            "rmse": 6.743495761743046e-07
+          },
+          "norm_FP64": {
+            "elements": 4194304,
+            "unequal": 4194304,
+            "max_abs": 0.007812488767323433,
+            "rmse": 0.0011577108260169065
+          },
+          "norm_BF16_RNE": {
+            "elements": 4194304,
+            "unequal": 37,
+            "max_abs": 0.0078125,
+            "rmse": 1.1267338656419165e-05
+          },
+          "rope_FP64": {
+            "elements": 4194304,
+            "unequal": 2097088,
+            "max_abs": 0.007808784386725165,
+            "rmse": 0.0006690976510064944
+          },
+          "rope_BF16_RNE": {
+            "elements": 4194304,
+            "unequal": 31,
+            "max_abs": 0.00390625,
+            "rmse": 3.211660740538913e-06
+          },
+          "quantized_vs_exported_scale_RNE": {
+            "elements": 4194304,
+            "unequal": 3651,
+            "max_abs": 1.0,
+            "rmse": 0.029503664726603113
+          },
+          "scale_vs_maxabs_div127": {
+            "elements": 32768,
+            "unequal": 32266,
+            "max_abs": 9.973218119407878e-10,
+            "rmse": 4.202987855056614e-10
+          },
+          "reconstruction_using_exported_FP32_scale": {
+            "elements": 4194304,
+            "unequal": 4181337,
+            "max_abs": 0.01273374818265438,
+            "rmse": 0.004693320378116392
+          },
+          "cache_dequantization_using_actual_FP16_scale": {
+            "elements": 4194304,
+            "unequal": 4167727,
+            "max_abs": 0.0127716064453125,
+            "rmse": 0.004695728779751895
+          },
+          "all_cache_bytes_reconstructed": 37961984,
+          "complete_slots": 32768
+        }
+      ],
+      "full_projection_input_replayed": false,
+      "full_downstream_rows": 52224,
+      "sampled_projection_rows": 256,
+      "device_or_model_invoked": false,
+      "numerical_acceptance": null
+    },
+    "full_BF16_boundary_unequal": {
+      "projection": 336,
+      "norm": 64,
+      "rope": 44
+    },
+    "quantization": {
+      "unequal_coordinates": 5847,
+      "all_at_exact_source_half_rowmax": true,
+      "maximum_INT8_difference": 1,
+      "native_kernel_defect_inferred": false
+    }
+  },
+  "native_measurements": {
+    "driver_returncode": 0,
+    "child_returncode": 0,
+    "wall_seconds": 35.22746559395455,
+    "measured_peak_allocated_bytes": 213138432,
+    "postallocation_highwater_guard_bytes": 536870912,
+    "guard_is_reservation": false,
+    "performance_ratio_claimed": false
+  },
+  "cleanup": {
+    "owned_processes_remaining": 0,
+    "case_processes_remaining": 0,
+    "idle_exposed_chips": 16,
+    "OOM_count": 0,
+    "signals_sent": []
+  },
+  "strict_VJP": [
+    {
+      "key": "N2048-L2",
+      "retained_statuses": [
+        "actual-local-gradients-produced-pending-independent-numerical-review",
+        "native-vjp-rejected"
+      ]
+    },
+    {
+      "key": "N2048-L20",
+      "retained_statuses": [
+        "actual-local-gradients-produced-pending-independent-numerical-review",
+        "actual-local-gradients-produced-pending-independent-numerical-review"
+      ]
+    },
+    {
+      "key": "N32768-L2",
+      "retained_statuses": [
+        "actual-local-gradients-produced-pending-independent-numerical-review",
+        "native-vjp-rejected"
+      ]
+    },
+    {
+      "key": "N32768-L20",
+      "retained_statuses": [
+        "actual-local-gradients-produced-pending-independent-numerical-review",
+        "actual-local-gradients-produced-pending-independent-numerical-review"
+      ]
+    }
+  ],
+  "source_SHA": {
+    "packet_manifest_sha256": "e060bb4c96b842938f77a5cdd1f70d0d5fa9beb0fd0dd41c3b7add848ab19a13",
+    "actual_math_review_sha256": "ccaddaf091ae893a479aae2458e2b4b4e595114da0d4b8f72163d14fb2e64f2c",
+    "boundary_path_scope_addendum_sha256": "b408dc5ddda23d7dea265a6d90fc3112c8163e2d1bccc7108b6039833b5542c8",
+    "native_command_sha256": "519dbaf5f52aeb1e98d3920ef7d0f2888b790bd301cf03568d0fcd1824f4c399",
+    "native_result_sha256": "fecbd58e9c66d4b42eba3bfccbdfb1de8a99a990fed5cc20bd777d5a9498df59",
+    "full_native_integrity_cleanup_sha256": "1b462a07bc5752eb51d3994bcd811f178175e34cbd4cee2c66a6249f478b2131",
+    "source_sha256": {
+      "sources/upstream_native_compressor.py": "f1dc10b8898403b029436f876b3cc8ef433c0f52ebb44ef2c051d9f8bf7c7a05",
+      "sources/indexer_native_keys.py": "470a2061fb0d45f796f6112fa9585e382168fb640816f1fea15cc798955aa299",
+      "sources/compressor_key_successor.py": "b59bb7af00ac584f8e092b106e3f385415e201fdda5cc7cc818534ab05cf7fe4",
+      "sources/tests/test_compressor_key_successor.py": "e428383cbbabed920c1f098ebe2a25aad6c71e1dd28831dcb1c3b66bac4bd658"
+    },
+    "native_source_admission_result_sha256": "a621b0d538c42c001b5b637278f5ea55dfecb5449080c8168487cd395495e8c1",
+    "native_source_admission_command_sha256": "b0f41a458fef64e619ee53a67293f561034f91a0e25692d69d848c3a9e3963f7"
+  },
+  "candidate": {
+    "run": "compare-ds41-native-producer-key-successor-private-portable-candidate-20261108T221641Z",
+    "zip_basename": "deepseek-v41-flash-1017-retained-native-key-cache-private-candidate.zip",
+    "zip_bytes": 56313881,
+    "zip_sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+    "manifest_sha256": "45d497ba6a141a8322e2e2a9ecf0a7953ff749f1fb4841e46f7a92cf05f1b0bb",
+    "portable_payload_bytes": 102866966,
+    "negative_controls": 12,
+    "installed": false,
+    "published": false
+  },
+  "source_artifact_SHA": {
+    "portable_evidence_json": "4a2a8e980b99f98d32e7089b799307561d36fd1f6bc23f866d5ed7c0bf3aaa35",
+    "portable_scope_json": "c29ed10076c4d7d1e89426e9d7677268791584f714d0eeeff03682b4c3524540",
+    "diagnostic_definitions_json": "d75706dae36b2ad5b367e371f1629a04aba632520098da850b2199bfeb099418",
+    "portable_replay_json": "02660381b5cff17cbdc23ca2251653e908c5976d06465bff278b5a97d262c1de",
+    "private_full_review_summary_json": "33846ca940de1881576afb34203069e42f6a45f9a1374cd6ac15b1b629a6b3ba",
+    "source_commitments_json": "f17316e4c391cb77ef5a161c25acaa1906bfa99348f9bdab1b61da71183935fc",
+    "candidate_receipt_json": "a5e4dbcfeb797bd9cb49565f213e6491924e199e9007f2807381b061adf41a23",
+    "report_md": "0cc86b9ec70dda7cdf8efd0447759d33ee81702e5e8cd633eda3ad71b2bc39c0",
+    "index_en": "92d4d6d0930aea4126efa99b0d2a38d19b84109cdf1ce1df15ca7e66c51d8d3a",
+    "index_zh_cn": "bbc1ca6e1eb125b99a75d6ec708262f6f84040373c0ac85a81ec64a6b1d0321f",
+    "figure_png": "e77053141c5e9f866d42e47bb11a1e756c0ce5dc2d377f21b3055924e399f627",
+    "figure_pdf": "d37daf5a4540f051c05437b4d1f926a54cc76451a78c95ffd86952ac4fe0b2ff",
+    "figure_svg": "88fea56d668170dbbd2fbe494d5c3ebb1c86df6196c336ac59d2556e450dad74"
+  },
+  "limitations": [
+    "Cross-run serialized completed BF16 handoff, not same live tensor or complete upstream composition.",
+    "Portable projection uses 256 dependent selected actual input rows; full private projection coordinates are not independently replayed from this package.",
+    "Ratio2 completed-M adapter and private strided sentinel cache differ from whole-model N-row/cache aliases.",
+    "Original strict L2 VJP rejection, backbone/training, original-default 32K and reference teacher/cache gaps remain.",
+    "Numerical residuals are descriptive; exact raw-cache SHA replay does not imply all arithmetic arrays equal."
+  ],
+  "local_delivery": {
+    "id": "deepseek41-native-producer-key-cache-20261109",
+    "date": "2026-11-09",
+    "metrics_url": "data/deepseek41-native-producer-key-cache-20261109.json",
+    "ZIP": {
+      "local_archive": {
+        "name": "deepseek41-native-producer-key-cache-20261109.zip",
+        "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+        "bytes": 56313881,
+        "availability": "local-only"
+      },
+      "bytes": 56313881,
+      "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+      "manifest_sha256": "45d497ba6a141a8322e2e2a9ecf0a7953ff749f1fb4841e46f7a92cf05f1b0bb",
+      "repacked": false
+    },
+    "source_metrics": {
+      "run": "compare-ds41-native-producer-key-successor-sanitized-writing-metrics-20261108T221729Z",
+      "member": "metrics.json",
+      "sha256": "a218b976b11d51dd5f72e9594cb5ff2b3a80cbbc3db646f1c86fb5bd42135db6"
+    },
+    "independent_reviews": [
+      {
+        "run": "compare-ds41-native-producer-key-portable-independent-source-numeric-byte-writing-review-20261108T221808Z",
+        "member": "review.json",
+        "sha256": "bace2e2e878c969096a7501a4648a497a710bf8ad02c58703a8007595fd15393"
+      },
+      {
+        "run": "compare-ds41-native-key-portable-writing-independent-exact-source-pin-addendum-20261108T221856Z",
+        "member": "review.json",
+        "sha256": "84a6cacd7f33beb61344167f8829f7b03133dde942309510dbfffa4c1617a388"
+      }
+    ],
+    "archive_members": [
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "REPORT.md",
+        "sha256": "0cc86b9ec70dda7cdf8efd0447759d33ee81702e5e8cd633eda3ad71b2bc39c0",
+        "bytes": 5799
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "INDEX.en.md",
+        "sha256": "92d4d6d0930aea4126efa99b0d2a38d19b84109cdf1ce1df15ca7e66c51d8d3a",
+        "bytes": 832
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "INDEX.zh-CN.md",
+        "sha256": "bbc1ca6e1eb125b99a75d6ec708262f6f84040373c0ac85a81ec64a6b1d0321f",
+        "bytes": 960
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "native-key-cache-scientific.png",
+        "sha256": "e77053141c5e9f866d42e47bb11a1e756c0ce5dc2d377f21b3055924e399f627",
+        "bytes": 166763
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "native-key-cache-scientific.pdf",
+        "sha256": "d37daf5a4540f051c05437b4d1f926a54cc76451a78c95ffd86952ac4fe0b2ff",
+        "bytes": 23095
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "native-key-cache-scientific.svg",
+        "sha256": "88fea56d668170dbbd2fbe494d5c3ebb1c86df6196c336ac59d2556e450dad74",
+        "bytes": 41505
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "verify.py",
+        "sha256": "7ee08714f5802dc4b82b8201f5538c8b39c8fd6b1070f83f6e325e22b8575cb6",
+        "bytes": 10184
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "negative_controls.py",
+        "sha256": "4a6ea782e2fbb95920f8d1db01b66bb52e1280cb4ed87e0a310f53d01b890ff6",
+        "bytes": 3267
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "metrics.csv",
+        "sha256": "bd8d092327f6440ee11eb5325aca82acb0d7600fe63ad2bfa372387d72cc84a6",
+        "bytes": 9283
+      },
+      {
+        "local_archive": {
+          "name": "deepseek41-native-producer-key-cache-20261109.zip",
+          "sha256": "d1977dee323b2355f02b510e4a9a05adeaf75ba2e8a8ca33b55894abee7181ea",
+          "bytes": 56313881,
+          "availability": "local-only"
+        },
+        "member": "diagnostic-definitions.json",
+        "sha256": "d75706dae36b2ad5b367e371f1629a04aba632520098da850b2199bfeb099418",
+        "bytes": 454
+      }
+    ],
+    "link_scope": "Report/figure links download the original ZIP; member identifies the file after extraction. No separate hosted report or figure is claimed.",
+    "installed": false,
+    "published": false
+  }
+}

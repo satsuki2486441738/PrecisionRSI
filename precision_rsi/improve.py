@@ -2,9 +2,11 @@
 
 Config: schema_version=1, store, evidence:[loop-state path or {state,family}],
 agent:{argv,timeout,usage_format?,execution?}, budget_seconds, max_updates?:4,
-evaluation_plan?:version-evaluator template, held_out_families?:[], splits?:{}.
+evaluation_plan?:version-evaluator template, held_out_families?:[], splits?:{},
+consumers?:[{id,tags,limit_chars,interface?:public input/output semantics}].
 Paths are relative to CONFIG. One bounded independent harness invocation writes
-{updates:[]} to the indicated proposals.json. Native receipts prevent replay calls.
+{updates:[], handoff?:{notes?,plan?}} to the indicated proposals.json.
+Native receipts prevent replay calls.
 """
 import json
 from pathlib import Path
@@ -34,7 +36,7 @@ def _sources(config, spec):
     return result
 
 
-def improve(config, workspace, sources=None, time_budget_seconds=None):
+def improve(config, workspace, sources=None, time_budget_seconds=None, snapshot_context=None):
     from .loop import _positive, _render
     config = Path(config).resolve()
     cfg = read(config)
@@ -45,6 +47,7 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
     maximum = cfg.get('max_updates', 4)
     if type(maximum) is not int or maximum <= 0:
         raise ValueError('positive max_updates required')
+    public_consumers = versions.consumers(cfg['consumers']) if 'consumers' in cfg else None
     index = collect(_sources(config, cfg) + list(sources or []))
     if not index['tasks']:
         raise ValueError('improvement needs task evidence')
@@ -74,13 +77,32 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
         write(state_path, state)
         started = time.monotonic()
         deadline = started + remaining
+        from .snapshots import Journal, seal
+        snapshots = snapshot_context or dict(journal=Journal(workspace/'.snapshots'),
+                                             prefix=f'attempt-{len(state["history"]):03d}')
+        journal, prefix = snapshots['journal'], snapshots['prefix']
+        parent = snapshots.get('parent')
+        research = snapshots.get('research')
+        if research is None and cfg.get('research'):
+            from .research import Research
+            research = Research(cfg['research']['root'], cfg['research']['binding'])
+        if parent is None:
+            parent = seal(workspace, store, 'checkpoint-000', 'initial',
+                          dict(config=cfg, state=state), journal=journal, research=research)['id']
         try:
             agent = cfg['agent']
             if not _positive(agent.get('timeout')) or agent.get('usage_format') not in (None, 'dsh-jsonl'):
                 raise ValueError('positive agent timeout and supported usage format required')
-            _stable(workspace/'agent.json', agent)
+            _stable(workspace/'agent.json', dict(agent, **(
+                {'research':cfg['research']} if research else {})))
             tags = {tag for t in index['tasks'] for tag in t['tags']}
             interfaces = select(store,tags,limit_chars=2000,version=base)
+            research_context = None
+            if research:
+                context_path = workspace/'research-context.json'
+                if not context_path.exists():
+                    write(context_path, research.context(sys.executable))
+                research_context = read(context_path)
             prompt = ('Choose what to improve from the task evidence and evaluation feedback. '
                 'Improve task completion and reduce cumulative task time and tokens, including construction costs, '
                 'without reducing correctness or coverage. Choose the bottleneck, method and update kind yourself. '
@@ -91,6 +113,8 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'save the minimum complete proposals early, then return after necessary checks. '
                 'Reuse unchanged persistent artifacts; save new files '
                 'under the artifact directory. Return {"updates":[]} when no useful update is justified. '
+                'When judgments change, include handoff:{notes:...,plan:...} in the same result '
+                'using the supplied research schemas; the host saves it without a separate memory call. '
                 'Each update has kind, content (call signature and input/output fields, or a short rule), tags, '
                 'artifacts: ["/absolute/persistent/file"] (a JSON array of paths; [] for no files), and benefit. '
                 'The host computes artifact fingerprints. Kinds: tool, context, procedure, data. '
@@ -101,12 +125,14 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 'labels refer to whole-task outcomes. replaces may contain only IDs in base_members. '
                 'One limitation may need a coupled set of updates, up to max_updates. '
                 'Every update tag must match the consumer tags. The JSON interface, including artifact paths, '
-                'must fit its character budget; evaluation selection feedback supplies exact mismatches and limits. '
+                'must fit the declared consumer character budget. '
                 'The host builds datasets, evaluates and publishes; benefits are hypotheses until measured.\n'
                 + json.dumps(dict(base_version=base, base_members=base_info['members'],
                     evidence=brief(index)[:cfg.get('summary_limit',12)],
                     available_interfaces=interfaces,
+                    consumers=public_consumers,
                     feedback=cfg.get('feedback', []),
+                    research=research_context,
                     tool_help=[sys.executable, str(Path(__file__).resolve().parents[1]/
                         'skills/precision-compare/scripts/tool_help.py')],
                     evidence_count=len(index['tasks']),
@@ -123,6 +149,8 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                 inputs=[str(workspace/'config.json'), str(workspace/'evidence.json'), str(workspace/'agent.json'),
                         str(prompt_path), str(Path(__file__).with_name('harness.py'))],
                 outputs={'proposals':'proposals.json', 'artifacts':'artifacts'})
+            if research:
+                stage['inputs'].append(str(context_path))
             if agent.get('execution'):
                 stage['execution'] = str((config.parent/agent['execution']).resolve())
             plan = dict(schema_version=1, id='system-improvement', root=str(workspace),
@@ -131,14 +159,32 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
             if not plan_path.exists() or read(plan_path) != plan:
                 write(plan_path, plan)
             inputs = {p:fingerprint(p) for p in stage['inputs']}
+            before = seal(workspace, store, prefix+'-harness', 'running', state, journal=journal,
+                          parent=parent, session_files={'prompt.txt': prompt_path}, research=research)
+            remaining = deadline-time.monotonic()
+            if remaining <= 0:
+                raise ValueError('improvement budget exhausted while sealing snapshot')
             workflow = run_workflow(plan_path, workspace/'agent', time_budget_seconds=remaining)
             result = dict(status='needs_action', workflow=workflow, candidates=[], datasets=[],
                           errors=[], version=None, evaluation=None, state=str(state_path))
             receipt = workflow['stages'][0] if workflow['status']=='completed' else workflow.get('next_action', {})
             stdout = Path(receipt['run'])/'stdout.bin' if receipt.get('run') else None
+            visible_prompt = Path(receipt['run'])/'prompt.txt' if receipt.get('run') else prompt_path
+            if not visible_prompt.is_file():
+                visible_prompt = prompt_path
             result['usage'] = usage(stdout, agent.get('usage_format')) if stdout and stdout.is_file() else None
             updates = None
             stopped = receipt.get('execution',{}).get('status')
+            fresh_research = research is not None and bool(receipt.get('run')) and not receipt.get('reused')
+            judgment_update = 'not_submitted'
+            construction_status = ('interrupted' if stopped == 'timed_out' else
+                'failed' if stopped in ('failed', 'launch_failed') else
+                'completed' if workflow['status'] == 'completed' else 'needs_action')
+            def checkpoint(phase, status):
+                if fresh_research:
+                    research.checkpoint(cfg['research']['turn'], Path(receipt['run']),
+                        phase=phase, status=status, usage=result['usage'], judgment_update=judgment_update)
+            checkpoint('construction', construction_status)
             if workflow['status']=='completed' or (receipt.get('run') and stopped in ('timed_out','failed')):
                 try:
                     proposal_path = (Path(receipt['outputs']['proposals']['path']) if workflow['status']=='completed'
@@ -159,6 +205,15 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                         result['proposal_recovery'] = dict(status=stopped,path=str(proposal_path))
                 except (OSError,ValueError,KeyError,TypeError) as exc:
                     result['errors'].append(dict(stage='proposals',reason=str(exc)))
+            if updates is not None and fresh_research and 'handoff' in proposals:
+                from .research import save_handoff
+                try:
+                    save_handoff(research.view, proposals['handoff'])
+                    judgment_update = 'recorded'
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    judgment_update = 'invalid'
+                    result['memory_error'] = str(exc)
+                checkpoint('construction', construction_status)
             if updates is not None:
                 runtime_ids = []
                 for position, update in enumerate(updates):
@@ -194,13 +249,24 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                     version = None
                 if version is not None:
                     result['version'] = version['id']
+                    if public_consumers is not None:
+                        selection = versions.selection(store, version['id'], public_consumers)
+                        if selection['missing_updates']:
+                            result['selection'] = selection
+                            write(workspace/'selection.json', selection)
+                            result['errors'].append(dict(stage='selection', reason=selection['reason']))
+                if result['candidates']:
+                    seal(workspace, store, prefix+'-submitted', 'submitted', result,
+                        candidates=result['candidates'], journal=journal, parent=before['id'],
+                        session_files={'prompt.txt': visible_prompt, 'proposals.json': workspace/'proposals.json'}, research=research)
+                if version is not None:
                     construction = dict(seconds=sum(a['seconds'] for a in state['history'][:-1])+
                                         time.monotonic()-started, usage=result['usage'],
                                         cost=price(result['usage'],cfg.get('pricing')))
                     if not (workspace/'construction.json').exists():
                         write(workspace/'construction.json', construction)
                     result['construction'] = read(workspace/'construction.json')
-                    if cfg.get('evaluation_plan') and deadline > time.monotonic():
+                    if cfg.get('evaluation_plan') and not result['errors'] and deadline > time.monotonic():
                         template = (config.parent/cfg['evaluation_plan']).resolve()
                         budget_path = workspace/'evaluation-budget.json'
                         if not budget_path.exists():
@@ -213,6 +279,7 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
                         evaluation['root'] = str((template.parent/evaluation.get('root', '.')).resolve())
                         evaluation_path = workspace/'evaluation-plan.json'
                         write(evaluation_path, evaluation)
+                        checkpoint('evaluation', 'running')
                         try:
                             result['evaluation'] = versions.evaluate(store, version['id'], evaluation_path,
                                 workspace/'evaluation', time_budget_seconds=deadline-time.monotonic())
@@ -223,11 +290,22 @@ def improve(config, workspace, sources=None, time_budget_seconds=None):
             result.setdefault('construction', dict(
                 seconds=sum(a['seconds'] for a in state['history'][:-1])+time.monotonic()-started,
                 usage=result.get('usage'),cost=price(result.get('usage'),cfg.get('pricing'))))
+            if construction_status == 'completed':
+                checkpoint('review', result['status'])
+            else:
+                checkpoint('construction', construction_status)
             state['result'] = result
         finally:
             attempt.update(seconds=time.monotonic()-started, status='finished')
             write(state_path, state)
         result['spent_seconds'] = sum(a['seconds'] for a in state['history'])
+        if snapshot_context is None:
+            submitted_path = journal.root/'events'/(prefix+'-submitted.json')
+            seal(workspace, store, prefix+'-committed', 'committed', state,
+                 candidates=result.get('candidates', []), journal=journal,
+                 parent=journal.event(prefix+'-submitted')['id'] if submitted_path.exists() else before['id'],
+                 session_files={'prompt.txt': visible_prompt, **(
+                     {'proposals.json': workspace/'proposals.json'} if (workspace/'proposals.json').is_file() else {})}, research=research)
         return result
 
 

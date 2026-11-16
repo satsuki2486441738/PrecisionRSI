@@ -50,6 +50,38 @@ class EvaluationPresentationTests(unittest.TestCase):
         self.assertIn('CUDA 双引擎重复预填充', names[3])
         self.assertIn('CUDA 缓存推理', names[4])
 
+    def test_component_supplements_preserve_local_scope(self):
+        names = self.evaluate("""[
+          'deepseek41-upstream-compressor-key-local-vjp-20261108',
+          'deepseek41-native-query-tail-20261108'
+        ].map(id=>titleFor(byId(id),'DeepSeek-V4.1-Flash-1017'))""")
+        self.assertIn('压缩器 / 键缓存 / 局部导数', names[0])
+        self.assertIn('Query / 头权重 / RoPE', names[1])
+        self.assertTrue(all('CUDA ↔ Ascend' in name for name in names))
+        self.assertTrue(all('完整前向' not in name for name in names))
+
+    def test_adapted_core_and_attention_titles_keep_their_boundaries(self):
+        names = self.evaluate("""[
+          'deepseek41-adapted-core275-20261109',
+          'deepseek41-full40-attention-20261109'
+        ].map(id=>titleFor(byId(id),'DeepSeek-V4.1-Flash-1017'))""")
+        self.assertIn('适配核心/冻结骨干输出头', names[0])
+        self.assertIn('40层注意力尾部回放', names[1])
+        self.assertNotIn('完整前向', names[1])
+        self.assertTrue(all(len(name) <= 65 for name in names))
+
+    def test_retained_compressor_key_title_preserves_partial_chain_scope(self):
+        result = self.evaluate("""(() => {
+          const r=byId('deepseek41-native-producer-key-cache-20261109');
+          const before=JSON.stringify(r);
+          return {name:titleFor(r,'DeepSeek-V4.1-Flash-1017'),
+                  unchanged:before===JSON.stringify(r)};
+        })()""")
+        self.assertTrue(result['unchanged'])
+        self.assertIn('保留压缩器输出 → 键缓存', result['name'])
+        self.assertNotIn('完整前向', result['name'])
+        self.assertLessEqual(len(result['name']), 65)
+
     def test_precision_and_native_attention_routes_remain_visible(self):
         precision, cann, trt = self.evaluate("""[
           titleFor(byId('torch-bf16-fp16-20261021'),'Qwen3.5-9B-Base'),

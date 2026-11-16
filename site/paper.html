@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="PrecisionRSI paper-writing results: versioned metrics, configurations, scope, reports and figures. Public metrics, reports and source hashes. Raw evidence remains local.">
+<title>论文写作结果 · PrecisionRSI</title>
+<style>
+:root{color-scheme:light;--ink:#16322e;--muted:#5b6b66;--line:#d5ded7;--accent:#17684f;--paper:#f5f6ef}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 system-ui,sans-serif}a{color:var(--accent);text-underline-offset:4px}button,input,select{font:inherit}button,a.download{cursor:pointer;border:1px solid var(--line);border-radius:6px;background:white;padding:8px 13px;color:var(--ink)}button:hover,a.download:hover{border-color:var(--accent)}header,main,footer{max-width:1240px;margin:auto;padding:24px 30px}header{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);gap:20px}header a{text-decoration:none}header b{letter-spacing:.04em}.eyebrow{font:12px/1.5 ui-monospace,monospace;letter-spacing:.12em;color:var(--accent)}h1{font-size:clamp(36px,5vw,64px);letter-spacing:-.05em;line-height:1.1;margin:15px 0}h2{font-size:23px;letter-spacing:-.03em;margin-top:32px}.intro{max-width:760px;color:var(--muted);font-size:17px}.downloads{display:flex;flex-wrap:wrap;gap:10px;margin:25px 0}a.download{text-decoration:none}.download.primary{background:var(--accent);color:white;border-color:var(--accent)}.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);margin:25px 0}.stats div{padding:18px 10px}.stats strong{display:block;font-size:29px}.stats span,.muted{color:var(--muted)}.notice{border-left:3px solid #aa773d;background:#eee9dc;padding:16px 20px}.notes{padding-left:22px}.notes li{margin:9px 0}.filters{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}label{display:block;color:var(--muted);font-size:13px}input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink)}.table-wrap{overflow:auto;border:1px solid var(--line);background:white}table{border-collapse:collapse;width:100%;font-size:13px}th{text-align:left;background:#e9eee6;font-size:11px;text-transform:uppercase;letter-spacing:.06em}th,td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}td.path{min-width:260px;max-width:580px;overflow-wrap:anywhere;font-family:ui-monospace,monospace;font-size:12px}td.value{font-family:ui-monospace,monospace;white-space:nowrap}.pagination{display:flex;gap:16px;align-items:center;margin:18px 0}.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:18px;min-width:0}.card h3{font-size:16px;margin:0 0 10px;overflow-wrap:anywhere}.card p{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.card button{margin:4px 6px 0 0;font-size:13px}.figure img{width:100%;height:180px;object-fit:contain;background:white}.figure a{font-size:12px;overflow-wrap:anywhere}dialog{max-width:1000px;width:90vw;border:1px solid var(--line);border-radius:9px;padding:25px;background:var(--paper);color:var(--ink)}dialog::backdrop{background:#16322e88}dialog pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:65vh;overflow:auto;font-size:12px;background:white;padding:20px}footer{color:var(--muted);font-size:12px;border-top:1px solid var(--line);margin-top:35px}noscript{display:block;margin:20px}#status{color:var(--muted)}:focus-visible{outline:3px solid #b48b45;outline-offset:3px}@media(max-width:700px){header,main,footer{padding:20px}.catalog{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr}header{font-size:13px}.pagination{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header><b><a href="./">P· PrecisionRSI</a></b><nav aria-label="页面导航"><a href="./">评测与修复历史</a> · <a href="#sources">来源档案</a></nav></header>
+<main>
+<p class="eyebrow">RESEARCH RESULTS / WRITING SNAPSHOT · 2026-11-09 UTC</p>
+<h1>让每个数值，都能回查。</h1>
+<p class="intro">原论文实验、Qwen3.5 / Qwen3.8、DeepSeek 与算子跨软件栈补充。查阅公开结果指标，按来源和 JSON Pointer 提取数值，再结合实验配置、覆盖范围与报告引用。</p>
+<div class="downloads"><a class="download" href="./data/paper-results.json" download>全部结果 JSON</a><a class="download" href="./data/paper-results.csv" download>数值索引 CSV</a></div>
+<p class="notice">本页仅公开结果指标、配置、覆盖范围、报告与科学图。历史 ZIP、原始张量及完整执行日志在本地保留，不提供在线下载。<a href="./data/local-evidence.json">本地证据索引与 SHA256</a>可用于识别归档。失败、未验证项和空验收阈值继续保留，哈希完整性不表示数值验收通过。</p>
+<div class="stats"><div><strong id="source-count">—</strong><span>来源文档</span></div><div><strong id="field-count">—</strong><span>可定位数值字段</span></div><div><strong id="report-count">—</strong><span>研究报告</span></div><div><strong id="figure-count">—</strong><span>已有结果图</span></div></div>
+<details><summary>引用与统计口径 / Citation and scope</summary><ul class="notes" id="notes"></ul><p>本地历史 ZIP 的校验器仅检查其声明的字节或数学范围，不随本页发布。<code>source_sha256</code> 指向原始源文件，<code>export_sha256</code> 指向移除私有连接信息后的导出 JSON。原始数组回放记录保留在私有案例中。</p></details>
+<section aria-labelledby="complete-metrics-title">
+<h2 id="complete-metrics-title">完整测评指标结果包 · 2026-11-10</h2>
+<p>汇总现有40个结果来源、117899个精确数值字段，包含DeepSeek主线及已有Qwen/算子对照材料。保留全部来源配置、指标、覆盖范围、失败与12项科学缺口，未重跑模型。</p>
+<p>公开 JSON 与 CSV 提供来源目录和数值索引，报告和科学图保留各自适用范围。历史补充包及其校验器留在本地。数值字段含配置/计数/相关观测，不等于独立实验数；原主机完整原始张量目录不随指标包复制。</p>
+
+</section>
+<section aria-labelledby="ds41-npu512-title">
+<h2 id="ds41-npu512-title">DeepSeek NPU512 物理缓存补测已完成 · 2026-11-10</h2>
+<p>连接恢复后，已在同一 TP8/EP8 Engine 完成四次512-token请求：全段及253+259分段各配对控制/采集组。8个rank原始数组、独立隔离回放、原主机重算及精确清理均通过；下方GPU快照中的“NPU待连接恢复”为历史状态。</p>
+<p>2304个状态环物理行写入逐值精确，96项原始compressor/indexer别名通过；控制组与采集组的完整词表head字节相同。全段与分段末四位置logits仍有差异，RMSE为0.4059744611614696。360个pool/norm诊断为描述性结果，无验收或缓存等价结论。</p>
+<p>本次有限范围补测完成，整体科学覆盖仍未完成：原始GPU191/275、NPU269/275、另行adaptedpaired275/275及原12项科学缺口均保持；不据512观测宣称32K/all40、opaque kernel逐访问、backbone训练或硬件独因。定时任务保持暂停，旧快照与包保留。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-npu512-physical-cache-20261110.json" download>NPU512精确结果 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-cache-lifecycle-title">
+<h2 id="ds41-cache-lifecycle-title">DeepSeek GPU 物理缓存与 Core 生命周期补充 · 2026-11-10</h2>
+<p>C1 的 <strong>512 个物理缓存快照</strong>、1,408 个原始字节数组，以及 C2 的 <strong>32K 历史 / 8 个选定层 / 末四位置</strong>同一 live 链，均已完成原始数学与本地隔离独立回放。C1 与 C2 使用不同 Engine；非零缓存、logit 与 FP64 差异按原值保留，TP 副本不计作独立样本。</p>
+<p>新 Core 生命周期补测将案例清理调用的原生等待预算从默认 <strong>5 秒</strong>改为 <strong>60 秒</strong>；原生清理实际耗时 <strong>9.486 秒</strong>并返回。严格生命周期、128-token 有界数学复核和精确 namespace 清理均通过。parent/Core 映射关闭与 data worker 的 live-alias 保留记录分列；旧 Core77 缺失和 Core117 强制退出证据保持原样。</p>
+<p class="muted"><strong>NPU 物理状态补测仍待 SSH 连接恢复，尚未启动。</strong>整体任务未标完成，定时任务保持暂停。原 GPU 191/275、原 NPU 269/275 与另行 adapted paired 275/275 单列，12 项既有科学缺口保留；没有数值验收阈值、物理缓存等价或硬件独因结论。新完整写作包保留历史内容并加入英文报告、双语索引、三种科学图格式及逐字段数据。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-cache-lifecycle-20261110.json" download>本次精确结果 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-services-final-title">
+<h2 id="ds41-services-final-title">DeepSeek 原生服务数值复核与写作整合 · 2026-11-09 UTC</h2>
+<p>SGLang <strong>277 项</strong>任务跨五个 Engine 生命周期；vLLM <strong>216 项</strong>任务在八张 H200 的同一 TP8/EP8 Engine 执行。原始全量复核与独立回放均已完成：vLLM 的 <strong>820 行</strong>完整词表数组已在本地独立回放；<strong>3,168 个目标</strong>与 24 个选择项分量由固定原主机全量原始审计导出。原 GPU 191/275、原 NPU 269/275 与另行适配 paired 275/275 保持单列。</p>
+<p class="muted">精确 namespace 清理已核验；Core77 最终恢复回执缺失，完整 worker 恢复未获证明。12 项科学缺口仍在报告中。服务分段不是物理 reference cache 等价，输出头研究不是主干训练。写作包含新英文报告、标准科学图与逐字段定位；包内校验器不冒充原始模型数值复算。</p>
+
+</section>
+<section aria-labelledby="ds41-core275-title">
+<h2 id="ds41-core275-title">DeepSeek 适配核心库存 275/275 · 2026-11-09</h2>
+<p>新增适配配置已完成 <strong>275/275</strong> 配对复核：191 项原始结果复用，新增 78 项真实多 token 缓存与 6 项显式 mask 转 packed 请求。共 110,062,080 个配对元素，40 层真实 post-FFN 四路 mHC 流保留；原 191/275 记录继续作为历史快照。</p>
+<p>推理 full / chunk / token 的保留位置 top-1 一致为 264/264、264/264、144/144；结构化 full / chunk 为 36/48、37/48。固定相同 teacher 历史的 32 步为 29/32。GPU 在线输出头 LoRA 已完成 4 rank × 95 次真实完整冻结主干前向，83 次 rank-0 更新和 12 次保留输入评估经独立 FP64 回放；冷启动与 checkpoint 续跑状态逐位一致。</p>
+<p class="muted">这是适配配置的核心库存覆盖及 GPU 输出头训练结果。权重、激活算术、TP 与部署不同，不能据差异归因硬件；没有精度验收阈值。输出头更新不代表主干反向或 Trainer/TRL/verl 训练。双侧输出头训练与注意力独立补充见下节；原生服务最终结果将分别追加，不把本节记为全任务完成。本地历史 ZIP 含英文报告、两张科学图、精确 JSON、逐坐标 CSV 和导出完整性校验器。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-adapted-core-20261109.json" download>275/275 精确结果 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-query-key-selection-title">
+<h2 id="ds41-query-key-selection-title">DeepSeek 保留原生 Query + Key / Cache → QLI 选择 · 2026-11-09</h2>
+<p>2K / 32K、L2 / L20 的 <strong>4 个相关 capsule</strong> 完成新的原生 QLI 选择：串联保留的原生 query 与生产者 key/cache，不重载模型或重跑投影。每条仅末尾 4 个 query、全部 32 逻辑头；共 16 个 query、52,224 行已完成 key。离线包含全部 20 源数组、74 组实际数值 / 原生字节对，并重构全部 60,709,632 缓存字节。</p>
+<p>独立参考先作实际 INT8 的 INT64 精确点积，再按实际 FP16 query/cache scale 与 scaled weights 作 FP64 计算；不是原生累加模拟或原生完整 scores。16 组 top512 与稳定参考集合的重叠为 11×512、4×511、1×510；5 组不符合独立参考边界。原生自己的完整 scores 不可用，不能据此认定原生 top-k 缺陷或数值验收。</p>
+<p>L2 是普通 mode3；L20 仅候选生产者 mode1，未证明 mode2 消费者。32K L20 的 top2048 块重叠为 2048 / 2047 / 2047 / 2047。2K L20 仅 256 个可见块，全部选中是平凡全选检查，不是有区分力的 top2048 精度。派生参考共 208,896 坐标，其中 208,876 有限、20 因果屏蔽；原生未命名第二返回仍为空 BF16 [0]。</p>
+<p class="muted">跨运行序列化、ratio2 completed-M、末尾 query 与构造器 scaffold 的边界保留；不代表同一活张量、完整上游或整模型、参考物理 cache 别名、TP、训练、Trainer / TRL / verl 或服务完成。原生 40.43474229704589 秒、实际峰值 158,717,952 字节；512 MiB 是分配后高水位检查，不是预留或稳态性能。清理审计为 0 所属进程、16 空闲芯片、OOM 0；整体任务仍未完成。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-native-query-key-selection-20261109.json" download>完整统计、参考边界与证据哈希 JSON</a></div>
+<p class="muted">ZIP 内 REPORT.md、native-query-key-selection-scientific.png / .pdf / .svg、NumPy verify.py 与 14 项语义负控；原包字节保持不变，外部 manifest SHA 是可信锚。</p>
+</section>
+
+<section aria-labelledby="ds41-producer-key-title">
+<h2 id="ds41-producer-key-title">DeepSeek 保留原生 Compressor 输出 → Key / Cache · 2026-11-09</h2>
+<p>2K / 32K、L2 / L20 共 <strong>4 个相关 capsule</strong> 已完成新的原生 key/cache 阶段。它读取保留的原生 completed BF16 输出；完整私有复核覆盖 52,224 行、6,684,672 个 key 坐标，生产者与消费者输入字节相同。原生 35.22746559395455 秒、实际峰值 213,138,432 字节；512 MiB 是分配后高水位检查。</p>
+<p>FP64 公式 → FP32 → BF16 RNE 参考分别有投影 336、归一化 64、RoPE 44 个坐标不同。INT8 相对导出 FP32 scale 的 FP64 除法 / RNE 参考有 5,847 个坐标不同，均为源值精确 half-row-maximum 边界，最大整数差为 1。缓存 60,709,632 字节及基线 / 采集 SHA 全部一致；这不表示所有算术数组相同。</p>
+<p>两种反量化口径分别列出：导出 FP32 scale 重建，以及实际缓存 FP16 scale 反量化。N32768 / L20 的最大绝对误差分别为 0.01273374818265438 / 0.0127716064453125。离线包只重放 256 个实际投影输入选点（32,768 个输出坐标），并重放全量新归一化 / RoPE / 量化 / slot / 缓存；完整私有投影复核与便携抽样结果分别保存。</p>
+<p class="muted">这是跨运行序列化交接；ratio2 使用 completed-M 适配，不代表同一活张量、完整上游、整模型 N 行几何或缓存别名。原 L2 严格 VJP 失败保留；query、scores / top-k、TP、主干训练与 Trainer / TRL / verl 不计入本节。没有精度验收阈值或硬件因果结论，整体任务仍未完成。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-native-producer-key-cache-20261109.json" download>完整私有统计、便携回放与证据哈希 JSON</a></div>
+<p class="muted">ZIP 内报告为 REPORT.md，科学图为 native-key-cache-scientific.png / .pdf / .svg；保留原包字节，12 项语义负控及独立 CPU 回放通过。完整生产者输入与原始大缓存保留在私有案例。</p>
+</section>
+
+<section aria-labelledby="ds41-http128-title">
+<h2 id="ds41-http128-title">DeepSeek 适配 HTTP：128 次请求与历史核心对照 · 2026-11-09</h2>
+<p>同一 TP8 服务已完成 <strong>128 次既定请求</strong>，保留 128 × 129,280 的生成位置完整词表分布，共 16,547,840 个坐标；3,168 个计划 target 标量与 24 个候选 token 项合计 3,192 个标量，18 条候选序列分属 6 组。其中 9 条输入历史达到 32,768 token（6 条 long、3 条 structured）。复核与导出复用原请求，没有重复运行。</p>
+<p>普通 full-prefill 的 78 个末位置相对历史适配 NPU 核心，top-1 一致为 <strong>78/78</strong>，由完整词表归一化分布导出的 top100 并集加尾部合并 JS 最大值为 1.4268220011713432e-13。32 个固定 teacher 历史在 HTTP 中重新 prefill，相对历史 cached 调用为 <strong>27/32</strong>，由完整词表归一化分布导出的 top100 并集加尾部合并 JS 最大值为 0.03209886705453027；两组分别报告。相对原始 GPU 核心，普通组为 75/78，teacher 组为 26/32。</p>
+<p>3,168 个 target 相对历史适配 NPU 的 logprob MAE 为 1.924259257603722e-06 nat，最大差为 0.0028981400788721245 nat；相对原始 GPU 的 MAE 为 0.2803154567828166 nat，NLL 为 1.9395359408692914 / 1.9448921572733036 nat/token（GPU / HTTP）。6 组候选的首选相对两套历史核心均为 6/6；18 个候选末位置没有历史完整分布，未计入 110 个配对分布。</p>
+<p class="muted">本节完成的是适配 HTTP 请求范围及独立序列化数值复核。词表分布为原生归一化 logprob，Float64 是存储格式；没有据此推断计算精度或精度验收。ZIP 含全部 128 个 NPY、3,192 个标量、逐请求数学记录、英文报告、科学图和离线校验器，未包含原始响应 JSON 或两套历史参考数组。原 191/275 与独立适配 275/275 记录保留；原始默认未分块 32K、cached teacher 等价、主干反向及 Trainer/TRL/verl 仍有缺项；GPU vLLM/SGLang 服务数值复核见本页新汇总，差异不能单独归因硬件。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-http128-20261109.json" download>HTTP128 精确指标与两套核心对照 JSON</a></div>
+</section>
+
+<section aria-labelledby="ds41-head95-title">
+<h2 id="ds41-head95-title">DeepSeek GPU / NPU 输出头训练与续跑 · 2026-11-09</h2>
+<p>两侧均完成每 rank <strong>95 次真实完整冻结主干前向</strong>：GPU TP4 共 380 个 rank 调用，NPU TP8 共 760 个。rank 0 各保留 83 次更新和 12 次保留评估，公式、优化器状态、各自冷启动与 checkpoint 续跑、三次 offset-0 重复轨迹均经独立回放核验。</p>
+<p>新增 95 行同历史 / teacher / offset / repeat / 分支 / 更新坐标的配对明细，完整 129,280 词表归一化，附英文报告、两组 SVG/PNG 科学图和离线校验器。步骤、重复和恢复分支是相关观测，不能算作 95 个独立输入样本。</p>
+<p class="muted">范围是 FP32 rank-2 LoRA 输出头与 AdamW 更新，主干始终冻结。相同 seed 的初始 A 也并非跨运行时逐位相等（offset 0 最大差 1.6763806343078613e-08），B 为相同零值；后续参数沿各自轨迹演化。该结果不代表主干反向、Trainer/TRL/verl 完成，也不能单独归因硬件。真实原生服务数值复核已纳入本页新汇总，主干训练缺口仍保留。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-paired-output-head95-20261109.json" download>双侧训练完整指标 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-attention40-title">
+<h2 id="ds41-attention40-title">DeepSeek 真实完整模型内的全 40 层 Attention 回放 · 2026-11-09</h2>
+<p>已核验 8 rank 的 193,872 个保留原始数组及真实缓存依赖、分页与别名。rank 0 全 40 层 × 12 次实际前向的末 4 个 query，完成 480 组层级前向比较、15,360 个 query-head 向量的独立 FP64 QK → 含 sink softmax → PV 重建。</p>
+<p>最大绝对残差为 0.010597425985962694，最大层级前向 RMSE 为 0.0008772552083595631。图按每层 12 次前向展示 min / median / max；这些相关坐标不作为独立样本，也没有精度验收阈值。FP64 不模拟原生累加舍入，残差不直接证明内核缺陷。</p>
+<p class="muted">数组完整性覆盖全部保留的 8 rank；数学回放覆盖全部已保存的 rank-0 query，未保存的位置及其他 rank 算术不计入该范围。原始 7.4 GB 数组留在原机器，写作包保留精确指标、480 条层级记录、40 层绘图数据、英文报告、SVG/PNG 与离线校验器。训练与服务结果继续单列。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-full40-attention-20261109.json" download>Attention 完整指标 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-fresh-title">
+<h2 id="ds41-fresh-title">DeepSeek 独立进程补充 · 2026-11-08</h2>
+<p>在 NPU 适配 BF16、TP8/EP8、offload48、Engram mmap 和固定种子配置下，3 次独立模型进程对 128 / 2048 token 两个固定输入产生完全一致的完整词表末位 logits。6 项跨进程对比的最大绝对误差为 0，对应原生数组字节也完全一致。</p>
+<p class="muted">48 项进程内对比、84 项 rank 间对比均一致。两条固定输入是样本单位；rank 副本和两两对比不是独立样本。范围仅限该推理配置，训练、全局确定性及其他缺项仍单列。原写作快照保留，新增数据可从独立 JSON 爬取。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-fresh-process-20261108.json" download>补充结果 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-indexer-title">
+<h2 id="ds41-indexer-title">DeepSeek 原生 Indexer 补充 · 2026-11-08</h2>
+<p>单卡原生选择阶段已完成 L2 / L20 × 2K / 32K 四组测试，使用全部 32 个复制头。16 个相关查询中，13 个 top-512 集合与独立 FP64 INT8 反量化参考完全一致，其余 3 个各差 1 个索引；与原 GPU 结果的集合重合为 497–511/512。</p>
+<p class="muted">查询量化与索引整理已精确回放。GPU/NPU 量化算术不同，FP64 参考不模拟原生累加舍入；原生未提供完整 scores，不能将边界差异判为内核错误或验收通过。范围仅限投影后选择阶段，完整模型等缺项及原写作快照继续保留。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-native-indexer-20261108.json" download>Indexer 结果 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-compressor-title">
+<h2 id="ds41-compressor-title">DeepSeek 真实输入 Compressor / 局部梯度补充 · 2026-11-08</h2>
+<p>已用同一条 2K 历史的真实隐藏状态与原始 FP32/BF16 权重，完成 L2 / L20 原生 compressor 重放。对应 latent 的最大绝对差分别为 0.0078125 / 0.015625，RMSE 为 3.06031e−5 / 2.05272e−4；两层原生采集前后输出逐位一致。</p>
+<p class="muted">7 组局部梯度已与独立解析参考比较，6 组有界尾部 pool / RMSNorm 的 BF16 舍入参考完全一致。L2 pool/norm 严格反向调用被拒绝，原始错误保留。这里只是一条固定历史及两个相关层，32K 与完整模型训练仍待补；严格覆盖仍为 191/275，无精度验收或硬件归因结论。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-compressor-2k-20261108.json" download>前向与局部梯度 JSON</a></div>
+</section>
+<section aria-labelledby="ds41-upstream-title">
+<h2 id="ds41-upstream-title">DeepSeek 32K Compressor / 原生 Key-cache / 梯度定位补充 · 2026-11-08</h2>
+<p>32K 原生 compressor 已完成 L2 / L20 真实输入重放，latent 最大绝对差为 0.0078125 / 0.03125，RMSE 为 3.23089e−5 / 2.12049e−4；两层采集控制均逐位一致。另完成 2K / 32K 原生 key 投影、归一化、RoPE 与私有分页缓存，原始 INT8 / FP16 缓存写入及保护区已精确回放。</p>
+<p>L2 反向边界已进一步定位：保留的四行同点诊断中，projected-kv / scores 梯度返回 None，norm.weight 梯度有效且 512 项 BF16 舍入预测一致。32K 另有 7 组局部梯度与独立解析参考比较。</p>
+<p class="muted">2K / 32K 是同一冻结输入族的长度视图，层与尾部坐标相关；key 使用 GPU 捕获的 compressor latent 完整已压缩行，尚未形成原生 compressor→key 端到端链。GPU FP4 与 NPU INT8 算术不同。完整 query / 模型缓存别名及全模型训练仍单列，严格配对覆盖仍为 191/275；以下是独立新版，早期快照的“待补”描述保留为当时状态。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-upstream-extension-20261108.json" download>新增指标 JSON（含 83 条比较记录）</a></div>
+</section>
+<section aria-labelledby="ds41-query-tail-title">
+<h2 id="ds41-query-tail-title">DeepSeek 原生 Query / Head weights / RoPE 补充 · 2026-11-08</h2>
+<p>已复用 GPU 四个 TP4 rank 的真实捕获，完成 2K / 32K 历史、L2 / L20、尾部 4 个位置与全部 32 heads 的原生 query 投影。四组最大绝对差为 0.5 / 0.6875 / 0.46875 / 0.4453125，RMSE 为 0.0583814 / 0.0624787 / 0.0581685 / 0.0626034。</p>
+<p>Head-weight 投影三组逐位一致，另一组仅一个值不同（最大差 7.62939e−6）。四组原生 RoPE 与独立 BF16 舍入预测完全一致；query 的独立参考为 65,533 / 65,536 项一致，另 3 项相差一个相邻 BF16 值。基线与采集结果逐位一致，原生运行 33.425 秒，峰值分配 66,206,208 字节，进程和设备清理已复核。</p>
+<p class="muted">GPU query 使用 FP8 激活量化 / GEMM，原生使用反量化后 BF16 权重与未量化 BF16 GEMM，差异属于配置比较。直接 GPU 捕获参考只有 pre-RoPE query 与 pre-scale head weights；RoPE 是原生输出与独立数学参考比较。只覆盖 tail4，尚未覆盖全历史 query、量化 query、scores/top-k、完整 attention、整模型缓存别名或全模型训练；严格配对覆盖仍为 191/275。无数值验收或硬件归因结论，早期快照保留。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-native-query-tail-20261108.json" download>新增指标 JSON（40 条比较记录）</a></div>
+</section>
+<section id="deepseek-mode2-component">
+<h2>DeepSeek mode2 候选筛选组件补证</h2>
+<p>已独立复核原生 NPU mode2 的同层序列化输入试验：完整 32K 键缓存、4 个查询、每查询 512 个选中位置。与 INT64 点积后按实际 FP16 scales/weights 进行 FP64 公式复算的集合重合数为 512 / 512 / 511 / 511。原生完整分数未保留，差异为描述性诊断，不是算子错误或通过阈值。</p>
+<p class="muted">该组件使用第 20 层保留的候选，不代表真实跨层链、完整 Attention、完整模型训练或服务覆盖。真实模型跨层记录见下节；同层组件与真实跨层结果分别列明，均已纳入当前写作快照。服务链路仍在推进。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-retained-mode2-20261109.json" download>mode2 组件指标 JSON</a></div>
+</section>
+<section id="deepseek-six-forward-selectors">
+<h2>DeepSeek 真实跨层 selector 补证</h2>
+<p>已对原生完整 40 层模型中保留的 6 次前向、30 条 selector 记录、120 个查询实例进行两套独立数学复核，共 1,740,800 个派生分数坐标。包含第 20 层候选到第 24 / 28 / 32 / 36 层的真实跨层链，以及短历史全可见候选和 32K 选择性候选分支。</p>
+<p class="muted">仅覆盖 rank0 各次前向尾部 4 个查询；原生完整分数没有保留，FP64 公式复算不等于原生累加。单次 32K 使用适配配置，原默认单次 32K 缺项仍保留。下载包包含脱敏指标、图及字节/CSV 校验器；独立原始数组数值回放证据保留在私有案例，未放入此包。本项已纳入当前写作快照；服务终态及数值汇总见本页新服务报告，科学缺口保持明确。</p>
+<div class="downloads"><a class="download" href="./data/deepseek41-six-forward-selectors-20261109.json" download>30 条 selector 指标 JSON</a></div>
+</section>
+<h2>论文关键结果</h2><p class="muted">以下是可直接追溯的选摘；引用时请一并保留每项的配置与范围。</p><div class="catalog" id="highlights"></div>
+<h2>查询数值</h2><p class="muted">数值字段包括测量、计数、配置和相关观测。未注明单位的字段请查来源上下文；不要把字段数当作独立实验数。</p>
+<div class="filters"><div><label for="study">来源 / cohort</label><select id="study"><option value="">全部来源</option></select></div><div><label for="query">指标、JSON Pointer 或数值</label><input id="query" type="search" placeholder="例如 native-level1、mae_nat、mhc_layers" autocomplete="off"></div></div>
+<p id="status" role="status">正在载入结果…</p>
+<div class="table-wrap"><table><thead><tr><th>来源</th><th>JSON Pointer</th><th>精确数值</th><th>单位</th><th>上下文</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="pagination"><button id="previous" disabled>上一页</button><span id="page-number"></span><button id="next" disabled>下一页</button><button id="filtered-download" disabled>下载筛选 CSV</button></div>
+<h2 id="sources">来源与配置</h2><p class="muted">每个来源保留完整嵌套指标、适用范围和版本上下文。可独立下载或查看。</p><div id="source-cards" class="catalog"></div>
+<h2>报告</h2><div id="reports" class="catalog"></div>
+<h2>图表</h2><div id="figures" class="catalog"></div>
+</main>
+<footer>PrecisionRSI · Writing snapshot and versioned supplements. 历史结果、独立补充与缺项均保留。机器读取入口：<a href="./data/paper-results.json">paper-results.json</a>。</footer>
+<dialog id="preview"><button id="close-preview">关闭</button><h2 id="preview-title"></h2><pre id="preview-content"></pre></dialog>
+<noscript>可直接下载 <a href="./data/paper-results.json">JSON</a>、<a href="./data/paper-results.csv">CSV</a> 或 。</noscript>
+<script>
+'use strict';
+const $=id=>document.getElementById(id); let data,filtered=[],page=0;const size=80;
+function element(tag,text,cls){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;}
+function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=element('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
+function preview(title,content){$('preview-title').textContent=title;$('preview-content').textContent=content;$('preview').showModal();}
+function csv(rows){const keys=['source_id','pointer','value','unit','kind'];const escape=v=>'"'+String(v).replaceAll('"','""')+'"';return '\uFEFF'+[keys,...rows.map(r=>keys.map(k=>r[k]))].map(row=>row.map(escape).join(',')).join('\r\n');}
+function render(){const start=page*size;$('rows').replaceChildren();for(const r of filtered.slice(start,start+size)){const tr=element('tr');tr.append(element('td',r.source_id),element('td',r.pointer,'path'),element('td',String(r.value),'value'),element('td',r.unit));const td=element('td');const button=element('button','查看');button.onclick=()=>{const source=data.sources.find(s=>s.id===r.source_id);let v=source.data;const parts=r.pointer.split('/').slice(1,-1);for(const p of parts)v=v[p.replaceAll('~1','/').replaceAll('~0','~')];preview(r.source_id+' · '+r.pointer,JSON.stringify(v,null,2));};td.append(button);tr.append(td);$('rows').append(tr);}$('status').textContent=filtered.length.toLocaleString()+' 个匹配字段 · 每页 '+size+' 个';$('page-number').textContent=(filtered.length?page+1:0)+' / '+Math.ceil(filtered.length/size);$('previous').disabled=page===0;$('next').disabled=start+size>=filtered.length;$('filtered-download').disabled=!filtered.length;}
+function filter(){const q=$('query').value.toLowerCase();const study=$('study').value;filtered=data.numeric_fields.filter(r=>(!study||r.source_id===study)&&(!q||(r.source_id+' '+r.pointer+' '+r.value).toLowerCase().includes(q)));page=0;render();}
+$('previous').onclick=()=>{page--;render();};$('next').onclick=()=>{page++;render();};$('filtered-download').onclick=()=>download('paper-results-filtered.csv',csv(filtered),'text/csv');$('close-preview').onclick=()=>$('preview').close();
+fetch('./data/paper-results.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json();}).then(d=>{data=d;$('source-count').textContent=d.sources.length;$('field-count').textContent=d.numeric_fields.length.toLocaleString();$('report-count').textContent=d.assets.filter(a=>a.kind==='report').length;$('figure-count').textContent=d.assets.filter(a=>a.kind==='figure').length;for(const h of d.highlights){const card=element('article',undefined,'card');card.append(element('h3',h.title),element('strong',String(h.value)+' '+h.unit),element('p',h.scope));const button=element('button','定位来源');button.onclick=()=>{$('study').value=h.source_id;$('query').value=h.pointer;filter();$('study').scrollIntoView({behavior:'smooth'});};card.append(button);$('highlights').append(card);}for(const note of d.notes)$('notes').append(element('li',note));for(const s of d.sources){const option=element('option',s.title);option.value=s.id;$('study').append(option);const card=element('article',undefined,'card');card.append(element('h3',s.title),element('p','ID: '+s.id),element('p','Source SHA-256: '+s.source_sha256),element('p','Public JSON SHA-256: '+s.export_sha256));const view=element('button','查看来源');view.onclick=()=>preview(s.title,JSON.stringify(s.data,null,2));const save=element('button','下载 JSON 语义副本');save.onclick=()=>download(s.id+'.json',JSON.stringify(s.data,null,2)+'\n','application/json');card.append(view,save);$('source-cards').append(card);}for(const a of d.assets){const card=element('article',undefined,'card');card.append(element('h3',a.file.split('/').pop()));if(a.kind==='portable_supplement'||a.kind==='local_archive'){card.append(element('p',a.scope),element('p','原始证据本地保留，不提供在线下载'),element('p','SHA-256: '+a.source_sha256));$('reports').append(card);continue;}if(a.kind==='figure'){card.classList.add('figure');const img=element('img');img.alt=a.file;img.loading='lazy';img.src=URL.createObjectURL(new Blob([a.svg],{type:'image/svg+xml'}));card.append(img);}else{const view=element('button','阅读报告');view.onclick=()=>preview(a.file,a.text);card.append(view);}const save=element('button','下载');save.onclick=()=>download(a.file.split('/').pop(),a.text||a.svg,a.kind==='figure'?'image/svg+xml':'text/markdown');card.append(save);$(a.kind==='figure'?'figures':'reports').append(card);}$('study').onchange=filter;let timer;$('query').oninput=()=>{clearTimeout(timer);timer=setTimeout(filter,150);};filter();}).catch(e=>{$('status').textContent='载入失败：'+e.message+'。请使用 HTTP 服务打开页面或直接下载 JSON / CSV。';});
+</script>
+</body>
+</html>

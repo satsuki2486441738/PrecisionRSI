@@ -1,0 +1,146 @@
+[
+  {
+    "side": "gpu",
+    "family": "grpo",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "GRPOTrainer.constructor(original_model_path)",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0+cu126",
+      "trl": "0.29.0",
+      "accelerate": "1.12.0",
+      "peft": "0.20.0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "e4bf7936f357c723dd317749fd413bcb3ed87c14ed35d93f7445a71c787cb8c9"
+  },
+  {
+    "side": "gpu",
+    "family": "sfttrainer",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "SFTTrainer.constructor(original_model_path)",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0+cu126",
+      "trl": "0.29.0",
+      "accelerate": "1.12.0",
+      "peft": "0.20.0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "97baf39987e529543492806ed3364267ce9370adb150babf04d4466e060d08fd"
+  },
+  {
+    "side": "gpu",
+    "family": "trainer",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "Trainer.call_model_init -> AutoModelForCausalLM.from_pretrained",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0+cu126",
+      "trl": "0.29.0",
+      "accelerate": "1.12.0",
+      "peft": "0.20.0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "2f48fabe951b2e799193193bc513fe1615160b0f3627bd6843d36853d9f2d67e"
+  },
+  {
+    "side": "gpu",
+    "family": "verl",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "verl.HFModelConfig(original_model_path)",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0+cu126",
+      "accelerate": "1.12.0",
+      "peft": "0.21.2",
+      "verl": "0.8.0.dev0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "eafdf96b7dfaad27efa4d47ccb8e3d2bb0e3db301007b30b6a71cc834c3a2952"
+  },
+  {
+    "side": "npu",
+    "family": "grpo",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "GRPOTrainer.constructor(original_model_path)",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0",
+      "trl": "0.29.0",
+      "accelerate": "1.12.0",
+      "peft": "0.20.0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "bb0478bad43faa5a63b25991a3f29366e44b3f1f0bf1f0563b79d738e179b1f4"
+  },
+  {
+    "side": "npu",
+    "family": "sfttrainer",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "SFTTrainer.constructor(original_model_path)",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0",
+      "trl": "0.29.0",
+      "accelerate": "1.12.0",
+      "peft": "0.20.0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "0a95f71d0ff1cb489bbc3d27a5e725ba13c9c86cb9008a45e59ebc7152f39001"
+  },
+  {
+    "side": "npu",
+    "family": "trainer",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "Trainer.call_model_init -> AutoModelForCausalLM.from_pretrained",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0",
+      "trl": "0.29.0",
+      "accelerate": "1.12.0",
+      "peft": "0.20.0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "b64d3e08f96d154ccd4931abf63a42849417dc586c3259ae48c81361cbc8d04e"
+  },
+  {
+    "side": "npu",
+    "family": "verl",
+    "status": "cpu-entrypoint-rejected",
+    "stage": "verl.HFModelConfig(original_model_path)",
+    "versions": {
+      "transformers": "5.20.2",
+      "torch": "2.9.0",
+      "accelerate": "1.12.0",
+      "peft": "0.21.2",
+      "verl": "0.8.0.dev0"
+    },
+    "error_type": "ValueError",
+    "error_scope": "Transformers does not recognize deepseek_v41 model registration",
+    "accelerator_execution": false,
+    "numerical_coverage": false,
+    "source_sha256": "96c0c5b1f047990d7c090541f2c5c82584f11563f014cbe6a8d67349cd3fc8da"
+  }
+]
