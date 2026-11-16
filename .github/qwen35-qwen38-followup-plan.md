@@ -37,7 +37,7 @@ restart the closed chains or broaden conditional experiments from this delivery.
 Current case checkpoint: runs/compare-qwen-scoped-final-delivery-checkpoint-20261107T225313Z/checkpoint.json.
 HANDOFF/workload/matrix retain exact source, terminal, review and cleanup pins.
 
-[Final English report](../projects/torch-gpu-npu/cases/qwen35-qwen38-followup/runs/compare-qwen-followup-scoped-final-delivery-20261107T225131Z/package/report.md) · [Chinese index](../projects/torch-gpu-npu/cases/qwen35-qwen38-followup/runs/compare-qwen-followup-scoped-final-delivery-20261107T225131Z/package/README.zh-CN.md).
+Final English report (private local record: `projects/torch-gpu-npu/cases/qwen35-qwen38-followup/runs/compare-qwen-followup-scoped-final-delivery-20261107T225131Z/package/report.md`) · Chinese index (private local record: `projects/torch-gpu-npu/cases/qwen35-qwen38-followup/runs/compare-qwen-followup-scoped-final-delivery-20261107T225131Z/package/README.zh-CN.md`).
 
 ## Retained historical plan and execution reference
 
@@ -145,8 +145,8 @@ Research novelty requires a separate related-work review.
 
 | Model | Authoritative evidence | Important interpretation |
 | --- | --- | --- |
-| Qwen3.5-9B-Base | [Final report](qwen35-precision-report.md); [coverage ledger](../projects/torch-gpu-npu/cases/qwen35-report/COVERAGE.md); [runbook](../projects/torch-gpu-npu/cases/qwen35-report/RUNBOOK.md) | Revision `68c46c4b3498877f3ef123c856ecfde50c39f404`; latest release uses Transformers 5.20.2. Historical framework versions remain separate. |
-| Qwen3.8-Flash-Next | [Final report](qwen38-precision-report.md); [handoff](../projects/torch-gpu-npu/cases/qwen38-flash-next/HANDOFF.md); [runbook](../projects/torch-gpu-npu/cases/qwen38-flash-next/RUNBOOK.md) | Revision `de4b8e4d43b917e7706784d8bb445c9af86a3540`; final inference compares GPU automatic placement with NPU TP8. Training and causal interventions use separate automatic-placement configurations. |
+| Qwen3.5-9B-Base | [Final report](qwen35-precision-report.md); coverage ledger (private local record: `projects/torch-gpu-npu/cases/qwen35-report/COVERAGE.md`); runbook (private local record: `projects/torch-gpu-npu/cases/qwen35-report/RUNBOOK.md`) | Revision `68c46c4b3498877f3ef123c856ecfde50c39f404`; latest release uses Transformers 5.20.2. Historical framework versions remain separate. |
+| Qwen3.8-Flash-Next | [Final report](qwen38-precision-report.md); handoff (private local record: `projects/torch-gpu-npu/cases/qwen38-flash-next/HANDOFF.md`); runbook (private local record: `projects/torch-gpu-npu/cases/qwen38-flash-next/RUNBOOK.md`) | Revision `de4b8e4d43b917e7706784d8bb445c9af86a3540`; final inference compares GPU automatic placement with NPU TP8. Training and causal interventions use separate automatic-placement configurations. |
 | Shared procedure | [Model precision evaluation protocol](model-precision-evaluation-plan.md) | Reuse task-owned execution and shared comparison, recording and integrity tools. Numerical acceptance remains unspecified. |
 
 Qwen3.5 capture index:
