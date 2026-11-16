@@ -1,0 +1,19 @@
+{
+  "scope": "real long-00 32768/logprobs8/seed0; six controls and same-hidden replay",
+  "controls": 6,
+  "B0_B1_exact": true,
+  "C0_C1_exact": true,
+  "B_C_normalized_hidden_and_native_head_exact": true,
+  "native_M1_M4_exact": true,
+  "M49_reproduces_selected49_exact": true,
+  "changed_last_row_logits": 28,
+  "vocab_size": 129280,
+  "max_logit_abs": 0.03125,
+  "same_top1_singleton": 223,
+  "full_vocab_tv": 1.5009041237698725e-12,
+  "full_vocab_max_probability_error": 1.4475574490121938e-12,
+  "probability_max_token": 19860,
+  "full_vocab_probability_rmse": 4.963466793291496e-15,
+  "core_logprobs_None_max_receipt": 0.0625,
+  "generalization_to_core_None": false
+}

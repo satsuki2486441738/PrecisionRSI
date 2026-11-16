@@ -1,0 +1,114 @@
+{
+  "status": "passed-second-independent-terminal-source-environment-cleanup-review",
+  "native_run": "npu-secondary-ds41-uninstrumented-performance-20261106T150541Z",
+  "command_sha256": "66bbf1d9d0be75e598e1746523cc7fa2e6396bb51c31d95163fccb1154e3d1a8",
+  "terminal_returncode": 0,
+  "terminal_wall_seconds": 5274.297406423953,
+  "transport_files_rehashed": 433,
+  "transport_bytes_rehashed": 432763480,
+  "sourcefreeze_files_rehashed": 28,
+  "production_helpers_rehashed": 13,
+  "actual_live_owner_environment_keys_verified": 20,
+  "load_census": {
+    "fresh_owned_matrices": 46080,
+    "rank_proofs": 8,
+    "owned_matrices_each": 5760,
+    "unequal_coordinates": 0,
+    "mmap_aliases": 16,
+    "loader_validated": true
+  },
+  "recorded_device_cleanup": {
+    "logical_chips": 16,
+    "aicore_zero": true,
+    "no_processes_on_8boards": true,
+    "hbm_mb": [
+      3136,
+      2877,
+      3117,
+      2891,
+      3119,
+      2888,
+      3133,
+      2876,
+      3116,
+      2891,
+      3131,
+      2880,
+      3124,
+      2871,
+      3116,
+      2887
+    ],
+    "hbm_delta_from_recorded_admission_mb": [
+      -1,
+      -3,
+      -4,
+      -1,
+      -3,
+      -5,
+      -2,
+      -3,
+      -1,
+      0,
+      0,
+      0,
+      -1,
+      0,
+      -1,
+      0
+    ],
+    "maxabs_delta_mb": 5,
+    "scope": "same recorded resource admission vs terminal snapshot; not zero total memory or proof of exclusive whole-host ownership"
+  },
+  "recorded_host_cgroup": {
+    "under_oom": 0,
+    "oom_kill": 0,
+    "usage_bytes": 265424609280,
+    "limit_bytes": 1099511627776
+  },
+  "limitations": [
+    "CPU reread/hash independent review of retained native queries; no fresh SSH/proc/device query",
+    "63x8 numerical/timing arithmetic deliberately not reviewed here; gpu_original owns that independent audit",
+    "cleanup evidence applies to exact150541Zlifetime and recorded observation time, not all later system state",
+    "unchanged performance/transport proofs do not close training or missing standalone-operator numerical gaps"
+  ],
+  "new_device_calls": 0,
+  "new_ssh_calls": 0,
+  "source_files_mutated": false,
+  "numerical_acceptance": false,
+  "owner_cleanup": {
+    "exact_argv_matches": true,
+    "recorded_terminal_group_absent": true,
+    "recorded_local_owned_processes_absent_count": 4
+  },
+  "receipt_counts": {
+    "verified_files": 433,
+    "verified_bytes": 432763480,
+    "per_rank_forward_counts": {
+      "0": 959,
+      "1": 959,
+      "2": 959,
+      "3": 959,
+      "4": 959,
+      "5": 959,
+      "6": 959,
+      "7": 959
+    },
+    "per_rank_empty_counts": {
+      "0": 63,
+      "1": 63,
+      "2": 63,
+      "3": 63,
+      "4": 63,
+      "5": 63,
+      "6": 63,
+      "7": 63
+    }
+  },
+  "source_evidence_sha256": {
+    "compare-ds41-performance-complete-independent-audit-20261106T164426Z/result.json": "6411444da7d76ca4a1520e9b79157768e89e0368f4565dbb3e03ae2493fb6523",
+    "compare-ds41-performance-complete-independent-audit-20261106T164426Z/performance-summary.json": "8e7ede50fe07f9302ccb260f94855fc383c6838f0c64e0aba4bd0002d61bcca9",
+    "compare-ds41-final-framework-runtime-clarification-20261106T161637Z/framework-facts.json": "55c5efd9105263e5304fc0c03ec38470020ce608639cc03456eb07c9356badfe",
+    "compare-ds41-performance-terminal-source-cleanup-second-independent-audit-20261106T164757Z/result.json": "f8ac4644ccbfbdfa2fe63614b3efa2215f3026644e7fe6e89e44eec3269787b5"
+  }
+}

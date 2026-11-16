@@ -528,6 +528,134 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         self.assertEqual(first['version'],second['version'])
         self.assertTrue(second['workflow']['stages'][0]['reused'])
 
+    def test_public_consumer_preflight_rejects_bundle_before_evaluator(self):
+        self.setup_improvement()
+        cfg=read(self.improve_cfg)
+        public=[dict(id='public-compare',tags=['mean'],limit_chars=1,
+                     interface='JSON metrics and tensor captures -> coverage and maximum error.')]
+        cfg.update(consumers=public,evaluation_plan='not-readable-evaluator.json')
+        self.improve_cfg.write_text(json.dumps(cfg))
+        session=self.root/'selection-session'
+        with patch('precision_rsi.improve.versions.evaluate',side_effect=AssertionError('unusable bundle evaluated')):
+            result=improve(self.improve_cfg,session)
+        self.assertEqual(result['status'],'needs_action')
+        self.assertEqual(result['errors'][0]['stage'],'selection')
+        self.assertEqual(len(result['selection']['missing_updates']),3)
+        self.assertTrue(all(r['reason']=='interface_budget' for r in result['selection']['cases'][0]['rejected']))
+        self.assertEqual(read(session/'selection.json'),result['selection'])
+        self.assertEqual(versions.current(self.root/'memory'),'empty')
+        prompt=json.loads((session/'prompt-template.txt').read_text().split('\n',1)[1])
+        self.assertEqual(prompt['consumers'],public)
+        self.assertNotIn('not-readable-evaluator',json.dumps(prompt))
+
+    def test_matching_public_consumers_allow_evaluation_and_invalid_contracts_fail_early(self):
+        self.setup_improvement()
+        cfg=read(self.improve_cfg)
+        cfg.update(consumers=[dict(id='mean',tags=['mean'],limit_chars=4000)],evaluation_plan='eval.json')
+        self.improve_cfg.write_text(json.dumps(cfg))
+        (self.root/'eval.json').write_text('{}')
+        with patch('precision_rsi.improve.versions.evaluate',return_value={}) as evaluator:
+            result=improve(self.improve_cfg,self.root/'matching-consumer')
+        self.assertEqual(evaluator.call_count,1)
+        self.assertNotIn('selection',result)
+        for consumers in ([],[dict(id='x',tags=[],limit_chars=True)],
+                          [dict(id='x',tags=[],limit_chars=10,private_inputs='hidden')]):
+            cfg['consumers']=consumers;self.improve_cfg.write_text(json.dumps(cfg))
+            with patch('precision_rsi.improve.run_workflow',side_effect=AssertionError('invalid consumer called model')):
+                with self.assertRaisesRegex(ValueError,'consumer'):
+                    improve(self.improve_cfg,self.root/'invalid-consumer')
+
+    def test_research_notes_changed_by_turn_do_not_invalidate_receipt_replay(self):
+        from precision_rsi.research import Research, document
+        self.setup_improvement(mode='none')
+        research = Research(self.root/'research', {'task':'fixture'})
+        research.sync([])
+        cfg = read(self.improve_cfg)
+        cfg['research'] = dict(root=str(research.root), binding={'task':'fixture'}, turn='round-001')
+        self.improve_cfg.write_text(json.dumps(cfg))
+        session = self.root/'research-session'
+        first = improve(self.improve_cfg, session)
+        self.assertTrue(first['no_update'])
+        document(research.view, 'notes', {'observations':['turn completed']})
+        second = improve(self.improve_cfg, session)
+        self.assertTrue(second['workflow']['stages'][0]['reused'])
+        self.assertEqual(first['usage'], second['usage'])
+        self.assertEqual(document(research.view, 'notes')['judgments'],
+                         {'observations':['turn completed']})
+
+    def test_proposal_handoff_saved_without_extra_call_and_cached_replay_keeps_newer_memory(self):
+        from precision_rsi.research import Research, document, state
+        self.setup_improvement(mode='none')
+        self.improver.write_text(self.improver.read_text().replace(
+            "{'updates':[] if sys.argv[2]=='none' else updates}",
+            "{'updates':[], 'handoff':{'notes':{'observations':['saved with proposal']},"
+            "'plan':{'next_experiments':[]}}}"))
+        research = Research(self.root/'research', {'task':'fixture'})
+        research.sync([])
+        cfg = read(self.improve_cfg)
+        cfg['research'] = dict(root=str(research.root), binding={'task':'fixture'}, turn='round-001')
+        self.improve_cfg.write_text(json.dumps(cfg))
+        session = self.root/'handoff-session'
+        result = improve(self.improve_cfg, session)
+        self.assertEqual(result['status'], 'completed')
+        self.assertEqual(result['usage']['steps'], 1)
+        self.assertEqual(document(research.view, 'notes')['judgments']['observations'], ['saved with proposal'])
+        self.assertEqual(state(research.view)['handoff']['judgment_update'], 'recorded')
+        document(research.view, 'notes', {'observations':['newer']})
+        research.checkpoint('round-002', session, phase='review', status='completed')
+        newer = read(research.view/'handoff.json')
+        replay = improve(self.improve_cfg, session)
+        self.assertTrue(replay['workflow']['stages'][0]['reused'])
+        self.assertEqual(document(research.view, 'notes')['judgments']['observations'], ['newer'])
+        self.assertEqual(read(research.view/'handoff.json'), newer)
+
+    def test_invalid_handoff_keeps_valid_candidate(self):
+        from precision_rsi.research import Research, document, state
+        self.setup_improvement()
+        self.improver.write_text(self.improver.read_text().replace(
+            "{'updates':[] if sys.argv[2]=='none' else updates}",
+            "{'updates':updates[:1], 'handoff':{'notes':{'observations':['overwrite']},"
+            "'plan':{'next_experiments':[{}]}}}"))
+        research = Research(self.root/'research', {'task':'fixture'})
+        research.sync([])
+        document(research.view, 'notes', {'observations':['retained']})
+        cfg = read(self.improve_cfg)
+        cfg['research'] = dict(root=str(research.root), binding={'task':'fixture'}, turn='round-001')
+        self.improve_cfg.write_text(json.dumps(cfg))
+        result = improve(self.improve_cfg, self.root/'invalid-handoff')
+        self.assertEqual(result['status'], 'completed')
+        self.assertEqual(len(result['candidates']), 1)
+        self.assertTrue(result['memory_error'])
+        self.assertEqual(result['errors'], [])
+        self.assertEqual(document(research.view, 'notes')['judgments']['observations'], ['retained'])
+        self.assertEqual(state(research.view)['handoff']['judgment_update'], 'invalid')
+
+    def test_timeout_saves_factual_handoff_without_inventing_judgments(self):
+        from precision_rsi.research import Research, state
+        self.setup_improvement(mode='none')
+        self.improver.write_text('''import json,sys,time
+from pathlib import Path
+p=json.loads(Path(sys.argv[1]).read_text().split('\\n',1)[1])
+folder=Path(p['artifacts']);folder.mkdir(exist_ok=True)
+(folder/'partial.py').write_text('unfinished')
+print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'outputTokens':2,'totalTokens':12}}),flush=True)
+time.sleep(30)
+''')
+        research = Research(self.root/'research', {'task':'fixture'})
+        research.sync([])
+        cfg = read(self.improve_cfg)
+        cfg['agent']['timeout'] = 1
+        cfg['research'] = dict(root=str(research.root), binding={'task':'fixture'}, turn='round-001')
+        self.improve_cfg.write_text(json.dumps(cfg))
+        result = improve(self.improve_cfg, self.root/'timeout-handoff')
+        self.assertEqual(result['status'], 'needs_action')
+        memory = state(research.view)
+        self.assertEqual(memory['documents'], {})
+        self.assertEqual(memory['handoff']['status'], 'interrupted')
+        self.assertEqual(memory['handoff']['reported_usage']['total_tokens'], 12)
+        self.assertIn('partial.py', memory['handoff']['artifacts'])
+        self.assertTrue((research.private/'active.json').is_file())
+
     def test_improver_relative_proposal_is_written_to_declared_run(self):
         self.setup_improvement()
         self.improver.write_text('''import json
@@ -678,6 +806,15 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
             argv=['nested-evaluator','--seconds','{evaluation_budget_seconds}'])))
         received=[]
         def evaluate(store,identity,plan,workspace,**kwargs):
+            from precision_rsi.snapshots import Journal
+            journal = Journal(self.root/'budget-session/.snapshots')
+            submitted = sorted((journal.root/'events').glob('*-submitted.json'))[-1]
+            frozen = journal.event(submitted.stem)
+            self.assertFalse(frozen['checkpoint'])
+            selection = read(journal.root/'objects'/frozen['files']['audit/selection.json']['object'])
+            self.assertTrue(selection['candidates'])
+            prompt = (journal.root/'objects'/frozen['files']['session/prompt.txt']['object']).read_text()
+            self.assertNotIn('{run}', prompt)
             received.append((read(plan),kwargs))
             return dict(id=identity,evaluation=dict(accepted=False))
         with patch('precision_rsi.improve.versions.evaluate',side_effect=evaluate):
@@ -736,12 +873,22 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
                          dict(families=['source-objective']))
         version=versions.prepare(store,[identity])
         suite=self.root/'suite.json'
-        suite.write_text(json.dumps(dict(schema_version=1,store=str(store),cases=[dict(
+        construction=self.root/'construction.json'
+        construction.write_text(json.dumps(dict(seconds=60,usage=dict(total_tokens=600),cost=None)))
+        suite.write_text(json.dumps(dict(schema_version=1,store=str(store),construction=str(construction),
+            amortize_over_tasks=2,cases=[dict(
             id='independent-mean',family='unseen-objective',**tasks)])))
         first=benchmark(suite,self.root/'bench',version['id'],'empty',30)
         self.assertTrue(first['baseline']['correct']);self.assertTrue(first['candidate']['correct'])
         self.assertGreater(first['baseline']['seconds'],0)
         self.assertEqual(first['usage']['total_tokens'],32)
+        candidate=first['candidate']
+        self.assertAlmostEqual(candidate['seconds'],candidate['execution']['seconds']+30)
+        self.assertEqual(candidate['execution']['total_tokens'],16)
+        self.assertEqual(candidate['including_construction']['total_tokens'],316)
+        self.assertIsNone(candidate['including_construction']['cost'])
+        from precision_rsi.memory import improvement
+        self.assertFalse(improvement(first))  # Task success cannot hide construction cost.
         with patch('precision_rsi.loop.record_run',side_effect=AssertionError('benchmark replay called agent')):
             self.assertEqual(benchmark(suite,self.root/'bench',version['id'],'empty',30),first)
         fresh=self.root/'fresh-candidate';fresh.mkdir()
@@ -758,6 +905,15 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         state=read(self.root/'reuse-bench/benchmark.json')
         self.assertEqual(state['arms']['0:baseline']['evidence']['state'],
                          read(self.root/'bench/0/baseline/result.json')['evidence']['state'])
+        construction.write_text(json.dumps(dict(seconds=600,usage=dict(total_tokens=600))))
+        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('changed cost launched task')):
+            with self.assertRaisesRegex(ValueError,'benchmark changed'):
+                benchmark(suite,self.root/'bench',version['id'],'empty',30)
+        self.assertEqual(read(self.root/'bench/measurement.json'),first)
+        construction.write_text(json.dumps(dict(seconds=0)))
+        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('invalid cost launched task')):
+            with self.assertRaisesRegex(ValueError,'construction receipt'):
+                benchmark(suite,self.root/'invalid-cost-bench',version['id'],'empty',30)
 
     def test_failed_benchmark_passes_native_error_to_improver_without_full_logs(self):
         from precision_rsi.evolve import _feedback

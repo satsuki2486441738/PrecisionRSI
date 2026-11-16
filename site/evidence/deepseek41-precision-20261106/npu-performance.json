@@ -1,0 +1,603 @@
+{
+  "schema_version": 1,
+  "status": "passed-independent-63request-receipt-audit",
+  "scope": "NPU TP8/EP8 adapted BF16/offload48 existing-mmap configuration; descriptive latency only; no hardware speed ratio or numerical acceptance",
+  "native_run_id": "npu-secondary-ds41-uninstrumented-performance-20261106T150541Z",
+  "cells": [
+    {
+      "prompt_length": 128,
+      "kind": "prefill",
+      "sample": "discovery-00-128",
+      "unit": "seconds",
+      "measurements": [
+        4.649820411927067,
+        4.72464872605633,
+        5.022988272947259,
+        4.905383946024813,
+        4.692200913908891
+      ],
+      "median": 4.72464872605633,
+      "minimum": 4.649820411927067,
+      "maximum": 5.022988272947259,
+      "arithmetic_mean": 4.799008454172872,
+      "stdev": 0.15864819275435643,
+      "driver_generate_wall": {
+        "measurements": [
+          4.65783000504598,
+          4.734070427017286,
+          5.031491756089963,
+          4.913772998959757,
+          4.70085005601868
+        ],
+        "median": 4.734070427017286,
+        "minimum": 4.65783000504598,
+        "maximum": 5.031491756089963,
+        "arithmetic_mean": 4.8076030486263335,
+        "stdev": 0.1586138582676871
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 4.599060100037605,
+          "driver_generate_wall_seconds": 4.607335182954557
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 4.621684201993048,
+          "driver_generate_wall_seconds": 4.629980044905096
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        4.649820411927067,
+        4.72464872605633,
+        5.022988272947259,
+        4.905383946024813,
+        4.692200913908891
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        4.649820411927067,
+        4.72464872605633,
+        5.022988272947259,
+        4.905383946024813,
+        4.692200913908891
+      ],
+      "max_measured_phase_peak_allocated_bytes": 47950334464,
+      "max_measured_phase_peak_reserved_bytes": 48089792512,
+      "max_measured_request_peak_allocated_bytes": 47950334464,
+      "max_measured_request_peak_reserved_bytes": 48089792512
+    },
+    {
+      "prompt_length": 128,
+      "kind": "fixed32-cached-decode",
+      "sample": "discovery-00-128",
+      "unit": "seconds",
+      "measurements": [
+        155.07216235378291,
+        155.72982366278302,
+        158.8205929719843,
+        156.19392707571387,
+        154.72911700571422
+      ],
+      "median": 155.72982366278302,
+      "minimum": 154.72911700571422,
+      "maximum": 158.8205929719843,
+      "arithmetic_mean": 156.10912461399568,
+      "stdev": 1.6188601741270057,
+      "driver_generate_wall": {
+        "measurements": [
+          160.44924336508848,
+          160.8379597630119,
+          164.03425455791876,
+          161.41681051196065,
+          159.79856173007283
+        ],
+        "median": 160.8379597630119,
+        "minimum": 159.79856173007283,
+        "maximum": 164.03425455791876,
+        "arithmetic_mean": 161.30736598561052,
+        "stdev": 1.634098092628455
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 150.15853220573626,
+          "driver_generate_wall_seconds": 155.42907532001846
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 152.2545503746951,
+          "driver_generate_wall_seconds": 157.20635951904114
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        5.098586363019422,
+        4.854309616028331,
+        4.962893291027285,
+        4.9778203188907355,
+        4.828386974986643
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        155.07556163019035,
+        155.73492458998226,
+        158.82559155824129,
+        156.1975436025532,
+        154.73253206326626
+      ],
+      "max_measured_phase_peak_allocated_bytes": 47937169920,
+      "max_measured_phase_peak_reserved_bytes": 48089792512,
+      "max_measured_request_peak_allocated_bytes": 47950334464,
+      "max_measured_request_peak_reserved_bytes": 48089792512
+    },
+    {
+      "prompt_length": 512,
+      "kind": "prefill",
+      "sample": "discovery-06-512",
+      "unit": "seconds",
+      "measurements": [
+        4.964428763021715,
+        4.9565277070505545,
+        4.889462835039012,
+        5.001665152958594,
+        4.842127016978338
+      ],
+      "median": 4.9565277070505545,
+      "minimum": 4.842127016978338,
+      "maximum": 5.001665152958594,
+      "arithmetic_mean": 4.930842295009643,
+      "stdev": 0.06400454807458487,
+      "driver_generate_wall": {
+        "measurements": [
+          4.972916456055827,
+          4.966638098005205,
+          4.899384175892919,
+          5.011075275018811,
+          4.851937407976948
+        ],
+        "median": 4.966638098005205,
+        "minimum": 4.851937407976948,
+        "maximum": 5.011075275018811,
+        "arithmetic_mean": 4.940390282589942,
+        "stdev": 0.06373515462997169
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 7.5005780920619145,
+          "driver_generate_wall_seconds": 7.511024672072381
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 4.813094430952333,
+          "driver_generate_wall_seconds": 4.822719882009551
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        4.964428763021715,
+        4.9565277070505545,
+        4.889462835039012,
+        5.001665152958594,
+        4.842127016978338
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        4.964428763021715,
+        4.9565277070505545,
+        4.889462835039012,
+        5.001665152958594,
+        4.842127016978338
+      ],
+      "max_measured_phase_peak_allocated_bytes": 47990129152,
+      "max_measured_phase_peak_reserved_bytes": 48173678592,
+      "max_measured_request_peak_allocated_bytes": 47990129152,
+      "max_measured_request_peak_reserved_bytes": 48173678592
+    },
+    {
+      "prompt_length": 512,
+      "kind": "fixed32-cached-decode",
+      "sample": "discovery-06-512",
+      "unit": "seconds",
+      "measurements": [
+        154.13645281887148,
+        152.77267173002474,
+        151.9242669660598,
+        150.29150212265085,
+        150.27060177747626
+      ],
+      "median": 151.9242669660598,
+      "minimum": 150.27060177747626,
+      "maximum": 154.13645281887148,
+      "arithmetic_mean": 151.87909908301663,
+      "stdev": 1.6586052719386548,
+      "driver_generate_wall": {
+        "measurements": [
+          159.33200785401277,
+          157.75108213804197,
+          156.97778818802908,
+          155.45670127903577,
+          155.35488152806647
+        ],
+        "median": 156.97778818802908,
+        "minimum": 155.35488152806647,
+        "maximum": 159.33200785401277,
+        "arithmetic_mean": 156.9744921974372,
+        "stdev": 1.6649182309292854
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 152.18988503771834,
+          "driver_generate_wall_seconds": 157.61096022301354
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 156.53897473041434,
+          "driver_generate_wall_seconds": 161.60549159697257
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        4.949690371984616,
+        4.73846488900017,
+        4.805254396982491,
+        4.914803167921491,
+        4.828833409002982
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        154.14253941585775,
+        152.78319489082787,
+        151.9339044051012,
+        150.30172719620168,
+        150.2800802992424
+      ],
+      "max_measured_phase_peak_allocated_bytes": 47937169920,
+      "max_measured_phase_peak_reserved_bytes": 48173678592,
+      "max_measured_request_peak_allocated_bytes": 47990129152,
+      "max_measured_request_peak_reserved_bytes": 48173678592
+    },
+    {
+      "prompt_length": 2048,
+      "kind": "prefill",
+      "sample": "reserved-24-2048",
+      "unit": "seconds",
+      "measurements": [
+        5.201864090980962,
+        4.981274937978014,
+        5.072921565035358,
+        5.072351883980446,
+        4.977570416987874
+      ],
+      "median": 5.072351883980446,
+      "minimum": 4.977570416987874,
+      "maximum": 5.201864090980962,
+      "arithmetic_mean": 5.061196578992531,
+      "stdev": 0.0914194573520535,
+      "driver_generate_wall": {
+        "measurements": [
+          5.212731552077457,
+          4.991983699030243,
+          5.083911405061372,
+          5.083496653940529,
+          4.989483325975016
+        ],
+        "median": 5.083496653940529,
+        "minimum": 4.989483325975016,
+        "maximum": 5.212731552077457,
+        "arithmetic_mean": 5.072321327216923,
+        "stdev": 0.09122844681022062
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 6.8823068459751084,
+          "driver_generate_wall_seconds": 6.894808374927379
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 4.933945783064701,
+          "driver_generate_wall_seconds": 4.947248680982739
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        5.201864090980962,
+        4.981274937978014,
+        5.072921565035358,
+        5.072351883980446,
+        4.977570416987874
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        5.201864090980962,
+        4.981274937978014,
+        5.072921565035358,
+        5.072351883980446,
+        4.977570416987874
+      ],
+      "max_measured_phase_peak_allocated_bytes": 48149307904,
+      "max_measured_phase_peak_reserved_bytes": 48530194432,
+      "max_measured_request_peak_allocated_bytes": 48149307904,
+      "max_measured_request_peak_reserved_bytes": 48530194432
+    },
+    {
+      "prompt_length": 2048,
+      "kind": "fixed32-cached-decode",
+      "sample": "reserved-24-2048",
+      "unit": "seconds",
+      "measurements": [
+        151.27286540414207,
+        149.7388733982807,
+        148.75986959866714,
+        149.79000411415473,
+        152.5532237001462
+      ],
+      "median": 149.79000411415473,
+      "minimum": 148.75986959866714,
+      "maximum": 152.5532237001462,
+      "arithmetic_mean": 150.42296724307818,
+      "stdev": 1.491210912561638,
+      "driver_generate_wall": {
+        "measurements": [
+          156.44548437499907,
+          155.4407224910101,
+          154.06196490104776,
+          155.08771837805398,
+          157.75289559189696
+        ],
+        "median": 155.4407224910101,
+        "minimum": 154.06196490104776,
+        "maximum": 157.75289559189696,
+        "arithmetic_mean": 155.75775714740158,
+        "stdev": 1.403452922336391
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 151.68617128452752,
+          "driver_generate_wall_seconds": 156.87217060895637
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 151.7316002190346,
+          "driver_generate_wall_seconds": 156.87167506699916
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        4.92964253295213,
+        5.452276729978621,
+        5.060213765013032,
+        5.051952917012386,
+        4.946376996929757
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        151.2816729467595,
+        149.74758055177517,
+        148.7707307107048,
+        149.79924899397884,
+        152.56357274227776
+      ],
+      "max_measured_phase_peak_allocated_bytes": 47937169920,
+      "max_measured_phase_peak_reserved_bytes": 48530194432,
+      "max_measured_request_peak_allocated_bytes": 48149307904,
+      "max_measured_request_peak_reserved_bytes": 48530194432
+    },
+    {
+      "prompt_length": 8192,
+      "kind": "prefill",
+      "sample": "reserved-36-8192",
+      "unit": "seconds",
+      "measurements": [
+        5.700872348970734,
+        5.501309323008172,
+        5.450763746979646,
+        5.539315978065133,
+        6.032737931003794
+      ],
+      "median": 5.539315978065133,
+      "minimum": 5.450763746979646,
+      "maximum": 6.032737931003794,
+      "arithmetic_mean": 5.644999865605496,
+      "stdev": 0.2361176971621389,
+      "driver_generate_wall": {
+        "measurements": [
+          5.720013250946067,
+          5.5182455679168925,
+          5.469569129054435,
+          5.559620580053888,
+          6.050208623986691
+        ],
+        "median": 5.559620580053888,
+        "minimum": 5.469569129054435,
+        "maximum": 6.050208623986691,
+        "arithmetic_mean": 5.663531430391595,
+        "stdev": 0.2357097097558022
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 6.3179433200275525,
+          "driver_generate_wall_seconds": 6.336271172040142
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 5.951338945073076,
+          "driver_generate_wall_seconds": 5.969663128023967
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        5.700872348970734,
+        5.501309323008172,
+        5.450763746979646,
+        5.539315978065133,
+        6.032737931003794
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        5.700872348970734,
+        5.501309323008172,
+        5.450763746979646,
+        5.539315978065133,
+        6.032737931003794
+      ],
+      "max_measured_phase_peak_allocated_bytes": 49211346944,
+      "max_measured_phase_peak_reserved_bytes": 49746542592,
+      "max_measured_request_peak_allocated_bytes": 49211346944,
+      "max_measured_request_peak_reserved_bytes": 49746542592
+    },
+    {
+      "prompt_length": 8192,
+      "kind": "fixed32-cached-decode",
+      "sample": "reserved-36-8192",
+      "unit": "seconds",
+      "measurements": [
+        150.4165763540659,
+        149.7057358508464,
+        155.58689942234196,
+        150.58866293891333,
+        149.9073135787621
+      ],
+      "median": 150.4165763540659,
+      "minimum": 149.7057358508464,
+      "maximum": 155.58689942234196,
+      "arithmetic_mean": 151.24103762898594,
+      "stdev": 2.456003626277126,
+      "driver_generate_wall": {
+        "measurements": [
+          156.07551930099726,
+          155.5254548379453,
+          161.8306112299906,
+          156.77364701707847,
+          155.89821784407832
+        ],
+        "median": 156.07551930099726,
+        "minimum": 155.5254548379453,
+        "maximum": 161.8306112299906,
+        "arithmetic_mean": 157.22069004601798,
+        "stdev": 2.616552692141261
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 146.0854840906104,
+          "driver_generate_wall_seconds": 152.03204797103535
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 145.68612081417814,
+          "driver_generate_wall_seconds": 151.6255490690237
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        5.397407950018533,
+        5.562058998970315,
+        6.003941811970435,
+        5.899087456986308,
+        5.745691949967295
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        150.4251555785304,
+        149.7143961112015,
+        155.59448252560105,
+        150.59876992879435,
+        149.91714208060876
+      ],
+      "max_measured_phase_peak_allocated_bytes": 47937169920,
+      "max_measured_phase_peak_reserved_bytes": 49746542592,
+      "max_measured_request_peak_allocated_bytes": 49211346944,
+      "max_measured_request_peak_reserved_bytes": 49746542592
+    },
+    {
+      "prompt_length": 32768,
+      "kind": "prefill",
+      "sample": "long-00-32768",
+      "unit": "seconds",
+      "measurements": [
+        9.276896041934378,
+        9.198987595038489,
+        9.27398377598729,
+        9.277603208087385,
+        9.025140476063825
+      ],
+      "median": 9.27398377598729,
+      "minimum": 9.025140476063825,
+      "maximum": 9.277603208087385,
+      "arithmetic_mean": 9.210522219422273,
+      "stdev": 0.10889461746007531,
+      "driver_generate_wall": {
+        "measurements": [
+          9.317628325079568,
+          9.237282658927143,
+          9.315178947057575,
+          9.316945760976523,
+          9.062091741943732
+        ],
+        "median": 9.315178947057575,
+        "minimum": 9.062091741943732,
+        "maximum": 9.317628325079568,
+        "arithmetic_mean": 9.249825486796908,
+        "stdev": 0.1104249884998203
+      },
+      "warmup_trials": [
+        {
+          "trial": 0,
+          "worker_seconds": 14.504788780002855,
+          "driver_generate_wall_seconds": 14.547980630071834
+        },
+        {
+          "trial": 1,
+          "worker_seconds": 9.18412516801618,
+          "driver_generate_wall_seconds": 9.223487401963212
+        }
+      ],
+      "request_prefill_measurements_seconds": [
+        9.276896041934378,
+        9.198987595038489,
+        9.27398377598729,
+        9.277603208087385,
+        9.025140476063825
+      ],
+      "sum_step_rank_max_diagnostic_seconds": [
+        9.276896041934378,
+        9.198987595038489,
+        9.27398377598729,
+        9.277603208087385,
+        9.025140476063825
+      ],
+      "max_measured_phase_peak_allocated_bytes": 60763630080,
+      "max_measured_phase_peak_reserved_bytes": 63669534720,
+      "max_measured_request_peak_allocated_bytes": 60763630080,
+      "max_measured_request_peak_reserved_bytes": 63669534720
+    }
+  ],
+  "cells_count": 9,
+  "requests": 63,
+  "warmups_per_cell": 2,
+  "measurements_per_cell": 5,
+  "warmup_requests": 18,
+  "measured_requests": 45,
+  "forwards_per_rank": 959,
+  "cached_forwards_per_rank": 896,
+  "prefills_per_rank": 63,
+  "untimed_cleanup_ticks_per_rank": 63,
+  "worker_metric": "prefill: max_rank(prefill span); cached decode: max_rank(sum32 cached execute_model spans), excludes prefill; differs from sum_step(max_rank span)",
+  "timing_boundary": "original execute_model including native head/offload and trailing local-device/existingTPGloo/local-device sync; leading sync/reset/before-memory query, scheduler, sampler/forcing, post-timer observation and RPC excluded",
+  "driver_wall": "generate only; includes scheduler/sampler/forcing/observation/synchronization; excludes prefix reset and arm/finish RPCs",
+  "memory_scope": "PyTorch NPU allocator peaks after each execute_model; loaded baseline retained; phase peaks exclude prefill for decode, request peaks include its prefill. No host/cgroup/whole-device peak claim.",
+  "cold_cache_claim": false,
+  "unmodified_native_head": true,
+  "selected_head_hooks": false,
+  "passive_taps": false,
+  "block_collectors": false,
+  "numerical_coverage": false,
+  "numerical_acceptance": false,
+  "source_hashes": {
+    "timing_source": "1295bf3eafa2e3a202a7ae2ce4b05a823cf15b2f309c3a0dd70d63268d1f724a",
+    "frozen_plan": "bde965f509147ba4e569701b598b00e60d024a085cd3633946e4464e417a42ca",
+    "native_interface_receipt": "ea5867ace4716e2b86504897b7396be816fea57e103c26696ff278be04ebfea5",
+    "native_command": "66bbf1d9d0be75e598e1746523cc7fa2e6396bb51c31d95163fccb1154e3d1a8",
+    "native_export_manifest": "b39517ebb34bae57572f0839cc765f585734eaec4de81fbac9a688302c2e0fb9",
+    "inventory": "25994a61acf228ed44793062e064901283563b1bfb0ba8ebffb4df65cf5f7598",
+    "cleanup_audit": "ec4937241a05a994afe6553c22a11c73a7a10134c7df65af7d7d851ae3eeff0c",
+    "auditor": "485f9d592114ba8247929fb4910a6bf7c839c813506c5207ebb42289752bd283"
+  },
+  "current_owner_cleanup": {
+    "audit_passed": true,
+    "exact_group_absent": true,
+    "device_baseline_scope": "See separate owned-resource cleanup review; this metric audit does not infer whole-device baseline from allocator statistics."
+  },
+  "final_delivery_approved": false
+}

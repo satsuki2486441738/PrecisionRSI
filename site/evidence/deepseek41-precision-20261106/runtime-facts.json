@@ -1,0 +1,189 @@
+{
+  "gpu": {
+    "torch": {
+      "value": "2.13.0+cu130",
+      "scope": "actual core receipt"
+    },
+    "cuda": {
+      "value": "13.0",
+      "scope": "actual core receipt"
+    },
+    "package_versions": {
+      "value": {
+        "torch": "2.13.0",
+        "tilelang": "0.1.12",
+        "transformers": "5.20.2",
+        "safetensors": "0.8.0",
+        "numpy": "2.3.5"
+      },
+      "scope": "actual core receipt"
+    },
+    "device": {
+      "value": "NVIDIA H20Z",
+      "scope": "actual core receipt"
+    },
+    "TP": {
+      "value": 4,
+      "scope": "actual core receipt"
+    },
+    "EP": {
+      "value": "4-way routed-expert ownership on same world_size4;96of384experts perrank, outputs all_reduce; no independently configured EP mesh",
+      "scope": "source-bound actual originalreference MoE, not vLLM EP flag"
+    },
+    "allow_tf32": {
+      "value": false,
+      "scope": "actual core receipt"
+    },
+    "allocator": {
+      "value": "expandable_segments:True",
+      "scope": "actual core receipt"
+    },
+    "reference_source_revision": {
+      "value": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+      "scope": "actual core receipt"
+    },
+    "storage_config": {
+      "value": {
+        "dtype": "fp8",
+        "expert_dtype": "fp4"
+      },
+      "scope": "actual core receipt"
+    },
+    "python_version": {
+      "value": "unknown",
+      "scope": "exact Python version not recorded in the inspected actual core receipt; do not infer from declared workload interpreter"
+    },
+    "vllm_execution": {
+      "value": "not the execution engine; actual official standalone original model source",
+      "scope": "actual receipt/source; see private provenance"
+    },
+    "offload_gb": {
+      "value": "unknown/no declared cpu_offload_gb flag in actual reference command",
+      "scope": "actual receipt/source; see private provenance"
+    },
+    "linear_operator_arithmetic": {
+      "value": "FP4 E2M1 packed weights and FP8 E4M3 weights both quantize input with act_quant to FP8; native fp4_gemm/fp8_gemm; nonquantized weights use F.linear",
+      "scope": "source-bound actual selected original model; not every op FP8"
+    },
+    "indexer_operator_arithmetic": {
+      "value": "source uses fp4_act_quant for queries and keys; BF16 weights_proj/wk; compressor wkv/wgate include FP32 paths",
+      "scope": "source-level actual reference arithmetic, independent sampled evidence has separate limits"
+    }
+  },
+  "npu": {
+    "torch": {
+      "value": "2.10.0+cpu",
+      "scope": "actual core receipt"
+    },
+    "vllm": {
+      "value": "0.30.0+empty",
+      "scope": "actual core receipt"
+    },
+    "transformers": {
+      "value": "5.14.1",
+      "scope": "actual core receipt"
+    },
+    "parameter_dtype_device_tensor_counts_rank0": {
+      "value": {
+        "torch.bfloat16@npu:0": 456,
+        "torch.float32@cpu": 216,
+        "torch.float32@npu:0": 220,
+        "torch.bfloat16@cpu": 142,
+        "torch.float8_e4m3fn@cpu": 2,
+        "torch.uint8@cpu": 2
+      },
+      "scope": "actual core receipt"
+    },
+    "model_dtype": {
+      "value": "torch.bfloat16",
+      "scope": "actual core receipt"
+    },
+    "quantization_metadata_label": {
+      "value": "fp8",
+      "scope": "actual core receipt"
+    },
+    "TP_EP_PP": {
+      "value": {
+        "tensor_parallel_size": "8",
+        "pipeline_parallel_size": "1",
+        "enable_expert_parallel": "True"
+      },
+      "scope": "actual core receipt"
+    },
+    "python_version": {
+      "value": "3.12 ABI observed; exact micro unknown",
+      "scope": "actual receipt/source; see private provenance"
+    },
+    "cann": {
+      "value": "CANN 9.1.0 installation selection observed; exact build unknown",
+      "scope": "core native stderr; installation path evidence, not independently collected package build"
+    },
+    "torch_npu": {
+      "value": "2.10.0.post4",
+      "scope": "actual bounded mHC native call in same source-environment path; core terminal did not separately record torch_npu version"
+    },
+    "device": {
+      "value": "Ascend910_9382",
+      "scope": "actual bounded mHC native call; core scope retains actual NPU tensor devices"
+    },
+    "vllm_ascend_release": {
+      "value": "0.30.0rc2 selected source checkout; installed distribution build unknown",
+      "scope": "source path plus exact file hash, not package metadata version"
+    },
+    "DP": {
+      "value": "1",
+      "scope": "actual core receipt"
+    },
+    "weight_activation_contract": {
+      "value": "original FP4 conversion + original CPU FP8 decode to native BF16 GEMM/MoE; original FP8 activation arithmetic not claimed; Engram original FP8/E8M0 rows FP32-decoded then BF16, no INT8 requantization",
+      "scope": "adapted execution, not W4A8; quantization=fp8 is config metadata not proof of FP8 native GEMM"
+    },
+    "head_native_dtypes": {
+      "value": {
+        "hidden": "torch.bfloat16",
+        "head_input": "torch.bfloat16",
+        "head_output": "torch.bfloat16",
+        "export_dtype": "float32"
+      },
+      "scope": "actual long00/logprobs8/seed0 head control; float32 export does not turn native arithmetic into FP32"
+    },
+    "mhc_capsule_native_dtypes": {
+      "value": {
+        "y": {
+          "shape": [
+            1,
+            4,
+            5120
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "post": {
+          "shape": [
+            1,
+            4,
+            4
+          ],
+          "dtype": "torch.float32"
+        },
+        "comb": {
+          "shape": [
+            1,
+            4,
+            4,
+            4
+          ],
+          "dtype": "torch.float32"
+        },
+        "pre": {
+          "shape": [
+            1,
+            4,
+            4
+          ],
+          "dtype": "torch.float32"
+        }
+      },
+      "scope": "layer0 bounded native preop only; y BF16, pre/post/comb FP32"
+    }
+  }
+}

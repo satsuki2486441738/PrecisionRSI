@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "scope": "allowlisted aggregate archive; consistency and figure replay only",
+  "raw_numerical_replay": false,
+  "model_execution": false,
+  "numerical_acceptance": false,
+  "files": {
+    "README.md": {
+      "bytes": 2648,
+      "sha256": "832c3db67e25095b8e3d528a4afe8ba72f806a50a578b609892669d72e381bce"
+    },
+    "core-measurements.json": {
+      "bytes": 102429,
+      "sha256": "9096c0671173f5abbd11c924df5faaed1b6282009b16fc39a01c1a2c154a2eb4"
+    },
+    "framework-facts.json": {
+      "bytes": 4753,
+      "sha256": "55c5efd9105263e5304fc0c03ec38470020ce608639cc03456eb07c9356badfe"
+    },
+    "gap-ledger.json": {
+      "bytes": 5530,
+      "sha256": "4b2585a09d3c8c3b1fa9c0fc8ab4d0377952542221e93918368c22aa4ee2732b"
+    },
+    "gpu-performance.json": {
+      "bytes": 5719,
+      "sha256": "ae0639f4b84f22fc699827a3e95c416df4f4799b926a2d3cefea86ce385aa4ab"
+    },
+    "head-summary.json": {
+      "bytes": 674,
+      "sha256": "72dc7f4bbe6eee9c88565038a72f4dd849ed05ba2eca1a1d46b9145c3b93bf53"
+    },
+    "npu-performance.json": {
+      "bytes": 19510,
+      "sha256": "8e7ede50fe07f9302ccb260f94855fc383c6838f0c64e0aba4bd0002d61bcca9"
+    },
+    "plot.py": {
+      "bytes": 6049,
+      "sha256": "18ff3532a297b2566e3ebe561dff2e961bf731a1f77012f72cccec3a1c002b56"
+    },
+    "replay.py": {
+      "bytes": 5658,
+      "sha256": "39e8ced176057c69dbf753568ac425599e7183b33274d884ac7c2b4acad28be9"
+    },
+    "runtime-facts.json": {
+      "bytes": 5884,
+      "sha256": "279c7badd3a494b1f51ed9e88f138dee15d5f43906f832df4262e4ad527fd2e5"
+    },
+    "terminal-cleanup-summary.json": {
+      "bytes": 3418,
+      "sha256": "59082073ae3d206025e36eab13d3782589d33ef0ddc3fe324f1fa8b5524ac86f"
+    }
+  }
+}

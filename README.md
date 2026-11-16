@@ -35,7 +35,7 @@ Evaluate candidate system versions on independent tasks using correctness, compl
 
 Closed tasks (precision validation/repair) measure correct completion, time and cost. Open tasks (operator optimization) measure the best valid performance reached at a given budget and its improvement as the budget grows.
 
-The [system runner](precision_rsi/README.md) connects native workflows to an existing agent harness. An independent improvement stage builds tools, memory, datasets and instruction/routing overlays from task evidence. Runtime updates form versioned bundles for evaluation and reuse; dataset checks prepare outcome-labeled examples. Run from the checkout:
+The [system runner](precision_rsi/README.md) connects native workflows to an existing agent harness. An independent improvement stage builds tools, memory, datasets and instruction/routing overlays from task evidence. Runtime updates form versioned bundles for evaluation and reuse; dataset checks prepare outcome-labeled examples. [Research snapshots](precision_rsi/README.md#research-snapshots) preserve round/candidate boundaries for integrity checks, isolated restoration and admitted-version rollback. Run from the checkout:
 
 ```sh
 python -m precision_rsi run task.json --workspace projects/my-task/session
@@ -87,6 +87,22 @@ Paired collection and numerical comparison with Qwen3.5-9B-Base, using each plat
 | TRL | Native SFTTrainer LoRA SFT with completion-only labels, gradient accumulation, two AdamW steps and native checkpoint restoration (complete adapter gradients, updates and optimizer state); fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 | verl / FSDP2 | Fixed-trajectory GRPO action scores, loss, gradients and one-step parameter updates |
 
+### Qwen3.8-Flash-Next
+
+The [text precision report](.github/qwen38-precision-report.md) and [verified evidence](site/evidence/qwen38-precision-20261106.json) cover 26 native core captures, full 32K inference, LoRA, actual Trainer/SFTTrainer, fixed-trajectory TRL/verl components and MoE/QSA interventions. Final inference compares GPU automatic placement with NPU TP8; other families retain their actual configurations. Both GPU serving engines completed, while native NPU vLLM/SGLang initialization failures remain explicit numerical-coverage gaps. Acceptance thresholds are unspecified.
+
+### DeepSeek-V4.1-Flash-1017
+
+The [precision report](.github/deepseek41-precision-report.md) and [verified evidence](site/evidence/deepseek41-precision-20261106.json) compare the pinned original GPU TP4 implementation with an explicitly adapted BF16 NPU TP8/EP8/offload48 configuration. Coverage is 191/275 paired tensor observations and all 3,168 target scores; actual NPU 32K full and exact split requests complete. Training, selected operator scopes and rejected native chains retain numerical gaps. Weight-conversion checks do not establish equivalent backend arithmetic; acceptance thresholds are unspecified.
+
+The separately adapted [public result metrics](site/data/deepseek41-adapted-core-20261109.json) adds 84 cache/packed-mask observations, actual global array reductions and 380 fresh frozen-backbone forwards for output-head-only LoRA. The [public result metrics](site/data/deepseek41-full40-attention-20261109.json) independently replays 480 rank-zero layer-forwards over 1,920 retained query rows using actual native operands. Both are available on the [writing page](site/paper.html). The original 191/275 ledger remains frozen; FP64 attention replay does not emulate native rounding. The newer [public result metrics](site/data/deepseek41-paired-output-head95-20261109.json) adds 95 same-coordinate calls per side (83 updates and 12 reserved evaluations), independently replayed formulas and exact within-runtime continuation/repeats. Initial A is near-equal rather than byte-exact across runtimes; later optimizer states follow independent trajectories. SGLang and vLLM service numerical reviews are complete, with the vLLM Core77 lifecycle limitation retained. These supplements do not establish full-model backward or numerical acceptance.
+
+- **DeepSeek-V4.1-Flash-1017 — reviewed service evidence (9 November 2026 UTC).**
+  The [English report](.github/deepseek41-services-final-20261109/report.md) covers all 277 SGLang tasks across five Engine lifetimes and 216 vLLM TP8/EP8 jobs in one Engine on eight H200 GPUs. Original-host raw mathematics and independent portable reviews are complete; all 820 formal vLLM full-vocabulary rows replay locally. Original GPU **191/275**, original NPU **269/275** and the separate adapted paired **275/275** inventories remain distinct; 3,168 target coordinates are retained. The 95-call output-head study keeps the backbone frozen.
+  Core77's final restoration receipt is missing: the original strict lifecycle review remains failed, although all eight data-worker finals and exact namespace cleanup are verified. Twelve scientific gaps remain explicit. Full-vocabulary normalization, matched causal histories and null acceptance thresholds are retained; GPU is not a mathematical oracle. The [service verification report](.github/deepseek41-services-final-20261109/report.md) provides the current report, scientific figure and precise JSON/CSV pointers. Historical ZIPs, raw tensors and complete execution logs remain local. No publication or full-backbone training claim is made.
+
+[HTTP128 metrics](site/data/deepseek41-http128-20261109.json) · [public result metrics](site/data/deepseek41-http128-20261109.json).
+
 ### Precision repair
 
 Qwen3.5-9B-Base: repaired zero-centered RMSNorm parameter semantics in a pinned historical stack. Verification covered native NPU operator forward/backward, checkpoint round trips, and the original TP4 model forward with unchanged loaded parameter bytes.
@@ -132,6 +148,9 @@ Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 
 ## Evaluation and repair history
 
-The [history website](https://satsuki2486441738.github.io/PrecisionRSI/) has two tabs: **Evaluations** shows inference/SFT/RL comparison settings, numerical metrics, coverage and evidence; **Repairs** retains library-grouped fixes, causes and before/after verification. Records and public evidence are maintained in [site/](site/README.md).
+The [comparison board](https://satsuki2486441738.github.io/PrecisionRSI/) reads published evaluation and repair records. The [history archive](https://satsuki2486441738.github.io/PrecisionRSI/archive.html) retains inference/SFT/RL settings, numerical metrics, coverage and evidence, alongside library-grouped fixes and verification. Records and public evidence are maintained in [site/](site/README.md).
 
 The [RSI dashboard](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html) shows current runs, candidate changes, independent evaluation outcomes and phase-specific time/token usage, including baseline reuse.
+
+
+The [results page](site/paper.html) provides public reports, scientific figures, [JSON](site/data/paper-results.json) and a [CSV numeric index](site/data/paper-results.csv). Published results retain source hashes, actual configurations, coverage, failures and unverified scopes. Numeric fields are not independent samples. Historical ZIPs, raw tensors and complete execution logs remain local with no online download. The [local evidence index](site/data/local-evidence.json) records archive names, sizes and SHA256 hashes. Byte integrity does not imply numerical acceptance.
