@@ -46,6 +46,11 @@ Task streams can trigger improvement on new evidence within a shared time budget
 
 ## Use
 
+See the [current architecture and four integration boundaries (Chinese)](.github/project-architecture.md).
+
+The [RL diagnosis and repair proposal (Chinese)](.github/rl-precision-workflow-proposal.md)
+plans reusable case workflows on top of this repository’s existing capabilities.
+
 Install `framework-adapt`, `precision-compare` and `precision-repair` side by side in your client's skill directory. Load a component for the next missing capability:
 
 | Skill | When to enter and result |
