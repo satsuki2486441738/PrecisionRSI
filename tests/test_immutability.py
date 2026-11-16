@@ -1,6 +1,7 @@
 import importlib.util
 import pathlib
 import unittest
+from unittest.mock import patch
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location('validate_immutability', ROOT / '.github/validate_immutability.py')
@@ -67,6 +68,27 @@ class PublishedHistoryTest(unittest.TestCase):
 
     def test_current_history_matches_its_own_revision(self):
         self.assertEqual(immutability.validate('HEAD'), [])
+
+    def test_ci_compares_draft_pushes_with_published_main(self):
+        event = {'GITHUB_REF': 'refs/heads/codex/evidence-integration',
+                 'BEFORE': 'draft-snapshot'}
+        self.assertEqual(immutability.ci_base(event), 'origin/main')
+
+    def test_ci_uses_pr_target_or_previous_published_commit(self):
+        self.assertEqual(immutability.ci_base({'BASE_REF': 'release'}), 'origin/release')
+        with patch.object(immutability, '_git', return_value='') as git:
+            self.assertEqual(immutability.ci_base(
+                {'GITHUB_REF': 'refs/heads/main', 'BEFORE': 'published-before'}),
+                'published-before')
+            git.assert_called_once_with('cat-file', '-e', 'published-before^{commit}')
+
+    def test_ci_handles_initial_and_unavailable_main_predecessors(self):
+        self.assertEqual(immutability.ci_base(
+            {'GITHUB_REF': 'refs/heads/main', 'BEFORE': '0' * 40}), 'origin/main')
+        with patch.object(immutability, '_git', side_effect=
+                          immutability.subprocess.CalledProcessError(128, ['git'])):
+            self.assertEqual(immutability.ci_base(
+                {'GITHUB_REF': 'refs/heads/main', 'BEFORE': 'unavailable'}), 'origin/main')
 
 
 if __name__ == '__main__':
