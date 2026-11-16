@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -64,6 +65,47 @@ class EvaluationDataTests(unittest.TestCase):
         self.check_data(lambda d:d['evaluations'][0]['archive'].update(revision='master'))
         self.check_data(lambda d:d['evaluations'][0]['evidence'][0].update(url='../README.md'))
         self.check_data(lambda d:d['evaluations'][0]['evidence'][0].update(url='javascript:alert(1)'))
+
+    def test_campaign_catalog_matches_public_samples_and_scoped_metrics(self):
+        campaign = json.loads((ROOT / 'site/evidence/model-precision-gpu-npu-20261110/results.json')
+                              .read_text(encoding='utf-8'))
+        catalog = {record['id']: record for record in self.data['evaluations']}
+        self.assertEqual(set(campaign['platforms']), {'cuda', 'ascend'})
+        for platform, models in campaign['platforms'].items():
+            self.assertEqual(set(models), {'gemma-3-27b-it', 'gpt-oss-120b', 'nemotron-bolt'})
+            for model, result in models.items():
+                with self.subTest(platform=platform, model=model):
+                    record = catalog[f'{model}-{platform}-precision-20261110']
+                    self.assertIsNone(record['acceptance'])
+                    self.assertEqual(record['model']['revision'], result['model']['revision'])
+                    self.assertEqual(record['sides'][0]['hardware'], record['sides'][1]['hardware'])
+                    comparisons = {row['id']: row for row in record['comparisons']}
+                    for stage, replay in result['replay'].items():
+                        rows = replay['samples']
+                        self.assertTrue(rows)
+                        count = sum(row[0] for row in rows)
+                        measured = result['text'][f'{stage}/full']
+                        self.assertEqual(count, measured['target_count'])
+                        for side, key in [(1, 'side_a_nll_nat_per_token'),
+                                          (2, 'side_b_nll_nat_per_token')]:
+                            pooled = math.fsum(row[0] * row[side] for row in rows) / count
+                            self.assertAlmostEqual(pooled, measured[key], delta=1e-12)
+                    bins = [result['replay'][f'validation-{length}']['samples']
+                            for length in (128, 512, 2048, 8192)]
+                    self.assertEqual([len(rows) for rows in bins], [12] * 4)
+                    delta = math.fsum(math.fsum(row[1] - row[2] for row in rows) / len(rows)
+                                      for rows in bins) / len(bins)
+                    heldout = {row['id']: row['value']
+                               for row in comparisons['reserved-full']['metrics']}
+                    self.assertAlmostEqual(delta, heldout['native-minus-reference'], delta=1e-12)
+                    for stage in ('discovery', 'long'):
+                        metrics = {row['id']: row['value']
+                                   for row in comparisons[f'{stage}-full']['metrics']}
+                        measured = result['text'][f'{stage}/full']
+                        self.assertEqual(metrics['absolute-nll-difference'], measured['nll_abs_diff_nat_per_token'])
+                        self.assertEqual(metrics['target-logprob-mae'], measured['mae_nat'])
+                        self.assertEqual(metrics['target-logprob-p99'], measured['p99_nat'])
+                        self.assertEqual(metrics['top-1-agreement'], measured['top1']['fraction'])
 
 
 @unittest.skipUnless(shutil.which('node'),'Node.js is needed for frontend model tests')
