@@ -2758,12 +2758,12 @@ const ico = (n, cls = "ico") => `<svg class="${cls}" aria-hidden="true"><use hre
 
 /* The worked example: one real adaptation chain from the repair records. */
 const FLOW_IDS = {
-  fix: "fasttrain-rmsnorm-zero-centered-gamma",
-  train: "fasttrain-rmsnorm-training-verification-20261021",
-  layer: "fasttrain-rmsnorm-layerwise-replay-20261021",
-  trace: "fasttrain-decoder-projection-trace-20261021",
-  gemm: "fasttrain-gemm-compute-policy-20261021",
-  proj: "fasttrain-selective-projection-20261021",
+  fix: "mindspeed-rmsnorm-zero-centered-gamma",
+  train: "mindspeed-rmsnorm-training-verification-20261021",
+  layer: "mindspeed-rmsnorm-layerwise-replay-20261021",
+  trace: "mindspeed-decoder-projection-trace-20261021",
+  gemm: "mindspeed-gemm-compute-policy-20261021",
+  proj: "mindspeed-selective-projection-20261021",
 };
 function flowCase() {
   const g = k => REPBY.get(FLOW_IDS[k]);
