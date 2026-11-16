@@ -85,31 +85,31 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
     reuse = spec.get('amortize_over_tasks', 1)
     if type(reuse) is not int or reuse <= 0:
         raise ValueError('positive amortize_over_tasks required')
+    construction_path = construction_file or (suite.parent/spec['construction'] if spec.get('construction') else None)
+    construction = read(construction_path) if construction_path else None
+    if construction is not None and (not isinstance(construction, dict) or not _positive(construction.get('seconds'))):
+        raise ValueError('construction receipt needs measured positive seconds')
     workspace = Path(workspace).resolve()
     workspace.mkdir(parents=True, exist_ok=True)
     deadline = time.monotonic() + time_budget_seconds
     with workspace_lock(workspace):
         state_path = workspace/'benchmark.json'
         binding = dict(suite=spec, version_id=version_id, baseline_version=baseline_version,
-                       construction_file=str(construction_file) if construction_file else None)
+                       construction_file=str(construction_file) if construction_file else None,
+                       construction=construction)
         state = read(state_path) if state_path.exists() else dict(key=digest(binding), arms={}, conditions={})
         if state['key'] != digest(binding):
             raise ValueError('benchmark changed; use a new workspace')
         # Every added interface must reach at least one evaluation consumer.
         # Otherwise activation would admit members absent from the measured bundle.
-        additions=set(version['members'])-set(versions.load(store,baseline_version)['members'])
-        covered=set();selection=[]
+        consumers=[]
         for case in cases:
             _,cfg,_,_,_,_=_config((suite.parent/case['candidate']).resolve())
-            memory=cfg.get('memory',{});rejected=[]
-            selected=select(store,memory.get('tags',[]),memory.get('limit_chars',4000),
-                            version=version_id,diagnostics=rejected)
-            covered.update(v['id'] for v in selected)
-            selection.append(dict(case=case['id'],selected=[v['id'] for v in selected],rejected=rejected))
-        missing=sorted(additions-covered)
-        if missing:
-            details=dict(reason='candidate updates not selected by evaluation tasks',missing_updates=missing,
-                         cases=selection)
+            memory=cfg.get('memory',{})
+            consumers.append(dict(id=case['id'], tags=memory.get('tags',[]),
+                                  limit_chars=memory.get('limit_chars',4000)))
+        details=versions.selection(store,version_id,consumers)
+        if details['missing_updates']:
             write(workspace/'selection.json',details)
             raise ValueError(details['reason']+': '+json.dumps(details))
         for index, case in enumerate(cases):
@@ -180,11 +180,12 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
                       if r.get('failure')]
             if failures:
                 values[arm]['failures']=failures
-        construction_path = construction_file or (suite.parent/spec['construction'] if spec.get('construction') else None)
-        construction = read(construction_path) if construction_path else None
+        if construction_path and read(construction_path) != construction:
+            raise ValueError('construction receipt changed; use a new workspace')
+        for value in values.values():
+            value['execution'] = dict(seconds=value['seconds'], usage=value['usage'],
+                total_tokens=value['usage']['total_tokens'], cost=price(value['usage'],spec.get('pricing')))
         if construction:
-            if not _positive(construction.get('seconds')):
-                raise ValueError('construction receipt needs measured positive seconds')
             values['candidate']['seconds'] += construction['seconds']/reuse
         a, b = values['baseline']['usage']['total_tokens'], values['candidate']['usage']['total_tokens']
         extra = (construction.get('usage') or {}).get('total_tokens') if construction else 0
@@ -196,6 +197,8 @@ def run(suite, workspace, version_id, baseline_version, time_budget_seconds, con
         if all(v is not None for v in costs.values()) and extra_cost is not None:
             values['baseline']['cost'] = costs['baseline']
             values['candidate']['cost'] = costs['candidate'] + extra_cost/reuse
+        for value in values.values():
+            value['including_construction'] = {k:value.get(k) for k in ('seconds','total_tokens','cost')}
         result = dict(status='completed',version_id=version_id, baseline_version=baseline_version, mode='closed',
             scope=[c['id'] for c in cases], families=sorted({c['family'] for c in cases}),
             baseline=values['baseline'], candidate=values['candidate'],

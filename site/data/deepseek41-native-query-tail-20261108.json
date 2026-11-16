@@ -1,0 +1,1653 @@
+{
+  "schema_version": 1,
+  "status": "independently-reviewed-actual-native-query-extension",
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "prior_snapshot_preserved": "compare-ds41-upstream-extension-writing-metrics-20261108T143214Z",
+  "flat_metric_rows": [
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "gpu_FP8_vs_native_BF16_query_pre_rope",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.5,
+      "rmse": 0.058381358879019164,
+      "cosine": 0.9998239088582951,
+      "error_norm": 7.472813936514453,
+      "compared_elements": 16384,
+      "unequal_elements": 15058,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "gpu_vs_native_weights_pre_scale",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled",
+      "reference": "derived-original-captured-GPU-preScale-times-explicit-FP32scale",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_query_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.06139373779296875,
+      "rmse": 0.005215066267390148,
+      "cosine": 0.9999985948365046,
+      "error_norm": 0.667528482225939,
+      "compared_elements": 16384,
+      "unequal_elements": 16384,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_query_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 16384,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_weights_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0019201647583031445,
+      "rmse": 0.0006362228091637261,
+      "cosine": 0.9999987542613511,
+      "error_norm": 0.007198039403283608,
+      "compared_elements": 128,
+      "unequal_elements": 128,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_weights_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_weights_scaling_vs_explicit_FP32",
+      "reference": "explicit-FP32scale-from-actual-native-projection",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_query_rope_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.04942667274735868,
+      "rmse": 0.0024258773692660378,
+      "cosine": 0.9999996959659353,
+      "error_norm": 0.31051230326605284,
+      "compared_elements": 16384,
+      "unequal_elements": 8192,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 2,
+      "stage": "native_query_rope_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 16384,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "gpu_FP8_vs_native_BF16_query_pre_rope",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.6875,
+      "rmse": 0.062478687596806484,
+      "cosine": 0.9997647309651977,
+      "error_norm": 7.99727201239123,
+      "compared_elements": 16384,
+      "unequal_elements": 15046,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "gpu_vs_native_weights_pre_scale",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled",
+      "reference": "derived-original-captured-GPU-preScale-times-explicit-FP32scale",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_query_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.04545877035707235,
+      "rmse": 0.004704267730157354,
+      "cosine": 0.9999986659216521,
+      "error_norm": 0.6021462694601413,
+      "compared_elements": 16384,
+      "unequal_elements": 16384,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_query_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 6.103515625e-05,
+      "rmse": 4.76837158203125e-07,
+      "cosine": 0.9999999999999863,
+      "error_norm": 6.103515625e-05,
+      "compared_elements": 16384,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_weights_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0018933827350338106,
+      "rmse": 0.000609879651886657,
+      "cosine": 0.9999985705028068,
+      "error_norm": 0.006900000600907938,
+      "compared_elements": 128,
+      "unequal_elements": 128,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_weights_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_weights_scaling_vs_explicit_FP32",
+      "reference": "explicit-FP32scale-from-actual-native-projection",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_query_rope_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.03111211210489273,
+      "rmse": 0.0027309586582176045,
+      "cosine": 0.9999995505062677,
+      "error_norm": 0.34956270825185337,
+      "compared_elements": 16384,
+      "unequal_elements": 8192,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 2048,
+      "layer": 20,
+      "stage": "native_query_rope_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 16384,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu_FP8_vs_native_BF16_query_pre_rope",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.46875,
+      "rmse": 0.058168534675876016,
+      "cosine": 0.9997906881852725,
+      "error_norm": 7.44557243851213,
+      "compared_elements": 16384,
+      "unequal_elements": 14963,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "gpu_vs_native_weights_pre_scale",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 7.62939453125e-06,
+      "rmse": 6.743495761743046e-07,
+      "cosine": 0.9999999999987009,
+      "error_norm": 7.62939453125e-06,
+      "compared_elements": 128,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled",
+      "reference": "derived-original-captured-GPU-preScale-times-explicit-FP32scale",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 1.1920928955078125e-07,
+      "rmse": 1.0536712127723509e-08,
+      "cosine": 0.9999999999987009,
+      "error_norm": 1.1920928955078125e-07,
+      "compared_elements": 128,
+      "unequal_elements": 1,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_query_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.06078163534402847,
+      "rmse": 0.004743972432719997,
+      "cosine": 0.9999986070988355,
+      "error_norm": 0.6072284713881596,
+      "compared_elements": 16384,
+      "unequal_elements": 16384,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_query_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 16384,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_weights_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0019241865975345718,
+      "rmse": 0.0006071602891035829,
+      "cosine": 0.9999989565598466,
+      "error_norm": 0.006869234523077251,
+      "compared_elements": 128,
+      "unequal_elements": 128,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_weights_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_weights_scaling_vs_explicit_FP32",
+      "reference": "explicit-FP32scale-from-actual-native-projection",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_query_rope_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.06107674166560173,
+      "rmse": 0.002701361018216464,
+      "cosine": 0.9999995487326493,
+      "error_norm": 0.3457742103317074,
+      "compared_elements": 16384,
+      "unequal_elements": 8192,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 2,
+      "stage": "native_query_rope_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 16384,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "gpu_FP8_vs_native_BF16_query_pre_rope",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.4453125,
+      "rmse": 0.06260335249477975,
+      "cosine": 0.9997724379374152,
+      "error_norm": 8.013229119331807,
+      "compared_elements": 16384,
+      "unequal_elements": 15044,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "gpu_vs_native_weights_pre_scale",
+      "reference": "actual-original-captured-GPU-vs-native-BF16",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled",
+      "reference": "derived-original-captured-GPU-preScale-times-explicit-FP32scale",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_query_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.031206611543893814,
+      "rmse": 0.004860373793180963,
+      "cosine": 0.9999986223906425,
+      "error_norm": 0.6221278455271633,
+      "compared_elements": 16384,
+      "unequal_elements": 16384,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_query_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0009765625,
+      "rmse": 7.62945273868887e-06,
+      "cosine": 0.9999999999966053,
+      "error_norm": 0.0009765699505521754,
+      "compared_elements": 16384,
+      "unequal_elements": 2,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_weights_projection_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0018785990141623188,
+      "rmse": 0.0005700835954819577,
+      "cosine": 0.9999985480207966,
+      "error_norm": 0.006449759619336014,
+      "compared_elements": 128,
+      "unequal_elements": 128,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_weights_projection_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_weights_scaling_vs_explicit_FP32",
+      "reference": "explicit-FP32scale-from-actual-native-projection",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 1.0,
+      "error_norm": 0.0,
+      "compared_elements": 128,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_query_rope_vs_continuous_FP64",
+      "reference": "continuous-FP64-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.051824810449033976,
+      "rmse": 0.0030565908452964033,
+      "cosine": 0.9999994551269236,
+      "error_norm": 0.3912436281979396,
+      "compared_elements": 16384,
+      "unequal_elements": 8192,
+      "exact_equal": false,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    },
+    {
+      "family": "indexer-query",
+      "length": 32768,
+      "layer": 20,
+      "stage": "native_query_rope_vs_BF16_RNE_prediction",
+      "reference": "BF16-RNE-prediction-from-actual-native-operands",
+      "scope": "actual four tail queries, all32 heads",
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "cosine": 0.9999999999999999,
+      "error_norm": 0.0,
+      "compared_elements": 16384,
+      "unequal_elements": 0,
+      "exact_equal": true,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      }
+    }
+  ],
+  "records": [
+    {
+      "key": "N2048-L2",
+      "length": 2048,
+      "layer": 2,
+      "positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "queries": 4,
+      "heads": 32,
+      "width": 128,
+      "rotated_last_channels": 64,
+      "native_array_bindings": 18,
+      "controls": {
+        "actual_source_inputs_weights_phase_exact": true,
+        "actual_pre_and_postlayout_logical_weights_exact": true,
+        "sameinput_warm_capture_raw_exact": true,
+        "unrotated64channels_exact": true,
+        "weights_scaling_FP32_exact": true
+      },
+      "metrics": {
+        "gpu_FP8_vs_native_BF16_query_pre_rope": {
+          "max_abs": 0.5,
+          "rmse": 0.058381358879019164,
+          "cosine": 0.9998239088582951,
+          "error_norm": 7.472813936514453,
+          "compared_elements": 16384,
+          "unequal_elements": 15058,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "gpu_vs_native_weights_pre_scale": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_continuous_FP64": {
+          "max_abs": 0.06139373779296875,
+          "rmse": 0.005215066267390148,
+          "cosine": 0.9999985948365046,
+          "error_norm": 0.667528482225939,
+          "compared_elements": 16384,
+          "unequal_elements": 16384,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 16384,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_continuous_FP64": {
+          "max_abs": 0.0019201647583031445,
+          "rmse": 0.0006362228091637261,
+          "cosine": 0.9999987542613511,
+          "error_norm": 0.007198039403283608,
+          "compared_elements": 128,
+          "unequal_elements": 128,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_scaling_vs_explicit_FP32": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_continuous_FP64": {
+          "max_abs": 0.04942667274735868,
+          "rmse": 0.0024258773692660378,
+          "cosine": 0.9999996959659353,
+          "error_norm": 0.31051230326605284,
+          "compared_elements": 16384,
+          "unequal_elements": 8192,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 16384,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      }
+    },
+    {
+      "key": "N2048-L20",
+      "length": 2048,
+      "layer": 20,
+      "positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "queries": 4,
+      "heads": 32,
+      "width": 128,
+      "rotated_last_channels": 64,
+      "native_array_bindings": 18,
+      "controls": {
+        "actual_source_inputs_weights_phase_exact": true,
+        "actual_pre_and_postlayout_logical_weights_exact": true,
+        "sameinput_warm_capture_raw_exact": true,
+        "unrotated64channels_exact": true,
+        "weights_scaling_FP32_exact": true
+      },
+      "metrics": {
+        "gpu_FP8_vs_native_BF16_query_pre_rope": {
+          "max_abs": 0.6875,
+          "rmse": 0.062478687596806484,
+          "cosine": 0.9997647309651977,
+          "error_norm": 7.99727201239123,
+          "compared_elements": 16384,
+          "unequal_elements": 15046,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "gpu_vs_native_weights_pre_scale": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_continuous_FP64": {
+          "max_abs": 0.04545877035707235,
+          "rmse": 0.004704267730157354,
+          "cosine": 0.9999986659216521,
+          "error_norm": 0.6021462694601413,
+          "compared_elements": 16384,
+          "unequal_elements": 16384,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 6.103515625e-05,
+          "rmse": 4.76837158203125e-07,
+          "cosine": 0.9999999999999863,
+          "error_norm": 6.103515625e-05,
+          "compared_elements": 16384,
+          "unequal_elements": 1,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_continuous_FP64": {
+          "max_abs": 0.0018933827350338106,
+          "rmse": 0.000609879651886657,
+          "cosine": 0.9999985705028068,
+          "error_norm": 0.006900000600907938,
+          "compared_elements": 128,
+          "unequal_elements": 128,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_scaling_vs_explicit_FP32": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_continuous_FP64": {
+          "max_abs": 0.03111211210489273,
+          "rmse": 0.0027309586582176045,
+          "cosine": 0.9999995505062677,
+          "error_norm": 0.34956270825185337,
+          "compared_elements": 16384,
+          "unequal_elements": 8192,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 16384,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      }
+    },
+    {
+      "key": "N32768-L2",
+      "length": 32768,
+      "layer": 2,
+      "positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "queries": 4,
+      "heads": 32,
+      "width": 128,
+      "rotated_last_channels": 64,
+      "native_array_bindings": 18,
+      "controls": {
+        "actual_source_inputs_weights_phase_exact": true,
+        "actual_pre_and_postlayout_logical_weights_exact": true,
+        "sameinput_warm_capture_raw_exact": true,
+        "unrotated64channels_exact": true,
+        "weights_scaling_FP32_exact": true
+      },
+      "metrics": {
+        "gpu_FP8_vs_native_BF16_query_pre_rope": {
+          "max_abs": 0.46875,
+          "rmse": 0.058168534675876016,
+          "cosine": 0.9997906881852725,
+          "error_norm": 7.44557243851213,
+          "compared_elements": 16384,
+          "unequal_elements": 14963,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "gpu_vs_native_weights_pre_scale": {
+          "max_abs": 7.62939453125e-06,
+          "rmse": 6.743495761743046e-07,
+          "cosine": 0.9999999999987009,
+          "error_norm": 7.62939453125e-06,
+          "compared_elements": 128,
+          "unequal_elements": 1,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled": {
+          "max_abs": 1.1920928955078125e-07,
+          "rmse": 1.0536712127723509e-08,
+          "cosine": 0.9999999999987009,
+          "error_norm": 1.1920928955078125e-07,
+          "compared_elements": 128,
+          "unequal_elements": 1,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_continuous_FP64": {
+          "max_abs": 0.06078163534402847,
+          "rmse": 0.004743972432719997,
+          "cosine": 0.9999986070988355,
+          "error_norm": 0.6072284713881596,
+          "compared_elements": 16384,
+          "unequal_elements": 16384,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 16384,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_continuous_FP64": {
+          "max_abs": 0.0019241865975345718,
+          "rmse": 0.0006071602891035829,
+          "cosine": 0.9999989565598466,
+          "error_norm": 0.006869234523077251,
+          "compared_elements": 128,
+          "unequal_elements": 128,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_scaling_vs_explicit_FP32": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_continuous_FP64": {
+          "max_abs": 0.06107674166560173,
+          "rmse": 0.002701361018216464,
+          "cosine": 0.9999995487326493,
+          "error_norm": 0.3457742103317074,
+          "compared_elements": 16384,
+          "unequal_elements": 8192,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 16384,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      }
+    },
+    {
+      "key": "N32768-L20",
+      "length": 32768,
+      "layer": 20,
+      "positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "queries": 4,
+      "heads": 32,
+      "width": 128,
+      "rotated_last_channels": 64,
+      "native_array_bindings": 18,
+      "controls": {
+        "actual_source_inputs_weights_phase_exact": true,
+        "actual_pre_and_postlayout_logical_weights_exact": true,
+        "sameinput_warm_capture_raw_exact": true,
+        "unrotated64channels_exact": true,
+        "weights_scaling_FP32_exact": true
+      },
+      "metrics": {
+        "gpu_FP8_vs_native_BF16_query_pre_rope": {
+          "max_abs": 0.4453125,
+          "rmse": 0.06260335249477975,
+          "cosine": 0.9997724379374152,
+          "error_norm": 8.013229119331807,
+          "compared_elements": 16384,
+          "unequal_elements": 15044,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "gpu_vs_native_weights_pre_scale": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "derived_GPU_preScale_times_FP32scale_vs_native_weights_scaled": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_continuous_FP64": {
+          "max_abs": 0.031206611543893814,
+          "rmse": 0.004860373793180963,
+          "cosine": 0.9999986223906425,
+          "error_norm": 0.6221278455271633,
+          "compared_elements": 16384,
+          "unequal_elements": 16384,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0009765625,
+          "rmse": 7.62945273868887e-06,
+          "cosine": 0.9999999999966053,
+          "error_norm": 0.0009765699505521754,
+          "compared_elements": 16384,
+          "unequal_elements": 2,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_continuous_FP64": {
+          "max_abs": 0.0018785990141623188,
+          "rmse": 0.0005700835954819577,
+          "cosine": 0.9999985480207966,
+          "error_norm": 0.006449759619336014,
+          "compared_elements": 128,
+          "unequal_elements": 128,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_projection_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_weights_scaling_vs_explicit_FP32": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 1.0,
+          "error_norm": 0.0,
+          "compared_elements": 128,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_continuous_FP64": {
+          "max_abs": 0.051824810449033976,
+          "rmse": 0.0030565908452964033,
+          "cosine": 0.9999994551269236,
+          "error_norm": 0.3912436281979396,
+          "compared_elements": 16384,
+          "unequal_elements": 8192,
+          "exact_equal": false,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        },
+        "native_query_rope_vs_BF16_RNE_prediction": {
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "cosine": 0.9999999999999999,
+          "error_norm": 0.0,
+          "compared_elements": 16384,
+          "unequal_elements": 0,
+          "exact_equal": true,
+          "nonfinite": {
+            "side_a": 0,
+            "side_b": 0
+          }
+        }
+      }
+    }
+  ],
+  "source_configuration": {
+    "runner_sha256": "bb24a5e78e97aa212f161b0e4fe9c8b57212c4f7ce329dbf181d87691ed778e6",
+    "admission_sha256": "cec259f95042608543c43a8016d3fb4d86ca53a29e3099591a2a4c148954e9d4",
+    "native_source_pins": 76,
+    "packet_manifest_sha256": "240e153b16ccf7311db9164941eb70d3ea7ed7c9a7fa23b9be76f07e23d5b55e",
+    "packet_loader_sha256": "b84e45a27554a22e196ceae9c7ca5f04b16977bae6f1df7805f407b8d3c38a1b",
+    "input_provenance": "Original TP4 GPU ranks0..3 captured qr,hidden,phase,FP8 weight/E8M0 scales,BF16 head weights,original outputs",
+    "native_constructor": "Actual DeepseekV41Indexer owns_k=False",
+    "projection": "Actual registered AscendReplicatedLinear/AscendUnquantizedLinearMethod/CustomReplicatedOp",
+    "parameter_load_layout": "Actual native process_weights_after_loading with logical values exact before/after",
+    "official_Ascend_config": "Actual validated native init/get/clear, default weight_nz_mode1, additional_config empty",
+    "native_dtype": "BF16 unquantized projection",
+    "original_query_arithmetic": "FP8 activation quantization and FP8 GEMM",
+    "native_query_arithmetic": "Original FP8/E8M0 weight dequantized FP32 then BF16 RNE, unquantized BF16 GEMM",
+    "captured_GPU_oracles": [
+      "query.reference_pre_rope",
+      "weights.reference_pre_scale"
+    ],
+    "derived_GPU_scaled_oracle": "Actual captured BF16 preScale weights multiplied by explicit FP32 weights_scale; not a captured GPU postScale array",
+    "GPU_postRoPE_oracle_available": false,
+    "weights_scale": 0.015625000000000003,
+    "query_rope": "Original captured complex64 phase expanded interleave2 FP32, rotate last64 of width128",
+    "actual_native_weight_format_ids": [
+      {
+        "key": "N2048-L2",
+        "wq_b": 2,
+        "weights_proj": 2
+      },
+      {
+        "key": "N2048-L20",
+        "wq_b": 2,
+        "weights_proj": 2
+      },
+      {
+        "key": "N32768-L2",
+        "wq_b": 2,
+        "weights_proj": 2
+      },
+      {
+        "key": "N32768-L20",
+        "wq_b": 2,
+        "weights_proj": 2
+      }
+    ],
+    "native_weight_format_interpretation": "Observed numeric format ID2 for both projections in all four records after actual native postload; default weight_nz_mode1 alone does not imply an observed NZ layout"
+  },
+  "native_execution_receipt": {
+    "native_run_id": "npu-secondary-ds41-indexer-tail-query-config-successor-native-20261108T152747Z",
+    "command_sha256": "183b9f7a52fbbcea811f75c2d33623579a36856f9ff2f12f182042c174b28f12",
+    "result_sha256": "783bae418e8473e6cdaba877805f88380520e4a8d726812c029ec5048f298fff",
+    "fixture_wall_seconds": 33.42459406494163,
+    "peak_allocated_bytes": 66206208,
+    "returncode": 0,
+    "terminal_status": "completed",
+    "actual_array_bindings": 72,
+    "device_count": 1,
+    "tp_collectives": false,
+    "ep_scope": "not exercised",
+    "group": {
+      "backend": "gloo",
+      "rank": 0,
+      "world_size": 1,
+      "device_communicator_present": false
+    },
+    "verified_native_files": 149,
+    "verified_source_files": 25,
+    "cleanup_sha256": "8893919e6aad75e04c99f11d21ce90fcfc66800f0517a7696c943980ea3d6e78",
+    "original_host_boot_verified": true,
+    "case_processes_absent": true,
+    "eight_card_process_lists_empty": true,
+    "oom_kill_zero": true,
+    "signals_sent": []
+  },
+  "evidence": [
+    {
+      "id": "compare-ds41-native-query-independent-array-phase-numerical-review-20261108T153703Z",
+      "artifact": "review.json",
+      "sha256": "e5afd7cb57de23bff191478ff397c0f6095ab568e101e9c9a08377b40a6c5cc5"
+    },
+    {
+      "id": "compare-ds41-native-query-terminal-verified-export-cleanup-20261108T153254Z",
+      "artifact": "native/capture/result.json",
+      "sha256": "783bae418e8473e6cdaba877805f88380520e4a8d726812c029ec5048f298fff"
+    },
+    {
+      "id": "compare-ds41-query-official-config-repair-independent-admission-20261108T152337Z",
+      "artifact": "review.json",
+      "sha256": "d6c1e6b35d293958656d5cdc6ab08ad9626ae26f8a459d5cf4ccf9585404d12d"
+    },
+    {
+      "id": "compare-ds41-actual-querypacket-independent-source-array-math-admission-20261108T150559Z",
+      "artifact": "review.json",
+      "sha256": "6ed79fd970b295c05ee8bff06963b4de64e01346374a300079bc8f5690c2f1be"
+    },
+    {
+      "id": "compare-ds41-query-postload-failure-independent-terminal-audit-20261108T152011Z",
+      "artifact": "review.json",
+      "sha256": "728434ab7cf20a3a4d3b0dd6e3aa6f50674f05b9bfb8a635e28ffc9daa338f1e"
+    },
+    {
+      "id": "compare-ds41-query-native-BF16-boundary-independent-exact-sum-diagnostic-20261108T153906Z",
+      "artifact": "review.json",
+      "sha256": "45531a7debb4bde3d14d297b97f7767663d855ff156a50d8ad1071c8faf04aff"
+    },
+    {
+      "id": "compare-ds41-exact-query-config-constructor-independent-admission-20261108T152436Z",
+      "artifact": "review.json",
+      "sha256": "6251045135efc859c917e5180bd779c16b71cbefff34fc95163631ec667ebfad"
+    }
+  ],
+  "metric_semantics": {
+    "shared_tool": "array_compare.py",
+    "reduction": "FP64",
+    "continuous_and_dtype_boundary_predictions_separate": true,
+    "no_acceptance_thresholds": true,
+    "fixture_timings_are_not_steady_state_performance": true,
+    "BF16_RNE_prediction": "FP64 continuous calculation rounded through FP32 then BF16 RNE; exact dyadic checks separately confirm all3 projection disagreements persist with direct exact BF16 rounding"
+  },
+  "coverage": {
+    "original_strict_ledger_paired_cells": 191,
+    "original_strict_ledger_expected_cells": 275,
+    "original_strict_ledger_changed": false,
+    "fixed_histories": [
+      2048,
+      32768
+    ],
+    "dependent_layers": [
+      2,
+      20
+    ],
+    "query_rows_per_record": 4,
+    "all32head_query_projection": true,
+    "full_history_query": false,
+    "native_model_quantization": false,
+    "query_quantization": false,
+    "score_topk": false,
+    "key_cache": false,
+    "composed_native_model": false,
+    "tp8_collectives": false,
+    "full_model_backward": false,
+    "training_coverage": false,
+    "numerical_acceptance": null,
+    "hardware_only_causality": false
+  },
+  "limitations": [
+    "Only four dependent tailrows at each fixedN2048/N32768 L2/L20, all32heads originalTP4 reassembled",
+    "Original GPU FP8 activation GEMM versus declared native BF16 unquantized GEMM; no hardware-only causality",
+    "CPU FP64 and BF16 boundary descriptive predictions do not emulate kernel accumulation or establish acceptance",
+    "No full-history query/queryquant/score/cache/composedmodel/TP8/fullmodeltraining claim",
+    "Original strict ledger191/275 unchanged"
+  ],
+  "prior_native_failure": {
+    "native_run_id": "npu-secondary-ds41-indexer-tail-query-native-20261108T151140Z",
+    "native_returncode": 1,
+    "fixture_wall_seconds": 32.42188801802695,
+    "failure_phase": "N2048-L2 actual native weight postload/NZ configuration before any query projection",
+    "native_command_sha256": "a6c6c0319bbf1058392d110c0769e5b4636079a5c6b832773354415c5536ec3e",
+    "native_result_sha256": "aa6309be1f5e0f4d71e85bc78dcf21bab907df1f4bd5049b8aba74b31a757b01",
+    "failure_sha256": "523c837eeb47c3f15e919264452fd0bd5714ce84c0aa057f0e4ceb3a6ae92cbe",
+    "cleanup_sha256": "8bf6eb1e915fcb40a693d6afbe726d4334223c207ff4dc8b9e3d1f9378dd7d2e",
+    "completed_native_query_records": 0,
+    "device_math_attempted": true,
+    "actual_raw_beforelayout_weight_binding_exact": true,
+    "eight_cards_processes_empty": true,
+    "signals_sent": [],
+    "recovery": "Source-pinned official AscendConfig init/get/clear on actual default VllmConfig, default weight_nz_mode1 unchanged; exact all4 CPU admission before new bounded native attempt"
+  },
+  "query_BF16_boundary_diagnostic": {
+    "records": [
+      {
+        "key": "N2048-L2",
+        "query_elements": 16384,
+        "FP64_to_FP32_to_BF16_prediction_disagreements": 0,
+        "exact_sum_diagnostics": []
+      },
+      {
+        "key": "N2048-L20",
+        "query_elements": 16384,
+        "FP64_to_FP32_to_BF16_prediction_disagreements": 1,
+        "exact_sum_diagnostics": [
+          {
+            "tail_row": 0,
+            "original_position": 2044,
+            "head": 17,
+            "channel": 73,
+            "exact_dot_numerator": 25231353,
+            "exact_dot_denominator": 2147483648,
+            "continuous_FP64": 0.011749264318495989,
+            "FP64_dot_equals_exact": true,
+            "FP32_intermediate": 0.011749263852834702,
+            "FP32_intermediate_equals_BF16_midpoint": false,
+            "exact_dot_minus_BF16_midpoint": -3.259629011154175e-09,
+            "actual_native_BF16": 0.01177978515625,
+            "FP64_to_FP32_to_BF16_RNE": 0.01171875,
+            "direct_exact_to_BF16_RNE": 0.01171875,
+            "native_matches_direct_exact_RNE": false,
+            "native_matches_FP32_intermediate_RNE": false,
+            "absolute_difference": 6.103515625e-05
+          }
+        ]
+      },
+      {
+        "key": "N32768-L2",
+        "query_elements": 16384,
+        "FP64_to_FP32_to_BF16_prediction_disagreements": 0,
+        "exact_sum_diagnostics": []
+      },
+      {
+        "key": "N32768-L20",
+        "query_elements": 16384,
+        "FP64_to_FP32_to_BF16_prediction_disagreements": 2,
+        "exact_sum_diagnostics": [
+          {
+            "tail_row": 1,
+            "original_position": 32765,
+            "head": 7,
+            "channel": 127,
+            "exact_dot_numerator": 5718019,
+            "exact_dot_denominator": 33554432,
+            "continuous_FP64": 0.17041024565696716,
+            "FP64_dot_equals_exact": true,
+            "FP32_intermediate": 0.17041024565696716,
+            "FP32_intermediate_equals_BF16_midpoint": false,
+            "exact_dot_minus_BF16_midpoint": 8.940696716308594e-08,
+            "actual_native_BF16": 0.169921875,
+            "FP64_to_FP32_to_BF16_RNE": 0.1708984375,
+            "direct_exact_to_BF16_RNE": 0.1708984375,
+            "native_matches_direct_exact_RNE": false,
+            "native_matches_FP32_intermediate_RNE": false,
+            "absolute_difference": 0.0009765625
+          },
+          {
+            "tail_row": 3,
+            "original_position": 32767,
+            "head": 22,
+            "channel": 112,
+            "exact_dot_numerator": -624959,
+            "exact_dot_denominator": 1073741824,
+            "continuous_FP64": -0.0005820384249091148,
+            "FP64_dot_equals_exact": true,
+            "FP32_intermediate": -0.0005820384249091148,
+            "FP32_intermediate_equals_BF16_midpoint": false,
+            "exact_dot_minus_BF16_midpoint": -2.9709190130233765e-07,
+            "actual_native_BF16": -0.000579833984375,
+            "FP64_to_FP32_to_BF16_RNE": -0.000583648681640625,
+            "direct_exact_to_BF16_RNE": -0.000583648681640625,
+            "native_matches_direct_exact_RNE": false,
+            "native_matches_FP32_intermediate_RNE": false,
+            "absolute_difference": 3.814697265625e-06
+          }
+        ]
+      }
+    ],
+    "interpretation": "Exact dyadic dot products are derived from actual retained BF16 native inputs/weights. Direct exact rounding and FP64-to-FP32-to-BF16 predictions are separate; this diagnostic does not emulate native accumulator ordering or establish a defect/acceptance.",
+    "total_query_elements": 65536,
+    "FP64_to_FP32_to_BF16_prediction_disagreements": 3,
+    "direct_exact_dyadic_to_BF16_agrees_with_prediction_at_all3": true,
+    "native_accumulator_order_emulated": false
+  },
+  "id": "deepseek41-native-query-tail-20261108",
+  "model_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "source_metrics_sha256": "fcb8c3a986a61566be973fdd68d8ea5a32b88bf7e00dff0ef700130ceac1f34b",
+  "writing_evidence_id": "compare-ds41-native-query-tail-writing-supplement-20261108T154133Z"
+}

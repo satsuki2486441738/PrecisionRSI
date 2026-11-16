@@ -1,0 +1,4030 @@
+{
+  "schema_version": 1,
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "scope": {
+    "kind": "sanitized-aggregates-only-writing-evidence",
+    "rank": 0,
+    "existing_forward_count": 6,
+    "selector_cases": 30,
+    "retained_queries_per_selector": 4,
+    "selected_query_cases": 120,
+    "full_derived_score_coordinates": 1740800,
+    "original_single32768_forward_is_adapted_configuration": true,
+    "original_default_unchunked32K_closed": false,
+    "full_history_queries_replayed": false,
+    "allTP_math_replayed": false,
+    "independent_numeric_replay_in_this_ZIP": false,
+    "native_own_scores_available": false,
+    "numerical_acceptance": null,
+    "hardware_cause": false,
+    "new_model_or_device_calls": 0,
+    "whole_task_completed": false
+  },
+  "source_SHA_commitments": {
+    "author_review_sha256": "2bcc31a66fec55bd0fdbf73b8defc4c6d27b319dedd0701de69bbe97e610a344",
+    "independent_review_sha256": "714cdff2b3a34c45a0ed369aeff70373ae7b6116ceb77634bb263f34aa886fe7",
+    "request_sha256": "88e15f6594d38d493cc075e50271c72e50c16ec136ff3b91ad585c78348e4fbc",
+    "actual_export_result_sha256": "1036df1083ece189d0bc8423a61a5fbb4bfce85f34b6d87b8cac6d094145a152",
+    "production_source_admission_sha256": "483bce34fe86930453d3f8fcaa803cc364c89baef4a184e70d7be263cc82c2c5",
+    "native_source_sha256": {
+      "dsa_v41.py": "3505769857f83fa7e67f652984f50bd0478158f1d24f185cab091203e70392fd",
+      "indexer.py": "d5d6a438bbced4e63d729dac94c08869df30dab4a71ceacecdea211386b3db33",
+      "model.py": "101f96b38e9fc47e7be147ddfe56976aee896867c73a33a7d95c3e3c833a6e91"
+    },
+    "private_original_four_consumer_portable_zip_sha256": "3c8d531f571ae03c61b21f9fcb7bdf404633f9f00c784116bde60cab2ff2fc1f"
+  },
+  "cohorts": [
+    {
+      "execution": "00-captured",
+      "forward": 0,
+      "history_tokens": 2048,
+      "query_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "key_rows": 2048,
+      "candidate_branch": "all-visible-blocks",
+      "negative_padding_per_query": [
+        1792,
+        1792,
+        1792,
+        1792
+      ],
+      "selector_count": 5,
+      "selected_query_cases": 20,
+      "selected_overlap_min": 511,
+      "selected_overlap_max": 512,
+      "full_coordinates": 40960,
+      "original_default_unchunked32K": false
+    },
+    {
+      "execution": "01-captured",
+      "forward": 0,
+      "history_tokens": 2048,
+      "query_positions": [
+        1020,
+        1021,
+        1022,
+        1023
+      ],
+      "key_rows": 1024,
+      "candidate_branch": "all-visible-blocks",
+      "negative_padding_per_query": [
+        1920,
+        1920,
+        1920,
+        1920
+      ],
+      "selector_count": 5,
+      "selected_query_cases": 20,
+      "selected_overlap_min": 511,
+      "selected_overlap_max": 512,
+      "full_coordinates": 20480,
+      "original_default_unchunked32K": false
+    },
+    {
+      "execution": "01-captured",
+      "forward": 1,
+      "history_tokens": 2048,
+      "query_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "key_rows": 2048,
+      "candidate_branch": "all-visible-blocks",
+      "negative_padding_per_query": [
+        1792,
+        1792,
+        1792,
+        1792
+      ],
+      "selector_count": 5,
+      "selected_query_cases": 20,
+      "selected_overlap_min": 511,
+      "selected_overlap_max": 512,
+      "full_coordinates": 40960,
+      "original_default_unchunked32K": false
+    },
+    {
+      "execution": "02-captured",
+      "forward": 0,
+      "history_tokens": 32768,
+      "query_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "key_rows": 32768,
+      "candidate_branch": "selective-2048-blocks",
+      "negative_padding_per_query": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selector_count": 5,
+      "selected_query_cases": 20,
+      "selected_overlap_min": 510,
+      "selected_overlap_max": 512,
+      "full_coordinates": 655360,
+      "original_default_unchunked32K": false
+    },
+    {
+      "execution": "03-captured",
+      "forward": 0,
+      "history_tokens": 32768,
+      "query_positions": [
+        16380,
+        16381,
+        16382,
+        16383
+      ],
+      "key_rows": 16384,
+      "candidate_branch": "all-visible-blocks",
+      "negative_padding_per_query": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selector_count": 5,
+      "selected_query_cases": 20,
+      "selected_overlap_min": 511,
+      "selected_overlap_max": 512,
+      "full_coordinates": 327680,
+      "original_default_unchunked32K": false
+    },
+    {
+      "execution": "03-captured",
+      "forward": 1,
+      "history_tokens": 32768,
+      "query_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "key_rows": 32768,
+      "candidate_branch": "selective-2048-blocks",
+      "negative_padding_per_query": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "selector_count": 5,
+      "selected_query_cases": 20,
+      "selected_overlap_min": 510,
+      "selected_overlap_max": 512,
+      "full_coordinates": 655360,
+      "original_default_unchunked32K": false
+    }
+  ],
+  "records": [
+    {
+      "execution": "00-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 20,
+      "mode": 1,
+      "original_query_shape": [
+        2048,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.09907386962459,
+          "reference_omitted_max": -2.1025174437170158,
+          "reference_boundary_margin": 0.003443574092425905,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.239560164850269,
+          "reference_omitted_max": -2.2423043571392967,
+          "reference_boundary_margin": 0.0027441922890276693,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.7042155104634276,
+          "reference_omitted_max": -2.7055422160006657,
+          "reference_boundary_margin": 0.0013267055372381265,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.9275877652597284,
+          "reference_omitted_max": -1.9271567819890834,
+          "reference_boundary_margin": -0.0004309832706450578,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": [
+        {
+          "query": 0,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.9307977126090696,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.9479560573100514,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -3.4385526090383607,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.582345125571539,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "00-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 24,
+      "mode": 2,
+      "original_query_shape": [
+        2048,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -3.9408076284138125,
+          "reference_omitted_max": -3.9411906317693313,
+          "reference_boundary_margin": 0.00038300335551877396,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -4.255551370095674,
+          "reference_omitted_max": -4.254578939701151,
+          "reference_boundary_margin": -0.0009724303945226609,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.9693075330845886,
+          "reference_omitted_max": -3.9690432306070846,
+          "reference_boundary_margin": -0.00026430247750397484,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -4.037252444623809,
+          "reference_omitted_max": -4.0377038503958715,
+          "reference_boundary_margin": 0.00045140577206215227,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "00-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 28,
+      "mode": 2,
+      "original_query_shape": [
+        2048,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.098297718751951,
+          "reference_omitted_max": -2.0985734265882137,
+          "reference_boundary_margin": 0.00027570783626273965,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.369293747805231,
+          "reference_omitted_max": -2.369717064662229,
+          "reference_boundary_margin": 0.000423316856998035,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.5412872979671803,
+          "reference_omitted_max": -2.5424265019475456,
+          "reference_boundary_margin": 0.0011392039803652665,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.184016407174454,
+          "reference_omitted_max": -2.18409693258468,
+          "reference_boundary_margin": 8.052541022607329e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "00-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 32,
+      "mode": 2,
+      "original_query_shape": [
+        2048,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.990043059636335,
+          "reference_omitted_max": -1.9916552431201495,
+          "reference_boundary_margin": 0.0016121834838145332,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.1882155078247365,
+          "reference_omitted_max": -2.1911206458331662,
+          "reference_boundary_margin": 0.0029051380084297307,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.292831453007679,
+          "reference_omitted_max": -2.293383796585431,
+          "reference_boundary_margin": 0.0005523435777519126,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.0571133410281774,
+          "reference_omitted_max": -2.0576632301976474,
+          "reference_boundary_margin": 0.0005498891694699637,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "00-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 36,
+      "mode": 2,
+      "original_query_shape": [
+        2048,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.3465765126147176,
+          "reference_omitted_max": -2.3474554562821446,
+          "reference_boundary_margin": 0.0008789436674270235,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -2.339242322799647,
+          "reference_omitted_max": -2.3391287030769234,
+          "reference_boundary_margin": -0.00011361972272361243,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.5639268585669868,
+          "reference_omitted_max": -2.564657888893862,
+          "reference_boundary_margin": 0.0007310303268752705,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.038619777392011,
+          "reference_omitted_max": -2.0397108836510016,
+          "reference_boundary_margin": 0.0010911062589906706,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 20,
+      "mode": 1,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        1020,
+        1021,
+        1022,
+        1023
+      ],
+      "logical_cache_keys": 1024,
+      "physical_cache_pages": 8,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 1021,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.0498141919659183,
+          "reference_omitted_max": -2.0501520617928763,
+          "reference_boundary_margin": 0.00033786982695804824,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 1022,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -2.418721587974998,
+          "reference_omitted_max": -2.41847415910172,
+          "reference_boundary_margin": -0.00024742887327811047,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 1023,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.5808812716553007,
+          "reference_omitted_max": -2.583770186088847,
+          "reference_boundary_margin": 0.002888914433546219,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 1024,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.9983888867991126,
+          "reference_omitted_max": -2.9989437101887972,
+          "reference_boundary_margin": 0.0005548233896846,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": [
+        {
+          "query": 0,
+          "visible": 128,
+          "selected_count": 128,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.3243577428714857,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 127,
+          "stable_reference_set_overlap": 128,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 128,
+          "selected_count": 128,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.793788789795637,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 127,
+          "stable_reference_set_overlap": 128,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 128,
+          "selected_count": 128,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.8553825601004945,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 127,
+          "stable_reference_set_overlap": 128,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 128,
+          "selected_count": 128,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -3.4264976979528967,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 127,
+          "stable_reference_set_overlap": 128,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "full_coordinates": 4096,
+      "causal_finite": 4090,
+      "candidate_causal_finite": 4090,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 24,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        1020,
+        1021,
+        1022,
+        1023
+      ],
+      "logical_cache_keys": 1024,
+      "physical_cache_pages": 8,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 1021,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -3.708201810520645,
+          "reference_omitted_max": -3.7098525649242298,
+          "reference_boundary_margin": 0.0016507544035846422,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 1022,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -4.139953016208695,
+          "reference_omitted_max": -4.140475120406772,
+          "reference_boundary_margin": 0.000522104198076967,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 1023,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -4.0366768577056575,
+          "reference_omitted_max": -4.037451512567259,
+          "reference_boundary_margin": 0.0007746548616012205,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 1024,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -4.022143228473077,
+          "reference_omitted_max": -4.022250058338983,
+          "reference_boundary_margin": 0.00010682986590637711,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 4096,
+      "causal_finite": 4090,
+      "candidate_causal_finite": 4090,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 28,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        1020,
+        1021,
+        1022,
+        1023
+      ],
+      "logical_cache_keys": 1024,
+      "physical_cache_pages": 8,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 1021,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.9216762678914634,
+          "reference_omitted_max": -1.921677149100475,
+          "reference_boundary_margin": 8.812090115384308e-07,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 1022,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.1409864217265007,
+          "reference_omitted_max": -2.1457296861435182,
+          "reference_boundary_margin": 0.004743264417017556,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 1023,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.364736225633189,
+          "reference_omitted_max": -2.3649979019583256,
+          "reference_boundary_margin": 0.00026167632513640626,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 1024,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.691412035519079,
+          "reference_omitted_max": -2.6928063726320772,
+          "reference_boundary_margin": 0.0013943371129983007,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 4096,
+      "causal_finite": 4090,
+      "candidate_causal_finite": 4090,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 32,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        1020,
+        1021,
+        1022,
+        1023
+      ],
+      "logical_cache_keys": 1024,
+      "physical_cache_pages": 8,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 1021,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -2.6049672045220262,
+          "reference_omitted_max": -2.6048946964316286,
+          "reference_boundary_margin": -7.250809039760497e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 1022,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.2853003972220627,
+          "reference_omitted_max": -2.285640552199716,
+          "reference_boundary_margin": 0.0003401549776533841,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 1023,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.5337016625065965,
+          "reference_omitted_max": -2.534558734412551,
+          "reference_boundary_margin": 0.0008570719059544096,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 1024,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.5690392761293595,
+          "reference_omitted_max": -2.5715227575575454,
+          "reference_boundary_margin": 0.0024834814281859963,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 4096,
+      "causal_finite": 4090,
+      "candidate_causal_finite": 4090,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 0,
+      "history": 2048,
+      "layer": 36,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        1020,
+        1021,
+        1022,
+        1023
+      ],
+      "logical_cache_keys": 1024,
+      "physical_cache_pages": 8,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 128,
+          "valid_blocks": 128,
+          "negative_padding": 1920,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 1021,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.466029934941716,
+          "reference_omitted_max": -2.466469519137661,
+          "reference_boundary_margin": 0.00043958419594503084,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 1022,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.6009762697023575,
+          "reference_omitted_max": -2.6017126925157577,
+          "reference_boundary_margin": 0.0007364228134001394,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 1023,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.6611917028179066,
+          "reference_omitted_max": -2.6621630870619084,
+          "reference_boundary_margin": 0.0009713842440017828,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 1024,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.8172472951347345,
+          "reference_omitted_max": -2.8177386726946594,
+          "reference_boundary_margin": 0.0004913775599248993,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 4096,
+      "causal_finite": 4090,
+      "candidate_causal_finite": 4090,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 1,
+      "history": 2048,
+      "layer": 20,
+      "mode": 1,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.106975960504876,
+          "reference_omitted_max": -2.107912103278272,
+          "reference_boundary_margin": 0.0009361427733960426,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.180171338744046,
+          "reference_omitted_max": -2.180862105814203,
+          "reference_boundary_margin": 0.0006907670701572499,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.566079841434032,
+          "reference_omitted_max": -2.56665385530059,
+          "reference_boundary_margin": 0.0005740138665579764,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.955501430769126,
+          "reference_omitted_max": -1.9554318731987816,
+          "reference_boundary_margin": -6.955757034443621e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": [
+        {
+          "query": 0,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.860410240881519,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.8594495214757476,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -3.4747987797133817,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 256,
+          "selected_count": 256,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.666911934481888,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 255,
+          "stable_reference_set_overlap": 256,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 1,
+      "history": 2048,
+      "layer": 24,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.8951393581843603,
+          "reference_omitted_max": -3.8946914477090155,
+          "reference_boundary_margin": -0.00044791047534475936,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 513,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -4.349946132408359,
+          "reference_omitted_max": -4.3492223726168255,
+          "reference_boundary_margin": -0.0007237597915334959,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.900281294477608,
+          "reference_omitted_max": -3.9000113856567395,
+          "reference_boundary_margin": -0.0002699088208686362,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -4.033532027383601,
+          "reference_omitted_max": -4.034369820336671,
+          "reference_boundary_margin": 0.0008377929530700712,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 1,
+      "history": 2048,
+      "layer": 28,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.062014489960724,
+          "reference_omitted_max": -2.0622923766562877,
+          "reference_boundary_margin": 0.0002778866955637227,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.406849303900503,
+          "reference_omitted_max": -2.407116757341342,
+          "reference_boundary_margin": 0.00026745344083911604,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.6626081462193696,
+          "reference_omitted_max": -2.6650554460928113,
+          "reference_boundary_margin": 0.0024472998734417217,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.171158728689875,
+          "reference_omitted_max": -2.1712668304422196,
+          "reference_boundary_margin": 0.00010810175234476915,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 1,
+      "history": 2048,
+      "layer": 32,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.9053522872059716,
+          "reference_omitted_max": -1.9045698492311338,
+          "reference_boundary_margin": -0.0007824379748377908,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.163815001391395,
+          "reference_omitted_max": -2.1641312365139402,
+          "reference_boundary_margin": 0.00031623512254519426,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.3572804669659675,
+          "reference_omitted_max": -2.3573819726907175,
+          "reference_boundary_margin": 0.00010150572474998398,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.9639372154181611,
+          "reference_omitted_max": -1.9638307939078157,
+          "reference_boundary_margin": -0.00010642151034545577,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "01-captured",
+      "forward": 1,
+      "history": 2048,
+      "layer": 36,
+      "mode": 2,
+      "original_query_shape": [
+        1024,
+        32,
+        128
+      ],
+      "retained_positions": [
+        2044,
+        2045,
+        2046,
+        2047
+      ],
+      "logical_cache_keys": 2048,
+      "physical_cache_pages": 16,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 256,
+          "valid_blocks": 256,
+          "negative_padding": 1792,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 2045,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.2866647445594737,
+          "reference_omitted_max": -2.2876860309380724,
+          "reference_boundary_margin": 0.0010212863785987736,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2046,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.3393785794980246,
+          "reference_omitted_max": -2.341152200565366,
+          "reference_boundary_margin": 0.0017736210673415798,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2047,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.496834950736634,
+          "reference_omitted_max": -2.4977367887504442,
+          "reference_boundary_margin": 0.0009018380138101634,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -2.0080927372743957,
+          "reference_omitted_max": -2.007600602381764,
+          "reference_boundary_margin": -0.0004921348926316682,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 514,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 8192,
+      "causal_finite": 8186,
+      "candidate_causal_finite": 8186,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "02-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 20,
+      "mode": 1,
+      "original_query_shape": [
+        32768,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.2799405985598256,
+          "reference_omitted_max": -1.280755230977788,
+          "reference_boundary_margin": 0.0008146324179625353,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.455440746848522,
+          "reference_omitted_max": -1.4560402577600726,
+          "reference_boundary_margin": 0.0005995109115506381,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.379138327062094,
+          "reference_omitted_max": -1.3788320669813783,
+          "reference_boundary_margin": -0.00030626008071577004,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.3564057663487077,
+          "reference_omitted_max": -1.3560816104613913,
+          "reference_boundary_margin": -0.0003241558873163797,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 513,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": [
+        {
+          "query": 0,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.6207198933808957,
+          "reference_omitted_max": -1.6202049067775297,
+          "reference_boundary_margin": -0.0005149866033660189,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2050,
+          "stable_reference_set_overlap": 2046,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.7624257443351894,
+          "reference_omitted_max": -1.7620236371439866,
+          "reference_boundary_margin": -0.00040210719120281624,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2050,
+          "stable_reference_set_overlap": 2046,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.796870721101539,
+          "reference_omitted_max": -1.7971195386052936,
+          "reference_boundary_margin": 0.0002488175037547169,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.8127137869250252,
+          "reference_omitted_max": -1.8132481862571392,
+          "reference_boundary_margin": 0.0005343993321140772,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "02-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 24,
+      "mode": 2,
+      "original_query_shape": [
+        32768,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -2.9242752836133263,
+          "reference_omitted_max": -2.9242735395544166,
+          "reference_boundary_margin": -1.744058909736168e-06,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -3.1654903270847434,
+          "reference_omitted_max": -3.1658155697860924,
+          "reference_boundary_margin": 0.00032524270134892674,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.3802044980568624,
+          "reference_omitted_max": -3.3799603250835872,
+          "reference_boundary_margin": -0.0002441729732751696,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 514,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.275557613355229,
+          "reference_omitted_max": -3.2746495066020316,
+          "reference_boundary_margin": -0.0009081067531973019,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 514,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "02-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 28,
+      "mode": 2,
+      "original_query_shape": [
+        32768,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.8619100932028587,
+          "reference_omitted_max": -1.8618577914800483,
+          "reference_boundary_margin": -5.2301722810454976e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.115146344315633,
+          "reference_omitted_max": -2.1156229655314007,
+          "reference_boundary_margin": 0.0004766212157676364,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.7485062132623508,
+          "reference_omitted_max": -1.7491899850279964,
+          "reference_boundary_margin": 0.0006837717656456022,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.7638666582604303,
+          "reference_omitted_max": -1.7634635022382383,
+          "reference_boundary_margin": -0.0004031560221919861,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 513,
+          "stable_reference_set_overlap": 510,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "02-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 32,
+      "mode": 2,
+      "original_query_shape": [
+        32768,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.3410910704094192,
+          "reference_omitted_max": -1.3421136721472564,
+          "reference_boundary_margin": 0.001022601737837192,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.2407529655031908,
+          "reference_omitted_max": -1.2404699866985354,
+          "reference_boundary_margin": -0.00028297880465544267,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 514,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.2814368235942446,
+          "reference_omitted_max": -1.28277754890928,
+          "reference_boundary_margin": 0.0013407253150354848,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.1961236228761782,
+          "reference_omitted_max": -1.196376257386224,
+          "reference_boundary_margin": 0.0002526345100457572,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "02-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 36,
+      "mode": 2,
+      "original_query_shape": [
+        32768,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.501470920330732,
+          "reference_omitted_max": -1.503061756707993,
+          "reference_boundary_margin": 0.0015908363772609846,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.2990502423628598,
+          "reference_omitted_max": -1.2985336206817202,
+          "reference_boundary_margin": -0.0005166216811396396,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.501225872094949,
+          "reference_omitted_max": -1.5023613164253362,
+          "reference_boundary_margin": 0.0011354443303872586,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.365456716366431,
+          "reference_omitted_max": -1.3661814483986063,
+          "reference_boundary_margin": 0.0007247320321752682,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 20,
+      "mode": 1,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        16380,
+        16381,
+        16382,
+        16383
+      ],
+      "logical_cache_keys": 16384,
+      "physical_cache_pages": 128,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 16381,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.3406252405297892,
+          "reference_omitted_max": -1.3413460666778256,
+          "reference_boundary_margin": 0.0007208261480364797,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 16382,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.3922117172058055,
+          "reference_omitted_max": -1.3922098195227335,
+          "reference_boundary_margin": -1.8976830720163207e-06,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 16383,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.583078353196015,
+          "reference_omitted_max": -1.5829872755765289,
+          "reference_boundary_margin": -9.107761948623505e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 16384,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.6277900920270587,
+          "reference_omitted_max": -1.6280898038997167,
+          "reference_boundary_margin": 0.0002997118726579817,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": [
+        {
+          "query": 0,
+          "visible": 2048,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.3860437845569837,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 2048,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.4497005947214205,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 2048,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.9665630260110234,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 2048,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.710345036592825,
+          "reference_omitted_max": null,
+          "reference_boundary_margin": null,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "full_coordinates": 65536,
+      "causal_finite": 65530,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 24,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        16380,
+        16381,
+        16382,
+        16383
+      ],
+      "logical_cache_keys": 16384,
+      "physical_cache_pages": 128,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 16381,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.2194651723941945,
+          "reference_omitted_max": -3.2194588950549274,
+          "reference_boundary_margin": -6.277339267057869e-06,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 16382,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.5728037811153968,
+          "reference_omitted_max": -3.5722644984093748,
+          "reference_boundary_margin": -0.0005392827060219929,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 513,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 16383,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.6381996704592297,
+          "reference_omitted_max": -3.6380238037122368,
+          "reference_boundary_margin": -0.00017586674699288096,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 16384,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.294364616595118,
+          "reference_omitted_max": -3.294293362411203,
+          "reference_boundary_margin": -7.125418391495941e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 65536,
+      "causal_finite": 65530,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 28,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        16380,
+        16381,
+        16382,
+        16383
+      ],
+      "logical_cache_keys": 16384,
+      "physical_cache_pages": 128,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 16381,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.9097260793198885,
+          "reference_omitted_max": -1.9106726821184026,
+          "reference_boundary_margin": 0.0009466027985141068,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 16382,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.644243640830215,
+          "reference_omitted_max": -1.6445840303971693,
+          "reference_boundary_margin": 0.0003403895669542578,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 16383,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.975836690750853,
+          "reference_omitted_max": -1.9762164727319824,
+          "reference_boundary_margin": 0.0003797819811293124,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 16384,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.794323308765053,
+          "reference_omitted_max": -1.7940626282239691,
+          "reference_boundary_margin": -0.0002606805410838575,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 65536,
+      "causal_finite": 65530,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 32,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        16380,
+        16381,
+        16382,
+        16383
+      ],
+      "logical_cache_keys": 16384,
+      "physical_cache_pages": 128,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 16381,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -0.7746694751925389,
+          "reference_omitted_max": -0.7746837726068208,
+          "reference_boundary_margin": 1.4297414281827514e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 16382,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.2402032735877473,
+          "reference_omitted_max": -1.2409027741617074,
+          "reference_boundary_margin": 0.0006995005739600657,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 16383,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.2608757970330444,
+          "reference_omitted_max": -1.2621105261837968,
+          "reference_boundary_margin": 0.0012347291507524005,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 16384,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -0.9064156167980286,
+          "reference_omitted_max": -0.9068370653592783,
+          "reference_boundary_margin": 0.0004214485612497043,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 65536,
+      "causal_finite": 65530,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 0,
+      "history": 32768,
+      "layer": 36,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        16380,
+        16381,
+        16382,
+        16383
+      ],
+      "logical_cache_keys": 16384,
+      "physical_cache_pages": 128,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        },
+        {
+          "visible_blocks": 2048,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": true
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 16381,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.29137978154926,
+          "reference_omitted_max": -1.2924415861697867,
+          "reference_boundary_margin": 0.0010618046205266296,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 16382,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.400475683883542,
+          "reference_omitted_max": -1.4021383439606794,
+          "reference_boundary_margin": 0.0016626600771374456,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 16383,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.3317911412427748,
+          "reference_omitted_max": -1.3334224601787525,
+          "reference_boundary_margin": 0.001631318935977788,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 16384,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.5491310856925793,
+          "reference_omitted_max": -1.5487715343542021,
+          "reference_boundary_margin": -0.0003595513383771731,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 65536,
+      "causal_finite": 65530,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 1,
+      "history": 32768,
+      "layer": 20,
+      "mode": 1,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.2483723039997519,
+          "reference_omitted_max": -1.2479495090955695,
+          "reference_boundary_margin": -0.00042279490418239973,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.6365533179328082,
+          "reference_omitted_max": -1.6371386811698585,
+          "reference_boundary_margin": 0.0005853632370502737,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.434865528159878,
+          "reference_omitted_max": -1.4349474951129735,
+          "reference_boundary_margin": 8.196695309559132e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.465141415286646,
+          "reference_omitted_max": -1.4652698738821295,
+          "reference_boundary_margin": 0.0001284585954834938,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": [
+        {
+          "query": 0,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.6177277597305406,
+          "reference_omitted_max": -1.6178878796183493,
+          "reference_boundary_margin": 0.00016011988780872954,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.0104063625207127,
+          "reference_omitted_max": -2.010479766045022,
+          "reference_boundary_margin": 7.340352430951214e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.8439694704546463,
+          "reference_omitted_max": -1.8438941685136143,
+          "reference_boundary_margin": -7.530194103200216e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2049,
+          "stable_reference_set_overlap": 2047,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 4096,
+          "selected_count": 2048,
+          "chronological": false,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.8834463070012646,
+          "reference_omitted_max": -1.883836920517986,
+          "reference_boundary_margin": 0.0003906135167213165,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 2047,
+          "stable_reference_set_overlap": 2048,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 1,
+      "history": 32768,
+      "layer": 24,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -2.9568474491303576,
+          "reference_omitted_max": -2.95703770891015,
+          "reference_boundary_margin": 0.00019025977979225672,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.228912752477595,
+          "reference_omitted_max": -3.22879432001561,
+          "reference_boundary_margin": -0.00011843246198495194,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.418187313579324,
+          "reference_omitted_max": -3.4174580875718874,
+          "reference_boundary_margin": -0.0007292260074365231,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 516,
+          "stable_reference_set_overlap": 510,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -3.3668930228974716,
+          "reference_omitted_max": -3.366580127716148,
+          "reference_boundary_margin": -0.00031289518132382454,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 513,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 1,
+      "history": 32768,
+      "layer": 28,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.7600573721946944,
+          "reference_omitted_max": -1.759832185098844,
+          "reference_boundary_margin": -0.00022518709585028773,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.9098993361594196,
+          "reference_omitted_max": -1.910921496368843,
+          "reference_boundary_margin": 0.0010221602094233617,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.7335953373001853,
+          "reference_omitted_max": -1.7333483826321139,
+          "reference_boundary_margin": -0.00024695466807145294,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 514,
+          "stable_reference_set_overlap": 510,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.667892206613815,
+          "reference_omitted_max": -1.6673511834355148,
+          "reference_boundary_margin": -0.0005410231783002928,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 1,
+      "history": 32768,
+      "layer": 32,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.1701184598445593,
+          "reference_omitted_max": -1.1694584616949157,
+          "reference_boundary_margin": -0.0006599981496435703,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 513,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": false,
+          "reference_boundary_score": -1.2976502825676133,
+          "reference_omitted_max": -1.2976374118763212,
+          "reference_boundary_margin": -1.2870691292077296e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 512,
+          "stable_reference_set_overlap": 511,
+          "stable_reference_set_exact": false
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.3539798511710188,
+          "reference_omitted_max": -1.354425285995383,
+          "reference_boundary_margin": 0.0004454348243640993,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.2117462372184984,
+          "reference_omitted_max": -1.2118356587984431,
+          "reference_boundary_margin": 8.942157994473732e-05,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    },
+    {
+      "execution": "03-captured",
+      "forward": 1,
+      "history": 32768,
+      "layer": 36,
+      "mode": 2,
+      "original_query_shape": [
+        16384,
+        32,
+        128
+      ],
+      "retained_positions": [
+        32764,
+        32765,
+        32766,
+        32767
+      ],
+      "logical_cache_keys": 32768,
+      "physical_cache_pages": 256,
+      "actual_quantization_exact": true,
+      "candidate_blocks": [
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        },
+        {
+          "visible_blocks": 4096,
+          "valid_blocks": 2048,
+          "negative_padding": 0,
+          "all_visible_blocks": false
+        }
+      ],
+      "selection": [
+        {
+          "query": 0,
+          "visible": 32765,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.4317909263417619,
+          "reference_omitted_max": -1.4334955888945444,
+          "reference_boundary_margin": 0.0017046625527825654,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 1,
+          "visible": 32766,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.2411675320821196,
+          "reference_omitted_max": -1.241367155435837,
+          "reference_boundary_margin": 0.00019962335371737083,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 2,
+          "visible": 32767,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.4206148299978238,
+          "reference_omitted_max": -1.4209904003873817,
+          "reference_boundary_margin": 0.0003755703895578222,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        },
+        {
+          "query": 3,
+          "visible": 32768,
+          "selected_count": 512,
+          "chronological": true,
+          "reference_topk_consistent": true,
+          "reference_boundary_score": -1.4470108638818857,
+          "reference_omitted_max": -1.4475733573676806,
+          "reference_boundary_margin": 0.000562493485794846,
+          "reference_boundary_tie_count": 1,
+          "selected_boundary_tie_count": 1,
+          "strictly_above_boundary_count": 511,
+          "stable_reference_set_overlap": 512,
+          "stable_reference_set_exact": true
+        }
+      ],
+      "candidate_selection": null,
+      "full_coordinates": 131072,
+      "causal_finite": 131066,
+      "candidate_causal_finite": 65530,
+      "native_own_scores_available": false,
+      "acceptance": null
+    }
+  ],
+  "limitations": [
+    "Rank0 tail4 per existing forward only, not all queries/TP ranks.",
+    "02-captured single32768-row forward belongs to adapted full40 configuration; not original-default unadapted32K closure.",
+    "Primitive three-QLI returns/native-own-scores absent.",
+    "All30selector cases are exact retained tail4 arithmetic only; no full-history/allTP coverage.",
+    "02-captured single32768 forward is adapted full40 model configuration, not originaldefault native32K.",
+    "2K and first16384chunk all-visible candidate branches are separated from two selective32768key branches; all-visible candidate containment alone is not selective mode2 coverage.",
+    "This ZIP contains sanitized aggregate metrics only; hash/CSV verification is not independent numerical replay.",
+    "Original raw inputs, full prompt/history, chain metadata, native argv and process/connection details remain private.",
+    "Independent private mathematical review and original four-consumer portable are referenced only by immutable SHA commitments."
+  ],
+  "id": "deepseek41-six-forward-selectors-20261109",
+  "writing_delivery": {
+    "status": "independently-reviewed-sanitized-aggregates-installed-locally",
+    "original_metrics_sha256": "4ae060e9fdfca77a094ab5a1742ef4944f1c5d053e5f037da2c7aa7b6bd5ad9f",
+    "independent_aggregate_audit_sha256": "705991f8af44f8d89e93da09cacba7eec15957fd70ad2cea4edd1bc6eee6a493",
+    "source_zip_sha256": "9c1f853fbd0e7352a0ea150e6f2561e4a1a412da2bf1fcb35d08f33cad10ea0d",
+    "portable_zip": "deepseek41-six-forward-selectors-20261109.zip",
+    "independent_numeric_replay_in_this_ZIP": false,
+    "installed": true,
+    "published": false,
+    "pushed": false,
+    "whole_task_completed": false
+  }
+}

@@ -1,0 +1,1681 @@
+{
+  "service": "vllm",
+  "scope": "Descriptive actual configuration-scoped same-history service contrasts; dependent coordinates.",
+  "formal_rows": 820,
+  "selected_targets": 3168,
+  "choice_terms": 24,
+  "internal_configuration_contrasts": {
+    "full-versus-chunk": {
+      "summary": {
+        "probability_rmse": {
+          "mean": 9.107953019683586e-05,
+          "p99": 0.002345408787448769,
+          "max": 0.0032150930249764853,
+          "max_coordinate": {
+            "sample": "discovery-07-512",
+            "position": 511
+          }
+        },
+        "max_probability_error": {
+          "mean": 0.0005182952372357513,
+          "p99": 0.010161674105152237,
+          "max": 0.02852899829244193,
+          "max_coordinate": {
+            "sample": "discovery-07-512",
+            "position": 511,
+            "token": 1124
+          }
+        },
+        "tail_merged_js": {
+          "mean": 0.00022485975559093582,
+          "p99": 0.008547847054227726,
+          "max": 0.012347288399440435,
+          "max_coordinate": {
+            "sample": "structured-domain0-2048",
+            "position": 2044
+          }
+        },
+        "top1_agreement": {
+          "count": 304,
+          "total": 312,
+          "fraction": 0.9743589743589743
+        },
+        "top100_overlap": {
+          "mean": 0.8866025641025641
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9826444699542282,
+            "p1": 0.1978447834173147,
+            "min": 0.11616342627876332
+          },
+          "side_b_top100": {
+            "mean": 0.9821469374784957,
+            "p1": 0.13713404508146174,
+            "min": 0.11563303663057273
+          },
+          "side_a_union": {
+            "mean": 0.9839722259703404,
+            "p1": 0.26890113624245865,
+            "min": 0.13261616058893289
+          },
+          "side_b_union": {
+            "mean": 0.9836749087570735,
+            "p1": 0.24667859329963843,
+            "min": 0.13099431303905545
+          }
+        }
+      }
+    },
+    "full-versus-token": {
+      "summary": {
+        "probability_rmse": {
+          "mean": 5.9422404522087466e-05,
+          "p99": 0.0009779406637328472,
+          "max": 0.001805755399933617,
+          "max_coordinate": {
+            "sample": "discovery-07-512",
+            "position": 511
+          }
+        },
+        "max_probability_error": {
+          "mean": 0.0005205474668815795,
+          "p99": 0.008081761975549268,
+          "max": 0.015281178195118983,
+          "max_coordinate": {
+            "sample": "discovery-07-512",
+            "position": 511,
+            "token": 1124
+          }
+        },
+        "tail_merged_js": {
+          "mean": 4.811084176570943e-05,
+          "p99": 0.0010732282774743647,
+          "max": 0.0010859705200096407,
+          "max_coordinate": {
+            "sample": "discovery-07-512",
+            "position": 511
+          }
+        },
+        "top1_agreement": {
+          "count": 144,
+          "total": 144,
+          "fraction": 1.0
+        },
+        "top100_overlap": {
+          "mean": 0.8892361111111112
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9998460375130347,
+            "p1": 0.9975984805062923,
+            "min": 0.9974904579111068
+          },
+          "side_b_top100": {
+            "mean": 0.9998389212367882,
+            "p1": 0.9976253549538311,
+            "min": 0.995698609127683
+          },
+          "side_a_union": {
+            "mean": 0.999851551294082,
+            "p1": 0.9976954049939994,
+            "min": 0.9975823246623786
+          },
+          "side_b_union": {
+            "mean": 0.9998447878642338,
+            "p1": 0.9977223691065333,
+            "min": 0.9958711530022293
+          }
+        }
+      }
+    }
+  },
+  "core_configuration_contrasts": {
+    "original_GPU": {
+      "distribution_summary": {
+        "probability_rmse": {
+          "mean": 0.00048288193626363064,
+          "p99": 0.010402242583081733,
+          "max": 0.026295692128946262,
+          "max_coordinate": {
+            "sample": "discovery-01-128",
+            "position": 131
+          }
+        },
+        "max_probability_error": {
+          "mean": 0.003969940405409298,
+          "p99": 0.08632933765263344,
+          "max": 0.25750405678659954,
+          "max_coordinate": {
+            "sample": "discovery-01-128",
+            "position": 131,
+            "token": 35977
+          }
+        },
+        "tail_merged_js": {
+          "mean": 0.0009285736621351901,
+          "p99": 0.02087584347780215,
+          "max": 0.04588735395916875,
+          "max_coordinate": {
+            "sample": "discovery-01-128",
+            "position": 131
+          }
+        },
+        "top1_agreement": {
+          "count": 495,
+          "total": 508,
+          "fraction": 0.9744094488188977
+        },
+        "top100_overlap": {
+          "mean": 0.8604133858267716
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.983992234988377,
+            "p1": 0.4308537183120869,
+            "min": 0.1393259536638164
+          },
+          "side_b_top100": {
+            "mean": 0.9837923292336221,
+            "p1": 0.43691149834048254,
+            "min": 0.11616342627876332
+          },
+          "side_a_union": {
+            "mean": 0.9854550665442942,
+            "p1": 0.43801134011336057,
+            "min": 0.19742017219877064
+          },
+          "side_b_union": {
+            "mean": 0.9855837354903316,
+            "p1": 0.4446171127315588,
+            "min": 0.22221359326143494
+          }
+        }
+      },
+      "distribution_groups": {
+        "fixed_teacher": {
+          "probability_rmse": {
+            "mean": 0.0063085012987676185,
+            "p99": 0.022392254555346026,
+            "max": 0.026295692128946262,
+            "max_coordinate": {
+              "sample": "discovery-01-128",
+              "position": 131
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.052698608797852424,
+            "p99": 0.2174451552907545,
+            "max": 0.25750405678659954,
+            "max_coordinate": {
+              "sample": "discovery-01-128",
+              "position": 131,
+              "token": 35977
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.012718317746725197,
+            "p99": 0.040874111015123046,
+            "max": 0.04588735395916875,
+            "max_coordinate": {
+              "sample": "discovery-01-128",
+              "position": 131
+            }
+          },
+          "top1_agreement": {
+            "count": 28,
+            "total": 32,
+            "fraction": 0.875
+          },
+          "top100_overlap": {
+            "mean": 0.8721875
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9171511016885749,
+              "p1": 0.7323208017225787,
+              "min": 0.7232454433239323
+            },
+            "side_b_top100": {
+              "mean": 0.9130148955566482,
+              "p1": 0.7160783168035536,
+              "min": 0.7041115976346084
+            },
+            "side_a_union": {
+              "mean": 0.9223972207699859,
+              "p1": 0.7497262354140064,
+              "min": 0.7403982917189164
+            },
+            "side_b_union": {
+              "mean": 0.9184155253395555,
+              "p1": 0.73254257533155,
+              "min": 0.7212947688680462
+            }
+          }
+        },
+        "inference-full": {
+          "probability_rmse": {
+            "mean": 4.330215445293942e-05,
+            "p99": 0.0006349257293991785,
+            "max": 0.0027348443628001716,
+            "max_coordinate": {
+              "sample": "reserved-23-512",
+              "position": 510
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.00038636507707015284,
+            "p99": 0.005574568288880933,
+            "max": 0.025203781079555454,
+            "max_coordinate": {
+              "sample": "reserved-23-512",
+              "position": 510,
+              "token": 223
+            }
+          },
+          "tail_merged_js": {
+            "mean": 3.776250496476912e-05,
+            "p99": 0.0006237375209840213,
+            "max": 0.0023219920396356708,
+            "max_coordinate": {
+              "sample": "reserved-23-512",
+              "position": 510
+            }
+          },
+          "top1_agreement": {
+            "count": 264,
+            "total": 264,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8675
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9999091870923777,
+              "p1": 0.998106081336482,
+              "min": 0.9975616337198605
+            },
+            "side_b_top100": {
+              "mean": 0.999912347590105,
+              "p1": 0.9977530621920503,
+              "min": 0.9974904579111068
+            },
+            "side_a_union": {
+              "mean": 0.9999130082299715,
+              "p1": 0.9982002501827016,
+              "min": 0.9976700573764424
+            },
+            "side_b_union": {
+              "mean": 0.9999159977591413,
+              "p1": 0.9978489066054258,
+              "min": 0.997620972057132
+            }
+          }
+        },
+        "inference-token": {
+          "probability_rmse": {
+            "mean": 0.00010667549890880175,
+            "p99": 0.0018816609047317945,
+            "max": 0.005860680240945126,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0009453297667632756,
+            "p99": 0.015784619181066894,
+            "max": 0.052685421020633116,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511,
+              "token": 1124
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.0001025481063398463,
+            "p99": 0.0020068827323754253,
+            "max": 0.005650753449586359,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511
+            }
+          },
+          "top1_agreement": {
+            "count": 144,
+            "total": 144,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8689583333333333
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9998105543126131,
+              "p1": 0.9977436937554788,
+              "min": 0.9948222624844971
+            },
+            "side_b_top100": {
+              "mean": 0.9998389212367882,
+              "p1": 0.9976253549538311,
+              "min": 0.995698609127683
+            },
+            "side_a_union": {
+              "mean": 0.9998174183352577,
+              "p1": 0.997829634751527,
+              "min": 0.9949891226190455
+            },
+            "side_b_union": {
+              "mean": 0.9998450491137283,
+              "p1": 0.997726213116778,
+              "min": 0.9958682472454563
+            }
+          }
+        },
+        "repeatability-baseline": {
+          "probability_rmse": {
+            "mean": 0.00012165423601540992,
+            "p99": 0.0004380838246430986,
+            "max": 0.00045110739182422575,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.00107162907199998,
+            "p99": 0.0038176115071861584,
+            "max": 0.003930623734306193,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00018273784876160932,
+            "p99": 0.0006527164066025096,
+            "max": 0.0006721489929000302,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8375
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9996193207198328,
+              "p1": 0.998783617052208,
+              "min": 0.998750136360244
+            },
+            "side_b_top100": {
+              "mean": 0.9993782859534905,
+              "p1": 0.9979535475125666,
+              "min": 0.9978948199454273
+            },
+            "side_a_union": {
+              "mean": 0.9996315783714482,
+              "p1": 0.9988193237573568,
+              "min": 0.9987867779939518
+            },
+            "side_b_union": {
+              "mean": 0.9993967952524668,
+              "p1": 0.9980102681376982,
+              "min": 0.9979530449198578
+            }
+          }
+        },
+        "repeatability-instrumented": {
+          "probability_rmse": {
+            "mean": 6.75215923343835e-05,
+            "p99": 0.0002201520692878237,
+            "max": 0.0002262003139465523,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0005556463109224752,
+            "p99": 0.0017384943880968825,
+            "max": 0.0017846344874474784,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 8.782854063651555e-05,
+            "p99": 0.0002901850700085762,
+            "max": 0.00029826988237197614,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.855
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9996193207198328,
+              "p1": 0.998783617052208,
+              "min": 0.998750136360244
+            },
+            "side_b_top100": {
+              "mean": 0.9995741810017729,
+              "p1": 0.9986820145379341,
+              "min": 0.9986455730332776
+            },
+            "side_a_union": {
+              "mean": 0.9996326684093932,
+              "p1": 0.9988254898441228,
+              "min": 0.9987931562361736
+            },
+            "side_b_union": {
+              "mean": 0.9995906766254735,
+              "p1": 0.9987332233815449,
+              "min": 0.9986982214542954
+            }
+          }
+        },
+        "repeatability-repeat-0": {
+          "probability_rmse": {
+            "mean": 0.00011118849059283112,
+            "p99": 0.0004120285404579838,
+            "max": 0.00042434735413596827,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0011148241820191232,
+            "p99": 0.004161604614683598,
+            "max": 0.004286700628001294,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00012004656470869582,
+            "p99": 0.00042174212067699397,
+            "max": 0.0004340086771378657,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.825
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9996193207198328,
+              "p1": 0.998783617052208,
+              "min": 0.998750136360244
+            },
+            "side_b_top100": {
+              "mean": 0.9994811279498091,
+              "p1": 0.9982319475391437,
+              "min": 0.9981805543888259
+            },
+            "side_a_union": {
+              "mean": 0.9996333862742485,
+              "p1": 0.9988266144735184,
+              "min": 0.9987943042988846
+            },
+            "side_b_union": {
+              "mean": 0.9995041167769325,
+              "p1": 0.9983105063538975,
+              "min": 0.9982614413211207
+            }
+          }
+        },
+        "repeatability-repeat-1": {
+          "probability_rmse": {
+            "mean": 0.0002709603996664537,
+            "p99": 0.0010064173048326159,
+            "max": 0.0010367888868716812,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0027454326554622044,
+            "p99": 0.010193403838816149,
+            "max": 0.010500978206828493,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00030315040540507395,
+            "p99": 0.001114028324719967,
+            "max": 0.0011474434090754497,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8375
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9996193207198328,
+              "p1": 0.998783617052208,
+              "min": 0.998750136360244
+            },
+            "side_b_top100": {
+              "mean": 0.9991553385273293,
+              "p1": 0.9970969813825175,
+              "min": 0.9970117803179231
+            },
+            "side_a_union": {
+              "mean": 0.9996312340355129,
+              "p1": 0.9988184793010828,
+              "min": 0.998785952359122
+            },
+            "side_b_union": {
+              "mean": 0.9991834882498867,
+              "p1": 0.9971898932981985,
+              "min": 0.9971074509303531
+            }
+          }
+        },
+        "repeatability-repeat-2": {
+          "probability_rmse": {
+            "mean": 0.00016421700529089693,
+            "p99": 0.0006172496960885585,
+            "max": 0.000635871242053748,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0016074349554632173,
+            "p99": 0.006059536245665651,
+            "max": 0.006242437775532461,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00017487626870268656,
+            "p99": 0.000642923171378316,
+            "max": 0.0006621900560067679,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.87
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9996193207198328,
+              "p1": 0.998783617052208,
+              "min": 0.998750136360244
+            },
+            "side_b_top100": {
+              "mean": 0.9994478938302597,
+              "p1": 0.9981426754827016,
+              "min": 0.9980889932543379
+            },
+            "side_a_union": {
+              "mean": 0.9996333099045809,
+              "p1": 0.9988293472346468,
+              "min": 0.9987971466330767
+            },
+            "side_b_union": {
+              "mean": 0.9994683795180275,
+              "p1": 0.998213761298803,
+              "min": 0.9981621823305232
+            }
+          }
+        },
+        "structured-full": {
+          "probability_rmse": {
+            "mean": 0.000285349469735775,
+            "p99": 0.0015795314350332528,
+            "max": 0.0016358840947179357,
+            "max_coordinate": {
+              "sample": "structured-domain1-32768",
+              "position": 32766
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.001330552269848867,
+            "p99": 0.011177123186472005,
+            "max": 0.012174292785695054,
+            "max_coordinate": {
+              "sample": "structured-domain1-512",
+              "position": 508,
+              "token": 68
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.0007608013611036459,
+            "p99": 0.008246430904899595,
+            "max": 0.008863058888636328,
+            "max_coordinate": {
+              "sample": "structured-domain0-2048",
+              "position": 2044
+            }
+          },
+          "top1_agreement": {
+            "count": 39,
+            "total": 48,
+            "fraction": 0.8125
+          },
+          "top100_overlap": {
+            "mean": 0.794375
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.8870435102554254,
+              "p1": 0.1439148296732024,
+              "min": 0.1393259536638164
+            },
+            "side_b_top100": {
+              "mean": 0.8876711429569056,
+              "p1": 0.12048906067129489,
+              "min": 0.11616342627876332
+            },
+            "side_a_union": {
+              "mean": 0.8989806587269071,
+              "p1": 0.21561721319089483,
+              "min": 0.19742017219877064
+            },
+            "side_b_union": {
+              "mean": 0.9029824273279439,
+              "p1": 0.23031507388874164,
+              "min": 0.22221359326143494
+            }
+          }
+        }
+      },
+      "target_metrics": {
+        "target_count": 3168,
+        "side_a_nll_nat_per_token": 1.9395359408692914,
+        "side_b_nll_nat_per_token": 1.9422448357085786,
+        "nll_abs_diff_nat_per_token": 0.002708894839287268,
+        "mae_nat": 0.27593624760505886,
+        "p99_nat": 3.4960450922680324,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 10.809526330961276,
+        "max_coordinate": [
+          "quality",
+          "reserved-15-512",
+          0,
+          6810
+        ]
+      },
+      "target_groups": {
+        "long-targets": {
+          "target_count": 288,
+          "side_a_nll_nat_per_token": 1.5209271783339213,
+          "side_b_nll_nat_per_token": 1.4960309533568525,
+          "nll_abs_diff_nat_per_token": 0.02489622497706878,
+          "mae_nat": 0.2904636127955284,
+          "p99_nat": 4.657108247925531,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 6.670692878128673,
+          "max_coordinate": [
+            "long-targets",
+            "long-04-32768",
+            1,
+            455
+          ]
+        },
+        "quality": {
+          "target_count": 2304,
+          "side_a_nll_nat_per_token": 1.6537816454387044,
+          "side_b_nll_nat_per_token": 1.6717680818113456,
+          "nll_abs_diff_nat_per_token": 0.01798643637264119,
+          "mae_nat": 0.2623930411317054,
+          "p99_nat": 3.395890677426957,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 10.809526330961276,
+          "max_coordinate": [
+            "quality",
+            "reserved-15-512",
+            0,
+            6810
+          ]
+        },
+        "structured": {
+          "target_count": 576,
+          "side_a_nll_nat_per_token": 3.291857503859325,
+          "side_b_nll_nat_per_token": 3.247258792473373,
+          "nll_abs_diff_nat_per_token": 0.04459871138595206,
+          "mae_nat": 0.3228453909032378,
+          "p99_nat": 3.7558413286428736,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 5.318528905896498,
+          "max_coordinate": [
+            "structured",
+            "structured-domain0-32768",
+            3,
+            34972
+          ]
+        }
+      },
+      "candidate_term_metrics": {
+        "target_count": 24,
+        "side_a_nll_nat_per_token": 5.988830002682959,
+        "side_b_nll_nat_per_token": 5.539840857590263,
+        "nll_abs_diff_nat_per_token": 0.44898914509269616,
+        "mae_nat": 0.6337200697356659,
+        "p99_nat": 2.2683462044722895,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 2.3654418244484283,
+        "max_coordinate": [
+          "probe-1",
+          2,
+          4,
+          16235
+        ]
+      }
+    },
+    "adapted_NPU_reference": {
+      "distribution_summary": {
+        "probability_rmse": {
+          "mean": 0.00027644279531271023,
+          "p99": 0.005750696220604565,
+          "max": 0.014199872608065552,
+          "max_coordinate": {
+            "sample": "discovery-01-128",
+            "position": 153
+          }
+        },
+        "max_probability_error": {
+          "mean": 0.0020918012715417343,
+          "p99": 0.04606762257116137,
+          "max": 0.1386714480518666,
+          "max_coordinate": {
+            "sample": "discovery-01-128",
+            "position": 153,
+            "token": 5081
+          }
+        },
+        "tail_merged_js": {
+          "mean": 0.0004564650862093381,
+          "p99": 0.009308720118831536,
+          "max": 0.01930776335573069,
+          "max_coordinate": {
+            "sample": "discovery-01-128",
+            "position": 153
+          }
+        },
+        "top1_agreement": {
+          "count": 806,
+          "total": 820,
+          "fraction": 0.9829268292682927
+        },
+        "top100_overlap": {
+          "mean": 0.884109756097561
+        },
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.983140255776985,
+            "p1": 0.18565744855315208,
+            "min": 0.11125599705688508
+          },
+          "side_b_top100": {
+            "mean": 0.9831662777365496,
+            "p1": 0.22205573326501593,
+            "min": 0.11563303663057273
+          },
+          "side_a_union": {
+            "mean": 0.9842345933710256,
+            "p1": 0.2971701840019942,
+            "min": 0.11541225284907679
+          },
+          "side_b_union": {
+            "mean": 0.9842861187293797,
+            "p1": 0.30333478029465594,
+            "min": 0.12168687247577747
+          }
+        }
+      },
+      "distribution_groups": {
+        "fixed_teacher": {
+          "probability_rmse": {
+            "mean": 0.004980808261873724,
+            "p99": 0.012396881442036742,
+            "max": 0.014199872608065552,
+            "max_coordinate": {
+              "sample": "discovery-01-128",
+              "position": 153
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.040401806800427625,
+            "p99": 0.12069461039854554,
+            "max": 0.1386714480518666,
+            "max_coordinate": {
+              "sample": "discovery-01-128",
+              "position": 153,
+              "token": 5081
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.007479290425681988,
+            "p99": 0.019185099816444468,
+            "max": 0.01930776335573069,
+            "max_coordinate": {
+              "sample": "discovery-01-128",
+              "position": 153
+            }
+          },
+          "top1_agreement": {
+            "count": 31,
+            "total": 32,
+            "fraction": 0.96875
+          },
+          "top100_overlap": {
+            "mean": 0.9021875
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9114075013276881,
+              "p1": 0.739953575608969,
+              "min": 0.7388202208309435
+            },
+            "side_b_top100": {
+              "mean": 0.9130148955566482,
+              "p1": 0.7160783168035536,
+              "min": 0.7041115976346084
+            },
+            "side_a_union": {
+              "mean": 0.9158908465015074,
+              "p1": 0.7528567149714507,
+              "min": 0.7502573998939989
+            },
+            "side_b_union": {
+              "mean": 0.9174302713017439,
+              "p1": 0.7291849190789105,
+              "min": 0.7156609318278073
+            }
+          }
+        },
+        "inference-chunk": {
+          "probability_rmse": {
+            "mean": 4.107896304041144e-05,
+            "p99": 0.00045155868523909,
+            "max": 0.003789224775334264,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.00037138047060025314,
+            "p99": 0.004600874320904103,
+            "max": 0.034130279820380374,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511,
+              "token": 1
+            }
+          },
+          "tail_merged_js": {
+            "mean": 3.7792597587232696e-05,
+            "p99": 0.0003897111394950659,
+            "max": 0.004564326097048393,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511
+            }
+          },
+          "top1_agreement": {
+            "count": 264,
+            "total": 264,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8901136363636364
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9999131649143898,
+              "p1": 0.9984077444407333,
+              "min": 0.9960356333123612
+            },
+            "side_b_top100": {
+              "mean": 0.9999016734604828,
+              "p1": 0.998082668541073,
+              "min": 0.99460552483258
+            },
+            "side_a_union": {
+              "mean": 0.999916181231008,
+              "p1": 0.9984689711588883,
+              "min": 0.9961805125670584
+            },
+            "side_b_union": {
+              "mean": 0.9999051573744777,
+              "p1": 0.9981354484876463,
+              "min": 0.9947950347376648
+            }
+          }
+        },
+        "inference-full": {
+          "probability_rmse": {
+            "mean": 3.816649119144092e-05,
+            "p99": 0.0007401004090894583,
+            "max": 0.0015884726599345565,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.00032127652862832303,
+            "p99": 0.006735559022090618,
+            "max": 0.0126692106137072,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511,
+              "token": 1
+            }
+          },
+          "tail_merged_js": {
+            "mean": 3.2749536610217715e-05,
+            "p99": 0.0006431208405857919,
+            "max": 0.001504837669553174,
+            "max_coordinate": {
+              "sample": "reserved-23-512",
+              "position": 510
+            }
+          },
+          "top1_agreement": {
+            "count": 264,
+            "total": 264,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8896590909090909
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9999115696118924,
+              "p1": 0.9985651109645037,
+              "min": 0.9967356520366261
+            },
+            "side_b_top100": {
+              "mean": 0.999912347590105,
+              "p1": 0.9977530621920503,
+              "min": 0.9974904579111068
+            },
+            "side_a_union": {
+              "mean": 0.9999150089303164,
+              "p1": 0.9986282655808645,
+              "min": 0.9968701314029718
+            },
+            "side_b_union": {
+              "mean": 0.9999156186477872,
+              "p1": 0.9978534514468325,
+              "min": 0.997574955183978
+            }
+          }
+        },
+        "inference-token": {
+          "probability_rmse": {
+            "mean": 5.567020523476258e-05,
+            "p99": 0.001055461218272099,
+            "max": 0.0014281012189683246,
+            "max_coordinate": {
+              "sample": "reserved-23-512",
+              "position": 510
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0005033617770201352,
+            "p99": 0.009550759832416232,
+            "max": 0.013241768755551275,
+            "max_coordinate": {
+              "sample": "reserved-23-512",
+              "position": 510,
+              "token": 223
+            }
+          },
+          "tail_merged_js": {
+            "mean": 3.958725386593722e-05,
+            "p99": 0.0007228050932118529,
+            "max": 0.0009370360534862373,
+            "max_coordinate": {
+              "sample": "discovery-07-512",
+              "position": 511
+            }
+          },
+          "top1_agreement": {
+            "count": 144,
+            "total": 144,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8844444444444445
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9998428999650676,
+              "p1": 0.9982221111948537,
+              "min": 0.9953619370310132
+            },
+            "side_b_top100": {
+              "mean": 0.9998389212367882,
+              "p1": 0.9976253549538311,
+              "min": 0.995698609127683
+            },
+            "side_a_union": {
+              "mean": 0.9998491434623128,
+              "p1": 0.9982723273552605,
+              "min": 0.99562306870173
+            },
+            "side_b_union": {
+              "mean": 0.9998449748663916,
+              "p1": 0.9977131950482686,
+              "min": 0.995916642141513
+            }
+          }
+        },
+        "repeatability-baseline": {
+          "probability_rmse": {
+            "mean": 0.00019463735749197079,
+            "p99": 0.000736076797211537,
+            "max": 0.0007585569552609271,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0017586265549341478,
+            "p99": 0.006642702043453179,
+            "max": 0.006845301886652999,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00015411751332595995,
+            "p99": 0.0005758299474837669,
+            "max": 0.0005933366472532191,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8825000000000001
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.999163187559288,
+              "p1": 0.9971312923367275,
+              "min": 0.9970468855355938
+            },
+            "side_b_top100": {
+              "mean": 0.9993782859534905,
+              "p1": 0.9979535475125666,
+              "min": 0.9978948199454273
+            },
+            "side_a_union": {
+              "mean": 0.999184227940982,
+              "p1": 0.9971997549212678,
+              "min": 0.9971172992910946
+            },
+            "side_b_union": {
+              "mean": 0.9993944809842799,
+              "p1": 0.9980032626043066,
+              "min": 0.9979458991485688
+            }
+          }
+        },
+        "repeatability-instrumented": {
+          "probability_rmse": {
+            "mean": 0.00022726798335864917,
+            "p99": 0.0008660793291287295,
+            "max": 0.0008926314814804132,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.002283546358545382,
+            "p99": 0.00872382188964718,
+            "max": 0.008991291133511714,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00018040680754953257,
+            "p99": 0.0006743767283193911,
+            "max": 0.0006948599310626217,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8400000000000001
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.999163187559288,
+              "p1": 0.9971312923367275,
+              "min": 0.9970468855355938
+            },
+            "side_b_top100": {
+              "mean": 0.9995741810017729,
+              "p1": 0.9986820145379341,
+              "min": 0.9986455730332776
+            },
+            "side_a_union": {
+              "mean": 0.9991968728237796,
+              "p1": 0.9972465213693329,
+              "min": 0.9971654637113996
+            },
+            "side_b_union": {
+              "mean": 0.9995914376139363,
+              "p1": 0.9987349801501427,
+              "min": 0.9987000287086484
+            }
+          }
+        },
+        "repeatability-repeat-0": {
+          "probability_rmse": {
+            "mean": 0.00016768409912070083,
+            "p99": 0.0006238763915593623,
+            "max": 0.0006427493650238201,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.001693011466119998,
+            "p99": 0.00629870893595574,
+            "max": 0.006489224992957898,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.00012190058267973253,
+            "p99": 0.0004417500150744841,
+            "max": 0.00045480164270134425,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.855
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.999163187559288,
+              "p1": 0.9971312923367275,
+              "min": 0.9970468855355938
+            },
+            "side_b_top100": {
+              "mean": 0.9994811279498091,
+              "p1": 0.9982319475391437,
+              "min": 0.9981805543888259
+            },
+            "side_a_union": {
+              "mean": 0.9991947132924826,
+              "p1": 0.9972397220849255,
+              "min": 0.9971584662254144
+            },
+            "side_b_union": {
+              "mean": 0.9995033009352642,
+              "p1": 0.9983085872344543,
+              "min": 0.9982594733332634
+            }
+          }
+        },
+        "repeatability-repeat-1": {
+          "probability_rmse": {
+            "mean": 4.491105614367196e-05,
+            "p99": 0.00016198116662475434,
+            "max": 0.000166752464663418,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.00042047726352222823,
+            "p99": 0.0015248745559393307,
+            "max": 0.001569600093150107,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 1004
+            }
+          },
+          "tail_merged_js": {
+            "mean": 8.373734143488468e-05,
+            "p99": 0.0003044219422178194,
+            "max": 0.00031351941656746873,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.875
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.999163187559288,
+              "p1": 0.9971312923367275,
+              "min": 0.9970468855355938
+            },
+            "side_b_top100": {
+              "mean": 0.9991553385273293,
+              "p1": 0.9970969813825175,
+              "min": 0.9970117803179231
+            },
+            "side_a_union": {
+              "mean": 0.9991919191285101,
+              "p1": 0.9972311156184518,
+              "min": 0.9971496590162786
+            },
+            "side_b_union": {
+              "mean": 0.9991890109047855,
+              "p1": 0.9972153160293786,
+              "min": 0.9971336000067361
+            }
+          }
+        },
+        "repeatability-repeat-2": {
+          "probability_rmse": {
+            "mean": 0.00012134529269930836,
+            "p99": 0.00044711148143584874,
+            "max": 0.0004605498586911624,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.001194170508002759,
+            "p99": 0.00440125042348273,
+            "max": 0.004533487845426731,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124,
+              "token": 334
+            }
+          },
+          "tail_merged_js": {
+            "mean": 7.437575901431833e-05,
+            "p99": 0.00026459447061761784,
+            "max": 0.0002724363174522275,
+            "max_coordinate": {
+              "sample": "discovery-00-128",
+              "position": 124
+            }
+          },
+          "top1_agreement": {
+            "count": 4,
+            "total": 4,
+            "fraction": 1.0
+          },
+          "top100_overlap": {
+            "mean": 0.8574999999999999
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.999163187559288,
+              "p1": 0.9971312923367275,
+              "min": 0.9970468855355938
+            },
+            "side_b_top100": {
+              "mean": 0.9994478938302597,
+              "p1": 0.9981426754827016,
+              "min": 0.9980889932543379
+            },
+            "side_a_union": {
+              "mean": 0.9991938490819002,
+              "p1": 0.9972363857717904,
+              "min": 0.9971550325739356
+            },
+            "side_b_union": {
+              "mean": 0.9994679090898017,
+              "p1": 0.9982093012133662,
+              "min": 0.9981575406020996
+            }
+          }
+        },
+        "structured-chunk": {
+          "probability_rmse": {
+            "mean": 0.00037757077076027156,
+            "p99": 0.0027404355649549524,
+            "max": 0.0027450954485722465,
+            "max_coordinate": {
+              "sample": "structured-domain1-512",
+              "position": 511
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0012583743414234661,
+            "p99": 0.014615235017423154,
+            "max": 0.020283900611819436,
+            "max_coordinate": {
+              "sample": "structured-domain1-512",
+              "position": 508,
+              "token": 71
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.0012897552455764909,
+            "p99": 0.009676489205988483,
+            "max": 0.01006225950964235,
+            "max_coordinate": {
+              "sample": "structured-domain1-512",
+              "position": 511
+            }
+          },
+          "top1_agreement": {
+            "count": 41,
+            "total": 48,
+            "fraction": 0.8541666666666666
+          },
+          "top100_overlap": {
+            "mean": 0.8345833333333333
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.8884109579150806,
+              "p1": 0.16235337324788257,
+              "min": 0.1621146247881193
+            },
+            "side_b_top100": {
+              "mean": 0.8844958895775669,
+              "p1": 0.11580231689686336,
+              "min": 0.11563303663057273
+            },
+            "side_a_union": {
+              "mean": 0.8965211267828197,
+              "p1": 0.20380914951776619,
+              "min": 0.20076023059149012
+            },
+            "side_b_union": {
+              "mean": 0.8947372460057578,
+              "p1": 0.18069332018412632,
+              "min": 0.16681297623564714
+            }
+          }
+        },
+        "structured-full": {
+          "probability_rmse": {
+            "mean": 0.0003586070448687118,
+            "p99": 0.0025777834956605024,
+            "max": 0.0026579413294124375,
+            "max_coordinate": {
+              "sample": "structured-domain1-512",
+              "position": 511
+            }
+          },
+          "max_probability_error": {
+            "mean": 0.0016098413410514623,
+            "p99": 0.017655163736163607,
+            "max": 0.024146386697334238,
+            "max_coordinate": {
+              "sample": "structured-domain1-512",
+              "position": 511,
+              "token": 26
+            }
+          },
+          "tail_merged_js": {
+            "mean": 0.0009640413600275517,
+            "p99": 0.00788907694826515,
+            "max": 0.007913276623215185,
+            "max_coordinate": {
+              "sample": "structured-domain2-32768",
+              "position": 32764
+            }
+          },
+          "top1_agreement": {
+            "count": 42,
+            "total": 48,
+            "fraction": 0.875
+          },
+          "top100_overlap": {
+            "mean": 0.86625
+          },
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.8844140094504972,
+              "p1": 0.11204101608331879,
+              "min": 0.11125599705688508
+            },
+            "side_b_top100": {
+              "mean": 0.8876711429569056,
+              "p1": 0.12048906067129489,
+              "min": 0.11616342627876332
+            },
+            "side_a_union": {
+              "mean": 0.8919435041746682,
+              "p1": 0.11764837747230239,
+              "min": 0.11541225284907679
+            },
+            "side_b_union": {
+              "mean": 0.8935523970710119,
+              "p1": 0.12645117700197214,
+              "min": 0.12168687247577747
+            }
+          }
+        }
+      },
+      "target_metrics": {
+        "target_count": 3168,
+        "side_a_nll_nat_per_token": 1.9448933733189466,
+        "side_b_nll_nat_per_token": 1.9422448357085786,
+        "nll_abs_diff_nat_per_token": 0.0026485376103679847,
+        "mae_nat": 0.23504396060710997,
+        "p99_nat": 3.0849190666305533,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 8.610955946586923,
+        "max_coordinate": [
+          "quality",
+          "reserved-20-512",
+          0,
+          9356
+        ]
+      },
+      "target_groups": {
+        "long-targets": {
+          "target_count": 288,
+          "side_a_nll_nat_per_token": 1.4923675801453218,
+          "side_b_nll_nat_per_token": 1.4960309533568525,
+          "nll_abs_diff_nat_per_token": 0.0036633732115307627,
+          "mae_nat": 0.16607465736145877,
+          "p99_nat": 2.554237108987635,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 4.6267147238477175,
+          "max_coordinate": [
+            "long-targets",
+            "long-01-32768",
+            0,
+            6810
+          ]
+        },
+        "quality": {
+          "target_count": 2304,
+          "side_a_nll_nat_per_token": 1.6699771654612234,
+          "side_b_nll_nat_per_token": 1.6717680818113456,
+          "nll_abs_diff_nat_per_token": 0.0017909163501221848,
+          "mae_nat": 0.2239247567593824,
+          "p99_nat": 2.839855069493361,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 8.610955946586923,
+          "max_coordinate": [
+            "quality",
+            "reserved-20-512",
+            0,
+            9356
+          ]
+        },
+        "structured": {
+          "target_count": 576,
+          "side_a_nll_nat_per_token": 3.270821101336652,
+          "side_b_nll_nat_per_token": 3.247258792473373,
+          "nll_abs_diff_nat_per_token": 0.023562308863279036,
+          "mae_nat": 0.31400542762084577,
+          "p99_nat": 3.73193195048312,
+          "p99_method": "global linear h=0.99*(N-1)",
+          "max_abs_nat": 6.927812146781192,
+          "max_coordinate": [
+            "structured",
+            "structured-domain0-32768",
+            0,
+            223
+          ]
+        }
+      },
+      "candidate_term_metrics": {
+        "target_count": 24,
+        "side_a_nll_nat_per_token": 5.971255536399568,
+        "side_b_nll_nat_per_token": 5.539840857590263,
+        "nll_abs_diff_nat_per_token": 0.43141467880930495,
+        "mae_nat": 0.9024355466742519,
+        "p99_nat": 4.071531326156817,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 4.265547238465045,
+        "max_coordinate": [
+          "probe-4",
+          2,
+          2,
+          3818
+        ]
+      }
+    }
+  },
+  "historical_original_adapted275_and_head95_scopes_remain_distinct": true,
+  "numerical_acceptance": null,
+  "hardware_only_cause": false,
+  "whole_task_completed": false,
+  "original_tasks": 216,
+  "all_tasks_same_Engine": true,
+  "actual_configuration": {
+    "tensor_parallel_size": 8,
+    "trust_remote_code": true,
+    "max_model_len": 32769,
+    "max_num_seqs": 1,
+    "max_num_batched_tokens": 32768,
+    "enforce_eager": true,
+    "async_scheduling": false,
+    "gpu_memory_utilization": 0.9,
+    "enable_expert_parallel": true,
+    "enable_prefix_caching": false,
+    "tokenizer_mode": "deepseek_v41",
+    "limit_mm_per_prompt": {
+      "image": 0
+    },
+    "engram_config": {
+      "cpu_offload": true,
+      "dp_shared_memory": false
+    },
+    "cpu_offload_gb": 4,
+    "safetensors_load_strategy": "lazy",
+    "scheduler_cls": "vllm_core_capture.ReferencePartitionScheduler"
+  },
+  "actual_settings_snapshot_sha256": "5c5dfc8c12ec4ead3fb9eb3334d773c0d47dfd37ad668ff049b44b3be4cdebfb",
+  "configuration_scope": "Actual same-lifetime TP8 firstpilot settings, bound to ready receipt retained in original native manifest; EP enabled,4 GiB CPUoffload, full model original revision.",
+  "lifecycle_gap": {
+    "lifecycle_incomplete": true,
+    "missing_relative_paths": [
+      "streamed-worker-receipts/worker-77/final.json"
+    ],
+    "core_pid": 77,
+    "core_install_sha256": "2f36453ed90b8cd0dea08814308397bcb004c4a870eb653373c679cfb861dff5",
+    "core_progress_sha256": "7d4a653953f80314ee0f321baa33ede3ce699e0cf5f489b122d0986925904412",
+    "missing_receipt_sha256": "933d1560287f1ab05f638fdc41ca3e95fc86ed5ca3981fb0d487dff11e1bda2b",
+    "authority_sha256": "5c1cbe90c7b19c2ef6c8c4fb025d27eda9d98960cdfaaeecd9a9f7d74631bdb0",
+    "recorded_progress_rows": 54,
+    "recorded_progress_all_zero": true,
+    "core_worker_init_receipts": 0,
+    "core_role": "recorded same-birth VLLM::EngineCore without recorded TP initialization",
+    "full_worker_restoration_proven": false,
+    "core_restoration_proven": false,
+    "no_later_activity_asserted": false,
+    "mapping_closed_proven": false,
+    "scope": "Missing Core77 final remains a genuine lifecycle-evidence gap; recorded zero counters and absent init do not prove no later activity or restoration"
+  },
+  "lifecycle_incomplete": true,
+  "full_worker_restoration_proven": false,
+  "namespace_cleanup_proven": true
+}

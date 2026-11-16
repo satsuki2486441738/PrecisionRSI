@@ -1,0 +1,20 @@
+{
+  "lifecycle_incomplete": true,
+  "missing_relative_paths": [
+    "streamed-worker-receipts/worker-77/final.json"
+  ],
+  "core_pid": 77,
+  "core_install_sha256": "2f36453ed90b8cd0dea08814308397bcb004c4a870eb653373c679cfb861dff5",
+  "core_progress_sha256": "7d4a653953f80314ee0f321baa33ede3ce699e0cf5f489b122d0986925904412",
+  "missing_receipt_sha256": "933d1560287f1ab05f638fdc41ca3e95fc86ed5ca3981fb0d487dff11e1bda2b",
+  "authority_sha256": "5c1cbe90c7b19c2ef6c8c4fb025d27eda9d98960cdfaaeecd9a9f7d74631bdb0",
+  "recorded_progress_rows": 54,
+  "recorded_progress_all_zero": true,
+  "core_worker_init_receipts": 0,
+  "core_role": "recorded same-birth VLLM::EngineCore without recorded TP initialization",
+  "full_worker_restoration_proven": false,
+  "core_restoration_proven": false,
+  "no_later_activity_asserted": false,
+  "mapping_closed_proven": false,
+  "scope": "Missing Core77 final remains a genuine lifecycle-evidence gap; recorded zero counters and absent init do not prove no later activity or restoration"
+}
