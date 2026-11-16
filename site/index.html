@@ -649,37 +649,39 @@ a.plink:hover{border-color:var(--ink)}
 .ico{width:1em;height:1em;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ico.eb{font-size:14px;margin-right:2px}
 .ico.sm{font-size:13px;margin-right:5px;vertical-align:-2px}
-.fw-row{display:grid;grid-template-columns:minmax(0,.86fr) 34px minmax(0,1.64fr) 34px minmax(0,.86fr);align-items:stretch}
+.fw-row{display:grid;grid-template-columns:minmax(0,.96fr) 28px minmax(0,1.56fr) 28px minmax(0,.96fr);align-items:stretch}
 .fw-p{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--paper);transition:border-color .3s,box-shadow .3s}
 .fw-p.u{--pc:var(--red);--pc-soft:var(--red-soft);--pc-line:var(--red-line)}
 .fw-p.s{--pc:var(--t0);--pc-soft:color-mix(in srgb,var(--t0) 9%,var(--paper));--pc-line:color-mix(in srgb,var(--t0) 28%,var(--line))}
 .fw-p.on{border-color:var(--pc);box-shadow:0 0 0 3px color-mix(in srgb,var(--pc) 14%,transparent)}
-.fw-h{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--pc-soft);border-bottom:1px solid var(--pc-line);font-size:15.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
-.fw-h>.ico{font-size:20px;color:var(--pc)}
+.fw-h{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--pc-soft);border-bottom:1px solid var(--pc-line);font-size:15px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+.fw-h>.ico{font-size:19px;color:var(--pc)}
 .fw-bar{width:2px;align-self:stretch;margin:2px 0;border-radius:1px;background:var(--pc);flex:none}
 .fw-tag,.fw-sub{margin-left:auto;font:10.5px var(--mono);font-weight:400;color:var(--muted);white-space:nowrap}
-.fw-tag{padding:2px 8px;border-radius:6px;background:var(--paper)}
-.fw-b{display:flex;flex-direction:column;gap:8px;flex:1;padding:12px}
+.fw-tag{padding:2px 7px;border-radius:6px;background:var(--paper);border:1px solid var(--hair)}
+.fw-b{display:flex;flex-direction:column;gap:9px;flex:1;padding:12px}
 .fw-it{display:flex;align-items:center;gap:9px;min-width:0;padding:8px 10px;border:1px solid var(--hair);border-radius:9px;background:var(--paper);transition:opacity .35s,border-color .35s,box-shadow .35s}
-.fw-it.t,.fw-it.d{opacity:.4}
+.fw-it.t,.fw-it.d{flex:1;padding:10px 12px;gap:10px;opacity:.4}
+.fw-it.t .fw-bar,.fw-it.d .fw-bar{height:28px;align-self:center;margin:0}
 .fw-it.on{opacity:1;border-color:var(--line)}
 .fw-it>.ico{font-size:17px;color:var(--pc)}
 .fw-it .k{font-size:13px;font-weight:500;white-space:nowrap}
-.fw-it .v{margin-left:auto;min-width:0;font:11px var(--mono);color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fw-foot{margin:0 12px 12px;padding:7px 10px;border-radius:8px;background:color-mix(in srgb,var(--t0) 9%,var(--paper));font-size:12.5px;text-align:center;color:var(--ink);opacity:.4;transition:opacity .35s}
-.fw-foot.on{opacity:1}
+.fw-kv{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.fw-kv .k{font:500 10.5px/1.35 var(--mono);letter-spacing:.03em;color:var(--muted)}
+.fw-kv .v{font:500 13.5px/1.35 var(--display);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fw-foot{margin:0 12px 12px;padding:7px 6px;border-radius:8px;background:color-mix(in srgb,var(--t0) 9%,var(--paper));font:10.5px/1.4 var(--mono);text-align:center;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.4;transition:opacity .35s}
+.fw-foot.on{opacity:1;color:var(--ink)}
 .fw-ar{display:grid;place-items:center;color:var(--line);transition:color .3s}
 .fw-ar .ico{font-size:20px;stroke-width:2.2}
 .fw-ar.on{color:var(--ink)}
 .fw-ar.go{color:var(--red)}
 .fw-ar.go .ico{animation:fw-nudge .5s ease-in-out infinite alternate}
 @keyframes fw-nudge{to{transform:translateX(4px)}}
-.fw-round,.fw-miss{font:10.5px var(--mono);font-weight:400;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--paper)}
-.fw-round{margin-left:auto}
+.fw-round,.fw-miss{margin-left:auto;font:10.5px var(--mono);font-weight:400;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--paper);white-space:nowrap}
 .fw-round.on{border-color:var(--red-line);color:var(--red)}
 .fw-miss{display:none}
 .fw-miss.on{display:inline-block;border-color:var(--pc-line);color:var(--t0)}
-.fw-miss.on+*{display:none}
+.fw-miss.on+.fw-round{display:none}
 .fw-stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .fw-st{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0}
 .fw-st+.fw-st::before{content:"›";position:absolute;left:-12px;top:22px;font-size:18px;line-height:1;color:var(--faint)}
@@ -699,11 +701,11 @@ a.plink:hover{border-color:var(--ink)}
 .fw-loop.on::before{color:var(--red)}
 .fw-loop span{z-index:1;position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);padding:0 10px;background:var(--paper);font-size:12.5px;color:var(--ink);white-space:nowrap}
 .fw-loop i{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);opacity:0}
-.fw-links{display:grid;grid-template-columns:minmax(0,.86fr) 34px minmax(0,1.64fr) 34px minmax(0,.86fr);height:62px}
+.fw-links{display:grid;grid-template-columns:minmax(0,.96fr) 28px minmax(0,1.56fr) 28px minmax(0,.96fr);height:56px}
 .fw-lp{grid-column:3;position:relative}
 .fw-lk{position:absolute;top:0;bottom:0;display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:500}
 .fw-lk.up{left:18%;color:var(--t0)}
-.fw-lk.down{right:16%;color:var(--muted)}
+.fw-lk.down{right:14%;color:var(--muted)}
 .fw-lk .ln{position:relative;width:2px;height:100%;background:currentColor}
 .fw-lk.down .ln{background:repeating-linear-gradient(var(--muted) 0 5px,transparent 5px 10px)}
 .fw-lk .ln::after{content:"";position:absolute;left:50%;width:8px;height:8px;border:solid currentColor;border-width:2px 0 0 2px;transform:translateX(-50%) rotate(45deg)}
@@ -712,7 +714,7 @@ a.plink:hover{border-color:var(--ink)}
 .fw-lk .ln i{position:absolute;left:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);opacity:0}
 .fw-lk.up .ln i{background:var(--t0);box-shadow:0 0 10px var(--t0)}
 .fw-lk.down .ln i{background:var(--red);box-shadow:0 0 10px var(--red)}
-.fw-kb{width:min(100%,920px);margin:0 auto}
+.fw-kb{width:100%}
 .fw-kbrow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .fw-it.k{position:relative;justify-content:center;overflow:visible}
 .fw-it.k.hit{border-color:var(--t0);box-shadow:0 0 0 3px color-mix(in srgb,var(--t0) 16%,transparent)}
@@ -744,11 +746,15 @@ a.plink:hover{border-color:var(--ink)}
 .kbx-go{margin:0 12px 14px}
 @media (max-width:1100px){
   .fw-row,.fw-links{grid-template-columns:1fr;gap:10px}
+  .fw-p[data-p="target"] .fw-b,.fw-p[data-p="deliver"] .fw-b{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
   .fw-ar{height:26px;transform:rotate(90deg)}
   .fw-links{height:auto}
   .fw-lp{grid-column:1;display:flex;justify-content:space-around;height:56px}
   .fw-lk{position:static}
   .kbx{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .fw-p[data-p="target"] .fw-b,.fw-p[data-p="deliver"] .fw-b{grid-template-columns:1fr}
 }
 @media (max-width:860px){
   .fw-stages{grid-template-columns:1fr;gap:8px}
@@ -758,6 +764,8 @@ a.plink:hover{border-color:var(--ink)}
   .fw-res{min-height:76px}
   .fw-loop{margin:12px 8% 12px}
   .fw-kbrow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fw-kbrow .fw-it{padding:8px 6px;gap:6px}
+  .fw-kbrow .k{font-size:12px}
   .fw-h{font-size:14.5px;flex-wrap:wrap;white-space:normal}
   .chain-r{grid-template-columns:24px minmax(0,1fr) auto}
   .cr-l{display:none}
@@ -796,23 +804,25 @@ a.plink:hover{border-color:var(--ink)}
 .fw-it{background:var(--fig);border-color:var(--fig-in)}
 .evcard{background:var(--fig);border-color:var(--fig-line)}
 /* factory-style stack + arc for the framework loop */
-.fx{position:relative;display:flex;flex-direction:column;align-items:stretch;padding-left:38px}
-.fx-st{display:grid;grid-template-columns:24px 104px minmax(0,1fr);gap:4px 10px;align-items:baseline;min-height:58px;padding:10px 12px;border:1px solid var(--fig-in);border-radius:4px;background:var(--fig);transition:border-color .3s,box-shadow .3s,background .3s}
+.fx{position:relative;display:flex;flex-direction:column;align-items:stretch;padding-left:34px}
+.fx-st{display:grid;grid-template-columns:20px 98px minmax(0,1fr);gap:4px 10px;align-items:baseline;min-height:56px;padding:9px 11px;border:1px solid var(--fig-in);border-radius:4px;background:var(--fig);transition:border-color .3s,box-shadow .3s,background .3s}
 .fx-n{font:11px var(--mono);color:var(--faint)}
-.fx-k{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--mono);letter-spacing:.08em;color:var(--ink);white-space:nowrap}
+.fx-k{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--mono);letter-spacing:.06em;color:var(--ink);white-space:nowrap}
+html[lang="en"] .fx-k{letter-spacing:.03em}
 .fx-k .ico{font-size:15px;color:var(--red)}
 .fx-st:nth-of-type(4) .fx-k .ico{color:var(--t0)}
-.fx-d{grid-column:3;font-size:12.5px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
+.fx-d{grid-column:3;font-size:12.5px;line-height:1.55;color:var(--muted);overflow-wrap:anywhere}
 .fx-d.on{color:var(--ink)}
 .fx-d b{font-family:var(--mono);font-weight:500;color:var(--red)}
 .fx-d code{font:11px var(--mono)}
 .fx-st.run{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft),0 0 18px color-mix(in srgb,var(--red) 22%,transparent)}
 .fx-st.run .fx-n{color:var(--red)}
 .fx-st.done{border-color:color-mix(in srgb,var(--t0) 45%,var(--fig-in))}
-.fx-ar{align-self:center;height:20px;font-style:normal;font-size:13px;line-height:20px;color:var(--faint)}
-.fx-arc{position:absolute;left:10px;width:22px;border:1.5px solid var(--faint);border-right:0;border-radius:7px 0 0 7px;pointer-events:none;transition:border-color .3s}
+.fx-ar{align-self:center;height:16px;font-style:normal;font-size:12px;line-height:16px;color:var(--faint)}
+.fx-arc{position:absolute;left:9px;width:19px;border:1.5px solid var(--faint);border-right:0;border-radius:7px 0 0 7px;pointer-events:none;transition:border-color .3s}
 .fx-arc::after{content:"";position:absolute;right:-1px;top:-5px;border:4.5px solid transparent;border-left:6px solid var(--faint);border-right:0;transition:border-color .3s}
-.fx-arc em{position:absolute;left:-11px;top:50%;transform:translateY(-50%);padding:6px 0;background:var(--fig);writing-mode:vertical-rl;font:10.5px/20px var(--mono);font-style:normal;letter-spacing:.18em;color:var(--muted);white-space:nowrap;transition:color .3s}
+.fx-arc em{position:absolute;left:-10px;top:50%;transform:translateY(-50%);padding:6px 0;background:var(--fig);writing-mode:vertical-rl;font:10.5px/18px var(--mono);font-style:normal;letter-spacing:.16em;color:var(--muted);white-space:nowrap;transition:color .3s}
+html[lang="en"] .fx-arc em{font-size:10px;letter-spacing:.04em;transform:translateY(-50%) rotate(180deg)}
 .fx-arc.on{border-color:var(--red)}
 .fx-arc.on::after{border-left-color:var(--red)}
 .fx-arc.on em{color:var(--red)}
@@ -1297,7 +1307,6 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 .gcard.wide .gtop li:nth-child(odd){border-right:1px solid var(--hair)}
 @media (max-width:860px){.gcard.wide .gtop{grid-template-columns:1fr}.gcard.wide .gtop li:nth-child(odd){border-right:0}}
 
-html[lang="en"] .fx-st{grid-template-columns:24px 176px minmax(0,1fr)}
 .gp-p{flex:0 1 auto;min-width:3.2em}
 .gp-line>.cs-tag{flex:none}
 .gp-p.fix{flex:none;max-width:45%}
@@ -1647,7 +1656,7 @@ const EN_EVAL_MAP = [
   [/observer transparency/i, "观测钩子透明性对照", "Observer Hook Transparency"],
   [/TP1 text pilot \(one input\)/i, "TP1 单输入文本推理基线", "TP1 Single-Input Inference Pilot"],
   [/cache-off anchor \(159 targets\)/i, "关闭 KV 缓存推理锚点（159 目标）", "Cache-Off Inference Anchor (159 Targets)"],
-  [/same-NPU three-repeat TP1 text pilot/i, "TP1 同卡三次重复推理", "Same-Accelerator 3× Repeat Pilot"],
+  [/same-NPU three-repeat TP1 text pilot/i, "TP1 同卡三次重复推理", "Same-NPU 3× Repeat Pilot"],
   [/text pilot:\s*H100 vs RTX 5090/i, "跨代 GPU 文本推理基线", "Cross-Gen GPU Inference Pilot"],
 ];
 function buildEvalUI(e) {
@@ -3074,7 +3083,7 @@ function makeScene(root, cfg) {
   }
   function setPlaying(v) {
     playing = v; last = null; root.dataset.playing = String(v);
-    playBtn.textContent = v ? "暂停" : "播放"; playBtn.setAttribute("aria-pressed", String(v));
+    playBtn.textContent = v ? tx("暂停", "Pause") : tx("播放", "Play"); playBtn.setAttribute("aria-pressed", String(v));
   }
   function tick(now) {
     if (playing && visible && !document.hidden) {
@@ -3109,14 +3118,14 @@ function makeScene(root, cfg) {
 function demoShell(o) {
   return `<article class="panel dm" id="${o.id}">
     <header class="dm-h"><div><h3 class="ev-q">${o.q}</h3><p class="ev-a">${o.a}</p></div>
-      <div class="dm-ctl"><button class="btn sm dm-play" type="button" aria-pressed="false">播放</button><button class="btn sm dm-replay" type="button">重播</button></div></header>
-    <div class="dm-steps" role="group" aria-label="动画步骤，点击跳转"></div>
+      <div class="dm-ctl"><button class="btn sm dm-play" type="button" aria-pressed="false">${tx("播放", "Play")}</button><button class="btn sm dm-replay" type="button">${tx("重播", "Replay")}</button></div></header>
+    <div class="dm-steps" role="group" aria-label="${tx("动画步骤，点击跳转", "Animation steps — click to jump")}"></div>
     <p class="dm-cap" aria-live="polite"></p>
     <div class="dm-stage">${o.body}</div>
-    <div class="dm-leg">${o.legend || ""}<span class="dm-ill">${o.ill || "示意，不按比例"}</span></div>
+    <div class="dm-leg">${o.legend || ""}<span class="dm-ill">${o.ill || tx("示意，不按比例", "Schematic")}</span></div>
   </article>`;
 }
-const measBox = (label, body) => `<div class="dm-meas"><p class="dm-ml"><b>实测</b><span>${label}</span></p>${body}</div>`;
+const measBox = (label, body) => `<div class="dm-meas"><p class="dm-ml"><b>${tx("实测", "Measured")}</b><span>${label}</span></p>${body}</div>`;
 const barsHtml = bars => `<div class="pbars">${bars.map(b => `<div class="pbar"><span class="lab">${b.label}${b.note ? `<small>${b.note}</small>` : ""}</span>
   <span class="val" style="color:${b.color}">${b.text}</span><span class="trk"><i style="--w:${b.w.toFixed(1)}%;background:${b.color}"></i></span></div>`).join("")}</div>`;
 
@@ -3491,53 +3500,79 @@ function flowCase() {
   const chain = ["fix", "train", "layer", "trace", "gemm", "proj"].map(k => g(k)).filter(Boolean);
   return {
     chain,
-    target: [["chip", "硬件平台", "Ascend 910C"], ["layers", "模型", fix.model?.name || "—"], ["monitor", "训推平台", "MindSpeed"]],
-    targetFoot: "TP4 · Megatron Bridge · 对照 H200",
-    rounds: [
-      { tag: "第 1 轮", res: [
-        `Action logprob 最大绝对误差 <b>${n(fix.headline.before)}</b>`,
-        `<code>fused_rms_norm.py</code><br>zero-centered gamma 约定不一致`,
-        `gamma 初始化为 0<br>两条前向都用 1 + gamma`,
-        `<b>${n(fix.headline.before)} → ${n(fix.headline.after)}</b><br>梯度余弦 ${n(train.headline.before)} → ${n(train.headline.after)}`] },
-      { tag: "后续追踪", res: [
-        `剩余 <b>${n(fix.headline.after)}</b><br>逐层采样 32 层边界`,
-        `首次分叉 layer 0 <code>in_proj</code><br>原生 BF16 GEMM 路径`,
-        `候选：首次投影选择性 FP32<br>RMSE ${n(proj.headline.before)} → ${n(proj.headline.after)}`,
-        `任务指标未一致改善<br><b>保留默认</b> · 未见新缺陷`] },
+    target: [
+      ["chip", tx("硬件平台", "Hardware"), tx("Ascend 910C", "Ascend 910C")],
+      ["layers", tx("模型", "Model"), fix.model?.name || "—"],
+      ["monitor", tx("训推框架", "Training stack"), "MindSpeed"],
     ],
-    deliver: [["wrench", "适配实现", "1 个补丁"], ["sliders", "运行配置", "默认投影"], ["doc", "验证报告", `${chain.length} 条记录`]],
+    targetFoot: tx("TP4 · Megatron Bridge · 对照 H200", "TP4 · Megatron Bridge · vs H200"),
+    rounds: [
+      { tag: tx("第 1 轮", "Round 1"), res: [
+        tx(`Action logprob 最大绝对误差 <b>${n(fix.headline.before)}</b>`, `Action logprob max abs error <b>${n(fix.headline.before)}</b>`),
+        tx(`<code>fused_rms_norm.py</code><br>zero-centered gamma 约定不一致`, `<code>fused_rms_norm.py</code><br>zero-centered gamma split`),
+        tx(`gamma 初始化为 0<br>两条前向都用 1 + gamma`, `Init gamma = 0<br>both forwards apply 1 + gamma`),
+        tx(`<b>${n(fix.headline.before)} → ${n(fix.headline.after)}</b><br>梯度余弦 ${n(train.headline.before)} → ${n(train.headline.after)}`, `<b>${n(fix.headline.before)} → ${n(fix.headline.after)}</b><br>grad cosine ${n(train.headline.before)} → ${n(train.headline.after)}`)] },
+      { tag: tx("后续追踪", "Follow-up"), res: [
+        tx(`剩余 <b>${n(fix.headline.after)}</b><br>逐层采样 32 层边界`, `Residual <b>${n(fix.headline.after)}</b><br>sample all 32 layer boundaries`),
+        tx(`首次分叉 layer 0 <code>in_proj</code><br>原生 BF16 GEMM 路径`, `First split at layer 0 <code>in_proj</code><br>native BF16 GEMM path`),
+        tx(`候选：首次投影选择性 FP32<br>RMSE ${n(proj.headline.before)} → ${n(proj.headline.after)}`, `Selective FP32 1st projection<br>RMSE ${n(proj.headline.before)} → ${n(proj.headline.after)}`),
+        tx(`任务指标未一致改善<br><b>保留默认</b> · 未见新缺陷`, `No net task gain<br><b>keep default</b> · no new defect`)] },
+    ],
+    deliver: [
+      ["wrench", tx("适配实现", "Implementation"), tx("1 个最小补丁", "1 minimal patch")],
+      ["sliders", tx("运行配置", "Runtime config"), tx("默认投影策略", "Default projection")],
+      ["doc", tx("验证报告", "Verification report"), tx(`${chain.length} 条关联记录`, `${chain.length} linked records`)],
+    ],
   };
 }
-const KB_ITEMS = [["book", "已知问题"], ["layers", "影响版本"], ["bulb", "替代方案"], ["wrench", "修复候选"], ["db", "验证证据"]];
+const KB_ITEMS = [
+  ["book", tx("已知问题", "Known issues")],
+  ["layers", tx("影响版本", "Affected versions")],
+  ["bulb", tx("替代方案", "Workarounds")],
+  ["wrench", tx("修复候选", "Fix candidates")],
+  ["db", tx("验证证据", "Evidence")],
+];
 
-const FX_DESC = ["双端输入固定，逐元素对齐输出与梯度", "区分硬件算术差异、代码缺陷与路径重排", "仅修改根因算子或参数约定，保持其余语义", "在原始负载下复测，核验误差收敛与回归项"];
+const FX_DESC = [
+  tx("双端输入固定，逐元素对齐输出与梯度", "Fixed inputs & weights; align outputs and gradients"),
+  tx("区分硬件算术差异、代码缺陷与路径重排", "Separate hardware rounding, code bugs & reordering"),
+  tx("仅修改根因算子或参数约定，保持其余语义", "Patch only the root-cause operator or convention"),
+  tx("在原始负载下复测，核验误差收敛与回归项", "Re-run native workload; verify convergence & scope"),
+];
 function sceneFlowHtml() {
   const X = flowCase(); if (!X) return "";
-  const stages = [["chart", "精度对比"], ["search", "问题诊断"], ["wrench", "修复优化"], ["cycle", "回归验证"]];
-  const panelItems = (rows, cls) => rows.map(([i, k, v]) => `<div class="fw-it ${cls}">${ico(i)}<i class="fw-bar"></i><span class="k">${k}</span><span class="v" title="${esc(v)}">${esc(v)}</span></div>`).join("");
+  const stages = [
+    ["chart", tx("精度对比", "Compare")],
+    ["search", tx("问题诊断", "Diagnose")],
+    ["wrench", tx("修复优化", "Repair")],
+    ["cycle", tx("回归验证", "Re-verify")],
+  ];
+  const panelItems = (rows, cls) => rows.map(([i, k, v]) => `<div class="fw-it ${cls}">${ico(i)}<i class="fw-bar"></i><div class="fw-kv"><span class="k">${k}</span><span class="v" title="${esc(v)}">${esc(v)}</span></div></div>`).join("");
   return demoShell({
-    id: "dmFlow", q: "一次跨栈适配在 NumericBridge 中如何闭环？", a: "以 Qwen3.5-9B-Base 在 910C 上的适配为例：先修复 RMSNorm 约定分叉，再逐层隔离原生 BF16 残差。",
+    id: "dmFlow",
+    q: tx("一次跨栈适配在 NumericBridge 中如何闭环？", "How does one cross-stack adaptation close the loop in NumericBridge?"),
+    a: tx("以 Qwen3.5-9B-Base 在 910C 上的适配为例：先修复 RMSNorm 约定分叉，再逐层隔离原生 BF16 残差。", "Qwen3.5-9B-Base on 910C: fix the RMSNorm convention split first, then isolate the native BF16 residual layer by layer."),
     body: `<div class="fw-row">
-        <section class="fw-p u" data-p="target"><div class="fw-h">${ico("target")}<i class="fw-bar"></i>适配目标<span class="fw-tag">真实案例</span></div>
-          <div class="fw-b">${panelItems(X.target, "t")}</div><p class="fw-foot">${esc(X.targetFoot)}</p></section>
+        <section class="fw-p u" data-p="target"><div class="fw-h">${ico("target")}<i class="fw-bar"></i>${tx("适配目标", "Target Stack")}<span class="fw-tag">${tx("真实案例", "Real case")}</span></div>
+          <div class="fw-b">${panelItems(X.target, "t")}</div><p class="fw-foot" title="${esc(X.targetFoot)}">${esc(X.targetFoot)}</p></section>
         <div class="fw-ar" data-a="0">${ico("arrow")}</div>
-        <section class="fw-p s" data-p="core"><div class="fw-h">${ico("gear")}<i class="fw-bar"></i>NumericBridge 框架<span class="fw-round" id="fwRound">待开始</span><span class="fw-miss" id="fwMiss">检索：未命中已知问题</span></div>
+        <section class="fw-p s" data-p="core"><div class="fw-h">${ico("gear")}<i class="fw-bar"></i>${tx("NumericBridge 框架", "NumericBridge")}<span class="fw-miss" id="fwMiss">${tx("检索：未命中已知问题", "KB: no known match")}</span><span class="fw-round" id="fwRound">${tx("待开始", "Ready")}</span></div>
           <div class="fw-b"><div class="fx" id="fxStack">
-            <span class="fx-arc" id="fxArc" aria-hidden="true"><em>残差未闭合 · 进入下一轮排查</em><i></i></span>
+            <span class="fx-arc" id="fxArc" aria-hidden="true"><em>${tx("残差未闭合 · 进入下一轮排查", "Residual open · next pass")}</em><i></i></span>
             ${stages.map(([i, k], j) => `${j ? '<i class="fx-ar" aria-hidden="true">↓</i>' : ""}<div class="fx-st" data-s="${j}"><span class="fx-n">0${j + 1}</span><b class="fx-k">${ico(i)}${k}</b><p class="fx-d">${FX_DESC[j]}</p></div>`).join("")}
-            <div class="fx-gate" id="fxGate"><span class="g0">✓ 误差收敛或成因闭合 → 生成交付</span><span class="g1">↻ 仍存残差 → 下一轮逐层排查</span><span class="g2">✓ 残差归因完毕 → 生成交付</span></div>
+            <div class="fx-gate" id="fxGate"><span class="g0">${tx("✓ 误差收敛或成因闭合 → 生成交付", "✓ Converged or explained → deliver")}</span><span class="g1">${tx("↻ 仍存残差 → 下一轮逐层排查", "↻ Residual open → next layer pass")}</span><span class="g2">${tx("✓ 残差归因完毕 → 生成交付", "✓ Residual explained → deliver")}</span></div>
           </div></div></section>
         <div class="fw-ar" data-a="1">${ico("arrow")}</div>
-        <section class="fw-p u" data-p="deliver"><div class="fw-h">${ico("box")}<i class="fw-bar"></i>适配交付</div>
-          <div class="fw-b">${panelItems(X.deliver, "d")}</div><p class="fw-foot">库 / 插件 / 补丁</p></section>
+        <section class="fw-p u" data-p="deliver"><div class="fw-h">${ico("box")}<i class="fw-bar"></i>${tx("适配交付", "Deliverables")}</div>
+          <div class="fw-b">${panelItems(X.deliver, "d")}</div><p class="fw-foot">${tx("库 / 插件 / 补丁", "Library / plugin / patch")}</p></section>
       </div>
       <div class="fw-links"><div class="fw-lp">
-        <span class="fw-lk up"><span class="ln"><i></i></span>检索</span>
-        <span class="fw-lk down"><span class="ln"><i></i></span>可选上传 · 审核发布</span></div></div>
-      <section class="fw-p s fw-kb" data-p="kb"><div class="fw-h">${ico("people")}<i class="fw-bar"></i>社区知识库</div>
+        <span class="fw-lk up"><span class="ln"><i></i></span>${tx("检索", "Query")}</span>
+        <span class="fw-lk down"><span class="ln"><i></i></span>${tx("可选上传 · 审核发布", "Optional upload · reviewed")}</span></div></div>
+      <section class="fw-p s fw-kb" data-p="kb"><div class="fw-h">${ico("people")}<i class="fw-bar"></i>${tx("社区知识库", "Community Knowledge Base")}</div>
         <div class="fw-b"><div class="fw-kbrow">${KB_ITEMS.map(([i, k], j) => `<div class="fw-it k" data-k="${j}">${ico(i)}<span class="k">${k}</span><em>+1</em></div>`).join("")}</div></div></section>`,
-    legend: `<span><i class="lg fw-l u"></i>用户侧：目标与交付</span><span><i class="lg fw-l s"></i>共享：框架与知识库</span><span><i class="lg op-l run"></i>当前步骤</span>`,
-    ill: "架构流程示意 · 目标环境、各轮读数与代码定位均取自实测修复记录",
+    legend: `<span><i class="lg fw-l u"></i>${tx("用户侧：目标与交付", "User side: target & deliverables")}</span><span><i class="lg fw-l s"></i>${tx("共享：框架与知识库", "Shared: framework & KB")}</span><span><i class="lg op-l run"></i>${tx("当前步骤", "Active step")}</span>`,
+    ill: tx("架构流程示意 · 目标环境、各轮读数与代码定位均取自实测修复记录", "Schematic · environment, readings and code locations come from verified repair records"),
   });
 }
 function sceneFlow() {
@@ -3560,12 +3595,12 @@ function sceneFlow() {
   makeScene(root, {
     name: "flow", loop: 26, still: 22,
     steps: [
-      { at: 0, label: "定义适配目标", cap: "锁定目标硬件（Ascend 910C）、模型（Qwen3.5-9B-Base）、训推框架（MindSpeed TP4）及对照基线（NVIDIA H200）。" },
-      { at: 2.2, label: "检索已知案例", cap: "先按组件与版本号检索社区知识库中的已知缺陷、补丁与规避配置；当前版本组合未命中既有记录，启动首轮精度对比。" },
-      { at: 5.2, label: "首轮定位与修复", cap: "首轮比对测得 Action logprob 最大绝对误差达 13.95，定位至 MindSpeed fused_rms_norm.py 的 zero-centered gamma 分支不一致；补丁复验后误差降至 0.113，梯度余弦由 0.07 升至 0.999。" },
-      { at: 11.2, label: "残差追踪与定性", cap: "针对剩余 0.113 误差继续逐层采样 32 层边界，定位首次分叉位于第 0 层 in_proj 的原生 BF16 GEMM；评估选择性 FP32 投影未带来一致收益，确认为正常低精度路径差异。" },
-      { at: 17.0, label: "生成适配交付", cap: "输出最小代码补丁、经验证的默认运行配置，以及包含 6 条关联记录、复验范围与残差说明的完整报告。" },
-      { at: 19.8, label: "沉淀至知识库", cap: "问题成因、影响版本、补丁与验证证据经复核后归档至社区知识库，供后续相同软件栈直接检索复用。" },
+      { at: 0, label: tx("定义适配目标", "Define target"), cap: tx("锁定目标硬件（Ascend 910C）、模型（Qwen3.5-9B-Base）、训推框架（MindSpeed TP4）及对照基线（NVIDIA H200）。", "Pin the target hardware (Ascend 910C), model (Qwen3.5-9B-Base), stack (MindSpeed TP4) and baseline (NVIDIA H200).") },
+      { at: 2.2, label: tx("检索已知案例", "Query KB"), cap: tx("先按组件与版本号检索社区知识库中的已知缺陷、补丁与规避配置；当前版本组合未命中既有记录，启动首轮精度对比。", "Query the knowledge base by component and version for known defects, patches and workarounds; on a miss, start Round 1.") },
+      { at: 5.2, label: tx("首轮定位与修复", "Round 1: fix"), cap: tx("首轮比对测得 Action logprob 最大绝对误差达 13.95，定位至 MindSpeed fused_rms_norm.py 的 zero-centered gamma 分支不一致；补丁复验后误差降至 0.113，梯度余弦由 0.07 升至 0.999。", "Round 1 measures Action logprob max abs error 13.95, traced to the zero-centered gamma split in MindSpeed fused_rms_norm.py; after patching it drops to 0.113 and grad cosine rises from 0.07 to 0.999.") },
+      { at: 11.2, label: tx("残差追踪与定性", "Trace residual"), cap: tx("针对剩余 0.113 误差继续逐层采样 32 层边界，定位首次分叉位于第 0 层 in_proj 的原生 BF16 GEMM；评估选择性 FP32 投影未带来一致收益，确认为正常低精度路径差异。", "Sample all 32 layer boundaries for the remaining 0.113: the first split sits at the native BF16 GEMM in layer 0 in_proj. Selective FP32 projection gives no net task gain—confirmed as normal low-precision drift.") },
+      { at: 17.0, label: tx("生成适配交付", "Deliverables"), cap: tx("输出最小代码补丁、经验证的默认运行配置，以及包含 6 条关联记录、复验范围与残差说明的完整报告。", "Ship the minimal code patch, verified default runtime config, and full report with 6 linked records, scope and residual analysis.") },
+      { at: 19.8, label: tx("沉淀至知识库", "Publish to KB"), cap: tx("问题成因、影响版本、补丁与验证证据经复核后归档至社区知识库，供后续相同软件栈直接检索复用。", "Root cause, affected versions, patch and verification evidence are reviewed and archived to the community knowledge base for reuse.") },
     ],
     render(t) {
       tItems.forEach((e, i) => e.classList.toggle("on", t >= 0.3 + i * 0.45));
@@ -3579,15 +3614,17 @@ function sceneFlow() {
       P.kb.classList.toggle("on", (t >= 3.0 && t < 4.8) || (t >= 20.6 && t < 22.4));
       miss.classList.toggle("on", t >= 4.2 && t < 5.6);
       const r2 = t >= 12.4, T = r2 ? R2 : R1, cur = stageAt(t, T), rd = X.rounds[r2 ? 1 : 0];
-      round.textContent = t < 5.2 ? "待开始" : r2 ? X.rounds[1].tag : X.rounds[0].tag;
+      round.textContent = t < 5.2 ? tx("待开始", "Ready") : r2 ? X.rounds[1].tag : X.rounds[0].tag;
       round.classList.toggle("on", t >= 5.2);
+      let dirty = false;
       sts.forEach((s, j) => {
         s.classList.toggle("run", cur === j);
         s.classList.toggle("done", cur > j || cur === 4);
         const show = t >= T[j] + 0.35, key = `${show}|${r2}`;
         res[j].classList.toggle("on", show);
-        if (res[j].dataset.k !== key) { res[j].dataset.k = key; res[j].innerHTML = show ? rd.res[j].replace(/<br>/g, " · ") : FX_DESC[j]; }
+        if (res[j].dataset.k !== key) { res[j].dataset.k = key; res[j].innerHTML = show ? rd.res[j].replace(/<br>/g, " · ") : FX_DESC[j]; dirty = true; }
       });
+      if (dirty) layoutArc();
       if (t < R2[0] && t >= 11.2) { sts.forEach(s => s.classList.add("done")); }
       /* the arc: leaves step 04 on the left, climbs the gutter, re-enters 01 */
       const lp = seg(t, 11.2, 12.4);
@@ -3612,10 +3649,10 @@ function sceneFlow() {
 function flowChainHtml() {
   const X = flowCase(); if (!X) return "";
   return `<div class="chain">${X.chain.map((r, i) => {
-    const hd = r.headline, lab = i === 0 ? "第 1 轮 · 修复" : i === 1 ? "第 1 轮 · 训练验证" : "后续追踪";
+    const hd = r.headline, lab = i === 0 ? tx("第 1 轮 · 修复", "Round 1 · fix") : i === 1 ? tx("第 1 轮 · 训练验证", "Round 1 · train check") : tx("后续追踪", "Follow-up");
     return `<button class="chain-r" type="button" data-rp="${esc(r.id)}"><span class="cr-n">${String(i + 1).padStart(2, "0")}</span><span class="cr-l">${lab}</span>
       <span class="cr-t">${esc(r.short)}<small>${esc(r.problem?.location || "")}</small></span>
-      <span class="cr-v">${hd ? `${fmtNum(hd.before)} <i>→</i> <b>${fmtNum(hd.after)}</b><small>${esc(hd.label)}</small>` : `<small>仅定性 · 定位证据</small>`}</span></button>`;
+      <span class="cr-v">${hd ? `${fmtNum(hd.before)} <i>→</i> <b>${fmtNum(hd.after)}</b><small>${esc(hd.label)}</small>` : `<small>${tx("仅定性 · 定位证据", "Qualitative · trace evidence")}</small>`}</span></button>`;
   }).join("")}</div>`;
 }
 /* inference-rsi keeps the MEASURED box inside the figure frame */
@@ -4360,7 +4397,7 @@ const I18N_EN = {
   "NPU": "NPU", "最大绝对误差": "Max abs error", "后续追踪": "Follow-up trace", "重播": "Replay", "实测": "Measured",
   "动画步骤，点击跳转": "Animation steps — click to jump", "播放": "Play", "暂停": "Pause", "已复验": "Verified", "最差": "Worst",
   "中位 {n} · n={n}": "median {n} · n={n}", "无该指标": "No such metric", "仅定性 · 定位证据": "Qualitative · localisation evidence",
-  "Ascend 910{n}": "Ascend 910{n}", "Ascend NPU": "Ascend NPU", "越小越一致": "Lower is closer", "越大越一致": "Higher is closer",
+  "Ascend 910{n}": "Ascend 910{n}", "Ascend NPU": "Ascend NPU", "昇腾 {n}C": "Ascend {n}C", "越小越一致": "Lower is closer", "越大越一致": "Higher is closer",
   "最差情况": "worst case", "改善倍数": "improvement factor", "仅定性": "Qualitative only", "余弦相似度": "Cosine similarity",
   "{n} 条": "{n}", "L{n} 误差": "L{n} error", "参数/优化器更新": "Optimizer updates", "精度对比": "Precision comparison",
   "问题诊断": "Diagnosis", "适配交付": "Adaptation delivery", "适配实现": "Implementation", "运行配置": "Runtime config",
@@ -4378,6 +4415,7 @@ const I18N_EN = {
   "NLL 绝对差": "NLL abs diff", "等待": "Waiting", "Top-{n} 一致率": "Top-{n} agreement", "Action logprob 最大绝对误差": "Action logprob max abs error",
   "模型": "Model", "一次跨栈适配在 NumericBridge 中如何闭环？": "How does one cross-stack adaptation close the loop in NumericBridge?",
   "以 Qwen{n}-{n}B-Base 在 B{n} 上的适配为例：先修复 RMSNorm 约定分叉，再逐层隔离原生 BF{n} 残差。": "Qwen{n}-{n}B-Base on B{n}: fix the RMSNorm convention split first, then isolate the native BF{n} residual layer by layer.",
+  "以 Qwen{n}-{n}B-Base 在 {n}C 上的适配为例：先修复 RMSNorm 约定分叉，再逐层隔离原生 BF{n} 残差。": "Qwen{n}-{n}B-Base on {n}C: fix the RMSNorm convention split first, then isolate the native BF{n} residual layer by layer.",
   "定义适配目标": "Define target", "检索已知案例": "Search known cases", "首轮定位与修复": "Round 1: locate & fix", "残差追踪与定性": "Trace the residual",
   "生成适配交付": "Deliver", "沉淀至知识库": "Publish to KB", "适配目标": "Adaptation target", "真实案例": "Real", "硬件平台": "Hardware",
   "训推平台": "Train/serve stack", "TP{n} · Megatron Bridge · 对照 H{n}": "TP{n} · Megatron Bridge · vs H{n}", "NumericBridge 框架": "NumericBridge framework",
@@ -4480,7 +4518,7 @@ const I18N_EN = {
   "将完全相同的 token 序列与模型权重分别送入双端环境。": "Send the identical token sequence and weights to both sides.", "在原始负载下复测，核验误差收敛与回归项": "Re-run the original workload; check convergence and regressions",
   "仅修改根因算子或参数约定，保持其余语义": "Change only the root-cause operator or convention", "区分硬件算术差异、代码缺陷与路径重排": "Separate hardware arithmetic, code defects and path reordering",
   "双端输入固定，逐元素对齐输出与梯度": "Fixed inputs, align outputs and gradients", "待开始": "Not started",
-  "锁定目标硬件（Ascend 910{n}）、模型（Qwen{n}-{n}B-Base）、训推框架（MindSpeed TP{n}）及对照基线（NVIDIA H{n}）。": "Fix the target hardware (Accelerator B{n}), model (Qwen{n}-{n}B-Base), stack (MindSpeed TP{n}) and baseline (NVIDIA H{n}).",
+  "锁定目标硬件（Ascend 910{n}）、模型（Qwen{n}-{n}B-Base）、训推框架（MindSpeed TP{n}）及对照基线（NVIDIA H{n}）。": "Fix the target hardware (Ascend 910{n}), model (Qwen{n}-{n}B-Base), stack (MindSpeed TP{n}) and baseline (NVIDIA H{n}).",
   "中": "中", "对照仅在有效 token 上计算的独立 GAE 参考值：原版有效回报最大偏差 {n}，打补丁后误差精确归零。": "Against a GAE reference on valid tokens only: the original is off by up to {n}; after the patch the error is exactly zero.",
   "查看最大偏离记录": "Open worst record",
   "首轮比对测得 Action logprob 最大绝对误差达 {n}，定位至 MindSpeed fused_rms_norm.py 的 zero-centered gamma 分支不一致；补丁复验后误差降至 {n}，梯度余弦由 {n} 升至 {n}。": "Round 1 measures Action logprob max abs error {n}, traced to the zero-centered gamma branch in MindSpeed fused_rms_norm.py; after the patch it drops to {n} and gradient cosine rises from {n} to {n}.",
@@ -4490,7 +4528,7 @@ const I18N_EN = {
   "清除全部": "Clear all", "无匹配的修复记录。": "No matching repairs.", "无匹配的修复记录": "No matching repairs", "请放宽筛选条件或清空搜索词。": "Loosen the filters or clear the search.",
   "token 路径单次写入前 {n} 个预填充 token；chunk{n}-{n} 路径分 {n} + {n} 两批写入，第二批注意力需读取第一批 KV，随后均逐 token 解码 {n} 步。": "The token path writes the first {n} prefill tokens at once; chunk{n}-{n} writes {n} + {n}, the second chunk reading the first chunk's KV; both then decode {n} steps.",
   "未参与这类比较": "Not compared on this target", "中位偏离": "Median deviation", "未参与": "Not compared",
-  "双端只在一个维度上不同：这里是 NVIDIA H{n} 与Ascend 910{n}，都走 token 路径。": "The sides differ in one thing only: NVIDIA H{n} vs Accelerator B{n}, both on the token path.",
+  "双端只在一个维度上不同：这里是 NVIDIA H{n} 与Ascend 910{n}，都走 token 路径。": "The sides differ in one thing only: NVIDIA H{n} vs Ascend 910{n}, both on the token path.",
   "分块改变了注意力归约的求和树结构。浮点加法不满足结合律，BF{n} 仅含 {n} 位有效尾数，分组变化直接改变舍入结果。": "Chunking changes the attention sum tree. FP addition is not associative and BF{n} has {n} mantissa bits, so regrouping changes the rounding.",
   "配对输出张量逐元素相减并按一致性分级着色；图中示意 {n} 个元素，该条实测共对齐 {n} 万个元素。": "Paired outputs are differenced and coloured by tier; {1} shown here, {2} × 10⁴ aligned in the real record.",
   "将全量元素差值归约为最大绝对误差、RMSE 或余弦相似度等标量指标；单一离群元素即可推高最大绝对误差。": "All differences reduce to scalars such as max abs error, RMSE or cosine; a single outlier is enough to raise the max abs error.",
