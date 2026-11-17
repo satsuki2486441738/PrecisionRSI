@@ -59,9 +59,9 @@ python -m precision_rsi iterate series.json --workspace projects/my-stream/sessi
 
 ## 使用
 
-[项目架构与四个整理边界](.github/project-architecture.md)说明当前实现与后续方向。
+[项目架构与四个整理边界](docs/project-architecture.md)说明当前实现与后续方向。
 
-[RL 精度诊断与修复方案（草案）](.github/rl-precision-workflow-proposal.md)基于本仓库已有能力，约定可复用的案例执行与交付流程。
+[RL 精度诊断与修复方案（草案）](docs/rl-precision-workflow-proposal.md)基于本仓库已有能力，约定可复用的案例执行与交付流程。
 
 将 skills 导出到新的客户端 skill 目录；导出器会带上公共执行包，使 Compare 能脱离仓库运行：
 
@@ -177,3 +177,5 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 
 
 [结果指标页](site/paper.html)提供公开报告、科学图、[JSON](site/data/paper-results.json)和[CSV 数值索引](site/data/paper-results.csv)。公开内容保留来源哈希、实际配置、覆盖范围、失败与未验证项，数值字段不代表独立样本。历史 ZIP、原始张量和完整执行日志仅在本地保留，不提供在线下载。[本地证据索引](site/data/local-evidence.json)记录归档名称、大小和 SHA256。哈希完整性不表示数值验收通过。
+
+公开内容范围见[发布规则](docs/publication.md)：保留最终结果及复现信息，中间执行产物本地保存。

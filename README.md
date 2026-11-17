@@ -61,9 +61,9 @@ Task streams can trigger improvement on new evidence within a shared time budget
 
 ## Use
 
-See the [current architecture and four integration boundaries (Chinese)](.github/project-architecture.md).
+See the [current architecture and four integration boundaries (Chinese)](docs/project-architecture.md).
 
-The [RL diagnosis and repair proposal (Chinese)](.github/rl-precision-workflow-proposal.md)
+The [RL diagnosis and repair proposal (Chinese)](docs/rl-precision-workflow-proposal.md)
 plans reusable case workflows on top of this repository’s existing capabilities.
 
 Export the skills side by side into a fresh client skill directory. The exporter
@@ -182,3 +182,5 @@ The [RSI dashboard](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html) s
 
 
 The [results page](site/paper.html) provides public reports, scientific figures, [JSON](site/data/paper-results.json) and a [CSV numeric index](site/data/paper-results.csv). Published results retain source hashes, actual configurations, coverage, failures and unverified scopes. Numeric fields are not independent samples. Historical ZIPs, raw tensors and complete execution logs remain local with no online download. The [local evidence index](site/data/local-evidence.json) records archive names, sizes and SHA256 hashes. Byte integrity does not imply numerical acceptance.
+
+Public repository scope: [publication policy](docs/publication.md). Keep final results and reproducibility metadata public; retain intermediate execution artifacts locally.

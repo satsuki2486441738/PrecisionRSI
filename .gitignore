@@ -18,6 +18,7 @@
 !/skills/precision-repair/
 !/site/
 !/.github/
+!/docs/
 !/tests/
 /tests/*
 !/tests/test_architecture.py
@@ -63,3 +64,10 @@ __pycache__/
 /site/evidence/deepseek41-*.zip
 /site/evidence/paper-writing-results-*.zip
 /site/evidence/evaluation-metrics-results-*.zip*
+
+# Retain generated report copies and completed execution plans locally.
+/.github/**/summary.json
+/.github/**/*.pdf
+/.github/**/*.png
+/.github/**/historical-report-preserved.md
+/.github/qwen35-qwen38-followup-plan.md
