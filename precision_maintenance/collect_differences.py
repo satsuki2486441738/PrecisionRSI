@@ -559,7 +559,7 @@ GLOBAL_NOTES = [
 ]
 
 def fetch(url):
-    request = urllib.request.Request(url, headers={"User-Agent": "PrecisionRSI-survey-collector"})
+    request = urllib.request.Request(url, headers={"User-Agent": "NumericBridge-survey-collector"})
     with urllib.request.urlopen(request, timeout=90) as response:
         return response.read()
 

@@ -6,7 +6,7 @@ GitHub Pages serves this directory. Preview from the repository root with `pytho
 
 | Path | What it is |
 | --- | --- |
-| `index.html` | NumericForge — the comparison board: exploration swarm, question groups, detail list, platform compare and repair figure. |
+| `index.html` | NumericBridge — the comparison board: exploration swarm, question groups, detail list, platform compare and repair figure. |
 | `archive.html` | The repair / evaluation / differences dashboard this directory served previously. Kept at its own URL; the board does not link to it. |
 | `rsi.html` | RSI iteration console, driven by `data/rsi.json`. |
 

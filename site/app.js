@@ -274,7 +274,7 @@ const pageCopy = {
 };
 function configurePage() {
   const copy = pageCopy[activeKind];
-  document.title = `精度${copy.noun}历史 · PrecisionRSI`;
+  document.title = `精度${copy.noun}历史 · NumericBridge`;
   $('hero-kind').textContent = copy.eyebrow;
   $('page-title').replaceChildren(document.createTextNode(copy.title[0]), ...(copy.title[1] ? [node('br'), node('span', '', copy.title[1])] : []));
   document.body.dataset.archive = activeKind;
@@ -473,7 +473,7 @@ $('download').addEventListener('click', () => {
   const url = URL.createObjectURL(new Blob([JSON.stringify(archive, null, 2)], { type: 'application/json;charset=utf-8' }));
   const link = node('a');
   link.href = url;
-  link.download = `PrecisionRSI-${activeKind}.json`;
+  link.download = `NumericBridge-${activeKind}.json`;
   document.body.append(link);
   link.click();
   link.remove();

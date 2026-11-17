@@ -1,4 +1,4 @@
-# PrecisionRSI runner
+# NumericBridge research runner
 
 A bounded task executor and an independent improvement stage over the existing workflow tools and an external agent harness. Run from the checkout with Python 3.10+; the runner uses the standard library. Workloads and harnesses supply their own dependencies.
 
