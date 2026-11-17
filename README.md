@@ -1,8 +1,24 @@
-# NumericBridge: Numerical Precision Comparison and Repair
+[![License: MIT](https://img.shields.io/badge/License-MIT-009688.svg)](LICENSE)
+
+# NumericBridge
+
+**Numerical precision comparison, diagnosis and repair**
 
 English | [简体中文](README.zh-CN.md)
 
+[Overview](#framework-overview) · [Get started](#use) · [Typical cases](#typical-cases) · [Results and repair history](#evaluation-and-repair-history)
+
 NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills and public community records.
+
+## Framework overview
+
+![NumericBridge workflow: target setup, numerical comparison, issue diagnosis, repair and optimization, regression testing, deliverables, and community knowledge retrieval](docs/images/numericbridge-overview.svg)
+
+*The Ascend 910C / Qwen3.8-27B / verl configuration in the figure is an example. See [Typical cases](#typical-cases) for measured results and verified coverage.*
+
+NumericBridge starts from the target hardware, model, execution stack, workload and validation conditions. It compares numerical results, diagnoses observed differences, repairs confirmed defects when requested, and re-runs the original workload in the user's environment. Depending on the task, deliverables include adapted implementations, runtime configurations, patches, and validation reports with actual coverage and evidence.
+
+Community records help retrieve known issues, affected versions, alternative solutions, candidate fixes and validation evidence. Findings suitable for public sharing can be contributed through a pull request for review and publication; uploading is optional.
 
 ## Repository
 
@@ -16,7 +32,7 @@ skill for the next missing capability; no research runner or website is required
 | [tools/](tools/README.md) | Shared execution, resource verification and evidence tools |
 | [community/](community/README.md) | Website, public results, retrieval and record validation |
 | [scripts/](scripts/README.md) | Installation, export and repository maintenance commands |
-| docs/, reports/ | Guides and final numerical reports |
+| [docs/](docs/), [reports/](reports/README.md) | Guides and final numerical reports |
 
 Comparison-specific arithmetic and collectors stay with their skill. Put tools
 in `tools/` only when they are shared. Community retrieval selects known issues
@@ -62,7 +78,7 @@ Start from existing workload commands, inputs/state, collectors and results. Loa
 
 Provide the requested outcome, workload or existing artifacts, target execution stacks and resource scope. Continue in the same workspace as additional capabilities become necessary; reuse execution, inputs/state, collectors and results across components. [Execution tools and the resource catalog](skills/precision-compare/references/comparison.md#shared-tasks) support reusable command chains. Repair remains task-selected; code changes rerun affected verification.
 
-Examples:
+### Example requests
 
 - Compare the gradients and stored updates in these two execution manifests.
 - Run this model's SFT workload on the supplied execution stacks, compare numerical results, fix confirmed correctness problems and verify the original workload.
@@ -104,7 +120,7 @@ The separately adapted [public result metrics](community/site/data/deepseek41-ad
   The [English report](reports/deepseek41-services-final-20261109/report.md) covers all 277 SGLang tasks across five Engine lifetimes and 216 vLLM TP8/EP8 jobs in one Engine on eight H200 GPUs. Original-host raw mathematics and independent portable reviews are complete; all 820 formal vLLM full-vocabulary rows replay locally. Original GPU **191/275**, original NPU **269/275** and the separate adapted paired **275/275** inventories remain distinct; 3,168 target coordinates are retained. The 95-call output-head study keeps the backbone frozen.
   Core77's final restoration receipt is missing: the original strict lifecycle review remains failed, although all eight data-worker finals and exact namespace cleanup are verified. Twelve scientific gaps remain explicit. Full-vocabulary normalization, matched causal histories and null acceptance thresholds are retained; GPU is not a mathematical oracle. The [service verification report](reports/deepseek41-services-final-20261109/report.md) provides the current report, scientific figure and precise JSON/CSV pointers. Historical ZIPs, raw tensors and complete execution logs remain local. No publication or full-backbone training claim is made.
 
-[HTTP128 metrics](community/site/data/deepseek41-http128-20261109.json) · [public result metrics](community/site/data/deepseek41-http128-20261109.json).
+[HTTP128 metrics](community/site/data/deepseek41-http128-20261109.json).
 
 ### Precision repair
 
@@ -119,7 +135,6 @@ Additional historical backports were verified using small native CPU workloads:
 | Transformers 4.51.3 | Qwen2 attention mask ignores disabled sliding window | Eager/SDPA full forward and dynamic/static cache; 18 workloads and 16 mask cases |
 
 The [repair history](https://satsuki2486441738.github.io/PrecisionRSI/) records affected and upstream-fixed revisions, patches, before/after metrics and verification scope.
-
 
 ## Tools and development
 
@@ -154,7 +169,6 @@ Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 The [comparison board](https://satsuki2486441738.github.io/PrecisionRSI/) reads published evaluation and repair records. The [history archive](https://satsuki2486441738.github.io/PrecisionRSI/archive.html) retains inference/SFT/RL settings, numerical metrics, coverage and evidence, alongside library-grouped fixes and verification. Records and public evidence are maintained in [community/site/](community/site/README.md).
 
 The [RSI dashboard](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html) shows current runs, candidate changes, independent evaluation outcomes and phase-specific time/token usage, including baseline reuse.
-
 
 The [results page](community/site/paper.html) provides public reports, scientific figures, [JSON](community/site/data/paper-results.json) and a [CSV numeric index](community/site/data/paper-results.csv). Published results retain source hashes, actual configurations, coverage, failures and unverified scopes. Numeric fields are not independent samples. Historical ZIPs, raw tensors and complete execution logs remain local with no online download. The [local evidence index](community/site/data/local-evidence.json) records archive names, sizes and SHA256 hashes. Byte integrity does not imply numerical acceptance.
 

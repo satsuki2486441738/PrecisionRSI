@@ -1,8 +1,24 @@
-# NumericBridge: Numerical Precision Comparison and Repair
+[![许可证：MIT](https://img.shields.io/badge/License-MIT-009688.svg)](LICENSE)
+
+# NumericBridge
+
+**数值精度比较、诊断与修复**
 
 [English](README.md) | 简体中文
 
+[框架概览](#框架概览) · [开始使用](#使用) · [典型案例](#典型案例) · [评测与修复历史](#评测与修复历史)
+
 NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含可复用 skills、配套工具和公开社区记录。
+
+## 框架概览
+
+![NumericBridge 工作流程：目标设置、数值比较、问题诊断、修复优化、回归测试、结果交付，以及社区知识检索](docs/images/numericbridge-overview.svg)
+
+*图中的 Ascend 910C / Qwen3.8-27B / verl 配置仅为示例；实测结果与已验证覆盖范围见[典型案例](#典型案例)。*
+
+NumericBridge 从目标硬件、模型、执行栈，以及工作负载和验证条件出发，比较数值结果、诊断差异，在任务要求修复时处理经证据确认的缺陷，并在用户环境中复验原始工作负载。根据任务需要，交付适配实现、运行配置、补丁，以及包含实际覆盖范围和证据的验证报告。
+
+社区记录用于检索已知问题、受影响版本、替代方案、候选修复和验证证据。适合公开的结果可通过 Pull Request 提交审核与发布，上传由用户选择。
 
 ## 项目组成
 
@@ -14,7 +30,7 @@ NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含�
 | [tools/](tools/README.md) | 多个 Skill 共用的执行、资源核验和证据工具 |
 | [community/](community/README.md) | 网页、公开结果、检索与数据校验 |
 | [scripts/](scripts/README.md) | 安装、导出、仓库校验等维护命令 |
-| docs/、reports/ | 使用指南和最终测评报告 |
+| [docs/](docs/)、[reports/](reports/README.md) | 使用指南和最终测评报告 |
 
 比较专用的计算与采集工具随对应 Skill 放置；只有实际共用的工具进入 `tools/`。社区检索用于选择已知问题和候选方案，实际配置仍需在用户环境验证。
 
@@ -51,7 +67,7 @@ python -B -m scripts install --output /path/to/client/skills
 
 提供期望结果、工作负载或已有产物、目标执行栈和资源范围。需要其他能力时，在同一工作目录继续，跨组件复用执行入口、输入／状态、采集器和结果。[执行工具与资源目录](skills/precision-compare/references/comparison.md#shared-tasks)支持复用命令链。修复由任务选择；代码变化后复验受影响的范围。
 
-例如：
+### 请求示例
 
 - 比较两份执行 manifest 中的梯度和实际权重更新。
 - 在提供的执行栈上运行这个模型的 SFT 负载，比较数值结果，修复确认的正确性问题，再复验原始任务。
@@ -93,7 +109,7 @@ python -B -m scripts install --output /path/to/client/skills
   [英文报告](reports/deepseek41-services-final-20261109/report.md)覆盖跨五个 Engine 生命周期的全部 277 项 SGLang 任务，以及八张 H200 上同一 Engine 的 216 项 vLLM TP8/EP8 任务。原主机原始数组数学与 portable 独立复核已完成，vLLM 的 820 行正式完整词表数组已在本地回放。原 GPU **191/275**、原 NPU **269/275** 与另行适配的 paired **275/275** 单列，保留全部 3,168 个目标坐标；95 次输出头研究保持主干冻结。
   Core77 缺少最终恢复回执，原严格生命周期审查仍为失败；八个数据 worker 的终结回执及精确 namespace 清理已核验。12 项科学缺口继续保留。完整词表归一化、相同因果历史配对与空验收阈值保持不变，GPU 不作为数学 oracle。[服务验证报告](reports/deepseek41-services-final-20261109/report.md)提供当前报告、科学图及精确 JSON/CSV 定位。历史 ZIP、原始张量和完整执行日志仅在本地保留。不作发布或完整主干训练完成声明。
 
-[HTTP128 指标](community/site/data/deepseek41-http128-20261109.json) · [公开结果指标](community/site/data/deepseek41-http128-20261109.json)。
+[HTTP128 指标](community/site/data/deepseek41-http128-20261109.json)。
 
 ### 精度修复
 
@@ -108,7 +124,6 @@ python -B -m scripts install --output /path/to/client/skills
 | Transformers 4.51.3 | Qwen2 attention mask 忽略关闭滑动窗口的配置 | Eager/SDPA 完整前向及动态/静态 cache；18 组工作负载和 16 组 mask 检查 |
 
 [修复历史](https://satsuki2486441738.github.io/PrecisionRSI/)记录受影响版本、上游修复版本、补丁、前后指标和验证范围。
-
 
 ## 工具与开发
 
@@ -143,7 +158,6 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 [比较看板](https://satsuki2486441738.github.io/PrecisionRSI/)读取已发布的评测与修复记录。[历史归档](https://satsuki2486441738.github.io/PrecisionRSI/archive.html)保留推理 / SFT / RL 的配置、数值指标、覆盖率和证据，以及按库分组的修复和验证记录。记录及公开证据维护在 [community/site/](community/site/README.md)。
 
 [RSI 迭代看板](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html)展示当前运行、候选变更、独立评测结果和分阶段时间/token 开销，单独记录基线复用。
-
 
 [结果指标页](community/site/paper.html)提供公开报告、科学图、[JSON](community/site/data/paper-results.json)和[CSV 数值索引](community/site/data/paper-results.csv)。公开内容保留来源哈希、实际配置、覆盖范围、失败与未验证项，数值字段不代表独立样本。历史 ZIP、原始张量和完整执行日志仅在本地保留，不提供在线下载。[本地证据索引](community/site/data/local-evidence.json)记录归档名称、大小和 SHA256。哈希完整性不表示数值验收通过。
 
