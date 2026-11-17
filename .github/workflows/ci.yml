@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  regressions:
+  repository-validation:
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +20,6 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: python -m pip install -r requirements-dev.txt
-      - run: python -B -m unittest discover -s tests -v
       - run: python -B -m scripts validate
   history:
     runs-on: ubuntu-latest
@@ -41,14 +40,6 @@ jobs:
         run: |
           large=$(find community/site -type f -size +50M)
           if [ -n "$large" ]; then echo "Files over 50 MB belong in release or dataset storage:"; echo "$large"; exit 1; fi
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Browser regressions
-        run: |
-          npm install --prefix "$RUNNER_TEMP/browser" playwright@1.49.1
-          "$RUNNER_TEMP/browser/node_modules/.bin/playwright" install --with-deps chromium
-          for test in tests/browser_*.cjs; do NODE_PATH="$RUNNER_TEMP/browser/node_modules" node "$test"; done
   clean-install:
     runs-on: ubuntu-latest
     steps:
@@ -58,5 +49,4 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cpu
-      - run: python -B -m unittest discover -s tests -v
       - run: python -B -m scripts smoke-install

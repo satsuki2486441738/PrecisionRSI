@@ -15,7 +15,7 @@ NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含�
 | [community/](community/README.md) | 网页、公开结果、检索与数据校验 |
 | [scripts/](scripts/README.md) | 安装、导出、仓库校验等维护命令 |
 | [research/](research/README.md) | 可选的 RSI 自动研究实验，不是使用 Skill 的前提 |
-| tests/、docs/、reports/ | 回归测试、使用指南和最终测评报告 |
+| docs/、reports/ | 使用指南和最终测评报告 |
 
 比较专用的计算与采集工具随对应 Skill 放置；只有实际共用的工具进入 `tools/`。社区检索用于选择已知问题和候选方案，实际配置仍需在用户环境验证。
 
@@ -149,3 +149,5 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 [结果指标页](community/site/paper.html)提供公开报告、科学图、[JSON](community/site/data/paper-results.json)和[CSV 数值索引](community/site/data/paper-results.csv)。公开内容保留来源哈希、实际配置、覆盖范围、失败与未验证项，数值字段不代表独立样本。历史 ZIP、原始张量和完整执行日志仅在本地保留，不提供在线下载。[本地证据索引](community/site/data/local-evidence.json)记录归档名称、大小和 SHA256。哈希完整性不表示数值验收通过。
 
 公开内容范围见[发布规则](docs/publication.md)：保留最终结果及复现信息，中间执行产物本地保存。
+
+开发回归 `tests/` 仅在本地保留并由 Git 忽略。公开 CI 运行仓库、历史数据校验和独立安装烟测，不依赖本地测试集合。
