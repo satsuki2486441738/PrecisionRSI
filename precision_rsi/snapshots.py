@@ -74,7 +74,7 @@ def _platform():
         for source in sorted((root/folder).rglob('*')):
             if '__pycache__' not in source.parts and source.suffix != '.pyc' and source.is_file():
                 files['platform/'+source.relative_to(root).as_posix()] = source
-    for name in ('AGENTS.md', '.github/requirements.txt'):
+    for name in ('AGENTS.md', 'requirements-dev.txt'):
         if (root/name).is_file():
             files['platform/'+name] = root/name
     return files

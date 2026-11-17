@@ -1,6 +1,6 @@
 # Evaluation integration planning
 
-The implementation lives in `precision_maintenance`; `.github/*.py` remains a compatibility interface.
+The implementation lives in `precision_maintenance`; invoke the module commands below. GitHub configuration lives separately in `.github/`.
 
 `plan_history_integration.py` builds a private append-only candidate from a base
 evaluation history and named source histories. It does not publish records,

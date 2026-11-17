@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate installable skill metadata and published Markdown links/heading anchors.
 
-Requires .github/requirements.txt. Only tracked Markdown is checked by default;
+Requires requirements-dev.txt. Only tracked Markdown is checked by default;
 external links are not fetched. Link/image references use Markdown parsing.
 """
 import argparse

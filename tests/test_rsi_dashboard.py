@@ -1,14 +1,11 @@
 """Public RSI snapshots retain costs and outcomes without exporting private traces."""
-import importlib.util
 import json
 from pathlib import Path
 import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('rsi_snapshot', ROOT / '.github/rsi_snapshot.py')
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
+from precision_maintenance import rsi_snapshot as module
 
 
 class DashboardTests(unittest.TestCase):

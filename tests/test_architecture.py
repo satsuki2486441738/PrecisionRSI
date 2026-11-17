@@ -82,23 +82,22 @@ assert sys.path==before
 assert catalog.related('comparison',catalog.find_comparisons()[0]['id'])==[]
 """)
 
-    def test_legacy_and_module_maintenance_commands_agree(self):
-        for legacy, command in (('validate_history','validate-history'),
-                                ('validate_differences','validate-differences'),
-                                ('export_statistics','export-statistics')):
-            args=['--help'] if legacy=='export_statistics' else []
-            old=subprocess.run([sys.executable,'-I','-S','-B',str(ROOT/'.github'/f'{legacy}.py'),*args],
-                cwd=ROOT,capture_output=True,text=True,timeout=15)
-            new=subprocess.run([sys.executable,'-B','-m','precision_maintenance',command,*args],
-                cwd=ROOT,capture_output=True,text=True,timeout=15)
-            self.assertEqual(old.returncode,0,old.stderr)
-            self.assertEqual(new.returncode,0,new.stderr)
-            # Argparse program names differ; output behavior and contracts match.
+    def test_dispatcher_and_canonical_module_commands_agree(self):
+        for module, command in (('precision_community.validation', 'validate-history'),
+                                ('precision_community.differences', 'validate-differences'),
+                                ('precision_maintenance.export_statistics', 'export-statistics')):
+            args = ['--help'] if command == 'export-statistics' else []
+            direct = subprocess.run([sys.executable, '-B', '-m', module, *args],
+                cwd=ROOT, capture_output=True, text=True, timeout=15)
+            dispatched = subprocess.run([sys.executable, '-B', '-m', 'precision_maintenance', command, *args],
+                cwd=ROOT, capture_output=True, text=True, timeout=15)
+            self.assertEqual(direct.returncode, 0, direct.stderr)
+            self.assertEqual(dispatched.returncode, 0, dispatched.stderr)
             if args:
-                self.assertIn('--source',old.stdout)
-                self.assertIn('--source',new.stdout)
+                self.assertIn('--source', direct.stdout)
+                self.assertIn('--source', dispatched.stdout)
             else:
-                self.assertEqual(old.stdout,new.stdout)
+                self.assertEqual(direct.stdout, dispatched.stdout)
 
 
 class CommunityRelationTests(unittest.TestCase):

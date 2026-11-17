@@ -19,6 +19,8 @@
 !/site/
 !/.github/
 !/docs/
+!/reports/
+!/requirements-dev.txt
 !/tests/
 /tests/*
 !/tests/test_architecture.py
@@ -65,9 +67,13 @@ __pycache__/
 /site/evidence/paper-writing-results-*.zip
 /site/evidence/evaluation-metrics-results-*.zip*
 
-# Retain generated report copies and completed execution plans locally.
-/.github/**/summary.json
-/.github/**/*.pdf
-/.github/**/*.png
-/.github/**/historical-report-preserved.md
-/.github/qwen35-qwen38-followup-plan.md
+# GitHub contains platform configuration only. Keep generated deliveries local.
+/.github/*
+!/.github/workflows/
+!/.github/ISSUE_TEMPLATE/
+!/.github/PULL_REQUEST_TEMPLATE/
+!/.github/PULL_REQUEST_TEMPLATE.md
+!/.github/CODEOWNERS
+/reports/**/*.pdf
+/reports/**/*.png
+/reports/**/historical-report-preserved.md

@@ -1,6 +1,5 @@
 """Regressions for published repair records and evidence boundaries."""
 import copy
-import importlib.util
 import json
 import shutil
 import subprocess
@@ -9,9 +8,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location('validate_history', ROOT / '.github/validate_history.py')
-MODULE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(MODULE)
+from precision_community import validation as MODULE
 
 
 class RepairHistoryTests(unittest.TestCase):

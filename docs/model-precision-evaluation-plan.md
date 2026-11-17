@@ -602,7 +602,7 @@ Run from the repository root with a Python interpreter containing the maintenanc
 dependencies. `SIDE`, paths and collector arguments below are placeholders to be
 replaced by the resolved case. Read actual schema help before constructing files.
 Use an isolated maintenance environment for `python -m pip install -r
-.github/requirements.txt`; this does not install native GPU/NPU workloads or their
+requirements-dev.txt`; this does not install native GPU/NPU workloads or their
 framework dependencies. Those remain bound to their declared environments.
 
 ```sh

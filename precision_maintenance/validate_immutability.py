@@ -1,6 +1,6 @@
 """Reject edits or removals of published history relative to a base revision.
 
-Usage: python -B .github/validate_immutability.py [--base REF | --ci]
+Usage: python -B -m precision_maintenance validate-immutability [--base REF | --ci]
 
 Recorded evaluations, repairs, library groups, survey measurement views and
 published evidence files are append-only. A change may add records or files,

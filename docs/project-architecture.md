@@ -31,14 +31,14 @@ CI / 旧 .github 命令        → precision_maintenance → 社区校验与维�
 | site/ | 版本化 JSON 与静态 GitHub Pages，尚无上传 REST 服务或数据库 |
 | 本地私有 projects/ | 案例配置、原生实现、输入、原始数组和执行证据 |
 
-三个 installable skills 已实现，operator-optimize 仍是占位。旧 Compare scripts 和 `.github/*.py` 保留兼容入口；唯一实现位于新模块。独立安装使用导出器，将公共包一并放入 Compare。
+三个 installable skills 已实现，operator-optimize 仍是占位。旧 Compare scripts 保留独立 skill 的兼容入口；维护命令统一使用 `precision_maintenance` 模块，不再提供 `.github/*.py` 转发脚本。独立安装使用导出器，将公共包一并放入 Compare。
 
 ## 四个边界的落地与范围
 
 1. **公共执行与比较业务**：通用执行和证据迁入 `precision_core`；数学比较与框架采集留在 Compare。RSI 不再修改 `sys.path` 导入 Compare。工作流的工具身份改变会使旧缓存失效，历史运行保留，不自动改成新工具下的已验证结果。
 2. **记录与关联**：`Catalog` 为原始记录提供类型化 ID、来源哈希及 JSON Pointer。硬件、库与版本筛选匹配同一侧。`relations.json` 显式连接比较、调查、问题、候选、验证和原负载，检查引用、类型、范围和证据哈希；不推断或回填历史因果链。现有关系集为空。
 3. **研究与社区**：社区校验和索引不导入 RSI 或模型运行时，研究迭代可独立启用。社区检索帮助选择候选，实际组合的验证仍由框架完成；没有自动化的社区—RSI 闭环。
-4. **维护与 CI**：可复用逻辑迁入 `precision_maintenance`；CI 调用模块命令，旧脚本转发。`.github/` 中保留 CI、兼容入口和历史文档，不再作为维护业务实现目录。
+4. **维护与 CI**：可复用逻辑迁入 `precision_maintenance`；CI 调用模块命令。`.github/` 只保留 GitHub 平台配置，现行指南位于 `docs/`，最终报告与科学图位于 `reports/`，维护依赖为根目录 `requirements-dev.txt`。
 
 关系校验仅证明结构、引用和字节绑定有效，不能替代人工对因果与数值结论的审查。社区没有记录不代表配置受支持，候选关系不自动升级为已验证修复。
 
