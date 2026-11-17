@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Export allowlisted paper aggregates (not raw traces) into a crawlable writing bundle.
-Usage: python -B -m precision_maintenance export-paper --output NEW_DIRECTORY
+Usage: python -B -m scripts export-paper --output NEW_DIRECTORY
 Outputs sources/, reports/, figures/, results.json, values.csv, manifest.json,
 verify.py, README.md and paper-writing-results.zip. Existing output is rejected.
 JSON pointers address sanitized exports; source and export hashes are distinct.

@@ -2,7 +2,7 @@ name: Publish precision history
 on:
   push:
     branches: [main]
-    paths: ['community/**', '.github/workflows/pages.yml', 'precision_maintenance/**']
+    paths: ['community/**', '.github/workflows/pages.yml', 'scripts/**']
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
       - name: Keep published history append-only
         env:
           BEFORE: ${{ github.event.before }}
-        run: python -B -m precision_maintenance validate-immutability --ci
+        run: python -B -m scripts validate-immutability --ci
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

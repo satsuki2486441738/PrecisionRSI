@@ -8,7 +8,7 @@ import sys
 import re
 import shutil
 
-from precision_maintenance import export_paper_results as m
+from scripts import export_paper_results as m
 
 class PaperExportTests(unittest.TestCase):
     def test_pointer_units_and_nulls(self):

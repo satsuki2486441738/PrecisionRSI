@@ -1,18 +1,21 @@
 # NumericBridge research runner
 
+This is an optional research experiment, not part of the normal Skill installation.
+Use the [skills](../skills/precision-compare/SKILL.md) directly for comparison and repair.
+
 A bounded task executor and an independent improvement stage over the existing workflow tools and an external agent harness. Run from the checkout with Python 3.10+; the runner uses the standard library. Workloads and harnesses supply their own dependencies.
 
 ```sh
-python -m precision_rsi run task.json --workspace projects/my-task/session
-python -m precision_rsi iterate series.json --workspace projects/my-stream/session
-python -m precision_rsi improve improve.json --workspace projects/my-improvement/session
-python -m precision_rsi evolve improve.json --workspace projects/my-evolution/session
-python -m precision_rsi activate VERSION_ID --store projects/memory
+python -m research run task.json --workspace projects/my-task/session
+python -m research iterate series.json --workspace projects/my-stream/session
+python -m research improve improve.json --workspace projects/my-improvement/session
+python -m research evolve improve.json --workspace projects/my-evolution/session
+python -m research activate VERSION_ID --store projects/memory
 ```
 
 ## Task execution
 
-Shared execution is imported from [precision_core](../precision_core/README.md); RSI does not import Compare scripts by modifying the process search path. Public [community records](../community/records/README.md) are independent of this optional runner.
+Shared execution is imported from [tools](../tools/README.md); RSI does not import Compare scripts by modifying the process search path. Public [community records](../community/records/README.md) are independent of this optional runner.
 
 Task paths are relative to the task JSON. `plan` uses the existing [workflow interface](../skills/precision-compare/scripts/workflow.py) for native preparation, reproduction, collection and task-owned checks. The agent edits implementations; the host executes and verifies the original workload.
 
@@ -42,7 +45,7 @@ Add the checked-in [overlay](dsh-compaction.patch.json) after the model overlay
 for both task and improvement harness invocations:
 
 ```sh
-dsh --profile headless --patch MODEL_PATCH --patch precision_rsi/dsh-compaction.patch.json --json "TASK"
+dsh --profile headless --patch MODEL_PATCH --patch research/dsh-compaction.patch.json --json "TASK"
 ```
 
 The policy reserves 16,384 headroom tokens plus the routed output allowance,
@@ -144,12 +147,12 @@ queryable. The prompt declares the memory CLI, so the researcher need not read
 its implementation:
 
 ```sh
-python -m precision_rsi.research /work/run/research/view history --start 0 --count 5
-python -m precision_rsi.research /work/run/research/view state
-python -m precision_rsi.research /work/run/research/view history --newest --outcome incomplete
-python -m precision_rsi.research /work/run/research/view history --candidate CANDIDATE_ID
-python -m precision_rsi.research /work/run/research/view notes --set notes.json
-python -m precision_rsi.research /work/run/research/view plan --set plan.json
+python -m research.research /work/run/research/view history --start 0 --count 5
+python -m research.research /work/run/research/view state
+python -m research.research /work/run/research/view history --newest --outcome incomplete
+python -m research.research /work/run/research/view history --candidate CANDIDATE_ID
+python -m research.research /work/run/research/view notes --set notes.json
+python -m research.research /work/run/research/view plan --set plan.json
 ```
 
 `state` returns counts, the last accepted round and current notes/plan in one
@@ -200,7 +203,7 @@ model; changed inputs or missing native state require explicit recovery. After
 confirming an unfinished process has stopped, an operator may abandon its turn:
 
 ```sh
-python -m precision_rsi.research /work/run/research reconcile round-001 --reason "Process stopped; partial turn abandoned"
+python -m research.research /work/run/research reconcile round-001 --reason "Process stopped; partial turn abandoned"
 ```
 
 This records interruption, never retries that turn or grants more budget.
@@ -225,11 +228,11 @@ overlay and maintenance dependency declarations. Model weights and datasets rema
 verified resource references requiring binding; snapshots do not back them up.
 
 ```sh
-python -m precision_rsi.snapshots --journal /work/run/.snapshots list
-python -m precision_rsi.snapshots --journal /work/run/.snapshots verify SNAPSHOT_ID
-python -m precision_rsi.snapshots --journal /work/run/.snapshots restore SNAPSHOT_ID /work/new-fork
-python -m precision_rsi.snapshots --journal /work/run/.snapshots restore SNAPSHOT_ID /work/operator-archive --view operator
-python -m precision_rsi.snapshots --journal /work/run/.snapshots rollback SNAPSHOT_ID --store /work/memory
+python -m research.snapshots --journal /work/run/.snapshots list
+python -m research.snapshots --journal /work/run/.snapshots verify SNAPSHOT_ID
+python -m research.snapshots --journal /work/run/.snapshots restore SNAPSHOT_ID /work/new-fork
+python -m research.snapshots --journal /work/run/.snapshots restore SNAPSHOT_ID /work/operator-archive --view operator
+python -m research.snapshots --journal /work/run/.snapshots rollback SNAPSHOT_ID --store /work/memory
 ```
 
 Researcher exports contain only declared `changes/` and `session/` files, including
@@ -264,7 +267,7 @@ An evaluator template uses `{version_id}`, `{baseline_version}`, `{store}` and `
 The supplied [benchmark runner](benchmark.py) executes both arms and measures them:
 
 ```sh
-python -m precision_rsi benchmark suite.json --version VERSION_ID --baseline BASE_ID \
+python -m research benchmark suite.json --version VERSION_ID --baseline BASE_ID \
   --workspace projects/evaluation/session --time-budget-seconds 1800 \
   --construction-file /work/improvement/construction.json --output /work/evaluation.json
 ```
@@ -278,3 +281,13 @@ Measurements include native completion, time and raw usage. Construction time is
 Each benchmark arm separates `execution` (measured task seconds, raw usage/tokens and cost) from `including_construction` (amortized seconds/tokens/cost used for admission). Legacy scalar admission fields retain their meaning; improver feedback and durable numeric memory use the explicit groups. Old receipts without execution timing keep that value unknown. Construction receipts are bound by content; changes require a new workspace.
 
 The original optional single `proposal.json` from completed tasks and candidate-level `evaluate` CLI remain available. Versioned improvement evaluates the runtime bundle together. Operator search and agent-weight training are not implemented.
+
+## Source layout and frozen versions
+
+The former RSI runner now lives in `research/`; commands use `python -m research`.
+Shared tool implementations are in `tools/`, and maintainer commands in `scripts/`.
+Research snapshots and runtime identities include the shared tools. An operator
+restore includes them so research imports work without the original checkout.
+Changed paths or source identities require new affected verification or version
+evaluation; existing checkpoints, runs and historical activation receipts are
+retained as recorded and are not silently admitted under the new layout.

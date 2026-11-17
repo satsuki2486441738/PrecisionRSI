@@ -7,7 +7,7 @@ import tempfile
 from unittest.mock import patch
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-from precision_maintenance import validate_immutability as immutability
+from scripts import validate_immutability as immutability
 
 
 class PublishedHistoryTest(unittest.TestCase):

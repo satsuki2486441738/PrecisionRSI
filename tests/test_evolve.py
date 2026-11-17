@@ -5,9 +5,9 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from precision_rsi.evolve import _feedback, run
-from precision_rsi.memory import propose, read, write
-from precision_rsi.snapshots import Journal
+from research.evolve import _feedback, run
+from research.memory import propose, read, write
+from research.snapshots import Journal
 
 
 class EvolutionTests(unittest.TestCase):
@@ -30,7 +30,7 @@ class EvolutionTests(unittest.TestCase):
             if len(received)==1:
                 return dict(status='needs_action',errors=[dict(reason='not applicable')],candidates=[])
             return dict(status='completed',no_update=True,candidates=[])
-        with patch('precision_rsi.evolve.improve',side_effect=improve):
+        with patch('research.evolve.improve',side_effect=improve):
             result=run(self.config,self.root/'session')
         self.assertEqual(result['rounds'],2)
         self.assertIn('not applicable',json.dumps(received[1]['feedback']))
@@ -49,26 +49,26 @@ class EvolutionTests(unittest.TestCase):
         terminal_state = read(journal.root/'objects'/final['files']['audit/controller.json']['object'])
         self.assertEqual(terminal_state['result'], result)
         count = len(list((journal.root/'events').glob('*.json')))
-        with patch('precision_rsi.evolve.improve',side_effect=AssertionError('replayed model')):
+        with patch('research.evolve.improve',side_effect=AssertionError('replayed model')):
             self.assertEqual(run(self.config,self.root/'session'),result)
         self.assertEqual(len(list((journal.root/'events').glob('*.json'))), count)
 
     def test_terminal_decision_is_preserved_at_the_round_limit(self):
         self.cfg['max_rounds'] = 1
         self.save()
-        with patch('precision_rsi.evolve.improve', return_value=dict(
+        with patch('research.evolve.improve', return_value=dict(
                 status='completed', candidates=[], no_update=True)):
             result = run(self.config, self.root/'last-round')
         self.assertEqual(result['reason'], 'no useful update')
 
     def test_repeated_failure_stops(self):
-        with patch('precision_rsi.evolve.improve',return_value=dict(status='completed',candidates=[])) as agent:
+        with patch('research.evolve.improve',return_value=dict(status='completed',candidates=[])) as agent:
             result=run(self.config,self.root/'session')
         self.assertEqual(agent.call_count,2)
         self.assertEqual(result['reason'],'repeated failure')
 
     def test_sealed_terminal_recovers_interrupted_state_write_without_agent(self):
-        with patch('precision_rsi.evolve.improve',return_value=dict(status='completed',candidates=[],no_update=True)):
+        with patch('research.evolve.improve',return_value=dict(status='completed',candidates=[],no_update=True)):
             result = run(self.config, self.root/'session')
         path = self.root/'session/evolution.json'
         state = read(path)
@@ -76,7 +76,7 @@ class EvolutionTests(unittest.TestCase):
         state['rounds'] = []
         state['reservation'] = 5
         write(path, state)
-        with patch('precision_rsi.evolve.improve',side_effect=AssertionError('repeated agent work')):
+        with patch('research.evolve.improve',side_effect=AssertionError('repeated agent work')):
             self.assertEqual(run(self.config,self.root/'session'), result)
         self.assertEqual(read(path)['result'], result)
 
@@ -90,43 +90,43 @@ class EvolutionTests(unittest.TestCase):
                 raise KeyboardInterrupt('crash before controller state write')
             real_write(path, value)
 
-        with patch('precision_rsi.evolve.improve', return_value=dict(
+        with patch('research.evolve.improve', return_value=dict(
                 status='completed', candidates=[], no_update=True)):
-            with patch('precision_rsi.evolve.write', side_effect=crash):
+            with patch('research.evolve.write', side_effect=crash):
                 with self.assertRaises(KeyboardInterrupt):
                     run(self.config, workspace)
-        with patch('precision_rsi.evolve.improve', side_effect=AssertionError('extra model call')):
+        with patch('research.evolve.improve', side_effect=AssertionError('extra model call')):
             result = run(self.config, workspace)
         self.assertEqual(result['rounds'], 1)
         self.assertEqual(result['reason'], 'no useful update')
 
     def test_unfinished_researcher_does_not_consume_another_model_round(self):
         def interrupted(config, workspace, **kwargs):
-            from precision_rsi.research import Research
+            from research.research import Research
             info = read(config)['research']
             research = Research(info['root'], info['binding'])
             research.begin(info['turn'], {'input':'started'})
             raise KeyboardInterrupt()
         workspace = self.root/'unfinished'
-        with patch('precision_rsi.evolve.improve', side_effect=interrupted):
+        with patch('research.evolve.improve', side_effect=interrupted):
             with self.assertRaises(KeyboardInterrupt):
                 run(self.config, workspace)
-        with patch('precision_rsi.evolve.improve', side_effect=AssertionError('blind retry')):
+        with patch('research.evolve.improve', side_effect=AssertionError('blind retry')):
             result = run(self.config, workspace)
         self.assertEqual(result['status'], 'needs_action')
         self.assertIn('reconcile', result['reason'])
 
     def test_runtime_binds_compaction_policy_and_skill_references(self):
-        from precision_rsi import versions
+        from research import versions
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            (root/'precision_rsi').mkdir()
-            policy = root/'precision_rsi/compact.json'
+            (root/'research').mkdir()
+            policy = root/'research/compact.json'
             policy.write_text('first')
             reference = root/'skills/compare/references/guide.md'
             reference.parent.mkdir(parents=True)
             reference.write_text('guide')
-            with patch.object(versions, '__file__', str(root/'precision_rsi/versions.py')):
+            with patch.object(versions, '__file__', str(root/'research/versions.py')):
                 before = versions._runtime()
                 policy.write_text('second')
                 after = versions._runtime()
@@ -142,13 +142,13 @@ class EvolutionTests(unittest.TestCase):
             if len(calls)==1:
                 return dict(status='needs_action',candidates=[],workflow=failure)
             return dict(status='completed',candidates=[],no_update=True)
-        with patch('precision_rsi.evolve.improve',side_effect=improve):
+        with patch('research.evolve.improve',side_effect=improve):
             result=run(self.config,self.root/'launch-failure')
         self.assertEqual(len(calls),1)
         self.assertEqual(result['rounds'],1)
         self.assertEqual(result['status'],'needs_action')
         self.assertEqual(result['reason'],'infrastructure failure')
-        with patch('precision_rsi.evolve.improve',side_effect=AssertionError('infrastructure retry')):
+        with patch('research.evolve.improve',side_effect=AssertionError('infrastructure retry')):
             self.assertEqual(run(self.config,self.root/'launch-failure'),result)
 
     def test_native_harness_error_stops_without_counting_unknown_usage_as_zero(self):
@@ -159,7 +159,7 @@ class EvolutionTests(unittest.TestCase):
         workflow=dict(status='needs_action',next_action=dict(stage='improve',run=str(folder),
             execution=dict(status='failed',logs=dict(stdout=dict(tail='x'*1000)))))
         value=dict(status='needs_action',workflow=workflow,candidates=[],usage=None)
-        with patch('precision_rsi.evolve.improve',return_value=value) as agent:
+        with patch('research.evolve.improve',return_value=value) as agent:
             result=run(self.config,self.root/'native-failure')
         self.assertEqual(agent.call_count,1)
         self.assertEqual(result['reason'],'infrastructure failure')
@@ -177,7 +177,7 @@ class EvolutionTests(unittest.TestCase):
         native=dict(type='status',phase='turn_end',reason=dict(kind='error',error=dict(code='MISSING_CREDENTIAL')))
         execution=dict(status='completed',returncode=0,logs=dict(stdout=dict(tail=json.dumps(native))))
         value=dict(no_update=True,workflow=dict(status='completed',stages=[dict(execution=execution)]))
-        with patch('precision_rsi.evolve.improve',return_value=value) as agent:
+        with patch('research.evolve.improve',return_value=value) as agent:
             result=run(self.config,self.root/'zero-exit-error')
         self.assertEqual(agent.call_count,1)
         self.assertEqual(result['reason'],'infrastructure failure')
@@ -188,7 +188,7 @@ class EvolutionTests(unittest.TestCase):
         self.assertNotIn('infrastructure',feedback)
 
     def test_interrupted_budget_is_not_granted_again(self):
-        with patch('precision_rsi.evolve.improve',side_effect=KeyboardInterrupt):
+        with patch('research.evolve.improve',side_effect=KeyboardInterrupt):
             with self.assertRaises(KeyboardInterrupt):
                 run(self.config,self.root/'session')
         state=read(self.root/'session/evolution.json')
@@ -208,7 +208,7 @@ class EvolutionTests(unittest.TestCase):
             if len(calls)==1:
                 return dict(status='completed',candidates=[],evaluation=dict(evaluation=dict(accepted=True)))
             return dict(status='completed',candidates=[],no_update=True)
-        with patch('precision_rsi.evolve.improve',side_effect=improve):
+        with patch('research.evolve.improve',side_effect=improve):
             result=run(self.config,self.root/'session')
         self.assertEqual(result['accepted'],1)
         self.assertTrue(calls[1]['feedback'][0]['accepted'])
@@ -219,8 +219,8 @@ class EvolutionTests(unittest.TestCase):
             self.assertLessEqual(kwargs['time_budget_seconds'],5)
             clock[0]+=31
             return dict(status='completed',candidates=[])
-        with patch('precision_rsi.evolve.time.monotonic',side_effect=lambda:clock[0]), \
-                patch('precision_rsi.evolve.improve',side_effect=improve) as agent:
+        with patch('research.evolve.time.monotonic',side_effect=lambda:clock[0]), \
+                patch('research.evolve.improve',side_effect=improve) as agent:
             result=run(self.config,self.root/'session')
         self.assertEqual(agent.call_count,1)
         self.assertEqual(result['reason'],'budget exhausted')
@@ -231,18 +231,18 @@ class EvolutionTests(unittest.TestCase):
         measured=dict(input_tokens=20,output_tokens=3,total_tokens=23)
         value=dict(status='completed',no_update=True,candidates=[],usage=construction,
                    evaluation=dict(evaluation=dict(accepted=False,measurement=dict(usage=measured))))
-        with patch('precision_rsi.evolve.improve',return_value=value):
+        with patch('research.evolve.improve',return_value=value):
             result=run(self.config,self.root/'usage')
         self.assertEqual(result['usage']['total_tokens'],35)
         self.assertEqual(result['construction_usage']['total_tokens'],12)
         self.assertEqual(result['evaluation_usage']['total_tokens'],23)
-        with patch('precision_rsi.evolve.improve',side_effect=AssertionError('replayed call')):
+        with patch('research.evolve.improve',side_effect=AssertionError('replayed call')):
             self.assertEqual(run(self.config,self.root/'usage'),result)
 
     def test_unmeasured_evaluation_usage_is_unknown(self):
         value=dict(status='completed',no_update=True,candidates=[],usage=dict(total_tokens=12),
                    evaluation=dict(evaluation=dict(accepted=False,measurement=None)))
-        with patch('precision_rsi.evolve.improve',return_value=value):
+        with patch('research.evolve.improve',return_value=value):
             result=run(self.config,self.root/'unknown-usage')
         self.assertIsNone(result['evaluation_usage']['total_tokens'])
         self.assertIsNone(result['usage']['total_tokens'])

@@ -239,7 +239,7 @@ class ReplayBundleTests(unittest.TestCase):
         self.assertTrue(json.loads(completed.stdout)['matched'])
 
     def test_explicit_other_checkout_tools_are_selected(self):
-        from precision_maintenance.install import install_skills
+        from scripts.install import install_skills
         exported = self.root / 'other-checkout'
         install_skills(REPO / 'skills', exported)
         selected = exported / 'precision-compare/scripts'

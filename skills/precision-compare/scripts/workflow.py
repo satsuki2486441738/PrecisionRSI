@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Compatibility entrypoint; implementation lives in precision_core.workflow."""
+"""Compatibility entrypoint; implementation lives in tools.workflow."""
 CORE_MODULE = "workflow"
 import importlib.util
 from pathlib import Path
 import sys
 
-_spec = importlib.util.spec_from_file_location('_precision_core_entry', Path(__file__).with_name('_core.py'))
+_spec = importlib.util.spec_from_file_location('_tools_entry', Path(__file__).with_name('_core.py'))
 _entry = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_entry)
 _module = _entry.load(CORE_MODULE)

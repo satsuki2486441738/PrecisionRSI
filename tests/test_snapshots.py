@@ -1,13 +1,15 @@
 """Immutable boundary, isolation and detached recovery regressions."""
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
-from precision_rsi import versions
-from precision_rsi.memory import fingerprint, propose, read, write
-from precision_rsi.snapshots import Journal, seal
+from research import versions
+from research.memory import fingerprint, propose, read, write
+from research.snapshots import Journal, seal
 
 
 class SnapshotTests(unittest.TestCase):
@@ -88,7 +90,7 @@ class SnapshotTests(unittest.TestCase):
         self.assertFalse(any(name.endswith('/weights') for name in event['files']))
         self.assertIn('changes/resources.json', event['files'])
         self.assertEqual(self.journal.rollback(event['id'], store)['id'], 'empty')
-        with patch('precision_rsi.snapshots._platform', return_value={}):
+        with patch('research.snapshots._platform', return_value={}):
             with self.assertRaisesRegex(ValueError, 'platform changed'):
                 self.journal.rollback(event['id'], store)
 
@@ -102,10 +104,33 @@ class SnapshotTests(unittest.TestCase):
         self.journal.restore(event['id'], self.root/'fork', evidence=True, view='operator')
         bindings = read(self.root/'fork/audit/bindings.json')
         self.assertEqual((self.root/'fork'/bindings[str(tool)]).read_text(), 'value = 42\n')
-        self.assertTrue((self.root/'fork/platform/precision_rsi/snapshots.py').is_file())
+        self.assertTrue((self.root/'fork/platform/research/snapshots.py').is_file())
         self.assertEqual((self.root/'fork/platform/requirements-dev.txt').read_bytes(),
                          (Path(__file__).resolve().parents[1]/'requirements-dev.txt').read_bytes())
         self.assertEqual(read(self.root/f'fork/audit/candidates/{candidate}.json')['status'], 'candidate')
+
+    def test_restored_platform_includes_shared_execution_tools(self):
+        store = self.root/'memory'
+        event = seal(self.root/'run', store, 'initial', 'initial', {}, journal=self.journal)
+        self.journal.restore(event['id'], self.root/'fork', view='operator')
+        platform = self.root/'fork/platform'
+        self.assertTrue((platform/'tools/workflow.py').is_file())
+        result = subprocess.run([sys.executable, '-I', '-S', '-B', '-c',
+            "import sys;sys.path.insert(0,sys.argv[1]);from research import loop;"
+            "from tools import workflow;assert loop.run_workflow is workflow.run_workflow",
+            str(platform)], cwd=self.root, capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_runtime_identity_changes_when_shared_execution_changes(self):
+        root = self.root/'checkout'
+        (root/'research').mkdir(parents=True)
+        (root/'tools').mkdir()
+        tool = root/'tools/record_run.py'
+        tool.write_text('first')
+        with patch.object(versions, '__file__', str(root/'research/versions.py')):
+            before = versions._runtime()
+            tool.write_text('second')
+            self.assertNotEqual(before, versions._runtime())
 
     def test_directory_artifact_restores_empty_directories_and_exact_identity(self):
         package = self.root/'package'; (package/'empty').mkdir(parents=True)

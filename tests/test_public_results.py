@@ -6,7 +6,7 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_maintenance import prepare_public_results as MODULE
+from scripts import prepare_public_results as MODULE
 
 
 class PublicResultsTests(unittest.TestCase):

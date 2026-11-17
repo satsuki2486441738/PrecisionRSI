@@ -30,8 +30,8 @@ def _parse(path):
             name = ast.literal_eval(node.value)
             if not isinstance(name, str) or not name.isidentifier() or name.startswith('_'):
                 raise ValueError('invalid core module declaration')
-            sources = (path.parent / 'precision_core' / (name + '.py'),
-                       path.resolve().parents[3] / 'precision_core' / (name + '.py'))
+            sources = (path.parent / 'tools' / (name + '.py'),
+                       path.resolve().parents[3] / 'tools' / (name + '.py'))
             source = next((p for p in sources if p.is_file()), None)
             if source is None:
                 raise ValueError('missing core module source: ' + name)

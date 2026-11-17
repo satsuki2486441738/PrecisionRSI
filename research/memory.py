@@ -13,7 +13,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from precision_core.workflow import fingerprint, run_workflow, workspace_lock
+from tools.workflow import fingerprint, run_workflow, workspace_lock
 
 
 def read(path):

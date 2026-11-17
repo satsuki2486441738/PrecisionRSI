@@ -4,71 +4,42 @@
 
 NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含可复用 skills、可选研究编排和公开社区记录。
 
-## 架构
+## 项目组成
 
-| 层 | 职责 |
+主要交付是 **Skill + Tools**：Skill 指导 Agent 完成任务，工具负责执行、采集、比较和保存证据。按缺失能力加载 Skill，无需启动研究运行器或网站。
+
+| 目录 | 用途 |
 |---|---|
-| [Skills](skills/precision-compare/SKILL.md) | 负载适配、精度比较、诊断修复与原任务复验 |
-| [precision_core](precision_core/README.md) | 公共执行、资源与运行时身份、证据工具 |
-| [community](community/README.md) | 社区页面、公开记录、数据校验与检索 |
-| [precision_rsi](precision_rsi/README.md) | 可选的 Agent 研究、预算、候选评估与激活 |
-| [precision_maintenance](precision_maintenance/README.md) | 数据维护、公开导出、安装及 CI 命令 |
+| [skills/](skills/precision-compare/SKILL.md) | 工作方法：适配、精度比较、诊断修复与原任务复验 |
+| [tools/](tools/README.md) | 多个 Skill 共用的执行、资源核验和证据工具 |
+| [community/](community/README.md) | 网页、公开结果、检索与数据校验 |
+| [scripts/](scripts/README.md) | 安装、导出、仓库校验等维护命令 |
+| [research/](research/README.md) | 可选的 RSI 自动研究实验，不是使用 Skill 的前提 |
+| tests/、docs/、reports/ | 回归测试、使用指南和最终测评报告 |
 
-RSI 依赖公共核心；社区记录不依赖 RSI。检索用于选择候选方案，实际组合的验证由任务负责。公开记录保留范围和不可变证据，完整轨迹与大数组留在本地。
+比较专用的计算与采集工具随对应 Skill 放置；只有实际共用的工具进入 `tools/`。社区检索用于选择已知问题和候选方案，实际配置仍需在用户环境验证。
 
-## 方法
-
-NumericBridge 包含两个闭环：完成模型工作负载，再将执行经验用于改进后续任务。
-
-**任务 loop**
+## 工作方式
 
 ```text
-配环境 → 复现库 → 精度检验 → 精度修复 → 算子优化
+用户目标 → 复用已有环境与证据 → 精度比较与诊断 → 必要时修复 → 原任务复验
 ```
 
-“复现库”指复现目标库的原生模型工作负载。从首个缺失阶段进入，达到任务要求后结束。精度修复与算子修改后，返回原始工作负载做精度检验；算子优化同时验证性能收益。
-
-**优化 loop**
-
-```text
-任务轨迹 → 选择改进对象 → 构建候选更新 → 独立评测 → 下一系统版本
-```
-
-| 迭代对象 | 产物与复用方式 |
-|---|---|
-| 分析工具 | 经测试的采集器、诊断工具、适配器和通用轮子，提供可调用接口 |
-| 上下文记忆 | 带适用条件的简短规则，按任务需要检索 |
-| 训练数据 | 标注执行结果的轨迹、失败—修复对和回归样本，去重并按任务族划分数据集 |
-| 任务 loop 流程 | 版本化的 skill 指令、阶段路由、工具选择、执行复用和验证范围 |
-
-成功、失败和开销过高的任务轨迹都进入改进过程。改进 agent 从中选择重复出现的瓶颈或缺失能力，构建预算内的候选更新；有新证据时再触发，无需每个任务都额外调用模型。任务达到要求后结束，迭代 loop 则在独立预算内跨任务持续。
-
-在独立任务上比较候选系统版本的正确性、完成时间和成本，计入更新的构建与维护开销，并保持任务目标、正确性标准和评测覆盖范围一致。有效版本供后续任务使用；预算耗尽或未观察到收益时暂停改进。训练数据先校验来源、结果标注、去重和数据集划分；后续权重训练与评测使用通过检查的数据集。
-
-封闭式任务（精度检验／修复）评估正确完成率、时间和成本。开放式任务（算子优化）评估给定预算下达到的最优有效性能，以及性能随预算增长的变化。
-
-[系统入口](precision_rsi/README.md)将原生工作流接入现有 agent harness。独立改进阶段根据任务证据构建工具、记忆、数据集和指令／路由更新；运行时更新组成版本化的组合，评测后供后续任务使用，数据集则通过检查后保留任务结果标注。[研究快照](precision_rsi/README.md#research-snapshots)记录轮次和候选边界，支持完整性校验、独立目录恢复和已准入版本回滚。在仓库目录运行：
-
-```sh
-python -m precision_rsi run task.json --workspace projects/my-task/session
-python -m precision_rsi iterate series.json --workspace projects/my-stream/session
-```
-
-任务队列可在总时间预算内，根据新证据触发改进。算子优化与 agent 权重训练为后续扩展。
+从首个缺失阶段开始，只运行需要补齐的工作。交付指标、覆盖范围、配置或补丁及复验证据；组件完成不等于完整 RL 通过，未声明的数值验收阈值保持为空。自动研究迭代的预算、候选评估与快照机制见 [research/](research/README.md)，无需参与日常 Skill 使用。
 
 ## 使用
 
-[项目架构与四个整理边界](docs/project-architecture.md)说明当前实现与后续方向。
+[项目目录与工具归属](docs/project-architecture.md)说明当前实现与后续方向。
 
 [RL 精度诊断与修复方案（草案）](docs/rl-precision-workflow-proposal.md)基于本仓库已有能力，约定可复用的案例执行与交付流程。
 
-将 skills 导出到新的客户端 skill 目录；导出器会带上公共执行包，使 Compare 能脱离仓库运行：
+将 skills 导出到新的客户端 skill 目录；导出器会带上公共工具，使 Compare 能脱离仓库运行：
 
 ```sh
-python -B -m precision_maintenance install --output /path/to/client/skills
+python -B -m scripts install --output /path/to/client/skills
 ```
 
-更新方式见[独立安装说明](precision_core/README.md#portable-skills)。执行时根据下一项缺失能力加载组件：
+更新方式见[独立安装说明](tools/README.md#portable-skills)。执行时根据下一项缺失能力加载组件：
 
 | Skill | 进入条件与交付 |
 |---|---|

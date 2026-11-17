@@ -13,7 +13,7 @@ import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
-PATCH = Path(__file__).resolve().parents[1] / 'precision_rsi/dsh-compaction.patch.json'
+PATCH = Path(__file__).resolve().parents[1] / 'research/dsh-compaction.patch.json'
 
 
 class DshCompactionTests(unittest.TestCase):
@@ -117,8 +117,8 @@ class DshCompactionTests(unittest.TestCase):
 
     @unittest.skipUnless(os.environ.get('DSH_BIN'), 'optional DSH integration')
     def test_research_adapter_keeps_native_history_across_round_directories(self):
-        from precision_rsi.memory import read, write
-        from precision_rsi.research import Research
+        from research.memory import read, write
+        from research.research import Research
         import sys
         requests = []
         marker = 'RSI_native_persistence_8297'
@@ -170,7 +170,7 @@ class DshCompactionTests(unittest.TestCase):
                             binding={'model':'mock-only'},turn=f'round-{number:03d}'))
                     config = root/f'agent-{number}.json'
                     write(config, agent)
-                    command = [sys.executable,'-B','-m','precision_rsi.harness',
+                    command = [sys.executable,'-B','-m','research.harness',
                         str(config), str(prompt), str(run),'--cwd-run']
                     output = subprocess.run(command,cwd=PATCH.parents[1],env=env,
                         capture_output=True,timeout=60)

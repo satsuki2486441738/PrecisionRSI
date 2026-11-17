@@ -8,9 +8,9 @@ import sys
 import tempfile
 import unittest
 
-from precision_rsi.memory import read, write
-from precision_rsi.research import Research, document, history, save_handoff, state
-from precision_rsi.snapshots import Journal, seal
+from research.memory import read, write
+from research.research import Research, document, history, save_handoff, state
+from research.snapshots import Journal, seal
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,7 +107,7 @@ class ResearchTests(unittest.TestCase):
         self.assertNotIn('records', snapshot)
         self.assertNotIn('private', json.dumps(snapshot))
         self.assertEqual(before, {p.name:p.read_bytes() for p in self.research.view.glob('*.json')})
-        result = subprocess.run([sys.executable, '-B', '-m', 'precision_rsi.research',
+        result = subprocess.run([sys.executable, '-B', '-m', 'research.research',
             str(self.research.view), 'history', '--outcome', 'incomplete', '--newest'],
             cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -189,7 +189,7 @@ time.sleep(30)
         write(cfg, dict(argv=[sys.executable, str(script), '{prompt}'], usage_format='dsh-jsonl',
             research=dict(root=str(self.research.root), binding={'task':'fixed'}, turn='round-001')))
         prompt = self.root/'prompt.txt'; prompt.write_text('partial task')
-        with subprocess.Popen([sys.executable, '-B', '-m', 'precision_rsi.harness',
+        with subprocess.Popen([sys.executable, '-B', '-m', 'research.harness',
                 str(cfg), str(prompt), str(run), '--cwd-run'], cwd=ROOT,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True) as process:
             try:
@@ -272,7 +272,7 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':5,'o
             write(cfg, dict(agent, research=info))
             prompt = self.root/'prompt.txt'
             prompt.write_text(f'round {number}')
-            return subprocess.run([sys.executable, '-B', '-m', 'precision_rsi.harness',
+            return subprocess.run([sys.executable, '-B', '-m', 'research.harness',
                 str(cfg), str(prompt), str(run), '--cwd-run'], cwd=ROOT, capture_output=True)
 
         first = invoke(1)

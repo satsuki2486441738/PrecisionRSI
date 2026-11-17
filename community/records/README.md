@@ -1,7 +1,7 @@
 # Public record model
 
 This package owns public comparison/repair validation, measurement-view validation
-and a read-only record index. It has no dependency on `precision_rsi`, agent
+and a read-only record index. It has no dependency on `research`, agent
 harnesses, model runtimes or execution tools. The community remains versioned JSON
 and static pages; this package is not an upload service or database.
 

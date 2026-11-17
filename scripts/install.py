@@ -1,6 +1,6 @@
 """Export standalone skills, bundling the canonical execution package once.
 
-python -m precision_maintenance.install --output /path/to/client/skills
+python -m scripts.install --output /path/to/client/skills
 Existing destinations are rejected. No model runtime or device is used.
 """
 import argparse
@@ -21,8 +21,8 @@ def install_skills(source, destination):
         shutil.copytree(folder, destination / folder.name,
                         ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
         if folder.name == 'precision-compare':
-            shutil.copytree(ROOT / 'precision_core',
-                            destination / folder.name / 'scripts/precision_core',
+            shutil.copytree(ROOT / 'tools',
+                            destination / folder.name / 'scripts/tools',
                             ignore=shutil.ignore_patterns('__pycache__', '*.pyc', '*.md'))
 
 

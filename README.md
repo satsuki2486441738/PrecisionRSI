@@ -4,75 +4,52 @@ English | [简体中文](README.zh-CN.md)
 
 NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills, an optional research runner and public community records.
 
-## Architecture
+## Repository
 
-| Layer | Responsibility |
+The main deliverable is **Skills + Tools**: skills guide an agent through the task;
+tools execute commands, collect and compare results, and retain evidence. Load a
+skill for the next missing capability; no research runner or website is required.
+
+| Directory | Purpose |
 |---|---|
-| [Skills](skills/precision-compare/SKILL.md) | Adapt the workload, compare numerical behavior, diagnose and verify repairs |
-| [precision_core](precision_core/README.md) | Shared execution, resource/runtime identity and evidence tools |
-| [community](community/README.md) | Community website, public records, validation and retrieval |
-| [precision_rsi](precision_rsi/README.md) | Optional agent research, budgets, candidate evaluation and activation |
-| [precision_maintenance](precision_maintenance/README.md) | Data maintenance, public exports, installation and CI commands |
+| [skills/](skills/precision-compare/SKILL.md) | Adaptation, numerical comparison, diagnosis, repair and original-workload verification |
+| [tools/](tools/README.md) | Shared execution, resource verification and evidence tools |
+| [community/](community/README.md) | Website, public results, retrieval and record validation |
+| [scripts/](scripts/README.md) | Installation, export and repository maintenance commands |
+| [research/](research/README.md) | Optional RSI research experiments; not required to use skills |
+| tests/, docs/, reports/ | Regressions, guides and final numerical reports |
 
-RSI depends on the core; community records do not depend on RSI. Retrieval selects
-candidate solutions; actual-stack verification remains task-owned. Public records
-retain scope and immutable evidence, while full traces and arrays stay private.
+Comparison-specific arithmetic and collectors stay with their skill. Put tools
+in `tools/` only when they are shared. Community retrieval selects known issues
+and candidate solutions; the user's actual configuration still needs verification.
 
-## Method
-
-NumericBridge has two loops: complete a model workload, then use its experience to improve subsequent tasks.
-
-**Task loop**
+## Workflow
 
 ```text
-Environment setup → Library workload reproduction → Precision validation → Precision repair → Operator optimization
+User goal → Reuse environments and evidence → Compare and diagnose → Repair when needed → Verify the original workload
 ```
 
-Reproduce the selected library's native model workload. Enter at the first missing stage and finish at the requested outcome. Repairs and operator changes return to precision validation on the original workload; operator optimization also verifies performance.
-
-**Improvement loop**
-
-```text
-Task traces → Improvement selection → Candidate update → Independent evaluation → Next system version
-```
-
-| Update target | Output and reuse |
-|---|---|
-| Analysis tools | Tested collectors, diagnostics, adapters and shared utilities with callable interfaces |
-| Context memory | Concise rules with applicability conditions, retrieved for relevant tasks |
-| Training data | Outcome-labeled trajectories, failure/fix pairs and regression cases, deduplicated and split by task family |
-| Task-loop procedure | Versioned skill instructions, routing, tool selection, execution reuse and verification scope |
-
-Use successful, failed and unnecessarily expensive task traces. An improvement agent selects a recurring limitation or missing capability and constructs a bounded candidate update. Run improvement when new evidence justifies it; each task need not trigger another model call. Task completion ends the task loop; the improvement loop continues across tasks within its own budget.
-
-Evaluate candidate system versions on independent tasks using correctness, completion time and cost, including update construction and maintenance. Keep task goals, correctness criteria and evaluation coverage fixed. Retain the useful version for subsequent tasks; pause improvement when its budget is exhausted or evidence shows no gain. Training data undergoes provenance, outcome, deduplication and split checks before use; agent-weight training and evaluation consume accepted datasets in a later stage.
-
-Closed tasks (precision validation/repair) measure correct completion, time and cost. Open tasks (operator optimization) measure the best valid performance reached at a given budget and its improvement as the budget grows.
-
-The [system runner](precision_rsi/README.md) connects native workflows to an existing agent harness. An independent improvement stage builds tools, memory, datasets and instruction/routing overlays from task evidence. Runtime updates form versioned bundles for evaluation and reuse; dataset checks prepare outcome-labeled examples. [Research snapshots](precision_rsi/README.md#research-snapshots) preserve round/candidate boundaries for integrity checks, isolated restoration and admitted-version rollback. Run from the checkout:
-
-```sh
-python -m precision_rsi run task.json --workspace projects/my-task/session
-python -m precision_rsi iterate series.json --workspace projects/my-stream/session
-```
-
-Task streams can trigger improvement on new evidence within a shared time budget. Operator optimization and agent-weight training are later extensions.
+Start at the first missing stage and execute only the required work. Deliver
+metrics, coverage, configurations or patches and verification evidence. Component
+completion does not establish full RL correctness; undeclared numerical acceptance
+remains null. Optional improvement budgets, candidate evaluation and snapshots are
+documented in [research/](research/README.md), outside the normal skill workflow.
 
 ## Use
 
-See the [current architecture and four integration boundaries (Chinese)](docs/project-architecture.md).
+See the [repository layout and tool ownership (Chinese)](docs/project-architecture.md).
 
 The [RL diagnosis and repair proposal (Chinese)](docs/rl-precision-workflow-proposal.md)
 plans reusable case workflows on top of this repository’s existing capabilities.
 
 Export the skills side by side into a fresh client skill directory. The exporter
-includes the shared execution package so Compare remains standalone:
+includes the shared tools so Compare remains standalone:
 
 ```sh
-python -B -m precision_maintenance install --output /path/to/client/skills
+python -B -m scripts install --output /path/to/client/skills
 ```
 
-See [portable installation](precision_core/README.md#portable-skills) when updating.
+See [portable installation](tools/README.md#portable-skills) when updating.
 Load a component for the next missing capability:
 
 | Skill | When to enter and result |
