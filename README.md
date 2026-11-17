@@ -12,7 +12,7 @@
 
 <p align="center">English · <a href="README.zh-CN.md">简体中文</a></p>
 
-<p align="center"><a href="#framework-overview">Overview</a> · <a href="#use">Get started</a> · <a href="#typical-cases">Typical cases</a> · <a href="#evaluation-and-repair-history">Results and repair history</a></p>
+<p align="center"><a href="#framework-overview">Overview</a> · <a href="#getting-started">Getting started</a> · <a href="#typical-cases">Typical cases</a> · <a href="#evaluation-and-repair-history">Results and repair history</a></p>
 
 NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills and public community records.
 
@@ -56,7 +56,7 @@ completion does not establish full RL correctness; undeclared numerical acceptan
 remains null. Optional agent-improvement experiments and their snapshots are retained locally
 and are not distributed in this repository.
 
-## Use
+## Getting started
 
 See the [repository layout and tool ownership (Chinese)](docs/project-architecture.md).
 
@@ -73,7 +73,7 @@ python -B -m scripts install --output /path/to/client/skills
 See [portable installation](tools/README.md#portable-skills) when updating.
 Load a component for the next missing capability:
 
-| Skill | When to enter and result |
+| Skill | When to use it and what it delivers |
 |---|---|
 | [Framework Adapt](skills/framework-adapt/SKILL.md) | Native execution is missing: deploy or adapt the target workload and verify execution |
 | [Precision Compare](skills/precision-compare/SKILL.md) | Collection or comparison is missing: return numerical metrics, coverage and evidence |
