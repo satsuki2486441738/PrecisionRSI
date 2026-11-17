@@ -25,7 +25,7 @@ Additional commands: `collect-differences`, `prepare-public`, `export-paper`,
 `rsi-snapshot`, `validate-history`, `validate-differences`. The selected module owns
 its arguments and behavior. Existing `.github/*.py` paths remain compatibility
 entrypoints for scripts and documentation. Read the corresponding module docstring
-for the exact contract; [history integration](../.github/HISTORY_INTEGRATION.md)
+for the exact contract; [history integration](../docs/history-integration.md)
 retains the planning/publication distinction.
 
 Repository paths resolve against the source checkout, independently of caller cwd.
