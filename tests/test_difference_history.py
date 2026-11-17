@@ -1,14 +1,11 @@
 """Survey provenance rejects corrupted measurements without rounding tiny values."""
 import copy
-import importlib.util
 import json
 from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location('difference_validator', ROOT / '.github/validate_differences.py')
-VALIDATOR = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(VALIDATOR)
+from precision_community import differences as VALIDATOR
 
 
 class DifferenceHistoryTests(unittest.TestCase):

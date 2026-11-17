@@ -1,4 +1,3 @@
-import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
@@ -9,8 +8,7 @@ import sys
 import re
 import shutil
 
-spec=importlib.util.spec_from_file_location('paper_export',Path(__file__).resolve().parents[1]/'.github/export_paper_results.py')
-m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+from precision_maintenance import export_paper_results as m
 
 class PaperExportTests(unittest.TestCase):
     def test_pointer_units_and_nulls(self):

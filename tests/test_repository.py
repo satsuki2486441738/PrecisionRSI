@@ -1,18 +1,10 @@
 """Regressions for repository metadata and Markdown maintenance checks."""
-import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
 
-spec = importlib.util.spec_from_file_location('repository_validation', Path(__file__).resolve().parents[1] / '.github/validate.py')
-validator = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(validator)
-
-
-smoke_spec = importlib.util.spec_from_file_location(
-    'smoke_install', Path(__file__).resolve().parents[1] / '.github/smoke_install.py')
-smoke = importlib.util.module_from_spec(smoke_spec)
-smoke_spec.loader.exec_module(smoke)
+from precision_maintenance import validate as validator
+from precision_maintenance import smoke_install as smoke
 
 
 class RepositoryValidationTests(unittest.TestCase):

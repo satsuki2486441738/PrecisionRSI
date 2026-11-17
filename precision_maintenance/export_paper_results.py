@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Export allowlisted paper aggregates (not raw traces) into a crawlable writing bundle.
-Usage: python .github/export_paper_results.py --output NEW_DIRECTORY
+Usage: python -B -m precision_maintenance export-paper --output NEW_DIRECTORY
 Outputs sources/, reports/, figures/, results.json, values.csv, manifest.json,
 verify.py, README.md and paper-writing-results.zip. Existing output is rejected.
 JSON pointers address sanitized exports; source and export hashes are distinct.
@@ -162,8 +162,8 @@ def export(output):
         sources.append(dict(id=identity,title=title,file=name,source_sha256=sha(raw),export_sha256=sha(payload),data=data))
         for pointer, value, unit in numbers(data):
             ledger.append(dict(source_id=identity,pointer=pointer,value=value,unit=unit,kind='numeric field; interpret with source configuration and scope'))
-    docs = [('qwen35',ROOT/'.github/qwen35-precision-report.md'),('qwen38',ROOT/'.github/qwen38-precision-report.md'),('deepseek41',ROOT/'.github/deepseek41-precision-report.md'),('qwen-followup',FOLLOW/'report.md'),('qwen-diagnostics',FOLLOW/'historical/interim/.github/qwen35-qwen38-followup-interim-report.md'),('operator',OPERATOR/'report.md')]
-    figures = [ROOT/'.github/qwen35-precision-trajectory.svg',ROOT/'.github/qwen38-precision-trajectory.svg',ROOT/'.github/deepseek41-precision-diagnostics.svg']
+    docs = [('qwen35',ROOT/'reports/qwen35-precision-report.md'),('qwen38',ROOT/'reports/qwen38-precision-report.md'),('deepseek41',ROOT/'reports/deepseek41-precision-report.md'),('qwen-followup',FOLLOW/'report.md'),('qwen-diagnostics',FOLLOW/'historical/interim/.github/qwen35-qwen38-followup-interim-report.md'),('operator',OPERATOR/'report.md')]
+    figures = [ROOT/'reports/qwen35-precision-trajectory.svg',ROOT/'reports/qwen38-precision-trajectory.svg',ROOT/'reports/deepseek41-precision-diagnostics.svg']
     figures += sorted((FOLLOW/'figures').glob('*.svg')) + sorted((FOLLOW/'historical/interim/.github/figures').glob('*.svg')) + sorted((OPERATOR/'figures').glob('*.svg'))
     asset_map = {path.name: '../figures/'+str(i+1)+'-'+path.name for i, path in enumerate(figures)}
     asset_map.update({path.name: '../sources/'+identity+'.json' for identity, _, path in registry() if path.name != 'results.json'})

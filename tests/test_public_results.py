@@ -1,15 +1,12 @@
 """Public results retain measurements without promising private downloads."""
 import copy
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location('public_results', ROOT/'.github/prepare_public_results.py')
-MODULE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(MODULE)
+from precision_maintenance import prepare_public_results as MODULE
 
 
 class PublicResultsTests(unittest.TestCase):

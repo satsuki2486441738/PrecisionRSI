@@ -1,6 +1,6 @@
 """Export new evaluation statistics, retaining scope without copying private artifacts.
 
-Usage: python -B .github/export_statistics.py --base SITE/data/evaluations.json
+Usage: python -B -m precision_maintenance export-statistics --base SITE/data/evaluations.json
        --source OTHER_SITE/data/evaluations.json --output NEW_FILE.json
 
 Output is a separate statistics-only evidence bundle, not a replacement history

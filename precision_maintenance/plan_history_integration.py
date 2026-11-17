@@ -1,6 +1,6 @@
 """Plan an append-only evaluation union without publishing or changing source files.
 
-Usage: python -B .github/plan_history_integration.py --base SITE/data/evaluations.json
+Usage: python -B -m precision_maintenance plan-history --base SITE/data/evaluations.json
        --source NAME=OTHER_SITE/data/evaluations.json [--source NAME=PATH ...]
        --output NEW_PRIVATE_DIRECTORY
 

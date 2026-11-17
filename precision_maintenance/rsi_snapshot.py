@@ -1,6 +1,6 @@
 """Export a public RSI dashboard snapshot from private run evidence.
 
-python .github/rsi_snapshot.py --monitor projects/rsi-system/monitor.json \
+python -B -m precision_maintenance rsi-snapshot --monitor projects/rsi-system/monitor.json \
     --output site/data/rsi.json [--refresh]
 
 --refresh reads the current remote run over the monitor's SSH connection.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Collect immutable public survey evidence into the Differences dashboard.
 
-Usage: python -B .github/collect_differences.py --output site/data/differences.json
+Usage: python -B -m precision_maintenance collect-differences --output site/data/differences.json
        --raw-output site/data/differences-raw.json
 
 Standard library only. Downloads public, SHA-pinned evidence; verifies Git blob

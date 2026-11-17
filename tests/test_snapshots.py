@@ -103,6 +103,8 @@ class SnapshotTests(unittest.TestCase):
         bindings = read(self.root/'fork/audit/bindings.json')
         self.assertEqual((self.root/'fork'/bindings[str(tool)]).read_text(), 'value = 42\n')
         self.assertTrue((self.root/'fork/platform/precision_rsi/snapshots.py').is_file())
+        self.assertEqual((self.root/'fork/platform/requirements-dev.txt').read_bytes(),
+                         (Path(__file__).resolve().parents[1]/'requirements-dev.txt').read_bytes())
         self.assertEqual(read(self.root/f'fork/audit/candidates/{candidate}.json')['status'], 'candidate')
 
     def test_directory_artifact_restores_empty_directories_and_exact_identity(self):

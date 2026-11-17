@@ -1,6 +1,8 @@
 # Public repository scope
 
 Publish reusable code, regression tests, current guides and concise final results.
+Current guides live in `docs/`, final reports and figures in `reports/`;
+`.github/` contains GitHub platform configuration only.
 A result identifies hardware, model, software revisions, settings, measured scope,
 metrics, limitations and reproducibility or immutable evidence references.
 Completion and numerical acceptance remain separate claims.

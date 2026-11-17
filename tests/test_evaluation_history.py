@@ -1,6 +1,5 @@
 """Evaluation history validates peer semantics and keeps repair routing intact."""
 import copy
-import importlib.util
 import json
 import math
 from pathlib import Path
@@ -10,9 +9,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location('evaluation_validator', ROOT / '.github/validate_history.py')
-VALIDATOR = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(VALIDATOR)
+from precision_community import validation as VALIDATOR
 
 
 class EvaluationDataTests(unittest.TestCase):
