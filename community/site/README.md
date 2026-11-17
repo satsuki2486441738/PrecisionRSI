@@ -57,16 +57,13 @@ Regenerate the snapshot with the standard-library collector:
 ```sh
 python3 -B -m scripts collect-differences --output community/site/data/differences.json --raw-output community/site/data/differences-raw.json
 python3 -B -m scripts validate-differences
-python3 -B -m unittest discover -s tests -p 'test_difference_history.py' -v
 ```
 
 To collect a later delivery, review and update the collector's pinned `PINS` and
 archive digest explicitly, then regenerate and verify the output. This is a
-reproducible published snapshot, not a live polling service. The optional
-`node tests/browser_differences.cjs` regression drives `archive.html` with Playwright and an installed
-Chromium (`PRECISION_BROWSER_EXECUTABLE`) to check filters, pagination, deep links,
-exact values, downloads, failure/retry behavior and mobile layout. The Pages
-workflow validates the survey archive against its frozen sources before deployment.
+reproducible published snapshot, not a live polling service. The Pages workflow
+validates the survey archive against its frozen sources before deployment.
+Developer browser regressions are retained locally and are not part of a public checkout.
 
 ## Record an evaluation
 
@@ -107,14 +104,10 @@ Metrics carry before/after values and units. State observed/expected coverage an
 
 ## Validate and publish
 
-Run `python3 -B -m scripts validate-history` and `python3 -B -m unittest discover -s tests -p 'test_*history.py' -v`. The optional `node tests/browser_history.cjs` regression requires Playwright and Chromium; `PRECISION_BROWSER_EXECUTABLE` selects an existing browser executable. It checks both tabs, filters, comparison values, permalinks, downloads, request races and mobile overflow. It starts and stops its own local preview server.
-
-The Pages workflow validates both data files, uploads only `community/site/` and deploys on changes to `main`.
-
-With Node.js available, run `python3 -B -m unittest discover -s tests -p 'test_evaluation_charts.py' -v`
-for signed, zero, extreme-value and selective-chart geometry checks. The browser
-regression checks every recorded comparison's chart values, side labels,
-coverage and linear geometry against the archived measurements.
+Run `python3 -B -m community.records validate` to check the public records and
+`python3 -B -m scripts validate` to check repository metadata and links.
+The Pages workflow validates the records, uploads only `community/site/` and
+deploys on changes to `main`. It does not require the local developer test suite.
 
 ## RSI dashboard
 
@@ -128,7 +121,8 @@ python -B -m scripts rsi-snapshot --monitor projects/rsi-system/monitor.json --o
 
 Omit `--refresh` to export archived local evidence. The optional refresh reads the current remote run through the monitor's SSH declaration; it does not change the run or model service. The exporter returns allowlisted summaries, strips paths from diagnostics, and keeps full traces, task inputs, SSH settings and credentials private. The page polls the published JSON every minute and shows its observation time; publication is a snapshot, not a direct connection to the model server. Publish `community/site/data/rsi.json` through the existing Pages workflow.
 
-Run exporter regressions with `python -B -m unittest discover -s tests -p 'test_rsi_dashboard.py' -v`. Optional page checks use `node tests/browser_rsi.cjs` with Playwright and an installed Chromium.
+Exporter and browser regressions are retained in the local developer suite;
+they are not distributed in the public repository.
 
 ## Results-only additions
 

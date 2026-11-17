@@ -17,7 +17,7 @@ skill for the next missing capability; no research runner or website is required
 | [community/](community/README.md) | Website, public results, retrieval and record validation |
 | [scripts/](scripts/README.md) | Installation, export and repository maintenance commands |
 | [research/](research/README.md) | Optional RSI research experiments; not required to use skills |
-| tests/, docs/, reports/ | Regressions, guides and final numerical reports |
+| docs/, reports/ | Guides and final numerical reports |
 
 Comparison-specific arithmetic and collectors stay with their skill. Put tools
 in `tools/` only when they are shared. Community retrieval selects known issues
@@ -160,3 +160,5 @@ The [RSI dashboard](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html) s
 The [results page](community/site/paper.html) provides public reports, scientific figures, [JSON](community/site/data/paper-results.json) and a [CSV numeric index](community/site/data/paper-results.csv). Published results retain source hashes, actual configurations, coverage, failures and unverified scopes. Numeric fields are not independent samples. Historical ZIPs, raw tensors and complete execution logs remain local with no online download. The [local evidence index](community/site/data/local-evidence.json) records archive names, sizes and SHA256 hashes. Byte integrity does not imply numerical acceptance.
 
 Public repository scope: [publication policy](docs/publication.md). Keep final results and reproducibility metadata public; retain intermediate execution artifacts locally.
+
+Developer regression files in `tests/` are retained locally and Git-ignored. Public CI runs repository/history validation and the clean-install smoke check, without depending on that local suite.

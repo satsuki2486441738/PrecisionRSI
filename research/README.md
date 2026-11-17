@@ -65,9 +65,9 @@ cannot shrink the fixed prefix or split an indivisible history unit. Keep large
 artifacts in files. Compaction is an auxiliary model call; account for its usage
 from session evidence separately when the headless step stream omits it.
 
-Run the optional real-DSH regression with `DSH_BIN=/path/to/dsh python -B -m
-unittest discover -s tests -p test_dsh_compaction.py -v`. It uses an isolated
-session and a local mock provider; no inference service or credentials are needed.
+The optional real-DSH regression is retained in the local developer suite,
+which is not distributed in the public repository. It uses an isolated session
+and a local mock provider; no inference service or credentials are needed.
 
 Tasks with private native checks supply `interface: {...}`: visible inputs, identifier mappings, invocation and required output fields. Delegation sends this object instead of host plan/protected paths. Keep those files outside the harness view; the host retains them for execution and integrity checks. Interface changes invalidate baseline reuse.
 

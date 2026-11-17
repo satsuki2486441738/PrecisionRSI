@@ -18,7 +18,7 @@ Agent 按缺失能力读取 Skill、调用工具，完成比较诊断、必要�
 | [community/](../community/README.md) | site/ 管理网页、公开数据与证据；records/ 管理校验与检索 |
 | [scripts/](../scripts/README.md) | 安装、数据导出、仓库与发布校验等维护脚本 |
 | [research/](../research/README.md) | 可选的 RSI 预算、候选迭代和独立评估实验 |
-| tests/ | 工具、流程和页面的回归测试 |
+| 本地 tests/（Git 忽略） | 开发回归，仅供本地维护，不上传 GitHub |
 | docs/、reports/ | 现行使用指南、最终测评报告和科学图 |
 | .github/ | GitHub 自动化配置 |
 | 本地私有 projects/、runs/ | 原生案例、资源配置、原始数组、完整日志与过程记录 |
