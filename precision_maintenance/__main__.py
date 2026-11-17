@@ -5,8 +5,8 @@ import sys
 
 COMMANDS = {
     'validate': ('precision_maintenance', 'validate'),
-    'validate-history': ('precision_community', 'validation'),
-    'validate-differences': ('precision_community', 'differences'),
+    'validate-history': ('community.records', 'validation'),
+    'validate-differences': ('community.records', 'differences'),
     'validate-immutability': ('precision_maintenance', 'validate_immutability'),
     'collect-differences': ('precision_maintenance', 'collect_differences'),
     'plan-history': ('precision_maintenance', 'plan_history_integration'),

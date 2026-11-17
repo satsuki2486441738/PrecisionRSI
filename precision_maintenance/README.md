@@ -17,7 +17,7 @@ python -B -m precision_maintenance smoke-install
 ```
 
 `validate` checks skill metadata and tracked Markdown links. The community package
-owns catalog validation: `python -B -m precision_community validate`.
+owns catalog validation: `python -B -m community.records validate`.
 `smoke-install` requires NumPy and Torch, performs a fresh skill export and checks
 the CPU gradient/repair workflow. No model download or accelerator is used.
 

@@ -16,7 +16,7 @@ numerical acceptance. These files are results, not instructions to restart work.
 
 Each report links its SVG and measurement sources. The service report retains
 JSON/CSV metrics and scope ledgers; other public metrics are in
-[site/data/](../site/README.md). The [paper-writing page](../site/paper.html) provides
+[community/site/data/](../community/site/README.md). The [paper-writing page](../community/site/paper.html) provides
 the published writing snapshot. Raw arrays, process logs, intermediate candidates
 and historical delivery packages remain local. See the
 [publication policy](../docs/publication.md).

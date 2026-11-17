@@ -41,7 +41,7 @@ class PublicResultsTests(unittest.TestCase):
         self.assertIn('[metrics](data/result.json)', result)
 
     def test_public_snapshot_has_consistent_hashes_and_no_archive_links(self):
-        snapshot=json.loads((ROOT/'site/data/paper-results.json').read_text())
+        snapshot=json.loads((ROOT/'community/site/data/paper-results.json').read_text())
         self.assertEqual(snapshot['publication']['mode'],'metrics-only')
         for source in snapshot['sources']:
             self.assertEqual(source['export_sha256'],hashlib.sha256(MODULE.encoded(source['data'])).hexdigest())
@@ -54,12 +54,12 @@ class PublicResultsTests(unittest.TestCase):
             elif isinstance(value,list):
                 for item in value: check(item)
         check(snapshot)
-        archives=json.loads((ROOT/'site/data/local-evidence.json').read_text())['archives']
+        archives=json.loads((ROOT/'community/site/data/local-evidence.json').read_text())['archives']
         self.assertGreater(len(archives),0)
         self.assertTrue(all(a['availability']=='local-only' and len(a['sha256'])==64 for a in archives))
 
     def test_results_page_has_no_static_archive_downloads(self):
         import re
-        page=(ROOT/'site/paper.html').read_text()
+        page=(ROOT/'community/site/paper.html').read_text()
         self.assertIsNone(re.search(r'href=["\'][^"\']*\.zip',page))
         self.assertIn('原始证据本地保留，不提供在线下载',page)

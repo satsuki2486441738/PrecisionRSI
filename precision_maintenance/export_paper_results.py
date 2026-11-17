@@ -92,10 +92,10 @@ def numbers(value, pointer='', inherited_unit=None):
         yield pointer, value, inherited_unit or 'unspecified; see source context'
 
 def registry():
-    evidence = ROOT / 'site/evidence'
+    evidence = ROOT / 'community/site/evidence'
     specs = [
-        ('original-repairs','Original manuscript / repair history',ROOT/'site/data/repairs.json'),
-        ('model-evaluations','Qwen / DeepSeek model evaluations',ROOT/'site/data/evaluations.json'),
+        ('original-repairs','Original manuscript / repair history',ROOT/'community/site/data/repairs.json'),
+        ('model-evaluations','Qwen / DeepSeek model evaluations',ROOT/'community/site/data/evaluations.json'),
         ('qwen-followup','Qwen follow-up / final',FOLLOW/'results.json'),
         ('qwen-diagnostics','Qwen follow-up / diagnostic and held-out cohorts',FOLLOW/'historical/interim/results.json'),
         ('operator-original','Operator / original conditions across stacks',OPERATOR/'results.json'),
@@ -106,7 +106,7 @@ def registry():
     for name in ['core-measurements','gpu-performance','npu-performance','head-summary','gap-ledger','runtime-facts','framework-facts','terminal-cleanup-summary']:
         specs.append(('deepseek-'+name,'DeepSeek / HISTORICAL 2026-11-06 / '+name,evidence/'deepseek41-precision-20261106'/(name+'.json')))
     for name in SUPPLEMENTS:
-        specs.append((name, 'DeepSeek / reviewed supplement / '+name, ROOT/'site/data'/(name+'.json')))
+        specs.append((name, 'DeepSeek / reviewed supplement / '+name, ROOT/'community/site/data'/(name+'.json')))
     return specs
 
 def filtered_history(identity, data):
@@ -195,7 +195,7 @@ def export(output):
         content = sanitize(path.read_text())
         write(name,content.encode()); assets.append(dict(file=name,kind='figure',svg=content,source_sha256=sha(path.read_bytes())))
     for stem in SUPPLEMENTS:
-        path=ROOT/'site/evidence'/(stem+'.zip')
+        path=ROOT/'community/site/evidence'/(stem+'.zip')
         name='supplements/'+path.name
         raw=path.read_bytes()
         with zipfile.ZipFile(io.BytesIO(raw)) as archive:

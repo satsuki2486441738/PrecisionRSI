@@ -12,7 +12,7 @@ python -m precision_rsi activate VERSION_ID --store projects/memory
 
 ## Task execution
 
-Shared execution is imported from [precision_core](../precision_core/README.md); RSI does not import Compare scripts by modifying the process search path. Public [community records](../precision_community/README.md) are independent of this optional runner.
+Shared execution is imported from [precision_core](../precision_core/README.md); RSI does not import Compare scripts by modifying the process search path. Public [community records](../community/records/README.md) are independent of this optional runner.
 
 Task paths are relative to the task JSON. `plan` uses the existing [workflow interface](../skills/precision-compare/scripts/workflow.py) for native preparation, reproduction, collection and task-owned checks. The agent edits implementations; the host executes and verifies the original workload.
 

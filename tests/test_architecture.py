@@ -72,8 +72,8 @@ assert workflow.ENGINE_FILES[0].parent.name=='precision_core'
 import sys
 sys.path.insert(0,sys.argv[1])
 before=sys.path.copy()
-from precision_community.catalog import Catalog
-catalog=Catalog(sys.argv[1]+'/site')
+from community.records.catalog import Catalog
+catalog=Catalog(sys.argv[1]+'/community/site')
 assert len(catalog.find_comparisons())==130
 assert not any(x=='precision_rsi' or x.startswith('precision_rsi.') for x in sys.modules)
 assert 'precision_core' not in sys.modules
@@ -83,8 +83,8 @@ assert catalog.related('comparison',catalog.find_comparisons()[0]['id'])==[]
 """)
 
     def test_dispatcher_and_canonical_module_commands_agree(self):
-        for module, command in (('precision_community.validation', 'validate-history'),
-                                ('precision_community.differences', 'validate-differences'),
+        for module, command in (('community.records.validation', 'validate-history'),
+                                ('community.records.differences', 'validate-differences'),
                                 ('precision_maintenance.export_statistics', 'export-statistics')):
             args = ['--help'] if command == 'export-statistics' else []
             direct = subprocess.run([sys.executable, '-B', '-m', module, *args],
@@ -123,7 +123,7 @@ class CommunityRelationTests(unittest.TestCase):
         (self.site/'data'/f'{name}.json').write_text(json.dumps(data))
 
     def catalog(self):
-        from precision_community.catalog import Catalog
+        from community.records.catalog import Catalog
         self.write('relations',self.graph)
         return Catalog(self.site)
 
@@ -204,7 +204,7 @@ class CommunityRelationTests(unittest.TestCase):
         self.graph['links'][0]['evidence']=self.proof
         (self.site/'evidence/proof.json').write_text('changed')
         with self.assertRaisesRegex(ValueError,'hash mismatch'): self.catalog()
-        from precision_community.catalog import Catalog
+        from community.records.catalog import Catalog
         for text in ('{"schema_version":1,"records":[],"records":[]}',
                      '{"schema_version":1,"records":[{"id":"x","metric":1e999}]}'):
             (self.site/'data/differences.json').write_text(text)
@@ -212,7 +212,7 @@ class CommunityRelationTests(unittest.TestCase):
 
     def test_relation_history_is_append_only(self):
         from precision_maintenance.validate_immutability import COLLECTIONS,compare_documents
-        self.assertEqual(COLLECTIONS['site/data/relations.json'],('entities','links'))
+        self.assertEqual(COLLECTIONS['community/site/data/relations.json'],('entities','links'))
         self.chain()
         import copy
         old=copy.deepcopy(self.graph)
@@ -222,7 +222,7 @@ class CommunityRelationTests(unittest.TestCase):
     def test_index_hash_is_bound_to_parsed_bytes_during_source_replacement(self):
         import hashlib
         from unittest.mock import patch
-        from precision_community.catalog import Catalog
+        from community.records.catalog import Catalog
         target=(self.site/'data/evaluations.json').resolve()
         original=target.read_bytes()
         read_bytes,read_text=Path.read_bytes,Path.read_text

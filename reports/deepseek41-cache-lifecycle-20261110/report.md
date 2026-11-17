@@ -36,8 +36,8 @@ The bounded run performs one128-token formal job,160 actual post-FFN logical coo
 
 ## Scope retained and remaining work
 
-OriginalGPU191/275, originalNPU269/275 and the separate adapted paired275/275 remain distinct. Existing SGLang277 across five Engine lifetimes and vLLM216 in one TP8/EP8 Engine are reused. This supplement does not rerun216 jobs or establish backbone training; output-head95 is output-head adaptation. All12 prior scientific gaps are preserved verbatim in [canonical metrics](../../site/data/deepseek41-cache-lifecycle-20261110.json) and the earlier report. Hardware-only causality and numerical acceptance are not claimed.
+OriginalGPU191/275, originalNPU269/275 and the separate adapted paired275/275 remain distinct. Existing SGLang277 across five Engine lifetimes and vLLM216 in one TP8/EP8 Engine are reused. This supplement does not rerun216 jobs or establish backbone training; output-head95 is output-head adaptation. All12 prior scientific gaps are preserved verbatim in [canonical metrics](../../community/site/data/deepseek41-cache-lifecycle-20261110.json) and the earlier report. Hardware-only causality and numerical acceptance are not claimed.
 
 The NPU endpoint failed three read-only SSH connection attempts at its gateway. Installed compressor/ring-kernel admission and the minimal512 physical-state probe remain pending; no NPU model was started. The recurring automation stays paused at the user's request.
 
-[canonical metrics](../../site/data/deepseek41-cache-lifecycle-20261110.json) supplies exact values, scope flags and immutable source SHA256 identifiers. The writing-package verifier checks exported bytes; independent raw numerical replay is recorded separately in the case.
+[canonical metrics](../../community/site/data/deepseek41-cache-lifecycle-20261110.json) supplies exact values, scope flags and immutable source SHA256 identifiers. The writing-package verifier checks exported bytes; independent raw numerical replay is recorded separately in the case.

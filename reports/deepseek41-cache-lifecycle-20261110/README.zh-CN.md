@@ -3,7 +3,7 @@
 日期：2026-11-10。GPU 本轮限定补充已完成独立复核；NPU 物理状态补测等待 SSH 连接恢复。整项任务保持未完成，定时任务保持用户要求的暂停。
 
 - `report.md`：英文研究报告，区分采集、数学复核、生命周期与 namespace 清理。
-- [canonical metrics](../../site/data/deepseek41-cache-lifecycle-20261110.json)：精确测量值、统计口径、12项既有科学缺口和源证据SHA。
+- [canonical metrics](../../community/site/data/deepseek41-cache-lifecycle-20261110.json)：精确测量值、统计口径、12项既有科学缺口和源证据SHA。
 - `physical-cache-bounded-diagnostics.svg`：标准科学图。
 - C1：512快照、1408原始字节数组、2104科学文件；真实非零缓存/logit差异保留。原采集任务的gate超时失败不改写。
 - C2：32K历史、八个选定层、末四位置；同一live链复核与独立本地原数组回放完成，C1/C2是不同Engine。

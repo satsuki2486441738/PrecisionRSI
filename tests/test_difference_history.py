@@ -5,14 +5,14 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_community import differences as VALIDATOR
+from community.records import differences as VALIDATOR
 
 
 class DifferenceHistoryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data = json.loads((ROOT / 'site/data/differences.json').read_text(encoding='utf-8'))
-        cls.raw = json.loads((ROOT / 'site/data/differences-raw.json').read_text(encoding='utf-8'))
+        cls.data = json.loads((ROOT / 'community/site/data/differences.json').read_text(encoding='utf-8'))
+        cls.raw = json.loads((ROOT / 'community/site/data/differences-raw.json').read_text(encoding='utf-8'))
 
     def test_all_published_metrics_match_frozen_source(self):
         records, metrics = VALIDATOR.validate_data(self.data, self.raw)

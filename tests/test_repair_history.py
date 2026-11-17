@@ -8,12 +8,12 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_community import validation as MODULE
+from community.records import validation as MODULE
 
 
 class RepairHistoryTests(unittest.TestCase):
     def setUp(self):
-        self.data = json.loads((ROOT / 'site/data/repairs.json').read_text(encoding='utf-8'))
+        self.data = json.loads((ROOT / 'community/site/data/repairs.json').read_text(encoding='utf-8'))
 
     def check_invalid(self, mutate):
         with tempfile.TemporaryDirectory() as temp:
@@ -32,7 +32,7 @@ class RepairHistoryTests(unittest.TestCase):
                 MODULE.validate(site)
 
     def test_published_history(self):
-        self.assertGreaterEqual(MODULE.validate(ROOT / 'site'), 1)
+        self.assertGreaterEqual(MODULE.validate(ROOT / 'community/site'), 1)
 
     def test_duplicate_identity(self):
         self.check_invalid(lambda d: d['repairs'].append(copy.deepcopy(d['repairs'][0])))
@@ -79,7 +79,7 @@ class RepairHistoryTests(unittest.TestCase):
 @unittest.skipUnless(shutil.which('node'), 'Node.js is needed for browser data-model regressions')
 class HistoryGroupingTests(unittest.TestCase):
     def evaluate(self, data, expression):
-        script = "const h=require('./site/history.js');const d=JSON.parse(require('fs').readFileSync(0,'utf8'));console.log(JSON.stringify(" + expression + "));"
+        script = "const h=require('./community/site/history.js');const d=JSON.parse(require('fs').readFileSync(0,'utf8'));console.log(JSON.stringify(" + expression + "));"
         result = subprocess.run(['node', '-e', script], input=json.dumps(data), cwd=ROOT,
                                 text=True, capture_output=True, check=True)
         return json.loads(result.stdout)
@@ -141,7 +141,7 @@ class HistoryGroupingTests(unittest.TestCase):
 @unittest.skipUnless(shutil.which('node'), 'Node.js is needed for repair presentation regressions')
 class RepairPresentationTests(unittest.TestCase):
     def evaluate(self, expression):
-        script = "const p=require('./site/repair-presentation.js');const h=require('./site/history.js');const d=require('./site/data/repairs.json');console.log(JSON.stringify(" + expression + "));"
+        script = "const p=require('./community/site/repair-presentation.js');const h=require('./community/site/history.js');const d=require('./community/site/data/repairs.json');console.log(JSON.stringify(" + expression + "));"
         return json.loads(subprocess.check_output(['node', '-e', script], cwd=ROOT, text=True))
 
     def test_every_published_fix_has_workflow_and_version(self):

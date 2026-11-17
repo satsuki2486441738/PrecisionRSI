@@ -5,13 +5,13 @@ const { readFile } = require('node:fs/promises');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
-const rawData = require('../site/data/evaluations.json');
-const repairs = require('../site/data/repairs.json');
-const historyModel = require('../site/history.js');
+const rawData = require('../community/site/data/evaluations.json');
+const repairs = require('../community/site/data/repairs.json');
+const historyModel = require('../community/site/history.js');
 const data = { ...rawData, evaluations: historyModel.publicEvaluations(rawData.evaluations) };
-const presentationModel = require('../site/evaluation-presentation.js');
+const presentationModel = require('../community/site/evaluation-presentation.js');
 (async () => {
-  const server = spawn(process.env.PRECISION_PYTHON || 'python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', path.join(root, 'site')], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const server = spawn(process.env.PRECISION_PYTHON || 'python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', path.join(root, 'community/site')], { stdio: ['ignore', 'pipe', 'pipe'] });
   let browser;
   try {
     const port = await new Promise((resolve, reject) => {

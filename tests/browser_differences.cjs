@@ -5,10 +5,10 @@ const { readFile } = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
-const data = require('../site/data/differences.json');
-const model = require('../site/differences.js');
+const data = require('../community/site/data/differences.json');
+const model = require('../community/site/differences.js');
 (async () => {
-  const server = spawn(process.env.PRECISION_PYTHON || 'python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', path.join(root, 'site')], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const server = spawn(process.env.PRECISION_PYTHON || 'python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', path.join(root, 'community/site')], { stdio: ['ignore', 'pipe', 'pipe'] });
   let browser;
   try {
     const port = await new Promise((resolve, reject) => {

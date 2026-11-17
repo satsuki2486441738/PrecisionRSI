@@ -9,16 +9,16 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_community import validation as VALIDATOR
+from community.records import validation as VALIDATOR
 
 
 class EvaluationDataTests(unittest.TestCase):
     def setUp(self):
-        self.data = json.loads((ROOT/'site/data/evaluations.json').read_text(encoding='utf-8'))
+        self.data = json.loads((ROOT/'community/site/data/evaluations.json').read_text(encoding='utf-8'))
 
     def check_data(self, mutate, valid=False):
         with tempfile.TemporaryDirectory() as tmp:
-            site=Path(tmp);shutil.copytree(ROOT/'site',site,dirs_exist_ok=True)
+            site=Path(tmp);shutil.copytree(ROOT/'community/site',site,dirs_exist_ok=True)
             data=copy.deepcopy(self.data);mutate(data)
             (site/'data/evaluations.json').write_text(json.dumps(data),encoding='utf-8')
             if valid:
@@ -27,7 +27,7 @@ class EvaluationDataTests(unittest.TestCase):
                 with self.assertRaises(ValueError):VALIDATOR.validate_evaluations(site)
 
     def test_published_data(self):
-        self.assertEqual(VALIDATOR.validate_evaluations(ROOT/'site'),len(self.data['evaluations']))
+        self.assertEqual(VALIDATOR.validate_evaluations(ROOT/'community/site'),len(self.data['evaluations']))
         self.assertGreater(len(self.data['evaluations']),0)
 
     def test_duplicate_record_and_side_identities(self):
@@ -64,7 +64,7 @@ class EvaluationDataTests(unittest.TestCase):
         self.check_data(lambda d:d['evaluations'][0]['evidence'][0].update(url='javascript:alert(1)'))
 
     def test_campaign_catalog_matches_public_samples_and_scoped_metrics(self):
-        campaign = json.loads((ROOT / 'site/evidence/model-precision-gpu-npu-20261110/results.json')
+        campaign = json.loads((ROOT / 'community/site/evidence/model-precision-gpu-npu-20261110/results.json')
                               .read_text(encoding='utf-8'))
         catalog = {record['id']: record for record in self.data['evaluations']}
         self.assertEqual(set(campaign['platforms']), {'cuda', 'ascend'})
@@ -108,7 +108,7 @@ class EvaluationDataTests(unittest.TestCase):
 @unittest.skipUnless(shutil.which('node'),'Node.js is needed for frontend model tests')
 class EvaluationModelTests(unittest.TestCase):
     def evaluate(self, expression, all_records=False):
-        script="const h=require('./site/history.js');const d=require('./site/data/evaluations.json');"
+        script="const h=require('./community/site/history.js');const d=require('./community/site/data/evaluations.json');"
         if not all_records:
             script+="d.evaluations=d.evaluations.filter(r=>['trl-sfttrainer-checkpoint-20261021','trl-sfttrainer-lora-20261021','torch-bf16-fp16-20261021'].includes(r.id));"
         script+="console.log(JSON.stringify("+expression+"))"
@@ -125,7 +125,7 @@ class EvaluationModelTests(unittest.TestCase):
             sameObjects:visible.every(r=>d.evaluations.includes(r)),
             hiddenSearch:h.filterEvaluations(visible,{query:archived[0].id}).length};
         })()""", all_records=True)
-        data=json.loads((ROOT/'site/data/evaluations.json').read_text())['evaluations']
+        data=json.loads((ROOT/'community/site/data/evaluations.json').read_text())['evaluations']
         self.assertEqual(set(result['archived']), {r['id'] for r in data if r['id'].startswith('skills-')})
         self.assertGreater(len(result['archived']), 0)
         self.assertEqual(set(result['visible']), {r['id'] for r in data if not r['id'].startswith('skills-')})

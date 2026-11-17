@@ -3,7 +3,7 @@
 The previously connection-blocked NPU probe has completed four512-token requests in one TP8/EP8 Engine. All8rank original arrays, independent emptycwd replay, original-host mathematics and exact process cleanup passed. Overall scientific coverage remains incomplete; acceptance is null and physical-cache equivalence is unproven.
 
 - `report.md`: English methods, measured results and limits.
-- [canonical metrics](../../site/data/deepseek41-npu512-physical-cache-20261110.json): exact metrics, dependent coordinates and immutable evidence SHA.
+- [canonical metrics](../../community/site/data/deepseek41-npu512-physical-cache-20261110.json): exact metrics, dependent coordinates and immutable evidence SHA.
 - `npu512-physical-cache-diagnostics.svg`: rank0 selected3source pooling/norm diagnostics; positions are categorical, TP samples dependent.
 - `README.zh-CN.md`: matching Chinese index.
 

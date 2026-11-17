@@ -45,7 +45,7 @@
 
 结论区分：**采集/配置差异、确认的缺陷、数值策略取舍、原因未明**。修复候选只有完成相应验证后才能标为已验证。
 
-公开结果沿用 [evaluations.json](../site/data/evaluations.json) 和 [repairs.json](../site/data/repairs.json)；需要新增的关联是「比较 → 调查 → 问题 → 候选 → 验证」，具体接口由首例需求决定。社区可独立于 RSI 存在，检索结果不替代本地验证。
+公开结果沿用 [evaluations.json](../community/site/data/evaluations.json) 和 [repairs.json](../community/site/data/repairs.json)；需要新增的关联是「比较 → 调查 → 问题 → 候选 → 验证」，具体接口由首例需求决定。社区可独立于 RSI 存在，检索结果不替代本地验证。
 
 公开指标、配置、报告、复现方法和证据哈希；原始轨迹、大数组及历史 ZIP 本地保留。说明公开材料能复现到哪一步，保留历史失败与科学缺口。
 

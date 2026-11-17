@@ -27,7 +27,7 @@ class PaperExportTests(unittest.TestCase):
         self.assertIn('digest',data.values())
         self.assertEqual(data['runtime_topology'],{'attention_mask':[1,1]})
     def test_public_snapshot_numeric_fields_match_sources(self):
-        snapshot=json.loads((m.ROOT/'site/data/paper-results.json').read_text())
+        snapshot=json.loads((m.ROOT/'community/site/data/paper-results.json').read_text())
         sources={source['id']:source['data'] for source in snapshot['sources']}
         self.assertGreater(len(snapshot['numeric_fields']),0)
         for row in snapshot['numeric_fields']:
@@ -115,7 +115,7 @@ class PaperExportTests(unittest.TestCase):
             self.assertEqual(qli['configuration']['candidate_mode_L2'],3)
             self.assertEqual(qli['configuration']['candidate_mode_L20'],1)
             qli_source=next(s for s in result['sources'] if s['id']=='deepseek41-native-query-key-selection-20261109')
-            self.assertEqual(qli_source['source_sha256'],m.sha((m.ROOT/'site/data/deepseek41-native-query-key-selection-20261109.json').read_bytes()))
+            self.assertEqual(qli_source['source_sha256'],m.sha((m.ROOT/'community/site/data/deepseek41-native-query-key-selection-20261109.json').read_bytes()))
             qli_asset=next(a for a in result['assets'] if a['file']=='supplements/deepseek41-native-query-key-selection-20261109.zip')
             self.assertEqual(qli_asset['source_sha256'],qli['candidate']['zip_sha256'])
             self.assertEqual(m.sha((out/qli_asset['file']).read_bytes()),qli['candidate']['zip_sha256'])
@@ -175,7 +175,7 @@ class PaperExportTests(unittest.TestCase):
                 self.assertIn('manifest.json',z.namelist())
                 for stem in m.SUPPLEMENTS:
                     name='supplements/'+stem+'.zip'
-                    original=(m.ROOT/'site/evidence'/(stem+'.zip')).read_bytes()
+                    original=(m.ROOT/'community/site/evidence'/(stem+'.zip')).read_bytes()
                     self.assertEqual(z.read(name),original)
             subprocess.run([sys.executable,'-I','-B',str(out/'verify.py')],check=True)
             (out/'values.csv').write_text('tampered')
@@ -183,7 +183,7 @@ class PaperExportTests(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("node"), "Node.js is required for page rendering regression")
     def test_local_supplement_has_no_online_archive_download(self):
-        script = "const fs=require('fs'),vm=require('vm'),assert=require('assert');\nconst nodes=new Map();class N{constructor(tag){this.tag=tag;this.children=[];this.value='';this.classList={add(){}};}append(...v){this.children.push(...v);}replaceChildren(...v){this.children=[...v];}}\nglobal.document={createElement:t=>new N(t),getElementById:id=>{if(!nodes.has(id))nodes.set(id,new N(id));return nodes.get(id);}};\nconst fixtureData={sources:[],numeric_fields:[],highlights:[],notes:[],assets:[{kind:'portable_supplement',file:'supplements/deepseek41-paired-output-head95-20261109.zip',scope:'Independent aggregate ZIP, not Markdown'},{kind:'report',file:'reports/native.md',text:'Retained native report'},{kind:'figure',file:'figures/plot.svg',svg:'<svg/>'}]};\nglobal.fetch=async()=>({ok:true,json:async()=>fixtureData});\nconst html=fs.readFileSync('site/paper.html','utf8');vm.runInThisContext(html.split('<script>')[1].split('</script>')[0]);\nsetImmediate(()=>{const reports=nodes.get('reports');assert.equal(reports.children.length,2);const zip=reports.children[0];const anchors=zip.children.filter(n=>n.tag==='a');assert.equal(anchors.length,0,'local archives must not have online download anchors');assert(zip.children.some(n=>n.textContent==='原始证据本地保留，不提供在线下载')); assert.equal(zip.children.filter(n=>n.tag==='button').length,0,'ZIP must not use Markdown preview/text Blob');assert.equal(reports.children[1].children.filter(n=>n.tag==='button').length,2);assert.equal(nodes.get('figures').children.length,1);console.log('PASS actual page async asset rendering: local-only archive, report and SVG');});\n"
+        script = "const fs=require('fs'),vm=require('vm'),assert=require('assert');\nconst nodes=new Map();class N{constructor(tag){this.tag=tag;this.children=[];this.value='';this.classList={add(){}};}append(...v){this.children.push(...v);}replaceChildren(...v){this.children=[...v];}}\nglobal.document={createElement:t=>new N(t),getElementById:id=>{if(!nodes.has(id))nodes.set(id,new N(id));return nodes.get(id);}};\nconst fixtureData={sources:[],numeric_fields:[],highlights:[],notes:[],assets:[{kind:'portable_supplement',file:'supplements/deepseek41-paired-output-head95-20261109.zip',scope:'Independent aggregate ZIP, not Markdown'},{kind:'report',file:'reports/native.md',text:'Retained native report'},{kind:'figure',file:'figures/plot.svg',svg:'<svg/>'}]};\nglobal.fetch=async()=>({ok:true,json:async()=>fixtureData});\nconst html=fs.readFileSync('community/site/paper.html','utf8');vm.runInThisContext(html.split('<script>')[1].split('</script>')[0]);\nsetImmediate(()=>{const reports=nodes.get('reports');assert.equal(reports.children.length,2);const zip=reports.children[0];const anchors=zip.children.filter(n=>n.tag==='a');assert.equal(anchors.length,0,'local archives must not have online download anchors');assert(zip.children.some(n=>n.textContent==='原始证据本地保留，不提供在线下载')); assert.equal(zip.children.filter(n=>n.tag==='button').length,0,'ZIP must not use Markdown preview/text Blob');assert.equal(reports.children[1].children.filter(n=>n.tag==='button').length,2);assert.equal(nodes.get('figures').children.length,1);console.log('PASS actual page async asset rendering: local-only archive, report and SVG');});\n"
         result=subprocess.run(["node","-e",script],cwd=m.ROOT,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)
         self.assertIn("PASS actual page async asset rendering",result.stdout)

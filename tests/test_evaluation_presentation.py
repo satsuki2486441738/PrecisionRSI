@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 @unittest.skipUnless(shutil.which('node'), 'Node.js is needed for display title tests')
 class EvaluationPresentationTests(unittest.TestCase):
     def evaluate(self, expression):
-        script = ("const {titleFor}=require('./site/evaluation-presentation.js');"
-                  "const records=require('./site/data/evaluations.json').evaluations;"
+        script = ("const {titleFor}=require('./community/site/evaluation-presentation.js');"
+                  "const records=require('./community/site/data/evaluations.json').evaluations;"
                   "const byId=(id)=>records.find(r=>r.id===id);"
                   "console.log(JSON.stringify(" + expression + ")); ")
         result = subprocess.run(['node', '-e', script], cwd=ROOT, text=True,
@@ -37,7 +37,7 @@ class EvaluationPresentationTests(unittest.TestCase):
 
     def test_model_precision_campaign_names_keep_framework_and_same_platform_scope(self):
         result = self.evaluate("""(() => {
-          const {evaluationModel}=require('./site/history.js');
+          const {evaluationModel}=require('./community/site/history.js');
           const cases=['gemma-3-27b-it','gpt-oss-120b','nemotron-bolt'];
           const rows=cases.flatMap(model=>['cuda','ascend'].map(platform=>{
             const record=byId(`${model}-${platform}-precision-20261110`);
@@ -219,7 +219,7 @@ class EvaluationPresentationTests(unittest.TestCase):
     def test_browser_global_and_commonjs_expose_the_same_api(self):
         result = self.evaluate("""(() => {
           const fs=require('fs'),vm=require('vm'),context={};
-          vm.runInNewContext(fs.readFileSync('./site/evaluation-presentation.js','utf8'),context);
+          vm.runInNewContext(fs.readFileSync('./community/site/evaluation-presentation.js','utf8'),context);
           return context.EvaluationPresentation.titleFor(byId('trl-sfttrainer-lora-20261021'),'模型');
         })()""")
         self.assertEqual(result, 'TRL · CUDA ↔ Ascend LoRA SFT · 模型')
