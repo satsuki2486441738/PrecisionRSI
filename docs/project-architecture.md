@@ -17,7 +17,7 @@ Agent 按缺失能力读取 Skill、调用工具，完成比较诊断、必要�
 | [tools/](../tools/README.md) | 实际共用的命令执行、依赖工作流、资源核验和证据工具 |
 | [community/](../community/README.md) | site/ 管理网页、公开数据与证据；records/ 管理校验与检索 |
 | [scripts/](../scripts/README.md) | 安装、数据导出、仓库与发布校验等维护脚本 |
-| [research/](../research/README.md) | 可选的 RSI 预算、候选迭代和独立评估实验 |
+| 本地 research/（Git 忽略） | 可选的 RSI 研究实验，代码与状态保留本地，不上传 GitHub |
 | 本地 tests/（Git 忽略） | 开发回归，仅供本地维护，不上传 GitHub |
 | docs/、reports/ | 现行使用指南、最终测评报告和科学图 |
 | .github/ | GitHub 自动化配置 |
@@ -39,7 +39,7 @@ Skill 脚本保留调用入口，共用工具只维护一份实现。
 
 ## 可选研究与身份
 
-日常 Skill 使用不依赖 RSI。research/ 仅在明确需要自动研究迭代时启用。
+日常 Skill 使用不依赖 RSI。research/ 不随公开仓库分发，仅在本地明确需要自动研究迭代时启用。
 研究快照及版本身份包含 research/、skills/ 和实际依赖的 tools/；
 工具改变后必须重新验证受影响范围，历史运行及旧版本回执不自动升级。
 旧目录改名不修改历史证据中的源路径，也不追溯补造缺失证据。

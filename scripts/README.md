@@ -64,7 +64,7 @@ published evidence remain unchanged and describe the original capture.
 | `python -m precision_maintenance ...` | `python -m scripts ...` |
 | `python -m precision_core.record_run ...` | `python -m tools.record_run ...` |
 | `from precision_core.workflow import run_workflow` | `from tools.workflow import run_workflow` |
-| `python -m precision_rsi ...` | `python -m research ...` |
+| `python -m precision_rsi ...` | Local research only; excluded from the public checkout |
 
 Flags and task formats retain their meanings. Update active caller commands and
 export a fresh skill installation; historical plans, command receipts and version
