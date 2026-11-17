@@ -176,7 +176,7 @@ These are batch-1 cache-off native forwards with two warmups and five synchroniz
 
 ## Evidence, independent replay and release limits
 
-The [public machine-readable evidence](../site/evidence/qwen38-precision-20261106.json) retains selected numerical sections, all compared runtime versions, 53 provenance exports, resource/input/source hashes and native admission/cleanup status. Full traces, source locations, raw arrays, token datasets and connection details stay in the private case. [Evaluation history](../site/data/evaluations.json) pins a separate local measurement Git revision; the model revision is not used as the measurement archive. These files are prepared locally and have not been pushed or published.
+The [public machine-readable evidence](../community/site/evidence/qwen38-precision-20261106.json) retains selected numerical sections, all compared runtime versions, 53 provenance exports, resource/input/source hashes and native admission/cleanup status. Full traces, source locations, raw arrays, token datasets and connection details stay in the private case. [Evaluation history](../community/site/data/evaluations.json) pins a separate local measurement Git revision; the model revision is not used as the measurement archive. These files are prepared locally and have not been pushed or published.
 
 - Private unified index: `compare-qwen38-release-20261104T235617Z`.
 - Final analysis: `compare-qwen38-analysis-20261105T171600Z`; fresh independent replay: `compare-qwen38-replay-20261105T171747Z`.

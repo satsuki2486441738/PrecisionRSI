@@ -172,8 +172,8 @@ def main():
         sources.append((name, Path(path)))
     output = args.output.resolve()
     repo = Path(__file__).resolve().parents[1]
-    if output.is_relative_to(repo / 'site'):
-        parser.error('output is private; choose a fresh directory outside site/')
+    if output.is_relative_to(repo / 'community/site'):
+        parser.error('output is private; choose a fresh directory outside community/site/')
     try:
         candidate, audit = plan(args.base, sources)
         output.mkdir(parents=True, exist_ok=False)

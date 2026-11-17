@@ -3,7 +3,7 @@
 Snapshot: 2026-11-10. GPU C1/C2 and the bounded prospective Core lifecycle repair have independent raw replays. The authorized NPU physical-state probe awaits endpoint connection recovery. Overall work is incomplete and the user-paused automation remains paused.
 
 - `report.md`: English scientific report and scope.
-- [canonical metrics](../../site/data/deepseek41-cache-lifecycle-20261110.json): exact aggregates, original12 gaps and immutable evidence identifiers/SHA256.
+- [canonical metrics](../../community/site/data/deepseek41-cache-lifecycle-20261110.json): exact aggregates, original12 gaps and immutable evidence identifiers/SHA256.
 - `physical-cache-bounded-diagnostics.svg`: scientific figure.
 - `README.zh-CN.md`: Chinese index with matching boundaries.
 

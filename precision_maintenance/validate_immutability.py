@@ -6,7 +6,9 @@ Recorded evaluations, repairs, library groups, survey measurement views and
 published evidence files are append-only. A change may add records or files,
 and may update top-level ``updated_at``/``snapshot_date`` fields, but every
 record identity present at the base revision must remain with identical
-content, and every evidence file must keep its bytes and path.
+content, and every evidence file must keep its bytes and site-relative path.
+The former root site/ maps explicitly to community/site/; this migration does
+not permit changing records, dropping evidence or renaming evidence within site.
 """
 import argparse
 import json
@@ -17,12 +19,14 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 COLLECTIONS = {
-    'site/data/evaluations.json': ('evaluations',),
-    'site/data/repairs.json': ('repairs', 'library_groups'),
-    'site/data/relations.json': ('entities', 'links'),
-    'site/data/differences.json': ('records', 'models', 'sources'),
+    'community/site/data/evaluations.json': ('evaluations',),
+    'community/site/data/repairs.json': ('repairs', 'library_groups'),
+    'community/site/data/relations.json': ('entities', 'links'),
+    'community/site/data/differences.json': ('records', 'models', 'sources'),
 }
-EVIDENCE = 'site/evidence/'
+EVIDENCE = 'community/site/evidence/'
+LEGACY_SITE = 'site/'
+SITE = 'community/site/'
 
 
 def _identity(item):
@@ -71,14 +75,14 @@ def compare_documents(path, base, head, keys):
 
 
 def compare_evidence(changes):
-    """Return violations from ``git diff --name-status`` lines under site/evidence."""
+    """Return violations from ``git diff --name-status`` lines under community/site/evidence."""
     errors = []
     for line in changes:
         fields = line.split('\t')
         status, paths = fields[0], fields[1:]
         if status.startswith('A'):
             continue
-        if any(path.startswith(EVIDENCE) for path in paths):
+        if any(path.startswith((EVIDENCE, LEGACY_SITE + 'evidence/')) for path in paths):
             errors.append(f'evidence {paths[0]} changed ({status})')
     return errors
 
@@ -91,17 +95,30 @@ def _git(*args):
 def validate(base):
     errors = []
     for path, keys in COLLECTIONS.items():
-        try:
-            old = json.loads(_git('show', f'{base}:{path}'))
-        except subprocess.CalledProcessError:
-            continue
-        head_file = ROOT / path
-        if not head_file.exists():
-            errors.append(f'{path}: published history file was removed')
-            continue
-        errors += compare_documents(path, old, json.loads(head_file.read_text(encoding='utf-8')), keys)
-    changes = _git('diff', '--no-renames', '--name-status', base, '--', EVIDENCE).splitlines()
-    return errors + compare_evidence(changes)
+        for original in (path, LEGACY_SITE + path.removeprefix(SITE)):
+            try:
+                old = json.loads(_git('show', f'{base}:{original}'))
+            except subprocess.CalledProcessError:
+                continue
+            head_file = ROOT / path
+            if not head_file.is_file():
+                errors.append(f'{path}: published history file was removed')
+                continue
+            errors += compare_documents(path, old, json.loads(head_file.read_text(encoding='utf-8')), keys)
+    # Compare base blobs against working-tree bytes across the explicit directory
+    # migration. Diff rename heuristics cannot prove that evidence was preserved.
+    entries = _git('ls-tree', '-r', '-z', base, '--', EVIDENCE,
+                   LEGACY_SITE + 'evidence/').split('\0')
+    for entry in filter(None, entries):
+        metadata, original = entry.split('\t', 1)
+        mode, kind, identity = metadata.split()
+        current = SITE + original.removeprefix(LEGACY_SITE) if original.startswith(LEGACY_SITE) else original
+        target = ROOT / current
+        if (mode != '100644' and mode != '100755') or kind != 'blob' or target.is_symlink() or not target.is_file():
+            errors.append(f'evidence {current} missing or not a regular file')
+        elif _git('hash-object', '--no-filters', str(target)).strip() != identity:
+            errors.append(f'evidence {current} changed')
+    return errors
 
 
 def ci_base(event):

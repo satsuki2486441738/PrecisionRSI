@@ -9,14 +9,13 @@
 !/skills/
 !/precision_rsi/
 !/precision_core/
-!/precision_community/
 !/precision_maintenance/
 /skills/*
 !/skills/operator-optimize/
 !/skills/framework-adapt/
 !/skills/precision-compare/
 !/skills/precision-repair/
-!/site/
+!/community/
 !/.github/
 !/docs/
 !/reports/
@@ -63,9 +62,9 @@ __pycache__/
 !/tests/test_public_results.py
 
 # Historical local deliveries are not part of the results-only publication.
-/site/evidence/deepseek41-*.zip
-/site/evidence/paper-writing-results-*.zip
-/site/evidence/evaluation-metrics-results-*.zip*
+/community/site/evidence/deepseek41-*.zip
+/community/site/evidence/paper-writing-results-*.zip
+/community/site/evidence/evaluation-metrics-results-*.zip*
 
 # GitHub contains platform configuration only. Keep generated deliveries local.
 /.github/*

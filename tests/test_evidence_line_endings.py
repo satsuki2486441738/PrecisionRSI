@@ -22,7 +22,7 @@ class EvidenceLineEndingsTests(unittest.TestCase):
             git('config', 'core.autocrlf', 'true')
             git('config', 'core.eol', 'crlf')
             (root / '.gitattributes').write_bytes(attributes.read_bytes())
-            evidence = Path('site/evidence/fixture/selected-targets.json')
+            evidence = Path('community/site/evidence/fixture/selected-targets.json')
             (root / evidence).parent.mkdir(parents=True)
             frozen = b'{\n  "target_logprobs": [-1.0, -2.0]\n}\n'
             (root / evidence).write_bytes(frozen)

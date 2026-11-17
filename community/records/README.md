@@ -6,8 +6,8 @@ harnesses, model runtimes or execution tools. The community remains versioned JS
 and static pages; this package is not an upload service or database.
 
 ```sh
-python -B -m precision_community validate
-python -B -m precision_community index --output /tmp/public-record-index.json
+python -B -m community.records validate
+python -B -m community.records index --output /tmp/public-record-index.json
 ```
 
 Both commands accept `--site DIRECTORY`. Index output must be new. Validation
@@ -15,8 +15,8 @@ checks data structure, local evidence and declared relationships; it does not
 establish numerical acceptance or independently verify causal claims.
 
 ```python
-from precision_community.catalog import Catalog
-catalog = Catalog('site')
+from community.records.catalog import Catalog
+catalog = Catalog('community/site')
 records = catalog.find_comparisons(hardware='Ascend 910C',
                                   library={'name': 'torch_npu', 'version': '2.9.0.post2'},
                                   task='rl')

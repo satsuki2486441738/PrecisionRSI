@@ -10,10 +10,9 @@ NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含�
 |---|---|
 | [Skills](skills/precision-compare/SKILL.md) | 负载适配、精度比较、诊断修复与原任务复验 |
 | [precision_core](precision_core/README.md) | 公共执行、资源与运行时身份、证据工具 |
-| [precision_community](precision_community/README.md) | 公开记录校验、同侧配置索引、绑定证据的显式关系 |
+| [community](community/README.md) | 社区页面、公开记录、数据校验与检索 |
 | [precision_rsi](precision_rsi/README.md) | 可选的 Agent 研究、预算、候选评估与激活 |
 | [precision_maintenance](precision_maintenance/README.md) | 数据维护、公开导出、安装及 CI 命令 |
-| site/ | 基于已审查公开记录的静态社区页面 |
 
 RSI 依赖公共核心；社区记录不依赖 RSI。检索用于选择候选方案，实际组合的验证由任务负责。公开记录保留范围和不可变证据，完整轨迹与大数组留在本地。
 
@@ -112,19 +111,19 @@ python -B -m precision_maintenance install --output /path/to/client/skills
 
 ### Qwen3.8-Flash-Next
 
-[文本精度报告](reports/qwen38-precision-report.md)和[已核验证据](site/evidence/qwen38-precision-20261106.json)覆盖 26 项原生核心采集、完整 32K 推理、LoRA、实际 Trainer/SFTTrainer、固定轨迹 TRL/verl 组件及 MoE/QSA 干预。最终推理比较 GPU 自动分布与 NPU TP8，其余链路保留各自实际配置。两种 GPU 服务引擎完成；NPU 原生 vLLM/SGLang 初始化失败，明确保留数值覆盖缺口。未设精度验收阈值。
+[文本精度报告](reports/qwen38-precision-report.md)和[已核验证据](community/site/evidence/qwen38-precision-20261106.json)覆盖 26 项原生核心采集、完整 32K 推理、LoRA、实际 Trainer/SFTTrainer、固定轨迹 TRL/verl 组件及 MoE/QSA 干预。最终推理比较 GPU 自动分布与 NPU TP8，其余链路保留各自实际配置。两种 GPU 服务引擎完成；NPU 原生 vLLM/SGLang 初始化失败，明确保留数值覆盖缺口。未设精度验收阈值。
 
 ### DeepSeek-V4.1-Flash-1017
 
-[精度报告](reports/deepseek41-precision-report.md)和[已核验证据](site/evidence/deepseek41-precision-20261106.json)比较固定 revision 的 GPU 原版 TP4 实现与明确适配为 BF16 的 NPU TP8/EP8/offload48 配置。覆盖 191/275 项配对张量观测和全部 3,168 个目标评分；NPU 实际 32K 完整前向及精确分段请求已完成。训练、部分算子范围及被拒绝的原生链路仍保留数值缺口。权重转换核验不证明后端算术等价；未设精度验收阈值。
+[精度报告](reports/deepseek41-precision-report.md)和[已核验证据](community/site/evidence/deepseek41-precision-20261106.json)比较固定 revision 的 GPU 原版 TP4 实现与明确适配为 BF16 的 NPU TP8/EP8/offload48 配置。覆盖 191/275 项配对张量观测和全部 3,168 个目标评分；NPU 实际 32K 完整前向及精确分段请求已完成。训练、部分算子范围及被拒绝的原生链路仍保留数值缺口。权重转换核验不证明后端算术等价；未设精度验收阈值。
 
-独立的[公开结果指标](site/data/deepseek41-adapted-core-20261109.json)新增 84 项缓存/掩码打包观测、实际数组全局归约，以及输出头 LoRA 所用的 380 次新鲜冻结骨干前向。[公开结果指标](site/data/deepseek41-full40-attention-20261109.json)使用实际原生操作数，对 rank 0 的 480 个层前向、1,920 行已保存 query 做独立回放；两者均可在[写作页](site/paper.html)读取。原始 191/275 库存保持冻结；FP64 注意力回放不模拟原生舍入。新增[公开结果指标](site/data/deepseek41-paired-output-head95-20261109.json)，包含每侧 95 次同坐标调用（83 次更新、12 次保留评估）、独立公式回放及各自续跑/重复轨迹逐位一致性。跨运行时初始 A 近似但不逐位相等，后续优化器状态为独立轨迹。SGLang 与 vLLM 服务数值复核已完成，vLLM 的 Core77 生命周期证据缺口仍保留。这些补充不代表全模型反向或精度验收通过。
+独立的[公开结果指标](community/site/data/deepseek41-adapted-core-20261109.json)新增 84 项缓存/掩码打包观测、实际数组全局归约，以及输出头 LoRA 所用的 380 次新鲜冻结骨干前向。[公开结果指标](community/site/data/deepseek41-full40-attention-20261109.json)使用实际原生操作数，对 rank 0 的 480 个层前向、1,920 行已保存 query 做独立回放；两者均可在[写作页](community/site/paper.html)读取。原始 191/275 库存保持冻结；FP64 注意力回放不模拟原生舍入。新增[公开结果指标](community/site/data/deepseek41-paired-output-head95-20261109.json)，包含每侧 95 次同坐标调用（83 次更新、12 次保留评估）、独立公式回放及各自续跑/重复轨迹逐位一致性。跨运行时初始 A 近似但不逐位相等，后续优化器状态为独立轨迹。SGLang 与 vLLM 服务数值复核已完成，vLLM 的 Core77 生命周期证据缺口仍保留。这些补充不代表全模型反向或精度验收通过。
 
 - **DeepSeek-V4.1-Flash-1017 — 已复核服务证据（2026 年 11 月 9 日 UTC）。**
   [英文报告](reports/deepseek41-services-final-20261109/report.md)覆盖跨五个 Engine 生命周期的全部 277 项 SGLang 任务，以及八张 H200 上同一 Engine 的 216 项 vLLM TP8/EP8 任务。原主机原始数组数学与 portable 独立复核已完成，vLLM 的 820 行正式完整词表数组已在本地回放。原 GPU **191/275**、原 NPU **269/275** 与另行适配的 paired **275/275** 单列，保留全部 3,168 个目标坐标；95 次输出头研究保持主干冻结。
   Core77 缺少最终恢复回执，原严格生命周期审查仍为失败；八个数据 worker 的终结回执及精确 namespace 清理已核验。12 项科学缺口继续保留。完整词表归一化、相同因果历史配对与空验收阈值保持不变，GPU 不作为数学 oracle。[服务验证报告](reports/deepseek41-services-final-20261109/report.md)提供当前报告、科学图及精确 JSON/CSV 定位。历史 ZIP、原始张量和完整执行日志仅在本地保留。不作发布或完整主干训练完成声明。
 
-[HTTP128 指标](site/data/deepseek41-http128-20261109.json) · [公开结果指标](site/data/deepseek41-http128-20261109.json)。
+[HTTP128 指标](community/site/data/deepseek41-http128-20261109.json) · [公开结果指标](community/site/data/deepseek41-http128-20261109.json)。
 
 ### 精度修复
 
@@ -171,11 +170,11 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 
 ## 评测与修复历史
 
-[比较看板](https://satsuki2486441738.github.io/PrecisionRSI/)读取已发布的评测与修复记录。[历史归档](https://satsuki2486441738.github.io/PrecisionRSI/archive.html)保留推理 / SFT / RL 的配置、数值指标、覆盖率和证据，以及按库分组的修复和验证记录。记录及公开证据维护在 [site/](site/README.md)。
+[比较看板](https://satsuki2486441738.github.io/PrecisionRSI/)读取已发布的评测与修复记录。[历史归档](https://satsuki2486441738.github.io/PrecisionRSI/archive.html)保留推理 / SFT / RL 的配置、数值指标、覆盖率和证据，以及按库分组的修复和验证记录。记录及公开证据维护在 [community/site/](community/site/README.md)。
 
 [RSI 迭代看板](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html)展示当前运行、候选变更、独立评测结果和分阶段时间/token 开销，单独记录基线复用。
 
 
-[结果指标页](site/paper.html)提供公开报告、科学图、[JSON](site/data/paper-results.json)和[CSV 数值索引](site/data/paper-results.csv)。公开内容保留来源哈希、实际配置、覆盖范围、失败与未验证项，数值字段不代表独立样本。历史 ZIP、原始张量和完整执行日志仅在本地保留，不提供在线下载。[本地证据索引](site/data/local-evidence.json)记录归档名称、大小和 SHA256。哈希完整性不表示数值验收通过。
+[结果指标页](community/site/paper.html)提供公开报告、科学图、[JSON](community/site/data/paper-results.json)和[CSV 数值索引](community/site/data/paper-results.csv)。公开内容保留来源哈希、实际配置、覆盖范围、失败与未验证项，数值字段不代表独立样本。历史 ZIP、原始张量和完整执行日志仅在本地保留，不提供在线下载。[本地证据索引](community/site/data/local-evidence.json)记录归档名称、大小和 SHA256。哈希完整性不表示数值验收通过。
 
 公开内容范围见[发布规则](docs/publication.md)：保留最终结果及复现信息，中间执行产物本地保存。

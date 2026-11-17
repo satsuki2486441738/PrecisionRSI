@@ -6,8 +6,8 @@ const path=require('node:path');
 const assert=require('node:assert/strict');
 (async()=>{
   const root=path.resolve(__dirname,'..');
-  const data=JSON.parse(await readFile(path.join(root,'site/data/rsi.json'),'utf8'));
-  const server=spawn(process.env.PRECISION_PYTHON||'python3',['-u','-m','http.server','0','--bind','127.0.0.1','--directory',path.join(root,'site')],{stdio:['ignore','pipe','pipe']});
+  const data=JSON.parse(await readFile(path.join(root,'community/site/data/rsi.json'),'utf8'));
+  const server=spawn(process.env.PRECISION_PYTHON||'python3',['-u','-m','http.server','0','--bind','127.0.0.1','--directory',path.join(root,'community/site')],{stdio:['ignore','pipe','pipe']});
   let browser;
   try {
     const port=await new Promise((resolve,reject)=>{let out='';server.once('error',reject);server.stdout.on('data',chunk=>{out+=chunk;const m=out.match(/port (\d+)/);if(m)resolve(m[1]);});setTimeout(()=>reject(Error('No preview server')),10000).unref();});

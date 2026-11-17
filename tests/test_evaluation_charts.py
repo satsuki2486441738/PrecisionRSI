@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 @unittest.skipUnless(shutil.which('node'), 'Node.js is needed for chart model tests')
 class EvaluationChartTests(unittest.TestCase):
     def evaluate(self, expression):
-        script = ("const {chartModel,barGeometry} = require('./site/evaluations.js');"
+        script = ("const {chartModel,barGeometry} = require('./community/site/evaluations.js');"
                   "console.log(JSON.stringify(" + expression + ")); ")
         result = subprocess.run(['node', '-e', script], cwd=ROOT, text=True,
                                 capture_output=True, check=True)
@@ -88,7 +88,7 @@ class EvaluationChartTests(unittest.TestCase):
 @unittest.skipUnless(shutil.which('node'), 'Node.js is needed for settings formatter tests')
 class EvaluationSettingsTests(unittest.TestCase):
     def evaluate(self, expression):
-        script = ("const {settingLabel,formatSettingValue} = require('./site/evaluation-settings.js');"
+        script = ("const {settingLabel,formatSettingValue} = require('./community/site/evaluation-settings.js');"
                   "console.log(JSON.stringify(" + expression + ")); ")
         result = subprocess.run(['node', '-e', script], cwd=ROOT, text=True,
                                 capture_output=True, check=True)

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Collect immutable public survey evidence into the Differences dashboard.
 
-Usage: python -B -m precision_maintenance collect-differences --output site/data/differences.json
-       --raw-output site/data/differences-raw.json
+Usage: python -B -m precision_maintenance collect-differences --output community/site/data/differences.json
+       --raw-output community/site/data/differences-raw.json
 
 Standard library only. Downloads public, SHA-pinned evidence; verifies Git blob
 hashes and every member of the shared paper archive's SHA-256 manifest. Source
@@ -925,8 +925,8 @@ class Collector:
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output',type=Path,default=Path('site/data/differences.json'))
-    parser.add_argument('--raw-output',type=Path,default=Path('site/data/differences-raw.json'))
+    parser.add_argument('--output',type=Path,default=Path('community/site/data/differences.json'))
+    parser.add_argument('--raw-output',type=Path,default=Path('community/site/data/differences-raw.json'))
     args=parser.parse_args()
     collector=Collector();collector.run();collector.write(args.output,args.raw_output)
 

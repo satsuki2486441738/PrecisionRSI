@@ -11,7 +11,7 @@ Use it before moving privately retained measurements into the public catalog.
 python -B -m precision_core.record_run \
   --output-root runs --side compare --task history-integration --timeout 600 \
   -- python -B -m precision_maintenance plan-history \
-  --base site/data/evaluations.json \
+  --base community/site/data/evaluations.json \
   --source supplement=/private/staging/site/data/evaluations.json \
   --output /private/new-integration-plan
 ```
@@ -64,7 +64,7 @@ actually changed. Explicit framework metadata is retained as well.
 Source record hashes bind the original inputs; original bytes remain unchanged.
 
 ```sh
-python -B -m precision_maintenance export-statistics --base site/data/evaluations.json \
+python -B -m precision_maintenance export-statistics --base community/site/data/evaluations.json \
   --source /private/staging/site/data/evaluations.json \
   --output /private/new-statistics.json
 ```

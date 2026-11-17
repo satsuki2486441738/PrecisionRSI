@@ -1,6 +1,6 @@
 # Precision history website
 
-GitHub Pages serves this directory. Preview from the repository root with `python3 -m http.server 8000 --directory site`, then open `http://localhost:8000`.
+GitHub Pages serves this directory. Preview from the repository root with `python3 -m http.server 8000 --directory community/site`, then open `http://localhost:8000`.
 
 ## Pages
 
@@ -55,7 +55,7 @@ computed across heterogeneous protocols.
 Regenerate the snapshot with the standard-library collector:
 
 ```sh
-python3 -B -m precision_maintenance collect-differences --output site/data/differences.json --raw-output site/data/differences-raw.json
+python3 -B -m precision_maintenance collect-differences --output community/site/data/differences.json --raw-output community/site/data/differences-raw.json
 python3 -B -m precision_maintenance validate-differences
 python3 -B -m unittest discover -s tests -p 'test_difference_history.py' -v
 ```
@@ -109,7 +109,7 @@ Metrics carry before/after values and units. State observed/expected coverage an
 
 Run `python3 -B -m precision_maintenance validate-history` and `python3 -B -m unittest discover -s tests -p 'test_*history.py' -v`. The optional `node tests/browser_history.cjs` regression requires Playwright and Chromium; `PRECISION_BROWSER_EXECUTABLE` selects an existing browser executable. It checks both tabs, filters, comparison values, permalinks, downloads, request races and mobile overflow. It starts and stops its own local preview server.
 
-The Pages workflow validates both data files, uploads only `site/` and deploys on changes to `main`.
+The Pages workflow validates both data files, uploads only `community/site/` and deploys on changes to `main`.
 
 With Node.js available, run `python3 -B -m unittest discover -s tests -p 'test_evaluation_charts.py' -v`
 for signed, zero, extreme-value and selective-chart geometry checks. The browser
@@ -123,10 +123,10 @@ coverage and linear geometry against the archived measurements.
 Refresh the public summary after a maintenance check:
 
 ```sh
-python -B -m precision_maintenance rsi-snapshot --monitor projects/rsi-system/monitor.json --output site/data/rsi.json --refresh
+python -B -m precision_maintenance rsi-snapshot --monitor projects/rsi-system/monitor.json --output community/site/data/rsi.json --refresh
 ```
 
-Omit `--refresh` to export archived local evidence. The optional refresh reads the current remote run through the monitor's SSH declaration; it does not change the run or model service. The exporter returns allowlisted summaries, strips paths from diagnostics, and keeps full traces, task inputs, SSH settings and credentials private. The page polls the published JSON every minute and shows its observation time; publication is a snapshot, not a direct connection to the model server. Publish `site/data/rsi.json` through the existing Pages workflow.
+Omit `--refresh` to export archived local evidence. The optional refresh reads the current remote run through the monitor's SSH declaration; it does not change the run or model service. The exporter returns allowlisted summaries, strips paths from diagnostics, and keeps full traces, task inputs, SSH settings and credentials private. The page polls the published JSON every minute and shows its observation time; publication is a snapshot, not a direct connection to the model server. Publish `community/site/data/rsi.json` through the existing Pages workflow.
 
 Run exporter regressions with `python -B -m unittest discover -s tests -p 'test_rsi_dashboard.py' -v`. Optional page checks use `node tests/browser_rsi.cjs` with Playwright and an installed Chromium.
 
@@ -145,7 +145,7 @@ bytes; `export_sha256` identifies the current public source JSON encoding.
 The historical dates, failure states and unspecified acceptance remain intact.
 
 For later projections, run `python -B -m precision_maintenance prepare-public --input
-INPUT.json --archives site/data/local-evidence.json --output NEW.json` as one
+INPUT.json --archives community/site/data/local-evidence.json --output NEW.json` as one
 command. The helper refuses existing outputs, preserves numerical fields and
 converts local archive downloads to explicit availability metadata. Retain the
 input privately and validate pointers/hashes before replacing a public snapshot.

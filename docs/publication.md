@@ -2,6 +2,7 @@
 
 Publish reusable code, regression tests, current guides and concise final results.
 Current guides live in `docs/`, final reports and figures in `reports/`;
+community pages, public data and record tools are grouped under `community/`.
 `.github/` contains GitHub platform configuration only.
 A result identifies hardware, model, software revisions, settings, measured scope,
 metrics, limitations and reproducibility or immutable evidence references.

@@ -682,7 +682,7 @@ receipts; owned active jobs/processes; resource usage and remaining authorizatio
 artifact availability; blockers; and the first safe next action. Include private
 connection references, never secrets. A next agent should not need this chat.
 
-For public history, follow [the site instructions](../site/README.md). Publish
+For public history, follow [the site instructions](../community/site/README.md). Publish
 allowlisted summaries, coverage and immutable evidence; keep traces, full datasets,
 connection details and credentials private. Do not create Repairs entries for
 unattributed numerical differences or diagnostic policy candidates.

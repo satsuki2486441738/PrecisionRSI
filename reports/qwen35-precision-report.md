@@ -183,6 +183,6 @@ These are native software-stack observations on synthetic repeated text, batch 1
 
 The reusable protocol is [model-precision-evaluation-plan.md](../docs/model-precision-evaluation-plan.md). Private case `projects/torch-gpu-npu/cases/qwen35-report/` contains the full command runbook, token-ID authority, frozen collectors, native receipts, integrity-checked exports, expected-coordinate comparisons and coverage ledger. Shared precision-compare tools supply array, target-score and distribution arithmetic. Connection details and raw traces remain private.
 
-Historical evidence: [evaluation and replay index](../site/evidence/precision-evaluations.md), [earlier full-model investigation](../site/evidence/autonomous-cross-platform-qwen35-20261025.md).
+Historical evidence: [evaluation and replay index](../community/site/evidence/precision-evaluations.md), [earlier full-model investigation](../community/site/evidence/autonomous-cross-platform-qwen35-20261025.md).
 
 Unified capture index: `compare-qwen35-release-20261104T161239Z`. Offline source and result hashes are retained with the run; a separate new replay directory verifies the numerical summary without another model execution. Thresholds and product acceptance remain null.

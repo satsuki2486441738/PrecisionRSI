@@ -432,8 +432,8 @@ The single ZIP is 35,603,091 bytes and was independently replayed without
 repacking. Its SHA256 is
 `1d58728b4f6789c3cee1ff052a4c5e2a5dbfbde12842073542dec2f7e9c68438`.
 The same ZIP bytes are installed locally as
-`site/evidence/deepseek41-http128-20261109.zip`; exact metrics are
-`site/data/deepseek41-http128-20261109.json`. The history entry retains local
+`community/site/evidence/deepseek41-http128-20261109.zip`; exact metrics are
+`community/site/data/deepseek41-http128-20261109.json`. The history entry retains local
 immutable archive revision `fd6231f96f681ba5846bc62031b04f3a3c21b89a`.
 This installation does not imply publication, whole-task completion or replay of
 the excluded historical reference arrays from the portable ZIP alone.

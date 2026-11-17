@@ -15,8 +15,8 @@ RL 重点包括推理、参数更新和连续长计算图，不能只检查 roll
 
 ```text
 Skills / 可选 precision_rsi → precision_core
-社区 site/                 → precision_community（记录、校验与显式关系）
-CI / 旧 .github 命令        → precision_maintenance → 社区校验与维护工具
+community/：site/ 展示与数据 + records/ 校验与检索
+CI → precision_maintenance / community.records
 ```
 
 | 模块 | 当前职责 |
@@ -25,10 +25,9 @@ CI / 旧 .github 命令        → precision_maintenance → 社区校验与维�
 | [precision-compare](../skills/precision-compare/SKILL.md) | 推理、SFT、RL 采集、数学比较及比较专用回放 |
 | [precision-repair](../skills/precision-repair/SKILL.md) | 正确性依据、诊断、补丁与原任务复验 |
 | [precision_core](../precision_core/README.md) | workflow、record_run、资源目录、运行时身份、通用证据传输与完整性工具 |
-| [precision_community](../precision_community/README.md) | 比较、修复、测量视图的校验与只读索引，显式关联层 |
+| [community](../community/README.md) | site/ 管理页面、公开数据与证据；records/ 管理校验、只读索引与显式关系 |
 | [precision_rsi](../precision_rsi/README.md) | 可选的 Agent 研究、预算、候选独立评估与版本激活；正常导入公共核心 |
 | [precision_maintenance](../precision_maintenance/README.md) | 采集、整合规划、统计与公开导出、安装和发布保护；按需加载 |
-| site/ | 版本化 JSON 与静态 GitHub Pages，尚无上传 REST 服务或数据库 |
 | 本地私有 projects/ | 案例配置、原生实现、输入、原始数组和执行证据 |
 
 三个 installable skills 已实现，operator-optimize 仍是占位。旧 Compare scripts 保留独立 skill 的兼容入口；维护命令统一使用 `precision_maintenance` 模块，不再提供 `.github/*.py` 转发脚本。独立安装使用导出器，将公共包一并放入 Compare。
