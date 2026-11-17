@@ -12,7 +12,7 @@
 
 <p align="center"><a href="README.md">English</a> · 简体中文</p>
 
-<p align="center"><a href="#框架概览">框架概览</a> · <a href="#使用">开始使用</a> · <a href="#典型案例">典型案例</a> · <a href="#评测与修复历史">评测与修复历史</a></p>
+<p align="center"><a href="#框架概览">框架概览</a> · <a href="#快速开始">快速开始</a> · <a href="#典型案例">典型案例</a> · <a href="#评测与修复历史">评测与修复历史</a></p>
 
 NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含可复用 skills、配套工具和公开社区记录。
 
@@ -48,7 +48,7 @@ NumericBridge 从目标硬件、模型、执行栈，以及工作负载和验证
 
 从首个缺失阶段开始，只运行需要补齐的工作。交付指标、覆盖范围、配置或补丁及复验证据；组件完成不等于完整 RL 通过，未声明的数值验收阈值保持为空。自动研究迭代及快照实验仅在本地保留，不随公开仓库或 Skill 分发。
 
-## 使用
+## 快速开始
 
 [项目目录与工具归属](docs/project-architecture.md)说明当前实现与后续方向。
 
@@ -62,7 +62,7 @@ python -B -m scripts install --output /path/to/client/skills
 
 更新方式见[独立安装说明](tools/README.md#portable-skills)。执行时根据下一项缺失能力加载组件：
 
-| Skill | 进入条件与交付 |
+| Skill | 适用场景与交付内容 |
 |---|---|
 | [Framework Adapt](skills/framework-adapt/SKILL.md) | 缺少原生执行能力时，部署或适配目标负载并验证执行 |
 | [Precision Compare](skills/precision-compare/SKILL.md) | 缺少采集或比较结果时，输出数值指标、覆盖率和证据 |
