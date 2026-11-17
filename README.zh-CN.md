@@ -1,12 +1,18 @@
-[![许可证：MIT](https://img.shields.io/badge/License-MIT-009688.svg)](LICENSE)
+<p align="center">
+  <img src="docs/images/numericbridge-logo.svg" width="88" height="88" alt="NumericBridge logo">
+</p>
 
-# NumericBridge
+<h1 align="center">NumericBridge</h1>
 
-**数值精度比较、诊断与修复**
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
+</p>
 
-[English](README.md) | 简体中文
+<p align="center"><strong>数值精度比较、诊断与修复</strong></p>
 
-[框架概览](#框架概览) · [开始使用](#使用) · [典型案例](#典型案例) · [评测与修复历史](#评测与修复历史)
+<p align="center"><a href="README.md">English</a> · 简体中文</p>
+
+<p align="center"><a href="#框架概览">框架概览</a> · <a href="#使用">开始使用</a> · <a href="#典型案例">典型案例</a> · <a href="#评测与修复历史">评测与修复历史</a></p>
 
 NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含可复用 skills、配套工具和公开社区记录。
 

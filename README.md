@@ -1,12 +1,18 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-009688.svg)](LICENSE)
+<p align="center">
+  <img src="docs/images/numericbridge-logo.svg" width="88" height="88" alt="NumericBridge logo">
+</p>
 
-# NumericBridge
+<h1 align="center">NumericBridge</h1>
 
-**Numerical precision comparison, diagnosis and repair**
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
+</p>
 
-English | [简体中文](README.zh-CN.md)
+<p align="center"><strong>Numerical precision comparison, diagnosis and repair</strong></p>
 
-[Overview](#framework-overview) · [Get started](#use) · [Typical cases](#typical-cases) · [Results and repair history](#evaluation-and-repair-history)
+<p align="center">English · <a href="README.zh-CN.md">简体中文</a></p>
+
+<p align="center"><a href="#framework-overview">Overview</a> · <a href="#use">Get started</a> · <a href="#typical-cases">Typical cases</a> · <a href="#evaluation-and-repair-history">Results and repair history</a></p>
 
 NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills and public community records.
 
