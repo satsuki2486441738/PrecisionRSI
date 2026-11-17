@@ -1,8 +1,8 @@
-# PrecisionRSI: Numerical Precision Comparison and Repair
+# NumericBridge: Numerical Precision Comparison and Repair
 
 English | [简体中文](README.zh-CN.md)
 
-NumericForge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks. PrecisionRSI hosts its skills, optional research runner and public community records.
+NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills, an optional research runner and public community records.
 
 ## Architecture
 
@@ -21,7 +21,7 @@ retain scope and immutable evidence, while full traces and arrays stay private.
 
 ## Method
 
-PrecisionRSI has two loops: complete a model workload, then use its experience to improve subsequent tasks.
+NumericBridge has two loops: complete a model workload, then use its experience to improve subsequent tasks.
 
 **Task loop**
 

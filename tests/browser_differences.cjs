@@ -64,7 +64,7 @@ const model = require('../site/differences.js');
     const downloadWait = page.waitForEvent('download');
     await page.locator('#download').click();
     const download = await downloadWait;
-    assert.equal(download.suggestedFilename(), 'PrecisionRSI-differences.json');
+    assert.equal(download.suggestedFilename(), 'NumericBridge-differences.json');
     const downloaded = JSON.parse(await readFile(await download.path(), 'utf8'));
     assert.equal(downloaded.records.length, data.records.length);
     assert.deepEqual(downloaded.branches, data.branches);

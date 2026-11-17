@@ -1,8 +1,8 @@
-# PrecisionRSI: Numerical Precision Comparison and Repair
+# NumericBridge: Numerical Precision Comparison and Repair
 
 [English](README.md) | 简体中文
 
-NumericForge 是面向 RL 的精度对比诊断与修复优化框架；PrecisionRSI 仓库承载其 skills、可选研究编排和公开社区记录。
+NumericBridge 是面向 RL 的精度对比诊断与修复优化框架，包含可复用 skills、可选研究编排和公开社区记录。
 
 ## 架构
 
@@ -19,7 +19,7 @@ RSI 依赖公共核心；社区记录不依赖 RSI。检索用于选择候选方
 
 ## 方法
 
-PrecisionRSI 包含两个闭环：完成模型工作负载，再将执行经验用于改进后续任务。
+NumericBridge 包含两个闭环：完成模型工作负载，再将执行经验用于改进后续任务。
 
 **任务 loop**
 
