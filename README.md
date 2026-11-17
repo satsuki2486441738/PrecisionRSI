@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills, an optional research runner and public community records.
+NumericBridge is an RL-focused framework for numerical comparison, diagnosis and repair across execution stacks, with reusable skills and public community records.
 
 ## Repository
 
@@ -16,7 +16,6 @@ skill for the next missing capability; no research runner or website is required
 | [tools/](tools/README.md) | Shared execution, resource verification and evidence tools |
 | [community/](community/README.md) | Website, public results, retrieval and record validation |
 | [scripts/](scripts/README.md) | Installation, export and repository maintenance commands |
-| [research/](research/README.md) | Optional RSI research experiments; not required to use skills |
 | docs/, reports/ | Guides and final numerical reports |
 
 Comparison-specific arithmetic and collectors stay with their skill. Put tools
@@ -32,8 +31,8 @@ User goal → Reuse environments and evidence → Compare and diagnose → Repai
 Start at the first missing stage and execute only the required work. Deliver
 metrics, coverage, configurations or patches and verification evidence. Component
 completion does not establish full RL correctness; undeclared numerical acceptance
-remains null. Optional improvement budgets, candidate evaluation and snapshots are
-documented in [research/](research/README.md), outside the normal skill workflow.
+remains null. Optional agent-improvement experiments and their snapshots are retained locally
+and are not distributed in this repository.
 
 ## Use
 

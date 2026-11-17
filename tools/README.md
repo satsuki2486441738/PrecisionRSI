@@ -53,7 +53,7 @@ there is one maintained implementation, not a separate copy for each skill.
 The exporter bundles the required implementation for standalone installation.
 
 Repository imports use `tools.<module>`. Maintainer commands use `python -m scripts`;
-optional research commands use `python -m research`. Neither maintenance nor
+optional local research experiments are not distributed in the public repository. Neither maintenance nor
 research code is required in an exported skill installation. Existing private
 runs and version receipts retain their original paths and source identities;
 changed tools require fresh affected verification, not rewritten old receipts.
