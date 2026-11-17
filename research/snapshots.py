@@ -70,7 +70,7 @@ def _immutable(path, raw):
 def _platform():
     root = Path(__file__).resolve().parents[1]
     files = {}
-    for folder in ('precision_rsi', 'skills'):
+    for folder in ('research', 'skills', 'tools'):
         for source in sorted((root/folder).rglob('*')):
             if '__pycache__' not in source.parts and source.suffix != '.pyc' and source.is_file():
                 files['platform/'+source.relative_to(root).as_posix()] = source

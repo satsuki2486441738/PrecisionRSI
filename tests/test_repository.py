@@ -3,8 +3,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from precision_maintenance import validate as validator
-from precision_maintenance import smoke_install as smoke
+from scripts import validate as validator
+from scripts import smoke_install as smoke
 
 
 class RepositoryValidationTests(unittest.TestCase):

@@ -1,7 +1,7 @@
 ---
 name: precision-compare
 description: Collect and compare numerical results across hardware and software stacks for inference, SFT (full/LoRA) and RL.
-compatibility: Python 3.10+; NumPy for array tools; native runtimes as required by the task. Install with the repository exporter to bundle precision_core.
+compatibility: Python 3.10+; NumPy for array tools; native runtimes as required by the task. Install with the repository exporter to bundle tools.
 ---
 
 # Precision comparison

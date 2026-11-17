@@ -12,7 +12,7 @@ from .memory import _entry, _unchanged, fingerprint, improvement, measure, read,
 
 def _runtime():
     root = Path(__file__).resolve().parents[1]
-    files = [p for folder in ('precision_rsi', 'skills') for p in (root/folder).rglob('*')
+    files = [p for folder in ('research', 'skills', 'tools') for p in (root/folder).rglob('*')
              if p.is_file() and '__pycache__' not in p.parts and p.suffix != '.pyc']
     return {str(p.relative_to(root)):fingerprint(p) for p in sorted(files)}
 

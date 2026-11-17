@@ -21,7 +21,7 @@ jobs:
           cache-dependency-path: requirements-dev.txt
       - run: python -m pip install -r requirements-dev.txt
       - run: python -B -m unittest discover -s tests -v
-      - run: python -B -m precision_maintenance validate
+      - run: python -B -m scripts validate
   history:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
           BEFORE: ${{ github.event.before }}
-        run: python -B -m precision_maintenance validate-immutability --ci
+        run: python -B -m scripts validate-immutability --ci
       - name: Keep published files small
         run: |
           large=$(find community/site -type f -size +50M)
@@ -59,4 +59,4 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cpu
       - run: python -B -m unittest discover -s tests -v
-      - run: python -B -m precision_maintenance smoke-install
+      - run: python -B -m scripts smoke-install

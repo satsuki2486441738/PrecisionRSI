@@ -7,14 +7,14 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from precision_rsi.loop import _prompt, _render, _usage, iterate, run_task
-from precision_rsi.memory import evaluate, improvement, propose, read, select
-from precision_rsi.evidence import collect, usage_totals
-from precision_rsi.dataset import build as build_dataset
-from precision_rsi import versions
-from precision_rsi.improve import improve
-from precision_rsi.benchmark import run as benchmark
-from precision_rsi.harness import activity, price
+from research.loop import _prompt, _render, _usage, iterate, run_task
+from research.memory import evaluate, improvement, propose, read, select
+from research.evidence import collect, usage_totals
+from research.dataset import build as build_dataset
+from research import versions
+from research.improve import improve
+from research.benchmark import run as benchmark
+from research.harness import activity, price
 
 
 class TaskLoopTests(unittest.TestCase):
@@ -94,7 +94,7 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
                    if a['stage']=='compare' and a.get('outputs')]
         self.assertEqual([m['correct'] for m in metrics],[False,True])
         self.assertEqual(sum(a['stage']=='environment' for a in native),1)
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent rerun')):
+        with patch('research.loop.record_run',side_effect=AssertionError('agent rerun')):
             replay = run_task(self.task,self.workspace)
         self.assertEqual(replay['status'],'completed')
         self.assertEqual(replay['agent_calls'],1)
@@ -287,7 +287,7 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         call=next(a for a in state['history'] if a['kind']=='agent')
         prompt=Path(call['run'])/'prompt.txt'
         self.assertEqual(json.loads(prompt.read_text().split('\n',1)[1])['skill'],str(skill))
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('replay agent')):
+        with patch('research.loop.record_run',side_effect=AssertionError('replay agent')):
             self.assertEqual(run_task(self.task,self.workspace)['system_version'],version['id'])
         with self.assertRaisesRegex(ValueError,'version changed'):
             run_task(self.task,self.workspace,system_version='empty')
@@ -317,7 +317,7 @@ Path(sys.argv[2]).write_text(json.dumps({'candidate_id':sys.argv[1],'mode':'clos
         second=read(self.root/'stream/tasks/1/loop.json')
         calls=[a for a in second['history'] if a['kind']=='agent']
         self.assertEqual(calls[0]['memory_ids'],[result['tasks'][0]['result']['candidate']])
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('unexpected agent replay')):
+        with patch('research.loop.record_run',side_effect=AssertionError('unexpected agent replay')):
             self.assertEqual(iterate(series,self.root/'stream')['status'],'completed')
 
 
@@ -536,7 +536,7 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         cfg.update(consumers=public,evaluation_plan='not-readable-evaluator.json')
         self.improve_cfg.write_text(json.dumps(cfg))
         session=self.root/'selection-session'
-        with patch('precision_rsi.improve.versions.evaluate',side_effect=AssertionError('unusable bundle evaluated')):
+        with patch('research.improve.versions.evaluate',side_effect=AssertionError('unusable bundle evaluated')):
             result=improve(self.improve_cfg,session)
         self.assertEqual(result['status'],'needs_action')
         self.assertEqual(result['errors'][0]['stage'],'selection')
@@ -554,19 +554,19 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         cfg.update(consumers=[dict(id='mean',tags=['mean'],limit_chars=4000)],evaluation_plan='eval.json')
         self.improve_cfg.write_text(json.dumps(cfg))
         (self.root/'eval.json').write_text('{}')
-        with patch('precision_rsi.improve.versions.evaluate',return_value={}) as evaluator:
+        with patch('research.improve.versions.evaluate',return_value={}) as evaluator:
             result=improve(self.improve_cfg,self.root/'matching-consumer')
         self.assertEqual(evaluator.call_count,1)
         self.assertNotIn('selection',result)
         for consumers in ([],[dict(id='x',tags=[],limit_chars=True)],
                           [dict(id='x',tags=[],limit_chars=10,private_inputs='hidden')]):
             cfg['consumers']=consumers;self.improve_cfg.write_text(json.dumps(cfg))
-            with patch('precision_rsi.improve.run_workflow',side_effect=AssertionError('invalid consumer called model')):
+            with patch('research.improve.run_workflow',side_effect=AssertionError('invalid consumer called model')):
                 with self.assertRaisesRegex(ValueError,'consumer'):
                     improve(self.improve_cfg,self.root/'invalid-consumer')
 
     def test_research_notes_changed_by_turn_do_not_invalidate_receipt_replay(self):
-        from precision_rsi.research import Research, document
+        from research.research import Research, document
         self.setup_improvement(mode='none')
         research = Research(self.root/'research', {'task':'fixture'})
         research.sync([])
@@ -584,7 +584,7 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
                          {'observations':['turn completed']})
 
     def test_proposal_handoff_saved_without_extra_call_and_cached_replay_keeps_newer_memory(self):
-        from precision_rsi.research import Research, document, state
+        from research.research import Research, document, state
         self.setup_improvement(mode='none')
         self.improver.write_text(self.improver.read_text().replace(
             "{'updates':[] if sys.argv[2]=='none' else updates}",
@@ -610,7 +610,7 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         self.assertEqual(read(research.view/'handoff.json'), newer)
 
     def test_invalid_handoff_keeps_valid_candidate(self):
-        from precision_rsi.research import Research, document, state
+        from research.research import Research, document, state
         self.setup_improvement()
         self.improver.write_text(self.improver.read_text().replace(
             "{'updates':[] if sys.argv[2]=='none' else updates}",
@@ -631,7 +631,7 @@ print(json.dumps({'type':'status','phase':'step_end','usage':{'inputTokens':10,'
         self.assertEqual(state(research.view)['handoff']['judgment_update'], 'invalid')
 
     def test_timeout_saves_factual_handoff_without_inventing_judgments(self):
-        from precision_rsi.research import Research, state
+        from research.research import Research, state
         self.setup_improvement(mode='none')
         self.improver.write_text('''import json,sys,time
 from pathlib import Path
@@ -695,7 +695,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.improver.write_text(source)
         cfg=read(self.improve_cfg);cfg['evaluation_plan']='unused.json'
         self.improve_cfg.write_text(json.dumps(cfg))
-        with patch('precision_rsi.improve.versions.evaluate',side_effect=AssertionError('partial evaluation')):
+        with patch('research.improve.versions.evaluate',side_effect=AssertionError('partial evaluation')):
             result=improve(self.improve_cfg,self.root/'partial-bundle')
         self.assertEqual(len(result['candidates']),3)
         self.assertEqual(result['errors'][0]['update'],1)
@@ -710,7 +710,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         (self.root/'evaluation.json').write_text('{}')
         self.improver.write_text(self.improver.read_text()+'\nsys.stdout.flush()\nimport time\ntime.sleep(10)\n')
         session=self.root/'timeout-proposals'
-        with patch('precision_rsi.versions.evaluate',return_value={'status':'candidate'}) as evaluator:
+        with patch('research.versions.evaluate',return_value={'status':'candidate'}) as evaluator:
             first=improve(self.improve_cfg,session)
         self.assertEqual(len(first['candidates']),4)
         self.assertEqual(first['proposal_recovery']['status'],'timed_out')
@@ -721,7 +721,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertGreater(evaluator.call_args.kwargs['time_budget_seconds'],0)
         self.assertEqual(versions.current(self.root/'memory'),'empty')
         with patch('workflow.record_run',side_effect=AssertionError('replayed agent')), \
-             patch('precision_rsi.versions.evaluate',return_value={'status':'candidate'}):
+             patch('research.versions.evaluate',return_value={'status':'candidate'}):
             second=improve(self.improve_cfg,session)
         self.assertEqual(second['candidates'],first['candidates'])
         self.assertEqual(second['usage'],first['usage'])
@@ -806,7 +806,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
             argv=['nested-evaluator','--seconds','{evaluation_budget_seconds}'])))
         received=[]
         def evaluate(store,identity,plan,workspace,**kwargs):
-            from precision_rsi.snapshots import Journal
+            from research.snapshots import Journal
             journal = Journal(self.root/'budget-session/.snapshots')
             submitted = sorted((journal.root/'events').glob('*-submitted.json'))[-1]
             frozen = journal.event(submitted.stem)
@@ -817,7 +817,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
             self.assertNotIn('{run}', prompt)
             received.append((read(plan),kwargs))
             return dict(id=identity,evaluation=dict(accepted=False))
-        with patch('precision_rsi.improve.versions.evaluate',side_effect=evaluate):
+        with patch('research.improve.versions.evaluate',side_effect=evaluate):
             result=improve(self.improve_cfg,self.root/'budget-session')
         plan,limits=received[0]
         budget=float(plan['argv'][-1])
@@ -828,7 +828,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(result['construction']['usage'],result['usage'])
         self.assertEqual(read(self.root/'budget-session/improvement.json')['result']['construction'],
                          result['construction'])
-        with patch('precision_rsi.improve.versions.evaluate',side_effect=evaluate):
+        with patch('research.improve.versions.evaluate',side_effect=evaluate):
             replay=improve(self.improve_cfg,self.root/'budget-session')
         self.assertEqual(received[1][0],plan)
         self.assertEqual(replay['construction'],result['construction'])
@@ -887,9 +887,9 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(candidate['execution']['total_tokens'],16)
         self.assertEqual(candidate['including_construction']['total_tokens'],316)
         self.assertIsNone(candidate['including_construction']['cost'])
-        from precision_rsi.memory import improvement
+        from research.memory import improvement
         self.assertFalse(improvement(first))  # Task success cannot hide construction cost.
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('benchmark replay called agent')):
+        with patch('research.loop.record_run',side_effect=AssertionError('benchmark replay called agent')):
             self.assertEqual(benchmark(suite,self.root/'bench',version['id'],'empty',30),first)
         fresh=self.root/'fresh-candidate';fresh.mkdir()
         for name in ('task.json','native-plan.json','agent.py','implementation.py','data.json','verify.py','native.py'):
@@ -906,17 +906,17 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertEqual(state['arms']['0:baseline']['evidence']['state'],
                          read(self.root/'bench/0/baseline/result.json')['evidence']['state'])
         construction.write_text(json.dumps(dict(seconds=600,usage=dict(total_tokens=600))))
-        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('changed cost launched task')):
+        with patch('research.loop.run_task',side_effect=AssertionError('changed cost launched task')):
             with self.assertRaisesRegex(ValueError,'benchmark changed'):
                 benchmark(suite,self.root/'bench',version['id'],'empty',30)
         self.assertEqual(read(self.root/'bench/measurement.json'),first)
         construction.write_text(json.dumps(dict(seconds=0)))
-        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('invalid cost launched task')):
+        with patch('research.loop.run_task',side_effect=AssertionError('invalid cost launched task')):
             with self.assertRaisesRegex(ValueError,'construction receipt'):
                 benchmark(suite,self.root/'invalid-cost-bench',version['id'],'empty',30)
 
     def test_failed_benchmark_passes_native_error_to_improver_without_full_logs(self):
-        from precision_rsi.evolve import _feedback
+        from research.evolve import _feedback
         self.cfg['family']='unseen-objective';self.save()
         (self.root/'agent.py').write_text('import json,sys\nfrom pathlib import Path\np=json.loads(Path(sys.argv[1]).read_text().split(\'\\n\',1)[1])\ncode="def objective(values): return sum(values)/len(values)\\n"\nif p[\'memory\']:\n code="def objective(values):\\n print(\'PRIVATE_TRACE_MARKER\')\\n raise ValueError(\'unsupported capture kind: records\')\\n"\nPath(\'implementation.py\').write_text(code)\n')
         tasks={}
@@ -942,7 +942,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         self.assertLess(len(json.dumps(failures)),2000)
         for private in ('PRIVATE_TRACE_MARKER','Traceback',str(self.root)):
             self.assertNotIn(private,json.dumps(failures))
-        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('diagnostic replay called task')):
+        with patch('research.loop.run_task',side_effect=AssertionError('diagnostic replay called task')):
             self.assertEqual(benchmark(suite,self.root/'failure-bench',version['id'],'empty',30),result)
 
     def test_benchmark_rejects_partially_selected_new_bundle_before_task_calls(self):
@@ -958,7 +958,7 @@ Path(p['output']).write_text(json.dumps({'updates':[{'kind':'context',
         version=versions.prepare(store,ids)
         suite=self.root/'partial-suite.json';suite.write_text(json.dumps(dict(schema_version=1,
             store=str(store),cases=[dict(id='partial',family='other',**tasks)])))
-        with patch('precision_rsi.loop.run_task',side_effect=AssertionError('uncovered bundle executed')):
+        with patch('research.loop.run_task',side_effect=AssertionError('uncovered bundle executed')):
             with self.assertRaisesRegex(ValueError,'updates not selected'):
                 benchmark(suite,self.root/'partial-bench',version['id'],'empty',30)
         diagnostic=read(self.root/'partial-bench/selection.json')
@@ -1046,7 +1046,7 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
             self.assertTrue((self.root/arm/'implementation.py').is_file())
         state=read(self.root/'missing-bench/benchmark.json')
         self.assertEqual(state['conditions']['0']['sources'][1][1],{'kind':'missing'})
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent rerun')):
+        with patch('research.loop.record_run',side_effect=AssertionError('agent rerun')):
             self.assertEqual(benchmark(suite,self.root/'missing-bench',version['id'],'empty',30),result)
 
     def test_benchmark_rejects_unselected_updates_before_calling_agents(self):
@@ -1063,7 +1063,7 @@ print(json.dumps({'usage':{'input_tokens':12,'output_tokens':4}}))
         suite=self.root/'unrelated-suite.json'
         suite.write_text(json.dumps(dict(schema_version=1,store=str(store),cases=[dict(
             id='unrelated-tool',family='unseen-objective',**tasks)])))
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('agent should not run')):
+        with patch('research.loop.record_run',side_effect=AssertionError('agent should not run')):
             with self.assertRaisesRegex(ValueError,'candidate updates not selected'):
                 benchmark(suite,self.root/'unrelated-bench',version['id'],'empty',30)
         diagnostics=read(self.root/'unrelated-bench/selection.json')
@@ -1104,7 +1104,7 @@ Path(sys.argv[3]).write_text(json.dumps({'version_id':sys.argv[1],'baseline_vers
         self.assertEqual(second['system_version'],first['version'])
         self.assertTrue(next(a for a in second['history'] if a['kind']=='agent')['memory_ids'])
         state=read(self.root/'stream/series.json')
-        with patch('precision_rsi.loop.record_run',side_effect=AssertionError('replay called agent')):
+        with patch('research.loop.record_run',side_effect=AssertionError('replay called agent')):
             replay=iterate(series,self.root/'stream')
         self.assertEqual(replay['status'],'completed')
         self.assertEqual(len(read(self.root/'stream/series.json')['improvements']),len(state['improvements']))

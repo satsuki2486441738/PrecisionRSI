@@ -235,22 +235,15 @@ if __name__ == '__main__':
     if not __package__:
         import importlib.util
         root = Path(__file__).resolve().parents[1]
-        for name in ('precision_core', 'precision_rsi'):
+        for name in ('tools', 'research'):
             if name not in sys.modules:
                 folder = root / name
                 spec = importlib.util.spec_from_file_location(name, folder / '__init__.py',
                     submodule_search_locations=[str(folder)])
-                if name == 'precision_rsi':
-                    # RSI is a namespace package; it intentionally has no eager initializer.
-                    from types import ModuleType
-                    module = ModuleType(name)
-                    module.__path__ = [str(folder)]
-                    sys.modules[name] = module
-                else:
-                    module = importlib.util.module_from_spec(spec)
-                    sys.modules[name] = module
-                    spec.loader.exec_module(module)
-        __package__ = 'precision_rsi'
+                module = importlib.util.module_from_spec(spec)
+                sys.modules[name] = module
+                spec.loader.exec_module(module)
+        __package__ = 'research'
     agent = json.loads(Path(sys.argv[1]).read_text())
     run = Path(sys.argv[3]).resolve()
     prompt = Path(sys.argv[2]).read_text().replace('{run}', str(run))

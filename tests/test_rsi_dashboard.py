@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_maintenance import rsi_snapshot as module
+from scripts import rsi_snapshot as module
 
 
 class DashboardTests(unittest.TestCase):

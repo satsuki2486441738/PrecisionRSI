@@ -1,10 +1,10 @@
 """Durable researcher state; no full trace or evaluator inputs in the public view.
 
-CLI: python -m precision_rsi.research VIEW state
-     python -m precision_rsi.research VIEW history [--start N --count 5]
+CLI: python -m research.research VIEW state
+     python -m research.research VIEW history [--start N --count 5]
          [--newest] [--outcome accepted|unaccepted|incomplete] [--candidate ID]
-     python -m precision_rsi.research VIEW notes|plan [--set JSON_FILE]
-     python -m precision_rsi.research ROOT reconcile TURN --reason TEXT
+     python -m research.research VIEW notes|plan [--set JSON_FILE]
+     python -m research.research ROOT reconcile TURN --reason TEXT
 Notes: {observations:[], hypotheses:[{claim,evidence_rounds:[]}], uncertainties:[]}.
 Plan: {next_experiments:[{intervention,falsified_if,evidence_rounds:[]}]}.
 Each document is optional, bounded to 4096 UTF-8 bytes. Round references must exist.
@@ -175,7 +175,7 @@ class Research:
     def context(self, python):
         """Reattach bounded current judgments, including after native compaction."""
         current = state(self.view)
-        return dict(view=str(self.view), interface=[python, '-m', 'precision_rsi.research', str(self.view)],
+        return dict(view=str(self.view), interface=[python, '-m', 'research.research', str(self.view)],
             operations='state; history [--start N --count 5] [--newest] '
                        '[--outcome accepted|unaccepted|incomplete] [--candidate ID]; '
                        'notes|plan [--set JSON_FILE]',

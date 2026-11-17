@@ -16,7 +16,7 @@
 | RL 采集与指标 | [RL 规范](../skills/precision-compare/references/rl.md)、[训练阶段](../skills/precision-compare/references/sft.md#training-stages) |
 | 比较、执行记录与证据复用 | [公共规则与工具](../skills/precision-compare/references/comparison.md) |
 | 诊断、修复与原任务复验 | [precision-repair](../skills/precision-repair/SKILL.md) |
-| 可选的 Agent 迭代 | [precision_rsi](../precision_rsi/README.md) |
+| 可选的 Agent 迭代 | [research](../research/README.md) |
 
 指标定义、采集细节和工具接口以上述文档为准。
 

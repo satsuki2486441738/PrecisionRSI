@@ -23,8 +23,8 @@ import sys,types
 sys.path.insert(0,sys.argv[1])
 foreign=types.ModuleType('workflow');sys.modules['workflow']=foreign
 before=sys.path.copy()
-from precision_rsi import loop,memory,harness
-from precision_core import workflow
+from research import loop,memory,harness
+from tools import workflow
 assert loop.run_workflow is workflow.run_workflow
 assert memory.fingerprint is workflow.fingerprint
 assert sys.path==before
@@ -33,7 +33,7 @@ assert 'torch' not in sys.modules and 'numpy' not in sys.modules
 """)
 
     def test_exported_skill_cli_is_independent_of_checkout_and_pythonpath(self):
-        from precision_maintenance.install import install_skills
+        from scripts.install import install_skills
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)
             install_skills(ROOT/'skills',root/'skills')
@@ -60,11 +60,11 @@ assert 'torch' not in sys.modules and 'numpy' not in sys.modules
 import sys
 from pathlib import Path
 sys.path.insert(0,sys.argv[1])
-from precision_core import workflow as canonical
+from tools import workflow as canonical
 sys.path.insert(0,str(Path(sys.argv[1])/'skills/precision-compare/scripts'))
 import workflow
 assert workflow is canonical
-assert workflow.ENGINE_FILES[0].parent.name=='precision_core'
+assert workflow.ENGINE_FILES[0].parent.name=='tools'
 """)
 
     def test_community_index_runs_without_rsi_or_model_dependencies(self):
@@ -75,8 +75,8 @@ before=sys.path.copy()
 from community.records.catalog import Catalog
 catalog=Catalog(sys.argv[1]+'/community/site')
 assert len(catalog.find_comparisons())==130
-assert not any(x=='precision_rsi' or x.startswith('precision_rsi.') for x in sys.modules)
-assert 'precision_core' not in sys.modules
+assert not any(x=='research' or x.startswith('research.') for x in sys.modules)
+assert 'tools' not in sys.modules
 assert 'torch' not in sys.modules and 'numpy' not in sys.modules
 assert sys.path==before
 assert catalog.related('comparison',catalog.find_comparisons()[0]['id'])==[]
@@ -85,11 +85,11 @@ assert catalog.related('comparison',catalog.find_comparisons()[0]['id'])==[]
     def test_dispatcher_and_canonical_module_commands_agree(self):
         for module, command in (('community.records.validation', 'validate-history'),
                                 ('community.records.differences', 'validate-differences'),
-                                ('precision_maintenance.export_statistics', 'export-statistics')):
+                                ('scripts.export_statistics', 'export-statistics')):
             args = ['--help'] if command == 'export-statistics' else []
             direct = subprocess.run([sys.executable, '-B', '-m', module, *args],
                 cwd=ROOT, capture_output=True, text=True, timeout=15)
-            dispatched = subprocess.run([sys.executable, '-B', '-m', 'precision_maintenance', command, *args],
+            dispatched = subprocess.run([sys.executable, '-B', '-m', 'scripts', command, *args],
                 cwd=ROOT, capture_output=True, text=True, timeout=15)
             self.assertEqual(direct.returncode, 0, direct.stderr)
             self.assertEqual(dispatched.returncode, 0, dispatched.stderr)
@@ -211,7 +211,7 @@ class CommunityRelationTests(unittest.TestCase):
             with self.assertRaises(ValueError): Catalog(self.site)
 
     def test_relation_history_is_append_only(self):
-        from precision_maintenance.validate_immutability import COLLECTIONS,compare_documents
+        from scripts.validate_immutability import COLLECTIONS,compare_documents
         self.assertEqual(COLLECTIONS['community/site/data/relations.json'],('entities','links'))
         self.chain()
         import copy

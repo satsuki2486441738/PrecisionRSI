@@ -6,8 +6,8 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_maintenance import plan_history_integration as integration
-from precision_maintenance import export_statistics as statistics
+from scripts import plan_history_integration as integration
+from scripts import export_statistics as statistics
 
 
 class IntegrationPlanTest(unittest.TestCase):

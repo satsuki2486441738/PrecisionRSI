@@ -4,18 +4,18 @@ import importlib
 import sys
 
 COMMANDS = {
-    'validate': ('precision_maintenance', 'validate'),
+    'validate': ('scripts', 'validate'),
     'validate-history': ('community.records', 'validation'),
     'validate-differences': ('community.records', 'differences'),
-    'validate-immutability': ('precision_maintenance', 'validate_immutability'),
-    'collect-differences': ('precision_maintenance', 'collect_differences'),
-    'plan-history': ('precision_maintenance', 'plan_history_integration'),
-    'export-statistics': ('precision_maintenance', 'export_statistics'),
-    'export-paper': ('precision_maintenance', 'export_paper_results'),
-    'prepare-public': ('precision_maintenance', 'prepare_public_results'),
-    'rsi-snapshot': ('precision_maintenance', 'rsi_snapshot'),
-    'install': ('precision_maintenance', 'install'),
-    'smoke-install': ('precision_maintenance', 'smoke_install'),
+    'validate-immutability': ('scripts', 'validate_immutability'),
+    'collect-differences': ('scripts', 'collect_differences'),
+    'plan-history': ('scripts', 'plan_history_integration'),
+    'export-statistics': ('scripts', 'export_statistics'),
+    'export-paper': ('scripts', 'export_paper_results'),
+    'prepare-public': ('scripts', 'prepare_public_results'),
+    'rsi-snapshot': ('scripts', 'rsi_snapshot'),
+    'install': ('scripts', 'install'),
+    'smoke-install': ('scripts', 'smoke_install'),
 }
 
 

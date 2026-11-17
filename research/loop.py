@@ -1,8 +1,8 @@
 """Run a bounded model-driven task loop over existing native workflow tools.
 
-CLI: python -m precision_rsi run|status TASK.json --workspace DIRECTORY
-     python -m precision_rsi iterate SERIES.json --workspace DIRECTORY
-     python -m precision_rsi evaluate ID --store DIRECTORY --plan PLAN --workspace DIRECTORY
+CLI: python -m research run|status TASK.json --workspace DIRECTORY
+     python -m research iterate SERIES.json --workspace DIRECTORY
+     python -m research evaluate ID --store DIRECTORY --plan PLAN --workspace DIRECTORY
 Task JSON: schema_version=1, goal, plan, budget:{seconds,agent_calls},
 agent:{argv:[...,"{prompt}" or "{prompt_file}"],timeout,execution?:profile},
 protected:[verifier/input paths relative to the task JSON],
@@ -24,8 +24,8 @@ from pathlib import Path
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-from precision_core.record_run import record_run
-from precision_core.workflow import fingerprint, inspect_workflow, run_workflow, workspace_lock
+from tools.record_run import record_run
+from tools.workflow import fingerprint, inspect_workflow, run_workflow, workspace_lock
 from .memory import evaluate, propose, read, select, write
 from .harness import command as harness_command, usage as _usage
 from . import versions

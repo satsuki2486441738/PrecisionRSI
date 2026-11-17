@@ -62,9 +62,9 @@ Contracts set `thresholds: null`. Outputs contain metrics, coordinate counts and
 ## Shared tasks
 
 Shared execution, resource/runtime identities and evidence transport are implemented
-in the task-independent `precision_core` package. The script paths below remain
+in the task-independent `tools` package. The script paths below remain
 compatible entrypoints. From a repository checkout, export skills with
-`python -B -m precision_maintenance install --output NEW_SKILL_DIRECTORY`; the
+`python -B -m scripts install --output NEW_SKILL_DIRECTORY`; the
 export includes the core so installed commands work without the checkout or RSI.
 Numerical comparison and task-specific collection remain in this skill.
 
