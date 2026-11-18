@@ -7,6 +7,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml"><img src="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
+  <a href="https://satsuki2486441738.github.io/NumericBridge/"><img src="https://img.shields.io/badge/Homepage-Community-2563EB.svg" alt="Project homepage: NumericBridge community"></a>
 </p>
 
 <p align="center"><strong>Numerical precision comparison, diagnosis and repair</strong></p>
@@ -141,7 +142,7 @@ Additional historical backports were verified using small native CPU workloads:
 | PEFT 0.17.1 | Duplicate LoRA scaling in SVD adapter combination | Forward, input gradients, checkpoint reload and merge; 24 workloads |
 | Transformers 4.51.3 | Qwen2 attention mask ignores disabled sliding window | Eager/SDPA full forward and dynamic/static cache; 18 workloads and 16 mask cases |
 
-The [repair history](https://satsuki2486441738.github.io/PrecisionRSI/) records affected and upstream-fixed revisions, patches, before/after metrics and verification scope.
+The [repair history](https://satsuki2486441738.github.io/NumericBridge/) records affected and upstream-fixed revisions, patches, before/after metrics and verification scope.
 
 ## Tools and development
 
@@ -173,9 +174,9 @@ Repository layout and test commands are in [AGENTS.md](AGENTS.md).
 
 ## Evaluation and repair history
 
-The [comparison board](https://satsuki2486441738.github.io/PrecisionRSI/) reads published evaluation and repair records. The [history archive](https://satsuki2486441738.github.io/PrecisionRSI/archive.html) retains inference/SFT/RL settings, numerical metrics, coverage and evidence, alongside library-grouped fixes and verification. Records and public evidence are maintained in [community/site/](community/site/README.md).
+The [comparison board](https://satsuki2486441738.github.io/NumericBridge/) reads published evaluation and repair records. The [history archive](https://satsuki2486441738.github.io/NumericBridge/archive.html) retains inference/SFT/RL settings, numerical metrics, coverage and evidence, alongside library-grouped fixes and verification. Records and public evidence are maintained in [community/site/](community/site/README.md).
 
-The [RSI dashboard](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html) shows current runs, candidate changes, independent evaluation outcomes and phase-specific time/token usage, including baseline reuse.
+The [RSI dashboard](https://satsuki2486441738.github.io/NumericBridge/rsi.html) shows current runs, candidate changes, independent evaluation outcomes and phase-specific time/token usage, including baseline reuse.
 
 The [results page](community/site/paper.html) provides public reports, scientific figures, [JSON](community/site/data/paper-results.json) and a [CSV numeric index](community/site/data/paper-results.csv). Published results retain source hashes, actual configurations, coverage, failures and unverified scopes. Numeric fields are not independent samples. Historical ZIPs, raw tensors and complete execution logs remain local with no online download. The [local evidence index](community/site/data/local-evidence.json) records archive names, sizes and SHA256 hashes. Byte integrity does not imply numerical acceptance.
 
