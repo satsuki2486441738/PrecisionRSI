@@ -1,0 +1,73 @@
+{
+  "case-qwen35-weighted-lora-bias": [{
+    "label": {"zh": "LoRA 合并推理 · 同一基线", "en": "LoRA merge inference · shared baseline"},
+    "file": "evidence/peft-0200-qwen35-lora-bias-20261024.json",
+    "baseline": "/case/metrics/unpatched",
+    "results": {
+      "verification-qwen35-weighted-lora-bias": {"repair": "peft-0200-qwen35-weighted-bias-20261024"},
+      "verification-qwen35-weighted-lora-bias-bias-only-rejected": {"pointer": "/case/metrics/upstream_bias_only_candidate_FAILED"}
+    },
+    "metrics": [
+      {"label": {"zh": "Logits 最大绝对误差", "en": "Logits max absolute error"}, "path": "/logits_max_abs", "recordMetric": "logits-max-abs"},
+      {"label": {"zh": "目标 logprob 平均绝对误差", "en": "Target logprob MAE"}, "unit": "nat", "path": "/target_logprob_mae", "recordMetric": "target-mae"},
+      {"label": {"zh": "NLL 绝对差", "en": "Absolute NLL difference"}, "unit": "nat/token", "path": "/nll_abs_diff", "recordMetric": "nll-abs"},
+      {"label": {"zh": "偏置最大绝对误差", "en": "Bias max absolute error"}, "path": "/bias_max_abs_error", "recordMetric": "bias-max-abs"}
+    ]
+  }],
+  "case-qwen35-cross-platform-rmsnorm-policy": [{
+    "label": {"zh": "单步 LoRA SFT · GPU 与 NPU 的差异", "en": "One LoRA SFT step · GPU versus NPU"},
+    "file": "evidence/cross-platform-rmsnorm-policy-20261025.json",
+    "baseline": "/native_baseline",
+    "results": {
+      "verification-qwen35-rmsnorm-sft": {"pointer": "/comparisons/rmsnorm-sft"},
+      "verification-qwen35-rmsnorm-qkv-sft": {"pointer": "/comparisons/rmsnorm-qkv-sft"},
+      "verification-qwen35-rmsnorm-layer8-sft": {"pointer": "/comparisons/rmsnorm-layer8-sft"},
+      "verification-qwen35-rmsnorm-backward-sft": {"pointer": "/comparisons/rmsnorm-backward-sft"}
+    },
+    "metrics": [
+      {"label": {"zh": "NLL 绝对差", "en": "Absolute NLL difference"}, "unit": "nat/token", "path": "/targets/nll_abs_diff_nat_per_token"},
+      {"label": {"zh": "梯度 L2 差", "en": "Gradient L2 difference"}, "path": "/gradients/metrics/error_norm/value"},
+      {"label": {"zh": "参数更新 L2 差", "en": "Parameter update L2 difference"}, "path": "/updates/metrics/error_norm/value"}
+    ]
+  }, {
+    "label": {"zh": "RMSNorm 局部算子耗时", "en": "Local RMSNorm operator time"},
+    "file": "evidence/cross-platform-rmsnorm-policy-20261025.json",
+    "results": {"verification-qwen35-rmsnorm-backward-sft": {"pointer": "/selected_operator"}},
+    "metrics": [
+      {"label": {"zh": "GPU 耗时倍数", "en": "GPU time ratio"}, "unit": "×", "path": "/gpu/candidate_over_native_median", "relative": true},
+      {"label": {"zh": "NPU 耗时倍数", "en": "NPU time ratio"}, "unit": "×", "path": "/npu/candidate_over_native_median", "relative": true}
+    ]
+  }],
+  "case-mindspeed-zero-centered-rmsnorm": [{
+    "label": {"zh": "GRPO · 同一批目标 token", "en": "GRPO · same target tokens"},
+    "file": "evidence/mindspeed-selective-projection.json",
+    "baseline": "/scores/0",
+    "results": {"verification-mindspeed-projection-tradeoff": {"pointer": "/scores/1"}},
+    "metrics": [
+      {"label": {"zh": "动作 logprob RMSE", "en": "Action logprob RMSE"}, "unit": "nat/token", "path": "/target_logprobs/metrics/rmse"},
+      {"label": {"zh": "NLL 绝对差", "en": "Absolute NLL difference"}, "unit": "nat/token", "path": "/absolute_nll_difference"},
+      {"label": {"zh": "GRPO 目标函数绝对差", "en": "Absolute GRPO objective difference"}, "path": "/absolute_objective_difference"}
+    ]
+  }, {
+    "label": {"zh": "预热后的局部前向投影", "en": "Warm local projection forward"},
+    "file": "evidence/mindspeed-selective-projection.json",
+    "baseline": "/warm_benchmark/median/native",
+    "results": {"verification-mindspeed-projection-tradeoff": {"pointer": "/warm_benchmark/median/fp32-fprop"}},
+    "metrics": [
+      {"label": {"zh": "模块耗时中位数", "en": "Median module time"}, "unit": "ms", "path": "/module_cuda_stream_ms"},
+      {"label": {"zh": "额外峰值显存中位数", "en": "Median peak memory increase"}, "unit": "bytes", "path": "/peak_increment_bytes_median"}
+    ]
+  }],
+  "case-trl-ppo-whitening-tail": [{
+    "label": {"zh": "单步 PPO · 与参考计算的差异", "en": "One PPO step · difference from reference"},
+    "file": "evidence/trl-ppo-whitening-tail-round3.json",
+    "baseline": "/metrics/before",
+    "results": {"verification-trl-0710-whitening-original-step": {"pointer": "/metrics/after"}},
+    "metrics": [
+      {"label": {"zh": "回报最大绝对误差", "en": "Returns max absolute error"}, "path": "/fixture_returns/max_abs"},
+      {"label": {"zh": "优势最大绝对误差", "en": "Advantage max absolute error"}, "path": "/fixture_advantages/max_abs"},
+      {"label": {"zh": "梯度 L2 差", "en": "Gradient L2 difference"}, "path": "/gradients/error_norm"},
+      {"label": {"zh": "参数更新 L2 差", "en": "Parameter update L2 difference"}, "path": "/updates/error_norm"}
+    ]
+  }]
+}

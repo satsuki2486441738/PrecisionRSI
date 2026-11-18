@@ -14,6 +14,7 @@
 try { const t = localStorage.getItem("nf-theme"); if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
 document.documentElement.classList.add("js");
 </script>
+<link rel="stylesheet" href="./cases.css?v=measured-report-20261118">
 <style>
 /* NumericBridge v2 — AccelMark's information architecture (results / compare /
    platform / suites) dressed in inference-rsi's reading view: warm paper, one
@@ -1318,7 +1319,7 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   <a class="brand" href="#/" aria-label="NumericBridge 首页"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 26Q24 -2 43 26" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M13 16.7V26M35 16.7V26M19 13V26M29 13V26" stroke="currentColor" stroke-width="1.7"/><rect x="7.5" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="36" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="4" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="12.25" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="28.75" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="37" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="20.5" y="22" width="7" height="6.5" rx="1" fill="var(--red)"/></svg><span><b>NumericBridge</b><small>cross-stack numerics</small></span></a>
   <nav class="nav" id="nav" aria-label="主导航">
     <a href="#/" data-route="">首页</a>
-    <a href="#/list" data-route="list">适配报告</a>
+    <a href="#/cases" data-route="cases">案例库</a>
     <a href="#/compare" data-route="compare">对比</a>
     <a href="#/repairs" data-route="repairs">修复</a>
     <a href="#/how" data-route="how">原理</a>
@@ -1339,6 +1340,8 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   <section class="view" id="v-compare" hidden></section>
   <section class="view" id="v-platform" hidden></section>
   <section class="view" id="v-repairs" hidden></section>
+  <section class="view" id="v-cases" hidden></section>
+  <section class="view" id="v-report" hidden></section>
   <section class="view" id="v-how" hidden></section>
 </main>
 
@@ -1346,7 +1349,7 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 
 <footer class="foot"><div class="wrap">
   <a class="brand" href="#/"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 26Q24 -2 43 26" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M13 16.7V26M35 16.7V26M19 13V26M29 13V26" stroke="currentColor" stroke-width="1.7"/><rect x="7.5" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="36" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="4" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="12.25" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="28.75" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="37" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="20.5" y="22" width="7" height="6.5" rx="1" fill="var(--red)"/></svg><span><b>NumericBridge</b><small>cross-stack numerics</small></span></a>
-  <span id="footNote">固定输入与权重下的跨栈成对数值一致性记录；仅在同指标与同场景内横向对照。</span>
+  <span id="footNote">跨硬件与软件栈的精度评测与修复记录。</span>
   <span class="foot-links"><a href="#/cite" id="footCite">引用与数据</a><a href="#top" id="toTop">回到顶部 ↑</a></span>
 </div></footer>
 
@@ -1363,7 +1366,9 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 </aside>
 <div class="tip" id="tip" role="tooltip"></div>
 
-<script src="./board-data.js"></script>
+<script src="./board-data.js?v=discovery-hardware-20261117"></script>
+<script src="./search.js?v=framework-scope-20261118"></script>
+<script src="./cases.js?v=measured-report-20261118"></script>
 <script>
 "use strict";
 function start(DATA) {
@@ -1491,21 +1496,16 @@ function parseLib(s) {
   const m = nm || sm;
   let name = (m ? m[1] : t).replace(/\s+(?:community\s+)?source\s*@?\s*$/i, "").replace(/\s*[\/@]\s*$/, "").trim(), ver = m ? m[2] : "";
   name = LIBMAP[name.toLowerCase().replace(/\s+/g, " ")] || name;
-  if (/^[0-9a-f]{12,}$/i.test(ver) || sm) ver = "@" + ver.slice(0, 7);
+  if (/^[0-9a-f]{12,}$/i.test(ver) || sm) ver = tx("源码版本", "Source build");
   return { name, ver: ver || "—" };
 }
 const FIXTURE = "微型基准模型";
 const modelDisp = m => m === FIXTURE ? tx("微型基准模型", "Micro Benchmark") : m;
 const STACK_LIBS = new Set(["vLLM", "SGLang", "TRL", "PEFT", "AReaL", "OpenRLHF", "ROLL", "slime", "NeMo RL", "ms-swift", "MindSpeed", "MindSpeed-RL", "verl", "LLaMA-Factory", "Axolotl", "LMDeploy", "Megatron Bridge", "llama.cpp"]);
 function modelNorm(m) {
-  const s = String(m || "");
-  if (/qwen3\.5-9b/i.test(s)) return "Qwen3.5-9B";
-  if (/qwen3-0\.6b/i.test(s)) return "Qwen3-0.6B";
-  if (/gemma-4-12b/i.test(s)) return "Gemma-4-12B";
-  if (/smollm2/i.test(s)) return "SmolLM2-135M";
-  if (/qwen2\.5-0\.5b/i.test(s)) return "Qwen2.5-0.5B";
-  return FIXTURE;
+  return String(m || '').trim() || tx('模型未记录','Model not recorded');
 }
+
 const PLAT_NOISE = new Set(["NVIDIA H100", "NVIDIA H200", "H100", "H200", "H100 80GB HBM3", "GeForce RTX 5090", "RTX 5090", "RTX 5060", "Ascend 910C", "910C", "Ascend NPU", "NPU", "Same NPU", "GPU", "CPU", "原生"]);
 const FAM_RANK = { acc: 0, gpu: 1, cpu: 2 };
 const platShort = p => ({ "NVIDIA H100": "H100", "NVIDIA H200": "H200", "Ascend 910C": "910C", "Ascend NPU": tx("Ascend NPU", "Ascend"), "RTX 5060": "RTX 5060", "RTX 5090": "RTX 5090", CPU: "CPU" })[p] || p;
@@ -1630,7 +1630,7 @@ function buildPairUI(r) {
   const short = `${sideTxt(L, false) || L.plat} ↔ ${samePlat ? `${sameWord} · ${sideTxt(R, true) || R.plat}` : (sideTxt(R, false) || R.plat)}`;
   return { left: L, right: R, samePlat, sameWord, subj, item, short };
 }
-const VERDICT = [tx("逐位一致", "Bit-exact"), tx("仅浮点舍入级差异", "FP rounding only"), tx("低精度量级差异", "Low-precision level"), tx("可观测偏离", "Observable drift"), tx("显著偏离", "Significant drift")];
+const VERDICT = [tx("逐位一致", "Bit-exact"), tx("微小偏差", "Very small deviation"), tx("小幅偏差", "Small deviation"), tx("可观测偏离", "Observable drift"), tx("显著偏离", "Significant drift")];
 const verdictOf = r => r.tier != null ? VERDICT[r.tier] : r.head ? tx("未分级", "Ungraded") : tx("定性记录", "Qualitative");
 
 const BYID = new Map();
@@ -1650,36 +1650,9 @@ ROWS.forEach(r => {
   r.verdict = verdictOf(r);
   r.hay = [r.title, r.read, r.pairUI.subj, r.pairUI.item, r.eval_title, r.model, r.modelN, r.pair, r.scope, r.subject, r.axis, TASK[r.task] || r.task, ...r.stack].join(" ").toLowerCase();
 });
-const EN_EVAL_MAP = [
-  [/partitions and same-process repeats/i, "KV 分块切分与同进程重复", "KV Partitioning & In-Process Repeats"],
-  [/batch and padding/i, "组批位置与 Padding 对照", "Batch Position & Padding Contrast"],
-  [/observer transparency/i, "观测钩子透明性对照", "Observer Hook Transparency"],
-  [/TP1 text pilot \(one input\)/i, "TP1 单输入文本推理基线", "TP1 Single-Input Inference Pilot"],
-  [/cache-off anchor \(159 targets\)/i, "关闭 KV 缓存推理锚点（159 目标）", "Cache-Off Inference Anchor (159 Targets)"],
-  [/same-NPU three-repeat TP1 text pilot/i, "TP1 同卡三次重复推理", "Same-NPU 3× Repeat Pilot"],
-  [/text pilot:\s*H100 vs RTX 5090/i, "跨代 GPU 文本推理基线", "Cross-Gen GPU Inference Pilot"],
-];
 function buildEvalUI(e) {
-  const t = String(e.title || "").trim();
-  let topic = "";
-  for (const [re, zhT, enT] of EN_EVAL_MAP) if (re.test(t)) { topic = tx(zhT, enT); break; }
-  if (!topic) {
-    const x = t.replace(/\bLLaMAFactory\b/g, "LLaMA-Factory").replace(/\bTRL\s+SFTTrainer\b/g, "TRL")
-      .replace(/\btrainer\s+component\b/gi, tx("训练组件", "Trainer Component")).replace(/\breward-driven CLI\b/gi, tx("奖励驱动 CLI", "Reward CLI"))
-      .replace(/\bworker API\b/gi, "Worker API").replace(/^自主调查：\s*/, "").replace(/与独立\s*CPU/g, "").replace(/\s*↔\s*CPU\b/g, "");
-    const mr = String(e.model || "").trim().toLowerCase();
-    const kept = [];
-    for (let p of x.split(/\s*[·：:]\s*/).filter(Boolean)) {
-      if (p.includes("↔") && /H[12]00|910C|Ascend|CPU|CANN|RTX/.test(p)) continue;
-      if (/^(NVIDIA\s*H[12]00|H[12]00|Ascend\s*910C|910C|Ascend\s*NPU|RTX\s*50[69]0|CPU|同一\s*H200)$/.test(p)) continue;
-      if (mr && (p.toLowerCase() === mr || (p.length >= 6 && mr.includes(p.toLowerCase())))) continue;
-      if (/^(Qwen\/?Qwen[\w.\-]+|SmolLM2[\w.\-]*|Gemma[\w.\- ]+|seeded tiny Llama|随机\s*tiny\s*Qwen\d+|tiny\s*Qwen\d+（[^）]+）|SmolLM2（[^）]+）)$/i.test(p)) continue;
-      p = p.replace(/^(Qwen\/?Qwen[\w.\-]+|tiny\s*Qwen\d+（[^）]+）|SmolLM2[\w.\-]*)\s+/i, "").replace(/\s*双端微型模型$/, "").trim();
-      if (LANG === "en") p = p.replace(/原生\s*/g, "").replace(/本地\s*RL\s*组件/g, "Local RL").replace(/连续训练与恢复训练/g, "Continuous vs. Resume").replace(/推理/g, "Inference");
-      if (p) kept.push(p);
-    }
-    topic = kept.join(" · ") || t;
-  }
+  const description=NumericBridgeSearch.describe(DATA,'comparison',e.id,LANG,{title:e.title});
+  const topic=description.title;
   const mRaw = String(e.model || "").trim();
   const model = e.rows[0]?.modelN !== FIXTURE ? e.rows[0]?.modelN : (LANG === "en" ? "Micro Benchmark" : (mRaw.replace(/（[^）]{10,}）/g, "").trim() || FIXTURE));
   const cross = e.rows.find(r => !r.pairUI.samePlat) || e.worst || e.rows[0];
@@ -1688,7 +1661,7 @@ function buildEvalUI(e) {
   const R = !hasCross ? { plat: P.sameWord, platFull: "", main: /观测钩子|Observer/i.test(topic) ? tx("观测钩子开关", "Hook modes") : (P.right.main || tx("路径切换", "Mode switch")), tags: [] }
     : { ...P.right, main: P.right.main || (P.right.platFull !== "CPU" ? (cross.stack[0] || cross.frameworks[0] || "") : "") };
   const note = hasCross && hasSame ? tx("跨平台 + 同卡对照", "Cross + same-device") : hasCross ? KINDS[cross.kind].label : tx(`${P.sameWord}对照`, `${P.sameWord} control`);
-  return { topic, model, left: L, right: R, sameOnly: !hasCross, sameWord: P.sameWord, note, full: `${model} · ${topic}` };
+  return { topic, model, left: L, right: R, sameOnly: !hasCross, sameWord: P.sameWord, note, full: topic };
 }
 const EVALS = new Map();
 for (const r of ROWS) {
@@ -1957,18 +1930,25 @@ function writeQuery(name, params) {
   const s = qs.toString().replace(/%2C/g, ",").replace(/%7C/g, "|");
   history.replaceState(null, "", `#/${name}${s ? "?" + s : ""}`);
 }
-const VIEWS = { "": "v-home", list: "v-list", compare: "v-compare", platform: "v-platform", repairs: "v-repairs", how: "v-how" };
+const VIEWS = { "": "v-home", list: "v-list", compare: "v-compare", platform: "v-platform", repairs: "v-repairs", cases: "v-cases", report: "v-report", how: "v-how" };
 const RENDER = {};
+RENDER.cases = h => NumericBridgeCases.mount(byId("v-cases"), h, { lang: LANG });
+RENDER.report = h => NumericBridgeCases.mountReport(byId("v-report"), h, { lang: LANG, copyLink: copyText });
 let lastView = null;
 function route() {
   const h = parseHash();
   const name = VIEWS[h.name] ? h.name : "";
   if (isOpen()) closeDrawer(true);
+  byId("v-cases")._lifecycleCleanup?.();
   hideTip();
   for (const [k, id] of Object.entries(VIEWS)) byId(id).hidden = k !== name;
-  const navKey = name === "platform" ? "compare" : name;
+  const navKey = name === "platform" ? "compare" : name === "report" ? "cases" : name;
   $$("#nav a").forEach(a => a.dataset.route === navKey ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   byId("csv").hidden = !(name === "list" || name === "repairs");
+  byId("mockbar").hidden = name === "cases" || name === "report";
+  byId("mbTag").textContent = tx("● 实测记录", "● Measured records");
+  byId("mbDesc").textContent = tx("读数与结构直接取自 data/evaluations.json 与 data/repairs.json", "Read directly from data/evaluations.json and data/repairs.json");
+  byId("updated").textContent = S.updated_at ? tx(`数据更新于 ${S.updated_at}`, `Updated ${S.updated_at}`) : "";
   const key = name + "/" + (h.arg || "");
   RENDER[name](h);
   if (key !== lastView) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
@@ -1979,7 +1959,7 @@ function route() {
   observeReveal(byId(VIEWS[name]));
   document.title = (TITLES[name] ? TITLES[name](h) + " · " : "") + "NumericBridge";
 }
-const TITLES = { list: () => tx("适配报告", "Report"), compare: () => tx("对比", "Compare"), platform: h => platDisp(h.arg || tx("平台", "Platform")), repairs: () => tx("修复", "Repairs"), how: () => tx("原理", "Method") };
+const TITLES = { cases: () => tx("精度案例库", "Precision Case Library"), report: () => tx("实测报告", "Measured Report"), list: () => tx("实测记录", "Measured Records"), compare: () => tx("对比", "Compare"), platform: h => platDisp(h.arg || tx("平台", "Platform")), repairs: () => tx("修复", "Repairs"), how: () => tx("原理", "Method") };
 
 /* ---------- outline (right-edge reading outline) ---------- */
 let outlineIO = null;
@@ -2079,7 +2059,7 @@ const GLOSS_BI = {
   tier: [["一致性分级", "依据最大绝对误差或余弦相似度划分为五档：位级一致、≤1e-6、≤1e-3、≤1、>1。"], ["Agreement tier", "Five bands from Max abs error or Cosine: Bitwise exact, ≤1e-6, ≤1e-3, ≤1, and >1."]],
   bit: [["位级一致", "最大绝对误差精确为 0，或余弦相似度精确为 1。"], ["Bitwise exact", "Max abs error = 0 or Cosine similarity = 1."]],
   ungraded: [["未分级", "仅采集 NLL、logprob 等标量指标，未采集最大绝对误差或余弦相似度的记录。"], ["Ungraded", "Records with NLL or logprob metrics only, without Max abs error or Cosine."]],
-  partial: [["partial", "采集或对齐未覆盖全部预定张量或步数，结论仅在已采样范围内成立。"], ["partial", "Sampled subset of tensors or steps; readings apply to the observed subset only."]],
+  partial: [["partial", "实际采集或对齐的张量、步数少于预定数量。"], ["partial", "Fewer tensors or steps were captured or aligned than planned."]],
   cov: [["覆盖", "实际对齐元素数占预定总数的比例。"], ["Coverage", "Observed elements divided by expected elements."]],
   kind: [["比较类型", "按双端关系分为四类：NPU ↔ GPU、对 CPU 参考、同平台内、其它。"], ["Comparison type", "NPU ↔ GPU, vs. CPU Reference, Same-platform, or Other."]],
   group: [["分组", "按评测场景组织的专题视图，组内按覆盖最广的单一指标排序。"], ["Scenario group", "Curated view ranked by the most frequent metric in that scenario."]],
@@ -2211,7 +2191,7 @@ RENDER[""] = function renderHome() {
           <p class="proposer">Proposer: Xinyuan XIE, Zheng YU, Ruijie ZHANG, Benyou WANG<sup>*</sup></p>
           <p class="lead">${tx("NumericBridge 串联精度对比、根因诊断、修复调优与原负载复验：在固定输入与权重下逐元素比对跨硬件与训推栈的张量、分布及梯度，区分浮点归约差异与代码缺陷，沉淀经验证的最小补丁、稳定配置与复验证据。", "NumericBridge unifies tensor comparison, root-cause diagnosis, minimal patching, and native-workload regression under identical inputs and weights—separating floating-point reduction order from code defects across accelerators and RL/training stacks.")}</p>
           <div class="cta">
-            <a class="btn primary" href="#/list?task=rl">${tx("生成适配报告", "Compatibility Report")} <span>→</span></a>
+            <a class="btn primary" href="#/cases?task=rl">${tx("查找 RL 精度案例", "Find RL precision cases")} <span>→</span></a>
             <a class="btn" href="#/compare">${tx("平台对比", "Compare Platforms")} <span>⇄</span></a>
             <a class="link" href="#/repairs">${tx(`${REPAIRS.length} 项缺陷修复`, `${REPAIRS.length} Verified Repairs`)} ↗</a>
           </div>
@@ -2234,7 +2214,7 @@ RENDER[""] = function renderHome() {
         <div class="result"><span class="result-num">${bestF ? fmtFactor(bestF).replace("×", "<small>×</small>") : "—"}</span><h3>${tx("最大改善倍数", "Peak Error Reduction")}</h3>
           <p>${bestRp ? `${fmtNum(bestRp.headline.before)}<i>→</i>${fmtNum(bestRp.headline.after)}　${esc(bestRp.lib || "")}` : ""}</p></div>
       </div>
-      <p class="measure">${tx(`快照 ${esc(S.updated_at || "—")} · 每条记录按${term("head", "主读数")}计算对数${term("dev", "偏离")}，仅在同场景、同指标内横向对照。`, `Snapshot ${esc(S.updated_at || "—")} · Log ${term("dev", "deviation")} per ${term("head", "headline metric")}; compare only within identical scenarios and metrics.`)}</p>
+      <p class="measure">${tx(`快照 ${esc(S.updated_at || "—")} · 按${term("head", "主读数")}展示对数${term("dev", "偏离")}。`, `Snapshot ${esc(S.updated_at || "—")} · Log ${term("dev", "deviation")} per ${term("head", "headline metric")}.`)}</p>
     </section>
 
     <section class="sec" data-ol="${tx("闭环", "Loop")}" data-reveal>
@@ -3986,7 +3966,7 @@ RENDER.platform = function renderPlatform(h) {
     </section>
 
     <section class="sec" data-ol="记录" data-reveal>
-      <div class="topline"><span class="eyebrow">04 / 极值明细</span><a class="link" href="#/list?plat=${encodeURIComponent(p)}">在适配报告页查看全部 ${fmtInt(rs.length)} 条 →</a></div>
+      <div class="topline"><span class="eyebrow">04 / 极值明细</span><a class="link" href="#/list?plat=${encodeURIComponent(p)}">${tx(`查看全部 ${fmtInt(rs.length)} 条实测记录 →`, `View all ${fmtInt(rs.length)} measured records →`)}</a></div>
       <div class="sec-head"><h2 class="h2">偏离最大的前 10 条记录</h2></div>
       <div class="tbl" id="pRows"></div>
     </section>
@@ -4063,19 +4043,19 @@ function paintFingerprint(p, fam) {
 const REPBY = new Map(REPAIRS.map(r => [r.id, r]));
 const R_GROUPS = [
   { id: "zero", t: "完全消除", d: "补丁复验后误差读数精确为 0", pick: h => h && h.better === "lower" && h.after === 0 },
-  { id: "machine", t: "降到机器精度", d: "残差 ≤1e-5，收敛至浮点舍入噪声范围", pick: h => h && h.better === "lower" && h.after > 0 && h.after <= 1e-5 },
-  { id: "partial", t: "部分收敛", d: "误差量级显著下降但仍高于 1e-5，尚存其余分叉源", pick: h => h && h.better === "lower" && h.after > 1e-5 },
+  { id: "machine", t: tx("偏差 ≤ 1e-5", "Deviation ≤ 1e-5"), d: tx("修复后的偏差大于 0 且不超过 1e-5", "Post-fix deviation is above zero and at most 1e-5"), pick: h => h && h.better === "lower" && h.after > 0 && h.after <= 1e-5 },
+  { id: "partial", t: tx("偏差 > 1e-5", "Deviation > 1e-5"), d: tx("修复后的偏差高于 1e-5", "Post-fix deviation exceeds 1e-5"), pick: h => h && h.better === "lower" && h.after > 1e-5 },
   { id: "dir", t: "正向指标改善", d: "余弦相似度等越大越一致的指标显著回升", pick: h => h && h.better === "higher" },
   { id: "qual", t: "仅定性复验", d: "以校验项通过与否记录复验结论，无连续标量读数", pick: h => !h },
 ];
 const R_STATUS = { validated: "已复验", investigating: "调查中" };
 REPAIRS.forEach(rp => {
   rp.out = (R_GROUPS.find(g => g.pick(rp.headline)) || R_GROUPS[4]).id;
-  rp.short = String(rp.title).replace(/^[^：]*：/, "");
-  rp.source = String(rp.title).includes("：") ? rp.title.split("：")[0] : "";
+  rp.short = NumericBridgeSearch.describe(DATA, "repair", rp.id, LANG, {title:rp.title}).title;
+  rp.source = rp.lib || "";
   const h = rp.headline;
   rp.factor = h ? (h.after === 0 ? Infinity : (h.better === "higher" ? h.after / h.before : h.before / h.after)) : null;
-  rp.hay = [rp.title, rp.lib, rp.problem?.summary, rp.problem?.location, rp.cause?.summary, rp.repair?.summary, rp.model?.name].join(" ").toLowerCase();
+  rp.hay = [rp.short, rp.title, rp.lib, rp.problem?.summary, rp.problem?.location, rp.cause?.summary, rp.repair?.summary, rp.model?.name].join(" ").toLowerCase();
 });
 const rpLogBefore = r => r.headline ? Math.log10(Math.abs(r.headline.before) || 1e-300) : -999;
 const rposR = v => v === 0 ? 3.4 : 8.5 + (Math.min(4, Math.max(-16, Math.log10(Math.abs(v)))) + 16) / 20 * 90;
@@ -4091,7 +4071,7 @@ function repairCard(rp) {
     <h3>${esc(rp.short)}</h3>
     ${h ? `<span class="rc-read"><span class="b">${fmtNum(h.before)}</span><span class="x">→</span><span class="a">${fmtNum(h.after)}</span><span class="x" style="margin-left:auto">${f.text}</span></span><span class="rc-lab">${esc(h.label)}${h.unit ? " · " + esc(h.unit) : ""}</span>`
       : `<span class="rc-lab">复验以通过／不通过记录</span>`}
-    <span class="rc-loc">${esc(rp.problem?.location || rp.date)}</span>
+    <span class="rc-loc">${esc(rp.model?.name || rp.date)}</span>
   </button>`;
 }
 const RS = { q: "", lib: new Set(), out: new Set(), status: new Set(), sort: "before", group: "out", view: "fig", expanded: new Set(), collapsed: new Set(), sel: null };
@@ -4325,7 +4305,7 @@ addEventListener("keydown", e => {
   if (e.key === "Escape") { if (isOpen()) { closeDrawer(); e.preventDefault(); } else if (typing) e.target.blur(); return; }
   if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
   const name = parseHash().name;
-  if (e.key === "/") { const q = byId(name === "repairs" ? "rQ" : "lQ"); if (q && !byId(VIEWS[name]).hidden) { e.preventDefault(); q.focus(); q.select(); } return; }
+  if (e.key === "/") { const q = name === "cases" ? $(".lc-option-dialog[open] input", byId("v-cases")) : name === "repairs" ? byId("rQ") : name === "list" ? byId("lQ") : null; if (q && !byId(VIEWS[name]).hidden) { e.preventDefault(); q.focus(); q.select(); } return; }
   if (isOpen()) {
     if (e.key === "j" || e.key === "ArrowDown") { e.preventDefault(); moveDrawer(1); }
     if (e.key === "k" || e.key === "ArrowUp") { e.preventDefault(); moveDrawer(-1); }
@@ -4365,12 +4345,12 @@ byId("updated").textContent = S.updated_at ? tx(`数据更新于 ${S.updated_at}
 /* page chrome that lives in the static markup */
 document.documentElement.lang = LANG === "en" ? "en" : "zh-CN";
 if (LANG === "en") {
-  const NAV_EN = { "": "Home", list: "Report", compare: "Compare", repairs: "Repairs", how: "How it works" };
+  const NAV_EN = { "": "Home", cases: "Cases", compare: "Compare", repairs: "Repairs", how: "How it works" };
   $$("#nav a").forEach(a => { a.textContent = NAV_EN[a.dataset.route] ?? a.textContent; });
   const setT = (id, t) => { const el = byId(id); if (el) el.textContent = t; };
   setT("citeBtn", "Cite & data"); setT("footCite", "Cite & data"); setT("toTop", "Back to top ↑");
   setT("mbTag", "● Measured records"); setT("mbDesc", "Read directly from data/evaluations.json and data/repairs.json");
-  setT("footNote", "Pairwise cross-stack numerical consistency records under fixed inputs and weights; compare only within one metric and scenario.");
+  setT("footNote", "Precision evaluations and repairs across hardware and software stacks.");
   byId("csv").innerHTML = "Export CSV <span>↓</span>";
   byId("theme").title = "Toggle theme"; byId("theme").setAttribute("aria-label", "Toggle theme");
   byId("nav").setAttribute("aria-label", "Main"); byId("outline").setAttribute("aria-label", "On this page");

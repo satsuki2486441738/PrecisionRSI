@@ -3,6 +3,13 @@
   'use strict';
   const list = (value) => Array.isArray(value) ? value : [];
   const text = (value) => typeof value === 'string' ? value.trim() : '';
+  let content = {};
+  function setContent(records) { content = records; }
+  function description(record) { return record.content || content['comparison:'+record.id] || {}; }
+  function summaryFor(record) {
+    const value=description(record).summary;
+    return value?.zh || value?.en || '';
+  }
   const frameworkNames = [
     [/Megatron Bridge|^megatron-bridge-/i, 'Megatron Bridge'],
     [/MindSpeed-RL|^mindspeed-rl-/i, 'MindSpeed-RL'],
@@ -158,6 +165,8 @@
   // passes that label so grouping, filters and card titles use the same identity.
   function titleFor(record = {}, modelLabel = '') {
     record = record || {};
+    const publicTitle=description(record).title;
+    if(publicTitle)return publicTitle.zh||publicTitle.en;
     modelLabel = text(modelLabel) || text(record.model?.name);
     const framework = frameworkFor(record);
     const platform = platformFor(record);
@@ -170,7 +179,7 @@
     return [framework, purpose, modelLabel].filter(Boolean).join(' · ');
   }
 
-  const api = { titleFor };
+  const api = { titleFor, summaryFor, setContent };
   if (typeof module === 'object' && module.exports) module.exports = api;
   global.EvaluationPresentation = api;
 })(globalThis);

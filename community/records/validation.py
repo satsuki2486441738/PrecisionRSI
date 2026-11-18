@@ -6,6 +6,8 @@ import math
 from pathlib import Path
 import re
 from urllib.parse import urlsplit
+from .content import validate_content
+from .models import model_facets
 
 
 def validate(site):
@@ -15,6 +17,8 @@ def validate(site):
     datetime.date.fromisoformat(data['updated_at'])
     ids = set()
     for repair in data['repairs']:
+        if 'content' in repair:
+            validate_content(repair['content'])
         identity = repair['id']
         if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', identity) or identity in ids:
             raise ValueError('Repair IDs must be unique stable slugs')
@@ -36,6 +40,7 @@ def validate(site):
                 if key not in repair[section]:
                     raise ValueError(f'{identity}: missing {section}.{key}')
         coverage = repair['validation']['coverage']
+        model_facets(repair['model'])
         observed, expected = coverage['observed'], coverage['expected']
         if (type(observed) is not int or type(expected) is not int
                 or not 0 <= observed <= expected or expected <= 0 or not coverage['unit']):
@@ -104,6 +109,8 @@ def validate_evaluations(site):
     def finite(value):
         return type(value) in (int, float) and math.isfinite(value)
     for record in data['evaluations']:
+        if 'content' in record:
+            validate_content(record['content'])
         slug(record['id'], ids)
         datetime.date.fromisoformat(record['date'])
         for name in ('title', 'task', 'status', 'acceptance', 'model', 'summary', 'sides',
@@ -114,6 +121,7 @@ def validate_evaluations(site):
             raise ValueError('Invalid evaluation task/status')
         if not record['title'] or not record['summary'] or not all(record['model'].get(k) for k in ('name', 'revision')):
             raise ValueError('Evaluation needs title, summary and model identity')
+        model_facets(record['model'])
         if record['acceptance'] is not None and not isinstance(record['acceptance'], (str, dict)):
             raise ValueError('Invalid numerical acceptance')
         for key in ('common', 'differences', 'notes'):

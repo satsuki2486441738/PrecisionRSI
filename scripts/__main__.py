@@ -11,6 +11,7 @@ COMMANDS = {
     'collect-differences': ('scripts', 'collect_differences'),
     'plan-history': ('scripts', 'plan_history_integration'),
     'export-statistics': ('scripts', 'export_statistics'),
+    'export-search': ('scripts', 'export_search'),
     'export-paper': ('scripts', 'export_paper_results'),
     'prepare-public': ('scripts', 'prepare_public_results'),
     'rsi-snapshot': ('scripts', 'rsi_snapshot'),

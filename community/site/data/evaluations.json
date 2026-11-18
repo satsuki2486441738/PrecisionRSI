@@ -57307,7 +57307,7 @@
         {
           "id": "gpu",
           "label": "GPU",
-          "hardware": "NVIDIA H200（运行时标识 H20Z）",
+          "hardware": "NVIDIA H200（运行时标识 H200）",
           "libraries": [
             {
               "name": "vLLM",
@@ -57571,7 +57571,7 @@
         {
           "id": "gpu",
           "label": "GPU",
-          "hardware": "NVIDIA H200（运行时标识 H20Z）",
+          "hardware": "NVIDIA H200（运行时标识 H200）",
           "libraries": [
             {
               "name": "vLLM",
@@ -58236,7 +58236,7 @@
         {
           "id": "gpu",
           "label": "GPU",
-          "hardware": "NVIDIA H200（运行时标识 H20Z）",
+          "hardware": "NVIDIA H200（运行时标识 H200）",
           "libraries": [
             {
               "name": "vLLM",
@@ -58752,7 +58752,7 @@
         {
           "id": "a",
           "label": "A · 使用 skills（经补充完成）",
-          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "hardware": "H200集群；runtime NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -58779,7 +58779,7 @@
         {
           "id": "b",
           "label": "B · 不使用 skills（独立完成）",
-          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "hardware": "H200集群；runtime NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -58806,7 +58806,7 @@
         {
           "id": "vllm",
           "label": "vLLM / CUDA",
-          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6bddf4bf-04fc-d8b9-1d3b-6d6bbb977dbc, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H200', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6bddf4bf-04fc-d8b9-1d3b-6d6bbb977dbc, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
           "libraries": [
             {
               "name": "vllm",
@@ -58836,7 +58836,7 @@
         {
           "id": "transformers",
           "label": "Transformers / CUDA",
-          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=2068e7a5-3eb9-d319-7dc5-b51d72b57c3a, pci_bus_id=171, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H200', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=2068e7a5-3eb9-d319-7dc5-b51d72b57c3a, pci_bus_id=171, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
           "libraries": [
             {
               "name": "transformers",
@@ -59094,7 +59094,7 @@
         {
           "id": "a",
           "label": "A · 使用 skills（命名明确）",
-          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "hardware": "H200集群；runtime NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -59121,7 +59121,7 @@
         {
           "id": "b",
           "label": "B · 不使用 skills（冻结基线）",
-          "hardware": "H200集群；runtime NVIDIA H20Z",
+          "hardware": "H200集群；runtime NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -59149,7 +59149,7 @@
         {
           "id": "vllm",
           "label": "vLLM / CUDA",
-          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6b2c3397-47a1-5813-00f6-76891faf74f5, pci_bus_id=99, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H200', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6b2c3397-47a1-5813-00f6-76891faf74f5, pci_bus_id=99, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
           "libraries": [
             {
               "name": "vllm",
@@ -59189,7 +59189,7 @@
         {
           "id": "transformers",
           "label": "Transformers / CUDA",
-          "hardware": "_CudaDeviceProperties(name='NVIDIA H20Z', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6bddf4bf-04fc-d8b9-1d3b-6d6bbb977dbc, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
+          "hardware": "_CudaDeviceProperties(name='NVIDIA H200', major=9, minor=0, total_memory=143167MB, multi_processor_count=132, uuid=6bddf4bf-04fc-d8b9-1d3b-6d6bbb977dbc, pci_bus_id=163, pci_device_id=0, pci_domain_id=0, L2_cache_size=60MB)",
           "libraries": [
             {
               "name": "transformers",
@@ -62022,7 +62022,7 @@
         {
           "id": "a",
           "label": "A · skills",
-          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "hardware": "H200 cluster (runtime NVIDIA H200, 150121545728 bytes)",
           "libraries": [
             {
               "name": "SGLang",
@@ -62056,7 +62056,7 @@
         {
           "id": "b",
           "label": "B · 无skills（冻结基线）",
-          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "hardware": "H200 cluster (runtime NVIDIA H200, 150121545728 bytes)",
           "libraries": [
             {
               "name": "SGLang",
@@ -62309,7 +62309,7 @@
         {
           "id": "a",
           "label": "A · skills",
-          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "hardware": "H200 cluster (runtime NVIDIA H200, 150121545728 bytes)",
           "libraries": [
             {
               "name": "SGLang",
@@ -62343,7 +62343,7 @@
         {
           "id": "b",
           "label": "B · 无skills（冻结基线）",
-          "hardware": "H200 cluster (runtime NVIDIA H20Z, 150121545728 bytes)",
+          "hardware": "H200 cluster (runtime NVIDIA H200, 150121545728 bytes)",
           "libraries": [
             {
               "name": "SGLang",
@@ -62684,7 +62684,7 @@
         {
           "id": "gpu",
           "label": "H200 / CUDA",
-          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H20Z）",
+          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H200）",
           "libraries": [
             {
               "name": "Transformers",
@@ -63002,7 +63002,7 @@
         {
           "id": "gpu",
           "label": "H200 / CUDA",
-          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H20Z）",
+          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H200）",
           "libraries": [
             {
               "name": "Transformers",
@@ -63271,7 +63271,7 @@
         {
           "id": "gpu",
           "label": "H200 / CUDA",
-          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H20Z）",
+          "hardware": "NVIDIA H200（用户确认；runtime NVIDIA H200）",
           "libraries": [
             {
               "name": "Transformers",
@@ -88498,8 +88498,8 @@
       "sides": [
         {
           "id": "gpu",
-          "label": "H20Z / CUDA / automatic placement",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / automatic placement",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -88740,8 +88740,8 @@
       "sides": [
         {
           "id": "gpu",
-          "label": "H20Z / CUDA / original automatic placement",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / original automatic placement",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -88937,8 +88937,8 @@
       "sides": [
         {
           "id": "gpu",
-          "label": "H20Z / CUDA / original automatic placement",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / original automatic placement",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -89174,8 +89174,8 @@
       "sides": [
         {
           "id": "gpu-serving-reference",
-          "label": "H20Z / CUDA / automatic placement",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / automatic placement",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -89196,8 +89196,8 @@
         },
         {
           "id": "gpu-serving-vllm",
-          "label": "H20Z / CUDA / native TP4",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / native TP4",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -89222,8 +89222,8 @@
         },
         {
           "id": "gpu-serving-sglang",
-          "label": "H20Z / CUDA / native TP4",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / native TP4",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -89519,8 +89519,8 @@
       "sides": [
         {
           "id": "gpu-original-reference",
-          "label": "H20Z / CUDA / original TP4",
-          "hardware": "NVIDIA H20Z",
+          "label": "H200 / CUDA / original TP4",
+          "hardware": "NVIDIA H200",
           "libraries": [
             {
               "name": "PyTorch",
@@ -89772,7 +89772,7 @@
         {
           "id": "gpu-original-stage",
           "label": "H200 / original GPU selected stage capture",
-          "hardware": "NVIDIA H200 (raw H20Z; identity confirmed by user)",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
           "libraries": [
             {
               "name": "PyTorch",
@@ -89973,7 +89973,7 @@
         {
           "id": "gpu-original-query",
           "label": "H200 / actual original TP4 query capture",
-          "hardware": "NVIDIA H200 (raw H20Z; identity confirmed by user)",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
           "libraries": [
             {
               "name": "PyTorch",
@@ -90250,7 +90250,7 @@
         {
           "id": "gpu-original-reference",
           "label": "H200 / TP4 reviewed cache adapter",
-          "hardware": "NVIDIA H200 (raw H20Z; identity confirmed by user)",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
           "libraries": [
             {
               "name": "PyTorch",
@@ -90657,7 +90657,7 @@
         {
           "id": "gpu-original-reference",
           "label": "GPU TP4 / FP32 output-head LoRA",
-          "hardware": "NVIDIA H200 (raw H20Z; identity confirmed by user)",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
           "libraries": [
             {
               "name": "PyTorch",
@@ -90870,7 +90870,7 @@
         {
           "id": "gpu-original-reference",
           "label": "Original GPU TP4 core reference",
-          "hardware": "NVIDIA H200 (raw H20Z; identity confirmed by user)",
+          "hardware": "NVIDIA H200 (raw H200; identity confirmed by user)",
           "libraries": [
             {
               "name": "PyTorch",
@@ -92175,7 +92175,7 @@
     {
       "id": "gemma-3-27b-it-cuda-precision-20261110",
       "date": "2026-11-12",
-      "title": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H20Z",
+      "title": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H200",
       "framework": "Transformers",
       "task": "inference",
       "status": "completed",
@@ -92189,7 +92189,7 @@
         {
           "id": "native",
           "label": "Native",
-          "hardware": "1 × NVIDIA H20Z",
+          "hardware": "1 × NVIDIA H200",
           "libraries": [
             {
               "name": "torch",
@@ -92232,7 +92232,7 @@
         {
           "id": "reference",
           "label": "Reference",
-          "hardware": "1 × NVIDIA H20Z",
+          "hardware": "1 × NVIDIA H200",
           "libraries": [
             {
               "name": "torch",
@@ -92446,7 +92446,7 @@
     {
       "id": "gpt-oss-120b-cuda-precision-20261110",
       "date": "2026-11-12",
-      "title": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H20Z",
+      "title": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H200",
       "framework": "Transformers",
       "task": "inference",
       "status": "completed",
@@ -92460,7 +92460,7 @@
         {
           "id": "native",
           "label": "Native",
-          "hardware": "4 × NVIDIA H20Z",
+          "hardware": "4 × NVIDIA H200",
           "libraries": [
             {
               "name": "torch",
@@ -92503,7 +92503,7 @@
         {
           "id": "reference",
           "label": "Reference",
-          "hardware": "4 × NVIDIA H20Z",
+          "hardware": "4 × NVIDIA H200",
           "libraries": [
             {
               "name": "torch",
@@ -92720,7 +92720,7 @@
     {
       "id": "nemotron-bolt-cuda-precision-20261110",
       "date": "2026-11-12",
-      "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H20Z",
+      "title": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H200",
       "framework": "Transformers",
       "task": "inference",
       "status": "completed",
@@ -92734,7 +92734,7 @@
         {
           "id": "native",
           "label": "Native",
-          "hardware": "2 × NVIDIA H20Z",
+          "hardware": "2 × NVIDIA H200",
           "libraries": [
             {
               "name": "torch",
@@ -92785,7 +92785,7 @@
         {
           "id": "reference",
           "label": "Reference",
-          "hardware": "2 × NVIDIA H20Z",
+          "hardware": "2 × NVIDIA H200",
           "libraries": [
             {
               "name": "torch",
