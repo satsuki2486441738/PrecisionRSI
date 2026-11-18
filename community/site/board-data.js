@@ -1,10 +1,5 @@
 /* Derive the board dataset from the site's own published records.
  *
- * The page reads `data/evaluations.json` and `data/repairs.json` directly, so
- * the interface can never show a frozen copy that has drifted from the data
- * the rest of the site serves. This is a port of tools/build_board.py; the two
- * are kept equivalent by tests/test_board_data.js.
- *
  * Note on word boundaries: Python's `\b` is Unicode-aware, so `\bloss\b` does
  * not match inside "loss值". JavaScript's `\w` is ASCII-only and would match
  * there, silently reclassifying rows — hence the explicit lookarounds below.
@@ -16,7 +11,7 @@
   function rx(source) { return new RegExp(source, "u"); }
 
   var PLATFORMS = [
-    [rx("ascend\\s*910c|ascend910_9382|ascend910c|\\b910_9382\\b|\\b910c\\b"), "Ascend 910C", "npu"],
+    [rx("ascend\\s*910c|ascend910_9382|ascend910c|\\b910_9382\\b|\\b910c\\b|^\\s*(?:ascend\\s+npu(?:\\s*\\(device sku not recorded in this lane\\))?|ascend910 as reported by retained native npu-smi; one logical device 0)\\s*$"), "Ascend 910C", "npu"],
     [rx("ascend\\s*910b"), "Ascend 910B", "npu"],
     [rx("ascend|npu"), "Ascend NPU", "npu"],
     [rx("h200|h20z"), "NVIDIA H200", "gpu"],
@@ -177,9 +172,88 @@
     if (!n) return null;
     return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
   }
+  function mean(values) {
+    return values.reduce(function (sum, value) { return sum + value; }, 0) / values.length;
+  }
   var isNum = function (v) { return typeof v === "number" && isFinite(v); };
 
-  function deriveBoard(data, repairs) {
+  function repairMeasure(m) {
+    var label = (m.label || "").toLowerCase(), unit = m.unit;
+    var key = /\brmse\b|均方根/.test(label) ? "rmse" : /最大绝对差异/.test(label) ? "max_abs" : metricKey(label)[0];
+    var subject;
+    if (unit === "nat/token" && /\bnll\b/.test(label) && /绝对差|absolute diff/.test(label)) {
+      subject = "目标分数"; key = "nll_abs";
+    } else if ((unit === "nat/token" || unit === "nat") && /logprob/.test(label)) {
+      subject = "目标分数";
+      if (/平均绝对|mean absolute|\bmae\b/.test(label)) key = "logprob_mae";
+    } else if ((unit === "logit" || unit === "absolute") && /\blogits?\b/.test(label)) {
+      subject = "词表分布";
+    } else if ((unit === "梯度值" || unit === "无量纲" || unit === "absolute") && /梯度|gradient/.test(label)) {
+      subject = "梯度";
+    } else if ((unit === "参数值" || unit === "absolute") && /更新|\bupdates?\b/.test(label)) {
+      subject = "参数/优化器更新";
+    } else if (unit === "张量值") {
+      subject = "张量/激活";
+    }
+    // The generic matcher treats some target-logprob labels as MAE. Require
+    // an explicit statistic so a percentile or maximum cannot enter that mean.
+    if (key === "logprob_mae" && !/平均绝对|mean absolute|\bmae\b/.test(label)) return null;
+    return key && subject ? { subject: subject, key: key } : null;
+  }
+
+  function compareRepairs(repairs, relations) {
+    var entities = new Map(((relations || {}).entities || []).map(function (e) { return [e.kind + ":" + e.id, e]; }));
+    var eligible = new Set();
+    ((relations || {}).links || []).forEach(function (link) {
+      if (link.relation !== "verifies") return;
+      var verification = entities.get(link.from.kind + ":" + link.from.id);
+      var candidate = entities.get(link.to.kind + ":" + link.to.id);
+      if (!verification || !candidate || ["not-selected", "selected-for-further-study"].includes(candidate.details.decision) ||
+          !["scoped-checks-passed", "partial"].includes(verification.details.outcome)) return;
+      (verification.details.sources || []).forEach(function (source) {
+        if (source.kind === "repair" && ["/validation/metrics", "/validation/acceptance"].includes(source.pointer)) eligible.add(source.id);
+      });
+    });
+    var grouped = new Map();
+    (repairs.repairs || []).forEach(function (repair) {
+      if (repair.status !== "validated" || !eligible.has(repair.id)) return;
+      var platforms = hardwarePlatforms((repair.environment || {}).hardware);
+      if (platforms.length !== 1 || !PLATFORMS.some(function (entry) { return entry[1] === platforms[0]; })) return;
+      var measured = new Map();
+      ((repair.validation || {}).metrics || []).forEach(function (m) {
+        var measure = repairMeasure(m);
+        if (!measure || !isNum(m.before) || !isNum(m.after)) return;
+        var higher = METRICS.some(function (col) { return col[0] === measure.key && col[3] === "higher"; });
+        if (m.before > (higher ? 1 : Infinity) || m.after > (higher ? 1 : Infinity) ||
+            m.before < (higher ? -1 : 0) || m.after < (higher ? -1 : 0)) return;
+        var id = JSON.stringify([measure.subject, platforms[0], measure.key]);
+        if (!measured.has(id)) measured.set(id, []);
+        measured.get(id).push(m);
+      });
+      // Give each repair record one vote; several readings in a record do not
+      // give that workload more weight in the platform average.
+      measured.forEach(function (values, id) {
+        if (!grouped.has(id)) grouped.set(id, []);
+        grouped.get(id).push({
+          before: mean(values.map(function (m) { return m.before; })),
+          after: mean(values.map(function (m) { return m.after; })),
+        });
+      });
+    });
+    var compare = {};
+    grouped.forEach(function (values, id) {
+      var parts = JSON.parse(id), subject = parts[0], platform = parts[1], key = parts[2];
+      if (!compare[subject]) compare[subject] = {};
+      if (!compare[subject][platform]) compare[subject][platform] = {};
+      compare[subject][platform][key] = {
+        n: values.length, before: mean(values.map(function (m) { return m.before; })),
+        after: mean(values.map(function (m) { return m.after; })),
+      };
+    });
+    return compare;
+  }
+
+  function deriveBoard(data, repairs, relations) {
     var evaluations = data.evaluations || [];
     var rows = [], unclassified = {};
     var bump = function (k) { unclassified[k] = (unclassified[k] || 0) + 1; };
@@ -337,7 +411,7 @@
       if (!compare[subject]) compare[subject] = {};
       if (!compare[subject][plat]) compare[subject][plat] = {};
       compare[subject][plat][key] = {
-        n: values.length, median: median(values),
+        n: values.length, mean: mean(values), median: median(values),
         worst: better === "lower" ? Math.max.apply(null, values) : Math.min.apply(null, values),
         better: better,
       };
@@ -348,9 +422,16 @@
       (e.comparisons || []).forEach(function (c) { metricsTotal += (c.metrics || []).length; });
     });
 
+    var entities = relations && relations.entities;
+    var community = Array.isArray(entities) ? {
+      cases: entities.filter(function (e) { return e.kind === "case" && e.details?.category !== "workflow-benchmark"; }).length,
+      issues: entities.filter(function (e) { return e.kind === "issue"; }).length,
+      confirmed_defects: entities.filter(function (e) { return e.kind === "issue" && e.details?.classification === "confirmed-defect"; }).length,
+    } : null;
     var summary = {
       updated_at: data.updated_at || "",
-      compare: compare, evaluations: evaluations.length, comparisons: rows.length,
+      compare: compare, compare_repairs: compareRepairs(repairs, relations),
+      evaluations: evaluations.length, comparisons: rows.length,
       metrics_total: metricsTotal,
       tasks: facet("task"), subjects: facet("subject"), axes: facet("axis"),
       platforms: mostCommon([].concat.apply([], rows.map(function (r) { return r.platforms; }))),
@@ -363,6 +444,7 @@
       partial: rows.filter(function (r) { return r.status === "partial"; }).length,
       cross_platform: rows.filter(function (r) { return r.axis_key === "platform"; }).length,
       hero: hero,
+      community: community,
     };
     return { summary: summary, rows: rows, repairs: repairs };
   }
@@ -375,9 +457,9 @@
         return r.json();
       });
     };
-    return Promise.all([get("evaluations.json"), get("repairs.json"), get("content.json")])
+    return Promise.all([get("evaluations.json"), get("repairs.json"), get("content.json"), get("relations.json")])
       .then(function (documents) {
-        var board=deriveBoard(documents[0], documents[1]);
+        var board=deriveBoard(documents[0], documents[1], documents[3]);
         board.content=Object.fromEntries(documents[2].records.map(function (entry) {
           return [entry.kind+":"+entry.id,entry.content];
         }));

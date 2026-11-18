@@ -11,6 +11,9 @@ from .models import model_facets, model_group
 
 HARDWARE_RULES = [
     dict(pattern=r'ascend\s*910c|ascend910_9382|\b910_9382\b|\b910c\b', name='Ascend 910C', family='npu'),
+    # Legacy labels for the 910C devices in the retained runs.
+    dict(pattern=r'^\s*(?:ascend\s+npu(?:\s*\(device sku not recorded in this lane\))?|ascend910 as reported by retained native npu-smi; one logical device 0)\s*$',
+         name='Ascend 910C', family='npu'),
     dict(pattern=r'ascend\s*910b', name='Ascend 910B', family='npu'),
     dict(pattern=r'ascend|npu', name='Ascend NPU', family='npu'),
     dict(pattern=r'(?<![a-z0-9_])(?:[1-9][0-9]*\s*[x×]\s*)?h(?:200|20z)(?![a-z0-9_])', name='NVIDIA H200', family='gpu'),
