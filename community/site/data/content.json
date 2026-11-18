@@ -1,0 +1,3609 @@
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "kind": "candidate",
+      "id": "solution-asgd-foreach-schedule-local",
+      "content": {
+        "title": {
+          "zh": "修正 ASGD 学习率公式",
+          "en": "Correct the ASGD learning-rate formula"
+        },
+        "summary": {
+          "zh": "修正公式括号，恢复预期的学习率变化。",
+          "en": "Correct the parentheses to restore the intended learning-rate schedule."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-asgd-foreach-schedule-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级到 PyTorch 2.4.0",
+          "en": "Upgrade to PyTorch 2.4.0"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-dora-conv1d-unmerge-local",
+      "content": {
+        "title": {
+          "zh": "修复 DoRA 权重恢复",
+          "en": "Fix DoRA weight restoration"
+        },
+        "summary": {
+          "zh": "使取消合并与合并使用一致的缩放方向。",
+          "en": "Use matching scaling directions for merging and unmerging."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-dora-conv1d-unmerge-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级 PEFT",
+          "en": "Upgrade PEFT"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-ipo-completion-average-local",
+      "content": {
+        "title": {
+          "zh": "按回复均值计算 IPO 评分",
+          "en": "Average IPO scores over the response"
+        },
+        "summary": {
+          "zh": "以平均 token 分数计算偏好差值。",
+          "en": "Compute the preference gap from mean token scores."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-ipo-completion-average-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级 TRL",
+          "en": "Upgrade TRL"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-lora-svd-double-scaling-local",
+      "content": {
+        "title": {
+          "zh": "移除 LoRA 重复缩放",
+          "en": "Remove duplicate LoRA scaling"
+        },
+        "summary": {
+          "zh": "合并时只应用一次适配器缩放。",
+          "en": "Apply adapter scaling once during merging."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-lora-svd-double-scaling-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级 PEFT",
+          "en": "Upgrade PEFT"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-mindspeed-selective-fp32-projection",
+      "content": {
+        "title": {
+          "zh": "提高输入投影计算精度",
+          "en": "Use higher precision for the input projection"
+        },
+        "summary": {
+          "zh": "将选定的投影计算改为 FP32。",
+          "en": "Run the selected projection in FP32."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-mindspeed-zero-centered-gamma-patch",
+      "content": {
+        "title": {
+          "zh": "统一归一化参数约定",
+          "en": "Align normalization parameter conventions"
+        },
+        "summary": {
+          "zh": "统一初始化和前向计算中的参数解释。",
+          "en": "Use the same parameter convention in initialization and forward computation."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-ppo-response-mask-local",
+      "content": {
+        "title": {
+          "zh": "修正 PPO 响应掩码位置",
+          "en": "Correct PPO response-mask positions"
+        },
+        "summary": {
+          "zh": "按回复本身的坐标应用掩码。",
+          "en": "Apply the mask using response coordinates."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-ppo-response-mask-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级 TRL",
+          "en": "Upgrade TRL"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen2-disabled-window-local",
+      "content": {
+        "title": {
+          "zh": "修正 Qwen2 滑窗开关",
+          "en": "Fix the Qwen2 sliding-window switch"
+        },
+        "summary": {
+          "zh": "关闭滑窗时保留全部可用历史位置。",
+          "en": "Keep all valid history positions when sliding-window attention is disabled."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen2-disabled-window-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级到 Transformers 4.52.0",
+          "en": "Upgrade to Transformers 4.52.0"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-rmsnorm-backward-sft",
+      "content": {
+        "title": {
+          "zh": "提高归一化反向计算精度",
+          "en": "Use higher precision in normalization backward computation"
+        },
+        "summary": {
+          "zh": "调整梯度计算中的精度策略。",
+          "en": "Adjust the precision policy used in gradient computation."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-rmsnorm-layer8-sft",
+      "content": {
+        "title": {
+          "zh": "调整单层归一化精度",
+          "en": "Adjust one normalization layer"
+        },
+        "summary": {
+          "zh": "在选定层评估提高计算精度的效果。",
+          "en": "Evaluate higher computation precision in the selected layer."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-rmsnorm-qkv-sft",
+      "content": {
+        "title": {
+          "zh": "联合调整归一化和注意力投影精度",
+          "en": "Adjust normalization and attention-projection precision"
+        },
+        "summary": {
+          "zh": "同时调整 RMSNorm 和 QKV 投影的精度。",
+          "en": "Adjust precision for both RMSNorm and QKV projections."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-rmsnorm-sft",
+      "content": {
+        "title": {
+          "zh": "提高全部归一化层计算精度",
+          "en": "Use higher precision in all normalization layers"
+        },
+        "summary": {
+          "zh": "调整全部 RMSNorm 层的计算精度。",
+          "en": "Adjust computation precision in all RMSNorm layers."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-token-mean-local",
+      "content": {
+        "title": {
+          "zh": "按有效 token 数平均损失",
+          "en": "Average loss over valid tokens"
+        },
+        "summary": {
+          "zh": "为累积窗口传递统一的有效 token 数。",
+          "en": "Pass a shared valid-token count for the accumulation window."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-weighted-lora-bias-bias-only-rejected",
+      "content": {
+        "title": {
+          "zh": "补齐 LoRA 偏置",
+          "en": "Restore the LoRA bias"
+        },
+        "summary": {
+          "zh": "补齐遗漏的偏置计算。",
+          "en": "Restore the omitted bias computation."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-weighted-lora-bias-local",
+      "content": {
+        "title": {
+          "zh": "修复 LoRA 合并输出",
+          "en": "Fix LoRA merged output"
+        },
+        "summary": {
+          "zh": "合并时保留偏置，并修正中间计算精度。",
+          "en": "Preserve the bias and correct intermediate computation precision during merging."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-qwen35-weighted-lora-bias-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级 PEFT",
+          "en": "Upgrade PEFT"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-radam-unrectified-zero-gradient-local",
+      "content": {
+        "title": {
+          "zh": "修复 RAdam 零梯度更新",
+          "en": "Fix RAdam zero-gradient updates"
+        },
+        "summary": {
+          "zh": "清理该更新分支中未使用的中间计算结果。",
+          "en": "Clear an unused intermediate value in the affected update branch."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-trainer-label-smoothing-local",
+      "content": {
+        "title": {
+          "zh": "统一梯度累积的损失分母",
+          "en": "Use a shared loss denominator during gradient accumulation"
+        },
+        "summary": {
+          "zh": "按累积窗口内的有效 token 总数计算损失。",
+          "en": "Compute loss using the valid-token count for the accumulation window."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-trainer-label-smoothing-source-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级 Transformers",
+          "en": "Upgrade Transformers"
+        },
+        "summary": {
+          "zh": "上游代码包含对应修复。",
+          "en": "The upstream code contains the corresponding fix."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-trl-0150-source-observed-upgrade",
+      "content": {
+        "title": {
+          "zh": "升级到 TRL 0.15.0",
+          "en": "Upgrade to TRL 0.15.0"
+        },
+        "summary": {
+          "zh": "新版 PPO 实现包含对应代码改动。",
+          "en": "The rewritten PPO implementation contains the corresponding code change."
+        }
+      }
+    },
+    {
+      "kind": "candidate",
+      "id": "solution-trl-0710-whitening-remask-backport",
+      "content": {
+        "title": {
+          "zh": "修复 PPO 奖励填充泄漏",
+          "en": "Fix padded-reward leakage in PPO"
+        },
+        "summary": {
+          "zh": "白化后重新应用掩码，清除填充位置的奖励。",
+          "en": "Reapply the mask after whitening to clear padded rewards."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-asgd-foreach-schedule",
+      "content": {
+        "title": {
+          "zh": "ASGD 学习率计算错误",
+          "en": "Incorrect ASGD learning-rate calculation"
+        },
+        "summary": {
+          "zh": "学习率公式中的括号错误改变了后续参数更新。",
+          "en": "A misplaced parenthesis in the learning-rate formula changes subsequent updates."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-dora-conv1d-unmerge",
+      "content": {
+        "title": {
+          "zh": "DoRA 取消合并后权重恢复错误",
+          "en": "DoRA restores weights incorrectly when unmerging"
+        },
+        "summary": {
+          "zh": "取消适配器合并时，权重可能被错误恢复或触发维度错误。",
+          "en": "Unmerging an adapter can restore incorrect weights or raise a dimension error."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-areal-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "AReaL · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-areal-pretrained-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "AReaL · CUDA 两卡 GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-areal-tiny-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "AReaL · CUDA 两卡 GRPO · 随机 tiny Qwen3",
+          "en": "Evaluation · RL · 随机 tiny Qwen3"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-autonomous-cross-platform-inference-20261025",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA ↔ Ascend 完整前向推理 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Transformers'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-autonomous-cross-platform-sft-20261025",
+      "content": {
+        "title": {
+          "zh": "Transformers / PEFT · CUDA ↔ Ascend LoRA SFT · Qwen3.5-9B-Base",
+          "en": "{'name': 'Transformers / PEFT'} · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-axolotl-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Axolotl · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "Axolotl SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-axolotl-qwen3-06b-cuda-native-20261021t182602z",
+      "content": {
+        "title": {
+          "zh": "Axolotl · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-axolotl-tiny-qwen2-cuda-native-20261021t182602z",
+      "content": {
+        "title": {
+          "zh": "Axolotl · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-axolotl-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Axolotl · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "Axolotl SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-cross-platform-sft-causal-continuation-20261025",
+      "content": {
+        "title": {
+          "zh": "Transformers / PEFT · CUDA ↔ Ascend LoRA SFT · Qwen3.5-9B-Base",
+          "en": "{'name': 'Transformers / PEFT'} · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-adapted-core275-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend 适配核心/冻结骨干输出头 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: adapted core275 and GPU online output-head trajectories"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-full40-attention-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · Ascend 40层注意力尾部回放 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: actual full40-layer attention tail replay"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-http128-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend 缓存推理 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: adapted HTTP128 final rows and fixed-history core contrasts"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-native-producer-key-cache-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · Ascend 保留压缩器输出 → 键缓存 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek retained native compressor outputs to selected native key/cache"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-native-query-key-selection-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · serialized retained Q/K→QLI · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek serialized retained Q/K→QLI"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-native-query-tail-20261108",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend Query / 头权重 / RoPE · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: actual all32-head tail query, head weights and native RoPE"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-original-vs-adapted-core-20261106",
+      "content": {
+        "title": {
+          "zh": "PyTorch · DeepSeek original vs adapted 推理 · DeepSeek-V4.1-Flash-1017",
+          "en": "PyTorch: DeepSeek original vs adapted inference"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-paired-output-head95-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · paired output-head LoRA and continuation · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: paired output-head LoRA and continuation"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-deepseek41-upstream-compressor-key-local-vjp-20261108",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend 压缩器 / 键缓存 / 局部导数 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: actual upstream compressor, native key-cache and local derivative supplement"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-factory-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "LLaMAFactory SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-factory-qwen3-06b-cuda-native-20261021t181049z",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-factory-tiny-qwen2-cuda-native-20261021t181049z",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-factory-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "LLaMAFactory SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma-3-27b-it-ascend-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · Ascend 完整前向推理 · google/gemma-3-27b-it",
+          "en": "Gemma 3 27B IT native and reference precision on TorchNPU on Ascend 910"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma-3-27b-it-cuda-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA 完整前向推理 · google/gemma-3-27b-it",
+          "en": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H200"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-ascend-tp1-repeat-20261106",
+      "content": {
+        "title": {
+          "zh": "Gemma · Ascend 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: same-NPU three-repeat TP1 text pilot"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-ascend-batch-padding-20261107",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA ↔ Ascend 批处理 / 左右填充 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend batch and padding"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-ascend-cacheoff-20261106",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA ↔ Ascend 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend cache-off anchor (159 targets)"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-ascend-fixed-20261106",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA ↔ Ascend 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend TP1 text pilot (one input)"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-ascend-observer-transparency-20261107",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA ↔ Ascend observer transparency · Gemma-4-12B",
+          "en": "Transformers · CUDA ↔ Ascend observer transparency · Gemma-4-12B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-ascend-partitions-20261107",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA ↔ Ascend 完整前向推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend partitions and same-process repeats"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-observer-transparency-20261107",
+      "content": {
+        "title": {
+          "zh": "Transformers · observer transparency · Gemma-4-12B",
+          "en": "Transformers · observer transparency · Gemma-4-12B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gemma4-h100-rtx5090-20261105",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B text pilot: H100 vs RTX 5090"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gpt-oss-120b-ascend-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · Ascend 完整前向推理 · openai/gpt-oss-120b",
+          "en": "gpt-oss-120b native and reference precision on TorchNPU on Ascend 910"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-gpt-oss-120b-cuda-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA 完整前向推理 · openai/gpt-oss-120b",
+          "en": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H200"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llama-cuda-qwen25-05b-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CUDA 缓存推理 · Qwen2.5-0.5B-Instruct",
+          "en": "llama.cpp CUDA · Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llama-cuda-smollm2-135m-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CUDA 缓存推理 · SmolLM2-135M-Instruct",
+          "en": "llama.cpp CUDA · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamacpp-cann-qwen3-0-6b-20261020",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU ↔ CANN 缓存推理 · Qwen3-0.6B",
+          "en": "llama.cpp：CPU ↔ CANN · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamacpp-cann-qwen3-0-6b-base-20261020",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU ↔ CANN 缓存推理 · Qwen3-0.6B-Base",
+          "en": "llama.cpp：CPU ↔ CANN · Qwen3-0.6B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamacpp-local-qwen2-5-0-5b-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU 缓存推理 · Qwen/Qwen2.5-0.5B-Instruct",
+          "en": "Evaluation · INFERENCE · Qwen/Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamacpp-local-smollm2-135m-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU 缓存推理 · HuggingFaceTB/SmolLM2-135M-Instruct",
+          "en": "Evaluation · INFERENCE · HuggingFaceTB/SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamacpp-luna-smollm2-135m-20261019",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU 冷上下文推理 · HuggingFaceTB/SmolLM2-135M-Instruct",
+          "en": "Evaluation · INFERENCE · HuggingFaceTB/SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamafactory-smollm2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA SFT 组件 · SmolLM2（134,515,008 参数快照）",
+          "en": "Evaluation · SFT · SmolLM2（134,515,008 参数快照）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-llamafactory-tiny-qwen2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA SFT 组件 · tiny Qwen2（seed 20261019）",
+          "en": "LLaMAFactory trainer component：tiny Qwen2（seed 20261019） · RTX 5060"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-lmdeploy-ascend-qwen3-0-6b-20261020",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · Ascend 缓存推理 · Qwen3-0.6B",
+          "en": "LMDeploy：Ascend ↔ CPU · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-lmdeploy-ascend-qwen3-0-6b-base-20261020",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · Ascend 缓存推理 · Qwen3-0.6B-Base",
+          "en": "LMDeploy：Ascend ↔ CPU · Qwen3-0.6B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-lmdeploy-cuda-qwen25-05b-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 缓存推理 · Qwen2.5-0.5B-Instruct",
+          "en": "LMDeploy CUDA · Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-lmdeploy-cuda-smollm2-135m-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 缓存推理 · SmolLM2-135M-Instruct",
+          "en": "LMDeploy CUDA · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-lmdeploy-local-qwen2-5-0-5b-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 双引擎重复预填充 · Qwen/Qwen2.5-0.5B-Instruct",
+          "en": "Evaluation · INFERENCE · Qwen/Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-lmdeploy-local-smollm2-135m-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 双引擎重复预填充 · HuggingFaceTB/SmolLM2-135M-Instruct",
+          "en": "Evaluation · INFERENCE · HuggingFaceTB/SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-megatron-bridge-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · Ascend fork checkpoint 冷恢复 SFT · Qwen3-0.6B",
+          "en": "Megatron Bridge fork SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-megatron-bridge-qwen3-06b-h100-native-20261022",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · CUDA checkpoint 冷恢复 SFT · Qwen/Qwen3-0.6B",
+          "en": "Megatron Bridge · Qwen/Qwen3-0.6B H100 SFT"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-megatron-bridge-tiny-qwen3-h100-native-20261022",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · CUDA checkpoint 冷恢复 SFT · tiny Qwen3（种子20261022随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen3（种子20261022随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-megatron-bridge-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · Ascend fork checkpoint 冷恢复 SFT · tiny Qwen3（seed 20261020）",
+          "en": "Megatron Bridge fork SFT：tiny Qwen3（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-mindie-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "MindIE-LLM · Ascend 缓存推理 · Qwen3-0.6B",
+          "en": "MindIE-LLM：Ascend ↔ CPU · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-mindspeed-llm-mini-pretraining-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "MindSpeed-LLM · Ascend 预训练 · tiny Megatron GPT（770,432 参数 seeded fixture）",
+          "en": "Evaluation · SFT · tiny Megatron GPT（770,432 参数 seeded fixture）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-mindspeed-rl-grpo-tiny-qwen3-20261020",
+      "content": {
+        "title": {
+          "zh": "MindSpeed-RL · Ascend GRPO · Qwen3 随机 1,836,544 参数（seed1729 / 2 layers / hidden256 / vocab256）",
+          "en": "Evaluation · RL · Qwen3 随机 1,836,544 参数（seed1729 / 2 layers / hidden256 / vocab256）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-ms-swift-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "ms-swift · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-ms-swift-rl-local-smollm2-135m-20261019",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CPU GRPO 组件 · SmolLM2-135M-Instruct",
+          "en": "Evaluation · RL · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-nemo-pretrained-untied-fp32-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · CUDA untied GRPO · Qwen3-0.6B · untied 派生配置",
+          "en": "Evaluation · RL · Qwen3-0.6B · untied 派生配置"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-nemo-rl-qwen3-06b-official-cli-20261020",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · Ascend 奖励驱动 GRPO · Qwen3-0.6B",
+          "en": "NeMo RL · Qwen3-0.6B reward-driven CLI"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-nemo-rl-tiny-qwen2-worker-20261020",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · Ascend PPO worker · Qwen2 随机 45,376 参数（1 layer / hidden64 / vocab64）",
+          "en": "NeMo RL · tiny Qwen2 worker API"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-nemo-tiny-untied-fp32-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · CUDA untied GRPO · 随机 tiny Qwen3 · untied",
+          "en": "Evaluation · RL · 随机 tiny Qwen3 · untied"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-nemotron-bolt-ascend-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · Ascend 完整前向推理 · nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+          "en": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on TorchNPU on Ascend 910"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-nemotron-bolt-cuda-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA 完整前向推理 · nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+          "en": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H200"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-openrlhf-community-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-openrlhf-pretrained-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA 两卡 PPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-openrlhf-rl-local-smollm2-135m-20261019",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA PPO 组件 · SmolLM2-135M-Instruct",
+          "en": "Evaluation · RL · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-openrlhf-rl-local-tiny-qwen2-20261019",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA PPO 组件 · tiny Qwen2 随机模型（22,816参数）",
+          "en": "Evaluation · RL · tiny Qwen2 随机模型（22,816参数）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-openrlhf-tiny-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA 两卡 PPO · 随机 tiny Qwen3",
+          "en": "Evaluation · RL · 随机 tiny Qwen3"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-qwen38-native-inference-20261106",
+      "content": {
+        "title": {
+          "zh": "Qwen3.8-Flash-Next · native TP8 and structured text · Qwen3.8-Flash-Next",
+          "en": "Qwen3.8-Flash-Next: native TP8 and structured text"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-qwen38-native-lora-frameworks-20261106",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend LoRA SFT · Qwen3.8-Flash-Next",
+          "en": "PyTorch: LoRA SFT, determinism and trainers"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-qwen38-native-rl-components-20261106",
+      "content": {
+        "title": {
+          "zh": "TRL · native /verl objective components · Qwen3.8-Flash-Next",
+          "en": "Qwen3.8-Flash-Next: native TRL/verl objective components"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-qwen38-native-serving-admissions-20261106",
+      "content": {
+        "title": {
+          "zh": "PyTorch · serving admissions with NPU gaps · Qwen3.8-Flash-Next",
+          "en": "PyTorch: serving admissions with NPU gaps"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-roll-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "ROLL · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-roll-pretrained-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "ROLL · CUDA 两卡 GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-roll-tiny-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "ROLL · CUDA 两卡 GRPO · 随机 tiny Qwen3",
+          "en": "Evaluation · RL · 随机 tiny Qwen3"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-ab-cache-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · CPU 缓存推理 · tiny Transformer",
+          "en": "{'name': 'Skills A/B'} · INFERENCE · tiny Transformer"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-ab-rl-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · CPU PPO · tiny PPO policy",
+          "en": "{'name': 'Skills A/B'} · RL · tiny PPO policy"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-ab-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · CPU 全参 SFT · tiny token classifier",
+          "en": "{'name': 'Skills A/B'} · SFT · tiny token classifier"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-conditional-reuse-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 按需诊断与接口复用 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-continuous-reuse-before-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 原有版本 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-continuous-reuse-bullet-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 首版路由句 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-continuous-reuse-table-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 请求分流表 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-demand-cache-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（按需） · CPU 缓存推理 · tiny Transformer",
+          "en": "{'name': 'Skills A/B（按需）'} · INFERENCE · tiny Transformer"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-demand-native-prefill-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（双端） · prefill 采集比较 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（双端）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-demand-rl-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（按需） · CPU PPO · tiny PPO policy",
+          "en": "{'name': 'Skills A/B（按需）'} · RL · tiny PPO policy"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-demand-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（按需） · CPU 全参 SFT · tiny token classifier",
+          "en": "{'name': 'Skills A/B（按需）'} · SFT · tiny token classifier"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-integrity-reuse-microtest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills 校验复用 · 已有采集取回与比较 · synthetic target-score fixture",
+          "en": "{'name': 'Skills 校验复用'} · INFERENCE · synthetic target-score fixture"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-interface-native-prefill-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（接口） · prefill 采集比较 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（接口）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-native-sglangtf-extra-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · SGLang / Transformers 新增输入与合并复用 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-native-sglangtf-initial-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · SGLang / Transformers 首次 接入 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-novel-ddp-a-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（Gloo DDP） · CPU SFT · tiny token classifier, CPU FP64",
+          "en": "{'name': 'Skills A/B（Gloo DDP）'} · SFT · tiny token classifier, CPU FP64"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-novel-shards-a-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（异构推理产物） · Skills A/B 异构分片与非有限值 原版 · deterministic forward-observation collector fixture",
+          "en": "{'name': 'Skills A/B（异构推理产物）'} · INFERENCE · deterministic forward-observation collector fixture"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-novel-shards-a1-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（异构推理产物） · Skills A/B 异构分片与非有限值 通用模式 · deterministic forward-observation collector fixture",
+          "en": "{'name': 'Skills A/B（异构推理产物）'} · INFERENCE · deterministic forward-observation collector fixture"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-novel-shards-a2-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（异构推理产物） · Skills A/B 异构分片与非有限值 接口精简 · deterministic forward-observation collector fixture",
+          "en": "{'name': 'Skills A/B（异构推理产物）'} · INFERENCE · deterministic forward-observation collector fixture"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-original-native-retest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（原任务） · prefill 采集比较 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（原任务）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-retained-results-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 结果复用接口与请求范围 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-single-checkpoint-retest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（单端恢复修复） · 全参 checkpoint 恢复 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（单端恢复修复）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-single-library-ab-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（单端跨库） · vLLM ↔ Transformers · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（单端跨库）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-single-library-clear-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（单端跨库复测） · Skills A/B 单端跨库 明确平台身份后复测 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（单端跨库复测）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-tool-policy-microtest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills 规则小测 · 已有采集取回与比较 · synthetic target-score fixture",
+          "en": "{'name': 'Skills 规则小测'} · INFERENCE · synthetic target-score fixture"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-skills-wait-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（接口复测） · CPU 全参 SFT · tiny token classifier",
+          "en": "{'name': 'Skills A/B（接口复测）'} · SFT · tiny token classifier"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-slime-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "slime · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-slime-pretrained-20261021t195747z",
+      "content": {
+        "title": {
+          "zh": "slime · CUDA 两卡 GRPO · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-slime-tiny-20261021t194857z",
+      "content": {
+        "title": {
+          "zh": "slime · CUDA 两卡 GRPO · tiny Qwen3（固定种子随机权重）",
+          "en": "Evaluation · RL · tiny Qwen3（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-pretrained-bf16-cuda-20261021",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA BF16 GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "ms-swift · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "ms-swift SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-qwen3-06b-cuda-native-20261021t182317z",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-smollm2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA SFT 组件 · SmolLM2（134,515,008 参数快照）",
+          "en": "Evaluation · SFT · SmolLM2（134,515,008 参数快照）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-tiny-fp32-cuda-20261021",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA FP32 GRPO · 随机 tiny Qwen3（19,709,312 参数）",
+          "en": "Evaluation · RL · 随机 tiny Qwen3（19,709,312 参数）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-tiny-qwen2-cuda-native-20261021t182317z",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-tiny-qwen2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA SFT 组件 · tiny Qwen2（seed 20261019）",
+          "en": "ms-swift trainer component：tiny Qwen2（seed 20261019） · RTX 5060"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-swift-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "ms-swift · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "ms-swift SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-tensorrt-llm-qwen25-05b-20261020",
+      "content": {
+        "title": {
+          "zh": "TensorRT-LLM · CUDA TRTLLM 缓存推理 · Qwen/Qwen2.5-0.5B-Instruct",
+          "en": "TensorRT-LLM：RTX 5060 ↔ CPU · Qwen/Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-tensorrt-llm-seeded-llama-20261020",
+      "content": {
+        "title": {
+          "zh": "TensorRT-LLM · CUDA TRTLLM 缓存推理 · seeded tiny Llama",
+          "en": "TensorRT-LLM：RTX 5060 ↔ CPU · seeded tiny Llama"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-torch-bf16-fp16-20261021",
+      "content": {
+        "title": {
+          "zh": "PyTorch · BF16 ↔ FP16 完整前向 / 缓存推理 · Qwen3.5-9B-Base",
+          "en": "Evaluation · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-torch-native-multitask-inference-20261024",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend 完整前向推理 · tiny MLP (8-16-7)",
+          "en": "Evaluation · INFERENCE · tiny MLP (8-16-7)"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-torch-native-multitask-rl-20261024",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend BF16 PPO · tiny MLP (8-16-7)",
+          "en": "Evaluation · RL · tiny MLP (8-16-7)"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-torch-native-multitask-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend 全参 SFT · tiny MLP (8-16-7)",
+          "en": "Evaluation · SFT · tiny MLP (8-16-7)"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "TRL · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "TRL SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-qwen3-06b-cuda-native-20261021t175700z",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-qwen3-06b-h100-ddp-native-20261022",
+      "content": {
+        "title": {
+          "zh": "TRL · 4卡 DDP LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-sfttrainer-checkpoint-20261021",
+      "content": {
+        "title": {
+          "zh": "TRL · LoRA checkpoint 恢复 · Qwen3.5-9B-Base",
+          "en": "Evaluation · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-sfttrainer-lora-20261021",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA ↔ Ascend LoRA SFT · Qwen3.5-9B-Base",
+          "en": "Evaluation · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-smollm2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA SFT 组件 · SmolLM2（134,515,008 参数快照）",
+          "en": "Evaluation · SFT · SmolLM2（134,515,008 参数快照）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-tiny-qwen2-cuda-native-20261021t175700z",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-tiny-qwen2-h100-ddp-native-20261022",
+      "content": {
+        "title": {
+          "zh": "TRL · 4卡 DDP 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-tiny-qwen2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA SFT 组件 · tiny Qwen2（seed 20261019）",
+          "en": "TRL trainer component：tiny Qwen2（seed 20261019） · RTX 5060"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-evaluation-trl-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "TRL · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "TRL SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-ipo-completion-average",
+      "content": {
+        "title": {
+          "zh": "IPO 评分受回复长度影响",
+          "en": "IPO scores depend on response length"
+        },
+        "summary": {
+          "zh": "使用 token 分数总和代替均值，使偏好差值随回复长度改变。",
+          "en": "Summing token scores instead of averaging makes the preference gap depend on response length."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-lora-svd-double-scaling",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并时重复缩放",
+          "en": "LoRA applies scaling twice during merging"
+        },
+        "summary": {
+          "zh": "加权 SVD 合并重复应用适配器缩放，改变了合并后的权重。",
+          "en": "Weighted SVD merging applies adapter scaling twice and changes the merged weights."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-mindspeed-zero-centered-rmsnorm",
+      "content": {
+        "title": {
+          "zh": "RMSNorm 参数约定不一致",
+          "en": "Inconsistent RMSNorm parameter conventions"
+        },
+        "summary": {
+          "zh": "跨库加载归一化参数后，输出和梯度不一致。",
+          "en": "Outputs and gradients differ after loading normalization parameters across libraries."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-ppo-response-mask",
+      "content": {
+        "title": {
+          "zh": "PPO 训练选中了错误的 token",
+          "en": "PPO selects the wrong training tokens"
+        },
+        "summary": {
+          "zh": "处理带填充的输入时，响应掩码的位置发生偏移。",
+          "en": "Response-mask positions shift when processing padded inputs."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-qwen2-disabled-window",
+      "content": {
+        "title": {
+          "zh": "Qwen2 关闭滑窗后仍屏蔽历史",
+          "en": "Qwen2 masks history after sliding-window attention is disabled"
+        },
+        "summary": {
+          "zh": "关闭滑窗注意力后，部分可用历史位置仍被遮蔽。",
+          "en": "Some valid history positions remain masked after sliding-window attention is disabled."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-qwen35-cross-platform-rmsnorm-policy",
+      "content": {
+        "title": {
+          "zh": "跨平台梯度与参数更新不一致",
+          "en": "Cross-platform gradients and parameter updates differ"
+        },
+        "summary": {
+          "zh": "比较 Qwen3.5 训练时的梯度和参数更新，评估不同计算精度策略。",
+          "en": "Compare Qwen3.5 training gradients and updates under different precision policies."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-qwen35-token-mean",
+      "content": {
+        "title": {
+          "zh": "梯度累积的损失平均方式待确认",
+          "en": "Loss averaging during gradient accumulation needs investigation"
+        },
+        "summary": {
+          "zh": "不同的小批次平均方式产生了不同的训练目标，后续需要核对完整训练流程。",
+          "en": "Different minibatch averaging methods produce different objectives; the full training path needs investigation."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-qwen35-weighted-lora-bias",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并后的输出不一致",
+          "en": "LoRA output changes after merging"
+        },
+        "summary": {
+          "zh": "合并适配器时遗漏了偏置。",
+          "en": "Adapter merging omits the bias."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-radam-unrectified-zero-gradient",
+      "content": {
+        "title": {
+          "zh": "RAdam 零梯度更新产生 NaN",
+          "en": "RAdam produces NaN on a zero-gradient update"
+        },
+        "summary": {
+          "zh": "特定优化器配置下，零梯度更新使原本有限的参数变成 NaN。",
+          "en": "With the affected optimizer configuration, a zero-gradient update turns finite parameters into NaN."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-trainer-label-smoothing",
+      "content": {
+        "title": {
+          "zh": "梯度累积时损失归一化错误",
+          "en": "Incorrect loss normalization during gradient accumulation"
+        },
+        "summary": {
+          "zh": "开启标签平滑时，各小批次的损失没有按整个累积窗口的有效 token 数归一化。",
+          "en": "With label smoothing, minibatch losses use different denominators from the accumulation window."
+        }
+      }
+    },
+    {
+      "kind": "case",
+      "id": "case-trl-ppo-whitening-tail",
+      "content": {
+        "title": {
+          "zh": "PPO 回报受填充位置影响",
+          "en": "Padding affects PPO returns"
+        },
+        "summary": {
+          "zh": "奖励白化改变了填充位置的值，进而影响有效 token 的回报。",
+          "en": "Reward whitening changes padded values, which then affect returns for valid tokens."
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "areal-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "AReaL · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "areal-pretrained-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "AReaL · CUDA 两卡 GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "areal-tiny-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "AReaL · CUDA 两卡 GRPO · 随机 tiny Qwen3",
+          "en": "Evaluation · RL · 随机 tiny Qwen3"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "autonomous-cross-platform-inference-20261025",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA ↔ Ascend 完整前向推理 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Transformers'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "autonomous-cross-platform-sft-20261025",
+      "content": {
+        "title": {
+          "zh": "Transformers / PEFT · CUDA ↔ Ascend LoRA SFT · Qwen3.5-9B-Base",
+          "en": "{'name': 'Transformers / PEFT'} · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "axolotl-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Axolotl · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "Axolotl SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "axolotl-qwen3-06b-cuda-native-20261021t182602z",
+      "content": {
+        "title": {
+          "zh": "Axolotl · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "axolotl-tiny-qwen2-cuda-native-20261021t182602z",
+      "content": {
+        "title": {
+          "zh": "Axolotl · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "axolotl-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Axolotl · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "Axolotl SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "cross-platform-sft-causal-continuation-20261025",
+      "content": {
+        "title": {
+          "zh": "Transformers / PEFT · CUDA ↔ Ascend LoRA SFT · Qwen3.5-9B-Base",
+          "en": "{'name': 'Transformers / PEFT'} · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-adapted-core275-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend 适配核心/冻结骨干输出头 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: adapted core275 and GPU online output-head trajectories"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-full40-attention-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · Ascend 40层注意力尾部回放 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: actual full40-layer attention tail replay"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-http128-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend 缓存推理 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: adapted HTTP128 final rows and fixed-history core contrasts"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-native-producer-key-cache-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · Ascend 保留压缩器输出 → 键缓存 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek retained native compressor outputs to selected native key/cache"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-native-query-key-selection-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · serialized retained Q/K→QLI · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek serialized retained Q/K→QLI"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-native-query-tail-20261108",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend Query / 头权重 / RoPE · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: actual all32-head tail query, head weights and native RoPE"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-original-vs-adapted-core-20261106",
+      "content": {
+        "title": {
+          "zh": "PyTorch · DeepSeek original vs adapted 推理 · DeepSeek-V4.1-Flash-1017",
+          "en": "PyTorch: DeepSeek original vs adapted inference"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-paired-output-head95-20261109",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · paired output-head LoRA and continuation · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: paired output-head LoRA and continuation"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "deepseek41-upstream-compressor-key-local-vjp-20261108",
+      "content": {
+        "title": {
+          "zh": "DeepSeek · CUDA ↔ Ascend 压缩器 / 键缓存 / 局部导数 · DeepSeek-V4.1-Flash-1017",
+          "en": "DeepSeek: actual upstream compressor, native key-cache and local derivative supplement"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "factory-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "LLaMAFactory SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "factory-qwen3-06b-cuda-native-20261021t181049z",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "factory-tiny-qwen2-cuda-native-20261021t181049z",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "factory-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "LLaMAFactory SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma-3-27b-it-ascend-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · Ascend 完整前向推理 · google/gemma-3-27b-it",
+          "en": "Gemma 3 27B IT native and reference precision on TorchNPU on Ascend 910"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma-3-27b-it-cuda-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA 完整前向推理 · google/gemma-3-27b-it",
+          "en": "Gemma 3 27B IT native and reference precision on CUDA on NVIDIA H200"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-ascend-tp1-repeat-20261106",
+      "content": {
+        "title": {
+          "zh": "Gemma · Ascend 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: same-NPU three-repeat TP1 text pilot"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-ascend-batch-padding-20261107",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA ↔ Ascend 批处理 / 左右填充 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend batch and padding"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-ascend-cacheoff-20261106",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA ↔ Ascend 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend cache-off anchor (159 targets)"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-ascend-fixed-20261106",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA ↔ Ascend 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend TP1 text pilot (one input)"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA ↔ Ascend observer transparency · Gemma-4-12B",
+          "en": "Transformers · CUDA ↔ Ascend observer transparency · Gemma-4-12B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-ascend-partitions-20261107",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA ↔ Ascend 完整前向推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B: H100 vs Ascend partitions and same-process repeats"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-observer-transparency-20261107",
+      "content": {
+        "title": {
+          "zh": "Transformers · observer transparency · Gemma-4-12B",
+          "en": "Transformers · observer transparency · Gemma-4-12B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gemma4-h100-rtx5090-20261105",
+      "content": {
+        "title": {
+          "zh": "Gemma · CUDA 缓存推理 · google/gemma-4-12B",
+          "en": "Gemma 4 12B text pilot: H100 vs RTX 5090"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gpt-oss-120b-ascend-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · Ascend 完整前向推理 · openai/gpt-oss-120b",
+          "en": "gpt-oss-120b native and reference precision on TorchNPU on Ascend 910"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "gpt-oss-120b-cuda-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA 完整前向推理 · openai/gpt-oss-120b",
+          "en": "gpt-oss-120b native and reference precision on CUDA on NVIDIA H200"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llama-cuda-qwen25-05b-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CUDA 缓存推理 · Qwen2.5-0.5B-Instruct",
+          "en": "llama.cpp CUDA · Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llama-cuda-smollm2-135m-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CUDA 缓存推理 · SmolLM2-135M-Instruct",
+          "en": "llama.cpp CUDA · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamacpp-cann-qwen3-0-6b-20261020",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU ↔ CANN 缓存推理 · Qwen3-0.6B",
+          "en": "llama.cpp：CPU ↔ CANN · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamacpp-cann-qwen3-0-6b-base-20261020",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU ↔ CANN 缓存推理 · Qwen3-0.6B-Base",
+          "en": "llama.cpp：CPU ↔ CANN · Qwen3-0.6B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamacpp-local-qwen2-5-0-5b-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU 缓存推理 · Qwen/Qwen2.5-0.5B-Instruct",
+          "en": "Evaluation · INFERENCE · Qwen/Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamacpp-local-smollm2-135m-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU 缓存推理 · HuggingFaceTB/SmolLM2-135M-Instruct",
+          "en": "Evaluation · INFERENCE · HuggingFaceTB/SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamacpp-luna-smollm2-135m-20261019",
+      "content": {
+        "title": {
+          "zh": "llama.cpp · CPU 冷上下文推理 · HuggingFaceTB/SmolLM2-135M-Instruct",
+          "en": "Evaluation · INFERENCE · HuggingFaceTB/SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamafactory-smollm2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA SFT 组件 · SmolLM2（134,515,008 参数快照）",
+          "en": "Evaluation · SFT · SmolLM2（134,515,008 参数快照）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "llamafactory-tiny-qwen2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "LLaMAFactory · CUDA SFT 组件 · tiny Qwen2（seed 20261019）",
+          "en": "LLaMAFactory trainer component：tiny Qwen2（seed 20261019） · RTX 5060"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "lmdeploy-ascend-qwen3-0-6b-20261020",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · Ascend 缓存推理 · Qwen3-0.6B",
+          "en": "LMDeploy：Ascend ↔ CPU · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "lmdeploy-ascend-qwen3-0-6b-base-20261020",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · Ascend 缓存推理 · Qwen3-0.6B-Base",
+          "en": "LMDeploy：Ascend ↔ CPU · Qwen3-0.6B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "lmdeploy-cuda-qwen25-05b-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 缓存推理 · Qwen2.5-0.5B-Instruct",
+          "en": "LMDeploy CUDA · Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "lmdeploy-cuda-smollm2-135m-instruct-20261021",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 缓存推理 · SmolLM2-135M-Instruct",
+          "en": "LMDeploy CUDA · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "lmdeploy-local-qwen2-5-0-5b-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 双引擎重复预填充 · Qwen/Qwen2.5-0.5B-Instruct",
+          "en": "Evaluation · INFERENCE · Qwen/Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "lmdeploy-local-smollm2-135m-instruct-20261019",
+      "content": {
+        "title": {
+          "zh": "LMDeploy · CUDA 双引擎重复预填充 · HuggingFaceTB/SmolLM2-135M-Instruct",
+          "en": "Evaluation · INFERENCE · HuggingFaceTB/SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "megatron-bridge-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · Ascend fork checkpoint 冷恢复 SFT · Qwen3-0.6B",
+          "en": "Megatron Bridge fork SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "megatron-bridge-qwen3-06b-h100-native-20261022",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · CUDA checkpoint 冷恢复 SFT · Qwen/Qwen3-0.6B",
+          "en": "Megatron Bridge · Qwen/Qwen3-0.6B H100 SFT"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "megatron-bridge-tiny-qwen3-h100-native-20261022",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · CUDA checkpoint 冷恢复 SFT · tiny Qwen3（种子20261022随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen3（种子20261022随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "megatron-bridge-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "Megatron Bridge · Ascend fork checkpoint 冷恢复 SFT · tiny Qwen3（seed 20261020）",
+          "en": "Megatron Bridge fork SFT：tiny Qwen3（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "mindie-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "MindIE-LLM · Ascend 缓存推理 · Qwen3-0.6B",
+          "en": "MindIE-LLM：Ascend ↔ CPU · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "mindspeed-llm-mini-pretraining-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "MindSpeed-LLM · Ascend 预训练 · tiny Megatron GPT（770,432 参数 seeded fixture）",
+          "en": "Evaluation · SFT · tiny Megatron GPT（770,432 参数 seeded fixture）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "mindspeed-rl-grpo-tiny-qwen3-20261020",
+      "content": {
+        "title": {
+          "zh": "MindSpeed-RL · Ascend GRPO · Qwen3 随机 1,836,544 参数（seed1729 / 2 layers / hidden256 / vocab256）",
+          "en": "Evaluation · RL · Qwen3 随机 1,836,544 参数（seed1729 / 2 layers / hidden256 / vocab256）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "ms-swift-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "ms-swift · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "ms-swift-rl-local-smollm2-135m-20261019",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CPU GRPO 组件 · SmolLM2-135M-Instruct",
+          "en": "Evaluation · RL · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "nemo-pretrained-untied-fp32-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · CUDA untied GRPO · Qwen3-0.6B · untied 派生配置",
+          "en": "Evaluation · RL · Qwen3-0.6B · untied 派生配置"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "nemo-rl-qwen3-06b-official-cli-20261020",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · Ascend 奖励驱动 GRPO · Qwen3-0.6B",
+          "en": "NeMo RL · Qwen3-0.6B reward-driven CLI"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "nemo-rl-tiny-qwen2-worker-20261020",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · Ascend PPO worker · Qwen2 随机 45,376 参数（1 layer / hidden64 / vocab64）",
+          "en": "NeMo RL · tiny Qwen2 worker API"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "nemo-tiny-untied-fp32-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "NeMo RL · CUDA untied GRPO · 随机 tiny Qwen3 · untied",
+          "en": "Evaluation · RL · 随机 tiny Qwen3 · untied"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "nemotron-bolt-ascend-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · Ascend 完整前向推理 · nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+          "en": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on TorchNPU on Ascend 910"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "nemotron-bolt-cuda-precision-20261110",
+      "content": {
+        "title": {
+          "zh": "Transformers · CUDA 完整前向推理 · nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+          "en": "Nemotron 3.5 Bolt 74B-A9B BF16 native and reference precision on CUDA on NVIDIA H200"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "openrlhf-community-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "openrlhf-pretrained-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA 两卡 PPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "openrlhf-rl-local-smollm2-135m-20261019",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA PPO 组件 · SmolLM2-135M-Instruct",
+          "en": "Evaluation · RL · SmolLM2-135M-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "openrlhf-rl-local-tiny-qwen2-20261019",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA PPO 组件 · tiny Qwen2 随机模型（22,816参数）",
+          "en": "Evaluation · RL · tiny Qwen2 随机模型（22,816参数）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "openrlhf-tiny-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "OpenRLHF · CUDA 两卡 PPO · 随机 tiny Qwen3",
+          "en": "Evaluation · RL · 随机 tiny Qwen3"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "qwen38-native-inference-20261106",
+      "content": {
+        "title": {
+          "zh": "Qwen3.8-Flash-Next · native TP8 and structured text · Qwen3.8-Flash-Next",
+          "en": "Qwen3.8-Flash-Next: native TP8 and structured text"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "qwen38-native-lora-frameworks-20261106",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend LoRA SFT · Qwen3.8-Flash-Next",
+          "en": "PyTorch: LoRA SFT, determinism and trainers"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "qwen38-native-rl-components-20261106",
+      "content": {
+        "title": {
+          "zh": "TRL · native /verl objective components · Qwen3.8-Flash-Next",
+          "en": "Qwen3.8-Flash-Next: native TRL/verl objective components"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "qwen38-native-serving-admissions-20261106",
+      "content": {
+        "title": {
+          "zh": "PyTorch · serving admissions with NPU gaps · Qwen3.8-Flash-Next",
+          "en": "PyTorch: serving admissions with NPU gaps"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "roll-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "ROLL · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "roll-pretrained-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "ROLL · CUDA 两卡 GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "roll-tiny-cuda-h100-20261022",
+      "content": {
+        "title": {
+          "zh": "ROLL · CUDA 两卡 GRPO · 随机 tiny Qwen3",
+          "en": "Evaluation · RL · 随机 tiny Qwen3"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-ab-cache-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · CPU 缓存推理 · tiny Transformer",
+          "en": "{'name': 'Skills A/B'} · INFERENCE · tiny Transformer"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-ab-rl-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · CPU PPO · tiny PPO policy",
+          "en": "{'name': 'Skills A/B'} · RL · tiny PPO policy"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-ab-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · CPU 全参 SFT · tiny token classifier",
+          "en": "{'name': 'Skills A/B'} · SFT · tiny token classifier"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-conditional-reuse-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 按需诊断与接口复用 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-continuous-reuse-before-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 原有版本 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-continuous-reuse-bullet-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 首版路由句 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-continuous-reuse-table-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 请求分流表 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-demand-cache-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（按需） · CPU 缓存推理 · tiny Transformer",
+          "en": "{'name': 'Skills A/B（按需）'} · INFERENCE · tiny Transformer"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-demand-native-prefill-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（双端） · prefill 采集比较 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（双端）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-demand-rl-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（按需） · CPU PPO · tiny PPO policy",
+          "en": "{'name': 'Skills A/B（按需）'} · RL · tiny PPO policy"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-demand-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（按需） · CPU 全参 SFT · tiny token classifier",
+          "en": "{'name': 'Skills A/B（按需）'} · SFT · tiny token classifier"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-integrity-reuse-microtest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills 校验复用 · 已有采集取回与比较 · synthetic target-score fixture",
+          "en": "{'name': 'Skills 校验复用'} · INFERENCE · synthetic target-score fixture"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-interface-native-prefill-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（接口） · prefill 采集比较 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（接口）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-native-sglangtf-extra-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · SGLang / Transformers 新增输入与合并复用 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-native-sglangtf-initial-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B · SGLang / Transformers 首次 接入 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-novel-ddp-a-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（Gloo DDP） · CPU SFT · tiny token classifier, CPU FP64",
+          "en": "{'name': 'Skills A/B（Gloo DDP）'} · SFT · tiny token classifier, CPU FP64"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-novel-shards-a-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（异构推理产物） · Skills A/B 异构分片与非有限值 原版 · deterministic forward-observation collector fixture",
+          "en": "{'name': 'Skills A/B（异构推理产物）'} · INFERENCE · deterministic forward-observation collector fixture"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-novel-shards-a1-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（异构推理产物） · Skills A/B 异构分片与非有限值 通用模式 · deterministic forward-observation collector fixture",
+          "en": "{'name': 'Skills A/B（异构推理产物）'} · INFERENCE · deterministic forward-observation collector fixture"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-novel-shards-a2-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（异构推理产物） · Skills A/B 异构分片与非有限值 接口精简 · deterministic forward-observation collector fixture",
+          "en": "{'name': 'Skills A/B（异构推理产物）'} · INFERENCE · deterministic forward-observation collector fixture"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-original-native-retest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（原任务） · prefill 采集比较 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（原任务）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-retained-results-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（连续任务复用） · Skills A/B 连续任务 结果复用接口与请求范围 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（连续任务复用）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-single-checkpoint-retest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（单端恢复修复） · 全参 checkpoint 恢复 · tiny GPT2, CPU FP32",
+          "en": "{'name': 'Skills A/B（单端恢复修复）'} · SFT · tiny GPT2, CPU FP32"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-single-library-ab-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（单端跨库） · vLLM ↔ Transformers · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（单端跨库）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-single-library-clear-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（单端跨库复测） · Skills A/B 单端跨库 明确平台身份后复测 · Qwen3.5-9B-Base",
+          "en": "{'name': 'Skills A/B（单端跨库复测）'} · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-tool-policy-microtest-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills 规则小测 · 已有采集取回与比较 · synthetic target-score fixture",
+          "en": "{'name': 'Skills 规则小测'} · INFERENCE · synthetic target-score fixture"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "skills-wait-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "Skills A/B（接口复测） · CPU 全参 SFT · tiny token classifier",
+          "en": "{'name': 'Skills A/B（接口复测）'} · SFT · tiny token classifier"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "slime-grpo-qwen3-06b-20261020",
+      "content": {
+        "title": {
+          "zh": "slime · Ascend GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "slime-pretrained-20261021t195747z",
+      "content": {
+        "title": {
+          "zh": "slime · CUDA 两卡 GRPO · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "slime-tiny-20261021t194857z",
+      "content": {
+        "title": {
+          "zh": "slime · CUDA 两卡 GRPO · tiny Qwen3（固定种子随机权重）",
+          "en": "Evaluation · RL · tiny Qwen3（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-pretrained-bf16-cuda-20261021",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA BF16 GRPO · Qwen3-0.6B",
+          "en": "Evaluation · RL · Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "ms-swift · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "ms-swift SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-qwen3-06b-cuda-native-20261021t182317z",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-smollm2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA SFT 组件 · SmolLM2（134,515,008 参数快照）",
+          "en": "Evaluation · SFT · SmolLM2（134,515,008 参数快照）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-tiny-fp32-cuda-20261021",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA FP32 GRPO · 随机 tiny Qwen3（19,709,312 参数）",
+          "en": "Evaluation · RL · 随机 tiny Qwen3（19,709,312 参数）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-tiny-qwen2-cuda-native-20261021t182317z",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-tiny-qwen2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "ms-swift · CUDA SFT 组件 · tiny Qwen2（seed 20261019）",
+          "en": "ms-swift trainer component：tiny Qwen2（seed 20261019） · RTX 5060"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "swift-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "ms-swift · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "ms-swift SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "tensorrt-llm-qwen25-05b-20261020",
+      "content": {
+        "title": {
+          "zh": "TensorRT-LLM · CUDA TRTLLM 缓存推理 · Qwen/Qwen2.5-0.5B-Instruct",
+          "en": "TensorRT-LLM：RTX 5060 ↔ CPU · Qwen/Qwen2.5-0.5B-Instruct"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "tensorrt-llm-seeded-llama-20261020",
+      "content": {
+        "title": {
+          "zh": "TensorRT-LLM · CUDA TRTLLM 缓存推理 · seeded tiny Llama",
+          "en": "TensorRT-LLM：RTX 5060 ↔ CPU · seeded tiny Llama"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "torch-bf16-fp16-20261021",
+      "content": {
+        "title": {
+          "zh": "PyTorch · BF16 ↔ FP16 完整前向 / 缓存推理 · Qwen3.5-9B-Base",
+          "en": "Evaluation · INFERENCE · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "torch-native-multitask-inference-20261024",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend 完整前向推理 · tiny MLP (8-16-7)",
+          "en": "Evaluation · INFERENCE · tiny MLP (8-16-7)"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "torch-native-multitask-rl-20261024",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend BF16 PPO · tiny MLP (8-16-7)",
+          "en": "Evaluation · RL · tiny MLP (8-16-7)"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "torch-native-multitask-sft-20261024",
+      "content": {
+        "title": {
+          "zh": "PyTorch · CUDA ↔ Ascend 全参 SFT · tiny MLP (8-16-7)",
+          "en": "Evaluation · SFT · tiny MLP (8-16-7)"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-pretrained-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "TRL · Ascend LoRA SFT · Qwen3-0.6B",
+          "en": "TRL SFT：Qwen3-0.6B · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-qwen3-06b-cuda-native-20261021t175700z",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-qwen3-06b-h100-ddp-native-20261022",
+      "content": {
+        "title": {
+          "zh": "TRL · 4卡 DDP LoRA SFT · Qwen/Qwen3-0.6B",
+          "en": "Evaluation · SFT · Qwen/Qwen3-0.6B"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-sfttrainer-checkpoint-20261021",
+      "content": {
+        "title": {
+          "zh": "TRL · LoRA checkpoint 恢复 · Qwen3.5-9B-Base",
+          "en": "Evaluation · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-sfttrainer-lora-20261021",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA ↔ Ascend LoRA SFT · Qwen3.5-9B-Base",
+          "en": "Evaluation · SFT · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-smollm2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA SFT 组件 · SmolLM2（134,515,008 参数快照）",
+          "en": "Evaluation · SFT · SmolLM2（134,515,008 参数快照）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-tiny-qwen2-cuda-native-20261021t175700z",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-tiny-qwen2-h100-ddp-native-20261022",
+      "content": {
+        "title": {
+          "zh": "TRL · 4卡 DDP 全参 SFT · tiny Qwen2（固定种子随机权重）",
+          "en": "Evaluation · SFT · tiny Qwen2（固定种子随机权重）"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-tiny-qwen2-sft-local-20261019",
+      "content": {
+        "title": {
+          "zh": "TRL · CUDA SFT 组件 · tiny Qwen2（seed 20261019）",
+          "en": "TRL trainer component：tiny Qwen2（seed 20261019） · RTX 5060"
+        }
+      }
+    },
+    {
+      "kind": "comparison",
+      "id": "trl-tiny-sft-npu-20261020",
+      "content": {
+        "title": {
+          "zh": "TRL · Ascend 全参 SFT · tiny Qwen2（seed 20261020）",
+          "en": "TRL SFT：tiny Qwen2（seed 20261020） · Ascend ↔ CPU"
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-asgd-foreach-schedule",
+      "content": {
+        "title": {
+          "zh": "ASGD 学习率计算错误",
+          "en": "Incorrect ASGD learning-rate calculation"
+        },
+        "summary": {
+          "zh": "学习率公式中的括号错误改变了后续参数更新。",
+          "en": "A misplaced parenthesis in the learning-rate formula changes subsequent updates."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-dora-conv1d-unmerge",
+      "content": {
+        "title": {
+          "zh": "DoRA 取消合并后权重恢复错误",
+          "en": "DoRA restores weights incorrectly when unmerging"
+        },
+        "summary": {
+          "zh": "取消适配器合并时，权重可能被错误恢复或触发维度错误。",
+          "en": "Unmerging an adapter can restore incorrect weights or raise a dimension error."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-ipo-completion-average",
+      "content": {
+        "title": {
+          "zh": "IPO 评分受回复长度影响",
+          "en": "IPO scores depend on response length"
+        },
+        "summary": {
+          "zh": "使用 token 分数总和代替均值，使偏好差值随回复长度改变。",
+          "en": "Summing token scores instead of averaging makes the preference gap depend on response length."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-lora-svd-double-scaling",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并时重复缩放",
+          "en": "LoRA applies scaling twice during merging"
+        },
+        "summary": {
+          "zh": "加权 SVD 合并重复应用适配器缩放，改变了合并后的权重。",
+          "en": "Weighted SVD merging applies adapter scaling twice and changes the merged weights."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-mindspeed-residual-peer-differences",
+      "content": {
+        "title": {
+          "zh": "归一化修复后仍有数值差异",
+          "en": "Numerical differences remain after the normalization fix"
+        },
+        "summary": {
+          "zh": "修正参数约定后，部分梯度和参数更新仍有偏差。",
+          "en": "Some gradients and parameter updates still differ after correcting the parameter convention."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-mindspeed-zero-centered-gamma",
+      "content": {
+        "title": {
+          "zh": "RMSNorm 参数约定不一致",
+          "en": "Inconsistent RMSNorm parameter conventions"
+        },
+        "summary": {
+          "zh": "跨库加载归一化参数后，输出和梯度不一致。",
+          "en": "Outputs and gradients differ after loading normalization parameters across libraries."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-ppo-response-mask",
+      "content": {
+        "title": {
+          "zh": "PPO 训练选中了错误的 token",
+          "en": "PPO selects the wrong training tokens"
+        },
+        "summary": {
+          "zh": "处理带填充的输入时，响应掩码的位置发生偏移。",
+          "en": "Response-mask positions shift when processing padded inputs."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-qwen2-disabled-window",
+      "content": {
+        "title": {
+          "zh": "Qwen2 关闭滑窗后仍屏蔽历史",
+          "en": "Qwen2 masks history after sliding-window attention is disabled"
+        },
+        "summary": {
+          "zh": "关闭滑窗注意力后，部分可用历史位置仍被遮蔽。",
+          "en": "Some valid history positions remain masked after sliding-window attention is disabled."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-qwen35-rmsnorm-peer-discrepancy",
+      "content": {
+        "title": {
+          "zh": "跨平台梯度与参数更新不一致",
+          "en": "Cross-platform gradients and parameter updates differ"
+        },
+        "summary": {
+          "zh": "比较 Qwen3.5 训练时的梯度和参数更新，评估不同计算精度策略。",
+          "en": "Compare Qwen3.5 training gradients and updates under different precision policies."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-qwen35-token-mean",
+      "content": {
+        "title": {
+          "zh": "梯度累积的损失平均方式待确认",
+          "en": "Loss averaging during gradient accumulation needs investigation"
+        },
+        "summary": {
+          "zh": "不同的小批次平均方式产生了不同的训练目标，后续需要核对完整训练流程。",
+          "en": "Different minibatch averaging methods produce different objectives; the full training path needs investigation."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-qwen35-weighted-lora-bias",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并后的输出不一致",
+          "en": "LoRA output changes after merging"
+        },
+        "summary": {
+          "zh": "合并适配器时遗漏了偏置。",
+          "en": "Adapter merging omits the bias."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-radam-unrectified-zero-gradient",
+      "content": {
+        "title": {
+          "zh": "RAdam 零梯度更新产生 NaN",
+          "en": "RAdam produces NaN on a zero-gradient update"
+        },
+        "summary": {
+          "zh": "特定优化器配置下，零梯度更新使原本有限的参数变成 NaN。",
+          "en": "With the affected optimizer configuration, a zero-gradient update turns finite parameters into NaN."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-trainer-label-smoothing",
+      "content": {
+        "title": {
+          "zh": "梯度累积时损失归一化错误",
+          "en": "Incorrect loss normalization during gradient accumulation"
+        },
+        "summary": {
+          "zh": "开启标签平滑时，各小批次的损失没有按整个累积窗口的有效 token 数归一化。",
+          "en": "With label smoothing, minibatch losses use different denominators from the accumulation window."
+        }
+      }
+    },
+    {
+      "kind": "issue",
+      "id": "issue-trl-ppo-whitening-tail",
+      "content": {
+        "title": {
+          "zh": "PPO 回报受填充位置影响",
+          "en": "Padding affects PPO returns"
+        },
+        "summary": {
+          "zh": "奖励白化改变了填充位置的值，进而影响有效 token 的回报。",
+          "en": "Reward whitening changes padded values, which then affect returns for valid tokens."
+        }
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "mindspeed-decoder-projection-trace-20261021",
+      "content": {
+        "title": {
+          "zh": "归一化修复后仍有数值差异",
+          "en": "Numerical differences remain after the normalization fix"
+        }
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "mindspeed-gemm-compute-policy-20261021",
+      "content": {
+        "title": {
+          "zh": "归一化修复后仍有数值差异",
+          "en": "Numerical differences remain after the normalization fix"
+        }
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "mindspeed-rmsnorm-layerwise-replay-20261021",
+      "content": {
+        "title": {
+          "zh": "归一化修复后仍有数值差异",
+          "en": "Numerical differences remain after the normalization fix"
+        }
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "mindspeed-rmsnorm-training-verification-20261021",
+      "content": {
+        "title": {
+          "zh": "整模型反向与首次更新验证",
+          "en": "Repair follow-up · Qwen3.5-9B-Base"
+        }
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "mindspeed-rmsnorm-zero-centered-gamma",
+      "content": {
+        "title": {
+          "zh": "RMSNorm 参数约定不一致",
+          "en": "Inconsistent RMSNorm parameter conventions"
+        },
+        "workflows": [
+          "inference",
+          "rl"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "mindspeed-selective-projection-20261021",
+      "content": {
+        "title": {
+          "zh": "归一化修复后仍有数值差异",
+          "en": "Numerical differences remain after the normalization fix"
+        }
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "peft-0171-dora-conv1d-unmerge-orientation",
+      "content": {
+        "title": {
+          "zh": "DoRA 取消合并后权重恢复错误",
+          "en": "DoRA restores weights incorrectly when unmerging"
+        },
+        "workflows": [
+          "sft"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "peft-0171-lora-svd-double-scaling-backport",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并时重复缩放",
+          "en": "LoRA applies scaling twice during merging"
+        },
+        "workflows": [
+          "sft"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "peft-0200-qwen35-weighted-bias-20261024",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并后的输出不一致",
+          "en": "LoRA output changes after merging"
+        },
+        "workflows": [
+          "inference"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "peft-compare-repair-forwardtest-20261022",
+      "content": {
+        "title": {
+          "zh": "LoRA 合并时重复缩放",
+          "en": "LoRA applies scaling twice during merging"
+        },
+        "workflows": [
+          "inference"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "pytorch-230-asgd-foreach-schedule-backport",
+      "content": {
+        "title": {
+          "zh": "ASGD 学习率计算错误",
+          "en": "Incorrect ASGD learning-rate calculation"
+        },
+        "workflows": [
+          "sft",
+          "rl"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "pytorch-260-radam-foreach-unrectified-zero-gradient",
+      "content": {
+        "title": {
+          "zh": "RAdam 零梯度更新产生 NaN",
+          "en": "RAdam produces NaN on a zero-gradient update"
+        },
+        "workflows": [
+          "sft",
+          "rl"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "pytorch-asgd-qwen35-9b-lora-20261024",
+      "content": {
+        "title": {
+          "zh": "ASGD 学习率计算错误",
+          "en": "Incorrect ASGD learning-rate calculation"
+        },
+        "workflows": [
+          "sft"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "transformers-4513-qwen2-disabled-window-backport",
+      "content": {
+        "title": {
+          "zh": "Qwen2 关闭滑窗后仍屏蔽历史",
+          "en": "Qwen2 masks history after sliding-window attention is disabled"
+        },
+        "workflows": [
+          "inference"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "transformers-4533-trainer-label-smoothing-backport",
+      "content": {
+        "title": {
+          "zh": "梯度累积时损失归一化错误",
+          "en": "Incorrect loss normalization during gradient accumulation"
+        },
+        "workflows": [
+          "sft"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "transformers-530-qwen35-token-mean-20261024",
+      "content": {
+        "title": {
+          "zh": "梯度累积的损失平均方式待确认",
+          "en": "Loss averaging during gradient accumulation needs investigation"
+        },
+        "workflows": [
+          "sft"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "transformers-qwen35-rmsnorm-backward-policy-20261025",
+      "content": {
+        "title": {
+          "zh": "跨平台梯度与参数更新不一致",
+          "en": "Cross-platform gradients and parameter updates differ"
+        },
+        "workflows": [
+          "sft"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "trl-0710-ipo-completion-average-backport",
+      "content": {
+        "title": {
+          "zh": "IPO 评分受回复长度影响",
+          "en": "IPO scores depend on response length"
+        },
+        "workflows": [
+          "rl"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "trl-0710-ppo-response-mask-backport",
+      "content": {
+        "title": {
+          "zh": "PPO 训练选中了错误的 token",
+          "en": "PPO selects the wrong training tokens"
+        },
+        "workflows": [
+          "rl"
+        ]
+      }
+    },
+    {
+      "kind": "repair",
+      "id": "trl-0710-ppo-whitening-tail-leakage",
+      "content": {
+        "title": {
+          "zh": "PPO 回报受填充位置影响",
+          "en": "Padding affects PPO returns"
+        },
+        "workflows": [
+          "rl"
+        ]
+      }
+    }
+  ]
+}

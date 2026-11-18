@@ -9,13 +9,18 @@ record identity present at the base revision must remain with identical
 content, and every evidence file must keep its bytes and site-relative path.
 The former root site/ maps explicitly to community/site/; this migration does
 not permit changing records, dropping evidence or renaming evidence within site.
+The explicitly pinned 2026-11-17 H20Z-to-H200 catalog correction is the only
+record-edit exception; it preserves original native evidence and numerical data.
 """
 import argparse
+import hashlib
 import json
 import os
 import pathlib
 import subprocess
 import sys
+
+from community.records.hardware import normalize_hardware_names
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 COLLECTIONS = {
@@ -27,6 +32,32 @@ COLLECTIONS = {
 EVIDENCE = 'community/site/evidence/'
 LEGACY_SITE = 'site/'
 SITE = 'community/site/'
+HARDWARE_CORRECTION = EVIDENCE + 'hardware-name-correction-H200-20261117.json'
+HARDWARE_CORRECTION_SHA256 = '373500b8c65df6df1c9c02f3dcbc9ce907354fdbc1e93aa58324f197195efa8f'
+
+
+def _digest(record):
+    return hashlib.sha256(json.dumps(record, ensure_ascii=False, sort_keys=True,
+                                    separators=(',', ':'), allow_nan=False).encode('utf-8')).hexdigest()
+
+
+def hardware_corrections():
+    """Load exact before/after identities, never a general permission to edit history."""
+    path = ROOT / HARDWARE_CORRECTION
+    if not path.exists():
+        return {}
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != HARDWARE_CORRECTION_SHA256:
+        raise ValueError('hardware-name correction ledger hash mismatch')
+    ledger = json.loads(raw)
+    return {(entry['file'], entry['collection'], entry['id']):
+            (entry['before_sha256'], entry['after_sha256']) for entry in ledger['entries']}
+
+
+def _approved_correction(path, collection, old, new, corrections):
+    pair = (corrections or {}).get((path, collection, _identity(old)))
+    return (pair is not None and pair == (_digest(old), _digest(new)) and
+            _same_json(normalize_hardware_names(old), new))
 
 
 def _identity(item):
@@ -46,7 +77,7 @@ def _same_json(left, right):
     return left == right
 
 
-def compare_documents(path, base, head, keys):
+def compare_documents(path, base, head, keys, corrections=None):
     """Return violations for records of ``base`` that are missing or changed in ``head``."""
     errors = []
     if not _same_json(base.get('schema_version'), head.get('schema_version')):
@@ -69,7 +100,8 @@ def compare_documents(path, base, head, keys):
                 continue
             if identity not in current:
                 errors.append(f'{path}: {key} record {identity} was removed')
-            elif not _same_json(current[identity], item):
+            elif (not _same_json(current[identity], item) and not
+                  _approved_correction(path, key, item, current[identity], corrections)):
                 errors.append(f'{path}: {key} record {identity} was modified')
     return errors
 
@@ -94,6 +126,10 @@ def _git(*args):
 
 def validate(base):
     errors = []
+    try:
+        corrections = hardware_corrections()
+    except ValueError as error:
+        return [str(error)]
     for path, keys in COLLECTIONS.items():
         for original in (path, LEGACY_SITE + path.removeprefix(SITE)):
             try:
@@ -104,7 +140,8 @@ def validate(base):
             if not head_file.is_file():
                 errors.append(f'{path}: published history file was removed')
                 continue
-            errors += compare_documents(path, old, json.loads(head_file.read_text(encoding='utf-8')), keys)
+            errors += compare_documents(path, old, json.loads(head_file.read_text(encoding='utf-8')), keys,
+                                        corrections=corrections)
     # Compare base blobs against working-tree bytes across the explicit directory
     # migration. Diff rename heuristics cannot prove that evidence was preserved.
     entries = _git('ls-tree', '-r', '-z', base, '--', EVIDENCE,
@@ -150,7 +187,7 @@ def main():
     errors = validate(base)
     if errors:
         sys.exit('Published history must stay append-only:\n' + '\n'.join(errors))
-    print(f'Published history is append-only relative to {base}.')
+    print(f'Published history is append-only with the pinned H200 naming correction relative to {base}.')
 
 
 if __name__ == '__main__':

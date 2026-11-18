@@ -22,7 +22,8 @@ function node(tag, className, text) {
 const list = (value) => Array.isArray(value) ? value : [];
 const text = (value, fallback = '未记录') => value === null || value === undefined || value === '' ? fallback : String(value);
 const libraries = (record) => list(record.environment?.libraries);
-const libraryLabel = (lib) => [lib.name, lib.version, lib.commit ? `commit ${lib.commit}` : ''].filter(Boolean).join(' · ');
+const hardwareLabel = value => globalThis.NumericBridgeHardware.hardwarePlatforms(value).join(' ↔ ');
+const libraryLabel = (lib) => [lib.name, lib.version || (lib.commit ? '源码版本' : '')].filter(Boolean).join(' · ');
 
 // Permit bundled evidence and public HTTPS URLs; reject local paths and private hosts.
 function publicURL(value) {
@@ -106,7 +107,6 @@ function renderCard(record) {
   const top = node('div', 'card-topline');
   top.append(node('span', `pill${record.status === 'validated' ? ' validated' : ''}`, record.status === 'validated' ? '✓ 验证完成' : text(record.status, '状态未记录')));
   const acceptance = record.validation?.acceptance;
-  top.append(node('span', `pill${acceptance == null ? ' pending' : ''}`, acceptance == null ? '验收 · 待用户判定' : `验收 · ${typeof acceptance === 'object' ? text(acceptance.status) : text(acceptance)}`));
   const link = node('a', 'permalink', '条目链接 ↗');
   link.href = `#${encodeURIComponent(card.id)}`;
   link.setAttribute('aria-label', `链接至：${text(record.title)}`);
@@ -114,10 +114,11 @@ function renderCard(record) {
   const mobileDate = node('time', 'mobile-date', text(record.date));
   if (/^\d{4}-\d{2}-\d{2}$/.test(record.date)) mobileDate.dateTime = record.date;
   top.append(link, mobileDate);
-  const title = node('h5', '', text(record.verification_title, text(record.title)));
-  heading.append(top, title, node('p', 'card-summary', text(record.problem?.summary)));
+  const view=globalThis.PrecisionRepairPresentation.overview({root:record});
+  const title = node('h5', '', view.title);
+  heading.append(top, title);
   const tags = node('div', 'tags');
-  [record.model?.name, record.environment?.hardware].filter(Boolean).forEach((tag) => tags.append(node('span', '', tag)));
+  [record.model?.name, record.environment?.hardware?hardwareLabel(record.environment.hardware):''].filter(Boolean).forEach((tag) => tags.append(node('span', '', tag)));
   heading.append(tags);
   header.append(rail, heading);
   const body = node('div', 'card-body');
@@ -134,7 +135,7 @@ function renderCard(record) {
   if (metrics.length) {
     const graphics = node('div', 'metrics');
     metrics.forEach((metric) => graphics.append(metricGraphic(metric)));
-    panel.append(graphics, node('p', 'scale-note', '每项指标独立尺度，前后共用线性零基线；条长不可跨指标比较。极小值请以标注数值为准，负值或缺失值仅显示数值。'));
+    panel.append(graphics, node('p', 'scale-note', '修复前后采用相同的线性刻度。'));
   } else bulletList(panel, record.validation?.checks);
   const coverage = record.validation?.coverage;
   if (coverage) {
@@ -166,6 +167,7 @@ function renderCard(record) {
   stages.append(stageList.childElementCount ? stageList : node('p', '', '未记录阶段。'));
   const validation = section('04 / 验证范围与证据');
   paragraph(validation, '范围', record.validation?.scope);
+  paragraph(validation, '数值验收', acceptance==null?'未记录':typeof acceptance==='object'?JSON.stringify(acceptance):acceptance);
   bulletList(validation, record.validation?.checks);
   if (list(record.validation?.remaining).length) {
     validation.append(node('p', '', '待定位与后续验证'));
@@ -233,7 +235,7 @@ function renderLibraryGroup(group) {
       });
       result.append(values, node('span', 'result-unit', view.metric.unit));
     } else result.append(node('p', 'result-label', fix.root.validation?.checks?.[0] || '展开查看验证结果'));
-    const scope = node('p', 'overview-scope', [fix.root.model?.name, fix.root.environment?.hardware].filter(Boolean).join(' · '));
+    const scope = node('p', 'overview-scope', [fix.root.model?.name, fix.root.environment?.hardware?hardwareLabel(fix.root.environment.hardware):''].filter(Boolean).join(' · '));
     const disclosure = node('div', 'overview-disclosure');
     disclosure.append(node('span', '', '问题与修复详情'), node('span', '', `${fix.records.length} 轮验证`));
     summary.append(result, scope, disclosure);
@@ -390,9 +392,14 @@ async function load() {
   pendingRequest = controller;
   const timeout = setTimeout(() => controller.abort(), kind === 'differences' ? 45000 : 15000);
   try {
-    const response = await fetch(`./data/${kind}.json`, { signal: controller.signal });
-    if (!response.ok) throw new Error('HTTP');
-    const data = await response.json();
+    const [response, contentResponse] = await Promise.all([
+      fetch(`./data/${kind}.json`, { signal: controller.signal }),
+      fetch('./data/content.json', { signal: controller.signal })]);
+    if (!response.ok || !contentResponse.ok) throw new Error('HTTP');
+    const [data, descriptions] = await Promise.all([response.json(),contentResponse.json()]);
+    const content=Object.fromEntries(descriptions.records.map(entry=>[entry.kind+':'+entry.id,entry.content]));
+    globalThis.PrecisionRepairPresentation.setContent(content);
+    globalThis.EvaluationPresentation.setContent(content);
     if (serial !== requestSerial) return;
     const rows = kind === 'differences' ? data.records : data[kind];
     if (data.schema_version !== 1 || !Array.isArray(rows)) throw new Error('schema');

@@ -21,6 +21,8 @@ import zipfile
 from collections import Counter
 from pathlib import Path
 
+from community.records.hardware import normalize_hardware_names
+
 REPO = "satsuki2486441738/PrecisionRSI"
 PINS = {
     "survey/gemma4-gpu-npu-delivery-20261107": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
@@ -911,7 +913,7 @@ class Collector:
         payload={'schema_version':1,'updated_at':'2026-11-13','snapshot_date':'2026-11-13',
                  'branches':[{'name':b,'branch':b,'commit':c,'url':f'https://github.com/{REPO}/tree/{c}'} for b,c in PINS.items()],
                  'models':[{'id':k,'label':v} for k,v in MODELS.items() if any(r['model_id']==k for r in self.records)],
-                 'records':self.records,'sources':self.sources,'notes':GLOBAL_NOTES,
+                 'records':normalize_hardware_names(self.records),'sources':self.sources,'notes':GLOBAL_NOTES,
                  'raw_results_url':'./data/'+raw_output.name,
                  'coverage':{'branches':len(PINS),'unique_source_files':len(self.sources),'raw_json_sources':len(self.raw),
                              'recorded_views':len(self.records),'numeric_metrics':sum(len(r['metrics']) for r in self.records),

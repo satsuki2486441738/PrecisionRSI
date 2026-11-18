@@ -12,12 +12,17 @@ python -B -m scripts validate
 python -B -m scripts validate-immutability --base origin/main
 python -B -m scripts plan-history --help
 python -B -m scripts export-statistics --help
+python -B -m scripts export-search --refresh
+python -B -m scripts export-search --check
 python -B -m scripts install --output /tmp/exported-skills
 python -B -m scripts smoke-install
 ```
 
 `validate` checks skill metadata and tracked Markdown links. The community package
 owns catalog validation: `python -B -m community.records validate`.
+`export-search` builds the compact, source-bound metadata used by browser and
+standalone Skill retrieval. It is local and deterministic; `--check` rejects a
+missing, stale or edited snapshot. Refresh it after reviewed catalog changes.
 `smoke-install` requires NumPy and Torch, performs a fresh skill export and checks
 the CPU gradient/repair workflow. No model download or accelerator is used.
 

@@ -1,0 +1,3158 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-17",
+  "purpose": "Immutable catalog association evidence only; no new numerical measurements or native execution.",
+  "canonical_hash_format": "SHA-256 of UTF-8 json.dumps(ensure_ascii=False, sort_keys=True, separators=(comma,colon), allow_nan=False).",
+  "external_artifacts_fetched": false,
+  "external_artifacts_replayed": false,
+  "external_only_evaluations": [
+    {
+      "id": "lmdeploy-cuda-smollm2-135m-instruct-20261021",
+      "record_sha256": "3277f0de7749cd59fba7dc3feafe1888b8ab87a855e6fbc51b399a210defc31e",
+      "locator": {
+        "kind": "comparison",
+        "id": "lmdeploy-cuda-smollm2-135m-instruct-20261021"
+      },
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ],
+      "observation": "Retained catalog association only; referenced external artifacts were not fetched or replayed in this organization."
+    },
+    {
+      "id": "llama-cuda-smollm2-135m-instruct-20261021",
+      "record_sha256": "e7c02b9f172a23faabb5002d7df722e023929ed0fe5d71d33bb1c637ae08f1ea",
+      "locator": {
+        "kind": "comparison",
+        "id": "llama-cuda-smollm2-135m-instruct-20261021"
+      },
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ],
+      "observation": "Retained catalog association only; referenced external artifacts were not fetched or replayed in this organization."
+    },
+    {
+      "id": "lmdeploy-cuda-qwen25-05b-instruct-20261021",
+      "record_sha256": "e1d2521c9def7a0580367a3b3085d046053f85c17a4dd96f2d150c1de2c01f86",
+      "locator": {
+        "kind": "comparison",
+        "id": "lmdeploy-cuda-qwen25-05b-instruct-20261021"
+      },
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ],
+      "observation": "Retained catalog association only; referenced external artifacts were not fetched or replayed in this organization."
+    },
+    {
+      "id": "llama-cuda-qwen25-05b-instruct-20261021",
+      "record_sha256": "b44e00dbb7e8580aad594ddd9dd431da0549d5b11cbba019632f79241121537d",
+      "locator": {
+        "kind": "comparison",
+        "id": "llama-cuda-qwen25-05b-instruct-20261021"
+      },
+      "evidence": [
+        {
+          "label": "原生执行与数值摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/native-summary.json"
+        },
+        {
+          "label": "便携原始数组与比较报告",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/inference-cuda-public-evidence-v02.zip"
+        },
+        {
+          "label": "包哈希与范围索引",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-artifact-index.json"
+        },
+        {
+          "label": "便携重放回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/inference/public-v02-replay-receipt.json"
+        }
+      ],
+      "observation": "Retained catalog association only; referenced external artifacts were not fetched or replayed in this organization."
+    },
+    {
+      "id": "swift-tiny-fp32-cuda-20261021",
+      "record_sha256": "c093e24124725e81663690ad676ec87ce9d7fb163457c74dd2ff33b4756e4588",
+      "locator": {
+        "kind": "comparison",
+        "id": "swift-tiny-fp32-cuda-20261021"
+      },
+      "evidence": [
+        {
+          "label": "原始数组与四组便携比较",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32.zip"
+        },
+        {
+          "label": "独立参考与覆盖摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-summary.json"
+        },
+        {
+          "label": "两模型数值结果",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/results.json"
+        },
+        {
+          "label": "已安装源码哈希与发行身份",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/installed-source-release-pin.json"
+        },
+        {
+          "label": "公共导出与重放审计",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        },
+        {
+          "label": "固定 rollout / 旧策略分数与 CPU 输入重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip"
+        },
+        {
+          "label": "固定输入哈希、范围与独立重算回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json"
+        }
+      ],
+      "observation": "Retained catalog association only; referenced external artifacts were not fetched or replayed in this organization."
+    },
+    {
+      "id": "swift-pretrained-bf16-cuda-20261021",
+      "record_sha256": "d5939c30d76012c72d12d45c8f242b9b81198564b083a1c6355bfbe168257cbf",
+      "locator": {
+        "kind": "comparison",
+        "id": "swift-pretrained-bf16-cuda-20261021"
+      },
+      "evidence": [
+        {
+          "label": "原始数组与四组便携比较",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-pretrained-bf16.zip"
+        },
+        {
+          "label": "独立参考与覆盖摘要",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-pretrained-bf16-summary.json"
+        },
+        {
+          "label": "两模型数值结果",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/results.json"
+        },
+        {
+          "label": "已安装源码哈希与发行身份",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/installed-source-release-pin.json"
+        },
+        {
+          "label": "公共导出与重放审计",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/a9fe8dff25de1c3bf806955b06e85d56a9c0a26b/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/public-export-audit.json"
+        },
+        {
+          "label": "固定 rollout / 旧策略分数与 CPU 输入重放",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/swift-tiny-fp32-fixed-inputs.zip"
+        },
+        {
+          "label": "固定输入哈希、范围与独立重算回执",
+          "url": "https://github.com/satsuki2486441738/precision-skills/blob/5e439f054c192f8beb2f89bf4462a801da993b97/tests/results/gpt-6/compare-gpurecovery-20261021T180045Z/swift-rl/fixed-inputs-index.json"
+        }
+      ],
+      "observation": "Retained catalog association only; referenced external artifacts were not fetched or replayed in this organization."
+    }
+  ],
+  "exact_measurement_origins": [
+    {
+      "measurement_id": "deepseek41-source-bdc7e6071b7287b8-evaluations-10-comparisons-0",
+      "comparison_id": "deepseek41-original-vs-adapted-core-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/10/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "15e6307938dae893a8ada8b40b0adcbf84a742dfad6131e1cc1ee5f6e6ef48b5",
+      "original_comparison_sha256": "06cab81931ed5a57672e4a9a1c660793cc0f65d55bb3d5f46e9bca45c092cc7e",
+      "record_sha256": "15e6307938dae893a8ada8b40b0adcbf84a742dfad6131e1cc1ee5f6e6ef48b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-0",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "ba384df9466aa96a5efc9eab00d95d11c99a16bff7b72ba9f146aa32f675eb9d",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-1",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "0318d5a89e685cbe010e67bf5a3f8da00d930f8deb8a26e5b23e1b9f209f3928",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-2",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "1e0d2990e634cf7fe4395cfae6cba16d20775002dc6eb1eca5e779270eadd510",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-3",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/3"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "427c592153e42ce687c198209943b8cbf6dc4651104e0e2f8919a2565614b451",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-4",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/4"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "69368e7d4efc9501a1826fd20c985f9c63461fba339fadb37193810f2a300891",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-5",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/5"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "7a917c9fef4133049920df64284881665dd6c6777475c026d046df2c71260249",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-6",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/6"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "bca4ba6f12ec4b68c96e1c6fb6c31c860f2022c31ee2d4cc1bccd00ba630802b",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-7",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/7"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "3bd32323a7bb3a12f791f2eb8addf2f6ce0c0d618833d76d995528720d5fe328",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-8",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/8"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "b825470d8620d070c364246ad2cbfe6693190bab3d3d1ed24ac0d2a8b5526d00",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-0",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "09038e43f68894ce27b59fa3c27eb7994304ec8b085bd63267c04644111df7a4",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-3",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/3"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "2941fb0847828f6073ac3942a5919774152c3efe48818f17776d6bfa7017c1bc",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-1",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "7a2f5089cd02995759ceaf965fd58ef078332a276974ed7b493a4c691b7a8ce2",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-4",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/4"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "99bb0b3cba6ae240c345017dec6aabe9da6c17e83f818108cec3391c72be19a8",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-2",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "7a0465fe473e74cbd3b56597a3c13de1ac392c29e15af386f9e85678f6fa3aac",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-5",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/5"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "e3385c6f1912f6ed09962c5d391d827a3ca67e1db7186e6164fff759a1cbd2f0",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-0",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "5220fdfc9591e715759bbe0d5ad9bbe5a96268918b4ab3f232739d9d992c9000",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-10",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/10"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "068b1d8b0c5f82a8441b1000725873f7bfcfb5951e37b4aecfb7d6f0f68a6491",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-0",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "a9583fd11019dd17fe9a3eb0d12ff705f20569ab0492cf31af77609426ebbd73",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-1",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "4279a339e59e1c666e7f0ecd351d1c1248a747ebc1584759eeb96b907ede0bad",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-2",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "67a8646ebeb38f466ddc11dd2f3cf7996c74c5de0ac0cadfecd3b1b4c69d0752",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-3",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/3"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "3cdbf7b0eadf185a06d1e65da8171c3fe134316f09bbb1cefe0cb54621a5e4e1",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-4",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/4"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "e23ee112dca19712069405a7fed8f8f3c30d5e6582ca2ac83279c04dec4bc99b",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-5",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/5"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "f864437478c4a0061223d8a838417286e7f0df90740ac29cbbe4acf65fade5ab",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-6",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/6"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "088cba0b3152b17b43a428bfd8279521b9cb3dd967b52a9d198fbaa549864e10",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-7",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/7"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "7e7b5e107dc9cd5404aedf5bd3eb79640e9e1bcedefc2f83a7aef8664a29bcce",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-8",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/8"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "2d4c32724a04a234accc8944f2c4f97eab5deca97ff770193c61e268dcee93d8",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-9",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/9"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "2655aa0c407b2d110713b2c5fce1fc4727ceb0dc54ecff1294b69929e8d9360e",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-24",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/24"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "dd1867b754eb8b71b0a30f2aad9c94e0d4764f5e58ca116bc649d0ca32a0c4b9",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-23",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/23"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "6ebb880408e0d47f776a84052b3d46d4bd0c283e1bd41b4709d5a9161e4d89e7",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-13",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/13"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "6142f51c7261f7b6f6b8186e9531d35a33d19617a19b8f848d12362300599a93",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-15",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/15"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "9c98c3e72f6d9db291d65bf962e352a0a681b254d9dabdf49ca6936a5af32fde",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-14",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/14"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "15a7b365673d81b656363cebe55e8cfbac6f7e5d1fa1261339391a718384bb4b",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-12",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/12"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "51391da99e02be6f41eb5b9a9f7d2b07dc9e5390769f036282a337eddb84849f",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-103-comparisons-0",
+      "comparison_id": "gemma4-h100-rtx5090-20261105",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/103/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "e2c23d46034378c7dcaf33875d9e40d9a53b473535aeb7f7eefc6f7f6dad148b",
+      "original_comparison_sha256": "e7dc44adc3f1855995c3913baefefd93db0f8ee4b5ebeeed0ee80e921efe28b3",
+      "record_sha256": "e2c23d46034378c7dcaf33875d9e40d9a53b473535aeb7f7eefc6f7f6dad148b",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-9",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/9"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "da61291c8c9d9b0db60b51173546aebf53e2d94862469a3d52604c954b4a3550",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-10",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/10"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "a4215791c93dec91b1a603fe817cd93c13a7ed02bc352f4942be6b8004114cbf",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-11",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/11"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "f7194650096878f8026fd91de8b3476bd3fb82f1d939354f0a974fefc534f45d",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-12",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/12"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "7c9ad614d64a7948f9485e0338e8e326be3a1fd37fec65e0eef649bc73e96db5",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-13",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/13"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "e84affd842c616ce18f46b87c782fd63abbe8c1e99fb7a05086ef615ae35d024",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-105-comparisons-14",
+      "comparison_id": "gemma4-h100-ascend-fixed-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/105/comparisons/14"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "original_comparison_sha256": "080da89798051f7f15ae2f43bc12b0c2c77728f6bec7a1ccf408c6c6ba4c6ef5",
+      "record_sha256": "11b38fba39b7d1c0f9dcf7b040b54bfd1fffe3a7b8c0b95c2f752b9a191aa37e",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-6",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/6"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "b21e86809fe8ba4b14d9519cb5e97c35a90c0dc79657b07f25bd5fe58ccf29b1",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-7",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/7"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "948b5168b6265236f176eb88eaa78e12af34f2b817322b0ec24afc0b3fafdb7e",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-9",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/9"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "c7e01b77efb4c31e75f40318f7f5f7475a3ef23ad30f864106eeccb4ed531b50",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-10",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/10"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "66c557cf6d678f8340eda353b0de5148fc419aeda300b452b4e804f2b5304354",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-8",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/8"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "4298c837c3c12fe1d5dc05c915d95a8e559bfbceb2eee0aab778e60aa4303418",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-11",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/11"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "1d7cb3086f54a98aab01e4313d7570cbaec75541cadca251fe6886ba4614e336",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-12",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/12"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "27bd74ba002a9efc3b9be4ad20e03740b6dc046610682d18b5b7789b4f10d6ad",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-13",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/13"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "6f71d983d9da11dc30fe172e733f608ac948153bd9a2be6e767992c4fd3e43fb",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-15",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/15"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "97cffb439851dda9c3b1a29302223b5cf85ec07e8c5e25d5744d535480199eff",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-16",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/16"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "511968760a337c539ba9234dc614b0702a0cc15a6c22c8cebd90a608e9c53c0d",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-14",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/14"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "1322a9e4873929c3c5bcb32cff8f0076121f6d71cb7943f0ee33f3555020b772",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-108-comparisons-17",
+      "comparison_id": "gemma4-h100-ascend-batch-padding-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/108/comparisons/17"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "original_comparison_sha256": "b52988ee71f5a1d72c7e56e9f694a0302144dbc0eecfbc456ad5f22eb2207ae6",
+      "record_sha256": "2102102ff7792bc1013a248263d69241330077fe7247b9cba1e2a43d304be544",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-1",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "b9edd4bd95c58431e6b4b1ceec719e197e25aa3eab058fe9d64c322d765b6eec",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-2",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "ad4cb366cd3090d7870eeed57f5f9c47f33682e6aff82aeedbbb8f86182a7720",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-3",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/3"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "eb9e19f0133c323a19c1392cfff95bc6c180f69579fa4c80bb805446609133fb",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-4",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/4"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "fa7c773f573c6322afef429cee7b7de0006e9f59f1f0e0ce7d77549d0b229fa0",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-5",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/5"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "de3ed912a0bd2e66b2f1a4754bfce6a428ee926e9febd509808a5e4c53149e28",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-106-comparisons-6",
+      "comparison_id": "gemma4-h100-ascend-cacheoff-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/106/comparisons/6"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "original_comparison_sha256": "788b8fed5295c5aa1d3e2c5fb8dab1fd931a8e86535fe0e5a183a3bd7ecb20ce",
+      "record_sha256": "9e681416377cb4307fc7de2ab3e85add3d29945a530a026cf9aef6199429f0b5",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-25",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/25"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "e69983aac455091e054b8882e8c62d81b32426e499b40e748612a97bbe4a58bd",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-26",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/26"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "ed3ad5fb1e55215c1e57773c1bd7d419067341fbf4bc236a7669590948a91919",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-15",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/15"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "138e2f75a1372853f0b7f607490b28951a378017b9c67cc9b25000700f2d9df4",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-11",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/11"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "2840bf7d8a02bd2de4fa8ba948d551761744dd45f37fc1b2baad2a75f5845967",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-12",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/12"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "2c2a046ce3b4959e582d8428769b6790e0b1a403bab472df93101a844c726760",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-14",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/14"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "4da5f81257f2cb0aa2900b1443b49d96ac4ad896da951eccc7acaf56dce82310",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-13",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/13"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "9f742a40d09ac94f142c8763120bbc1286c28c69b328990542c4cf71a3a2ce49",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-16",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/16"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "6081e95375fd9575a4e7e49b97644ec9cceb5407fd679cb4c1ca72882b964564",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-21",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/21"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "02a54e19890e33f9482699d8337bead1a2c1638643d44e103597a3df6a12c704",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-17",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/17"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "4b2feb48a5b8eaa674e0e863c306d334a0dd5df02505e13e2c3c20da127779aa",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-18",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/18"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "328ec18a4f762234bc2a81835eb7caccdcd168c4d9b4ac6b19e60e4712bdc66a",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-20",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/20"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "88e95f2c41abf51c9cb21f853d197e284510a756a90f52cc9e5eb60b85445318",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-19",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/19"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "01d93b8e65f913f90cb15fdc9bcdf18c731fdd9c9b51396df3deee9abe30eecb",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-107-comparisons-22",
+      "comparison_id": "gemma4-h100-ascend-partitions-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/107/comparisons/22"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "original_comparison_sha256": "2be65740ee8e36531d516f939a8dad8939e78f92c8d2c03e1f158a8e568996be",
+      "record_sha256": "7c3de65ce1d39e73e804b920d1e8b6148a57577da67ab14f899cb58658d87722",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-104-comparisons-0",
+      "comparison_id": "gemma4-ascend-tp1-repeat-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/104/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "fffb8b8cd2f5c748445b6d00dbca0102e8bdb50d2a2b2caa10aa619fbaf93d42",
+      "original_comparison_sha256": "5d61a8b26575fd91cfaf685563a75fd059313e9f34ab02b0813b03ed11a67310",
+      "record_sha256": "fffb8b8cd2f5c748445b6d00dbca0102e8bdb50d2a2b2caa10aa619fbaf93d42",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-104-comparisons-1",
+      "comparison_id": "gemma4-ascend-tp1-repeat-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/104/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "fffb8b8cd2f5c748445b6d00dbca0102e8bdb50d2a2b2caa10aa619fbaf93d42",
+      "original_comparison_sha256": "a761e63183763630ddc15a56a2f675cebb3fd8baf614be4c363b71c2f7e9a2a5",
+      "record_sha256": "fffb8b8cd2f5c748445b6d00dbca0102e8bdb50d2a2b2caa10aa619fbaf93d42",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-104-comparisons-2",
+      "comparison_id": "gemma4-ascend-tp1-repeat-20261106",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/104/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "fffb8b8cd2f5c748445b6d00dbca0102e8bdb50d2a2b2caa10aa619fbaf93d42",
+      "original_comparison_sha256": "79d18e57c9eb065162301c52a64a47cd40ad67aeb0cad153ba9c28e0cbf32b30",
+      "record_sha256": "fffb8b8cd2f5c748445b6d00dbca0102e8bdb50d2a2b2caa10aa619fbaf93d42",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-4",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/4"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "a2f81fcc0d94c5aa226c04a780cec065ab402abb88dc6d548afcd42267d58650",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-3",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/3"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "091b357f089be50bb0439aadd1fd958a262a77661149fa3c61067694d3942bb1",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-5",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/5"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "ad833266f47a0b47257b7d0a9caa7701b4213805d21e11ad07ff8260aa373d79",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-0",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "903b3a1b7d73de9a550bdeae7830caffd44699f4d62108f31d75ab9cf8ceca43",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-2",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "93264c5e496d72ced9421a49be5a6143a93a2d0f74494938db261cc50f6dbaad",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-1",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "712c0bccc1fc1a823ab7dcbb9b5e12c1fd44115537a2fade921a31f93cc4512a",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-10",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/10"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "c4eff3b92a00f417252e540db4621852b3a92316eea67555025de9b39629aa4a",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-9",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/9"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "e554cc23e8af2c3080215be97c53974bf38afbb83b7dbdb77d76565d4281dd12",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-11",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/11"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "b4c6b578d372cd612576489bf6695275eca7a8d61d94c8cb1020758e7b50cb2e",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-6",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/6"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "6dafda7a1ac8028fd7a697ac12aeba613a37e407ad1ee5283249b859e8ad3531",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-8",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/8"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "4e6b5e1e9584516ad2d39899b6e7299e0cae8165ba6c81cfb0d98c0a08eb7f11",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-110-comparisons-7",
+      "comparison_id": "gemma4-h100-ascend-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/110/comparisons/7"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "original_comparison_sha256": "168edfe9d5c5dd3855a33ca17cf302e642fca7ed782e4c5f7d11708013e5ec6c",
+      "record_sha256": "d4cfb3c75bb7a5510ff13bb47f453a41a4454d8210426c09a9b531e2550fd8a7",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-109-comparisons-4",
+      "comparison_id": "gemma4-h100-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/109/comparisons/4"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "original_comparison_sha256": "d96c10d6adb00a790bc04f6cb2bc4cf8a1d4c1c6e9d614efbc1b88b70a31d3b7",
+      "record_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-109-comparisons-3",
+      "comparison_id": "gemma4-h100-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/109/comparisons/3"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "original_comparison_sha256": "f13065baf82bf51769dd9b352a0d790e136e2c4fbfb986ec8ccbd853642714ec",
+      "record_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-109-comparisons-5",
+      "comparison_id": "gemma4-h100-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/109/comparisons/5"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "original_comparison_sha256": "0e2120976da64c3269814f759a6e9afbeb47bd3108d2f1bdf076efc9ced75307",
+      "record_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-109-comparisons-0",
+      "comparison_id": "gemma4-h100-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/109/comparisons/0"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "original_comparison_sha256": "9ea02e5c72f29582e59a18ebe97576615dfdd6c879cf4e3cb571cc0c7a5fd47c",
+      "record_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-109-comparisons-2",
+      "comparison_id": "gemma4-h100-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/109/comparisons/2"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "original_comparison_sha256": "637e36f098ff32e4739a3d2b3fb27d5d9b6be40805e8fb93cfa07c7d8da2ac68",
+      "record_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "gemma4-source-209f6ca0e44c8510-evaluations-109-comparisons-1",
+      "comparison_id": "gemma4-h100-observer-transparency-20261107",
+      "source": {
+        "id": "source-209f6ca0e44c8510",
+        "branch": "survey/gemma4-gpu-npu-delivery-20261107",
+        "commit": "118b50032dabd6f771b3a8391e24cef1d02e9a1a",
+        "path": "site/data/evaluations.json",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/118b50032dabd6f771b3a8391e24cef1d02e9a1a/site/data/evaluations.json",
+        "json_pointer": "/evaluations/109/comparisons/1"
+      },
+      "raw_source_sha256": "386a73741e7dcbc9fe49a84dd8e792fea12c9fa313e05227c5aff607749e76f2",
+      "original_parent_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "original_comparison_sha256": "3a42ca22902a22ad12f6887c4f80c773d957fceb2378c19cae6261a3b8766896",
+      "record_sha256": "35a77de5a636d274f16637240210e9aef2f09fd231c36c222178f283c2e881f2",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-5-comparisons-3",
+      "comparison_id": "cross-platform-sft-causal-continuation-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/5/comparisons/3"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "original_comparison_sha256": "d79092b5821711799f14e4abe647962d2d111955954c0f194c48836c3b07a1f5",
+      "record_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-5-comparisons-1",
+      "comparison_id": "cross-platform-sft-causal-continuation-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/5/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "original_comparison_sha256": "ced3137f7524a9ba1030384e34acb03468cba9aeabed72b2e17f29ec5d9cf0df",
+      "record_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-5-comparisons-0",
+      "comparison_id": "cross-platform-sft-causal-continuation-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/5/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "original_comparison_sha256": "d81335f849c89fbfb78131379fa0fb1d67adef86c0cb1b306e7c943d2ad85d50",
+      "record_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-5-comparisons-2",
+      "comparison_id": "cross-platform-sft-causal-continuation-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/5/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "original_comparison_sha256": "14225bc92939cf96eb9e0811986032298c5915fe4a29acc5b16f787e21a2d84b",
+      "record_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-5-comparisons-4",
+      "comparison_id": "cross-platform-sft-causal-continuation-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/5/comparisons/4"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "original_comparison_sha256": "e9adee2f4c3b9f7be2aec130fadd05574d36cc15a8e903209714d2afd9102508",
+      "record_sha256": "09f763924fbad9df42b8d10dc80c222f2a5d9d9f721e9788d3172948ff5d2b99",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-0-comparisons-2",
+      "comparison_id": "trl-sfttrainer-checkpoint-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/0/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "d1515a3ce1fbf1a69abd5457b8efb87f0b7f2b8f52a6deeebabcaae2ccf492a0",
+      "original_comparison_sha256": "c5cd5e652ed07d2125b1a3522b601cd76537f5594ddaac283447b096257c1b07",
+      "record_sha256": "d1515a3ce1fbf1a69abd5457b8efb87f0b7f2b8f52a6deeebabcaae2ccf492a0",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-1-comparisons-0",
+      "comparison_id": "trl-sfttrainer-lora-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/1/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "cac2e8b9b7602715494c5a5f517afe72dfe468492e90ddf7ed5bb4638c97d01c",
+      "original_comparison_sha256": "36a450e7aff536f6aa9bfe26ee347a457e13e354e950ebf674177a9d046a2c75",
+      "record_sha256": "cac2e8b9b7602715494c5a5f517afe72dfe468492e90ddf7ed5bb4638c97d01c",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-1-comparisons-1",
+      "comparison_id": "trl-sfttrainer-lora-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/1/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "cac2e8b9b7602715494c5a5f517afe72dfe468492e90ddf7ed5bb4638c97d01c",
+      "original_comparison_sha256": "a254fe019c100f619eba3ed988e459860d9a4f98ff45fb3c9793c3cc86792a7e",
+      "record_sha256": "cac2e8b9b7602715494c5a5f517afe72dfe468492e90ddf7ed5bb4638c97d01c",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-3-comparisons-2",
+      "comparison_id": "autonomous-cross-platform-inference-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/3/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "original_comparison_sha256": "97ebf4ebed4d809c163e9a9f841515be8d05b5c7b208feeac1c5f361c06be61c",
+      "record_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-3-comparisons-3",
+      "comparison_id": "autonomous-cross-platform-inference-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/3/comparisons/3"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "original_comparison_sha256": "da5cc532417954e3f5cfbcf6b46c5ddaa578947712e123adc63fc89bf1049f8a",
+      "record_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-3-comparisons-0",
+      "comparison_id": "autonomous-cross-platform-inference-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/3/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "original_comparison_sha256": "d8b5adf4aeadb22180f03a2cf93392870e94fee6cfaa3c329dfb5bbb396c71a6",
+      "record_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-3-comparisons-1",
+      "comparison_id": "autonomous-cross-platform-inference-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/3/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "original_comparison_sha256": "ac6f499cadc4618c83957e57b32e587e23f1265adcf56308a1f32d931bf60381",
+      "record_sha256": "74fb42fe3a453fec4a55b431b3f0cd868398a30b7a89e82e9ab5fff3c7f3f368",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-4-comparisons-1",
+      "comparison_id": "autonomous-cross-platform-sft-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/4/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "3df391694fed6340ed55af4e3ed6aa6370d43e76ce99fb84d406cd7bbf247fda",
+      "original_comparison_sha256": "cf84df1cb8a7ebc4ef97d2836b7323e45b55ad1e364a369616086bf6d4edf05c",
+      "record_sha256": "3df391694fed6340ed55af4e3ed6aa6370d43e76ce99fb84d406cd7bbf247fda",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-4-comparisons-0",
+      "comparison_id": "autonomous-cross-platform-sft-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/4/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "3df391694fed6340ed55af4e3ed6aa6370d43e76ce99fb84d406cd7bbf247fda",
+      "original_comparison_sha256": "61c0b1cd19037b6c72896885264a8eba0d6c489ad275bb2c4ab8414ba2c0d252",
+      "record_sha256": "3df391694fed6340ed55af4e3ed6aa6370d43e76ce99fb84d406cd7bbf247fda",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-4-comparisons-2",
+      "comparison_id": "autonomous-cross-platform-sft-20261025",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/4/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "3df391694fed6340ed55af4e3ed6aa6370d43e76ce99fb84d406cd7bbf247fda",
+      "original_comparison_sha256": "f75896a50edfafce2b9e56c1f53611badc7ff3fc906b068e11d7fc99b8fe51f4",
+      "record_sha256": "3df391694fed6340ed55af4e3ed6aa6370d43e76ce99fb84d406cd7bbf247fda",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-0-comparisons-0",
+      "comparison_id": "trl-sfttrainer-checkpoint-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/0/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "d1515a3ce1fbf1a69abd5457b8efb87f0b7f2b8f52a6deeebabcaae2ccf492a0",
+      "original_comparison_sha256": "82d3d138bd36c68463ff39a401400ab75ba2a4444fca76a62eacc11b80d73856",
+      "record_sha256": "d1515a3ce1fbf1a69abd5457b8efb87f0b7f2b8f52a6deeebabcaae2ccf492a0",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-0-comparisons-1",
+      "comparison_id": "trl-sfttrainer-checkpoint-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/0/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "d1515a3ce1fbf1a69abd5457b8efb87f0b7f2b8f52a6deeebabcaae2ccf492a0",
+      "original_comparison_sha256": "56f905bc36d1df8ff316a9606361a18b58edbc21109ea08e1c475c633b91bd0a",
+      "record_sha256": "d1515a3ce1fbf1a69abd5457b8efb87f0b7f2b8f52a6deeebabcaae2ccf492a0",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-2-comparisons-1",
+      "comparison_id": "torch-bf16-fp16-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/2/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "fc172eef4cbf7397626363ae9d710e0246129b1e6c63afbe32599487f68aaf82",
+      "original_comparison_sha256": "19aa63c813a31b9efe9953d29caaa6471f81f6a06d39a5a5a6d7027767c9f4e6",
+      "record_sha256": "fc172eef4cbf7397626363ae9d710e0246129b1e6c63afbe32599487f68aaf82",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen35-source-bdc7e6071b7287b8-evaluations-2-comparisons-0",
+      "comparison_id": "torch-bf16-fp16-20261021",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/2/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "fc172eef4cbf7397626363ae9d710e0246129b1e6c63afbe32599487f68aaf82",
+      "original_comparison_sha256": "f43ed694329c23605ae05020514426d9af938a5b56049ba41b41993ad0aa6253",
+      "record_sha256": "fc172eef4cbf7397626363ae9d710e0246129b1e6c63afbe32599487f68aaf82",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-7-comparisons-2",
+      "comparison_id": "qwen38-native-lora-frameworks-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/7/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+      "original_comparison_sha256": "ca46284d715e4c99c765b0e718e24f36b7ee8aeb14eecf460c65ca2781f3c6a4",
+      "record_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-7-comparisons-0",
+      "comparison_id": "qwen38-native-lora-frameworks-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/7/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+      "original_comparison_sha256": "7b33794b1018e26ff5dbb397a6570d355a654b052507fe94bf7b4897170b72af",
+      "record_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-7-comparisons-1",
+      "comparison_id": "qwen38-native-lora-frameworks-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/7/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+      "original_comparison_sha256": "1b7b31fb677a560a2a821193a7e58b448a3325f468e2be65f64b04e22e9e59a2",
+      "record_sha256": "26ee90abbae6a9e14063e6e6d2839228b2c38f8498809415331de5ba37215428",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-9-comparisons-2",
+      "comparison_id": "qwen38-native-serving-admissions-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/9/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+      "original_comparison_sha256": "741b0a8fa36973ef34fd1a8aca3638fcb019dd4e82c82cb0155091ebe0d4eb84",
+      "record_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-6-comparisons-1",
+      "comparison_id": "qwen38-native-inference-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/6/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "original_comparison_sha256": "024442b0b2e75c17f8d2dfb53d4d3c084b3b605a10426691fa131f25ca1d7898",
+      "record_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-6-comparisons-2",
+      "comparison_id": "qwen38-native-inference-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/6/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "original_comparison_sha256": "ac8e087bf2ea0a61b2209a3af1aaa8241bde9246b1b89f1a671a085fc287a3a1",
+      "record_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-6-comparisons-0",
+      "comparison_id": "qwen38-native-inference-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/6/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "original_comparison_sha256": "f620c67c34872c25a3f6ef3109825010461b806163a078531ebbb76f5e44ea5e",
+      "record_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-6-comparisons-3",
+      "comparison_id": "qwen38-native-inference-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/6/comparisons/3"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "original_comparison_sha256": "e074dd9f59072e1fb120bf618c5581f783d5e0adf532873c3281e3a1b16cf460",
+      "record_sha256": "b6edc41919ed3d4308cf7ca9de7c50ef5b049aa194de47ab635d86909aeacc26",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-8-comparisons-1",
+      "comparison_id": "qwen38-native-rl-components-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/8/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "original_comparison_sha256": "2febff73a6e1f7f1ec806ddd19ee4747b07105381fa0feb71f36a5b31334528d",
+      "record_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-8-comparisons-0",
+      "comparison_id": "qwen38-native-rl-components-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/8/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "original_comparison_sha256": "015d5ef9c664388e72c31c03afad4a7b9895b1befdffafc7c37e9cebff865a56",
+      "record_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-8-comparisons-3",
+      "comparison_id": "qwen38-native-rl-components-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/8/comparisons/3"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "original_comparison_sha256": "052070617b22650884433f0b8692be161660e97ae304fabb9fb4ddcb930271bd",
+      "record_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-8-comparisons-2",
+      "comparison_id": "qwen38-native-rl-components-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/8/comparisons/2"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "original_comparison_sha256": "f6ad8599e7cc16e13e6080b05b09890073aa71f6e94647ff82a5b490c0949aaf",
+      "record_sha256": "69d5ec70ffb8295fd5ca2ac93ee60b50f9685bea0fdbb4890606783563ef237a",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-9-comparisons-0",
+      "comparison_id": "qwen38-native-serving-admissions-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/9/comparisons/0"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+      "original_comparison_sha256": "1be18558ddfa9bd72964db3c7d1afb3ec0f16c93704f1d48ad467643ab208247",
+      "record_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    },
+    {
+      "measurement_id": "qwen38-source-bdc7e6071b7287b8-evaluations-9-comparisons-1",
+      "comparison_id": "qwen38-native-serving-admissions-20261106",
+      "source": {
+        "id": "source-bdc7e6071b7287b8",
+        "branch": "survey/deepseek41-gpu-npu-delivery-20261108",
+        "commit": "0ed4019febaec0d501d74382e054060a54fa30c3",
+        "path": "site/evidence/paper-writing-results-20261108.zip",
+        "url": "https://github.com/satsuki2486441738/PrecisionRSI/blob/0ed4019febaec0d501d74382e054060a54fa30c3/site/evidence/paper-writing-results-20261108.zip",
+        "archive_member": "sources/model-evaluations.json",
+        "json_pointer": "/evaluations/9/comparisons/1"
+      },
+      "raw_source_sha256": "2fadbdd6e18a6bfc1e8266c66e948e01cf287c3c67c45734b3fc3aa1eb619461",
+      "original_parent_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+      "original_comparison_sha256": "20bc66b881c370a4b2dcdb36a681f7b6e019900f30244fd8c538e47121fa7e4d",
+      "record_sha256": "157800fccfbb75fdf4ce103a69fd8862dbadb994204a422d464c664e38406285",
+      "matched_fields": [
+        "id",
+        "task",
+        "model",
+        "sides",
+        "comparison-entire-object"
+      ]
+    }
+  ],
+  "limitations": [
+    "Evaluation cases are retrieval boundaries, not inferred defects, original user confirmations or independent experiment counts.",
+    "A measurement is linked only when its retained raw parent ID, task, model, sides and complete comparison object match the current evaluation exactly.",
+    "Remaining measurement views retain their original frozen source IDs and pointers; shared model names or filenames do not establish relationships."
+  ]
+}

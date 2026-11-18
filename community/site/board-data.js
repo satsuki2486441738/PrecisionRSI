@@ -16,7 +16,7 @@
   function rx(source) { return new RegExp(source, "u"); }
 
   var PLATFORMS = [
-    [rx("ascend\\s*910c|ascend910_9382|ascend910c"), "Ascend 910C", "npu"],
+    [rx("ascend\\s*910c|ascend910_9382|ascend910c|\\b910_9382\\b|\\b910c\\b"), "Ascend 910C", "npu"],
     [rx("ascend\\s*910b"), "Ascend 910B", "npu"],
     [rx("ascend|npu"), "Ascend NPU", "npu"],
     [rx("h200|h20z"), "NVIDIA H200", "gpu"],
@@ -31,6 +31,21 @@
     for (var i = 0; i < PLATFORMS.length; i++)
       if (PLATFORMS[i][0].test(low)) return [PLATFORMS[i][1], PLATFORMS[i][2]];
     return [((text || "未记录").trim().slice(0, 26) || "未记录"), "other"];
+  }
+  // Discovery groups device SKUs, never allocation sizes, UUIDs or TP/EP.
+  // Preserve all explicit accelerator SKUs in a cross-platform record.
+  function hardwarePlatforms(text) {
+    var low=String(text || "").toLowerCase();
+    var names=PLATFORMS.filter(function (entry) { return entry[0].test(low); })
+      .map(function (entry) { return entry[1]; });
+    if (names.indexOf("Ascend 910C")>=0 || names.indexOf("Ascend 910B")>=0)
+      names=names.filter(function (name) { return name!=="Ascend NPU"; });
+    if (names.some(function (name) { return /^(NVIDIA H|RTX )/.test(name); }))
+      names=names.filter(function (name) { return name!=="NVIDIA GPU"; });
+    // CPU offload in an accelerator environment is not a CPU platform result.
+    if (names.some(function (name) { return name!=="CPU"; }))
+      names=names.filter(function (name) { return name!=="CPU"; });
+    return names.length ? names : [String(text || "未记录").trim() || "未记录"];
   }
 
   // What quantity the comparison is about.
@@ -360,12 +375,24 @@
         return r.json();
       });
     };
-    return Promise.all([get("evaluations.json"), get("repairs.json")])
-      .then(function (both) { return deriveBoard(both[0], both[1]); });
+    return Promise.all([get("evaluations.json"), get("repairs.json"), get("content.json")])
+      .then(function (documents) {
+        var board=deriveBoard(documents[0], documents[1]);
+        board.content=Object.fromEntries(documents[2].records.map(function (entry) {
+          return [entry.kind+":"+entry.id,entry.content];
+        }));
+        [["comparison",documents[0].evaluations],["repair",documents[1].repairs]].forEach(function (group) {
+          group[1].forEach(function (record) {
+            if(record.content)board.content[group[0]+":"+record.id]=record.content;
+          });
+        });
+        return board;
+      });
   }
 
   global.deriveBoard = deriveBoard;
   global.buildBoard = buildBoard;
+  global.NumericBridgeHardware = { hardwarePlatforms: hardwarePlatforms };
   if (typeof module !== "undefined" && module.exports)
-    module.exports = { deriveBoard: deriveBoard, buildBoard: buildBoard };
+    module.exports = { deriveBoard: deriveBoard, buildBoard: buildBoard, hardwarePlatforms: hardwarePlatforms };
 })(typeof window !== "undefined" ? window : globalThis);

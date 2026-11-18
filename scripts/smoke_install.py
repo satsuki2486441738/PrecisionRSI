@@ -51,6 +51,15 @@ def main():
             cwd=cwd, env=env, capture_output=True, text=True, check=True, timeout=30).stdout
         if 'Details:' in cli_help or '--mode' not in cli_help:
             raise ValueError('installed tensor CLI help lost short declaration or mode flags')
+        retrieval = subprocess.run(
+            [sys.executable, '-I', '-B', str(installed / 'scripts/community_search.py'),
+             '--hardware', 'H20Z', '--model', 'Qwen3.5-9B-Base', '--library', 'peft', '--task', 'inference'],
+            cwd=cwd, env=env, capture_output=True, text=True, check=True, timeout=30)
+        lookup = json.loads(retrieval.stdout)
+        if (lookup['normalized_request']['hardware'] != 'NVIDIA H200' or
+                lookup['recommendation']['candidate_id'] != 'solution-qwen35-weighted-lora-bias-local' or
+                'community-search.json' not in lookup['retrieval']['source']):
+            raise ValueError('installed offline community retrieval lost configuration/evidence binding')
         result = subprocess.run([sys.executable, '-I', '-B', str(installed / 'examples/compare_gradients.py'),
                                  '--output-root', str(cwd)], cwd=cwd, env=env, capture_output=True,
                                 text=True, check=True, timeout=120)

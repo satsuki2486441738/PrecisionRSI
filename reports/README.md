@@ -7,6 +7,7 @@ numerical acceptance. These files are results, not instructions to restart work.
 
 | Result | Report |
 |---|---|
+| Community case / issue / solution inventory | [Reviewed record inventory](community-record-inventory-20261117.md) |
 | Qwen3.5 | [Precision report](qwen35-precision-report.md) |
 | Qwen3.8 | [Precision report](qwen38-precision-report.md) |
 | DeepSeek V4.1 original comparison | [Precision report](deepseek41-precision-report.md) |

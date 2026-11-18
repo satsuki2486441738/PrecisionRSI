@@ -5,6 +5,9 @@ description: Establish native execution when a requested model, framework or har
 
 # Framework adaptation
 
+For a new hardware/model/framework task, follow [request establishment](../precision-compare/SKILL.md#establish-the-request); reuse the confirmed request when continuing comparison or repair.
+Reuse comparison's [community retrieval](../precision-compare/SKILL.md#retrieve-community-evidence) before new execution; retain applicable source-bound results and collect only missing scope.
+
 ## Execute
 
 Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.

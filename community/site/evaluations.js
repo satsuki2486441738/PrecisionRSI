@@ -205,7 +205,9 @@
     evidence.append(links);
     grid.append(conditions, environments, maximum, evidence);
     details.append(grid);
-    body.append(node('p', 'card-summary evaluation-intro', record.summary), selection, panel, details);
+    const summary=global.EvaluationPresentation?.summaryFor(record);
+    if(summary)body.append(node('p', 'card-summary evaluation-intro', summary));
+    body.append(selection, panel, details);
     card.append(header, body);
     return card;
   }

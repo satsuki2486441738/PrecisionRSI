@@ -11,11 +11,11 @@
     'reported-diagnostic': '诊断记录'
   };
   const kindNotes = {
-    'cross-backend': '两侧硬件、精度与并行设置请见配置；该结果不自动归因于硬件。',
-    'native-reference': '同一平台的原生实现与参考路径比较；不是 GPU 与 NPU 的直接差值。',
-    'within-backend': '同一平台内的执行配置比较，保留各自的控制条件。',
-    'operator-reference': '算子级参考对比；范围以该记录为准，不代表完整模型误差。',
-    'reported-diagnostic': '报告中的诊断证据；不与配对比较合并计算。'
+    'cross-backend': 'GPU 与 NPU 对比。',
+    'native-reference': '同一平台的原生实现与参考实现对比。',
+    'within-backend': '同一平台的不同执行配置对比。',
+    'operator-reference': '算子级参考对比。',
+    'reported-diagnostic': '报告中的诊断记录。'
   };
   function modelLabel(record) {
     return typeof record.model === 'string' ? record.model : record.model?.label || record.model?.name || record.model_id || '模型未记录';
@@ -166,7 +166,8 @@
       });
       if (!headline.childElementCount) headline.append(node('p', '', '展开查看采集状态与诊断证据'));
       const scope = [record.stage, record.mode].filter(Boolean).join(' · ');
-      summary.append(headline, node('p', 'overview-scope', scope || record.scope || '比较范围见详情'));
+      summary.append(headline);
+      if(scope)summary.append(node('p', 'overview-scope', scope));
       const disclosure = node('div', 'overview-disclosure');
       disclosure.append(node('span', '', '指标、配置与证据'), node('span', '', `${list(record.metrics).length} 项指标`));
       summary.append(disclosure);
@@ -180,7 +181,7 @@
         const permalink = node('a', '', '条目链接 ↗');
         permalink.href = `#difference-${encodeURIComponent(record.id)}`;
         toolbar.append(permalink);
-        content.append(toolbar, node('p', 'difference-scope-note', record.scope), node('p', 'difference-kind-note', kindNotes[record.comparison_kind] || '请按原始证据中的范围解释。'));
+        content.append(toolbar, node('p', 'difference-kind-note', kindNotes[record.comparison_kind] || kindLabel(record.comparison_kind)));
         const metrics = node('dl', 'difference-metrics');
         list(record.metrics).forEach((metric) => metrics.append(metricPanel(metric)));
         content.append(metrics);
@@ -189,6 +190,7 @@
         const grid = node('div', 'detail-grid');
         const comparison = node('section', 'detail-section');
         comparison.append(node('h6', '', '01 / 比较条件'));
+        if(record.scope)comparison.append(node('p', 'difference-scope-note', record.scope));
         comparison.append(settings(record.configuration || { common_conditions: record.common_conditions, differences: record.differences }));
         if (list(record.coverage).length) {
           comparison.append(node('h6', 'difference-side-title', '采集覆盖'), settings({ coverage: record.coverage }));
@@ -216,7 +218,7 @@
           record.notes.forEach((note) => notes.append(node('li', '', typeof note === 'string' ? note : JSON.stringify(note))));
           provenance.append(notes);
         }
-        provenance.append(node('p', 'difference-acceptance', record.acceptance == null ? '数值验收：未记录结论。差异大小不等于任务效果变化。' : `数值验收：${typeof record.acceptance === 'object' ? JSON.stringify(record.acceptance) : record.acceptance}`));
+        provenance.append(node('p', 'difference-acceptance', record.acceptance == null ? '数值验收：未记录。' : `数值验收：${typeof record.acceptance === 'object' ? JSON.stringify(record.acceptance) : record.acceptance}`));
         grid.append(comparison, provenance);
         details.append(grid);
         content.append(details);
@@ -297,7 +299,7 @@
         row.append(name, node('strong', '', `${count} 条`), drawBar(count, [0, records.length], kind === 'cross-backend' ? 'difference-bar-peer' : ''));
         distribution.append(row);
       });
-      element.append(distribution, node('p', 'difference-overview-note', 'GPU ↔ NPU 是直接跨平台比较；其余类型是平台内部或参考实现对比。共享输入不代表两侧软件栈、精度和并行策略完全相同。条形仅表示测量记录数量，同一实验可包含多条视图。'));
+      element.append(distribution, node('p', 'difference-overview-note', '按比较类型统计测量记录数：GPU ↔ NPU、平台内部及参考实现对比。'));
       return element;
     }
     const elements = records.length ? [overview()] : [];

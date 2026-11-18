@@ -6,6 +6,35 @@ compatibility: Python 3.10+; NumPy for array tools; native runtimes as required 
 
 # Precision comparison
 
+## Establish the request
+
+For a new hardware/model/framework task, summarize the request in the user's language and ask them to confirm or correct it:
+
+| Field | Summarize |
+|---|---|
+| Hardware platform | Vendor/model; device count and environment when known |
+| Target model | Model identifier; revision when known |
+| Training/inference framework | User-selected framework; distinguish known training backend, rollout engine and device adaptation libraries with their versions |
+| Task and goal | Inference/SFT/RL, algorithm and affected stage when known; requested comparison, diagnosis, repair or version/configuration selection |
+
+Separate user-provided facts, inferred assumptions and unknowns. Include existing symptoms, evidence, constraints and expected delivery when supplied. Ask only about missing choices that affect the next step; exact versions, numerical settings and distributed configuration can remain unknown for preliminary retrieval and must be resolved when required for execution or comparison.
+
+Reuse prior confirmation across skills and follow-ups; ask again only for material changes or unresolved choices. While confirmation is pending, read-only preliminary retrieval may proceed using explicitly labeled assumptions; wait for the user's answer before performing work that depends on those choices.
+
+## Retrieve community evidence
+
+Before new collection, query the confirmed demand (or label preliminary assumptions):
+
+```sh
+python -B scripts/community_search.py --hardware H200 --model MODEL --library LIB --task rl
+```
+
+The tool uses an offline metadata snapshot; `--index FILE_OR_HTTPS_URL` selects another source and `--sha256 HASH` pins it. It also accepts `--request REQUEST.json`. Read `normalized_request`, `missing_input` and matching records. No match supplies no additional context: continue the normal collection or repair workflow.
+
+When `recommendation` exists, present the version combination and required patch. Otherwise use the records as context; explain the relevant `recommendation_gaps` when version selection is requested. `alternatives` lists other supported versions; select one when that change fits the user's request. Reuse applicable evidence and collect missing scope.
+
+For requested community submissions or public descriptions, follow [community record writing](references/community-records.md). Keep public summaries concise and record configuration, status and evidence in their fields.
+
 ## Scope
 
 - Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.

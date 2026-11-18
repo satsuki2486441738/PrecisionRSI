@@ -5,6 +5,9 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 # Precision repair
 
+For a new hardware/model/framework task, follow [request establishment](../precision-compare/SKILL.md#establish-the-request); reuse the confirmed request when continuing comparison or adaptation.
+Reuse comparison's [community retrieval](../precision-compare/SKILL.md#retrieve-community-evidence) to inspect known issues and scoped solutions before new diagnosis; a retrieved candidate still requires applicability and original-workload checks.
+
 ## Diagnose
 
 - Enter for requested diagnosis or repair. Reuse the workload execution, inputs/state, source/runtime identities, collectors, captures and completed checks.
