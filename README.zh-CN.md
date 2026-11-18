@@ -7,6 +7,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml"><img src="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI 状态"></a>
+  <a href="https://satsuki2486441738.github.io/NumericBridge/"><img src="https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E4%B8%BB%E9%A1%B5-%E7%A4%BE%E5%8C%BA-2563EB.svg" alt="项目主页：NumericBridge 社区"></a>
 </p>
 
 <p align="center"><strong>数值精度比较、诊断与修复</strong></p>
@@ -130,7 +131,7 @@ python -B -m scripts install --output /path/to/client/skills
 | PEFT 0.17.1 | SVD adapter 合并重复应用 LoRA 缩放 | 前向、输入梯度、checkpoint 加载及合并；24 组工作负载 |
 | Transformers 4.51.3 | Qwen2 attention mask 忽略关闭滑动窗口的配置 | Eager/SDPA 完整前向及动态/静态 cache；18 组工作负载和 16 组 mask 检查 |
 
-[修复历史](https://satsuki2486441738.github.io/PrecisionRSI/)记录受影响版本、上游修复版本、补丁、前后指标和验证范围。
+[修复历史](https://satsuki2486441738.github.io/NumericBridge/)记录受影响版本、上游修复版本、补丁、前后指标和验证范围。
 
 ## 工具与开发
 
@@ -162,9 +163,9 @@ python3 examples/workflow_demo.py --output-root /tmp/precision-workloads
 
 ## 评测与修复历史
 
-[比较看板](https://satsuki2486441738.github.io/PrecisionRSI/)读取已发布的评测与修复记录。[历史归档](https://satsuki2486441738.github.io/PrecisionRSI/archive.html)保留推理 / SFT / RL 的配置、数值指标、覆盖率和证据，以及按库分组的修复和验证记录。记录及公开证据维护在 [community/site/](community/site/README.md)。
+[比较看板](https://satsuki2486441738.github.io/NumericBridge/)读取已发布的评测与修复记录。[历史归档](https://satsuki2486441738.github.io/NumericBridge/archive.html)保留推理 / SFT / RL 的配置、数值指标、覆盖率和证据，以及按库分组的修复和验证记录。记录及公开证据维护在 [community/site/](community/site/README.md)。
 
-[RSI 迭代看板](https://satsuki2486441738.github.io/PrecisionRSI/rsi.html)展示当前运行、候选变更、独立评测结果和分阶段时间/token 开销，单独记录基线复用。
+[RSI 迭代看板](https://satsuki2486441738.github.io/NumericBridge/rsi.html)展示当前运行、候选变更、独立评测结果和分阶段时间/token 开销，单独记录基线复用。
 
 [结果指标页](community/site/paper.html)提供公开报告、科学图、[JSON](community/site/data/paper-results.json)和[CSV 数值索引](community/site/data/paper-results.csv)。公开内容保留来源哈希、实际配置、覆盖范围、失败与未验证项，数值字段不代表独立样本。历史 ZIP、原始张量和完整执行日志仅在本地保留，不提供在线下载。[本地证据索引](community/site/data/local-evidence.json)记录归档名称、大小和 SHA256。哈希完整性不表示数值验收通过。
 
