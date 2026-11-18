@@ -8,6 +8,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml"><img src="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI 状态"></a>
   <a href="https://satsuki2486441738.github.io/NumericBridge/"><img src="https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E4%B8%BB%E9%A1%B5-%E7%A4%BE%E5%8C%BA-2563EB.svg" alt="项目主页：NumericBridge 社区"></a>
+  <a href="https://github.com/satsuki2486441738/NumericBridge/stargazers"><img src="https://img.shields.io/github/stars/satsuki2486441738/NumericBridge?logo=github" alt="GitHub 星标数"></a>
 </p>
 
 <p align="center"><strong>数值精度比较、诊断与修复</strong></p>
