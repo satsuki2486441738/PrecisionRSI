@@ -368,7 +368,7 @@
     const requestedVersion=value=>libraryVersion({version:value})||tx('指定版本','Selected version');
     root.innerHTML=`<div class="wrap lc-page">
       <div class="lc-intro"><h1>${tx('精度案例库','Precision Case Library')}</h1></div>
-      <div class="lc-discovery"><aside class="lc-demand" aria-label="${tx('目标配置','Target configuration')}"><div class="lc-demand-head"><h2>${tx('目标配置','Target configuration')}</h2><button type="button" class="link" data-reset>${tx('重置','Reset')}</button></div><div class="lc-selectors"></div><button class="lc-example" data-example type="button" ${example?'':'hidden'}>${tx('载入示例','Load example')} →</button></aside>
+      <div class="lc-discovery"><aside class="lc-demand" aria-label="${tx('目标配置','Target configuration')}"><div class="lc-demand-head"><h2>${tx('目标配置','Target configuration')}</h2><button type="button" class="link" data-reset>${tx('重置','Reset')}</button></div><div class="lc-selectors"></div></aside>
       <section class="lc-results" aria-label="${tx('配置结果','Configuration results')}"><section class="lc-recommendation" aria-live="polite"></section><section class="lc-problems"><h2>${tx('相关问题','Related issues')}</h2><div class="lc-list"></div></section><section class="lc-problems" data-model-records hidden></section></section></div>
       <dialog class="lc-option-dialog" aria-labelledby="lc-option-title"><div class="lc-modal-bar"><h2 id="lc-option-title"></h2><button type="button" class="iconbtn" data-options-close aria-label="${tx('关闭选项','Close options')}">×</button></div><div class="lc-option-body"><label class="lc-option-search"><svg class="lc-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span class="sr">${tx('搜索选项','Search options')}</span><input type="search" data-options-search placeholder="${tx('搜索或输入名称','Search or enter a name')}"></label><div class="lc-option-grid" data-options-list></div></div></dialog>
       <dialog class="lc-case-dialog" aria-labelledby="lc-case-title"><div class="lc-modal-bar"><span>${tx('案例详情','Case detail')}</span><div class="lc-detail-actions"><button class="btn sm" type="button" data-copy>${tx('复制链接','Copy link')}</button><button type="button" class="iconbtn" data-detail-close aria-label="${tx('关闭案例详情','Close case detail')}">×</button></div></div><article class="lc-detail" id="lc-detail"></article></dialog></div>`;
@@ -727,13 +727,15 @@
       const ready=['hardware','model','library'].every(field=>state[field]);
       const section=root.querySelector('.lc-recommendation');
       section.innerHTML=`<h2>${tx('推荐配置','Recommended configuration')}${showingExample?` <span class="lc-badge" data-example-label>${tx('示例','Example')}</span>`:''}</h2>`+(recommendation?(()=>{
-        const {config,library,solution}=recommendation;
+        const {case:c,config,library,solution,verification}=recommendation;
         const version=libraryVersion(library),requested=requestedVersion(state.version);
+        const details=solution?'':`<button class="link lc-detail-link" type="button" data-case="${esc(c.row.id)}" aria-haspopup="dialog">${tx('配置与验证详情','Configuration & verification')} ↗</button>`;
+        const report=verification||config.kind==='comparison'?`<a class="link" href="${esc(reportLink(c,verification?'verification':'comparison',verification?.id||config.recordId,state,'',solution?.id))}">${tx('查看实测报告','View measured report')} ↗</a>`:'';
         return `<div class="lc-recommend-head"><h3>${esc(library.name)}${version?` <span>${esc(version)}</span>`:''}${solution?` <span>＋ ${tx('本地修复','local fix')}</span>`:''}</h3></div>
           ${recommendation.differences.includes('version')?`<p class="lc-version-change">${version&&version!==requested?`${tx('版本调整','Version change')}: ${esc(requested)} → ${esc(version)}`:tx('已显示其他版本的记录','Showing records for a different version')}</p>`:''}
           <dl class="lc-recommend-config"><div><dt>${tx('硬件','Hardware')}</dt><dd title="${esc(config.hardware)}">${esc(state.hardware)}</dd></div><div><dt>${tx('实测模型','Tested model')}</dt><dd>${esc(config.model)}</dd></div><div><dt>${tx('任务','Task')}</dt><dd>${esc(taskLabel(state.task||config.tasks[0]||tx('未记录','Not recorded')))}</dd></div></dl>
           <section class="lc-stack" aria-label="${tx('库版本搭配','Library version combination')}"><h4>${tx('库版本搭配','Library version combination')}</h4><dl class="lc-recommend-config">${config.libraries.map(lib=>`<div><dt>${esc(lib.name)}</dt><dd>${esc(libraryVersion(lib)||'—')}</dd></div>`).join('')}</dl></section>
-          <div class="lc-report-links"><button class="link lc-detail-link" type="button" data-case="${esc(recommendation.case.row.id)}" aria-haspopup="dialog">${solution?tx('查看修复方案','View fix'):tx('配置与验证详情','Configuration & verification')} ↗</button>${recommendation.verification||config.kind==='comparison'?`<a class="link" href="${esc(reportLink(recommendation.case,recommendation.verification?'verification':'comparison',recommendation.verification?.id||config.recordId,state,'',solution?.id))}">${tx('查看实测报告','View measured report')} ↗</a>`:''}</div>`;
+          ${details||report?`<div class="lc-report-links">${details}${report}</div>`:''}`;
       })():!ready?`<p class="lc-placeholder">${tx('请选择硬件、模型和框架','Select hardware, model and framework')}</p>`:
         lookup.recommendation_gaps.includes('specific-model-required-for-recommendation')?`<button class="btn sm" type="button" data-pick-model>${tx('选择具体型号','Select a specific model')}</button>`:
         `<p class="lc-placeholder">${tx('暂无可推荐组合','No supported recommendation')}</p>`);
@@ -766,9 +768,6 @@
       writeURL();
     }
     root.querySelector('[data-reset]').onclick=()=>{for(const k of configurationFields)state[k]='';state.q='';allowAlternatives=false;showingExample=false;selected='';render();};
-    root.querySelector('[data-example]').onclick=()=>{
-      if(!example)return;Object.assign(state,example,{q:''});allowAlternatives=false;showingExample=true;selected='';render();
-    };
     const requested=selected,requestedIssue=selectedIssue;selected='';selectedIssue='';render();
     if(requested){const c=index.cases.find(c=>c.row.id===requested);if(c)openCase(c,null,requestedIssue);}
   }
