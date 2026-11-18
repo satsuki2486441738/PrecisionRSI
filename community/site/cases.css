@@ -7,7 +7,7 @@
 #v-cases .lc-demand-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 #v-cases .lc-demand h2{font-size:16px;letter-spacing:-.02em}
 #v-cases .lc-demand-head button{font-size:11px;color:var(--muted)}
-#v-cases .lc-selectors{display:grid;gap:18px;margin-block:22px}
+#v-cases .lc-selectors{display:grid;gap:18px;margin-block:22px 0}
 #v-cases .lc-select-field{min-width:0;margin:0;padding:0 0 18px;border:0;border-bottom:1px solid var(--hair)}
 #v-cases .lc-select-field:last-child{padding-bottom:0;border-bottom:0}
 #v-cases .lc-select-field legend{font-size:12px;font-weight:500;width:100%;padding:0;margin-bottom:12px}
@@ -52,7 +52,6 @@
 #v-cases .lc-evaluation-links button{text-align:left;justify-self:start}
 #v-cases .lc-evaluation-links span{color:var(--muted);font-size:11px}
 #v-cases .lc-option-grid .lc-choice:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
-#v-cases .lc-example{font-size:11px;line-height:1.7;text-align:left;color:var(--red);padding-top:14px;border-top:1px solid var(--hair);width:100%}
 #v-cases .lc-results{min-width:0}
 #v-cases .lc-recommendation{padding:24px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
 #v-cases .lc-recommendation>h2,#v-cases .lc-problems>h2{font-size:15px;font-weight:500;margin-bottom:20px}
