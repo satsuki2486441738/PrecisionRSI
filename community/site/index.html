@@ -14,7 +14,7 @@
 try { const t = localStorage.getItem("nf-theme"); if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
 document.documentElement.classList.add("js");
 </script>
-<link rel="stylesheet" href="./cases.css?v=measured-report-20261118">
+<link rel="stylesheet" href="./cases.css?v=case-board-refresh">
 <style>
 /* NumericBridge v2 — AccelMark's information architecture (results / compare /
    platform / suites) dressed in inference-rsi's reading view: warm paper, one
@@ -120,6 +120,8 @@ br.d{display:inline}
 .iconbtn{display:grid;place-content:center;width:36px;height:36px;border:1px solid var(--line);border-radius:4px;color:var(--muted);font-size:15px;transition:border-color .2s,color .2s}
 .iconbtn:hover{border-color:var(--ink);color:var(--ink)}
 .langbtn{width:auto;min-width:40px;padding:0 9px;font:500 11px/1 var(--mono);letter-spacing:.06em}
+.acts .github-link{gap:6px}
+.github-link svg{width:16px;height:16px;flex:none;fill:currentColor}
 .mockbar{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hair);font:10px/1.6 var(--mono);letter-spacing:.04em;color:var(--faint)}
 .mockbar b{font-weight:500;color:var(--red)}
 
@@ -131,6 +133,7 @@ br.d{display:inline}
 .btn.primary:hover{filter:brightness(1.06)}
 .btn.sm{min-height:32px;padding:6px 12px;font-size:12px;gap:10px}
 .btn.sm span{font-size:13px}
+.btn.sm .csv-label{font-size:inherit}
 .btn.ghost{border-color:transparent;color:var(--muted)}
 .btn.ghost:hover{color:var(--ink);border-color:var(--line)}
 .link{color:var(--red);font-size:13px;display:inline-flex;gap:8px;align-items:center}
@@ -160,7 +163,6 @@ br.d{display:inline}
 .pbar .trk{grid-column:1/-1;height:8px;background:var(--hair);border-radius:2px;overflow:hidden;margin-top:6px}
 .pbar .trk i{display:block;height:100%;border-radius:0 4px 4px 0}
 .proof figcaption{margin-top:18px;padding-top:14px;border-top:1px solid var(--hair);font-size:12.5px;line-height:1.75;color:var(--muted)}
-.proof figcaption b{color:var(--ink);font-weight:500}
 .results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:64px;padding-top:34px;border-top:1px solid var(--line)}
 .result{padding:0 34px 4px;border-left:1px solid var(--line)}
 .result:first-child{padding-left:0;border-left:0}
@@ -169,7 +171,62 @@ br.d{display:inline}
 .result h3{font-size:17px;font-weight:400;letter-spacing:-.01em;margin-top:10px}
 .result p{font:11.5px/1.6 var(--mono);color:var(--muted);margin-top:12px}
 .result p i{font-style:normal;color:var(--red);padding:0 6px}
-.measure{margin-top:26px;font-size:12px;line-height:1.8;color:var(--faint);max-width:90ch}
+:is(#v-overview,#v-cite) .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}
+#v-overview .sec-head .h2{max-width:none;word-break:normal}
+.home-intro{padding:62px 0 42px;text-align:center}
+.home-intro .h1{max-width:none;font-size:64px;letter-spacing:0;color:var(--red)}
+.home-tagline{max-width:1080px;margin:12px auto 0;font-size:28px;font-weight:500;line-height:1.35;text-wrap:balance}
+.home-tagline strong{font-weight:650}
+.home-affiliations{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 24px;margin:24px 0 0;padding:0;list-style:none;color:var(--muted);font-size:14px}
+.home-workflow{margin:0 auto}
+.home-coverage,.home-results{margin-top:48px}
+.home-section-title{position:relative;min-width:0;padding-inline-start:14px;color:var(--ink);font-size:32px;font-weight:650;line-height:1.25}
+.home-section-title::before{content:"";position:absolute;inset-inline-start:0;top:.19em;width:3px;height:.87em;background:var(--red);border-radius:2px}
+.home-results .home-section-title{margin-bottom:18px}
+.home-coverage-head,.home-citation{display:flex;align-items:baseline;justify-content:space-between;gap:6px 20px;flex-wrap:wrap}
+.home-coverage-head{margin-bottom:18px}
+.home-coverage h3{color:var(--muted);font-size:13px;font-weight:550}
+.home-platforms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0 18px}
+.home-platform{min-width:0;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:12px}
+.home-platform header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.home-platform h4{font-size:14px;font-weight:550}
+.home-platform img,.home-platform .ico{display:block;width:24px;height:20px;object-fit:contain}
+.home-platform img[src$="ascend.svg"]{width:42px}
+.home-platform.soon{border-style:dashed;background:transparent}
+.home-platform .soon-label{color:var(--muted);font-size:12px}
+.home-stack{display:flex;flex-wrap:wrap;gap:5px}
+.home-stack a{display:block;padding:2px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);font-size:12px;overflow-wrap:anywhere}
+.home-stack a:hover{border-color:var(--red);color:var(--red)}
+.home-frameworks{margin-top:6px;border-top:1px solid var(--line)}
+.home-frameworks>div{display:grid;grid-template-columns:82px minmax(0,1fr);gap:8px 12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
+.home-frameworks dt{font-size:13px;font-weight:550}
+.home-citation{margin:48px 0 44px;padding-top:20px;border-top:1px solid var(--line)}
+.home-citation p,.home-coverage-status{margin-top:4px;color:var(--muted);font-size:13px}
+.home-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 24px}
+.home-stat{display:flex;flex-direction:column;align-items:flex-start;min-width:0;border-top:1px solid var(--line);padding-top:12px}
+.home-stat dt{font-size:14px;font-weight:500;line-height:1.4}
+.home-stat dt a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.home-stat dt a:hover{text-decoration-color:currentColor}
+.home-stat .home-stat-value{order:-1;margin-bottom:6px;color:var(--red);font-size:38px;line-height:1.12;font-weight:500;font-variant-numeric:tabular-nums}
+.home-stat .home-stat-value.pending{display:flex;align-items:center;min-height:42.56px;color:var(--muted);font-size:17px}
+.home-stat-note{margin-top:5px;font-size:12px;line-height:1.5;color:var(--muted)}
+@media(max-width:780px){.home-stats,.home-platforms{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.home-intro .h1{font-size:52px}.home-tagline{font-size:24px}}
+@media(max-width:600px){
+  .home-intro{padding:36px 0 28px}
+  .home-intro .h1{font-size:40px}
+  .home-tagline{margin-top:8px;font-size:18px}
+  .home-affiliations{margin-top:16px;gap:5px 14px;font-size:13px}
+  .home-coverage,.home-results{margin-top:34px}
+  .home-section-title{font-size:26px}
+  .home-citation{margin:34px 0 34px}
+  .home-frameworks>div{grid-template-columns:1fr}
+  .home-stats{column-gap:14px}
+  .home-stat .home-stat-value{font-size:30px}
+  .home-stat .home-stat-value.pending{min-height:33.6px;font-size:14px}
+  #v-overview .proof-top{flex-direction:column;gap:4px}
+}
+@media(max-width:360px){.home-intro .h1{font-size:36px}}
 
 /* ---------- pills / facets (AccelMark) ---------- */
 .pills{display:flex;flex-wrap:wrap;gap:7px}
@@ -390,38 +447,35 @@ a.plink:hover{border-color:var(--ink)}
 .evcard .figbox{padding:0;border:0}
 .evcard .cmptbl{margin:0 -24px;border-top:1px solid var(--line)}
 .evcard .fp{padding:0;background:none;border:0;box-shadow:none}
-.evcard .rfig{margin:0 -24px;border-radius:0;border-left:0;border-right:0;border-bottom:0}
-.evcard #rBody>.panel.empty{border:0}
 /* repair drawer: before | after twin panels on one grid */
 .twin{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:10px;margin-top:12px}
 .tw-c{min-width:0;padding:9px 14px;border-left:1px solid var(--line);border-right:1px solid var(--line);overflow-wrap:anywhere}
 .tw-c.b{background:var(--wash)}
-.tw-c.a{background:var(--paper);border-color:color-mix(in srgb,var(--t0) 50%,var(--line))}
+.tw-c.a{background:var(--paper)}
 .tw-c.h{padding-top:13px;border-top:1px solid var(--line);border-radius:8px 8px 0 0}
-.tw-c.a.h{border-top-color:color-mix(in srgb,var(--t0) 50%,var(--line))}
 .tw-c.h b{display:block;font-size:15px;font-weight:500}
 .tw-c.end{padding-bottom:14px;border-bottom:1px solid var(--line);border-radius:0 0 8px 8px}
-.tw-c.a.end{border-bottom-color:color-mix(in srgb,var(--t0) 50%,var(--line))}
-.tw-c.s{font-size:12.5px;line-height:1.7;color:var(--muted);padding-bottom:12px}
 .tw-c.m{border-top:1px solid var(--hair)}
 .tw-c.m small{display:block;font-size:11.5px;line-height:1.5;color:var(--muted)}
 .tw-c.a.m small{color:var(--faint)}
 .tw-c.m strong{display:block;margin-top:3px;font:500 17px/1.3 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .tw-c.m.hd strong{font-size:25px}
 .tw-c.m em{display:block;margin-top:2px;font:10.5px/1.5 var(--mono);font-style:normal;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tw-c.a.m em{color:var(--t0)}
-.chips2{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.chip2{padding:1px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);font:10.5px/1.6 var(--mono);color:var(--muted);overflow-wrap:anywhere}
-.chip2.bad{border-color:var(--red-line);background:var(--red-soft);color:var(--red)}
-.chip2.good{border-color:color-mix(in srgb,var(--t0) 50%,transparent);color:var(--t0)}
-/* home overview */
-.ovw{margin-top:40px;border-top:1px solid var(--line)}
-.ov{display:grid;grid-template-columns:minmax(150px,.28fr) minmax(0,1fr);gap:28px;padding:20px 0;border-bottom:1px solid var(--line)}
-.ov>span{font:500 11px/2.1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.ov>span i{font-style:normal;color:var(--red);margin-right:12px}
-.ov p{font-size:17px;line-height:1.8;color:var(--ink);max-width:62ch}
-.ov a{color:var(--red);cursor:pointer}
-.ov a:hover{text-decoration:underline;text-underline-offset:4px}
+.how-header{padding-top:40px}
+.how-header .h1{max-width:none}
+.how-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-block:1px solid var(--line);margin-top:22px}
+.how-steps a{display:flex;align-items:center;gap:9px;height:100%;min-height:46px;padding:8px 10px;font-size:13px;font-weight:500;line-height:1.35;overflow-wrap:anywhere}
+.how-steps a:hover{color:var(--red);background:var(--red-soft)}
+.how-steps span{flex:none;color:var(--red);font:500 11px var(--mono)}
+.how-chapter-title{display:flex;align-items:baseline;gap:12px;font-size:30px;font-weight:650;line-height:1.25}
+.how-chapter-number{flex:none;color:var(--red);font:500 13px var(--mono)}
+#v-how .sec{padding-top:52px}
+@media(max-width:1000px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:520px){
+  .how-header{padding-top:28px}
+  .how-steps{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:16px}
+  #v-how .sec{padding-top:38px}
+}
 /* folded lists */
 .fold summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--hair)}
 .fold summary::-webkit-details-marker{display:none}
@@ -436,14 +490,6 @@ a.plink:hover{border-color:var(--ink)}
 .rows-dl dd .fold summary{padding:0;border-bottom:0}
 .rows-dl dd ul.notes{list-style:none;padding-left:0;margin-top:6px}
 .rows-dl dd .fold .notes li:last-child{border-bottom:0}
-/* repair figure entry motion */
-.rtrk .pa{left:var(--a)}
-.rfig:not(.go) .rtrk .pa{left:var(--b)}
-.rfig:not(.go) .rtrk .seg{transform:translateY(-50%) scaleX(0)}
-.rfig:not(.go) .rfac{opacity:0}
-.rfig .rtrk .pa{transition:left .95s cubic-bezier(.2,.7,.2,1) calc(var(--i,0) * 45ms)}
-.rfig .rtrk .seg{transition:transform .95s cubic-bezier(.2,.7,.2,1) calc(var(--i,0) * 45ms)}
-.rfig .rfac{transition:opacity .4s calc(var(--i,0) * 45ms + .6s)}
 /* cite */
 .cite{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;align-items:stretch}
 .cite-meta{display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:20px 22px}
@@ -471,9 +517,14 @@ a.plink:hover{border-color:var(--ink)}
 :root{--node:#3f3c43;--node-fg:#fff;--node-2:#9a959e;--cellbg:#e6e2db}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--node:#e4e1dc;--node-fg:#17181c;--node-2:#7d7a82;--cellbg:#26272c}}
 :root[data-theme="dark"]{--node:#e4e1dc;--node-fg:#17181c;--node-2:#7d7a82;--cellbg:#26272c}
-.how-lead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px 56px;margin:22px 0 30px}
-.how-lead .l{font-size:20px;line-height:1.7;color:var(--ink);letter-spacing:-.01em}
-.how-lead .r{font-size:14.5px;line-height:1.95;color:var(--muted)}
+.how-note{max-width:72ch;margin:12px 0 16px;color:var(--muted)}
+.how-note > p + p{margin-top:6px}
+.how-request dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.how-match .dm-h{flex-direction:row;align-items:center;gap:8px}
+.how-match dl{grid-template-columns:repeat(2,minmax(0,1fr))}
+.how-request dt{color:var(--muted);font-size:12px}
+.how-request dd{margin-top:3px;font-weight:500;overflow-wrap:anywhere}
+.how-readings{margin-top:40px}
 .dm{padding:20px 22px 14px}
 .dm-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
 .dm-ctl{display:flex;gap:8px;flex:none}
@@ -623,8 +674,6 @@ a.plink:hover{border-color:var(--ink)}
 .rp-foot strong{font:500 22px var(--mono)}
 .rp-lane.bug .rp-foot strong{color:var(--red)} .rp-lane.fix .rp-foot strong{color:var(--t0)}
 @media (max-width:860px){
-  .how-lead{grid-template-columns:1fr;gap:10px}
-  .how-lead .l{font-size:17px}
   .dm{padding:16px 14px 12px}
   .dm-h{flex-direction:column}
   .dm-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -644,13 +693,20 @@ a.plink:hover{border-color:var(--ink)}
   .rp-grid .c{font-size:10px;height:28px}
   .dm-ill{margin-left:0}
 }
+@media (max-width:760px){.how-request dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.how-match dl{grid-template-columns:1fr}.how-readings{margin-top:28px}}
 
 
 /* ---------- how: framework overview (team flow diagram, animated) ---------- */
 .ico{width:1em;height:1em;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ico.eb{font-size:14px;margin-right:2px}
 .ico.sm{font-size:13px;margin-right:5px;vertical-align:-2px}
-.fw-row{display:grid;grid-template-columns:minmax(0,.96fr) 28px minmax(0,1.56fr) 28px minmax(0,.96fr);align-items:stretch}
+.fw-flow{display:grid;grid-template-columns:minmax(0,.96fr) 28px minmax(0,1.56fr) 28px minmax(0,.96fr);grid-template-areas:"target to-core core to-deliver deliver" ". . links . ." "kb kb kb kb kb"}
+.fw-p[data-p="target"]{grid-area:target}
+.fw-p[data-p="core"]{grid-area:core}
+.fw-p[data-p="deliver"]{grid-area:deliver}
+.fw-ar[data-a="0"]{grid-area:to-core}
+.fw-ar[data-a="1"]{grid-area:to-deliver}
 .fw-p{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--paper);transition:border-color .3s,box-shadow .3s}
 .fw-p.u{--pc:var(--red);--pc-soft:var(--red-soft);--pc-line:var(--red-line)}
 .fw-p.s{--pc:var(--t0);--pc-soft:color-mix(in srgb,var(--t0) 9%,var(--paper));--pc-line:color-mix(in srgb,var(--t0) 28%,var(--line))}
@@ -658,8 +714,7 @@ a.plink:hover{border-color:var(--ink)}
 .fw-h{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--pc-soft);border-bottom:1px solid var(--pc-line);font-size:15px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
 .fw-h>.ico{font-size:19px;color:var(--pc)}
 .fw-bar{width:2px;align-self:stretch;margin:2px 0;border-radius:1px;background:var(--pc);flex:none}
-.fw-tag,.fw-sub{margin-left:auto;font:10.5px var(--mono);font-weight:400;color:var(--muted);white-space:nowrap}
-.fw-tag{padding:2px 7px;border-radius:6px;background:var(--paper);border:1px solid var(--hair)}
+.fw-sub{margin-left:auto;font:10.5px var(--mono);font-weight:400;color:var(--muted);white-space:nowrap}
 .fw-b{display:flex;flex-direction:column;gap:9px;flex:1;padding:12px}
 .fw-it{display:flex;align-items:center;gap:9px;min-width:0;padding:8px 10px;border:1px solid var(--hair);border-radius:9px;background:var(--paper);transition:opacity .35s,border-color .35s,box-shadow .35s}
 .fw-it.t,.fw-it.d{flex:1;padding:10px 12px;gap:10px;opacity:.4}
@@ -678,11 +733,14 @@ a.plink:hover{border-color:var(--ink)}
 .fw-ar.go{color:var(--red)}
 .fw-ar.go .ico{animation:fw-nudge .5s ease-in-out infinite alternate}
 @keyframes fw-nudge{to{transform:translateX(4px)}}
-.fw-round,.fw-miss{margin-left:auto;font:10.5px var(--mono);font-weight:400;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--paper);white-space:nowrap}
+.fw-p[data-p="core"] .fw-h{display:grid;grid-template-columns:auto auto minmax(0,1fr) minmax(0,max-content);white-space:normal}
+.fw-slot{display:grid}
+.fw-slot>*{grid-area:1/1}
+.fw-slot>[aria-hidden="true"]{visibility:hidden}
+.fw-status{justify-items:end;text-align:center}
+.fw-round,.fw-miss{align-self:center;font:10.5px var(--mono);font-weight:400;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--paper)}
 .fw-round.on{border-color:var(--red-line);color:var(--red)}
-.fw-miss{display:none}
-.fw-miss.on{display:inline-block;border-color:var(--pc-line);color:var(--t0)}
-.fw-miss.on+.fw-round{display:none}
+.fw-miss{border-color:var(--pc-line);color:var(--t0)}
 .fw-stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .fw-st{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0}
 .fw-st+.fw-st::before{content:"›";position:absolute;left:-12px;top:22px;font-size:18px;line-height:1;color:var(--faint)}
@@ -702,11 +760,10 @@ a.plink:hover{border-color:var(--ink)}
 .fw-loop.on::before{color:var(--red)}
 .fw-loop span{z-index:1;position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);padding:0 10px;background:var(--paper);font-size:12.5px;color:var(--ink);white-space:nowrap}
 .fw-loop i{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);opacity:0}
-.fw-links{display:grid;grid-template-columns:minmax(0,.96fr) 28px minmax(0,1.56fr) 28px minmax(0,.96fr);height:56px}
-.fw-lp{grid-column:3;position:relative}
-.fw-lk{position:absolute;top:0;bottom:0;display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:500}
-.fw-lk.up{left:18%;color:var(--t0)}
-.fw-lk.down{right:14%;color:var(--muted)}
+.fw-lp{grid-area:links;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:12px;min-height:56px;padding-inline:clamp(12px,12%,54px) clamp(8px,4%,22px)}
+.fw-lk{display:grid;grid-template-columns:2px minmax(0,1fr);align-items:center;gap:9px;font-size:12.5px;font-weight:500;overflow-wrap:anywhere}
+.fw-lk.up{color:var(--t0)}
+.fw-lk.down{color:var(--muted)}
 .fw-lk .ln{position:relative;width:2px;height:100%;background:currentColor}
 .fw-lk.down .ln{background:repeating-linear-gradient(var(--muted) 0 5px,transparent 5px 10px)}
 .fw-lk .ln::after{content:"";position:absolute;left:50%;width:8px;height:8px;border:solid currentColor;border-width:2px 0 0 2px;transform:translateX(-50%) rotate(45deg)}
@@ -715,11 +772,12 @@ a.plink:hover{border-color:var(--ink)}
 .fw-lk .ln i{position:absolute;left:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);opacity:0}
 .fw-lk.up .ln i{background:var(--t0);box-shadow:0 0 10px var(--t0)}
 .fw-lk.down .ln i{background:var(--red);box-shadow:0 0 10px var(--red)}
-.fw-kb{width:100%}
+.fw-kb{grid-area:kb}
 .fw-kbrow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .fw-it.k{position:relative;justify-content:center;overflow:visible}
 .fw-it.k.hit{border-color:var(--t0);box-shadow:0 0 0 3px color-mix(in srgb,var(--t0) 16%,transparent)}
-.fw-it.k em{position:absolute;top:-9px;right:-6px;padding:1px 6px;border-radius:999px;background:var(--red);color:#fff;font:10px/1.5 var(--mono);font-style:normal;opacity:0;transform:scale(.6);transition:opacity .3s,transform .3s}
+.fw-it.k .k{white-space:normal;overflow-wrap:anywhere}
+.fw-it.k em{position:absolute;top:-9px;right:2px;padding:1px 6px;border-radius:999px;background:var(--red);color:#fff;font:10px/1.5 var(--mono);font-style:normal;opacity:0;transform:scale(.6);transition:opacity .3s,transform .3s}
 .fw-it.k.add em{opacity:1;transform:none}
 .fw-kb .fw-b{overflow:visible}
 .lg.fw-l.u{background:var(--red-soft);border:1px solid var(--red)}
@@ -739,19 +797,18 @@ a.plink:hover{border-color:var(--ink)}
 /* knowledge base & delivery */
 .kbx{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
 .kbx-b{display:grid;gap:8px;padding:12px}
-.kbx-it{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 13px;border:1px solid var(--hair);border-radius:10px}
+.kbx-it{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:11px 13px;border:1px solid var(--hair);border-radius:10px}
 .kbx-it>.ico{font-size:20px;color:var(--pc)}
 .kbx-it b{display:block;font-size:14px;font-weight:500}
 .kbx-it small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
-.kbx-it strong{font:500 26px/1 var(--display);letter-spacing:-.04em;color:var(--pc);font-variant-numeric:tabular-nums}
-.kbx-go{margin:0 12px 14px}
 @media (max-width:1100px){
-  .fw-row,.fw-links{grid-template-columns:1fr;gap:10px}
+  .fw-flow{grid-template-columns:minmax(0,1fr);grid-template-areas:"target" "to-core" "core" "links" "kb" "deliver"}
   .fw-p[data-p="target"] .fw-b,.fw-p[data-p="deliver"] .fw-b{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-  .fw-ar{height:26px;transform:rotate(90deg)}
-  .fw-links{height:auto}
-  .fw-lp{grid-column:1;display:flex;justify-content:space-around;height:56px}
-  .fw-lk{position:static}
+  .fw-ar{height:46px}
+  .fw-ar .ico{rotate:90deg}
+  .fw-ar[data-a="1"]{display:none}
+  .fw-lp{width:min(100%,420px);justify-self:center}
+  .fw-p[data-p="deliver"]{margin-top:20px}
   .kbx{grid-template-columns:1fr}
 }
 @media (max-width:680px){
@@ -779,7 +836,9 @@ a.plink:hover{border-color:var(--ink)}
 :root[data-theme="dark"]{--fig:#141518;--fig-2:#1a1b1f;--fig-line:#2f3036;--fig-in:#34353b;--fig-hl:#1d1517;--fig-hl-line:#6b2f39;--fig-lab:#a39aa1;--meas-bg:#1a1416;--meas-line:#4a2b31}
 .dm{background:var(--fig);border-color:var(--fig-line);padding:22px 22px 18px}
 .dm .ev-q,.dm .ev-a{font-size:24px;line-height:1.25;letter-spacing:-.03em}
+#dmFlow .ev-a{margin-top:5px;color:var(--muted);font-size:13px;font-weight:400;line-height:1.5;letter-spacing:0}
 .dm-cap{font-weight:500;font-size:15px}
+#dmFlow .dm-cap{min-height:0}
 .dm-steps button{background:var(--fig);border-color:#ded9d2}
 .lane{background:var(--fig-2);border-color:var(--fig-in);border-radius:6px;padding:10px}
 .lane.hl,.rp-lane.fix{background:var(--fig-hl);border-color:var(--fig-hl-line)}
@@ -805,48 +864,38 @@ a.plink:hover{border-color:var(--ink)}
 .fw-it{background:var(--fig);border-color:var(--fig-in)}
 .evcard{background:var(--fig);border-color:var(--fig-line)}
 /* factory-style stack + arc for the framework loop */
-.fx{position:relative;display:flex;flex-direction:column;align-items:stretch;padding-left:34px}
-.fx-st{display:grid;grid-template-columns:20px 98px minmax(0,1fr);gap:4px 10px;align-items:baseline;min-height:56px;padding:9px 11px;border:1px solid var(--fig-in);border-radius:4px;background:var(--fig);transition:border-color .3s,box-shadow .3s,background .3s}
+.fx{position:relative;display:grid;grid-template-rows:repeat(3,1fr 16px) 1fr auto;padding-left:26px}
+.fx-st{display:grid;grid-template-columns:2ch 98px minmax(0,1fr);gap:4px 10px;align-items:center;min-height:56px;padding:9px 11px;border:1px solid var(--fig-in);border-radius:4px;background:var(--fig);transition:border-color .3s,box-shadow .3s,background .3s}
 .fx-n{font:11px var(--mono);color:var(--faint)}
 .fx-k{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--mono);letter-spacing:.06em;color:var(--ink);white-space:nowrap}
 html[lang="en"] .fx-k{letter-spacing:.03em}
 .fx-k .ico{font-size:15px;color:var(--red)}
 .fx-st:nth-of-type(4) .fx-k .ico{color:var(--t0)}
 .fx-d{grid-column:3;font-size:12.5px;line-height:1.55;color:var(--muted);overflow-wrap:anywhere}
+.fx-d>span{align-self:center}
 .fx-d.on{color:var(--ink)}
 .fx-d b{font-family:var(--mono);font-weight:500;color:var(--red)}
 .fx-d code{font:11px var(--mono)}
 .fx-st.run{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft),0 0 18px color-mix(in srgb,var(--red) 22%,transparent)}
 .fx-st.run .fx-n{color:var(--red)}
 .fx-st.done{border-color:color-mix(in srgb,var(--t0) 45%,var(--fig-in))}
-.fx-ar{align-self:center;height:16px;font-style:normal;font-size:12px;line-height:16px;color:var(--faint)}
-.fx-arc{position:absolute;left:9px;width:19px;border:1.5px solid var(--faint);border-right:0;border-radius:7px 0 0 7px;pointer-events:none;transition:border-color .3s}
+.fx-ar{justify-self:center;height:16px;font-style:normal;font-size:12px;line-height:16px;color:var(--faint)}
+.fx-arc{position:absolute;left:4px;width:16px;border:1.5px solid var(--faint);border-right:0;border-radius:7px 0 0 7px;pointer-events:none;transition:border-color .3s}
 .fx-arc::after{content:"";position:absolute;right:-1px;top:-5px;border:4.5px solid transparent;border-left:6px solid var(--faint);border-right:0;transition:border-color .3s}
-.fx-arc em{position:absolute;left:-10px;top:50%;transform:translateY(-50%);padding:6px 0;background:var(--fig);writing-mode:vertical-rl;font:10.5px/18px var(--mono);font-style:normal;letter-spacing:.16em;color:var(--muted);white-space:nowrap;transition:color .3s}
-html[lang="en"] .fx-arc em{font-size:10px;letter-spacing:.04em;transform:translateY(-50%) rotate(180deg)}
 .fx-arc.on{border-color:var(--red)}
 .fx-arc.on::after{border-left-color:var(--red)}
-.fx-arc.on em{color:var(--red)}
 .fx-arc i{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);opacity:0}
-.fx-gate{align-self:center;margin-top:12px;padding:4px 12px;border:1px dashed var(--fig-in);border-radius:999px;font:11px/1.6 var(--mono);letter-spacing:.04em;color:var(--muted);transition:color .3s,border-color .3s}
-.fx-gate span{display:none}
-.fx-gate[data-g="0"] .g0,.fx-gate:not([data-g]) .g0,.fx-gate[data-g="1"] .g1,.fx-gate[data-g="2"] .g2{display:inline}
+.fx-gate{justify-self:center;align-items:center;margin-top:12px;padding:4px 12px;border:1px dashed var(--fig-in);border-radius:999px;font:11px/1.6 var(--mono);letter-spacing:.04em;text-align:center;color:var(--muted);transition:color .3s,border-color .3s}
 .fx-gate[data-g="1"]{color:var(--red);border-color:var(--red-line)}
 .fx-gate[data-g="2"]{color:var(--t0);border-color:color-mix(in srgb,var(--t0) 50%,var(--fig-in))}
 @media (max-width:860px){
-  .fx{padding-left:30px}
   .fx-st{grid-template-columns:22px minmax(0,1fr)}
   .fx-d{grid-column:1/-1}
-  .fx-arc{left:6px;width:18px}
   .dm .ev-q,.dm .ev-a{font-size:19px}
   .lane-h b{font-size:17px}
 }
 
 
-.proposer{margin-top:14px;font-size:15px;line-height:1.6;color:#4f6a8a;letter-spacing:.005em}
-.proposer sup{font-size:.7em}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .proposer{color:#8fa9c6}}
-:root[data-theme="dark"] .proposer{color:#8fa9c6}
 /* ---------- report page ---------- */
 .sel4{display:grid;gap:0;margin-top:26px;border:1px solid var(--fig-line,var(--line));border-radius:10px;background:var(--fig,var(--paper));overflow:hidden}
 .st4{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:start;padding:14px 18px;border-top:1px solid var(--hair)}
@@ -1084,37 +1133,73 @@ a.dp-side:hover{border-color:var(--ink)}
 .recent .rn{font:11px var(--mono);color:var(--muted);white-space:nowrap}
 
 /* ---------- compare ---------- */
-.cmp-hero{text-align:center;padding:56px 0 8px}
-.cmp-hero .h2{margin-top:12px}
-.cmp-hero .sub{margin:12px auto 0}
-.basket{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 16px;margin-top:14px}
-.basket .lb{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
-.bitem{display:inline-flex;align-items:center;gap:8px;padding:5px 6px 5px 10px;border:1px solid var(--line);border-radius:6px;font-size:13px}
-.bitem a:hover{color:var(--red)}
-.bitem small{font:10px var(--mono);color:var(--faint)}
-.bitem button{display:grid;place-content:center;width:20px;height:20px;border-radius:3px;color:var(--faint)}
-.bitem button:hover{color:var(--red);background:var(--red-soft)}
-.basket .ba{margin-left:auto;display:flex;gap:8px}
-.presets{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
-.cmptbl{margin-top:16px;overflow-x:auto}
-.cmprow{display:grid;align-items:stretch;border-top:1px solid var(--hair);min-width:max-content}
-.cmprow.h{border-top:0;background:var(--wash);border-bottom:1px solid var(--line)}
-.cmprow>div{padding:13px 16px}
-.cmprow>div+div{border-left:1px solid var(--hair)}
-.cmprow.h .mc{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);align-self:center}
-.cmprow.h .pc a{font-size:13.5px;font-weight:500;display:inline-flex;gap:7px;align-items:center}
-.cmprow.h .pc a:hover{color:var(--red)}
-.cmprow.h .pc small{display:block;font:10px var(--mono);color:var(--faint);margin-top:2px}
-.mc b{display:block;font-size:13.5px;font-weight:500}
-.mc small{display:block;font:9.5px var(--mono);letter-spacing:.06em;color:var(--faint);margin-top:2px}
-.pc .pv{font:500 14px var(--mono);font-variant-numeric:tabular-nums}
-.pc .pu{font:10px var(--mono);color:var(--faint);margin-left:5px}
-.pc .best{font:10px var(--mono);color:var(--t0);margin-left:6px}
-.pc .pn{font:10px var(--mono);color:var(--faint);margin-top:4px}
-.pc.low .pv{color:var(--faint)}
-.pc .nod{font:12px var(--mono);color:var(--faint)}
-.logbar{position:relative;height:6px;margin-bottom:8px;background:var(--hair);border-radius:2px;overflow:hidden}
-.logbar i{position:absolute;left:0;top:0;bottom:0;border-radius:0 3px 3px 0}
+.work-title{display:flex;align-items:center;gap:11px;min-width:0;letter-spacing:0}
+.work-title-mark{display:grid;place-items:center;width:36px;height:36px;flex:none;border:1px solid var(--red-line);border-radius:8px;background:var(--red-soft);color:var(--red);font-size:19px}
+.cmp-page{padding-block:34px 64px}
+.cmp-head,.cmp-results-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cmp-head{margin-bottom:22px}
+.cmp-head h1{font-size:29px;font-weight:600;line-height:1.3}
+.cmp-filters{display:grid;padding:0 18px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.cmp-filter{display:grid;grid-template-columns:8rem minmax(0,1fr);align-items:center;gap:8px 14px;padding:12px 0}
+.cmp-filter+.cmp-filter{border-top:1px solid var(--hair)}
+.cmp-filter h2{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600}
+.cmp-filter h2 .ico{font-size:15px;color:var(--muted)}
+.cmp-filter .pill{gap:6px;font-weight:500}
+.cmp-filter .pill[aria-pressed="true"]{border-color:var(--red);background:var(--red-soft);box-shadow:inset 0 0 0 1px var(--red-line)}
+.cmp-filter .pill .dot{width:6px;height:6px}
+.cmp-actions{display:flex;align-items:center;gap:6px}
+.cmp-actions .btn{gap:6px;border-radius:6px;background:var(--paper)}
+.cmp-actions .ghost{background:transparent}
+.cmp-actions .ico{font-size:14px}
+#cShare{min-width:104px}
+.cmp-actions button:disabled{opacity:.5;cursor:default}
+.cmp-note{margin:12px 0 16px;color:var(--muted);font-size:12px;line-height:1.6}
+.cmp-results-head{margin-block:22px 10px}
+.cmp-results-head h2{font-size:17px;font-weight:600}
+.cmp-switch{display:inline-flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;font-weight:500}
+.cmp-switch:disabled{color:var(--muted);cursor:default}
+.cmp-switch-track{position:relative;width:30px;height:17px;flex:none;border-radius:10px;background:var(--faint)}
+.cmp-switch-track::after{content:"";position:absolute;top:3px;left:3px;width:11px;height:11px;border-radius:50%;background:var(--paper);transition:transform .2s ease}
+.cmp-switch[aria-checked="true"] .cmp-switch-track{background:var(--t0)}
+.cmp-switch[aria-checked="true"] .cmp-switch-track::after{transform:translateX(13px)}
+.cmp-switch:disabled .cmp-switch-track{opacity:.55}
+.cmptbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.cmp-table{width:100%;border-collapse:separate;border-spacing:0;text-align:left}
+.cmp-table :is(th,td){padding:11px 16px;vertical-align:middle}
+.cmp-table :is(th,td)+td,.cmp-table thead th+th{border-left:1px solid var(--hair)}
+.cmp-table tbody :is(th,td){border-top:1px solid var(--hair)}
+.cmp-table th{font-size:13px;font-weight:600}
+.cmp-table thead th{background:var(--wash)}
+.cmp-table th:first-child{position:sticky;left:0;z-index:1;min-width:120px;max-width:168px;overflow-wrap:anywhere}
+.cmp-table tbody th{background:var(--paper)}
+.cmp-table tbody tr:hover :is(th,td){background:var(--wash)}
+.cmp-table :is(th,td):not(:first-child){min-width:138px}
+.cmp-table th a{display:inline-flex;gap:7px;align-items:center}
+.cmp-table th a:hover{color:var(--red)}
+.cmp-table .direction{display:inline-grid;place-items:center;width:17px;height:17px;margin-left:2px;border-radius:4px;background:var(--wash);color:var(--muted);font-size:11px}
+.cmp-table .pv{font:600 15px var(--mono);white-space:nowrap}
+.cmp-table .pn,.cmp-table .nod{font:11px/1.5 var(--mono);color:var(--muted)}
+.cmp-table .pn{margin-top:4px}
+.cmp-table .pn span{display:inline-block;white-space:nowrap}
+.cmp-table .low .pv{color:var(--muted)}
+.cmp-table .cmp-bar{display:block;height:6px;margin-bottom:7px;overflow:hidden;border-radius:3px;background:var(--hair)}
+.cmp-table .cmp-bar i{display:block;height:100%;width:var(--bar);border-radius:inherit;background:var(--t3);transition:width .25s ease,background-color .25s ease}
+.cmp-table .low .cmp-bar i{background:var(--none)}
+.cmp-table .cmp-improved :is(.pv,.pn){color:var(--t0)}
+.cmp-table .cmp-improved .cmp-bar i{background:var(--t0)}
+.cmp-table [data-before] .pv{min-width:10ch}
+@media(prefers-reduced-motion:reduce){.cmp-switch-track::after,.cmp-table .cmp-bar i{transition:none}}
+.cmp-empty{padding:18px 0;color:var(--muted);font-size:13px}
+@media(max-width:600px){
+  .work-title-mark{width:32px;height:32px;font-size:17px}
+  .cmp-page{padding-top:24px}
+  .cmp-head h1{font-size:24px}
+  .cmp-filters{padding-inline:11px}
+  .cmp-filter{grid-template-columns:minmax(0,1fr)}
+  .cmp-table :is(th,td){padding:10px}
+  .cmp-table th:first-child{min-width:94px;max-width:114px}
+  .cmp-table :is(th,td):not(:first-child){min-width:108px}
+}
 
 /* ---------- platform page (AccelMark chip detail) ---------- */
 .p-hero{text-align:center;padding:56px 0 10px}
@@ -1157,38 +1242,34 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 .peer .lt small{font:10.5px var(--mono);color:var(--faint)}
 
 /* ---------- repairs ---------- */
-.rstat .result-num{font-size:clamp(40px,4.4vw,60px)}
-.rfig{--rlab:22rem;--rfac:6rem;padding-bottom:6px;overflow:hidden}
-.rhead{display:grid;grid-template-columns:var(--rlab) minmax(0,1fr) var(--rfac);gap:0 18px;padding:12px 20px 6px;align-items:end;background:var(--wash);border-bottom:1px solid var(--line)}
-.rhead>b{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-.rhead>b:last-child{text-align:right}
-.rticks{position:relative;height:16px}
-.rticks i{position:absolute;bottom:0;transform:translateX(-50%);font:9.5px var(--mono);font-style:normal;color:var(--faint);white-space:nowrap}
-.rgrp{display:flex;align-items:baseline;gap:12px;width:100%;padding:16px 20px 7px;border-top:1px solid var(--hair);text-align:left}
-.rgrp:first-of-type{border-top:0}
-.rgrp b{font-size:13.5px;font-weight:500;white-space:nowrap}
-.rgrp s{text-decoration:none;font:10.5px var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-.rgrp .chev{font:11px var(--mono);color:var(--faint);transition:transform .2s}
-.rgrp[aria-expanded="false"] .chev{transform:rotate(-90deg)}
-.rrow{display:grid;width:100%;grid-template-columns:var(--rlab) minmax(0,1fr) var(--rfac);gap:2px 18px;align-items:center;padding:6px 20px;text-align:left;transition:background .1s}
+.records-head{padding-block:32px 20px}
+.records-head h1{margin-top:10px}
+.records-directory{border-block:1px solid var(--line)}
+.records-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:center;padding:16px 0}
+.records-entry+.records-entry{border-top:1px solid var(--hair)}
+.records-entry h2{font-size:16px;letter-spacing:0;margin-bottom:4px}
+.records-entry p{font-size:12px;color:var(--muted)}
+.records-entry .btn{min-width:0}
+.repair-list{padding:20px 0 48px}
+.repair-controls .sel{width:13rem;min-width:0}
+.repair-controls #rStatus{width:10rem}
+.rhead,.rrow{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) 8rem 1rem;gap:10px 18px;align-items:center;padding:12px 18px}
+.rhead{background:var(--wash);color:var(--muted);font-size:12px;border-radius:8px 8px 0 0}
+.rrow{width:100%;text-align:left;border-top:1px solid var(--hair)}
+.rrow:last-child{border-radius:0 0 8px 8px}
 .rrow:hover,.rrow.sel{background:var(--wash)}
 .rrow.sel{box-shadow:inset 3px 0 var(--red)}
-.rlab{display:flex;flex-direction:column;min-width:0}
-.rlab b{font-weight:400;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rlab small{font:10px var(--mono);color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rtrk{position:relative;height:24px;background-image:var(--grad)}
-.rtrk i{position:absolute;top:50%}
-.rtrk .seg{height:2px;background:var(--line);transform:translateY(-50%)}
-.rtrk .pb{width:9px;height:9px;border-radius:50%;background:var(--none);transform:translate(-50%,-50%);box-shadow:0 0 0 2px var(--paper)}
-.rtrk .pa{width:10px;height:10px;border-radius:50%;background:var(--t0);transform:translate(-50%,-50%);box-shadow:0 0 0 2px var(--paper)}
-.rtrk .pa.zero{border-radius:2px;transform:translate(-50%,-50%) rotate(45deg)}
-.rtrk .pa.part{background:var(--t2)}
-.rfac{font:11.5px var(--mono);font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;white-space:nowrap}
-.rfac.zero{color:var(--t0)}
-.rrow.bare .rtrk{background:none}
-.rrow.bare .rfac{color:var(--faint)}
-.rmore{display:block;width:100%;padding:9px 20px 12px;font-size:12px;color:var(--red);text-align:left}
-.rmore:hover{text-decoration:underline}
+.rrow:focus-visible{outline-offset:-3px}
+.rlab,.rread{display:grid;gap:4px;min-width:0;overflow-wrap:anywhere}
+.rlab b{font-weight:550;font-size:14px}
+.rlab small,.rread small,.rrow .rnext{color:var(--muted);font-size:12px}
+.rnums{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 8px;font:14px var(--mono);font-variant-numeric:tabular-nums}
+.rnums span{color:var(--muted)}
+.rnums b{font-weight:600}
+.rstate{justify-self:start;white-space:nowrap}
+.rnext{justify-self:end}
+.rrow .rnext svg{width:15px;height:15px}
+.dw-repair-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
 .rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
 .rcard{display:flex;flex-direction:column;gap:10px;padding:16px 18px;text-align:left;transition:border-color .15s,transform .15s}
 .rcard:hover{border-color:var(--ink);transform:translateY(-1px)}
@@ -1208,6 +1289,7 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   .outline.on{opacity:1;visibility:visible;transform:translateY(-50%)}
   /* gutter only where the page margin is narrower than outline + gap */
   body.has-ol .view .sec{padding-right:max(0px,calc(236px - (100vw - 1200px) / 2))}
+  body.has-ol #v-home .wrap > section[data-ol]{padding-inline-end:max(0px,calc(232px - max(32px,(100vw - 1200px) / 2)))}
 }
 .outline p{margin-bottom:10px;font:10px var(--mono);letter-spacing:.12em;color:var(--faint)}
 .outline ol{border-left:1px solid var(--line)}
@@ -1229,11 +1311,17 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 .js [data-reveal].in{opacity:1;transform:none}
 
 /* ---------- responsive ---------- */
+@media (max-width:1150px){
+  :root{--hdr:86px}
+  .site{height:auto}
+  .site .wrap{grid-template-columns:auto auto;gap:6px 12px;padding:10px 0 0}
+  .nav{grid-column:1/-1;grid-row:2;justify-content:flex-start;gap:22px;overflow-x:auto;scrollbar-width:none;padding:2px 0 8px}
+  .nav::-webkit-scrollbar{display:none}
+}
 @media (max-width:1100px){
   .hero-grid{grid-template-columns:1fr;gap:34px}
   .sec-head{grid-template-columns:1fr;gap:12px}
   .fp{grid-template-columns:1fr}
-  .rfig{--rlab:15rem}
 }
 @media (max-width:860px){
   .wrap{width:calc(100% - 32px)}
@@ -1242,19 +1330,10 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   .ev-how summary{padding:12px 16px}
   .ev-how-b{padding:0 16px 18px}
   .ev-q,.ev-a{font-size:18px}
-  .ov{grid-template-columns:1fr;gap:4px;padding:16px 0}
-  .ov p{font-size:15px}
   .cite{grid-template-columns:1fr}
-  #citeBtn{display:none}
-  .evcard .cmptbl,.evcard .rfig{margin:0 -16px}
+  .evcard .cmptbl{margin:0 -16px}
   .tw-c{padding-left:11px;padding-right:11px}
   .tw-c.m.hd strong{font-size:20px}
-  :root{--hdr:auto}
-  .site{height:auto}
-  .site .wrap{grid-template-columns:auto auto;gap:6px 12px;padding:10px 0 0}
-  .nav{grid-column:1/-1;grid-row:2;justify-content:flex-start;gap:22px;overflow-x:auto;scrollbar-width:none;padding:2px 0 8px}
-  .nav::-webkit-scrollbar{display:none}
-  .acts{justify-self:end}
   .toolbar{position:static}
   .results{grid-template-columns:1fr;gap:26px}
   .result{border-left:0;padding:0 0 22px;border-bottom:1px solid var(--line)}
@@ -1273,28 +1352,37 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   .recent .d,.recent .rn{display:none}
   .partners button{grid-template-columns:minmax(0,1fr) auto}
   .partners .c:nth-child(3),.partners .go{display:none}
-  .rfig{--rfac:4.6rem}
-  .rhead{grid-template-columns:minmax(0,1fr) var(--rfac);padding:10px 14px 6px}
-  .rhead>b:first-child{display:none}
-  .rticks i.thin{display:none}
-  .rrow{grid-template-columns:minmax(0,1fr) var(--rfac);padding:8px 14px}
+  .repair-controls .search{flex-basis:100%}
+  .repair-controls .sel,.repair-controls #rStatus{flex:1 1 7rem;width:0}
+  .rhead{display:none}
+  .rrow{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:12px 14px}
   .rrow .rlab{grid-column:1/-1}
-  .rrow .rlab b{white-space:normal}
-  .rgrp{padding:14px 14px 6px}
-  .rgrp s{white-space:normal}
+  .rrow .rnext{display:none}
   .facet{grid-template-columns:1fr;gap:4px}
   .facet-l{line-height:1.6}
   .count{margin-left:0;width:100%}
   .gcards{grid-template-columns:1fr}
   .dw-body{padding:20px 18px 30px}
   .rows-dl{grid-template-columns:4.6rem minmax(0,1fr);gap:0 12px}
-  .basket .ba{margin-left:0}
 }
 @media (max-width:520px){
   .brand small{display:none}
+  .site .wrap{column-gap:8px}
+  .site .brand,.site .acts{gap:6px}
+  html[lang="en"] .site .nav{gap:9px}
+  html[lang="en"] .site .nav a{font-size:11.5px}
+  #csv{width:34px;padding-inline:0}
+  #csv .csv-label{display:none}
+  .acts .github-link{width:36px;padding-inline:0}
+  .github-link .github-label{display:none}
   .h1{font-size:29px}
   .cta .btn{flex:1 1 auto}
   .pcards,.rcards,.peers{grid-template-columns:1fr}
+}
+@media (max-width:360px){
+  .site .brand-mark{width:28px;height:28px}
+  .site .brand b{font-size:11px;letter-spacing:0}
+  html[lang="en"] .site .nav{gap:4px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -1319,14 +1407,13 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   <a class="brand" href="#/" aria-label="NumericBridge 首页"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 26Q24 -2 43 26" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M13 16.7V26M35 16.7V26M19 13V26M29 13V26" stroke="currentColor" stroke-width="1.7"/><rect x="7.5" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="36" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="4" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="12.25" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="28.75" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="37" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="20.5" y="22" width="7" height="6.5" rx="1" fill="var(--red)"/></svg><span><b>NumericBridge</b><small>cross-stack numerics</small></span></a>
   <nav class="nav" id="nav" aria-label="主导航">
     <a href="#/" data-route="">首页</a>
+    <a href="#/how" data-route="how">框架实现</a>
     <a href="#/cases" data-route="cases">案例库</a>
-    <a href="#/compare" data-route="compare">对比</a>
-    <a href="#/repairs" data-route="repairs">修复</a>
-    <a href="#/how" data-route="how">原理</a>
+    <a href="#/compare" data-route="compare">硬件平台比较</a>
   </nav>
   <div class="acts">
-    <a class="btn sm ghost" id="citeBtn" href="#/cite">引用与数据</a>
-    <button class="btn sm" id="csv" hidden title="导出 CSV">导出 CSV <span>↓</span></button>
+    <a class="btn sm ghost github-link" href="https://github.com/satsuki2486441738/NumericBridge" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.23.49-2.7-.94-2.7-.94-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.51-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 3.87c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.66 3.95.29.25.55.73.55 1.48v2.19c0 .21.14.46.55.38A8 8 0 0 0 8 0Z"/></svg><span class="github-label">GitHub</span></a>
+    <button class="btn sm" id="csv" type="button" hidden title="导出 CSV" aria-label="导出 CSV"><span class="csv-label">导出 CSV</span><span aria-hidden="true">↓</span></button>
     <button class="iconbtn langbtn" id="langBtn" type="button" title="Switch language" aria-label="Switch language">EN</button>
     <button class="iconbtn" id="theme" title="切换明暗" aria-label="切换明暗">◐</button>
   </div>
@@ -1336,7 +1423,10 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 <main id="main">
   <p class="wrap empty" id="boot">正在读取内嵌数据…</p>
   <section class="view" id="v-home" hidden></section>
+  <section class="view" id="v-overview" hidden></section>
+  <section class="view" id="v-cite" hidden></section>
   <section class="view" id="v-list" hidden></section>
+  <section class="view" id="v-records" hidden></section>
   <section class="view" id="v-compare" hidden></section>
   <section class="view" id="v-platform" hidden></section>
   <section class="view" id="v-repairs" hidden></section>
@@ -1366,9 +1456,9 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 </aside>
 <div class="tip" id="tip" role="tooltip"></div>
 
-<script src="./board-data.js?v=discovery-hardware-20261117"></script>
+<script src="./board-data.js?v=ascend-910c"></script>
 <script src="./search.js?v=framework-scope-20261118"></script>
-<script src="./cases.js?v=measured-report-20261118"></script>
+<script src="./cases.js?v=home-coverage"></script>
 <script>
 "use strict";
 function start(DATA) {
@@ -1930,10 +2020,22 @@ function writeQuery(name, params) {
   const s = qs.toString().replace(/%2C/g, ",").replace(/%7C/g, "|");
   history.replaceState(null, "", `#/${name}${s ? "?" + s : ""}`);
 }
-const VIEWS = { "": "v-home", list: "v-list", compare: "v-compare", platform: "v-platform", repairs: "v-repairs", cases: "v-cases", report: "v-report", how: "v-how" };
+const VIEWS = { "": "v-home", overview: "v-overview", cite: "v-cite", list: "v-list", records: "v-records", compare: "v-compare", platform: "v-platform", repairs: "v-repairs", cases: "v-cases", report: "v-report", how: "v-how" };
 const RENDER = {};
 RENDER.cases = h => NumericBridgeCases.mount(byId("v-cases"), h, { lang: LANG });
 RENDER.report = h => NumericBridgeCases.mountReport(byId("v-report"), h, { lang: LANG, copyLink: copyText });
+RENDER.records = () => {
+  const rows = [
+    [tx("评测记录", "Evaluation records"), tx(`${fmtInt(EVALS.size)} 个评测 · ${fmtInt(ROWS.length)} 条实测比较`, `${fmtInt(EVALS.size)} evaluations · ${fmtInt(ROWS.length)} measured comparisons`), "#/list?group=eval&sort=date", "evaluations"],
+    [tx("修复记录", "Repair records"), tx(`${fmtInt(REPAIRS.length)} 条记录`, `${fmtInt(REPAIRS.length)} records`), "#/repairs", "repairs"],
+  ];
+  byId("v-records").innerHTML = `<div class="wrap">
+    <header class="records-head"><a class="link" href="#/cases">← ${tx("案例库", "Cases")}</a><h1 class="h2">${tx("全部记录", "All records")}</h1></header>
+    <div class="records-directory">${rows.map(([label, count, href, file]) => `<section class="records-entry">
+      <div><h2><a class="link" href="${href}">${label} <span aria-hidden="true">→</span></a></h2><p>${count}</p></div>
+      <a class="btn sm" href="./data/${file}.json" download aria-label="${tx(`下载${label} JSON`, `Download ${label.toLowerCase()} JSON`)}">JSON <span aria-hidden="true">↓</span></a>
+    </section>`).join("")}</div></div>`;
+};
 let lastView = null;
 function route() {
   const h = parseHash();
@@ -1945,7 +2047,7 @@ function route() {
   const navKey = name === "platform" ? "compare" : name === "report" ? "cases" : name;
   $$("#nav a").forEach(a => a.dataset.route === navKey ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   byId("csv").hidden = !(name === "list" || name === "repairs");
-  byId("mockbar").hidden = name === "cases" || name === "report";
+  byId("mockbar").hidden = ["", "how", "overview", "cite", "cases", "report", "compare", "repairs", "records"].includes(name);
   byId("mbTag").textContent = tx("● 实测记录", "● Measured records");
   byId("mbDesc").textContent = tx("读数与结构直接取自 data/evaluations.json 与 data/repairs.json", "Read directly from data/evaluations.json and data/repairs.json");
   byId("updated").textContent = S.updated_at ? tx(`数据更新于 ${S.updated_at}`, `Updated ${S.updated_at}`) : "";
@@ -1955,38 +2057,42 @@ function route() {
   lastView = key;
   setupOutline(byId(VIEWS[name]));
   syncOutline();
-  if (h.name === "cite") requestAnimationFrame(() => byId("cite")?.scrollIntoView({ block: "start" }));
   observeReveal(byId(VIEWS[name]));
   document.title = (TITLES[name] ? TITLES[name](h) + " · " : "") + "NumericBridge";
 }
-const TITLES = { cases: () => tx("精度案例库", "Precision Case Library"), report: () => tx("实测报告", "Measured Report"), list: () => tx("实测记录", "Measured Records"), compare: () => tx("对比", "Compare"), platform: h => platDisp(h.arg || tx("平台", "Platform")), repairs: () => tx("修复", "Repairs"), how: () => tx("原理", "Method") };
+const TITLES = { overview: () => tx("评测概览", "Evaluation Overview"), cite: () => tx("数据与引用", "Data & Citation"), cases: () => tx("精度案例库", "Precision Case Library"), report: () => tx("实测报告", "Measured Report"), list: () => tx("评测记录", "Evaluation Records"), records: () => tx("全部记录", "All Records"), compare: () => tx("硬件平台比较", "Hardware Comparison"), platform: h => platDisp(h.arg || tx("平台", "Platform")), repairs: () => tx("修复记录", "Repair Records"), how: () => tx("框架实现", "Framework Implementation") };
 
 /* ---------- outline (right-edge reading outline) ---------- */
-let outlineIO = null;
+let OL_SECS = [], OL_LINKS = [], OL_JUMP = null;
 function setupOutline(view) {
   const ol = byId("outline");
-  outlineIO && outlineIO.disconnect();
   const secs = $$("[data-ol]", view);
   OL_SECS = secs.length >= 3 ? secs : [];
-  document.body.classList.toggle("has-ol", secs.length >= 3);
-  if (secs.length < 3) { ol.innerHTML = ""; ol.classList.remove("on"); return; }
-  ol.innerHTML = `<p>${tx("本页", "ON THIS PAGE")}</p><ol>${secs.map((s, i) => `<li><a href="#" data-to="${i}"><span>${String(i + 1).padStart(2, "0")}</span>${esc(s.dataset.ol)}</a></li>`).join("")}</ol>`;
-  $$("a", ol).forEach(a => a.onclick = e => { e.preventDefault(); secs[+a.dataset.to].scrollIntoView({ behavior: "smooth", block: "start" }); });
-  outlineIO = new IntersectionObserver(ents => {
-    for (const en of ents) if (en.isIntersecting) {
-      const i = secs.indexOf(en.target);
-      $$("a", ol).forEach((a, j) => j === i ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current"));
-    }
-  }, { rootMargin: "-40% 0px -55% 0px" });
-  secs.forEach(s => outlineIO.observe(s));
+  OL_JUMP = null;
+  document.body.classList.toggle("has-ol", OL_SECS.length > 0);
+  ol.innerHTML = OL_SECS.length ? `<p>${tx("本页", "ON THIS PAGE")}</p><ol>${OL_SECS.map((s, i) => `<li><a href="#"><span aria-hidden="true">${esc(s.dataset.olNumber ?? String(i + 1).padStart(2, "0"))}</span>${esc(s.dataset.ol)}</a></li>`).join("")}</ol>` : "";
+  OL_LINKS = $$("a", ol);
+  OL_LINKS.forEach((a, i) => a.onclick = e => {
+    e.preventDefault();
+    OL_SECS[i].scrollIntoView({ behavior: "instant", block: "start" });
+    OL_JUMP = { index: i, top: scrollY };
+    syncOutline();
+  });
 }
 /* The outline appears once the opening is behind the reader, so it never sits
    on top of the hero; sections after the opening keep a gutter for it. */
-let OL_SECS = [];
 function syncOutline() {
   const ol = byId("outline");
-  if (!ol.innerHTML || OL_SECS.length < 2) return;
-  ol.classList.toggle("on", OL_SECS[1].getBoundingClientRect().top < innerHeight * 0.55);
+  const tops = OL_SECS.map(s => s.getBoundingClientRect().top);
+  const edge = innerHeight * 0.55;
+  const visible = scrollY > 8 && tops.length > 1 && tops[1] < edge;
+  ol.classList.toggle("on", visible);
+  if (!visible) return;
+  let active = tops.reduce((last, top, i) => top < edge ? i : last, 0);
+  if (OL_JUMP?.top !== scrollY) OL_JUMP = null;
+  if (OL_JUMP) active = OL_JUMP.index;
+  else if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) active = tops.length - 1;
+  OL_LINKS.forEach((a, i) => i === active ? a.setAttribute("aria-current", "location") : a.removeAttribute("aria-current"));
 }
 addEventListener("scroll", syncOutline, { passive: true });
 addEventListener("resize", syncOutline, { passive: true });
@@ -2157,20 +2263,100 @@ function downloadCsv(name, header, rows) {
 }
 
 /* ======================================================================
-   home — inference-rsi's finding-first opening, AccelMark's sections
+   home and evaluation overview
    ====================================================================== */
-let homeDone = false;
-const SW = { kind: "", task: "" };
-const HERO_BAR_EN = {
-  "同一张 H100 · 重复跑": ["Same H100 · Repeat run", "Bitwise exact"],
-  "跨平台 · 同为 token 路径": ["Cross-platform · Token-by-token", "H100 ↔ Ascend"],
-  "同一张 H100 · 换 KV 分块": ["Same H100 · KV chunk switch", "token vs 63+65 chunk"],
-  "同一张 Ascend · 换 KV 分块": ["Same Ascend · KV chunk switch", "token vs 63+65 chunk"],
-};
+function renderHomeCoverage(target) {
+  const link = (label, filters) => `<li><a href="#/cases?${esc(new URLSearchParams(filters).toString())}">${esc(label)}</a></li>`;
+  NumericBridgeCases.loadCoverage().then(({hardware, frameworks}) => {
+    const logos = {nvidia: "nvidia", ascend: "ascend"};
+    const chip = '<svg class="ico" aria-hidden="true"><use href="#nf-i-chip"/></svg>';
+    const platforms = hardware.map(({key, label, platforms}) => {
+      const logo = logos[key] ? `<img src="./assets/${logos[key]}.svg" alt="" width="24" height="20">` : chip;
+      const chips = platforms.map(platform => link(platform.replace(/^(?:NVIDIA|Ascend) /, ""), {hardware: platform}));
+      return `<li class="home-platform"><header>${logo}<h4>${esc(label || tx("其他", "Other"))}</h4></header><ul class="home-stack">${chips.join("")}</ul></li>`;
+    });
+    const tasks = [["inference", tx("推理", "Inference")], ["sft", tx("训练", "Training")], ["rl", "RL"]];
+    target.innerHTML = `<h3>${tx("硬件平台", "Hardware platforms")}</h3>
+      <ul class="home-platforms">${platforms.join("")}
+        <li class="home-platform soon"><header>${chip}<h4>${tx("其他硬件平台", "Other hardware platforms")}</h4></header><p class="soon-label">Coming soon...</p></li>
+      </ul><h3>${tx("训推框架", "Software frameworks")}</h3>
+      <dl class="home-frameworks">${tasks.filter(([task]) => frameworks[task].length).map(([task, label]) =>
+        `<div><dt>${esc(label)}</dt><dd><ul class="home-stack">${frameworks[task].map(library => link(library, {library, task})).join("")}</ul></dd></div>`).join("")}</dl>`;
+  }).catch(() => {
+    target.innerHTML = `<p class="home-coverage-status">${tx("暂时无法读取覆盖记录。", "Coverage records are temporarily unavailable.")}</p>`;
+  });
+}
+function homeResultsHtml() {
+  const totals = S.community;
+  const repair = REPBY.get(FLOW_IDS.fix);
+  const metric = repair?.status === "validated" && repair.validation?.metrics?.find(m => m.id === "max_abs_nat");
+  const improvement = metric && Number.isFinite(metric.before) && Number.isFinite(metric.after) && metric.before > 0 && metric.after >= 0 && metric.after < metric.before
+    ? `${((1 - metric.after / metric.before) * 100).toFixed(1)}%` : null;
+  const stats = [
+    { key: "cases", label: tx("已收录精度案例", "Precision cases"), value: totals && fmtInt(totals.cases), href: "#/cases" },
+    { key: "issues", label: tx("已记录问题", "Recorded issues"), value: totals && fmtInt(totals.issues),
+      note: totals && tx(`${fmtInt(totals.confirmed_defects)} 个已确认缺陷`, `${fmtInt(totals.confirmed_defects)} confirmed defects`) },
+    { key: "improvement", label: tx("代表性修复：误差下降", "Example: error reduction"), value: improvement,
+      href: improvement && "#/report/case-mindspeed-zero-centered-rmsnorm?verification=verification-mindspeed-forward-and-operator-checks&solution=solution-mindspeed-zero-centered-gamma-patch",
+      note: improvement && tx(`MindSpeed · logprob 最大绝对误差 ${metric.before.toPrecision(4)} → ${fmtNum(metric.after)}`,
+        `MindSpeed · max absolute logprob error ${metric.before.toPrecision(4)} → ${fmtNum(metric.after)}`) },
+    { key: "prs", label: tx("上游 PR 合并", "Upstream PRs merged"), value: null },
+  ];
+  return `<section class="home-results" aria-labelledby="homeResultsTitle" data-ol="${tx("项目成果", "Project results")}"><h2 class="home-section-title" id="homeResultsTitle">${tx("项目成果", "Project results")}</h2>
+    <dl class="home-stats">${stats.map(({key, label, value, href, note}) => `<div class="home-stat" data-stat="${key}">
+      <dt>${href ? `<a href="${esc(href)}">${esc(label)}</a>` : esc(label)}</dt>
+      <dd class="home-stat-value${value == null ? " pending" : ""}">${esc(value ?? tx("暂无已核实记录", "No verified records"))}</dd>
+      ${note ? `<dd class="home-stat-note">${esc(note)}</dd>` : ""}</div>`).join("")}</dl></section>`;
+}
 RENDER[""] = function renderHome() {
-  if (homeDone) return;
-  homeDone = true;
-  const v = byId("v-home");
+  const view = byId("v-home");
+  if (view.firstElementChild) return;
+  const institutions = [
+    tx("深圳河套学院", "Shenzhen Loop Area Institute"),
+    tx("香港中文大学（深圳）", "The Chinese University of Hong Kong, Shenzhen"),
+    tx("中山大学", "Sun Yat-sen University"),
+    tx("智子芯元", "AutoKernel"),
+    tx("狮子山人工智能实验室", "China Merchants Lion Rock AI Lab"),
+  ];
+  view.innerHTML = `<div class="wrap">
+    <header class="home-intro" data-ol="${tx("首页概览", "Overview")}" data-ol-number="·">
+      <h1 class="h1">NumericBridge</h1>
+      <p class="home-tagline">${tx('面向推理、训练、强化学习的<strong>跨栈精度对齐</strong>框架与协作社区', '<strong>Cross-Stack Precision Alignment</strong> Framework and Collaborative Community for Inference, Training, and Reinforcement Learning')}</p>
+      <ul class="home-affiliations" aria-label="${tx("参与机构", "Participating institutions")}">${institutions.map(name => `<li>${esc(name)}</li>`).join("")}</ul>
+    </header>
+    <section class="home-workflow" aria-label="${tx("适配流程", "Adaptation workflow")}" data-ol="${tx("流程概览", "Workflow")}">${sceneFlowHtml()}</section>
+    <section class="home-coverage" aria-labelledby="homeCoverageTitle" data-ol="${tx("硬件与软件栈覆盖", "Stack coverage")}">
+      <div class="home-coverage-head"><h2 class="home-section-title" id="homeCoverageTitle">${tx("硬件与软件栈覆盖", "Hardware &amp; Software Coverage")}</h2><a class="link" href="#/cases">${tx("浏览案例库", "Browse cases")} <span aria-hidden="true">→</span></a></div>
+      <div id="homeCoverageList"></div>
+    </section>
+    ${homeResultsHtml()}
+    <section class="home-citation" aria-labelledby="homeCitationTitle" data-ol="${tx("论文引用", "Paper citation")}">
+      <div><h2 class="home-section-title" id="homeCitationTitle">${tx("论文引用", "Paper Citation")}</h2><p>${tx("论文发布后补充引用信息。", "Citation details will be added when the paper is available.")}</p></div>
+      <a class="link" href="#/cite">${tx("数据引用", "Cite the dataset")} <span aria-hidden="true">→</span></a>
+    </section>
+  </div>`;
+  sceneFlow();
+  renderHomeCoverage(byId("homeCoverageList"));
+};
+RENDER.cite = function renderCitationPage() {
+  const view = byId("v-cite");
+  if (view.firstElementChild) return;
+  view.innerHTML = `<div class="wrap sec first">
+    <header class="sec-head"><h1 class="h2">${tx("数据与引用", "Data &amp; Citation")}</h1><a class="link" href="#/overview">${tx("评测概览 →", "Evaluation overview →")}</a></header>
+    <div class="cite" id="citeBox"></div>
+  </div>`;
+  renderCite();
+};
+const SW = { kind: "", task: "" };
+const HERO_BAR_LABELS = {
+  "同一张 H100 · 重复跑": ["H100 · 重复运行", "H100 · Repeat run"],
+  "跨平台 · 同为 token 路径": ["H100 ↔ Ascend · 同为 token 路径", "H100 ↔ Ascend · Same token path"],
+  "同一张 H100 · 换 KV 分块": ["H100 · token ↔ 63+65 分块", "H100 · Token path vs. 63+65 chunks"],
+  "同一张 Ascend · 换 KV 分块": ["Ascend · token ↔ 63+65 分块", "Ascend · Token path vs. 63+65 chunks"],
+};
+RENDER.overview = function renderOverview() {
+  const v = byId("v-overview");
+  if (v.firstElementChild) return;
   const withH = REPAIRS.filter(r => r.headline);
   const zeroed = withH.filter(r => r.headline.after === 0).length;
   const lowerFinite = withH.filter(r => r.headline.better === "lower" && r.headline.after > 0);
@@ -2186,90 +2372,74 @@ RENDER[""] = function renderHome() {
     <section class="hero" data-ol="${tx("概览", "Overview")}">
       <div class="hero-grid">
         <div>
-          <p class="eyebrow"><span class="live"></span>${tx("跨栈数值一致性 · CROSS-STACK NUMERICS", "CROSS-STACK NUMERICAL CONSISTENCY")}</p>
-          <h1 class="h1" style="margin-top:22px">${tx('面向 RL 的跨栈精度对齐<br class="d"><em>框架</em>与<em>协作社区</em>', 'Cross-Stack Numerical Alignment<br class="d"><em>Framework</em> &amp; <em>Community</em> for RL')}</h1>
-          <p class="proposer">Proposer: Xinyuan XIE, Zheng YU, Ruijie ZHANG, Benyou WANG<sup>*</sup></p>
-          <p class="lead">${tx("NumericBridge 串联精度对比、根因诊断、修复调优与原负载复验：在固定输入与权重下逐元素比对跨硬件与训推栈的张量、分布及梯度，区分浮点归约差异与代码缺陷，沉淀经验证的最小补丁、稳定配置与复验证据。", "NumericBridge unifies tensor comparison, root-cause diagnosis, minimal patching, and native-workload regression under identical inputs and weights—separating floating-point reduction order from code defects across accelerators and RL/training stacks.")}</p>
+          <h1 class="h1">${tx("评测概览", "Evaluation Overview")}</h1>
           <div class="cta">
             <a class="btn primary" href="#/cases?task=rl">${tx("查找 RL 精度案例", "Find RL precision cases")} <span>→</span></a>
-            <a class="btn" href="#/compare">${tx("平台对比", "Compare Platforms")} <span>⇄</span></a>
-            <a class="link" href="#/repairs">${tx(`${REPAIRS.length} 项缺陷修复`, `${REPAIRS.length} Verified Repairs`)} ↗</a>
+            <a class="btn" href="#/compare">${tx("硬件平台比较", "Hardware Comparison")} <span>⇄</span></a>
+            <a class="link" href="#/records">${tx("查看全部记录", "Browse all records")} <span aria-hidden="true">→</span></a>
           </div>
         </div>
         ${h ? `<figure class="panel proof">
           <div class="proof-top"><span>${esc(tx(h.unit, "KV Cache Max Abs Error"))}</span><span>${esc(h.model)} · ${tx("同输入同权重", "Identical inputs & weights")}</span></div>
-          <div class="pbars">${h.bars.map(b => { const en = HERO_BAR_EN[b.label]; return `<div class="pbar">
-            <span class="lab">${esc(LANG === "en" && en ? en[0] : b.label)}<small>${esc(LANG === "en" && en ? en[1] : b.note)}</small></span>
+          <div class="pbars">${h.bars.map(b => { const labels = HERO_BAR_LABELS[b.label]; return `<div class="pbar">
+            <span class="lab">${esc(labels ? tx(...labels) : b.label)}</span>
             <span class="val" style="color:${barColor[b.kind] || "var(--ink)"}">${fmtNum(b.value)}</span>
             <span class="trk"><i style="width:${b.value ? Math.max(1.5, b.value / maxBar * 100) : 1.5}%;background:${barColor[b.kind] || "var(--muted)"}"></i></span>
           </div>`; }).join("")}</div>
-          <figcaption>${tx('同卡切换 <b>63+65 分块预填充</b>产生的 KV 误差（2.16 / 2.42）高于跨平台同路径（1.39）。', 'Switching to <b>63+65 chunked prefill</b> on the same card induces larger KV drift (2.16 / 2.42) than cross-platform execution (1.39).')}<a class="link" href="#/list?ev=${encodeURIComponent(h.eval_id)}" style="margin-left:6px">${tx("查看批次 →", "Inspect batch →")}</a></figcaption>
+          <figcaption><a class="link" href="#/list?ev=${encodeURIComponent(h.eval_id)}">${tx("查看评测 →", "View evaluation →")}</a></figcaption>
         </figure>` : ""}
       </div>
       <div class="results">
         <div class="result"><span class="result-num">${fmtInt(S.comparisons ?? ROWS.length)}</span><h3>${tx("条成对比较", "Pairwise Comparisons")}</h3>
-          <p>${fmtInt(S.evaluations ?? EVALS.size)} ${tx("个评测", "batches")}<i>·</i>${PLATS.length} ${tx("个平台", "platforms")}<i>·</i>${fmtInt(S.partial ?? 0)} ${term("partial")}</p></div>
-        <div class="result"><span class="result-num">${REPAIRS.length}</span><h3>${tx("项数值缺陷定位与修复", "Root-Cause Repairs")}</h3>
+          <p>${fmtInt(S.evaluations ?? EVALS.size)} ${tx("个评测", "batches")}<i>·</i>${PLATS.length} ${tx("个平台", "platforms")}<i>·</i>${fmtInt(S.partial ?? 0)} ${term("partial", tx("条部分覆盖", "partial"))}</p></div>
+        <div class="result"><span class="result-num">${REPAIRS.length}</span><h3>${tx("条修复记录", "Repair Records")}</h3>
           <p>${zeroed} ${term("zero")}<i>·</i>${withH.length} ${tx("项前后读数", "quantified")}<i>·</i>${investigating} ${tx("项调查中", "open")}</p></div>
         <div class="result"><span class="result-num">${bestF ? fmtFactor(bestF).replace("×", "<small>×</small>") : "—"}</span><h3>${tx("最大改善倍数", "Peak Error Reduction")}</h3>
           <p>${bestRp ? `${fmtNum(bestRp.headline.before)}<i>→</i>${fmtNum(bestRp.headline.after)}　${esc(bestRp.lib || "")}` : ""}</p></div>
       </div>
-      <p class="measure">${tx(`快照 ${esc(S.updated_at || "—")} · 按${term("head", "主读数")}展示对数${term("dev", "偏离")}。`, `Snapshot ${esc(S.updated_at || "—")} · Log ${term("dev", "deviation")} per ${term("head", "headline metric")}.`)}</p>
     </section>
 
     <section class="sec" data-ol="${tx("闭环", "Loop")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("01 / 适配闭环", "01 / ADAPTATION LOOP")}</span><a class="link" href="#/how">${tx("分步机制与口径 →", "Methodology & math →")}</a></div>
-      <div class="sec-head"><h2 class="h2">${tx('在目标环境中闭环完成<br class="d"><em>精度对齐</em>与<em>补丁验证</em>', 'Closed-Loop <em>Alignment</em> &amp;<br class="d"><em>Patch Verification</em> on Target Stacks')}</h2></div>
-      ${sceneFlowHtml()}
-      ${measBox(tx("Qwen3.5-9B-Base · Ascend 910C ⇄ NVIDIA H200 · 6 条关联记录", "Qwen3.5-9B-Base · Ascend 910C ⇄ NVIDIA H200 · 6 linked records"), flowChainHtml())}
+      <div class="sec-head"><h2 class="h2">${tx("适配案例", "Adaptation Case")}</h2><a class="link" href="#/">${tx("查看流程 →", "View workflow →")}</a></div>
+      ${measBox(tx("修复与复验记录", "Repair and verification records"), flowChainHtml())}
     </section>
 
     <section class="sec" data-ol="${tx("分布", "Distribution")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("02 / 偏离分布", "02 / DEVIATION SPECTRUM")}</span></div>
-      <div class="sec-head"><h2 class="h2">${tx('七项指标上的偏离分布：<br class="d">跨度越大，对<em>执行配置</em>越敏感', 'Deviation Across Seven Metrics:<br class="d">Wider Span Signals Higher <em>Config Sensitivity</em>')}</h2></div>
-      ${evCard({ q: tx("哪些指标对硬件与执行路径最敏感？", "Which metrics are most sensitive to hardware and execution path?"), aid: "swA", mid: "swMeta", meta: "", tid: "swTake",
-        body: `<div class="fig-filters"><span class="facet-l">${term("kind")}</span><div class="pills" id="swKind"></div><span class="facet-l">${tx("任务", "Task")}</span><div class="pills" id="swTask"></div></div>
-          <figure class="figbox"><svg id="swarm" viewBox="0 0 1000 380" role="img" aria-label="${tx("按指标分列的偏离分布", "Deviation distribution by metric")}"></svg></figure>
-          <div class="legend" id="swLegend"></div>`,
-        how: `<p>${tx(`纵轴为对数${term("dev", "偏离")}；虚线下方窄带集中展示偏离精确为 0 的记录。余弦相似度与 Top-1 一致率按 1 − 值统一方向。`, `Vertical axis shows log ${term("dev", "deviation")}; exact-zero readings sit in the band below the dashed line. Cosine and Top-1 are plotted as 1 − value.`)}</p>` })}
+      <div class="sec-head"><h2 class="h2">${tx("偏离分布", "Deviation Distribution")}</h2></div>
+      <div class="panel evcard">
+        <div class="fig-filters"><span class="facet-l">${term("kind")}</span><div class="pills" id="swKind"></div><span class="facet-l">${tx("任务", "Task")}</span><div class="pills" id="swTask"></div></div>
+        <p class="ev-meta" id="swMeta" role="status"></p>
+        <figure class="figbox"><svg id="swarm" viewBox="0 0 1000 380" role="img" aria-label="${tx("按指标分列的偏离分布", "Deviation distribution by metric")}"></svg></figure>
+        <div class="legend" id="swLegend"></div>
+      </div>
     </section>
 
     <section class="sec" data-ol="${tx("场景", "Scenarios")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("03 / 评测场景", "03 / SCENARIOS")}</span></div>
-      <div class="sec-head"><h2 class="h2">${tx('按评测场景归类，<br class="d">定位各组<em>最大偏离</em>记录', 'Worst-Case Divergence<br class="d">by <em>Evaluation Scenario</em>')}</h2></div>
+      <div class="sec-head"><h2 class="h2">${tx("评测场景", "Evaluation Scenarios")}</h2></div>
       <div class="gcards" id="gcards"></div>
       <div class="legend" style="margin-top:16px"><span style="color:var(--faint)">${tx("一致性分布：", "Tiers:")}</span>${tierLegend()}</div>
     </section>
 
     <section class="sec" data-ol="${tx("平台", "Platforms")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("04 / 硬件覆盖", "04 / PLATFORMS")}</span></div>
-      <div class="sec-head"><h2 class="h2">${tx('参测<em>硬件与参考平台</em>', 'Evaluated <em>Hardware &amp; Reference Platforms</em>')}</h2></div>
+      <div class="sec-head"><h2 class="h2">${tx("参测平台", "Tested Platforms")}</h2></div>
       <div class="panel"><div class="cloud" id="hCloud"></div><div class="cloud-legend" id="hCloudLeg"></div></div>
     </section>
 
     <section class="sec" data-ol="${tx("近期", "Recent")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("05 / 近期评测", "05 / RECENT BATCHES")}</span><a class="link" href="#/list?sort=date">${tx("按日期查看全部 →", "View all by date →")}</a></div>
-      <div class="sec-head"><h2 class="h2">${tx('近期归档的<em>评测批次</em>', 'Recently Archived <em>Evaluation Batches</em>')}</h2></div>
+      <div class="sec-head"><h2 class="h2">${tx("近期评测", "Recent Evaluations")}</h2><a class="link" href="#/list?sort=date">${tx("全部评测 →", "All evaluations →")}</a></div>
       <div class="tbl" id="hRecent"></div>
     </section>
 
     <section class="sec" data-ol="${tx("修复", "Repairs")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("06 / 缺陷修复", "06 / REPAIRS")}</span><a class="link" href="#/repairs">${tx(`全部 ${REPAIRS.length} 项 →`, `All ${REPAIRS.length} repairs →`)}</a></div>
-      <div class="sec-head"><h2 class="h2">${tx('从偏差归因到<em>最小补丁</em>与原负载复验', 'From Root Cause to <em>Minimal Patch</em> &amp; Regression')}</h2></div>
+      <div class="sec-head"><h2 class="h2">${tx("近期修复", "Recent Repairs")}</h2><a class="link" href="#/repairs">${tx("全部修复 →", "All repairs →")}</a></div>
       <div class="rcards" id="hRepairs"></div>
     </section>
 
-    <section class="sec" id="cite" data-ol="${tx("引用", "Cite")}" data-reveal>
-      <div class="topline"><span class="eyebrow">${tx("07 / 引用与数据", "07 / CITATION & DATA")}</span><span class="mono-note">${tx("快照", "Snapshot")} ${esc(S.updated_at || "—")}</span></div>
-      <div class="sec-head"><h2 class="h2">${tx('数据下载与<em>快照引用</em>', 'Dataset Download &amp; <em>Citation</em>')}</h2></div>
-      <div class="cite" id="citeBox"></div>
-    </section>
   </div>`;
 
-  $$("#v-home [data-go]").forEach(a => { a.href = "#"; a.onclick = e => { e.preventDefault(); $(`#v-home [data-ol="${a.dataset.go}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
-  renderCite();
-  sceneFlow(); tuckMeasured(v);
-  $$("#v-home .chain-r").forEach(b => b.onclick = () => openDrawer("repair", b.dataset.rp, $$("#v-home .chain-r").map(x => x.dataset.rp)));
+  tuckMeasured(v);
+  const chain = $$(".chain-r", v);
+  chain.forEach(b => b.onclick = () => openDrawer("repair", b.dataset.rp, chain.map(x => x.dataset.rp)));
   renderGroupCards();
   renderSwarmFilters();
   renderSwarm();
@@ -2298,8 +2468,11 @@ RENDER[""] = function renderHome() {
     </button>`;
   }).join("");
   $$("#hRecent [data-ev]").forEach(b => b.onclick = () => { location.hash = `#/list?ev=${encodeURIComponent(b.dataset.ev)}&group=eval`; });
-  const teaser = [...REPAIRS].filter(r => r.headline && r.status === "validated").sort((a, b) => String(b.date).localeCompare(String(a.date)) || rpLogBefore(b) - rpLogBefore(a)).slice(0, 3);
-  byId("hRepairs").innerHTML = teaser.map(repairCard).join("");
+  const teaser = REPAIRS.filter(r => r.headline && r.status === "validated").sort((a, b) => String(b.date).localeCompare(String(a.date)) || Math.abs(b.headline.before) - Math.abs(a.headline.before)).slice(0, 3);
+  byId("hRepairs").innerHTML = teaser.map(r => `<button class="panel rcard" type="button" data-rp="${esc(r.id)}">
+    <h3>${esc(r.short)}</h3><span class="rc-lab">${esc(r.headline.label)}</span>
+    <span class="rc-read"><span class="b">${fmtNum(r.headline.before)}</span><span class="x">→</span><span class="a">${fmtNum(r.headline.after)}</span></span>
+    <span class="rc-loc">${esc(repairLibrary(r))}</span></button>`).join("");
   $$("#hRepairs [data-rp]").forEach(b => b.onclick = () => openDrawer("repair", b.dataset.rp, teaser.map(r => r.id)));
 };
 
@@ -2322,9 +2495,7 @@ function renderCite() {
   const d = S.updated_at || "snapshot";
   box.innerHTML = `<div class="panel cite-meta"><dl class="spec2">
       <dt>${tx("快照日期", "Snapshot")}</dt><dd class="mono">${esc(S.updated_at || "—")}</dd>
-      <dt>${tx("内容", "Contents")}</dt><dd>${fmtInt(ROWS.length)} ${term("pair", tx("条成对比较", "comparisons"))} · ${fmtInt(EVALS.size)} ${tx("个评测", "batches")} · ${PLATS.length} ${tx("个平台", "platforms")} · ${REPAIRS.length} ${tx("项修复", "repairs")}</dd>
-      <dt>${tx("来源", "Sources")}</dt><dd class="mono">data/evaluations.json · data/repairs.json</dd>
-      <dt>${tx("数据指纹", "SHA-256")}</dt><dd class="mono" id="citeHash">…</dd></dl>
+      </dl>
       <div class="cite-dl"><button class="btn sm" type="button" data-dl="rows">${tx("比较记录 JSON", "Evaluations JSON")} <span>↓</span></button><button class="btn sm" type="button" data-dl="repairs">${tx("修复记录 JSON", "Repairs JSON")} <span>↓</span></button><button class="btn sm" type="button" data-dl="csv">${tx("全部比较 CSV", "Comparisons CSV")} <span>↓</span></button></div></div>
     <div class="panel cite-code"><div class="cc-top"><div class="seg" role="group" aria-label="${tx("引用格式", "Citation format")}"><button type="button" data-ct="bib">BibTeX</button><button type="button" data-ct="txt">${tx("纯文本", "Plain text")}</button></div><button class="btn sm" type="button" id="citeCopy">${tx("复制", "Copy")}</button></div>
       <pre id="citePre"></pre></div>`;
@@ -2339,7 +2510,7 @@ function renderCite() {
   });
   paint();
   const raw = JSON.stringify(DATA);
-  const done = hx => { CITE.hash = hx; const el = byId("citeHash"); if (el) { el.textContent = hx ? `sha256:${hx.slice(0, 16)}…` : "—"; el.title = hx || ""; } paint(); };
+  const done = hx => { CITE.hash = hx; paint(); };
   if (window.crypto?.subtle) crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw)).then(b => done([...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("")), () => done(null));
   else done(null);
 }
@@ -2426,40 +2597,11 @@ function dimSwarm() {
   $$("#swarm .sw-pt").forEach(c => c.classList.toggle("dim", !swMatch(BYID.get(c.dataset.id))));
   paintSwarmText();
 }
-function swCols(rows) {
-  return (S.metric_columns || []).filter(m => m.count).map(m => {
-    const ds = rows.map(r => r.metrics[m.key]?.value).filter(v => v != null).map(v => devOf(m.key, v));
-    const pos = ds.filter(d => d > 0);
-    return { m: MCOL[m.key], n: ds.length, zeros: ds.length - pos.length, span: pos.length > 1 ? Math.log10(Math.max(...pos)) - Math.log10(Math.min(...pos)) : 0 };
-  }).filter(c => c.n);
-}
 function paintSwarmText() {
-  const rows = ROWS.filter(swMatch), cols = swCols(rows);
-  const nRead = cols.reduce((a, c) => a + c.n, 0);
-  const filt = [SW.kind && KINDS[SW.kind].label, SW.task && TASK[SW.task]].filter(Boolean).join(" · ");
-  byId("swMeta").innerHTML = `${fmtInt(rows.length)} ${tx("条比较", "comparisons")} · ${fmtInt(nRead)} ${tx("个读数", "readings")} · ${tx("对数偏离轴", "Log deviation")}${filt ? ` · ${esc(filt)}` : ""}`;
-  const take = byId("swTake");
-  if (!cols.length) { byId("swA").textContent = tx("当前筛选下没有读数。", "No readings match the current filter."); take.hidden = true; return; }
-  const wide = cols.reduce((a, b) => b.span > a.span ? b : a);
-  const big = cols.filter(c => c.n >= 10);
-  const zc = (big.length ? big : cols).reduce((a, b) => (b.zeros / b.n > a.zeros / a.n ? b : a));
-  byId("swA").innerHTML = LANG === "en"
-    ? `${esc(wide.m.label)} spans ~${Math.round(wide.span)} orders of magnitude; ${esc(zc.m.label)} is exact on ${fmtInt(zc.zeros)} / ${fmtInt(zc.n)} records.`
-    : `${esc(wide.m.label)}跨度约 ${Math.round(wide.span)} 个数量级；${esc(zc.m.label)}有 ${fmtInt(zc.zeros)} / ${fmtInt(zc.n)} 条精确一致。`;
-  const t4 = rows.filter(r => r.tier === 4);
-  let t = "";
-  if (t4.length && new Set(t4.map(r => r.eval_id)).size === 1) {
-    const ev = EVALS.get(t4[0].eval_id);
-    t = LANG === "en"
-      ? `All ${t4.length} records in the <b>&gt;1</b> tier come from "${esc(ev.ui.full)}".`
-      : `分级 <b>&gt;1</b> 的 ${t4.length} 条记录均出自「${esc(ev.ui.full)}」。`;
-  } else {
-    const w = rows.filter(r => r.dev != null).reduce((a, b) => (!a || b.dev > a.dev ? b : a), null);
-    if (w) t = LANG === "en"
-      ? `Peak deviation: "${esc(w.pairUI.short)}" (${esc(MCOL[w.head.key]?.label || w.head.label)} ${fmtNum(w.head.value)}).`
-      : `最大偏离记录为「${esc(w.pairUI.short)}」：${esc(MCOL[w.head.key]?.label || w.head.label)} ${fmtNum(w.head.value)}。`;
-  }
-  take.innerHTML = t; take.hidden = !t;
+  const n = $$("#swarm .sw-pt:not(.dim)").length;
+  byId("swMeta").innerHTML = n
+    ? `${fmtInt(n)} ${tx("个读数", "readings")} · ${term("dev", tx("对数偏离轴", "Log deviation"))}`
+    : tx("当前筛选下没有读数。", "No readings match the current filter.");
 }
 function renderSwarm() {
   const cols = (S.metric_columns || []).filter(m => m.count);
@@ -2601,8 +2743,8 @@ function buildList() {
   listBuilt = true;
   byId("v-list").innerHTML = `
   <div class="wrap"><div class="sec first" style="padding-bottom:10px">
-    <div class="topline"><span class="eyebrow">${tx("适配报告 · REPORT", "COMPATIBILITY REPORT")}</span><span class="mono-note">${fmtInt(ROWS.length)} ${tx("条比较", "comparisons")} · ${REPAIRS.length} ${tx("项修复", "repairs")}</span></div>
-    <h1 class="h2">${tx('按任务、硬件、适配库与模型，<br class="d">生成<em>版本核验报告与保守配置</em>', 'Select Workload, Hardware, Stack &amp; Model<br class="d">for <em>Version Audit &amp; Pinned Recipe</em>')}</h1>
+    <div class="topline"><a class="link" href="#/records">← ${tx("全部记录", "All records")}</a></div>
+    <h1 class="h2">${tx("评测记录", "Evaluation records")}</h1>
     <div class="sel4" id="lSel"></div>
     <div id="lScope"></div>
   </div>
@@ -3035,9 +3177,21 @@ const SCENES = {};
 const prand = i => { const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
 window.NF_SCENES = SCENES;
 
+// Overlay alternate text so the longest variant reserves space without being shown.
+const slotHtml = variants => variants.map((html, i) => `<span aria-hidden="${i !== 0}">${html}</span>`).join("");
+function showSlot(slot, index) {
+  if (slot.dataset.index === String(index)) return;
+  slot.dataset.index = index;
+  Array.from(slot.children).forEach((child, i) => child.setAttribute("aria-hidden", String(i !== index)));
+}
+
 function makeScene(root, cfg) {
   const steps = cfg.steps;
   const playBtn = $(".dm-play", root), replayBtn = $(".dm-replay", root), cap = $(".dm-cap", root), chips = $(".dm-steps", root), stage = $(".dm-stage", root);
+  if (cfg.stableCaption) {
+    cap.classList.add("fw-slot");
+    cap.innerHTML = slotHtml(steps.map(s => s.cap));
+  }
   chips.style.setProperty("--n", steps.length);
   chips.innerHTML = steps.map((s, i) => `<button type="button" data-i="${i}"><span>${String(i + 1).padStart(2, "0")}</span>${esc(s.label)}</button>`).join("");
   const chipEls = [...chips.children];
@@ -3050,7 +3204,8 @@ function makeScene(root, cfg) {
     if (k !== cur) {
       cur = k;
       chipEls.forEach((b, i) => { if (i === k) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); b.style.setProperty("--p", 0); });
-      cap.innerHTML = steps[k].cap;
+      if (cfg.stableCaption) showSlot(cap, k);
+      else cap.innerHTML = steps[k].cap;
     }
     chipEls[k].style.setProperty("--p", seg(t, steps[k].at, end).toFixed(3));
   }
@@ -3097,7 +3252,7 @@ function makeScene(root, cfg) {
 
 function demoShell(o) {
   return `<article class="panel dm" id="${o.id}">
-    <header class="dm-h"><div><h3 class="ev-q">${o.q}</h3><p class="ev-a">${o.a}</p></div>
+    <header class="dm-h"><div><h3 class="ev-q">${o.q}</h3>${o.a ? `<p class="ev-a">${o.a}</p>` : ""}</div>
       <div class="dm-ctl"><button class="btn sm dm-play" type="button" aria-pressed="false">${tx("播放", "Play")}</button><button class="btn sm dm-replay" type="button">${tx("重播", "Replay")}</button></div></header>
     <div class="dm-steps" role="group" aria-label="${tx("动画步骤，点击跳转", "Animation steps — click to jump")}"></div>
     <p class="dm-cap" aria-live="polite"></p>
@@ -3133,7 +3288,7 @@ function scenePairHtml(F) {
     <p class="mlab">执行算子</p><div class="ops">${ops.map((o, i) => `<span class="op" data-op="${i}">${o}</span>`).join('<i class="op-ar">›</i>')}</div>
     <p class="mlab">输出 · 示意 32 个元素</p><div class="vgrid">${V.map(v => `<i style="--v:${(18 + v * 70).toFixed(0)}%"></i>`).join("")}</div></div>`;
   return demoShell({
-    id: "dmPair", q: "单条成对比较如何生成？", a: "固定输入与模型权重，双端独立执行后逐元素求差，归约为标量指标。",
+    id: "dmPair", q: tx("成对比较：KV 缓存", "Paired comparison: KV cache"),
     body: `<div class="pa-in"><div class="pa-box" data-k="in"><small>输入 · 同一份</small><span class="tok">${Array.from({ length: 8 }, () => "<i></i>").join("")}</span></div>
         <div class="pa-box" data-k="w"><small>权重 · 同一份</small><b>${esc(r.model || "同一模型快照")}</b></div></div>
       <svg class="pa-wire" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
@@ -3146,7 +3301,7 @@ function scenePairHtml(F) {
         ${lane("b", pb, sb)}</div>
       <div class="pa-rec tbl" id="paRec">${rowHtml(r)}</div>`,
     legend: `<span><i class="lg op-l done"></i>已完成</span><span><i class="lg op-l run"></i>执行中</span>${TIERS.map(t => `<span><i class="dot" style="background:var(--${t.key})"></i>${t.label}</span>`).join("")}`,
-    ill: "流程示意 · 极值读数与覆盖元素数取自实测记录",
+    ill: tx("网格为示意；最大误差和覆盖为实测。", "The grid is schematic. Max error and coverage are measured."),
   });
 }
 function scenePair(F) {
@@ -3162,13 +3317,13 @@ function scenePair(F) {
   rec.onclick = e => { const b = e.target.closest(".trow"); if (b) openDrawer("row", b.dataset.id, [b.dataset.id]); };
   const opState = (els, t, t0, d) => els.forEach((e, i) => { const s = t0 + i * d; e.classList.toggle("run", t >= s && t < s + d); e.classList.toggle("done", t >= s + d); });
   makeScene(root, {
-    name: "pair", loop: 18, still: 14,
+    name: "pair", loop: 18, still: 14, stableCaption: true,
     steps: [
-      { at: 0, label: "固定输入", cap: "将完全相同的 token 序列与模型权重分别送入双端环境。" },
-      { at: 2, label: "双端独立执行", cap: "双端只在一个维度上不同：这里是 NVIDIA H100 与Ascend 910C，都走 token 路径。" },
-      { at: 6.2, label: "逐元素对齐", cap: "配对输出张量逐元素相减并按一致性分级着色；图中示意 32 个元素，该条实测共对齐 2,752 万个元素。" },
-      { at: 9.4, label: "归约为指标", cap: "将全量元素差值归约为最大绝对误差、RMSE 或余弦相似度等标量指标；单一离群元素即可推高最大绝对误差。" },
-      { at: 12.6, label: "归档记录", cap: "记录双端配置、对齐覆盖率与标量读数。点击下方记录行可展开完整对照详情。" },
+      { at: 0, label: tx("固定输入", "Fix inputs"), cap: tx("两端使用相同的 token 和权重。", "Both sides use identical tokens and weights.") },
+      { at: 2, label: tx("双端运行", "Run both sides"), cap: tx("两端都逐 token 运行。", "Both sides run token by token.") },
+      { at: 6.2, label: tx("对齐输出", "Align outputs"), cap: tx("在相同的 KV 位置计算绝对差值。", "Compute absolute differences at matching KV positions.") },
+      { at: 9.4, label: tx("计算指标", "Compute metrics"), cap: tx("取已配对元素中的最大绝对误差。", "Take the maximum absolute error across paired elements.") },
+      { at: 12.6, label: tx("记录结果", "Record results"), cap: tx("记录两端配置、误差和覆盖。", "Record both configurations, errors, and coverage.") },
     ],
     render(t) {
       toks.forEach((e, i) => e.classList.toggle("on", t >= 0.2 + i * 0.12));
@@ -3218,7 +3373,7 @@ function sceneAxisHtml(F) {
   }).join("");
   const cuts = [[0, 5.2, 0], [5.2, logPos(1e-6), 1], [logPos(1e-6), logPos(1e-3), 2], [logPos(1e-3), logPos(1), 3], [logPos(1), 100, 4]];
   return demoShell({
-    id: "dmAxis", q: "量纲与方向不同的指标如何同轴对照？", a: "统一换算为偏离完全一致的幅度，投射至同一对数刻度轴。",
+    id: "dmAxis", q: tx("如何读数", "How to read the metrics"),
     body: `<div class="rcs" style="--n:${C.length}">${C.map((c, i) => `<div class="rc" data-i="${i}" style="--tc:${c.tier == null ? "var(--faint)" : `var(--t${c.tier})`}">
         <small class="rc-m">${esc(MCOL[c.k].label)} · ${HIGHER.has(c.k) ? "越大越一致" : "越小越一致"}</small>
         <b class="rc-v">${HIGHER.has(c.k) ? fmtHi(c.v) : fmtNum(c.v)}</b>
@@ -3231,10 +3386,10 @@ function sceneAxisHtml(F) {
         <div class="line"></div><span class="zero-sep" style="left:5.2%"></span>
         <div class="ticks"><i style="left:${axPos(0)}%">0</i>${[-16, -12, -8, -4, 0].map(e => `<i style="left:${axPos(10 ** e)}%">10${sup(e)}</i>`).join("")}</div>
         ${C.map((c, i) => `<span class="dot${c.d === 0 ? " sq" : ""}" data-i="${i}" style="background:${c.tier == null ? "var(--ink)" : `var(--t${c.tier})`}"></span>`).join("")}
-        <span class="ax-cap">${term("dev", "偏离")}（对数）→ 越往右越不一致</span>
+        <span class="ax-cap">${tx("偏离越大，越靠右（对数刻度）", "Larger deviations to the right (log scale)")}</span>
       </div>`,
-    legend: `<span><i class="dot" style="background:var(--ink)"></i>未分级记录</span>${TIERS.map(t => `<span><i class="dot" style="background:var(--${t.key})"></i>${t.label}</span>`).join("")}<span><i class="lg hist-l"></i>全站读数分布（按数量级统计）</span>`,
-    ill: "五张示例卡片与背景直方图均基于站内实测记录计算",
+    legend: `<span><i class="dot" style="background:var(--ink)"></i>${tx("未分级", "Ungraded")}</span><span><i class="lg hist-l"></i>${tx("读数分布", "Reading distribution")}</span>`,
+    ill: tx("分档不代表验收。", "Tiers are not acceptance criteria."),
   });
 }
 function sceneAxis(F) {
@@ -3243,13 +3398,13 @@ function sceneAxis(F) {
   const cards = $$(".rc", root), dots = $$(".axa .dot", root), ax = byId("axA"), hist = $$(".axa .hist i", root);
   const AXY = 146;
   makeScene(root, {
-    name: "axis", loop: 16, still: 13,
+    name: "axis", loop: 16, still: 13, stableCaption: true,
     steps: [
-      { at: 0, label: "原始读数", cap: "五条实测比较涵盖不同指标与优化方向：余弦相似度越接近 1 越一致，误差类指标越接近 0 越一致。" },
-      { at: 2.6, label: "统一偏离方向", cap: "正向指标按 1 − 值换算，所有指标统一表示为偏离完全一致的非负幅度；精确为 0 的记录单独标记。" },
-      { at: 5.0, label: "对数刻度映射", cap: "将非零偏离映射至 10⁻¹⁶ 至 1 的对数轴；精确为 0 的记录置于最左侧独立区间。" },
-      { at: 8.0, label: "一致性五档分级", cap: "含最大绝对误差或余弦相似度的记录按阈值划入五档；仅含 NLL 或 logprob 的记录保留原值、不参与分级。" },
-      { at: 10.5, label: "全站读数分布", cap: `全站 ${fmtInt(F.nRead)} 个实测读数共用同一对数偏离轴，贯穿首页分布图、平台指纹与修复量级图。` },
+      { at: 0, label: tx("原始读数", "Raw readings"), cap: tx("相似度越接近 1、误差越接近 0，结果越一致。", "Closer to 1 for similarity and closer to 0 for error means better agreement.") },
+      { at: 2.6, label: tx("换算偏离", "Compute deviation"), cap: tx("相似度用 1 − 原值，误差取绝对值。", "Use 1 minus the similarity value, or the absolute error.") },
+      { at: 5.0, label: tx("对数刻度", "Log scale"), cap: tx("非零偏离用对数刻度，零单独显示。", "Use a log scale for nonzero deviations and show zero separately.") },
+      { at: 8.0, label: tx("分档", "Tiers"), cap: tx("仅最大绝对误差和余弦相似度用于分档。", "Only max absolute error and cosine similarity are tiered.") },
+      { at: 10.5, label: tx("读数分布", "Distribution"), cap: tx("柱越高，该数量级的读数越多。", "Taller bars indicate more readings at that order of magnitude.") },
     ],
     render(t) {
       cards.forEach((c, i) => {
@@ -3292,7 +3447,7 @@ function sceneOrderHtml(F) {
       <p data-l="3" class="res">= ${grpB}</p>` };
   const cross = F.cross?.head?.value, chunk = F.chunk?.head?.value;
   return demoShell({
-    id: "dmOrder", q: "同一张卡仅切换 KV 分块，为何输出显著偏离？", a: "预填充分块改变了注意力浮点归约的分组顺序，放大了 BF16 尾数舍入差异。",
+    id: "dmOrder", q: tx("实测例：同卡 KV 分块", "Example: changing KV chunking on one GPU"),
     body: `<div class="oc-lanes">${lane("a", "token 路径", "预填充 128 个 token 一次写入 · 再逐个解码 32 个", 33, accA)}${lane("b", "chunk63-65 路径", "预填充拆成 63 + 65 两块写入 · 再逐个解码 32 个", 34, accB)}</div>
       <div class="oc-delta" id="ocDelta"><span class="oc-d1">同组输入因归约顺序不同相差 <b>${grpB - seqA}</b></span>
         <span class="oc-d2">实测 · 同一张 H100 · token ↔ chunk63-65 · KV 最大绝对误差 <strong id="ocVal">0</strong>${cross != null ? `<small>跨平台 token ↔ token 是 ${fmtNum(cross)}</small>` : ""}</span></div>`,
@@ -3377,7 +3532,7 @@ function sceneRepairHtml(F) {
       <span class="rp-sweep"></span></div>
     <div class="rp-foot"><span>有效 token 相对独立参考的最大偏差</span><strong>${side === "bug" ? f2(X.dMax) : "0"}</strong></div></div>`;
   return demoShell({
-    id: "dmRepair", q: "实例拆解：TRL PPO 的 padding 尾部泄漏", a: "reward whitening 的仿射变换使 padding 零值偏移为非零，经 GAE 反向递推污染有效 token。",
+    id: "dmRepair", q: tx("实测例：TRL PPO 的 padding 泄漏", "Example: padding leakage in TRL PPO"),
     body: `<div class="rp-lanes">${lane("bug", "原版 TRL 0.7.10", "whiten_rewards=True")}${lane("fix", "修复后", "whitening 之后重新乘 mask")}</div>`,
     legend: `<span><i class="lg cell-l padl"></i>padding 位置（mask = 0）</span><span><i class="lg cell-l leakl"></i>非零泄漏 / 受污染</span><span><i class="lg cell-l okl"></i>重乘 mask 归零</span><span>γ = 1，λ = ${X.LAM}，价值基线取 0</span>`,
     ill: "张量数值按原公式在小样本上精确计算 · 原负载实测读数见下方",
@@ -3459,6 +3614,8 @@ const NF_ICONS = `<svg width="0" height="0" style="position:absolute" aria-hidde
 <symbol id="nf-i-bulb" viewBox="0 0 24 24"><path d="M9.4 18.4h5.2M10.2 21.2h3.6"/><path d="M12 2.8a6.2 6.2 0 0 0-3.6 11.2c.6.5 1 1.2 1 2h5.2c0-.8.4-1.5 1-2A6.2 6.2 0 0 0 12 2.8z"/></symbol>
 <symbol id="nf-i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.8" rx="7.6" ry="3"/><path d="M4.4 5.8v12.4c0 1.7 3.4 3 7.6 3s7.6-1.3 7.6-3V5.8"/><path d="M4.4 12c0 1.7 3.4 3 7.6 3s7.6-1.3 7.6-3"/></symbol>
 <symbol id="nf-i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+<symbol id="nf-i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+<symbol id="nf-i-external" viewBox="0 0 24 24"><path d="M13 5h6v6m-8 2 8-8M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
 </defs></svg>`;
 document.body.insertAdjacentHTML("afterbegin", NF_ICONS);
 const ico = (n, cls = "ico") => `<svg class="${cls}" aria-hidden="true"><use href="#nf-i-${n}"/></svg>`;
@@ -3530,34 +3687,36 @@ function sceneFlowHtml() {
   const panelItems = (rows, cls) => rows.map(([i, k, v]) => `<div class="fw-it ${cls}">${ico(i)}<i class="fw-bar"></i><div class="fw-kv"><span class="k">${k}</span><span class="v" title="${esc(v)}">${esc(v)}</span></div></div>`).join("");
   return demoShell({
     id: "dmFlow",
-    q: tx("一次跨栈适配在 NumericBridge 中如何闭环？", "How does one cross-stack adaptation close the loop in NumericBridge?"),
-    a: tx("以 Qwen3.5-9B-Base 在 910C 上的适配为例：先修复 RMSNorm 约定分叉，再逐层隔离原生 BF16 残差。", "Qwen3.5-9B-Base on 910C: fix the RMSNorm convention split first, then isolate the native BF16 residual layer by layer."),
-    body: `<div class="fw-row">
-        <section class="fw-p u" data-p="target"><div class="fw-h">${ico("target")}<i class="fw-bar"></i>${tx("适配目标", "Target Stack")}<span class="fw-tag">${tx("真实案例", "Real case")}</span></div>
+    q: tx("流程概览", "Workflow Overview"),
+    a: tx("以 MindSpeed RMSNorm 修复为例", "Example: Fixing RMSNorm in MindSpeed"),
+    body: `<div class="fw-flow">
+        <section class="fw-p u" data-p="target"><div class="fw-h">${ico("target")}<i class="fw-bar"></i>${tx("适配目标", "Target Stack")}</div>
           <div class="fw-b">${panelItems(X.target, "t")}</div><p class="fw-foot" title="${esc(X.targetFoot)}">${esc(X.targetFoot)}</p></section>
         <div class="fw-ar" data-a="0">${ico("arrow")}</div>
-        <section class="fw-p s" data-p="core"><div class="fw-h">${ico("gear")}<i class="fw-bar"></i>${tx("NumericBridge 框架", "NumericBridge")}<span class="fw-miss" id="fwMiss">${tx("检索：未命中已知问题", "KB: no known match")}</span><span class="fw-round" id="fwRound">${tx("待开始", "Ready")}</span></div>
+        <section class="fw-p s" data-p="core"><div class="fw-h">${ico("gear")}<i class="fw-bar"></i><span>${tx("NumericBridge 框架", "NumericBridge")}</span><span class="fw-status fw-slot" id="fwStatus"><span class="fw-round">${tx("待开始", "Ready")}</span><span class="fw-miss" aria-hidden="true">${tx("检索：未命中已知问题", "KB: no known match")}</span>${X.rounds.map(r => `<span class="fw-round on" aria-hidden="true">${esc(r.tag)}</span>`).join("")}</span></div>
           <div class="fw-b"><div class="fx" id="fxStack">
-            <span class="fx-arc" id="fxArc" aria-hidden="true"><em>${tx("残差未闭合 · 进入下一轮排查", "Residual open · next pass")}</em><i></i></span>
-            ${stages.map(([i, k], j) => `${j ? '<i class="fx-ar" aria-hidden="true">↓</i>' : ""}<div class="fx-st" data-s="${j}"><span class="fx-n">0${j + 1}</span><b class="fx-k">${ico(i)}${k}</b><p class="fx-d">${FX_DESC[j]}</p></div>`).join("")}
-            <div class="fx-gate" id="fxGate"><span class="g0">${tx("✓ 误差收敛或成因闭合 → 生成交付", "✓ Converged or explained → deliver")}</span><span class="g1">${tx("↻ 仍存残差 → 下一轮逐层排查", "↻ Residual open → next layer pass")}</span><span class="g2">${tx("✓ 残差归因完毕 → 生成交付", "✓ Residual explained → deliver")}</span></div>
+            <span class="fx-arc" id="fxArc" aria-hidden="true"><i></i></span>
+            ${stages.map(([i, k], j) => `${j ? '<i class="fx-ar" aria-hidden="true">↓</i>' : ""}<div class="fx-st" data-s="${j}"><span class="fx-n">0${j + 1}</span><b class="fx-k">${ico(i)}${k}</b><p class="fx-d fw-slot">${slotHtml([FX_DESC[j], ...X.rounds.map(r => r.res[j])])}</p></div>`).join("")}
+            <div class="fx-gate fw-slot" id="fxGate">${slotHtml([
+              tx("✓ 误差收敛或成因闭合 → 生成交付", "✓ Converged or explained → deliver"),
+              tx("↻ 仍存残差 → 下一轮逐层排查", "↻ Residual open → next layer pass"),
+              tx("✓ 残差归因完毕 → 生成交付", "✓ Residual explained → deliver"),
+            ])}</div>
           </div></div></section>
+        <div class="fw-lp">
+          <span class="fw-lk up"><span class="ln"><i></i></span><span>${tx("检索", "Query")}</span></span>
+          <span class="fw-lk down"><span class="ln"><i></i></span><span>${tx("可选上传 · 审核发布", "Optional upload · reviewed")}</span></span></div>
+        <section class="fw-p s fw-kb" data-p="kb"><div class="fw-h">${ico("people")}<i class="fw-bar"></i>${tx("社区知识库", "Community Knowledge Base")}</div>
+          <div class="fw-b"><div class="fw-kbrow">${KB_ITEMS.map(([i, k], j) => `<div class="fw-it k" data-k="${j}">${ico(i)}<span class="k">${k}</span><em>+1</em></div>`).join("")}</div></div></section>
         <div class="fw-ar" data-a="1">${ico("arrow")}</div>
         <section class="fw-p u" data-p="deliver"><div class="fw-h">${ico("box")}<i class="fw-bar"></i>${tx("适配交付", "Deliverables")}</div>
-          <div class="fw-b">${panelItems(X.deliver, "d")}</div><p class="fw-foot">${tx("库 / 插件 / 补丁", "Library / plugin / patch")}</p></section>
-      </div>
-      <div class="fw-links"><div class="fw-lp">
-        <span class="fw-lk up"><span class="ln"><i></i></span>${tx("检索", "Query")}</span>
-        <span class="fw-lk down"><span class="ln"><i></i></span>${tx("可选上传 · 审核发布", "Optional upload · reviewed")}</span></div></div>
-      <section class="fw-p s fw-kb" data-p="kb"><div class="fw-h">${ico("people")}<i class="fw-bar"></i>${tx("社区知识库", "Community Knowledge Base")}</div>
-        <div class="fw-b"><div class="fw-kbrow">${KB_ITEMS.map(([i, k], j) => `<div class="fw-it k" data-k="${j}">${ico(i)}<span class="k">${k}</span><em>+1</em></div>`).join("")}</div></div></section>`,
+          <div class="fw-b">${panelItems(X.deliver, "d")}</div><p class="fw-foot">${tx("库 / 插件 / 补丁", "Library / plugin / patch")}</p></section></div>`,
     legend: `<span><i class="lg fw-l u"></i>${tx("用户侧：目标与交付", "User side: target & deliverables")}</span><span><i class="lg fw-l s"></i>${tx("共享：框架与知识库", "Shared: framework & KB")}</span><span><i class="lg op-l run"></i>${tx("当前步骤", "Active step")}</span>`,
-    ill: tx("架构流程示意 · 目标环境、各轮读数与代码定位均取自实测修复记录", "Schematic · environment, readings and code locations come from verified repair records"),
+    ill: tx("流程示意", "Workflow diagram"),
   });
 }
 function sceneFlow() {
   const root = byId("dmFlow"); if (!root) return;
-  const X = flowCase();
   const P = Object.fromEntries($$(".fw-p", root).map(p => [p.dataset.p, p]));
   const tItems = $$(".fw-it.t", root), dItems = $$(".fw-it.d", root), feet = $$(".fw-foot", root);
   const arrows = $$(".fw-ar", root), sts = $$(".fx-st", root), res = sts.map(s => $(".fx-d", s));
@@ -3567,20 +3726,20 @@ function sceneFlow() {
     const y0 = a.offsetTop + a.offsetHeight / 2, y1 = b.offsetTop + b.offsetHeight / 2;
     arc.style.top = y0 + "px"; arc.style.height = Math.max(0, y1 - y0) + "px";
   }
-  layoutArc(); addEventListener("resize", layoutArc, { passive: true });
-  const kbIt = $$(".fw-kb .fw-it", root), round = byId("fwRound"), miss = byId("fwMiss");
+  layoutArc(); new ResizeObserver(layoutArc).observe(stack);
+  const kbIt = $$(".fw-kb .fw-it", root), status = byId("fwStatus");
   const up = $(".fw-lk.up .ln i", root), down = $(".fw-lk.down .ln i", root);
   const R1 = [5.4, 6.8, 8.2, 9.6, 11.0], R2 = [12.6, 13.6, 14.6, 15.6, 16.8];
   const stageAt = (t, T) => { for (let j = 0; j < 4; j++) if (t >= T[j] && t < T[j + 1]) return j; return t >= T[4] ? 4 : -1; };
   makeScene(root, {
-    name: "flow", loop: 26, still: 22,
+    name: "flow", loop: 26, still: 22, stableCaption: true,
     steps: [
-      { at: 0, label: tx("定义适配目标", "Define target"), cap: tx("锁定目标硬件（Ascend 910C）、模型（Qwen3.5-9B-Base）、训推框架（MindSpeed TP4）及对照基线（NVIDIA H200）。", "Pin the target hardware (Ascend 910C), model (Qwen3.5-9B-Base), stack (MindSpeed TP4) and baseline (NVIDIA H200).") },
-      { at: 2.2, label: tx("检索已知案例", "Query KB"), cap: tx("先按组件与版本号检索社区知识库中的已知缺陷、补丁与规避配置；当前版本组合未命中既有记录，启动首轮精度对比。", "Query the knowledge base by component and version for known defects, patches and workarounds; on a miss, start Round 1.") },
-      { at: 5.2, label: tx("首轮定位与修复", "Round 1: fix"), cap: tx("首轮比对测得 Action logprob 最大绝对误差达 13.95，定位至 MindSpeed fused_rms_norm.py 的 zero-centered gamma 分支不一致；补丁复验后误差降至 0.113，梯度余弦由 0.07 升至 0.999。", "Round 1 measures Action logprob max abs error 13.95, traced to the zero-centered gamma split in MindSpeed fused_rms_norm.py; after patching it drops to 0.113 and grad cosine rises from 0.07 to 0.999.") },
-      { at: 11.2, label: tx("残差追踪与定性", "Trace residual"), cap: tx("针对剩余 0.113 误差继续逐层采样 32 层边界，定位首次分叉位于第 0 层 in_proj 的原生 BF16 GEMM；评估选择性 FP32 投影未带来一致收益，确认为正常低精度路径差异。", "Sample all 32 layer boundaries for the remaining 0.113: the first split sits at the native BF16 GEMM in layer 0 in_proj. Selective FP32 projection gives no net task gain—confirmed as normal low-precision drift.") },
-      { at: 17.0, label: tx("生成适配交付", "Deliverables"), cap: tx("输出最小代码补丁、经验证的默认运行配置，以及包含 6 条关联记录、复验范围与残差说明的完整报告。", "Ship the minimal code patch, verified default runtime config, and full report with 6 linked records, scope and residual analysis.") },
-      { at: 19.8, label: tx("沉淀至知识库", "Publish to KB"), cap: tx("问题成因、影响版本、补丁与验证证据经复核后归档至社区知识库，供后续相同软件栈直接检索复用。", "Root cause, affected versions, patch and verification evidence are reviewed and archived to the community knowledge base for reuse.") },
+      { at: 0, label: tx("确定目标", "Set target"), cap: tx("Ascend 910C · Qwen3.5-9B-Base · MindSpeed TP4", "Ascend 910C · Qwen3.5-9B-Base · MindSpeed TP4") },
+      { at: 2.2, label: tx("检索案例", "Search cases"), cap: tx("未找到匹配案例，开始对比。", "No match. Start a comparison.") },
+      { at: 5.2, label: tx("定位与修复", "Diagnose and fix"), cap: tx("修正 RMSNorm 参数约定后，logprob 最大绝对误差从 13.95 降到 0.113。", "The RMSNorm fix reduces max absolute logprob error from 13.95 to 0.113.") },
+      { at: 11.2, label: tx("追踪残差", "Trace residual"), cap: tx("首次分叉出现在第 0 层 BF16 投影；改用 FP32 未带来一致改善。", "The first split is in layer 0’s BF16 projection. FP32 did not improve all metrics.") },
+      { at: 17.0, label: tx("交付", "Deliver"), cap: tx("保留默认投影配置，交付补丁和复验报告。", "Keep the default projection and deliver the patch and report.") },
+      { at: 19.8, label: tx("归档", "Archive"), cap: tx("将补丁和复验结果归档到案例库。", "Archive the patch and verification results in the case library.") },
     ],
     render(t) {
       tItems.forEach((e, i) => e.classList.toggle("on", t >= 0.3 + i * 0.45));
@@ -3592,19 +3751,15 @@ function sceneFlow() {
       up.style.top = (100 - pu * 100).toFixed(1) + "%"; up.style.opacity = t >= 3.0 && t < 4.1 ? 1 : 0;
       kbIt.forEach((e, j) => e.classList.toggle("hit", t >= 3.3 && t < 4.8 && (j === 0 || j === 3)));
       P.kb.classList.toggle("on", (t >= 3.0 && t < 4.8) || (t >= 20.6 && t < 22.4));
-      miss.classList.toggle("on", t >= 4.2 && t < 5.6);
-      const r2 = t >= 12.4, T = r2 ? R2 : R1, cur = stageAt(t, T), rd = X.rounds[r2 ? 1 : 0];
-      round.textContent = t < 5.2 ? tx("待开始", "Ready") : r2 ? X.rounds[1].tag : X.rounds[0].tag;
-      round.classList.toggle("on", t >= 5.2);
-      let dirty = false;
+      const r2 = t >= 12.4, T = r2 ? R2 : R1, cur = stageAt(t, T);
+      showSlot(status, t >= 4.2 && t < 5.6 ? 1 : t < 5.2 ? 0 : r2 ? 3 : 2);
       sts.forEach((s, j) => {
         s.classList.toggle("run", cur === j);
         s.classList.toggle("done", cur > j || cur === 4);
-        const show = t >= T[j] + 0.35, key = `${show}|${r2}`;
-        res[j].classList.toggle("on", show);
-        if (res[j].dataset.k !== key) { res[j].dataset.k = key; res[j].innerHTML = show ? rd.res[j].replace(/<br>/g, " · ") : FX_DESC[j]; dirty = true; }
+        const index = t >= T[j] + 0.35 ? (r2 ? 2 : 1) : 0;
+        res[j].classList.toggle("on", index !== 0);
+        showSlot(res[j], index);
       });
-      if (dirty) layoutArc();
       if (t < R2[0] && t >= 11.2) { sts.forEach(s => s.classList.add("done")); }
       /* the arc: leaves step 04 on the left, climbs the gutter, re-enters 01 */
       const lp = seg(t, 11.2, 12.4);
@@ -3614,7 +3769,9 @@ function sceneFlow() {
         let x, y; if (d < w) { x = w - d; y = h; } else if (d < w + h) { x = 0; y = h - (d - w); } else { x = d - w - h; y = 0; }
         arcDot.style.left = x + "px"; arcDot.style.top = y + "px"; arcDot.style.opacity = 1;
       } else arcDot.style.opacity = 0;
-      gate.dataset.g = t >= 10.9 && t < 12.4 ? "1" : t >= 16.8 ? "2" : "0";
+      const gateIndex = t >= 10.9 && t < 12.4 ? 1 : t >= 16.8 ? 2 : 0;
+      showSlot(gate, gateIndex);
+      if (gate.dataset.g !== String(gateIndex)) gate.dataset.g = gateIndex;
       arrows[1].classList.toggle("on", t >= 17.0); arrows[1].classList.toggle("go", t >= 17.0 && t < 18.0);
       P.deliver.classList.toggle("on", t >= 17.4 && t < 20.2);
       dItems.forEach((e, i) => e.classList.toggle("on", t >= 17.8 + i * 0.5));
@@ -3642,47 +3799,18 @@ function tuckMeasured(scope) {
   const io = !reduced && "IntersectionObserver" in window ? new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }, { threshold: 0.35 }) : null;
   $$(".dm-meas", scope).forEach(m => (io ? io.observe(m) : m.classList.add("in")));
 }
-/* ---------------- knowledge base & delivery, counted from the records ---------------- */
-function kbFacts() {
-  const ev = REPAIRS.flatMap(r => (r.evidence || []).filter(e => e.url && e.url !== "#").map(e => e.url));
-  const ext = x => ev.filter(u => new RegExp(`\\.(${x})$`).test(u)).length;
-  const vers = new Set(REPAIRS.flatMap(r => (r.environment?.libraries || []).filter(l => l.version).map(l => `${l.name} ${l.version}`)));
-  const alt = REPAIRS.filter(r => /上游已修复|Fixed upstream|PR\s?#|等效防护/.test(r.repair?.upstream_status || "")).length;
-  return {
-    kb: [
-      ["book", "已知问题", REPAIRS.length, `条修复记录 · ${LIBGROUPS.length} 个库分组`],
-      ["layers", "影响版本", vers.size, "个组件版本组合，按实测环境逐条登记"],
-      ["bulb", "替代方案", alt, "项具备上游修复或等效配置，可通过升级或开关规避"],
-      ["wrench", "修复候选", ext("patch|py"), "个补丁与候选模块"],
-      ["db", "验证证据", ext("md|json|svg"), "份报告、数据与轨迹图"],
-    ],
-    deliver: [
-      ["wrench", "适配实现", ext("patch"), "份最小改动补丁，支持独立审阅与回滚"],
-      ["sliders", "运行配置", REPAIRS.filter(r => (r.environment?.libraries || []).length).length, "份硬件、依赖库与版本号清单"],
-      ["doc", "验证报告", ext("md"), "份复验报告，记录测试负载、收敛读数与未覆盖边界"],
-    ],
-  };
-}
-function kbSectionHtml() {
-  const K = kbFacts();
-  const items = rows => rows.map(([i, k, n, note]) => `<div class="kbx-it">${ico(i)}<div><b>${k}</b><small>${esc(note)}</small></div><strong data-n="${n}">${fmtInt(n)}</strong></div>`).join("");
+function howDeliveryHtml() {
+  const items = rows => rows.map(([i, title, note]) => `<div class="kbx-it">${ico(i)}<div><b>${esc(title)}</b><small>${esc(note)}</small></div></div>`).join("");
   return `<div class="kbx">
-    <section class="panel fw-p s"><div class="fw-h">${ico("people")}<i class="fw-bar"></i>社区知识库<span class="fw-sub">检索 · 可选上传 · 审核发布</span></div><div class="kbx-b">${items(K.kb)}</div></section>
-    <section class="panel fw-p u"><div class="fw-h">${ico("box")}<i class="fw-bar"></i>适配交付<span class="fw-sub">库 / 插件 / 补丁</span></div><div class="kbx-b">${items(K.deliver)}</div>
-      <a class="link kbx-go" href="#/repairs">浏览全部修复与证据 →</a></section></div>`;
-}
-function armCounts(scope) {
-  const els = $$("[data-n]", scope);
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const run = el => {
-    const n = +el.dataset.n, t0 = performance.now();
-    const step = now => { const p = ease(clamp01((now - t0) / 900)); el.textContent = fmtInt(Math.round(n * p)); if (p < 1) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
-  };
-  if (reduced || !("IntersectionObserver" in window)) return;
-  els.forEach(el => { el.textContent = "0"; });
-  const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { run(e.target); io.unobserve(e.target); } }, { threshold: 0.6 });
-  els.forEach(el => io.observe(el));
+    <section class="panel fw-p u"><div class="fw-h">${ico("box")}<i class="fw-bar"></i>${tx("用户交付", "User deliverables")}</div><div class="kbx-b">${items([
+      ["sliders", tx("运行配置", "Runtime configuration"), tx("实测版本组合、关键设置和运行方式。", "Tested versions, key settings, and how to run the workload.")],
+      ["wrench", tx("适配方案", "Adaptation plan"), tx("按需交付可用版本、插件、补丁或配置调整。", "A usable release, plugin, patch, or configuration change as needed.")],
+      ["doc", tx("验证结果", "Validation results"), tx("指标、覆盖范围及仍未解决的问题。", "Metrics, measured coverage, and open findings.")],
+    ])}</div></section>
+    <section class="panel fw-p s"><div class="fw-h">${ico("people")}<i class="fw-bar"></i>${tx("社区记录", "Community records")}</div><div class="kbx-b">${items([
+      ["book", tx("评测与问题", "Evaluations and issues"), tx("保留实测配置、指标及已确认的问题。", "Keep measured configurations, metrics, and confirmed findings.")],
+      ["layers", tx("候选与复验", "Options and verification"), tx("同一问题可有多个方案，各自记录复验结果。", "One issue can have several options, each with its own verification results.")],
+    ])}</div></section></div>`;
 }
 
 /* ---------------- page ---------------- */
@@ -3690,200 +3818,215 @@ let howDone = false;
 RENDER.how = function renderHow() {
   if (howDone) return;
   howDone = true;
-  const F = howFacts(), K = kbFacts();
+  const F = howFacts();
   const h = S.hero;
   const maxBar = h ? Math.max(...h.bars.map(b => b.value ?? 0)) || 1 : 1;
   const barColor = { same: "var(--t0)", cross: "var(--t3)", worse: "var(--t4)" };
   const tierN = [0, 0, 0, 0, 0, 0]; ROWS.forEach(r => tierN[r.tier == null ? 5 : r.tier]++);
   const maxT = Math.max(...tierN);
   const rp = F.rp, vm = rp?.validation?.metrics || [];
-  const eb = (icon, txt) => `<span class="eyebrow">${ico(icon, "ico eb")}${txt}</span>`;
-  const kn = k => K.kb.find(x => x[1] === k)?.[2] ?? 0;
-  const ovr = [
-    ["精度对比", `<a data-go="精度对比">固定输入与权重双端独立执行</a>，逐元素对齐输出；七项指标映射至同一对数偏离轴，累计 ${fmtInt(F.nRead)} 个实测读数。`],
-    ["问题诊断", `<a data-go="问题诊断">同卡 H100 切换 KV 分块产生 ${fmtNum(F.chunk?.head?.value)} 误差</a>，高于跨平台同路径的 ${fmtNum(F.cross?.head?.value)}，再用单变量对照区分算术重排与代码缺陷。`],
-    ["修复与回归", `<a data-go="修复与回归">TRL reward whitening 尾部泄漏案例</a>：单行重乘 mask 补丁，使有效回报误差由 ${vm[0] ? `${fmtNum(vm[0].before)} 降至 ${fmtNum(vm[0].after)}` : "非零降至精确归零"}。`],
-    ["知识库与交付", `<a data-go="知识库">${kn("已知问题")} 项缺陷记录、${kn("修复候选")} 份补丁与候选模块、${kn("验证证据")} 份复验证据</a>，按版本索引供后续适配直接复用。`],
-  ];
+  const example = { hardware: "Ascend 910C", model: "Qwen3.5-9B-Base", library: "MindSpeed", task: "rl" };
+  const exampleCase = new URLSearchParams({ ...example, id: "case-mindspeed-zero-centered-rmsnorm", issue: "issue-mindspeed-zero-centered-gamma" });
+  const chapters = [
+    ["request", tx("需求确认", "Confirm request")],
+    ["retrieve", tx("社区检索", "Search community")],
+    ["compare", tx("精度对比", "Compare numerics")],
+    ["diagnose", tx("问题诊断", "Diagnose differences")],
+    ["verify", tx("修复与复验", "Repair and verify")],
+    ["deliver", tx("交付与沉淀", "Deliver and contribute")],
+  ].map(([id, label], i) => ({id, label, n: String(i + 1).padStart(2, "0")}));
+  const chapter = id => {
+    const {label, n} = chapters.find(s => s.id === id);
+    return `<section class="sec" id="how-${id}" data-ol="${esc(label)}" data-ol-number="${n}" data-reveal>
+      <h2 class="how-chapter-title"><span class="how-chapter-number" aria-hidden="true">${n}</span> ${esc(label)}</h2>`;
+  };
 
   byId("v-how").innerHTML = `<div class="wrap">
-    <section class="hero" data-ol="概览">
-      <p class="eyebrow"><span class="live"></span>方法原理 · HOW IT WORKS</p>
-      <h1 class="h1" style="margin-top:22px">成对测量、定位根因，<br class="d"><em>在原负载上复验</em></h1>
-      <p class="lead" style="margin-top:22px">针对给定软硬件适配目标，NumericBridge 先检索社区知识库，未命中时按「精度对比 → 问题诊断 → 修复优化 → 回归验证」在目标环境中迭代收敛，输出补丁、配置与复验证据。完整跨栈适配链路见<a class="link" href="#/">首页总览</a>；本页逐一拆解四个核心环节的机制与计算口径。</p>
-      <div class="ovw">${ovr.map(([k, t], i) => `<div class="ov"><span><i>${String(i + 1).padStart(2, "0")}</i>${k}</span><p>${t}</p></div>`).join("")}</div>
+    <section class="how-header" data-ol="${tx("概览", "Overview")}" data-ol-number="·">
+      <h1 class="h1">${tx("框架<em>实现</em>", "Framework <em>Implementation</em>")}</h1>
+      <nav aria-label="${tx("框架步骤", "Framework steps")}"><ol class="how-steps">${chapters.map(({id, label, n}) => `<li><a href="#/how" data-go="${id}"><span aria-hidden="true">${n}</span>${esc(label)}</a></li>`).join("")}</ol></nav>
     </section>
 
-    <section class="sec" data-ol="精度对比" data-reveal>
-      <div class="topline">${eb("chart", "01 / 精度对比 · 测量机制")}</div>
-      <h2 class="h2"><em>同一份输入与权重</em>送入双端，<br class="d">逐元素对齐中间与输出张量</h2>
-      <div class="how-lead"><p class="l">每条成对比较严格固定输入序列、模型参数与初始状态，量化两条执行路径之间的数值分叉。</p>
-        <p class="r">双端只在硬件、框架、数值精度或分块调度中的一项上不同。采集后的张量逐元素配对求差，归约为最大绝对误差、RMSE、余弦相似度等标量指标，连同对齐元素覆盖率一并归档。</p></div>
+    ${chapter("request")}
+      <p class="how-note">${tx("Agent 整理目标配置，由用户确认；影响运行的设置在执行前补齐。", "The agent summarizes the target stack for the user to confirm. Resolve settings that affect the run before execution.")}</p>
+      <div class="panel dm how-request">
+        <div class="dm-h"><h3 class="h3">${tx("需求示例", "Example request")}</h3></div>
+        <dl>${[
+          [tx("硬件平台", "Hardware"), example.hardware],
+          [tx("目标模型", "Model"), example.model],
+          [tx("训推框架", "Framework"), example.library],
+          [tx("任务目标", "Task goal"), tx("RL · 检查训练阶段的数值差异", "RL · Check numerical differences during training")],
+        ].map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl>
+      </div>
+    </section>
+
+    ${chapter("retrieve")}
+      <p class="how-note">${tx("按已确认的配置查找实测记录；没有匹配就进入精度对比。", "Search for measured results using the confirmed stack. With no match, continue to comparison.")}</p>
+      <div class="panel dm how-request how-match">
+        <div class="dm-h"><h3 class="h3">${tx("命中案例", "Matching case")}</h3><a class="link" href="#/cases?${esc(exampleCase.toString())}">${tx("查看案例", "View case")} <span aria-hidden="true">→</span></a></div>
+        <dl>
+          <div><dt>${tx("已知问题", "Known issue")}</dt><dd>${tx("RMSNorm 参数约定不一致", "Inconsistent RMSNorm parameter conventions")}</dd></div>
+          <div><dt>${tx("关联方案", "Recorded fix")}</dt><dd>${tx("统一归一化参数约定", "Align normalization parameter conventions")}</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    ${chapter("compare")}
+      <p class="how-note">${tx("对齐两侧输入、状态和观测位置，记录差异与覆盖范围。", "Align inputs, state, and observation points. Report differences and coverage.")}<br>${tx("推理看分数与缓存，训练看损失、梯度与更新，RL 可固定 rollout 对照策略更新。", "Compare scores and caches for inference, loss, gradients, and updates for training, or policy updates on a fixed rollout for RL.")}</p>
       ${scenePairHtml(F)}
-      ${measBox("全部记录", `<div class="mstats"><div><b>${fmtInt(ROWS.length)}</b><span>条成对比较</span></div><div><b>${fmtInt(F.nRead)}</b><span>个标量读数</span></div><div><b>${fmtInt(F.maxcov?.coverage?.expected || 0)}</b><span>单条比较最多对齐的元素</span></div></div>`)}
-    </section>
-
-    <section class="sec" data-ol="读数" data-reveal>
-      <div class="topline">${eb("chart", "02 / 精度对比 · 读数映射")}</div>
-      <h2 class="h2">七项标量指标映射至<em>同一对数偏离轴</em></h2>
-      <div class="how-lead"><p class="l">不同指标的量纲与最优方向各异：余弦相似度与 Top-1 一致率越接近 1 越一致，误差类指标越接近 0 越一致。</p>
-        <p class="r">正向指标按 1 − 值折算为偏离度，与误差类指标共同落入 10⁻¹⁶ 至 1 的对数轴；精确为 0 的读数单独置于左端。基于最大绝对误差或余弦相似度的五档分级用于同组快速筛选，不跨指标混排。</p></div>
+      ${measBox(tx("全站比较概览", "All comparisons"), `<div class="mstats"><div><b>${fmtInt(ROWS.length)}</b><span>${tx("条成对比较", "paired comparisons")}</span></div><div><b>${fmtInt(F.nRead)}</b><span>${tx("个指标读数", "metric readings")}</span></div><div><b>${fmtInt(F.maxcov?.coverage?.expected || 0)}</b><span>${tx("单条最大预期元素数", "largest expected element count")}</span></div></div>`)}
+      <div class="how-readings">
       ${sceneAxisHtml(F)}
-      ${measBox(`按主读数分级 · ${fmtInt(ROWS.length)} 条`, barsHtml(TIERS.map((t, i) => ({ label: t.label, note: t.long, text: fmtInt(tierN[i]), w: tierN[i] / maxT * 100, color: `var(--${t.key})` })).concat([{ label: "未分级", note: "仅含分布或标量分数指标", text: fmtInt(tierN[5]), w: tierN[5] / maxT * 100, color: "var(--none)" }])))}
+      ${measBox(tx("各档记录数", "Comparisons by tier"), barsHtml(TIERS.map((t, i) => ({ label: t.label, text: fmtInt(tierN[i]), w: tierN[i] / maxT * 100, color: `var(--${t.key})` })).concat([{ label: tierLabel(null), text: fmtInt(tierN[5]), w: tierN[5] / maxT * 100, color: "var(--none)" }])))}
+      </div>
     </section>
 
-    <section class="sec" data-ol="问题诊断" data-reveal>
-      <div class="topline">${eb("search", "03 / 问题诊断")}</div>
-      <h2 class="h2">区分硬件差异、代码缺陷与<br class="d"><em>浮点归约顺序</em></h2>
-      <div class="how-lead"><p class="l">观测到数值偏离后，首先通过同卡重复运行排除非确定性算子噪声，再沿算子边界定位首次分叉位置。</p>
-        <p class="r">浮点加法不满足结合律，BF16 仅保留 8 位有效尾数，求和树分组变化即可引发显著舍入偏移。将 128 token 预填充拆分为 63 + 65 两块写入，改变了注意力归约顺序，导致单卡分块差异超过跨平台同路径对比。</p></div>
+    ${chapter("diagnose")}
+      <p class="how-note">${tx("复现差异并定位首次分叉，必要时重复运行以估计波动。", "Reproduce the difference and locate the first divergence, estimating run-to-run variation as needed.")}<br>${tx("用单变量对照或独立参考检验平台、代码实现和归约顺序的影响。", "Use a controlled contrast or independent reference to test the effects of the platform, implementation, and reduction order.")}</p>
       ${sceneOrderHtml(F)}
       ${h ? measBox(`${esc(h.unit)} · ${esc(h.model)} · 同输入同权重`, barsHtml(h.bars.map(b => ({ label: esc(b.label), note: esc(b.note), text: fmtNum(b.value), w: b.value ? Math.max(1.5, b.value / maxBar * 100) : 1.5, color: barColor[b.kind] || "var(--muted)" })))) : ""}
     </section>
 
-    <section class="sec" data-ol="修复与回归" data-reveal>
-      <div class="topline">${eb("wrench", "04 / 修复优化 · 回归验证")}</div>
-      <h2 class="h2">实施最小补丁，并在原负载下与<br class="d"><em>独立参考实现</em>逐项核对</h2>
-      <div class="how-lead"><p class="l">定位到软件实现缺陷后，仅针对根因实施最小代码修改，随后回到完整训练或推理步中复测并记录未覆盖边界。</p>
-        <p class="r">以 TRL 0.7.10 的 PPO 训练为例：开启 reward whitening 时，仿射变换将尾部 padding 的零奖励偏移为非零值，经 GAE 反向累加污染全部有效 token。在白化后补乘一行 mask 即可消除泄漏，与独立参考实现逐位吻合。</p></div>
+    ${chapter("verify")}
+      <p class="how-note">${tx("对补丁、替代版本或配置先做针对性回归，再比较原任务的前后指标与覆盖，按需测耗时和显存。", "Run focused checks on each patch, release, or configuration. Compare before-and-after metrics and coverage on the original workload, including time and memory when relevant.")}</p>
       ${sceneRepairHtml(F)}
       ${rp ? measBox(`原生完整 PPOTrainer.step · ${esc(rp.environment?.hardware || "")}`, `<div class="mrows">${vm.map(m => `<div class="mrow2"><span>${esc(m.label)}</span><b class="b">${fmtNum(m.before)}</b><i>→</i><b class="a">${fmtNum(m.after)}</b><em>${m.after === 0 ? "→ 0" : fmtFactor(m.before / m.after)}</em></div>`).join("")}</div>
         <div class="mstages">${(rp.stages || []).map((s, i) => `<span><i>${String(i + 1).padStart(2, "0")}</i>${esc(s.name)}</span>`).join("")}</div>
         <a class="link" href="#/repairs?id=${encodeURIComponent(rp.id)}">查看该项修复完整记录 →</a>`) : ""}
     </section>
 
-    <section class="sec" data-ol="知识库" data-reveal>
-      <div class="topline">${eb("people", "05 / 社区知识库 · 交付")}</div>
-      <h2 class="h2"><em>检索</em>既有缺陷记录，<br class="d"><em>沉淀</em>经复验的补丁与证据</h2>
-      <div class="how-lead"><p class="l">每条修复档案统一记录故障现象、影响版本、规避方案、最小补丁及原负载复验证据。</p>
-        <p class="r">新适配任务启动时优先匹配已知版本组合；闭环验证后可将脱敏记录与证据归档回库。下方统计实时汇总自站内修复数据集，点击「修复」页可查阅全部条目。</p></div>
-      ${kbSectionHtml()}
+    ${chapter("deliver")}
+      <div class="how-note">
+        <p>${tx("满足任务标准后，交付可运行方案和验证结果。", "Deliver a runnable setup and validation results when the task criteria are met.")}<br>${tx("未设验收标准时，报告实测结果、覆盖范围和未解决差异。", "If no criteria were set, report the measurements, coverage, and unresolved differences.")}</p>
+        <p>${tx("用户可选择将评测、问题和复验结果提交社区，经审核后供后续任务检索。", "Users can choose to submit evaluations, issues, and verification results for review and reuse in future searches.")}</p>
+      </div>
+      ${howDeliveryHtml()}
     </section>
   </div>`;
   sceneAxis(F); scenePair(F); sceneOrder(F); sceneRepair(F);
-  armCounts(byId("v-how"));
-  $$("#v-how [data-go]").forEach(a => { a.href = "#"; a.onclick = e => { e.preventDefault(); $(`#v-how [data-ol="${a.dataset.go}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" }); }; });
+  $$("#v-how [data-go]").forEach(a => { a.onclick = e => { e.preventDefault(); byId(`how-${a.dataset.go}`)?.scrollIntoView({ block: "start" }); }; });
   tuckMeasured(byId("v-how"));
 };
 
 /* ======================================================================
-   compare — AccelMark side-by-side, with honest small-n handling
+   compare — platform summaries by measured target
    ====================================================================== */
-const CS = { picks: [], subject: SUBJ[0] || null };
+const CS = { optimized: false, picks: [], subject: null };
+const CMP_REPAIRS = S.compare_repairs || {};
+const CMP_SUBJECTS = [...new Set([...SUBJ, ...Object.keys(CMP_REPAIRS)])];
+const CMP_PLATFORMS = [...new Set([...PLATS.map(p => p.name), ...Object.values(CMP_REPAIRS).flatMap(Object.keys)])];
 let cmpBuilt = false;
-const platCount = p => ROWS.filter(r => r.platforms.includes(p)).length;
+function cmpDefault(picks, subject) {
+  const counts = new Map();
+  for (const r of ROWS) {
+    if (r.uplats.length !== 2 || !CMP_SUBJECTS.includes(r.subject) || !Object.keys(r.metrics).length ||
+        (subject && r.subject !== subject) || !picks.every(p => r.uplats.includes(p))) continue;
+    const key = JSON.stringify([r.subject, [...r.uplats].sort()]);
+    if (!counts.has(key)) counts.set(key, {
+      subject: r.subject, platforms: [...r.uplats].sort(), n: 0,
+      paired: r.uplats.filter(p => CMP_REPAIRS[r.subject]?.[p]).length,
+    });
+    counts.get(key).n++;
+  }
+  const best = [...counts.values()].sort((a, b) => b.paired - a.paired || b.n - a.n)[0];
+  return best ? [best.subject, best.platforms] : [subject || CMP_SUBJECTS[0] || null, []];
+}
 RENDER.compare = function renderCompare(h) {
-  const p = h.q.get("p"), s = h.q.get("s");
-  if (p != null) CS.picks = p.split("|").filter(x => PLATS.some(q => q.name === x));
-  if (s && CMP[s]) CS.subject = s;
+  const p = h.q.get("p"), requested = h.q.get("s");
+  CS.optimized = h.q.get("optimized") === "1" || (!h.q.has("optimized") && h.q.get("view") === "verification");
+  const s = CMP_SUBJECTS.includes(requested) ? requested : null;
+  const picks = p === null ? null : [...new Set(p.split("|").filter(x => CMP_PLATFORMS.includes(x)))];
+  const [defaultSubject, defaultPicks] = cmpDefault(picks || [], s);
+  CS.picks = picks || defaultPicks;
+  CS.subject = s || defaultSubject;
   if (!cmpBuilt) {
     cmpBuilt = true;
-    byId("v-compare").innerHTML = `<div class="wrap">
-      <section class="cmp-hero"><span class="eyebrow">平台对比 · COMPARE</span><h1 class="h2" id="cTitle"></h1>
-        <p class="sub">选择两个及以上平台，横向对照其在同一比较对象下相对测试对侧的最大与中位偏离。各项读数统计自各平台实际参与的成对评测子集。</p></section>
-      <div class="panel" style="margin-top:28px"><div style="text-align:center;padding:22px 20px 0"><b style="font-weight:500">选择参与对比的平台</b><p class="note">点击平台标签加入或移出对比栏；字号对应参与比较条数，在对比栏点击平台名可进入单平台概览。</p></div>
-        <div class="cloud" id="cCloud"></div><div class="presets" id="cPresets" style="padding:0 20px 20px;margin-top:0"></div></div>
-      <div class="panel basket" id="cBasket" hidden></div>
-      <div class="topline" style="margin-top:34px;margin-bottom:12px"><span class="eyebrow">比较对象</span></div>
-      <div class="pills" id="cSubj"></div>
-      <div style="margin-top:16px">${evCard({ q: '<span id="cQ"></span>', aid: "cA", mid: "cMeta", meta: "", tid: "cTake",
-        body: '<div class="cmptbl" id="cTbl"></div>',
-        how: `<p>每个单元格主数字为该平台在当前比较对象下的${term("worst", "最差情况")}读数，下方小字列出偏离中位数与样本量 n。</p>
-          <p>水平色条按对数${term("dev", "偏离")}绘制（正向指标按 1 − 值换算）。样本量 n &lt; 3 的单元格置灰，不参与「最小偏离」判定。</p>
-          <p>各平台参与的测试集与对侧配置不完全重合；若所选两个平台曾直接对测，双方的极值可能源自同一条比较记录。</p>` })}</div>
+    byId("v-compare").innerHTML = `<div class="wrap cmp-page">
+      <header class="cmp-head"><h1 class="work-title"><span class="work-title-mark">${ico("chart")}</span><span>${tx("硬件平台比较", "Hardware Comparison")}</span></h1><div class="cmp-actions">
+        <button class="btn sm ghost" type="button" id="cClr">${ico("cycle")}${tx("清空", "Clear")}</button>
+        <button class="btn sm" type="button" id="cShare">${ico("copy")}${tx("复制链接", "Copy link")}</button>
+      </div></header>
+      <div class="cmp-filters">
+        <div class="cmp-filter"><h2 id="cPlatformLabel">${ico("chip")}${tx("硬件平台", "Hardware")}</h2><div class="pills" id="cCloud" role="group" aria-labelledby="cPlatformLabel">${CMP_PLATFORMS.map(p => `<button class="pill" type="button" data-p="${esc(p)}" aria-pressed="false">${pdot(p)}${esc(platDisp(p))}</button>`).join("")}</div></div>
+        <div class="cmp-filter"><h2 id="cSubjectLabel">${ico("target")}${tx("比较对象", "Target")}</h2><div class="pills" id="cSubj" role="group" aria-labelledby="cSubjectLabel">${CMP_SUBJECTS.map(s => `<button class="pill" type="button" data-s="${esc(s)}" aria-pressed="false">${esc(subjDisp(s))}</button>`).join("")}</div></div>
+      </div>
+      <section aria-labelledby="cResultsTitle"><header class="cmp-results-head"><h2 id="cResultsTitle">${tx("实测指标", "Measured metrics")}</h2>
+        <button class="cmp-switch" type="button" id="cOptimize" role="switch" aria-checked="false" aria-controls="cTbl"><span class="cmp-switch-track" aria-hidden="true"></span>${tx("显示优化效果", "Show optimization effect")}</button></header>
+        <p class="cmp-empty" id="cEmpty" role="status" hidden></p>
+        <div class="cmptbl" id="cTbl" role="region" aria-labelledby="cResultsTitle" tabindex="0"></div>
+        <p class="cmp-note">${tx("修复前后取同一批复验的均值。测试配置可能不同，读数不作硬件排名。", "Before and after use the same set of paired tests. Test configurations may differ; these readings do not rank hardware.")}</p>
+      </section>
     </div>`;
+    byId("cOptimize").onclick = () => { CS.optimized = !CS.optimized; paintCmpOptimization(); writeCmpQuery(); };
+    $$("#cCloud [data-p]").forEach(b => b.onclick = () => {
+      const i = CS.picks.indexOf(b.dataset.p);
+      if (i >= 0) CS.picks.splice(i, 1); else CS.picks.push(b.dataset.p);
+      paintCompare();
+    });
+    $$("#cSubj [data-s]").forEach(b => b.onclick = () => { CS.subject = b.dataset.s; paintCompare(); });
+    byId("cClr").onclick = () => { CS.picks = []; paintCompare(); $("#cCloud button")?.focus(); };
+    byId("cShare").onclick = e => copyText(location.href, e.currentTarget);
   }
   paintCompare();
 };
-function writeCmpQuery() { writeQuery("compare", { p: CS.picks.join("|"), s: CS.subject && CS.subject !== SUBJ[0] ? CS.subject : "" }); }
 function paintCompare() {
-  byId("cTitle").innerHTML = `并排对比 · <em>${esc(CS.subject || "")}</em>`;
-  renderCloud(byId("cCloud"), p => { const on = CS.picks.includes(p.name); return `<button class="ptile ${sizeOf(p.n)} ${p.fam}" type="button" data-p="${esc(p.name)}" aria-pressed="${on}">${on ? "✓ " : ""}${esc(p.name)}<span class="n">${p.n}</span></button>`; });
-  $$("#cCloud [data-p]").forEach(b => b.onclick = () => { const i = CS.picks.indexOf(b.dataset.p); i >= 0 ? CS.picks.splice(i, 1) : CS.picks.push(b.dataset.p); paintCompare(); });
-  // presets: the platform pairs that were actually compared most often
-  const pairN = new Map();
-  for (const r of ROWS) if (r.uplats.length === 2) { const k = [...r.uplats].sort().join("|"); pairN.set(k, (pairN.get(k) || 0) + 1); }
-  const presets = [...pairN.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
-  byId("cPresets").innerHTML = CS.picks.length < 2 ? `<span class="note" style="align-self:center">常用测试组合：</span>` + presets.map(([k, n]) => `<button class="pill" type="button" data-pre="${esc(k)}">${esc(k.replace("|", " ⇄ "))}<span class="n">${n}</span></button>`).join("") : "";
-  $$("#cPresets [data-pre]").forEach(b => b.onclick = () => { CS.picks = b.dataset.pre.split("|"); paintCompare(); });
-  const bk = byId("cBasket"); bk.hidden = !CS.picks.length;
-  bk.innerHTML = `<span class="lb">对比中</span>` + CS.picks.map(p => `<span class="bitem">${pdot(p)}<a href="${platHref(p)}" title="打开 ${esc(p)} 概览">${esc(p)}</a><small>${platCount(p)} 条</small><button type="button" data-rm="${esc(p)}" aria-label="移除 ${esc(p)}">×</button></span>`).join("")
-    + `<span class="ba"><button class="btn sm" type="button" id="cShare">复制链接 <span>↗</span></button><button class="btn sm ghost" type="button" id="cClr">清空</button></span>`;
-  $$("#cBasket [data-rm]").forEach(b => b.onclick = () => { CS.picks = CS.picks.filter(x => x !== b.dataset.rm); paintCompare(); });
-  byId("cClr") && (byId("cClr").onclick = () => { CS.picks = []; paintCompare(); });
-  byId("cShare") && (byId("cShare").onclick = e => copyText(location.href, e.currentTarget));
-  byId("cSubj").innerHTML = SUBJ.map(s => `<button class="pill solid" type="button" data-s="${esc(s)}" aria-pressed="${CS.subject === s}">${esc(s)}<span class="n">${ROWS.filter(r => r.subject === s).length}</span></button>`).join("");
-  $$("#cSubj [data-s]").forEach(b => b.onclick = () => { CS.subject = b.dataset.s; paintCompare(); });
+  $$("#cCloud [data-p]").forEach(b => b.setAttribute("aria-pressed", String(CS.picks.includes(b.dataset.p))));
+  $$("#cSubj [data-s]").forEach(b => b.setAttribute("aria-pressed", String(CS.subject === b.dataset.s)));
+  byId("cClr").disabled = !CS.picks.length;
   paintCmpTable();
+  paintCmpOptimization();
   writeCmpQuery();
 }
+function writeCmpQuery() {
+  const query = new URLSearchParams({ p: CS.picks.join("|") });
+  if (CS.subject) query.set("s", CS.subject);
+  if (CS.optimized) query.set("optimized", "1");
+  history.replaceState(null, "", `#/compare?${query}`);
+}
+const cmpBarWidth = d => `${Math.max(1.5, logPos(d)).toFixed(1)}%`;
+const cmpBar = d => `<span class="cmp-bar" aria-hidden="true"><i style="--bar:${cmpBarWidth(d)}"></i></span>`;
+const cmpNoReading = () => `<td><span class="nod" title="${tx("无该指标", "No reading")}">—</span></td>`;
+function paintCmpOptimization() {
+  const cells = $$("#cTbl [data-before][data-after]");
+  const toggle = byId("cOptimize");
+  toggle.disabled = !cells.length;
+  toggle.title = cells.length ? "" : tx("当前筛选没有成对复验", "No paired tests for this selection");
+  toggle.setAttribute("aria-checked", String(CS.optimized && !!cells.length));
+  for (const cell of cells) {
+    const { before, after, metric } = cell.dataset;
+    const value = Number(CS.optimized ? after : before);
+    const deviation = devOf(metric, value);
+    cell.classList.toggle("cmp-improved", CS.optimized && deviation < devOf(metric, Number(before)));
+    $(".cmp-bar i", cell).style.setProperty("--bar", cmpBarWidth(deviation));
+    $(".pv", cell).textContent = fmtNum(value);
+    $(".cmp-phase", cell).textContent = CS.optimized ? tx("修复后", "After") : tx("修复前", "Before");
+  }
+}
 function paintCmpTable() {
-  const box = byId("cTbl");
-  byId("cQ").textContent = `在「${CS.subject}」上，所选平台相对测试对侧的偏离幅度如何？`;
-  const say = (a, meta, take) => { byId("cA").innerHTML = a; byId("cMeta").innerHTML = meta; const t = byId("cTake"); t.innerHTML = take || ""; t.hidden = !take; };
-  if (CS.picks.length < 2) {
-    box.innerHTML = `<div class="empty">${mascot("idle")}<p class="h3">请再选择 ${2 - CS.picks.length} 个平台</p><p>从上方平台云点选，或直接使用常用测试组合。</p></div>`;
-    say("待选择对比平台。", "至少选定两个平台后，此处汇总各指标的极值与中位偏离。", ""); return;
-  }
+  const box = byId("cTbl"), empty = byId("cEmpty");
   const bySub = CMP[CS.subject] || {};
-  const metrics = (S.metric_columns || []).filter(m => CS.picks.some(p => bySub[p]?.[m.key]));
-  if (!metrics.length) {
-    box.innerHTML = `<div class="empty">${mascot()}<p class="h3">当前对象下无共同指标</p><p>请切换上方其它比较对象查看。</p></div>`;
-    say("当前对象下无共同标量读数。", `所选平台在「${esc(CS.subject)}」下未采集可对照的标量指标。`, ""); return;
-  }
-  const MIN_N = 3;
-  const cols = `minmax(180px,1.1fr) repeat(${CS.picks.length},minmax(170px,1fr))`;
-  const head = `<div class="cmprow h" style="grid-template-columns:${cols}"><div class="mc">指标 · ${term("worst", "最差情况")}</div>` + CS.picks.map(p => {
-    const n = Object.values(bySub[p] || {}).reduce((a, m) => Math.max(a, m.n), 0);
-    return `<div class="pc"><a href="${platHref(p)}">${pdot(p)}${esc(p)}</a><small>${n} 条比较参与</small></div>`;
-  }).join("") + `</div>`;
-  const wins = new Map(), shared = new Map();
-  let eligible = 0, gap = null;
+  const paired = CMP_REPAIRS[CS.subject] || {};
+  const metrics = Object.values(MCOL).filter(m => CS.picks.some(p => bySub[p]?.[m.key] || paired[p]?.[m.key]));
+  const message = CS.picks.length < 2 ? tx("请选择至少两个平台。", "Select at least two platforms.") :
+    !metrics.length ? tx("暂无实测指标。", "No measured metrics.") : "";
+  empty.hidden = !message;
+  empty.textContent = message;
+  box.hidden = !!message;
+  if (message) { box.innerHTML = ""; return; }
+  const head = CS.picks.map(p => `<th scope="col"><a href="${platHref(p)}">${pdot(p)}${esc(platDisp(p))}</a></th>`).join("");
   const body = metrics.map(m => {
-    const cells = CS.picks.map(p => bySub[p]?.[m.key] ?? null);
-    const dv = c => devOf(m.key, c.worst);
-    const ok = cells.map((c, i) => ({ c, p: CS.picks[i] })).filter(x => x.c && x.c.n >= MIN_N);
-    const best = new Set();
-    if (ok.length >= 2) {
-      eligible++;
-      const min = Math.min(...ok.map(x => dv(x.c))), max = Math.max(...ok.map(x => dv(x.c)));
-      const bests = ok.filter(x => dv(x.c) === min);
-      if (bests.length < ok.length) {
-        bests.forEach(x => best.add(x.c));
-        if (bests.length === 1) wins.set(bests[0].p, (wins.get(bests[0].p) || 0) + 1);
-      }
-      if (min > 0 && max / min > (gap ? gap.ratio : 1)) gap = { ratio: max / min, m, lo: ok.find(x => dv(x.c) === min), hi: ok.find(x => dv(x.c) === max) };
-    }
-    // equal worst values often mean the two picks were compared with each other
-    for (let i = 0; i < CS.picks.length; i++) for (let j = i + 1; j < CS.picks.length; j++) {
-      const a = cells[i], b = cells[j], p = CS.picks[i], q = CS.picks[j];
-      if (!a || !b || a.worst !== b.worst) continue;
-      if (ROWS.some(r => r.subject === CS.subject && r.platforms.includes(p) && r.platforms.includes(q) && r.metrics[m.key]?.value === a.worst)) {
-        const k = p + "|" + q; if (!shared.has(k)) shared.set(k, []); shared.get(k).push(m.label);
-      }
-    }
-    return `<div class="cmprow" style="grid-template-columns:${cols}"><div class="mc"><b>${esc(m.label)}</b><small>${m.better === "lower" ? "越小越一致" : "越大越一致"}</small></div>`
-      + cells.map(c => c ? `<div class="pc${c.n < MIN_N ? " low" : ""}">
-          <span class="logbar"><i style="width:${Math.max(1.5, logPos(dv(c))).toFixed(1)}%;background:${best.has(c) ? "var(--t0)" : c.n < MIN_N ? "var(--none)" : "var(--t3)"}"></i></span>
-          <span class="pv">${fmtNum(c.worst)}</span><span class="pu">最差</span>${best.has(c) ? `<span class="best">● ${best.size > 1 ? "并列最小" : "最小偏离"}</span>` : ""}
-          <div class="pn">中位 ${fmtNum(c.median)} · n=${c.n}${c.n < MIN_N ? ` · ${term("lown", "样本少")}，不参与比较` : ""}</div></div>`
-        : `<div class="pc"><span class="nod">—</span><div class="pn">无该指标</div></div>`).join("") + `</div>`;
+    const lower = m.better === "lower";
+    const direction = lower ? tx("越小越一致", "Lower is closer") : tx("越大越一致", "Higher is closer");
+    const cells = CS.picks.map(p => {
+      const pair = paired[p]?.[m.key];
+      if (pair) return `<td data-metric="${m.key}" data-before="${pair.before}" data-after="${pair.after}">${cmpBar(devOf(m.key, pair.before))}<div class="pv"></div><div class="pn"><span class="cmp-phase"></span> <span>· n=${pair.n}</span></div></td>`;
+      const c = bySub[p]?.[m.key];
+      if (!c) return cmpNoReading();
+      return `<td${c.n < 3 ? ' class="low"' : ""}>${cmpBar(devOf(m.key, c.mean))}<div class="pv">${fmtNum(c.mean)}</div><div class="pn"><span>${tx("极值", "Extreme")} ${fmtNum(c.worst)}</span> <span>· n=${c.n}</span></div></td>`;
+    }).join("");
+    return `<tr><th scope="row">${esc(m.label)} <span class="direction" role="img" aria-label="${direction}" title="${direction}">${lower ? "↓" : "↑"}</span></th>${cells}</tr>`;
   }).join("");
-  box.innerHTML = head + body;
-  let a;
-  const top = [...wins.entries()].sort((x, y) => y[1] - x[1]);
-  if (!eligible) a = `样本不足：当前对象下尚无同时满足两个平台 n≥${MIN_N} 的指标。`;
-  else if (!top.length) a = `${eligible} 项有效指标上，所选平台的最差读数全部持平。`;
-  else if (top.length > 1 && top[0][1] === top[1][1]) a = `${esc(top[0][0])} 与 ${esc(top[1][0])} 各在 ${top[0][1]} 项指标上最差偏离最小（共 ${eligible} 项满足 n≥${MIN_N}）。`;
-  else a = `${esc(top[0][0])} 在 ${top[0][1]} / ${eligible} 项有效指标上最差偏离最小。`;
-  let take = "";
-  if (shared.size) {
-    const [k, labels] = [...shared.entries()][0], [p, q] = k.split("|");
-    take = `${esc(p)} 与 ${esc(q)} 在${labels.map(esc).join("、")}上的最差值相等，源自双方<b>直接对测的同一条比较记录</b>。`;
-  } else if (gap) {
-    take = `极值差距最大项为${esc(gap.m.label)}：${esc(gap.lo.p)} 最差 ${fmtNum(gap.lo.c.worst)}，${esc(gap.hi.p)} 最差 ${fmtNum(gap.hi.c.worst)}，偏离相差约 ${fmtFactor(gap.ratio)}。`;
-  }
-  say(a, `${CS.picks.length} 个平台 · ${metrics.length} 项指标 · 统计口径：${term("worst", "最差情况")}（仅 n≥${MIN_N} 参与比较）`, take);
+  box.innerHTML = `<table class="cmp-table"><thead><tr><th scope="col">${tx("指标 · 均值", "Metric · Mean")}</th>${head}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
 /* ======================================================================
@@ -3899,7 +4042,7 @@ RENDER.platform = function renderPlatform(h) {
   const p = h.arg, v = byId("v-platform");
   const P = PLATS.find(x => x.name === p);
   if (!P) {
-    v.innerHTML = `<div class="wrap"><div class="empty" style="padding:100px 20px">${mascot()}<p class="h3">没有找到平台 <code>${esc(p || "")}</code></p><p>链接可能已过期。<a class="link" href="#/compare">从平台云里重新选 →</a></p></div></div>`;
+    v.innerHTML = `<div class="wrap"><div class="empty" style="padding:100px 20px">${mascot()}<p class="h3">没有找到平台 <code>${esc(p || "")}</code></p><a class="link" href="#/compare">${tx("返回对比", "Back to comparison")} →</a></div></div>`;
     return;
   }
   const rs = ROWS.filter(r => r.platforms.includes(p));
@@ -4036,242 +4179,97 @@ function paintFingerprint(p, fam) {
   take.innerHTML = t; take.hidden = !t;
 }
 
-/* ======================================================================
-   repairs — one log figure for scanning, cards for reading, a drawer for
-   the full record; filters + collapsible groups so 20 → 200 still reads
-   ====================================================================== */
+/* ---------- repairs ---------- */
 const REPBY = new Map(REPAIRS.map(r => [r.id, r]));
-const R_GROUPS = [
-  { id: "zero", t: "完全消除", d: "补丁复验后误差读数精确为 0", pick: h => h && h.better === "lower" && h.after === 0 },
-  { id: "machine", t: tx("偏差 ≤ 1e-5", "Deviation ≤ 1e-5"), d: tx("修复后的偏差大于 0 且不超过 1e-5", "Post-fix deviation is above zero and at most 1e-5"), pick: h => h && h.better === "lower" && h.after > 0 && h.after <= 1e-5 },
-  { id: "partial", t: tx("偏差 > 1e-5", "Deviation > 1e-5"), d: tx("修复后的偏差高于 1e-5", "Post-fix deviation exceeds 1e-5"), pick: h => h && h.better === "lower" && h.after > 1e-5 },
-  { id: "dir", t: "正向指标改善", d: "余弦相似度等越大越一致的指标显著回升", pick: h => h && h.better === "higher" },
-  { id: "qual", t: "仅定性复验", d: "以校验项通过与否记录复验结论，无连续标量读数", pick: h => !h },
-];
-const R_STATUS = { validated: "已复验", investigating: "调查中" };
+const R_STATUS = { validated: tx("已复验", "Verified"), investigating: tx("调查中", "Investigating") };
+const repairLibrary = rp => LIBGROUPS.find(g => g.id === rp.lib)?.title || (rp.lib === "其它" ? tx("其它", "Other") : rp.lib);
+const repairStatus = rp => `<span class="badge rstate ${rp.status === "validated" ? "ok" : "warn"}">${esc(R_STATUS[rp.status] || rp.status)}</span>`;
 REPAIRS.forEach(rp => {
-  rp.out = (R_GROUPS.find(g => g.pick(rp.headline)) || R_GROUPS[4]).id;
-  rp.short = NumericBridgeSearch.describe(DATA, "repair", rp.id, LANG, {title:rp.title}).title;
-  rp.source = rp.lib || "";
-  const h = rp.headline;
-  rp.factor = h ? (h.after === 0 ? Infinity : (h.better === "higher" ? h.after / h.before : h.before / h.after)) : null;
-  rp.hay = [rp.short, rp.title, rp.lib, rp.problem?.summary, rp.problem?.location, rp.cause?.summary, rp.repair?.summary, rp.model?.name].join(" ").toLowerCase();
+  rp.short = NumericBridgeSearch.describe(DATA, "repair", rp.id, LANG, { title: rp.title }).title;
+  rp.hay = [rp.short, rp.title, repairLibrary(rp), rp.problem?.summary, rp.problem?.location, rp.cause?.summary, rp.repair?.summary, rp.model?.name].join(" ").toLowerCase();
 });
-const rpLogBefore = r => r.headline ? Math.log10(Math.abs(r.headline.before) || 1e-300) : -999;
-const rposR = v => v === 0 ? 3.4 : 8.5 + (Math.min(4, Math.max(-16, Math.log10(Math.abs(v)))) + 16) / 20 * 90;
-function facOf(rp) {
-  const h = rp.headline; if (!h) return { text: "仅定性", cls: "" };
-  if (h.after === 0) return { text: "→ 0", cls: "zero" };
-  return { text: fmtFactor(rp.factor), cls: "" };
-}
-function repairCard(rp) {
-  const h = rp.headline, f = facOf(rp);
-  return `<button class="panel rcard" type="button" data-rp="${esc(rp.id)}">
-    <span class="rc-top"><span class="badge">${esc(rp.lib || "其它")}</span><span class="badge ${rp.status === "validated" ? "ok" : "warn"}">${R_STATUS[rp.status] || esc(rp.status)}</span></span>
-    <h3>${esc(rp.short)}</h3>
-    ${h ? `<span class="rc-read"><span class="b">${fmtNum(h.before)}</span><span class="x">→</span><span class="a">${fmtNum(h.after)}</span><span class="x" style="margin-left:auto">${f.text}</span></span><span class="rc-lab">${esc(h.label)}${h.unit ? " · " + esc(h.unit) : ""}</span>`
-      : `<span class="rc-lab">复验以通过／不通过记录</span>`}
-    <span class="rc-loc">${esc(rp.model?.name || rp.date)}</span>
-  </button>`;
-}
-const RS = { q: "", lib: new Set(), out: new Set(), status: new Set(), sort: "before", group: "out", view: "fig", expanded: new Set(), collapsed: new Set(), sel: null };
+const R_LIBS = [...new Set(REPAIRS.map(r => r.lib))].sort((a, b) => repairLibrary({lib: a}).localeCompare(repairLibrary({lib: b})));
+const RS = { q: "", lib: "", status: "", sel: null };
 let repBuilt = false, repView = [];
-const R_FACETS = [
-  { key: "lib", label: "库", get: r => r.lib || "其它" },
-  { key: "out", label: "结果", get: r => r.out, fmt: v => R_GROUPS.find(g => g.id === v).t, order: R_GROUPS.map(g => g.id) },
-  { key: "status", label: "状态", get: r => r.status, fmt: v => R_STATUS[v] || v, order: ["validated", "investigating"] },
-];
 function readRepQuery(q) {
   RS.q = q.get("q") || "";
-  R_FACETS.forEach(f => { RS[f.key] = new Set((q.get(f.key) || "").split(",").filter(Boolean)); });
-  RS.sort = ["before", "factor", "date"].includes(q.get("sort")) ? q.get("sort") : "before";
-  RS.group = ["out", "lib", "none"].includes(q.get("group")) ? q.get("group") : "out";
-  RS.view = q.get("view") === "cards" ? "cards" : "fig";
+  RS.lib = R_LIBS.includes(q.get("lib")) ? q.get("lib") : "";
+  RS.status = Object.hasOwn(R_STATUS, q.get("status")) ? q.get("status") : "";
   RS.sel = REPBY.has(q.get("id")) ? q.get("id") : null;
 }
 function writeRepQuery() {
-  const p = { q: RS.q.trim() };
-  R_FACETS.forEach(f => { p[f.key] = [...RS[f.key]].join(","); });
-  p.sort = RS.sort === "before" ? "" : RS.sort; p.group = RS.group === "out" ? "" : RS.group; p.view = RS.view === "fig" ? "" : RS.view;
-  p.id = isOpen() && DW.kind === "repair" ? DW.order[DW.idx] : "";
-  writeQuery("repairs", p);
+  writeQuery("repairs", { q: RS.q.trim(), lib: RS.lib, status: RS.status, id: RS.sel });
 }
-const repPass = (r, except) => R_FACETS.every(f => f.key === except || !RS[f.key].size || RS[f.key].has(f.get(r)))
-  && (!RS.q.trim() || RS.q.trim().toLowerCase().split(/\s+/).every(w => r.hay.includes(w)));
-
-/* First sight of the magnitude figure: each "after" dot slides from its
-   "before" position, once per page load; reduced-motion skips straight to the end. */
-let repAnimDone = false, repIO = null;
-function armRepairMotion() {
-  const fig = $("#rBody .rfig"); if (!fig) return;
-  if (repAnimDone || matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) { fig.classList.add("go"); repAnimDone = true; return; }
-  repIO && repIO.disconnect();
-  repIO = new IntersectionObserver(ents => {
-    if (ents.some(e => e.isIntersecting)) { requestAnimationFrame(() => fig.classList.add("go")); repAnimDone = true; repIO.disconnect(); }
-  }, { rootMargin: "0px 0px -38% 0px" });
-  repIO.observe(fig);
-}
-const R_HOW = `<p>每行对应一项缺陷修复：灰点为修复前读数，绿点为打补丁复验后读数，菱形代表修复后${term("zero", "精确归零")}。横轴采用对数误差刻度，右列列出${term("factor", "改善倍数")}。</p>
-  <p>按复验收敛程度分为五类：${term("zero")}、${term("machine")}、${term("partfix")}、正向指标改善（余弦相似度等越大越优指标）与${term("qual")}。</p>
-  <p>各分组默认展示前 8 项，其余可展开查看；点击任意条目可查阅故障位置、根因链路、前后指标及未覆盖边界。</p>`;
 RENDER.repairs = function renderRepairs(h) {
   readRepQuery(h.q);
   if (!repBuilt) buildRepairs();
   byId("rQ").value = RS.q;
+  byId("rLib").value = RS.lib;
+  byId("rStatus").value = RS.status;
   updateRepairs();
   if (RS.sel) openDrawer("repair", RS.sel, repView.some(r => r.id === RS.sel) ? repView.map(r => r.id) : [RS.sel], repDrawerMove);
 };
 function buildRepairs() {
   repBuilt = true;
-  const withH = REPAIRS.filter(r => r.headline);
-  const zeroed = withH.filter(r => r.headline.after === 0).length;
-  const fin = withH.filter(r => r.headline.better === "lower" && r.headline.after > 0);
-  const best = fin.reduce((a, b) => b.factor > a.factor ? b : a, fin[0]);
-  const inv = REPAIRS.filter(r => r.status !== "validated").length;
-  byId("v-repairs").innerHTML = `<div class="wrap"><div class="sec first" style="padding-bottom:6px">
-      <div class="topline"><span class="eyebrow">缺陷修复 · REPAIRS</span><span class="mono-note">${REPAIRS.length} 项记录 · ${REPAIRS.length - inv} 项已复验 · ${inv} 项调查中</span></div>
-      <h1 class="h2">数值缺陷定位与<em>补丁复验</em></h1>
-      <div class="results rstat" style="margin-top:34px">
-        <div class="result"><span class="result-num">${zeroed}<small>/ ${withH.length}</small></span><h3>偏差精确归零</h3><p>其余 ${withH.length - zeroed} 项有前后读数<i>·</i>${REPAIRS.length - withH.length} 项仅定性</p></div>
-        <div class="result"><span class="result-num">${best ? fmtFactor(best.factor).replace("×", "<small>×</small>") : "—"}</span><h3>最大改善倍数</h3><p>${best ? `${fmtNum(best.headline.before)}<i>→</i>${fmtNum(best.headline.after)}　${esc(best.lib)}` : ""}</p></div>
-        <div class="result"><span class="result-num">${new Set(REPAIRS.map(r => r.lib)).size}</span><h3>个组件库</h3><p>${LIBGROUPS.map(g => esc(g.title)).slice(0, 3).join("<i>·</i>")}${LIBGROUPS.length > 3 ? "<i>·</i>…" : ""}</p></div>
-      </div>
+  byId("v-repairs").innerHTML = `<div class="wrap"><div class="sec first" style="padding-bottom:20px">
+    <div class="topline"><a class="link" href="#/records">← ${tx("全部记录", "All records")}</a></div>
+    <h1 class="h2">${tx("修复记录", "Repair Records")}</h1>
   </div></div>
-  <div class="toolbar"><div class="wrap">
-    <div class="tb-row">
-      <label class="search"><span style="color:var(--faint)">⌕</span><input id="rQ" type="search" placeholder="搜索修复、库、代码位置、成因…" autocomplete="off" aria-label="搜索修复"><kbd>/</kbd></label>
-      <select class="sel" id="rGroup" aria-label="分组"><option value="out">按结果分组</option><option value="lib">按库分组</option><option value="none">不分组</option></select>
-      <select class="sel" id="rSort" aria-label="排序"><option value="before">修复前量级</option><option value="factor">改善倍数</option><option value="date">最近优先</option></select>
-      <div class="seg" id="rView" role="group" aria-label="视图"><button type="button" data-v="fig">量级图</button><button type="button" data-v="cards">卡片</button></div>
-      <span class="count" id="rCount"></span>
-    </div>
-    <div class="facets" id="rFacets"></div>
+  <div class="toolbar"><div class="wrap tb-row repair-controls">
+    <label class="search"><span aria-hidden="true" style="color:var(--faint)">⌕</span><input id="rQ" type="search" placeholder="${tx("搜索问题、库、模型…", "Search issues, libraries, models…")}" autocomplete="off" aria-label="${tx("搜索修复记录", "Search repair records")}"></label>
+    <select class="sel" id="rLib" aria-label="${tx("库", "Library")}"><option value="">${tx("所有库", "All libraries")}</option>${R_LIBS.map(lib => `<option value="${esc(lib)}">${esc(repairLibrary({lib}))}</option>`).join("")}</select>
+    <select class="sel" id="rStatus" aria-label="${tx("状态", "Status")}"><option value="">${tx("所有状态", "All statuses")}</option>${Object.entries(R_STATUS).map(([value, label]) => `<option value="${value}">${esc(label)}</option>`).join("")}</select>
+    <span class="count" id="rCount" role="status"></span>
   </div></div>
-  <div class="wrap">${evCard({ q: "修复前后各案例的误差收敛幅度如何？", aid: "rA", mid: "rMeta", meta: "", tid: "rTake", body: '<div id="rBody"></div>', how: R_HOW })}
-    <div class="kbdhint"><span><span class="kbd">/</span> 搜索</span><span><span class="kbd">j</span> <span class="kbd">k</span> 详情内切换</span><span>每组默认展示 8 项；筛选与视图状态实时同步至 URL。</span></div>
-  </div>`;
-  const onQ = debounce(() => updateRepairs(), 120);
+  <div class="wrap repair-list" id="rBody"></div>`;
+  const onQ = debounce(() => { if (parseHash().name === "repairs") updateRepairs(); }, 120);
   byId("rQ").addEventListener("input", e => { RS.q = e.target.value; onQ(); });
-  byId("rGroup").onchange = e => { RS.group = e.target.value; updateRepairs(); };
-  byId("rSort").onchange = e => { RS.sort = e.target.value; updateRepairs(); };
-  $$("#rView button").forEach(b => b.onclick = () => { RS.view = b.dataset.v; updateRepairs(); });
+  byId("rLib").onchange = e => { RS.lib = e.target.value; updateRepairs(); };
+  byId("rStatus").onchange = e => { RS.status = e.target.value; updateRepairs(); };
   byId("rBody").addEventListener("click", e => {
-    const g = e.target.closest("[data-rg]");
-    if (g) { const id = g.dataset.rg; RS.collapsed.has(id) ? RS.collapsed.delete(id) : RS.collapsed.add(id); updateRepairs(); return; }
-    const m = e.target.closest("[data-rmore]");
-    if (m) { RS.expanded.add(m.dataset.rmore); updateRepairs(); return; }
-    const b = e.target.closest("[data-rp]");
-    if (b) openDrawer("repair", b.dataset.rp, repView.map(r => r.id), repDrawerMove);
+    const row = e.target.closest("[data-rp]");
+    if (row) openDrawer("repair", row.dataset.rp, repView.map(r => r.id), repDrawerMove);
   });
 }
 function repDrawerMove(id) {
   RS.sel = id;
-  if (id) {
-    const r = REPBY.get(id), gid = groupKey(r);
-    if (RS.collapsed.has(gid) || (!RS.expanded.has(gid) && !$(`#rBody [data-rp="${CSS.escape(id)}"]`))) { RS.collapsed.delete(gid); RS.expanded.add(gid); updateRepairs(); return; }
-  }
-  $$("#rBody [data-rp]").forEach(b => b.classList.toggle("sel", b.dataset.rp === id));
+  $$("#rBody [data-rp]").forEach(row => row.classList.toggle("sel", row.dataset.rp === id));
   writeRepQuery();
   if (id) $(`#rBody [data-rp="${CSS.escape(id)}"]`)?.scrollIntoView({ block: "nearest" });
 }
-const groupKey = r => RS.group === "lib" ? (r.lib || "其它") : RS.group === "out" ? r.out : "all";
 function updateRepairs() {
-  // facets with counts
-  byId("rFacets").innerHTML = R_FACETS.map(f => {
-    const counts = new Map(); REPAIRS.filter(r => repPass(r, f.key)).forEach(r => counts.set(f.get(r), (counts.get(f.get(r)) || 0) + 1));
-    const all = [...new Set(REPAIRS.map(f.get))];
-    const vals = f.order ? f.order.filter(v => all.includes(v)) : all.sort((a, b) => (counts.get(b) || 0) - (counts.get(a) || 0));
-    return `<div class="facet"><span class="facet-l">${f.label}</span><div class="pills">${vals.map(v => {
-      const n = counts.get(v) || 0, on = RS[f.key].has(v);
-      const desc = f.key === "lib" ? (LIBGROUPS.find(g => g.components.includes(v))?.description || "") : "";
-      return `<button class="pill" type="button" data-f="${f.key}" data-v="${esc(v)}" aria-pressed="${on}" ${!n && !on ? "disabled" : ""} ${desc ? `title="${esc(desc)}"` : ""}>${esc(f.fmt ? f.fmt(v) : v)}<span class="n">${n}</span></button>`;
-    }).join("")}${f.key === "status" && (RS.lib.size || RS.out.size || RS.status.size || RS.q) ? `<button class="clear" type="button" id="rClr">清除全部</button>` : ""}</div></div>`;
-  }).join("");
-  $$("#rFacets [data-f]").forEach(b => b.onclick = () => { const s = RS[b.dataset.f]; s.has(b.dataset.v) ? s.delete(b.dataset.v) : s.add(b.dataset.v); updateRepairs(); });
-  byId("rClr") && (byId("rClr").onclick = () => { R_FACETS.forEach(f => RS[f.key].clear()); RS.q = ""; byId("rQ").value = ""; updateRepairs(); });
-  byId("rGroup").value = RS.group; byId("rSort").value = RS.sort;
-  $$("#rView button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === RS.view)));
-
-  const sorter = { before: (a, b) => rpLogBefore(b) - rpLogBefore(a), factor: (a, b) => (b.factor ?? -1) - (a.factor ?? -1), date: (a, b) => String(b.date).localeCompare(String(a.date)) }[RS.sort];
-  const rows = REPAIRS.filter(r => repPass(r)).sort(sorter);
-  let groups;
-  if (RS.group === "out") groups = R_GROUPS.map(g => ({ id: g.id, t: g.t, d: g.d, rows: rows.filter(r => r.out === g.id) }));
-  else if (RS.group === "lib") {
-    const libs = [...new Set(rows.map(r => r.lib || "其它"))].sort((a, b) => rows.filter(r => (r.lib || "其它") === b).length - rows.filter(r => (r.lib || "其它") === a).length);
-    groups = libs.map(l => ({ id: l, t: l, d: LIBGROUPS.find(g => g.components.includes(l))?.description || "未归入库分组的修复", rows: rows.filter(r => (r.lib || "其它") === l) }));
-  } else groups = [{ id: "all", t: "全部修复", d: "", rows }];
-  groups = groups.filter(g => g.rows.length);
-  repView = groups.flatMap(g => g.rows);
-  byId("rCount").innerHTML = `<b>${repView.length}</b> / ${REPAIRS.length} 项`;
-  {
-    const cnt = id => repView.filter(r => r.out === id).length;
-    const parts = [["zero", "项精确归零"], ["machine", "项收敛至机器精度"], ["partial", "项部分收敛"], ["dir", "项正向指标改善"], ["qual", "项定性复验"]]
-      .filter(([id]) => cnt(id)).map(([id, t]) => `${cnt(id)} ${t}`);
-    byId("rA").innerHTML = repView.length ? parts.join("，") + "。" : "无匹配的修复记录。";
-    const filt = RS.q.trim() || R_FACETS.some(f => RS[f.key].size);
-    byId("rMeta").innerHTML = `${repView.length} / ${REPAIRS.length} 项${filt ? "（已筛选）" : ""} · 横轴为误差量级（对数） · 右列为${term("factor", "改善倍数")}`;
-    const fin = repView.filter(r => r.headline && r.headline.better === "lower" && r.headline.after > 0);
-    const best = fin.reduce((a, b) => (!a || b.factor > a.factor ? b : a), null);
-    const inv = repView.filter(r => r.status !== "validated").length;
-    let tk = best ? `非归零案例中改善幅度最大项为「${esc(trunc(best.short, 30))}」：${fmtNum(best.headline.before)} → ${fmtNum(best.headline.after)}（${fmtFactor(best.factor)}）。` : "";
-    if (inv) tk += `当前列表含 ${inv} 项调查中记录，待补充最终复验。`;
-    const te = byId("rTake"); te.innerHTML = tk; te.hidden = !tk;
-  }
-  const CAP = 8;
+  const terms = RS.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  repView = REPAIRS.filter(r => (!RS.lib || r.lib === RS.lib) && (!RS.status || r.status === RS.status) && terms.every(term => r.hay.includes(term)))
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  byId("rCount").textContent = tx(`${repView.length} / ${REPAIRS.length} 条`, `${repView.length} / ${REPAIRS.length} records`);
   const body = byId("rBody");
-  if (!repView.length) { body.innerHTML = `<div class="panel empty">${mascot()}<p class="h3">无匹配的修复记录</p><p>请放宽筛选条件或清空搜索词。</p></div>`; writeRepQuery(); return; }
-  const grpHead = g => `<button class="rgrp" type="button" data-rg="${esc(g.id)}" aria-expanded="${!RS.collapsed.has(g.id)}"><span class="chev">▾</span><b>${esc(g.t)}</b><s>${g.rows.length} 项${g.d ? " · " + esc(g.d) : ""}</s></button>`;
-  const shown = g => RS.collapsed.has(g.id) ? [] : (RS.expanded.has(g.id) ? g.rows : g.rows.slice(0, CAP));
-  const more = g => !RS.collapsed.has(g.id) && !RS.expanded.has(g.id) && g.rows.length > CAP ? `<button class="rmore" type="button" data-rmore="${esc(g.id)}">展开其余 ${g.rows.length - CAP} 项 ↓</button>` : "";
-  if (RS.view === "cards") {
-    body.innerHTML = groups.map(g => `<div style="margin-top:8px">${grpHead(g)}<div class="rcards" style="margin-top:8px">${shown(g).map(repairCard).join("")}</div>${more(g)}</div>`).join("");
-  } else {
-    const ticks = [-15, -12, -9, -6, -3, 0, 3];
-    const stops = ["transparent 0%", "transparent 6.3%", "var(--line) 6.3%", "var(--line) 6.45%", "transparent 6.45%"];
-    for (const t of ticks) { const x = rposR(10 ** t); stops.push(`transparent ${x - .08}%`, `var(--hair) ${x - .08}%`, `var(--hair) ${x + .08}%`, `transparent ${x + .08}%`); }
-    const row = rp => {
-      const h = rp.headline, f = facOf(rp);
-      let trk = "";
-      if (h) {
-        const b = rposR(h.before), a = rposR(h.after);
-        const cls = h.after === 0 ? " zero" : (h.better === "lower" && h.after > 1e-5 ? " part" : "");
-        trk = `<i class="seg" style="left:${Math.min(a, b)}%;width:${Math.abs(b - a)}%;transform-origin:${b > a ? "right" : "left"}"></i><i class="pb" style="left:${b}%"></i><i class="pa${cls}" style="--a:${a}%;--b:${b}%"></i>`;
-      }
-      return `<button class="rrow${h ? "" : " bare"}${RS.sel === rp.id ? " sel" : ""}" type="button" data-rp="${esc(rp.id)}" title="${esc(rp.title)}">
-        <span class="rlab"><b>${hl(rp.short, RS.q)}</b><small>${esc(rp.lib || "其它")} · ${esc(rp.date)}${rp.status !== "validated" ? " · 调查中" : ""}${h ? " · " + esc(h.label) : ""}</small></span>
-        <span class="rtrk">${trk}</span><span class="rfac ${f.cls}">${f.text}</span></button>`;
-    };
-    body.innerHTML = `<div class="legend" style="margin:0 0 12px"><span><i class="dot" style="background:var(--none)"></i>修复前</span><span><i class="dot" style="background:var(--t0)"></i>修复后</span><span><i class="dot sq" style="background:var(--t0)"></i>${term("zero", "精确为 0")}</span><span><i class="dot" style="background:var(--t2)"></i>仍可观测</span><span style="color:var(--faint)">横轴为对数误差量级；点击任意条目查看代码定位与复验范围</span></div>
-      <div class="panel rfig${repAnimDone ? " go" : ""}" style="--grad:linear-gradient(90deg,${stops.join(",")},transparent 100%)">
-      <div class="rhead"><b>修复</b><div class="rticks"><i style="left:3.4%">0</i>${ticks.map((t, i) => `<i class="${i % 2 ? "thin" : ""}" style="left:${rposR(10 ** t)}%">10${sup(t)}</i>`).join("")}</div><b>${term("factor", "改善")}</b></div>
-      ${groups.map(g => grpHead(g) + shown(g).map(row).join("") + more(g)).join("")}</div>`;
-    let k = 0; $$("#rBody .rrow").forEach(r => r.style.setProperty("--i", Math.min(k++, 16)));
-    armRepairMotion();
-  }
+  const row = rp => {
+    const h = rp.headline;
+    return `<button class="rrow${RS.sel === rp.id ? " sel" : ""}" type="button" data-rp="${esc(rp.id)}">
+      <span class="rlab"><b>${hl(rp.short, RS.q)}</b><small>${[repairLibrary(rp), rp.model?.name, rp.date].filter(Boolean).map(esc).join(" · ")}</small></span>
+      <span class="rread">${h ? `<small>${esc(h.label)}</small><span class="rnums"><span>${fmtNum(h.before)}</span><span>→</span><b>${fmtNum(h.after)}</b></span>` : `<small>${tx("定位与验证记录", "Diagnostic checks")}</small>`}</span>
+      ${repairStatus(rp)}<span class="rnext" aria-hidden="true">${ico("arrow")}</span>
+    </button>`;
+  };
+  body.innerHTML = repView.length ? `<div class="panel"><div class="rhead" aria-hidden="true"><span>${tx("问题", "Issue")}</span><span>${tx("实测结果", "Measured result")}</span><span>${tx("状态", "Status")}</span></div>${repView.map(row).join("")}</div>`
+    : `<div class="panel empty"><p class="h3">${tx("无匹配的修复记录", "No matching repairs")}</p></div>`;
   writeRepQuery();
 }
 function paintRepair(rp) {
   if (!rp) return;
-  const h = rp.headline, v = rp.validation || {}, f = facOf(rp);
-  byId("dwCrumb").textContent = `修复 · ${rp.lib || "其它"} · ${rp.date}`;
+  const h = rp.headline, v = rp.validation || {};
+  byId("dwCrumb").textContent = `${repairLibrary(rp)} · ${rp.date}`;
   const dl = pairs => `<dl class="rows-dl">${pairs.filter(([, x]) => x).map(([k, x, m]) => `<dt>${k}</dt><dd class="${m ? "m" : ""}">${x}</dd>`).join("")}</dl>`;
   const list = a => (a || []).length ? `<ul>${a.map(x => `<li>${esc(typeof x === "string" ? x : JSON.stringify(x))}</li>`).join("")}</ul>` : "";
-  // Twin panels share one grid, so every reading lines up across the gap.
-  const ms = (v.metrics || []).map(m => ({ ...m }));
-  if (h && !ms.some(m => m.label === h.label)) ms.unshift({ label: h.label, unit: h.unit, before: h.before, after: h.after, better: h.better });
-  const hi = h ? ms.findIndex(m => m.label === h.label) : -1;
+  const ms = [...(v.metrics || [])];
+  const hi = h ? ms.findIndex(m => m.label === h.label && m.before === h.before && m.after === h.after) : -1;
   if (hi > 0) ms.unshift(ms.splice(hi, 1)[0]);
-  const outG = R_GROUPS.find(g => g.id === rp.out);
-  const facM = m => m.after === 0 ? "→ 0" : (m.before != null && m.after) ? fmtFactor((m.better || "lower") === "higher" ? m.after / m.before : m.before / m.after) : "—";
-  const aCol = (m, i) => m.after === 0 ? "var(--t0)" : (rp.out === "partial" && i === 0) ? "var(--t2)" : "var(--t0)";
+  const candidate = rp.status === "investigating";
+  const metricCell = (m, value) => `<small>${esc(m.label)}</small><strong title="${esc(value)}">${fmtNum(value)}</strong>${m.unit ? `<em>${esc(m.unit)}</em>` : ""}`;
   const pairs = [
-    [`<b>修复前</b><span class="chips2">${rp.cause?.category ? `<span class="chip2 bad">${esc(rp.cause.category).replace(/_/g, "_<wbr>")}</span>` : ""}</span>`,
-     `<b>修复后</b><span class="chips2"><span class="chip2 good">${esc(outG.t)}</span><span class="chip2">${R_STATUS[rp.status] || esc(rp.status)}</span></span>`, "h"],
-    [esc(rp.problem?.observed || rp.problem?.summary || ""), esc(rp.repair?.summary || ""), "s"],
-    ...ms.map((m, i) => [
-      `<small>${esc(m.label)}</small><strong>${fmtNum(m.before)}</strong><em>${esc(m.unit || " ")}</em>`,
-      `<small>${esc(m.label)}</small><strong style="color:${aCol(m, i)}">${fmtNum(m.after)}</strong><em>${facM(m)}</em>`,
-      "m" + (i === 0 && h ? " hd" : "")]),
+    [`<b>${candidate ? tx("原路径", "Baseline") : tx("修复前", "Before")}</b>`,
+     `<b>${candidate ? tx("候选路径", "Candidate") : tx("修复后", "After")}</b>`, "h"],
+    ...ms.map((m, i) => [metricCell(m, m.before), metricCell(m, m.after), "m" + (i === 0 && h ? " hd" : "")]),
   ];
   const twin = pairs.map(([b, a, cls], i) => {
     const end = i === pairs.length - 1 ? " end" : "";
@@ -4281,19 +4279,17 @@ function paintRepair(rp) {
   const ev = (rp.evidence || []).filter(e => e.url && e.url !== "#").map(e => `<a href="https://satsuki2486441738.github.io/PrecisionRSI/${esc(e.url)}" target="_blank" rel="noopener">${esc(e.label || e.url)}<span>↗</span></a>`).join("");
   const env = rp.environment || {}, cov = v.coverage;
   byId("dwBody").innerHTML = `
-    <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="badge">${esc(rp.lib || "其它")}</span><span class="badge ${rp.status === "validated" ? "ok" : "warn"}">${R_STATUS[rp.status] || esc(rp.status)}</span><span class="badge">${term({ zero: "zero", machine: "machine", partial: "partfix", qual: "qual" }[rp.out] || "factor", esc(outG.t))}</span></div>
+    <div class="dw-repair-top">${repairStatus(rp)}<span>${esc(rp.model?.name || "")}</span></div>
     <h2 class="dw-title" id="dwTitle">${esc(rp.short)}</h2>
-    <p class="dw-sub">${esc(rp.source || "")}${rp.problem?.location ? `　<span class="mono" style="font-size:11px;color:var(--faint)">${esc(rp.problem.location)}</span>` : ""}</p>
-    <div class="dw-sec"><h4>修复前后 <span>${h ? `${term("factor", "改善")} ${f.text}` : term("qual")}</span></h4><div class="twin">${twin}</div></div>
-    ${(rp.stages || []).length ? `<div class="dw-sec"><h4>验证路径 <span>${rp.stages.length} 步</span></h4><div class="stages">${rp.stages.map((s, i) => `<div class="stage"><span>${String(i + 1).padStart(2, "0")}</span><div><b>${esc(s.name)}</b><p>${esc(s.result)}</p></div></div>`).join("")}</div></div>` : ""}
-    <div class="dw-sec"><h4>问题</h4>${dl([["现象", esc(rp.problem?.summary)], ["触发", esc(rp.problem?.trigger)], ["预期", esc(rp.problem?.expected)], ["位置", esc(rp.problem?.location), 1]])}</div>
-    <div class="dw-sec"><h4>成因</h4>${dl([["成因", esc(typeof rp.cause === "string" ? rp.cause : rp.cause?.summary)], ["链路", (rp.cause?.components || []).map(esc).join("<br>"), 1], ["上游", esc(rp.repair?.upstream_status)], ["提交", esc(rp.repair?.commit), 1]])}</div>
-    <div class="dw-sec"><h4>复验范围</h4>${dl([["范围", esc(v.scope)], ["覆盖", cov ? esc(`${fmtInt(cov.observed)} / ${fmtInt(cov.expected)} ${cov.unit || ""}`) : "", 1], ["检查", (v.checks || []).length ? foldList(v.checks, "检查", 160) : ""], ["未覆盖", list(v.remaining)]])}${acc ? `<div class="kv" style="margin-top:12px">${acc}</div>` : ""}</div>
+    ${ms.length ? `<div class="dw-sec"><h4>${tx("实测结果", "Measured results")}</h4><div class="twin">${twin}</div></div>` : ""}
+    <div class="dw-sec"><h4>${tx("问题与方案", "Issue and approach")}</h4>${dl([["现象", esc(rp.problem?.summary || rp.problem?.observed)], ["触发", esc(rp.problem?.trigger)], ["位置", esc(rp.problem?.location), 1], ["成因", esc(typeof rp.cause === "string" ? rp.cause : rp.cause?.summary)], [candidate ? tx("候选方案", "Candidate approach") : tx("处理方案", "Approach"), esc(rp.repair?.summary)], ["上游", esc(rp.repair?.upstream_status)]])}</div>
+    <div class="dw-sec"><h4>${tx("验证范围", "Verification scope")}</h4>${dl([["范围", esc(v.scope)], ["覆盖", cov ? esc(`${fmtInt(cov.observed)} / ${fmtInt(cov.expected)} ${cov.unit || ""}`) : "", 1], ["检查", (v.checks || []).length ? foldList(v.checks, "检查", 160) : ""], ["未覆盖", list(v.remaining)]])}${acc ? `<div class="kv" style="margin-top:12px">${acc}</div>` : ""}</div>
+    ${(rp.stages || []).length ? `<div class="dw-sec"><h4>验证路径</h4><div class="stages">${rp.stages.map((s, i) => `<div class="stage"><span>${String(i + 1).padStart(2, "0")}</span><div><b>${esc(s.name)}</b><p>${esc(s.result)}</p></div></div>`).join("")}</div></div>` : ""}
     <div class="dw-sec"><h4>环境</h4>${dl([["模型", esc([rp.model?.name, rp.model?.revision].filter(Boolean).join(" · ")), 1], ["硬件", esc(env.hardware), 1], ["库", (env.libraries || []).map(l => esc(`${l.name} ${l.version || ""}`.trim())).join("<br>"), 1]])}</div>
     ${(rp.notes || []).length ? `<div class="dw-sec"><h4>备注 <span>${rp.notes.length} 条</span></h4>${foldList(rp.notes, "备注")}</div>` : ""}
     ${ev ? `<div class="dw-sec"><h4>证据</h4><div class="evlist">${ev}</div></div>` : ""}`;
   const link = `#/repairs?id=${encodeURIComponent(rp.id)}`;
-  byId("dwFoot").innerHTML = `<span class="mono-note">${DW.idx + 1} / ${DW.order.length} · j / k 切换</span><span style="display:flex;gap:8px"><button class="btn sm" type="button" id="dwCopy">复制链接</button>${parseHash().name !== "repairs" ? `<a class="btn sm" href="${link}">在修复页定位 <span>→</span></a>` : ""}</span>`;
+  byId("dwFoot").innerHTML = `<span class="mono-note">${DW.idx + 1} / ${DW.order.length}</span><span style="display:flex;gap:8px"><button class="btn sm" type="button" id="dwCopy">复制链接</button>${parseHash().name !== "repairs" ? `<a class="btn sm" href="${link}">在修复页定位 <span>→</span></a>` : ""}</span>`;
   byId("dwCopy").onclick = e => copyText(pageUrl(link), e.currentTarget);
 }
 
@@ -4324,8 +4320,8 @@ addEventListener("keydown", e => {
 byId("csv").onclick = () => {
   const name = parseHash().name;
   if (name === "repairs") {
-    downloadCsv("numericbridge-repairs.csv", ["id", "title", "library", "status", "outcome", "date", "headline", "before", "after", "factor", "location"],
-      repView.map(r => [r.id, r.title, r.lib, r.status, r.out, r.date, r.headline?.label, r.headline?.before, r.headline?.after, r.factor === Infinity ? "inf" : r.factor, r.problem?.location]));
+    downloadCsv("numericbridge-repairs.csv", ["id", "title", "library", "status", "date", "metric", "before", "after", "unit", "location"],
+      repView.map(r => [r.id, r.title, repairLibrary(r), r.status, r.date, r.headline?.label, r.headline?.before, r.headline?.after, r.headline?.unit, r.problem?.location]));
     return;
   }
   exportRowsCsv(listView, "numericbridge-comparisons.csv");
@@ -4339,16 +4335,15 @@ byId("theme").onclick = () => {
   syncThemeMeta();
 };
 syncThemeMeta();
-$$('a[href="#/cite"]').forEach(a => a.addEventListener("click", e => { if (location.hash === "#/cite") { e.preventDefault(); byId("cite")?.scrollIntoView({ behavior: "smooth", block: "start" }); } }));
 byId("toTop").onclick = e => { e.preventDefault(); scrollTo({ top: 0, behavior: "smooth" }); };
 byId("updated").textContent = S.updated_at ? tx(`数据更新于 ${S.updated_at}`, `Updated ${S.updated_at}`) : "";
 /* page chrome that lives in the static markup */
 document.documentElement.lang = LANG === "en" ? "en" : "zh-CN";
 if (LANG === "en") {
-  const NAV_EN = { "": "Home", cases: "Cases", compare: "Compare", repairs: "Repairs", how: "How it works" };
+  const NAV_EN = { "": "Home", cases: "Cases", compare: "Hardware Comparison", how: "Framework Implementation" };
   $$("#nav a").forEach(a => { a.textContent = NAV_EN[a.dataset.route] ?? a.textContent; });
   const setT = (id, t) => { const el = byId(id); if (el) el.textContent = t; };
-  setT("citeBtn", "Cite & data"); setT("footCite", "Cite & data"); setT("toTop", "Back to top ↑");
+  setT("footCite", "Cite & data"); setT("toTop", "Back to top ↑");
   setT("mbTag", "● Measured records"); setT("mbDesc", "Read directly from data/evaluations.json and data/repairs.json");
   setT("footNote", "Precision evaluations and repairs across hardware and software stacks.");
   byId("csv").innerHTML = "Export CSV <span>↓</span>";
@@ -4406,15 +4401,8 @@ const I18N_EN = {
   "当前步骤": "Current step", "架构流程示意 · 目标环境、各轮读数与代码定位均取自实测修复记录": "Schematic · environment, readings and code locations come from real repair records",
   "第 {n} 轮 · 修复": "Round {n} · fix", "第 {n} 轮 · 训练验证": "Round {n} · training check", "第 {n} 轮": "Round {n}", "Checkpoint 往返": "Checkpoint round-trip",
   "目标分数": "Objective scores", "词表分布": "Logit distribution", "梯度": "Gradients", "张量/激活": "Tensors & activations", "复制链接": "Copy link",
-  "平台对比 · COMPARE": "COMPARE", "并排对比 ·": "Side by side ·",
-  "选择两个及以上平台，横向对照其在同一比较对象下相对测试对侧的最大与中位偏离。各项读数统计自各平台实际参与的成对评测子集。": "Pick two or more platforms to compare their worst and median deviation on the same target. Each figure comes from the comparisons that platform actually took part in.",
-  "选择参与对比的平台": "Pick platforms", "点击平台标签加入或移出对比栏；字号对应参与比较条数，在对比栏点击平台名可进入单平台概览。": "Click a platform to add or remove it; size reflects how many comparisons it took part in.",
-  "对比中": "Comparing", "清空": "Clear", "每个单元格主数字为该平台在当前比较对象下的": "Each cell shows the platform's ",
-  "读数，下方小字列出偏离中位数与样本量 n。": " reading on this target; the line below gives the median deviation and sample size n.", "水平色条按对数": "Bars plot ",
-  "各平台参与的测试集与对侧配置不完全重合；若所选两个平台曾直接对测，双方的极值可能源自同一条比较记录。": "Platforms were tested against different counterparts; if two selected platforms were compared directly, their extremes may come from the same record.",
-  "其它": "Other", "{n} 个平台 · {n} 项指标 · 统计口径：": "{n} platforms · {n} metrics · basis: ", "（仅 n≥{n} 参与比较）": " (only n≥{n} counted)",
-  "指标 ·": "Metric ·", "样本不足：当前对象下尚无同时满足两个平台 n≥{n} 的指标。": "Not enough samples: no metric has n≥{n} for two platforms on this target.",
-  "库": "Library", "调查中": "Investigating", "没有找到平台": "Platform not found", "链接可能已过期。": "The link may be out of date.", "从平台云里重新选 →": "Pick again →",
+  "清空": "Clear", "其它": "Other",
+  "库": "Library", "调查中": "Investigating", "没有找到平台": "Platform not found", "链接可能已过期。": "The link may be out of date.",
   "缺陷修复 · REPAIRS": "REPAIRS", "{n} 项记录 · {n} 项已复验 · {n} 项调查中": "{n} records · {n} verified · {n} investigating",
   "数值缺陷定位与": "Numerical defects, ", "补丁复验": "patched and re-verified", "偏差精确归零": "deviations driven to exactly zero",
   "其余 {n} 项有前后读数": "{n} more have before/after readings", "{n} 项仅定性": "{n} qualitative only", "最大改善倍数": "largest improvement",
@@ -4492,7 +4480,7 @@ const I18N_EN = {
   "问题成因、影响版本、补丁与验证证据经复核后归档至社区知识库，供后续相同软件栈直接检索复用。": "Cause, affected versions, patch and evidence are reviewed and published to the knowledge base for the next team on the same stack.",
   "完成": "Done", "记录双端配置、对齐覆盖率与标量读数。点击下方记录行可展开完整对照详情。": "Both configurations, coverage and readings are recorded. Click the row below for details.",
   "同一张 H{n} 处理同一段 {n} token 序列，两条执行路径仅在预填充分块方式上不同。": "One H{n}, one {n}-token sequence; the two paths differ only in how the prefill is chunked.",
-  "全站 {n} 个实测读数共用同一对数偏离轴，贯穿首页分布图、平台指纹与修复量级图。": "All {n} readings share this axis — the home distribution, platform fingerprints and repair magnitudes all use it.",
+  "首页分布图与平台指纹使用同一对数偏离轴，共展示 {n} 个实测读数。": "The home distribution and platform fingerprints show {n} readings on the same logarithmic deviation scale.",
   "五条实测比较涵盖不同指标与优化方向：余弦相似度越接近 {n} 越一致，误差类指标越接近 {n} 越一致。": "Five real comparisons with different metrics: cosine is better near {n}, error metrics near {n}.",
   "切换到中文": "切换到中文", "归约差异在每一层注意力与投影中逐层传播并写入最终 KV 缓存，使单卡分块切换的最大绝对误差超过跨平台同路径对比。": "The reordering propagates through every attention and projection layer into the final KV cache, so chunking on one card exceeds the cross-platform difference.",
   "将完全相同的 token 序列与模型权重分别送入双端环境。": "Send the identical token sequence and weights to both sides.", "在原始负载下复测，核验误差收敛与回归项": "Re-run the original workload; check convergence and regressions",
