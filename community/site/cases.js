@@ -301,8 +301,26 @@
     }).catch(error => {loading=null; throw error;});
     return loading;
   }
+  async function loadCoverage() {
+    const {search} = await loadIndex();
+    const configs = search.cases.filter(c => c.category !== 'workflow-benchmark').flatMap(c => c.configurations);
+    const unique = values => [...new Set(values)].sort((a,b) => a.localeCompare(b,'en',{numeric:true}));
+    const hardware = new Map();
+    for (const platform of unique(configs.flatMap(c => c.platforms))) {
+      const [key,label] = choiceGroup('hardware',platform) || ['other',''];
+      if (!hardware.has(key)) hardware.set(key,{key,label,platforms:[]});
+      hardware.get(key).platforms.push(platform);
+    }
+    const order = [...choiceGroups.hardware.map(([key]) => key),'other'];
+    return {
+      hardware: order.flatMap(key => hardware.has(key) ? [hardware.get(key)] : []),
+      frameworks: Object.fromEntries(['inference','sft','rl'].map(task =>
+        [task,unique(configs.filter(c => c.tasks.includes(task)).flatMap(c => c.frameworks))]))
+    };
+  }
   async function mount(root, hash, options={}) {
     const tx=(zh,en)=>options.lang==='en'?en:zh;
+    const icon=name=>`<svg class="ico" aria-hidden="true"><use href="#nf-i-${name}"/></svg>`;
     root._lifecycleCleanup?.();
     const stamp={};root._lifecycleRequest=stamp;
     root._lifecycleCleanup=()=>{root._lifecycleRequest=null;};
@@ -367,8 +385,8 @@
     }
     const requestedVersion=value=>libraryVersion({version:value})||tx('指定版本','Selected version');
     root.innerHTML=`<div class="wrap lc-page">
-      <div class="lc-intro"><h1>${tx('精度案例库','Precision Case Library')}</h1></div>
-      <div class="lc-discovery"><aside class="lc-demand" aria-label="${tx('目标配置','Target configuration')}"><div class="lc-demand-head"><h2>${tx('目标配置','Target configuration')}</h2><button type="button" class="link" data-reset>${tx('重置','Reset')}</button></div><div class="lc-selectors"></div></aside>
+      <header class="lc-intro"><h1 class="work-title"><span class="work-title-mark">${icon('book')}</span><span>${tx('精度案例库','Precision Case Library')}</span></h1><a class="link" href="#/records">${tx('查看全部记录','Browse all records')} <span aria-hidden="true">→</span></a></header>
+      <div class="lc-discovery"><aside class="lc-demand" aria-label="${tx('目标配置','Target configuration')}"><div class="lc-demand-head"><h2>${icon('sliders')}${tx('目标配置','Target configuration')}</h2><button type="button" class="btn sm ghost" data-reset>${icon('cycle')}${tx('重置','Reset')}</button></div><div class="lc-selectors"></div></aside>
       <section class="lc-results" aria-label="${tx('配置结果','Configuration results')}"><section class="lc-recommendation" aria-live="polite"></section><section class="lc-problems"><h2>${tx('相关问题','Related issues')}</h2><div class="lc-list"></div></section><section class="lc-problems" data-model-records hidden></section></section></div>
       <dialog class="lc-option-dialog" aria-labelledby="lc-option-title"><div class="lc-modal-bar"><h2 id="lc-option-title"></h2><button type="button" class="iconbtn" data-options-close aria-label="${tx('关闭选项','Close options')}">×</button></div><div class="lc-option-body"><label class="lc-option-search"><svg class="lc-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span class="sr">${tx('搜索选项','Search options')}</span><input type="search" data-options-search placeholder="${tx('搜索或输入名称','Search or enter a name')}"></label><div class="lc-option-grid" data-options-list></div></div></dialog>
       <dialog class="lc-case-dialog" aria-labelledby="lc-case-title"><div class="lc-modal-bar"><span>${tx('案例详情','Case detail')}</span><div class="lc-detail-actions"><button class="btn sm" type="button" data-copy>${tx('复制链接','Copy link')}</button><button type="button" class="iconbtn" data-detail-close aria-label="${tx('关闭案例详情','Close case detail')}">×</button></div></div><article class="lc-detail" id="lc-detail"></article></dialog></div>`;
@@ -437,6 +455,7 @@
     }
     function fitPreviewChoices(row) {
       const maxRows=Number(row.dataset.previewRows);
+      const focused=row.contains(document.activeElement)?document.activeElement:null;
       const buttons=[...row.children],toggle=buttons.pop();
       for(const button of buttons)button.hidden=false;
       toggle.hidden=true;
@@ -452,6 +471,10 @@
       }
       const summary=row.previousElementSibling?.querySelector('.lc-selection');
       if(summary)summary.hidden=buttons.some(button=>!button.hidden&&button.getAttribute('aria-pressed')==='true');
+      if(focused){
+        const next=focused.hidden?(!toggle.hidden?toggle:buttons.find(b=>!b.hidden&&b.getAttribute('aria-pressed')==='true')||buttons.find(b=>!b.hidden)):focused;
+        if(next!==document.activeElement)next?.focus({preventScroll:true});
+      }
     }
     function paintFrameworks(box,query,expanded) {
       const term=choiceKey(query),alias=choiceKey(canonical('library',query));
@@ -727,15 +750,13 @@
       const ready=['hardware','model','library'].every(field=>state[field]);
       const section=root.querySelector('.lc-recommendation');
       section.innerHTML=`<h2>${tx('推荐配置','Recommended configuration')}${showingExample?` <span class="lc-badge" data-example-label>${tx('示例','Example')}</span>`:''}</h2>`+(recommendation?(()=>{
-        const {case:c,config,library,solution,verification}=recommendation;
+        const {case:c,config,library,solution}=recommendation;
         const version=libraryVersion(library),requested=requestedVersion(state.version);
         const details=solution?'':`<button class="link lc-detail-link" type="button" data-case="${esc(c.row.id)}" aria-haspopup="dialog">${tx('配置与验证详情','Configuration & verification')} ↗</button>`;
-        const report=verification||config.kind==='comparison'?`<a class="link" href="${esc(reportLink(c,verification?'verification':'comparison',verification?.id||config.recordId,state,'',solution?.id))}">${tx('查看实测报告','View measured report')} ↗</a>`:'';
-        return `<div class="lc-recommend-head"><h3>${esc(library.name)}${version?` <span>${esc(version)}</span>`:''}${solution?` <span>＋ ${tx('本地修复','local fix')}</span>`:''}</h3></div>
+        return `<div class="lc-recommend-head"><h3>${esc(library.name)}${version?` <span class="lc-recommend-version">${esc(version)}</span>`:''}${solution?` <span class="lc-recommend-patch">${icon('wrench')}${tx('本地修复','local fix')}</span>`:''}</h3>${details}</div>
           ${recommendation.differences.includes('version')?`<p class="lc-version-change">${version&&version!==requested?`${tx('版本调整','Version change')}: ${esc(requested)} → ${esc(version)}`:tx('已显示其他版本的记录','Showing records for a different version')}</p>`:''}
-          <dl class="lc-recommend-config"><div><dt>${tx('硬件','Hardware')}</dt><dd title="${esc(config.hardware)}">${esc(state.hardware)}</dd></div><div><dt>${tx('实测模型','Tested model')}</dt><dd>${esc(config.model)}</dd></div><div><dt>${tx('任务','Task')}</dt><dd>${esc(taskLabel(state.task||config.tasks[0]||tx('未记录','Not recorded')))}</dd></div></dl>
-          <section class="lc-stack" aria-label="${tx('库版本搭配','Library version combination')}"><h4>${tx('库版本搭配','Library version combination')}</h4><dl class="lc-recommend-config">${config.libraries.map(lib=>`<div><dt>${esc(lib.name)}</dt><dd>${esc(libraryVersion(lib)||'—')}</dd></div>`).join('')}</dl></section>
-          ${details||report?`<div class="lc-report-links">${details}${report}</div>`:''}`;
+          <dl class="lc-recommend-config"><div><dt>${icon('chip')}${tx('硬件','Hardware')}</dt><dd title="${esc(config.hardware)}">${esc(state.hardware)}</dd></div><div><dt>${icon('layers')}${tx('实测模型','Tested model')}</dt><dd>${esc(config.model)}</dd></div><div><dt>${icon('target')}${tx('任务','Task')}</dt><dd>${esc(taskLabel(state.task||config.tasks[0]||tx('未记录','Not recorded')))}</dd></div></dl>
+          <section class="lc-stack" aria-label="${tx('库版本搭配','Library version combination')}"><h4>${tx('库版本搭配','Library version combination')}</h4><dl class="lc-recommend-config">${config.libraries.map(lib=>`<div><dt>${esc(lib.name)}</dt><dd>${esc(libraryVersion(lib)||'—')}</dd></div>`).join('')}</dl></section>`;
       })():!ready?`<p class="lc-placeholder">${tx('请选择硬件、模型和框架','Select hardware, model and framework')}</p>`:
         lookup.recommendation_gaps.includes('specific-model-required-for-recommendation')?`<button class="btn sm" type="button" data-pick-model>${tx('选择具体型号','Select a specific model')}</button>`:
         `<p class="lc-placeholder">${tx('暂无可推荐组合','No supported recommendation')}</p>`);
@@ -747,7 +768,7 @@
         const text=description('issue',issue);
         const note=resolutionNote(resolution);
         const meta=[config.model,...(versions.length?versions:[state.library]),note].filter(Boolean).map(esc).join(' · ');
-        return `<button class="lc-problem" type="button" data-case="${esc(c.row.id)}" data-issue="${esc(issue.id)}" aria-haspopup="dialog" aria-expanded="false"><strong>${esc(text.title)}</strong><span class="lc-problem-meta">${meta}</span>${resolutionBadge(resolution)}<span class="lc-detail-link">${tx('查看详情','View details')} <span aria-hidden="true">→</span></span></button>`;
+        return `<button class="lc-problem" type="button" data-case="${esc(c.row.id)}" data-issue="${esc(issue.id)}" aria-haspopup="dialog" aria-expanded="false"><strong>${esc(text.title)}</strong><span class="lc-problem-meta">${meta}</span>${resolutionBadge(resolution)}<span class="lc-row-arrow" title="${tx('查看详情','View details')}">${icon('arrow')}</span></button>`;
       }).join('')||`<p class="lc-placeholder">${ready?tx('暂无问题记录','No issue recorded'):tx('选择配置后查看','Select a configuration')}</p>`;
       const records=root.querySelector('[data-model-records]');
       const evaluations=state.model?filterCases(index,state).filter(c=>c.category!=='workflow-benchmark').flatMap(c=>{
@@ -882,6 +903,6 @@
     };
   }
 
-  global.NumericBridgeCases={buildIndex,filterCases,configurationDifferences,configurationMatches,assessCoverage,recommendConfiguration,configurationIssues,issueResolution,issueSolutions,mount,mountReport};
+  global.NumericBridgeCases={buildIndex,filterCases,configurationDifferences,configurationMatches,assessCoverage,recommendConfiguration,configurationIssues,issueResolution,issueSolutions,loadCoverage,mount,mountReport};
   if(typeof module!=='undefined'&&module.exports)module.exports=global.NumericBridgeCases;
 })(typeof window!=='undefined'?window:globalThis);
