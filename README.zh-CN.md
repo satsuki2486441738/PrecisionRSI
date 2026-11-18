@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
+  <a href="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml"><img src="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI 状态"></a>
 </p>
 
 <p align="center"><strong>数值精度比较、诊断与修复</strong></p>
