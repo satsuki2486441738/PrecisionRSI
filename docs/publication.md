@@ -9,12 +9,9 @@ A result identifies hardware, model, software revisions, settings, measured scop
 metrics, limitations and reproducibility or immutable evidence references.
 Completion and numerical acceptance have separate fields.
 
-Write public titles and summaries in record `content`; historical descriptions
-use `community/site/data/content.json`. Describe the actual observation or change
-in plain language. Store versions, settings, status and evidence in their owning
-fields. Add specific tradeoffs or unresolved conditions when relevant; omit stock
-scope/correctness disclaimers. See the [record format](../community/records/README.md)
-and [writing guide](../skills/precision-compare/references/community-records.md).
+For public record fields and wording, use the
+[record format](../community/records/README.md) and
+[writing guide](../skills/precision-compare/references/community-records.md).
 
 ## Keep public
 

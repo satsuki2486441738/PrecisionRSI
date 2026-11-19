@@ -13,6 +13,8 @@ from urllib.parse import unquote, urlsplit
 from markdown_it import MarkdownIt
 import yaml
 
+from .install import installable_folders
+
 
 def validate_metadata(path):
     text = path.read_text(encoding='utf-8')
@@ -94,8 +96,7 @@ def validate_links(root, paths):
 
 def validate_skills(root):
     """Validate every installable directory, including missing entrypoints."""
-    folders = sorted(path for path in (root / 'skills').iterdir()
-                     if path.is_dir() and not path.name.startswith('.'))
+    folders = installable_folders(root / 'skills')
     if not folders:
         raise ValueError(f'{root}: no installable skills')
     for folder in folders:

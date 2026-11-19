@@ -1,105 +1,35 @@
 ---
 name: precision-compare
-description: Collect and compare numerical results across hardware and software stacks for inference, SFT (full/LoRA) and RL.
-compatibility: Python 3.10+; NumPy for array tools; native runtimes as required by the task. Install with the repository exporter to bundle tools.
+description: Collect and compare numerical observations for inference, SFT and RL against an aligned reference or another configuration.
 ---
 
 # Precision comparison
 
-## Establish the request
-
-For a new hardware/model/framework task, summarize the request in the user's language and ask them to confirm or correct it:
-
-| Field | Summarize |
-|---|---|
-| Hardware platform | Vendor/model; device count and environment when known |
-| Target model | Model identifier; revision when known |
-| Training/inference framework | User-selected framework; distinguish known training backend, rollout engine and device adaptation libraries with their versions |
-| Task and goal | Inference/SFT/RL, algorithm and affected stage when known; requested comparison, diagnosis, repair or version/configuration selection |
-
-Separate user-provided facts, inferred assumptions and unknowns. Include existing symptoms, evidence, constraints and expected delivery when supplied. Ask only about missing choices that affect the next step; exact versions, numerical settings and distributed configuration can remain unknown for preliminary retrieval and must be resolved when required for execution or comparison.
-
-Reuse prior confirmation across skills and follow-ups; ask again only for material changes or unresolved choices. While confirmation is pending, read-only preliminary retrieval may proceed using explicitly labeled assumptions; wait for the user's answer before performing work that depends on those choices.
-
-## Retrieve community evidence
-
-Before new collection, query the confirmed demand (or label preliminary assumptions):
-
-```sh
-python -B scripts/community_search.py --hardware H200 --model MODEL --library LIB --task rl
-```
-
-The tool uses an offline metadata snapshot; `--index FILE_OR_HTTPS_URL` selects another source and `--sha256 HASH` pins it. It also accepts `--request REQUEST.json`. Read `normalized_request`, `missing_input` and matching records. No match supplies no additional context: continue the normal collection or repair workflow.
-
-When `recommendation` exists, present the version combination and required patch. Otherwise use the records as context; explain the relevant `recommendation_gaps` when version selection is requested. `alternatives` lists other supported versions; select one when that change fits the user's request. Reuse applicable evidence and collect missing scope.
-
-For requested community submissions or public descriptions, follow [community record writing](references/community-records.md). Keep public summaries concise and record configuration, status and evidence in their fields.
-
-## Scope
-
-- Compare symmetric sides at matching inputs/state/coordinates; record intended differences and actual configurations. Ask when choices change task meaning or resource limits.
-- Initially, collect or compare only missing scope. Route follow-ups by the requested action (default: reuse completed evidence):
-
-| Request | Action |
-|---|---|
-| Repeat / confirm a completed task; inputs/state, source/runtime and scope unchanged | Return prior metrics, coverage and paths as reused; skip training/inference and regression reruns. |
-| Conditions or requested scope changed | Recompute affected scope. Configuration-only changes: validate requested settings; expand regressions for changed implementations or uncovered failures. |
-| Explicitly rerun training/inference or obtain new measurements | Execute fresh captures for the requested scope. |
-
-## Tool use
-
-Follow these requirements for the bundled tools:
-
-| Operation | Required path |
-|---|---|
-| Interface details | Reuse loaded instructions/interfaces; read only missing details via declarations or `tool_help TOOL` / `--full`. Read source for tool edits, observed failures or requested audits. |
-| Supported work | Call the declared tool. Write adapters for uncovered semantics; identify an unsupported requirement before replacing a tool. |
-| Results and checks | Validate adapter coordinates/identities; reuse tool arithmetic, coverage and integrity receipts. Recompute for changed evidence, inconsistent results or requested audits. Batch retained-result checks. |
-| Delivery | Return existing results, configurations and evidence paths. Create extra report files, bundles or offline replay only on request. |
-
-## Compare
-
-Reuse workload checks covering the request. Missing comparisons: import from `scripts/` (arrays/trees require NumPy):
-
-| Input | Python call | Result |
-|---|---|---|
-| Named numeric arrays | `array_compare.compare_arrays(a, b, expected=None, metrics=False, groups=None, mode='metrics')` | Equality, coverage, groups; `mode=nonfinite`: categories + paired-finite metrics |
-| Nested state | `tree_compare.compare_trees(a, b, leaf_adapter=None, metrics=False)` | `exact_equal`, coverage, metadata, numeric |
-| Coordinate → natural-logprob maps | `score_metrics.reduce_scores(a, b)` | Both NLLs, NLL difference, MAE/P99/max and coordinate |
-| Global + grouped target scores | `group_metrics.reduce_groups(expected, groups, score_metrics.reduce_scores, a, b)` | `global` and `groups[name]`, each with status, coverage, metrics |
-
-`expected`: task coordinate inventory; `groups`: label → coordinate subset. Arrays use their own `groups`; `mode=nonfinite` reports the finite subset while retaining missing/nonfinite findings and original coordinates. Adapters establish identities, masks, shifts and logical coordinates; tools supply arithmetic and coverage.
-
-File CLIs, from the skill directory:
-
-```sh
-python scripts/array_compare.py A.npz B.npz --output NEW.json
-python scripts/tree_compare.py A.pt B.pt --output NEW.json
-python scripts/evidence_bundle.py fetch REQUEST.json NEW_SIDE_DIRECTORY
-```
-
-NPZ: named arrays. Checkpoints: trusted Torch state, loaded on CPU; Torch required. Both comparators accept `--metrics` and `--all-findings`; arrays also accept `--mode nonfinite`. Exit 0=computed; equality is `exact_equal` (NPZ) or `comparison.exact_equal` (checkpoint).
-
-Fetch request: `{"transport":["ssh","HOST","python3 -I -"],"source_dir":"/work/native-run","include":["*.json","*.bin"]}`. Use the endpoint's Python-stdin command and terminal receipt's source directory. Fetch verifies selected files. Reuse its receipt and `EXPORT.json` hashes/sizes for unchanged files; large arrays stay at source.
-
-Repeated result review: `runtime_probe.save_identity(paths, NEW_MANIFEST, results=None)` retains verified file identities and results. Include relevant source/config/data/runtime identities and evidence files. `python scripts/runtime_probe.py --identity MANIFEST` checks them and returns saved results without rerunning.
-
-[tool_help](scripts/tool_help.py): `--list` for discovery, `--full` for schemas. Shards/runtime/repeated commands → [shared tools](references/comparison.md#tools).
+Start from the workload, reference, observation points and available evidence.
 
 ## Collect
 
-Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
-
-Independent sides: concurrent native capture → terminal receipts → batch-fetch selected small artifacts → compare. Use task recipes for unresolved capture semantics or framework integration.
+Select exactly one recipe for the requested workload and read only that recipe:
 
 - [Inference](references/inference.md): scores, distributions, cache stages.
 - [SFT, full / LoRA](references/sft.md): objectives, gradients, stored updates.
 - [RL](references/rl.md): trajectories, objectives, updates.
 
-Preserve native operators, state transitions, masks and dtype identity; map batches/shards/replicas to logical coordinates. Missing execution → [adapt](../framework-adapt/SKILL.md). Confirm scope/resources before [internal sampling](references/layerwise.md).
+Read the [execution guide](references/comparison.md#wait-for-native-execution)
+when you need shared receipts, workflow continuation or a tool interface. Read
+[tool use](references/comparison.md#tools) only when selecting or integrating a
+comparator. Read [internal sampling](references/layerwise.md) only when the
+confirmed scope includes layerwise observations. Do not load unrelated recipes
+or references. Run independent captures concurrently when resources and
+isolation allow. Preserve native operators, state transitions and dtype identity.
 
-## Return
+## Tool use
 
-- Return completed tool results, actual configurations, gaps and existing artifact paths. Add only uncovered task checks; large arrays stay at source/agreed storage.
-- Recheck affected scope after changes, failed checks or unresolved findings.
-- Apply supplied acceptance criteria; otherwise report differences. Requested [repair](../precision-repair/SKILL.md) reuses evidence; differences alone do not establish defects.
+Install with the repository exporter to bundle the tools. Use Python 3.10+ and
+NumPy for array tools. Native execution uses the runtime required by the task.
+
+Select a [comparator](references/comparison.md#tools) and use adapters for
+task-specific coordinates, masks, shifts and state. Read [tool help](scripts/tool_help.py)
+for missing interface details. Inspect source for edits, failures and audits.
+Batch checks of retained results. Recompute affected results when their evidence
+changes or a check calls them into doubt.

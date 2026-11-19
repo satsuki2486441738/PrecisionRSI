@@ -1,46 +1,36 @@
-# Community record writing
+# Community submission guide
 
-Use this guide when preparing a requested community submission or updating public
-descriptions. Publishing follows the user's authorized destination and scope.
+After delivery, use this guide to write a public record if the user opts in to
+sharing. For the submission procedure, see [the workflow](../../numericbridge/references/workflow.md#resume-and-deliver).
 
-Write the observation and proposed change in plain language:
+## Record the result
 
-- Title: the problem or task, such as “LoRA output changes after merging”.
-- Summary: the observed effect or the solution's change, in one or two sentences.
-- Configuration: hardware, model architecture, size, checkpoint and revision,
-  tested frameworks, library versions and settings. Use `model.architecture` and `model.size` for
-  the search facets; use `tiny` for a custom miniature fixture and keep its
-  actual dimensions and seed in the original record.
-- Verification: workload, coverage, measured values, outcome and evidence.
-- Tradeoffs or remaining work: the specific condition that affects use, if any.
+| Work completed | What to record |
+|---|---|
+| Compared two configurations | The tested configurations, workload, coverage and measured differences. A comparison can stand on its own. Record acceptance separately when criteria were supplied. |
+| Investigated a difference | Link the comparison to the investigation. Describe the observed issue and the evidence for its classification. |
+| Evaluated a solution | Link each patch, upgrade or settings change to the issue it addresses. Give each evaluated solution its own verification, with the tested configuration, workload, measured outcome and tradeoffs. Keep a source-only finding distinct from an executed check. |
 
-Keep public wording in `content.title` and optional `content.summary`, localized
-with `zh` and/or `en`. Lifecycle entities use `details.content`. Historical
-descriptions can be maintained by typed ID in `data/content.json`. Optional
-`content.workflows` lists affected inference/SFT/RL usage; actual executed tasks
-remain part of the experiment configuration.
+To make the submitted record searchable, record the hardware, model checkpoint
+and revision, tested framework and version, and actual task and settings. Use
+`model.architecture` and `model.size` for search facets. Use `tiny` for a custom
+miniature fixture; retain its dimensions and seed with the experiment. List
+tested frameworks in `frameworks`, dependencies in `libraries`, and the repair
+target in `affected_library`. Keep release versions and commits in their fields;
+put patch or backport descriptions on the solution.
 
-Use structured fields for versions, commits, settings, status and relationships.
-List the frameworks evaluated on each side in `frameworks`; keep the complete
-dependency stack in `libraries`. Use `affected_library` for the repair target.
-Keep `libraries[].version` as the version identifier. Describe a local patch,
-source backport or upgrade in its solution record rather than in a version string.
-Keep code paths, implementation steps and detailed reproduction material with
-the technical record. A source-inspected upgrade and an executed repair have
-different verification records; express that through their status and evidence.
+## Write the public entry
 
-Omit repeated stock caveats such as “limited to this verification” or “not a
-global pass”. Record concrete conditions where they matter, such as the tested
-adapter type or an outstanding workload. Omit optional fields when there is
-nothing useful to add.
+Use a short title for the task or symptom, for example "LoRA output changes
+after merging". Use the summary for the observed effect, the change or a
+condition that affects use. Put versions, settings and measurements in their
+structured fields. Keep implementation detail with the technical evidence.
 
-Link each solution to the issue it addresses and each verification to its
-solution and workload. Multiple patches, upgrades and numerical policies can
-coexist, with their own measurements and tradeoffs.
+Use `content.title` and optional `content.summary` in `zh` and/or `en`;
+lifecycle entities use `details.content`. `content.workflows` lists affected
+workflows; the experiment configuration records what actually ran. To clarify
+historical wording, use the typed ID in `data/content.json`.
 
-Search results supply context for the requested task. No match means there is
-no community context to reuse; continue the normal comparison/repair workflow.
-Search by the framework the user runs or the library they need to repair.
-Use a model group to browse results, then select an exact checkpoint for
-recommendations. Present the tested checkpoint and briefly explain any missing
-requirement when the user requests a recommendation.
+Include the minimum public evidence needed to trace each measurement. Keep raw
+logs, prompts, private paths and host details with the local experiment. Retain
+public hardware, model and software identities needed to interpret the result.

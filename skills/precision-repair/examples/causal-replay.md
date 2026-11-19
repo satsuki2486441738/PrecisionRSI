@@ -19,3 +19,13 @@ A regression against the analytic objective distinguishes the original reduction
 from the fix. Rerunning from `w=0` then gives gradients `[-2, -1.8]` and stored
 parameters `[0.2, 0.38]`. Together these checks establish the local correction
 and recovery of the two-step workload; the same execution can supply both results.
+
+## RL at a rollout boundary
+
+If two online rollouts choose different tokens, later token scores have different
+histories. Compare at the last shared history and keep the later online behavior
+as separate observations. To test whether the trainer also introduces a
+difference, replay the same valid trajectories into each trainer from matched
+weights and optimizer state. If effective loss inputs agree but gradients
+diverge, narrow the next check to the backward path. Record the fixed replay
+separately; it does not verify the online rollout or policy handoff.

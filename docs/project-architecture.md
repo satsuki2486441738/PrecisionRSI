@@ -4,16 +4,15 @@
 
 ## 使用与交付
 
-用户给出硬件 × 模型 × 训推框架 × 适配库版本 × 配置和期望结果。
-Agent 按缺失能力读取 Skill、调用工具，完成比较诊断、必要的修复与原任务复验。
-交付经过限定范围验证的配置、版本组合或补丁，以及指标、覆盖和复验证据。
-社区提供已知问题及候选方案检索，检索结果仍需在实际环境验证。
+Agent 从 [NumericBridge Skill](../skills/numericbridge/SKILL.md) 进入。[流程规范](../skills/numericbridge/references/workflow.md)定义执行分支和交接。Agent 按当前步骤读取适配、对比或修复 Skill，沿用已确认的需求、运行身份和证据位置。在输入中开启[精度优化](../skills/numericbridge/references/workflow.md#optimize-precision)后，可以在验证通过的配置上继续改善精度。RL 采集与指标见 [RL 方法](../skills/precision-compare/references/rl.md)。
+
+[RL 首例设计](rl-precision-workflow-proposal.md)用于选择研究案例和设计对照。[整模型评测手册](model-precision-evaluation-plan.md)用于明确要求整模型覆盖的任务。
 
 ## 目录归属
 
 | 目录 | 放什么 |
 |---|---|
-| [skills/](../skills/precision-compare/SKILL.md) | Agent 工作方法、任务规范与该 Skill 专用工具 |
+| [skills/](../skills/numericbridge/SKILL.md) | NumericBridge 总入口、各阶段工作方法和专用工具 |
 | [tools/](../tools/README.md) | 实际共用的命令执行、依赖工作流、资源核验和证据工具 |
 | [community/](../community/README.md) | site/ 管理网页、公开数据与证据；records/ 管理校验与检索 |
 | [scripts/](../scripts/README.md) | 安装、数据导出、仓库与发布校验等维护脚本 |
@@ -24,8 +23,7 @@ Agent 按缺失能力读取 Skill、调用工具，完成比较诊断、必要�
 | 本地私有 projects/、runs/ | 原生案例、资源配置、原始数组、完整日志与过程记录 |
 
 这些目录按用途分工，不是用户必须理解或依次启动的架构层。
-三个已实现 Skill 是 framework-adapt、precision-compare、precision-repair；
-operator-optimize 仍是占位，不计为已实现能力。
+安装包包含 numericbridge、framework-adapt、precision-compare、precision-repair。仓库中的 operator-optimize 是预留项。
 
 ## 工具放置与安装
 
@@ -54,5 +52,3 @@ Skill 脚本保留调用入口，共用工具只维护一份实现。
 其中 26 条 Skills/Agent 评测单列为工作流评测；测量视图不计为独立实验。
 [records 的检索接口](../community/records/README.md)支持按实际硬件、模型、库版本和任务筛选案例；网页的精度案例库（`#/cases`）展示问题、修复方案及各方案的复验结果。
 只有明确来源支持的关系才入库；源码检查、原任务复验、候选选择与数值验收分别表达。
-
-实际案例执行见 [RL 精度诊断与修复方案](rl-precision-workflow-proposal.md)。

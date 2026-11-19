@@ -74,15 +74,25 @@ Keep full execution options and identity manifests in files consumed by adapters
 {"argv_prefix":["/env/bin/python"],"path_prepend":["/env/bin"],"env":{"HF_HUB_OFFLINE":"1"}}
 ```
 
-Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Prepared environments expose their verified launch command and terminal receipt; reuse them instead of rediscovering submission. Reuse prepared model identity receipts while the resource identity matches; refresh affected identity checks when it changes. Reuse a matching successful preflight; otherwise verify the smallest native call with the capture configuration before full collection.
+Fields are optional and literal; `env` values of null remove inherited variables. Prefixes may select a task-owned launcher instead of Python. Overrides apply where the recorder runs; remote launchers forward job settings. Environment adapters own scheduling, current allocation/device binding and runtime/cache paths. Prepared environments expose their verified launch command and terminal receipt; reuse them instead of rediscovering submission. Reuse prepared model identity receipts while the resource identity matches; refresh affected identity checks when it changes. Follow the [native preflight contract](../../framework-adapt/SKILL.md#native-preflight) before fresh collection. In `workflow.py`, declare the task's preflight receipt as an output and use `checks` to enforce its pass conditions when a successful command alone does not establish readiness.
 
-Run a native command through `record_run` to retain complete logs and receive a compact result with failure diagnostics:
+### Wait for native execution
+
+Use completion notifications when supported, or the longest supported blocking
+wait (at least 10 seconds when available). Let the execution tool own the
+timeout and terminal receipt. Keep scheduler polling in the case adapter:
+propagate the job's terminal status, and inspect progress to resolve a stall,
+handle interaction or answer a user request. Batch independent probes.
+
+Use `record_run` to retain logs and obtain a compact failure diagnostic:
 
 ```sh
 python scripts/record_run.py --execution environment.json --output-root runs --side SIDE --task capture --timeout 300 -- COLLECTOR ARGS
 ```
 
-Its CLI returns log paths and byte counts; failures include the final 2048 bytes per stream (`--tail-bytes` adjusts this). For scheduled work, the adapter waits for the job's terminal result within its budget and propagates its exit status; a successful submission alone does not establish workload completion. Batch independent probes and use completion waits of 10–30 seconds for noninteractive commands where supported.
+Its CLI returns log paths and byte counts; failures include the final 2048 bytes
+per stream (`--tail-bytes` adjusts this). Job submission alone does not establish
+workload completion.
 
 Fetch selected terminal artifacts in one transport per side. `fetch` verifies paths, hashes and sizes; its temporary transfer archive is removed. Use the receipt and `EXPORT.json` for per-file evidence, without rescanning unchanged outputs. Adapters check uncovered task identities and semantics. Large arrays remain at source; size-limit failures retain no partial output.
 

@@ -1,8 +1,41 @@
 # RL
 
+## Native preflight
+
+Apply the [native preflight contract](../../framework-adapt/SKILL.md#native-preflight)
+to the RL path in scope. Find the minimum valid sample count, complete group
+size, microbatch and accumulation window in the selected configuration. Use
+prompts and responses that yield valid, unmasked actions and keep the workers,
+topology and settings needed by the path. A sample count of one can bypass the
+intended computation or be invalid, for example for group-based advantages.
+
+| Requested path | Evidence required in the reduced run |
+|---|---|
+| Rollout only | Native generation returns valid actions and the requested scores or other observations. |
+| Training update | The native trainer consumes valid trajectories, evaluates the in-scope objective, runs backward and completes an optimizer update without skipping it. Captured state identifies the update. Fixed trajectories are valid for this scope; label injected dependencies. |
+| Online rollout-to-update loop | Run native rollout and the configured reward/advantage path into a training update. Verify that the next native rollout consumed the resulting actor policy version. A transfer success message alone does not establish use. |
+
+For example, use one valid training update and the next rollout for the online
+preflight, with enough trajectories to satisfy the objective and distributed
+batching. This checks one handoff; more iterations or the target workload are
+needed for claims about repeated updates, long sequences or scale.
+
 ## Collection
 
-Select the requested action-score, objective or update observations. Replay fixed prompt/response IDs, action positions, masks and EOS/truncation. For objective comparisons, retain the effective old/reference scores, rewards, advantages, returns and values used by that objective, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
+For the first full-loop comparison, start with a fixed prompt set sized for a
+valid update, one optimizer update, and the first rollout using the updated
+policy. Select paired observations across rollout, reward/advantage, loss and
+update, and retain the policy handoff evidence. Compare per-action values only
+under matching histories. Use fixed trajectory replay to pair training
+observations when online trajectories diverge. When checking group-centered
+reward gradients, also use [fixed mixed-reward replay](../examples/minimal-precision-batch.md#fixed-precision-batch)
+if either side has no mixed-reward group after filtering and action masking.
+Verify that a mixed group reaches the objective on both sides and produces a
+nonzero reward-driven reference gradient before aggregation across prompts.
+Report online and replay coverage separately; mark the gradient check uncovered
+if replay cannot exercise it.
+
+For replay, fix prompt/response IDs, action positions, masks and EOS/truncation. For objective comparisons, retain the effective old/reference scores, rewards, advantages, returns and values used by that objective, marking injected versus recomputed dependencies. Preserve native score transforms, detach behavior and dynamic masks.
 
 For training comparisons, apply the requested [training state and stages](sft.md#training-stages) to actor and critic; identify the optimizer step, accumulation window and actor/critic order. Use the relevant objective dependencies below:
 

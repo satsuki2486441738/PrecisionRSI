@@ -5,18 +5,49 @@ description: Establish native execution when a requested model, framework or har
 
 # Framework adaptation
 
-For a new hardware/model/framework task, follow [request establishment](../precision-compare/SKILL.md#establish-the-request); reuse the confirmed request when continuing comparison or repair.
-Reuse comparison's [community retrieval](../precision-compare/SKILL.md#retrieve-community-evidence) before new execution; retain applicable source-bound results and collect only missing scope.
+Start from the confirmed target, runtime requirements and existing evidence.
 
 ## Execute
 
-Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
+Use [shared execution tools](../precision-compare/references/comparison.md#wait-for-native-execution) for waiting and receipts.
 
 - Enter for missing native execution. Reuse environments, adapters and receipts matching source, dependencies and target.
 - Missing support: inspect the selected revision's support declarations and closest native example; implement the required model/backend integration.
-- Reuse a matching successful preflight; otherwise check a minimal native call with the capture configuration. Verify the original workload; retry within budget.
-- Preserve native state transitions; record checkpoint conversions and tensor-layout changes. Confirm changes to target or implementation scope.
+- Run or reuse a [native preflight](#native-preflight) before capture. Verify only the
+  planned native path within the agreed scope and budget, then hand its receipt to
+  comparison. A preflight is a readiness check and does not establish numerical
+  agreement.
+- Preserve native state transitions; record checkpoint conversions and tensor-layout changes.
 - Patches need a focused regression and original-workload verification. Keep implementations and environment declarations with the case.
+
+## Native preflight
+
+A preflight exercises the **smallest valid workload that reaches the declared
+native path and produces its required evidence**. Choose the path and observable
+completion checks before shrinking the workload. There is no fixed batch size,
+sequence length or step count across tasks.
+
+- **Keep the execution path.** Use the target device, model checkpoint and
+  revision, framework and backend, dtype, and launch environment of the planned
+  capture on that side. Preserve the topology and settings required to exercise
+  the claimed path, including relevant kernels or collectives. A substitute
+  model, CPU fallback, or a topology that skips a required collective is a
+  separate check with narrower coverage.
+- **Shrink work within that path.** Reduce requests, examples, sequence lengths
+  or iterations only while the workload is valid and still reaches the required
+  boundaries. Keep any shape or scale needed to trigger the path. Read only the
+  recipe for the requested task: [inference](../precision-compare/references/inference.md),
+  [SFT](../precision-compare/references/sft.md) or [RL](../precision-compare/references/rl.md#native-preflight).
+- **Check execution and evidence.** Require successful native termination,
+  observed target-device and path execution, and the declared outputs or
+  collector artifacts. Imports, device enumeration, model loading alone and
+  scheduler submission do not establish that a workload path ran. Record the
+  actual configuration, reductions, checked boundaries, and terminal and
+  artifact references. Reuse a matching receipt only for its recorded scope;
+  check the current allocation/device binding before launching new work.
+
+A pass establishes readiness for capture on the tested path. Numerical
+agreement, target scale and uncovered paths require their own evidence.
 
 ## Continue
 
@@ -24,4 +55,5 @@ When requested work needs [comparison](../precision-compare/SKILL.md) or [repair
 
 ## Return
 
-Return support/gaps, effective settings, device execution, source/dependency identities, runnable command and existing evidence paths once workload checks pass. Recheck only changed or unresolved scope; packaging and extra reports require a request.
+Return support and gaps, effective settings, device execution, source/dependency
+identities, runnable command and evidence paths.
