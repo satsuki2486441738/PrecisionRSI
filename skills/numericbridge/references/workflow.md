@@ -5,12 +5,28 @@
 ```xml
 <handoff>
   Confirm, retrieve, prepare and compare. Diagnose and verify when warranted and
-  in scope, then optimize if enabled. Deliver once the request is satisfied or
-  no supported step remains in budget. Offer contribution after delivery.
-  For handoff or resume, keep the confirmed request, current stage, workload,
-  source and runtime identities, evidence paths and next action. Reuse matching
-  evidence and collect only what is missing.
+  in scope, then optimize if enabled. A stage handoff is a checkpoint: record
+  its result, give a progress update if useful, and execute the next in-scope
+  step in the same turn. If one side is blocked, continue independent work on
+  the other side and use applicable reference fallbacks within scope.
+  Deliver when the request is satisfied or no authorized action or wait can
+  advance it within budget. For incomplete work, report the blocker. For resume,
+  retain the confirmed request, stage, workload, source/runtime identities,
+  evidence paths, issue record path when present, and exact next action.
+  Reuse matching evidence.
 </handoff>
+```
+
+```xml
+<issue_record>
+  Create issues.md in the local case workspace when a finding changes the
+  execution path or affects the result. Record it when found, including setup
+  blockers, then update the same entry after diagnosis and each attempted change.
+  Keep the symptom, triggering configuration and workload, cause or open
+  question, and each candidate's change and outcome. Link to existing receipts,
+  patches and measurements. Keep failed attempts and open checks; distinguish a
+  verified workaround from repair of the original path.
+</issue_record>
 ```
 
 ## Request and execution inputs
@@ -19,11 +35,11 @@ Start from the [confirmed request](request.md) and authorization.
 
 ```xml
 <authorization>
-  Carry authorization across skills. Reconfirm material changes to the target,
-  scope or resource limits. Before launching a native run, resolve its local or
-  remote placement, host or queue, launch method, resource limits and budget,
-  checkpoint and revision, runtime and settings. Apply this to each side that
-  needs a native run.
+  Carry authorization across stages and skills. Resolve routine setup, retries
+  and evidence collection within the agreed scope and limits. Ask only for
+  required inputs the agent cannot resolve or actions that require new approval.
+  Before launching each native side, resolve placement, host or queue, launch
+  method, resource limits and budget, checkpoint and revision, runtime and settings.
 </authorization>
 ```
 
@@ -180,8 +196,9 @@ when resuming work.
 ```xml
 <deliver>
   Reuse any comparison handoff for each candidate. Include its actual configuration,
-  runnable setup when available, and unresolved checks. Report whether agreed
-  criteria were met; leave acceptance unset without criteria or an assessment.
+  runnable setup when available, unresolved checks and the local issue record
+  path when present. Report whether agreed criteria were met; leave acceptance
+  unset without criteria or an assessment.
   On follow-up, rerun only affected scope or explicitly requested fresh checks.
   Produce extra reports, bundles or offline replay on request.
 </deliver>

@@ -5,6 +5,10 @@ sharing. For the submission procedure, see [the workflow](../../numericbridge/re
 
 ## Record the result
 
+Use the case's local issue record and linked evidence to select shareable
+findings. Preserve the distinction between a workaround verified on an
+alternative path and a fix verified on the original path.
+
 | Work completed | What to record |
 |---|---|
 | Compared two configurations | The tested configurations, workload, coverage and measured differences. A comparison can stand on its own. Record acceptance separately when criteria were supplied. |
