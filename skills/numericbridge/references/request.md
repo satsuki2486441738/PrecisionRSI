@@ -17,9 +17,10 @@
 
 ```xml
 <authorization>
-  Ask the user to confirm the target, task and validation scope and authorize
-  the workflow. Once confirmed and authorized, hand off the request to community
-  retrieval. Execution details can remain pending during retrieval.
+  Ask once to confirm the target, validation scope and execution limits for the
+  whole requested workflow, including in-scope preparation, runs and follow-up
+  checks. Keep execution details the agent can discover pending. After approval,
+  start community retrieval and carry the agreed scope and limits forward.
 </authorization>
 ```
 

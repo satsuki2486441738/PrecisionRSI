@@ -29,10 +29,11 @@ Start from the confirmed request, paired observations and evidence paths.
 
 ```xml
 <diagnosis_handoff>
-  Record the discrepancy, paired coordinates, coverage and checked boundaries,
-  including gaps. Cite supporting evidence and the source revision and code
-  when identified. Classify the discrepancy as a capture or setup problem,
-  a numerical-policy difference, a supported defect, or unresolved.
+  Update the case's local issues.md with the discrepancy, paired coordinates,
+  coverage and checked boundaries, including gaps. Cite supporting evidence
+  and the source revision and code when identified. Classify the discrepancy
+  as a capture or setup problem, a numerical-policy difference, a supported
+  defect, or unresolved.
   Propose a patch only when correctness evidence supports the defect. Pass
   a focused regression check to verification, or the smallest discriminating
   next check when the cause remains open.
@@ -57,6 +58,8 @@ for receipts or resumed runs.
 
 ## Return
 
-For each candidate, report the cause, change and tested configuration, regression
-and workload outcomes, before/after metrics, coverage and evidence paths. Mark
-verified only after both checks pass; report remaining checks for partial results.
+Update the same issue entry after each candidate attempt with its change and
+tested configuration, regression and workload outcomes, before/after metrics
+when measured, coverage and evidence paths. Mark verified only after both
+checks pass; retain failed candidates and remaining checks for partial results.
+Return the issue record path with the diagnosis and candidate outcomes.
