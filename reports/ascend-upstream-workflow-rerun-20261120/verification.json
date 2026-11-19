@@ -1,0 +1,1044 @@
+{
+  "schema_version": 1,
+  "numericbridge_revision": "0bbb7769be0cd9f4c5ec1639f00abf160f53a254",
+  "fixture_revision": "77e18cd8a7ce1d32bc8197f337956316d3752639",
+  "observation_dates": [
+    "2026-11-20"
+  ],
+  "observation_timezone": "Asia/Shanghai",
+  "environment": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "python": "3.13.9",
+    "packages": {
+      "numpy": "2.4.2",
+      "torch": "2.15.0"
+    }
+  },
+  "comparator": "skills/precision-compare/scripts/array_compare.py",
+  "native_npu_status": "not-run",
+  "workflow": {
+    "engine": "tools.workflow",
+    "plan_schema_version": 1,
+    "planned_stages": 18,
+    "source_ready": "completed",
+    "cpu_preflight": {
+      "status": "completed",
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "gradient_elements": 2,
+      "finite": true
+    },
+    "verified_source_variants": 12,
+    "source_cpu_baseline_runs": 6,
+    "source_cpu_candidate_runs": 6,
+    "cpu_smoke_controls": 3,
+    "observed_runs": 15,
+    "id": "ascend-pr-cpu-rerun",
+    "status": "completed",
+    "completed_stages": 18,
+    "stage_attempts": 18,
+    "checked_assertions": 266,
+    "stage_checks": [
+      {
+        "id": "source-runtime-readiness",
+        "status": "passed",
+        "assertions": 2
+      },
+      {
+        "id": "cpu-preflight",
+        "status": "passed",
+        "assertions": 4
+      },
+      {
+        "id": "op-plugin-mul-host-scalar-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "sglang-gdn-state-layout-before",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "sglang-gdn-state-layout-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "sglang-mla-prefix-compaction-before",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "sglang-mla-prefix-compaction-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "torchnpu-inductor-expm1-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "torchnpu-triton-int64-div-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "vllm-ascend-deepseek-v4-sink-reload-before",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "vllm-ascend-deepseek-v4-sink-reload-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "mindspeed-llm-gpt-dataset-loss-mask-before",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "mindspeed-llm-gpt-dataset-loss-mask-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "mindspeed-packed-mtp-first-segment-before",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "mindspeed-packed-mtp-first-segment-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "mindspeed-te-sp-column-bias-before",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "mindspeed-te-sp-column-bias-after",
+        "status": "passed",
+        "assertions": 17
+      },
+      {
+        "id": "reconcile-results",
+        "status": "passed",
+        "assertions": 5
+      }
+    ]
+  },
+  "source_objects": [
+    {
+      "case_id": "sglang-gdn-state-layout",
+      "variant": "before",
+      "sources": [
+        {
+          "project": "sgl-project/sglang",
+          "revision": "c2578f28cfaece96167765ed93cab9a484f6fe95",
+          "files": {
+            "python/sglang/srt/layers/attention/linear/kernels/gdn_triton.py": "28ff3db49ead2c71ffc6968e028db27e406dbf07061fbb6c6266d23936baca3f"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "sglang-gdn-state-layout",
+      "variant": "after",
+      "sources": [
+        {
+          "project": "sgl-project/sglang",
+          "revision": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475",
+          "files": {
+            "python/sglang/srt/layers/attention/linear/kernels/gdn_triton.py": "f296825bbb6c070e243b43bbdec048b2683c89f36e776fbbd1dd37d0672fccd9"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "sglang-mla-prefix-compaction",
+      "variant": "before",
+      "sources": [
+        {
+          "project": "sgl-project/sglang",
+          "revision": "2120cf1190d32135358ea0fa73a87c4ca232803f",
+          "files": {
+            "python/sglang/srt/hardware_backend/npu/attention/mla_cache.py": "6301c57fe29bc4a51a8a164855cc720c34b7aa8b0e680c545982feb15bf4261e",
+            "python/sglang/srt/hardware_backend/npu/attention/ascend_backend.py": "0c9b912864b3ec2f53a3ce388551459a9a8684b469a43fd68c44905ee6a0f221"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "sglang-mla-prefix-compaction",
+      "variant": "after",
+      "sources": [
+        {
+          "project": "sgl-project/sglang",
+          "revision": "643909b5a898665aa7640c85b48963598f41815a",
+          "files": {
+            "python/sglang/srt/hardware_backend/npu/attention/mla_cache.py": "8ed172b214dc33e5fdd4ed6362feabb9e6278c75cbc83b980f37f1bc3c5cfdf8",
+            "python/sglang/srt/hardware_backend/npu/attention/ascend_backend.py": "dd3ce6e01104019f387178ce04a8a105169bd62b7749bfd1a5322b518cf53077"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "mindspeed-packed-mtp-first-segment",
+      "variant": "before",
+      "sources": [
+        {
+          "project": "Ascend/MindSpeed",
+          "revision": "43e884e651b6460b0a49a1eac5991d63eb4996a7",
+          "files": {
+            "mindspeed/core/transformer/multi_token_prediction.py": "c0c8735f18d3d34a8aa14e149c8b84f9ce92604443afaa3ce64f2b5060edf63a"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "mindspeed-packed-mtp-first-segment",
+      "variant": "after",
+      "sources": [
+        {
+          "project": "Ascend/MindSpeed",
+          "revision": "5f4402805352459264fb526ca5f587453b811c72",
+          "files": {
+            "mindspeed/core/transformer/multi_token_prediction.py": "e4058cdf6c6e3e7c2b8201e78985f3a16a4ee50b1f4ec44a6de259768f9007c7"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "mindspeed-te-sp-column-bias",
+      "variant": "before",
+      "sources": [
+        {
+          "project": "Ascend/MindSpeed",
+          "revision": "c2357e9ae4689cf1791a5f258217cd256ce41ce1",
+          "files": {
+            "mindspeed/te/pytorch/module/linear.py": "8f40a81a47c369c379edcbbbd7061c76d9ecd6ae7d61c43bd847cb4b646ae0da"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "mindspeed-te-sp-column-bias",
+      "variant": "after",
+      "sources": [
+        {
+          "project": "Ascend/MindSpeed",
+          "revision": "17f1bb727be109b152e5c2e4d74664592233b2df",
+          "files": {
+            "mindspeed/te/pytorch/module/linear.py": "d3cb844df26934e422a0f70d179a6e702e95e8c37d112fdc675b78542956aae8"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+      "variant": "before",
+      "sources": [
+        {
+          "project": "Ascend/MindSpeed-LLM",
+          "revision": "dd5ee0321c1179aaaded4fba4f119ed310b30639",
+          "files": {
+            "mindspeed_llm/core/datasets/gpt_dataset.py": "125e070da084238ee59a8b0e8a1d698f83815c4affc178b8c723b0c9256dafa5"
+          }
+        },
+        {
+          "project": "NVIDIA/Megatron-LM",
+          "revision": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17",
+          "files": {
+            "megatron/core/datasets/gpt_dataset.py": "3c7fecd01608f8af5fa23589905ed80b6a602bfd303645c389c17e2599ed50f3"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+      "variant": "after",
+      "sources": [
+        {
+          "project": "Ascend/MindSpeed-LLM",
+          "revision": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0",
+          "files": {
+            "mindspeed_llm/core/datasets/gpt_dataset.py": "be25366895b99614323b0facde359e054c9768ac156e52efb0e69e99b6a7b137"
+          }
+        },
+        {
+          "project": "NVIDIA/Megatron-LM",
+          "revision": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17",
+          "files": {
+            "megatron/core/datasets/gpt_dataset.py": "3c7fecd01608f8af5fa23589905ed80b6a602bfd303645c389c17e2599ed50f3"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+      "variant": "before",
+      "sources": [
+        {
+          "project": "vllm-project/vllm-ascend",
+          "revision": "cb629ea1925a280d57b41b48416a85097f6cdb6b",
+          "files": {
+            "vllm_ascend/models/deepseek_v4/model.py": "e834918a8c9f9458452a437e8c4a66d25e76c816758358edf3eef06dc0588c71",
+            "vllm_ascend/models/deepseek_v4/mtp.py": "65683ca8affc6a11f92c4c460eae588a108dabd871d7ecb8df764dfea3839cbe",
+            "vllm_ascend/models/deepseek_v4/dspark.py": "24ab8bc1437ff69b6f80ed0624d032da0bb182d7e281a0d6026a072e97486dba"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+      "variant": "after",
+      "sources": [
+        {
+          "project": "vllm-project/vllm-ascend",
+          "revision": "db9ad13183f6836f7f83304590e1ba4035b888e5",
+          "files": {
+            "vllm_ascend/models/deepseek_v4/model.py": "7fdfedc44a328fde9913b281cca36b13f70c6777b9762857ed5ff07626a842cd",
+            "vllm_ascend/models/deepseek_v4/mtp.py": "18b26a47da2d59a9bda2d43c49d5ae2a2bba1c9ca2da1a7148ce35c540b784f2",
+            "vllm_ascend/models/deepseek_v4/dspark.py": "70719efc3e5b062a2c781baaa8b1e8da2ba2b77cfda5a9306062dcc66763b9d5"
+          }
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "case_id": "op-plugin-mul-host-scalar",
+      "mode": "cpu-smoke",
+      "variant": "after",
+      "upstream_revision": null,
+      "timestamp_utc": "20261119T183845Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 4,
+      "compared_elements": 4,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 4,
+        "side_a_arrays": 4,
+        "side_b_arrays": 4,
+        "paired_arrays": 4,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 4,
+        "compared_elements": 4
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "sglang-gdn-state-layout",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "c2578f28cfaece96167765ed93cab9a484f6fe95",
+      "timestamp_utc": "20261119T183846Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 3,
+      "compared_elements": 704,
+      "unequal_elements": 480,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 2.0625,
+      "rmse": 0.2144104218139864,
+      "coverage": {
+        "expected_arrays": 3,
+        "side_a_arrays": 3,
+        "side_b_arrays": 3,
+        "paired_arrays": 3,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 3,
+        "compared_elements": 704
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "sglang-gdn-state-layout",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475",
+      "timestamp_utc": "20261119T183847Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 3,
+      "compared_elements": 704,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 3,
+        "side_a_arrays": 3,
+        "side_b_arrays": 3,
+        "paired_arrays": 3,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 3,
+        "compared_elements": 704
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "sglang-mla-prefix-compaction",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "2120cf1190d32135358ea0fa73a87c4ca232803f",
+      "timestamp_utc": "20261119T183848Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 16,
+      "compared_elements": 3208,
+      "unequal_elements": 772,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 384.0,
+      "rmse": 109.41395120460868,
+      "coverage": {
+        "expected_arrays": 16,
+        "side_a_arrays": 16,
+        "side_b_arrays": 16,
+        "paired_arrays": 16,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 16,
+        "compared_elements": 3208
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "sglang-mla-prefix-compaction",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "643909b5a898665aa7640c85b48963598f41815a",
+      "timestamp_utc": "20261119T183849Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 16,
+      "compared_elements": 3208,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 16,
+        "side_a_arrays": 16,
+        "side_b_arrays": 16,
+        "paired_arrays": 16,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 16,
+        "compared_elements": 3208
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "torchnpu-inductor-expm1",
+      "mode": "cpu-smoke",
+      "variant": "after",
+      "upstream_revision": null,
+      "timestamp_utc": "20261119T183850Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 1e-06
+      },
+      "compared_arrays": 1,
+      "compared_elements": 5,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 1,
+        "side_a_arrays": 1,
+        "side_b_arrays": 1,
+        "paired_arrays": 1,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 1,
+        "compared_elements": 5
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "torchnpu-triton-int64-div",
+      "mode": "cpu-smoke",
+      "variant": "after",
+      "upstream_revision": null,
+      "timestamp_utc": "20261119T183851Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 9,
+      "compared_elements": 58,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 9,
+        "side_a_arrays": 9,
+        "side_b_arrays": 9,
+        "paired_arrays": 9,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 9,
+        "compared_elements": 58
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "cb629ea1925a280d57b41b48416a85097f6cdb6b",
+      "timestamp_utc": "20261119T183852Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 12,
+      "compared_elements": 144,
+      "unequal_elements": 144,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 200.0,
+      "rmse": 158.11388300841898,
+      "coverage": {
+        "expected_arrays": 12,
+        "side_a_arrays": 12,
+        "side_b_arrays": 12,
+        "paired_arrays": 12,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 12,
+        "compared_elements": 144
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "db9ad13183f6836f7f83304590e1ba4035b888e5",
+      "timestamp_utc": "20261119T183853Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 12,
+      "compared_elements": 144,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 12,
+        "side_a_arrays": 12,
+        "side_b_arrays": 12,
+        "paired_arrays": 12,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 12,
+        "compared_elements": 144
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "dd5ee0321c1179aaaded4fba4f119ed310b30639",
+      "timestamp_utc": "20261119T183854Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 4,
+      "compared_elements": 16,
+      "unequal_elements": 4,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 1.0,
+      "rmse": 0.5,
+      "coverage": {
+        "expected_arrays": 4,
+        "side_a_arrays": 4,
+        "side_b_arrays": 4,
+        "paired_arrays": 4,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 4,
+        "compared_elements": 16
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      },
+      "dependencies": {
+        "NVIDIA/Megatron-LM": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+      }
+    },
+    {
+      "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0",
+      "timestamp_utc": "20261119T183854Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 4,
+      "compared_elements": 16,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 4,
+        "side_a_arrays": 4,
+        "side_b_arrays": 4,
+        "paired_arrays": 4,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 4,
+        "compared_elements": 16
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      },
+      "dependencies": {
+        "NVIDIA/Megatron-LM": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+      }
+    },
+    {
+      "case_id": "mindspeed-packed-mtp-first-segment",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "43e884e651b6460b0a49a1eac5991d63eb4996a7",
+      "timestamp_utc": "20261119T183855Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 12,
+      "compared_elements": 115,
+      "unequal_elements": 92,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 6.0,
+      "rmse": 0.7016126654687385,
+      "coverage": {
+        "expected_arrays": 12,
+        "side_a_arrays": 12,
+        "side_b_arrays": 12,
+        "paired_arrays": 12,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 12,
+        "compared_elements": 115
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "mindspeed-packed-mtp-first-segment",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "5f4402805352459264fb526ca5f587453b811c72",
+      "timestamp_utc": "20261119T183856Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 12,
+      "compared_elements": 115,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 12,
+        "side_a_arrays": 12,
+        "side_b_arrays": 12,
+        "paired_arrays": 12,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 12,
+        "compared_elements": 115
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "mindspeed-te-sp-column-bias",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "c2357e9ae4689cf1791a5f258217cd256ce41ce1",
+      "timestamp_utc": "20261119T183858Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 34,
+      "compared_elements": 224,
+      "unequal_elements": 16,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 3.0,
+      "rmse": 0.5175491695067657,
+      "coverage": {
+        "expected_arrays": 34,
+        "side_a_arrays": 34,
+        "side_b_arrays": 34,
+        "paired_arrays": 34,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 34,
+        "compared_elements": 224
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    },
+    {
+      "case_id": "mindspeed-te-sp-column-bias",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "17f1bb727be109b152e5c2e4d74664592233b2df",
+      "timestamp_utc": "20261119T183859Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 34,
+      "compared_elements": 224,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0,
+      "coverage": {
+        "expected_arrays": 34,
+        "side_a_arrays": 34,
+        "side_b_arrays": 34,
+        "paired_arrays": 34,
+        "missing": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "unexpected": {
+          "side_a": 0,
+          "side_b": 0
+        },
+        "compared_arrays": 34,
+        "compared_elements": 224
+      },
+      "runtime": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "python": "3.13.9",
+        "packages": {
+          "numpy": "2.4.2",
+          "torch": "2.15.0"
+        }
+      }
+    }
+  ],
+  "native_npu_pending": [
+    "torchnpu-inductor-expm1",
+    "torchnpu-triton-int64-div",
+    "vllm-ascend-qsfa-tnd-tail",
+    "op-plugin-mul-host-scalar"
+  ],
+  "native_npu_preflight": {
+    "status": "blocked",
+    "local_runtime": {
+      "status": "failed",
+      "type": "ModuleNotFoundError",
+      "missing_module": "torch_npu"
+    },
+    "configured_device_access": {
+      "attempted": 2,
+      "preflight_completed": 0
+    }
+  }
+}

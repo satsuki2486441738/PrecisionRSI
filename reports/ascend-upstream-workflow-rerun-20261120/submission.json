@@ -1,0 +1,1173 @@
+{
+  "title": "November 19 Ascend upstream CPU regressions",
+  "additions": {
+    "evaluations": {
+      "evaluations": []
+    },
+    "repairs": {
+      "repairs": [
+        {
+          "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+          "title": "MindSpeed-LLM indexer loss overwrites saved sparse-attention padding",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "MindSpeed-LLM",
+          "library_group_id": "mindspeed-llm",
+          "tasks": [
+            "sft"
+          ],
+          "content": {
+            "title": {
+              "en": "MindSpeed-LLM indexer loss overwrites saved sparse-attention padding"
+            },
+            "summary": {
+              "en": "Baseline differs on 6/34 paired elements. Candidate matches all 34."
+            },
+            "workflows": [
+              "sft"
+            ]
+          },
+          "model": {
+            "name": "Tiny DeepSeek V4 DSA indexer fixture",
+            "revision": "Fixture SHA-256 58dfc9acec112f103efab6113f05572d19e1c7660e854ac1018bb7c6264185d2",
+            "architecture": "DeepSeek V4 sparse attention",
+            "size": "tiny"
+          },
+          "environment": {
+            "hardware": "CPU (Darwin arm64)",
+            "libraries": [
+              {
+                "name": "MindSpeed-LLM",
+                "version": "not-recorded",
+                "commit": "259fa5991088c869d78c2e0f601a0fa096648c47"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false
+            }
+          },
+          "problem": {
+            "summary": "MindSpeed-LLM indexer loss overwrites saved sparse-attention padding",
+            "trigger": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+            "expected": "The captured arrays match the independent fixture reference exactly.",
+            "observed": "Baseline differs on 6/34 paired elements. Candidate matches all 34.",
+            "location": "mindspeed_llm/tasks/models/transformer/dsa_indexer.py · compute_dsa_indexer_loss_dsv4"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "In-place sanitization replaces padding index -1 in the caller-owned tensor. A saved sparse-attention view observes those entries as valid indices.",
+            "components": [
+              "mindspeed_llm/tasks/models/transformer/dsa_indexer.py · compute_dsa_indexer_loss_dsv4"
+            ]
+          },
+          "repair": {
+            "summary": "Sanitize a new tensor for the indexer loss and preserve the caller-owned padding.",
+            "commit": "259fa5991088c869d78c2e0f601a0fa096648c47",
+            "upstream_status": "open"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "mismatch"
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "match"
+            }
+          ],
+          "validation": {
+            "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+            "coverage": {
+              "observed": 34,
+              "expected": 34,
+              "unit": "paired elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 6,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "fixture value",
+                "before": 14.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "fixture value",
+                "before": 3.662207627358442,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "8 array pairs per arm.",
+              "Both arms have zero nonfinite elements."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU workflow measurements and provenance",
+              "url": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://gitcode.com/Ascend/MindSpeed-LLM/merge_requests/5235"
+            }
+          ],
+          "notes": [
+            "Comparison is scoped to the named CPU fixture."
+          ]
+        },
+        {
+          "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+          "title": "Mooncake prefill handoff can retire a page needed by decode",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "vLLM-Ascend",
+          "library_group_id": "vllm-ascend",
+          "tasks": [
+            "inference"
+          ],
+          "content": {
+            "title": {
+              "en": "Mooncake prefill handoff can retire a page needed by decode"
+            },
+            "summary": {
+              "en": "Baseline differs on 7/1553 paired elements. Candidate matches all 1553."
+            },
+            "workflows": [
+              "inference"
+            ]
+          },
+          "model": {
+            "name": "Tiny Mooncake sliding-window cache fixture",
+            "revision": "Fixture SHA-256 0b0d93b0f88be5c865994b2108b48422dcfb666b717e5c4fbee95d4857a0cd1a",
+            "architecture": "Sliding-window attention",
+            "size": "tiny"
+          },
+          "environment": {
+            "hardware": "CPU (Darwin arm64)",
+            "libraries": [
+              {
+                "name": "vLLM-Ascend",
+                "version": "not-recorded",
+                "commit": "47b32942d6e74b757fcae48cd40c181e53c7e588"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              },
+              {
+                "name": "vllm",
+                "version": "not-recorded",
+                "commit": "ba15685ab7f4f5fbed8630bbb7441f8837e76fbe"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false
+            }
+          },
+          "problem": {
+            "summary": "Mooncake prefill handoff can retire a page needed by decode",
+            "trigger": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+            "expected": "The captured arrays match the independent fixture reference exactly.",
+            "observed": "Baseline differs on 7/1553 paired elements. Candidate matches all 1553.",
+            "location": "vllm_ascend/distributed/kv_transfer/kv_p2p/mooncake/base_scheduler.py"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "On sliding-window cache groups, Prefill computes the final prompt token even though Decode replays it. This advances retention beyond the history needed by that replay.",
+            "components": [
+              "vllm_ascend/distributed/kv_transfer/kv_p2p/mooncake/base_scheduler.py"
+            ]
+          },
+          "repair": {
+            "summary": "Recognize sliding-window cache groups and use the existing handoff that leaves the final prompt token to Decode.",
+            "commit": "47b32942d6e74b757fcae48cd40c181e53c7e588",
+            "upstream_status": "merged"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "mismatch"
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "match"
+            }
+          ],
+          "validation": {
+            "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+            "coverage": {
+              "observed": 1553,
+              "expected": 1553,
+              "unit": "paired elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 7,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "fixture value",
+                "before": 512.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "fixture value",
+                "before": 12.992394625087847,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "8 array pairs per arm.",
+              "Both arms have zero nonfinite elements."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU workflow measurements and provenance",
+              "url": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://github.com/vllm-project/vllm-ascend/pull/22270"
+            }
+          ],
+          "notes": [
+            "Comparison is scoped to the named CPU fixture."
+          ]
+        }
+      ],
+      "library_groups": [
+        {
+          "id": "mindspeed-llm",
+          "title": "MindSpeed-LLM",
+          "components": [
+            "MindSpeed-LLM"
+          ]
+        },
+        {
+          "id": "vllm-ascend",
+          "title": "vLLM-Ascend",
+          "components": [
+            "vLLM-Ascend"
+          ]
+        }
+      ]
+    },
+    "relations": {
+      "entities": [
+        {
+          "id": "case-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed-LLM indexer loss overwrites saved sparse-attention padding",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/fixture"
+              }
+            ],
+            "limitations": [
+              "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            ],
+            "request": {
+              "hardware": "CPU (Darwin arm64)",
+              "model": "Tiny DeepSeek V4 DSA indexer fixture",
+              "framework": "MindSpeed-LLM",
+              "task": "sft",
+              "goal": "Reproduce the discrepancy and compare the upstream change on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "MindSpeed-LLM indexer loss overwrites saved sparse-attention padding"
+              },
+              "summary": {
+                "en": "Baseline differs on 6/34 paired elements. Candidate matches all 34."
+              },
+              "workflows": [
+                "sft"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed-LLM indexer loss overwrites saved sparse-attention padding",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/before"
+              }
+            ],
+            "limitations": [
+              "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "Pinned upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/upstream"
+              }
+            ],
+            "limitations": [
+              "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "MindSpeed-LLM",
+              "version": null,
+              "commit": "259fa5991088c869d78c2e0f601a0fa096648c47"
+            },
+            "applicability": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/workflow"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+              "pointer": "/cases/mindspeed-llm-dsa-topk-padding/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "Tiny DeepSeek V4 DSA indexer fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/mindspeed-llm-dsa-topk-padding/fixture"
+              }
+            ],
+            "limitations": [
+              "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            ]
+          }
+        },
+        {
+          "id": "case-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "Mooncake prefill handoff can retire a page needed by decode",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/fixture"
+              }
+            ],
+            "limitations": [
+              "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            ],
+            "request": {
+              "hardware": "CPU (Darwin arm64)",
+              "model": "Tiny Mooncake sliding-window cache fixture",
+              "framework": "vLLM-Ascend",
+              "task": "inference",
+              "goal": "Reproduce the discrepancy and compare the upstream change on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "Mooncake prefill handoff can retire a page needed by decode"
+              },
+              "summary": {
+                "en": "Baseline differs on 7/1553 paired elements. Candidate matches all 1553."
+              },
+              "workflows": [
+                "inference"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "Mooncake prefill handoff can retire a page needed by decode",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/before"
+              }
+            ],
+            "limitations": [
+              "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "Pinned upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/upstream"
+              }
+            ],
+            "limitations": [
+              "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "vLLM-Ascend",
+              "version": null,
+              "commit": "47b32942d6e74b757fcae48cd40c181e53c7e588"
+            },
+            "applicability": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/workflow"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+              "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "details": {
+            "title": "Tiny Mooncake sliding-window cache fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+                "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6",
+                "pointer": "/cases/vllm-ascend-mooncake-swa-handoff/fixture"
+              }
+            ],
+            "limitations": [
+              "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            ]
+          }
+        }
+      ],
+      "links": [
+        {
+          "id": "includes-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "addresses-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "verifies-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "uses-workload-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-llm-dsa-topk-padding-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "includes-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "addresses-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "verifies-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "verification",
+            "id": "verification-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        },
+        {
+          "id": "uses-workload-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json",
+              "sha256": "dcb991186bfed3e0e6a80d4a1cdf92981ea0003ec9f796389a1761a8700f88b6"
+            }
+          ],
+          "from": {
+            "kind": "verification",
+            "id": "verification-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-vllm-ascend-mooncake-swa-handoff-cpu-fixture-20261120"
+          }
+        }
+      ]
+    },
+    "evidence": {
+      "evidence/submissions/ascend-nov19-cpu-regressions-20261120.json": {
+        "schema_version": 1,
+        "numericbridge_revision": "0bbb7769be0cd9f4c5ec1639f00abf160f53a254",
+        "observation_date": "2026-11-20",
+        "capture_mode": "source-cpu",
+        "environment": {
+          "system": "Darwin",
+          "machine": "arm64",
+          "python": "3.13.9",
+          "packages": {
+            "torch": "2.15.0",
+            "numpy": "2.4.2"
+          }
+        },
+        "cases": {
+          "mindspeed-llm-dsa-topk-padding": {
+            "upstream": {
+              "project": "Ascend/MindSpeed-LLM",
+              "pr": "https://gitcode.com/Ascend/MindSpeed-LLM/merge_requests/5235",
+              "status": "open",
+              "date": "2026-11-19"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-workflow-rerun-20261120/mindspeed_case.py",
+              "sha256": "58dfc9acec112f103efab6113f05572d19e1c7660e854ac1018bb7c6264185d2",
+              "scope": "Pinned CPU indexer loss with three queries, top-k width three, padded and fully populated indices, an aliased saved view and independent gather output and gradient references.",
+              "limitation": "A synthetic CPU gather consumes the retained view and checks its output and gradient. Native sparse attention, context parallelism and model training were outside this comparison."
+            },
+            "workflow": {
+              "id": "mindspeed-llm-dsa-topk-padding",
+              "status": "completed",
+              "stages": [
+                "source-readiness",
+                "cpu-preflight",
+                "before",
+                "after"
+              ],
+              "checked_assertions": 11,
+              "attempts": 4
+            },
+            "before": {
+              "case_id": "mindspeed-llm-dsa-topk-padding",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "4458c30c2deff2534d5373c6002b8a16c8fb0551",
+              "coverage_complete": true,
+              "compared_arrays": 8,
+              "compared_elements": 34,
+              "unequal_elements": 6,
+              "max_abs": 14.0,
+              "rmse": 3.662207627358442,
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "timestamp_utc": "20261119T184257Z"
+            },
+            "after": {
+              "case_id": "mindspeed-llm-dsa-topk-padding",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "259fa5991088c869d78c2e0f601a0fa096648c47",
+              "coverage_complete": true,
+              "compared_arrays": 8,
+              "compared_elements": 34,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "timestamp_utc": "20261119T184258Z"
+            }
+          },
+          "vllm-ascend-mooncake-swa-handoff": {
+            "upstream": {
+              "project": "vllm-project/vllm-ascend",
+              "pr": "https://github.com/vllm-project/vllm-ascend/pull/22270",
+              "status": "merged",
+              "date": "2026-11-19"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-workflow-rerun-20261120/vllm_case.py",
+              "sha256": "0b0d93b0f88be5c865994b2108b48422dcfb666b717e5c4fbee95d4857a0cd1a",
+              "scope": "Pinned CPU scheduler, cache manager and block-pool paths at a 512-token window and 128-token pages. Tests use 1,022–1,024 prompt tokens with single-token and full-attention controls.",
+              "limitation": "CPU fixture substitutes request metadata, FIFO storage and synthetic page payloads. Transport, full-model outputs and accelerator behavior are outside the comparison."
+            },
+            "workflow": {
+              "id": "vllm-ascend-mooncake-swa-handoff",
+              "status": "completed",
+              "stages": [
+                "source-readiness",
+                "cpu-preflight",
+                "before",
+                "after"
+              ],
+              "checked_assertions": 11,
+              "attempts": 4
+            },
+            "before": {
+              "case_id": "vllm-ascend-mooncake-swa-handoff",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "a06547191910aa665c80eb914643d95552eeaafe",
+              "coverage_complete": true,
+              "compared_arrays": 8,
+              "compared_elements": 1553,
+              "unequal_elements": 7,
+              "max_abs": 512.0,
+              "rmse": 12.992394625087847,
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "timestamp_utc": "20261119T184257Z"
+            },
+            "after": {
+              "case_id": "vllm-ascend-mooncake-swa-handoff",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "47b32942d6e74b757fcae48cd40c181e53c7e588",
+              "coverage_complete": true,
+              "compared_arrays": 8,
+              "compared_elements": 1553,
+              "unequal_elements": 0,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "timestamp_utc": "20261119T184257Z"
+            },
+            "dependencies": {
+              "vllm-project/vllm": "ba15685ab7f4f5fbed8630bbb7441f8837e76fbe"
+            }
+          }
+        }
+      }
+    }
+  }
+}
