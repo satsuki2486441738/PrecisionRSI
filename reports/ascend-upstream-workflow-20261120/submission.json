@@ -1,0 +1,4055 @@
+{
+  "title": "Ascend upstream precision regression fixtures",
+  "additions": {
+    "evaluations": {
+      "evaluations": []
+    },
+    "repairs": {
+      "repairs": [
+        {
+          "id": "sglang-gdn-state-layout-cpu-fixture-20261120",
+          "title": "SGLang Ascend GDN prefill swaps recurrent-state axes",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "SGLang",
+          "library_group_id": "sglang",
+          "tasks": [
+            "inference"
+          ],
+          "content": {
+            "title": {
+              "en": "SGLang Ascend GDN prefill swaps recurrent-state axes"
+            },
+            "summary": {
+              "en": "Baseline differs on 480/704 paired elements. Candidate matches all 704 paired elements."
+            },
+            "workflows": [
+              "inference"
+            ]
+          },
+          "model": {
+            "name": "Tiny GDN recurrent-state fixture",
+            "architecture": "Gated DeltaNet",
+            "size": "tiny",
+            "revision": "Fixture source Git blob d22b7fe198681be6346767e0de20dad0a3169187"
+          },
+          "environment": {
+            "hardware": "CPU (Apple M4 arm64)",
+            "libraries": [
+              {
+                "name": "SGLang",
+                "version": "not-recorded",
+                "commit": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false,
+              "fixture": "deterministic synthetic tensors without model weights"
+            }
+          },
+          "problem": {
+            "summary": "SGLang Ascend GDN prefill swaps recurrent-state axes",
+            "trigger": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+            "expected": "Every paired observation matches its fixture reference exactly.",
+            "observed": "Baseline differs on 480/704 paired elements. Candidate matches all 704 paired elements.",
+            "location": "python/sglang/srt/layers/attention/linear/kernels/gdn_triton.py · TritonGDNKernel.extend"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "The wrapper passes [V,K] pool state directly to the chunk operation whose contract uses [K,V]. Square state dimensions allow the wrong orientation to continue silently.",
+            "components": [
+              "python/sglang/srt/layers/attention/linear/kernels/gdn_triton.py · TritonGDNKernel.extend"
+            ]
+          },
+          "repair": {
+            "summary": "Transpose state at entry to the chunk operation and restore the pool orientation on returned final and chunk states.",
+            "commit": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475",
+            "upstream_status": "open"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "480/704 elements differ from the reference."
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "704/704 elements match the reference."
+            }
+          ],
+          "validation": {
+            "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+            "coverage": {
+              "observed": 704,
+              "expected": 704,
+              "unit": "paired tensor elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 480,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "tensor value",
+                "before": 2.0625,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "tensor value",
+                "before": 0.2144104218139864,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "3 complete array pairs per arm.",
+              "Both arms report zero nonfinite elements.",
+              "The same fixture and exact reference criterion are used for both revisions."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU fixture measurements and upstream provenance",
+              "url": "evidence/submissions/ascend-precision-source-fixtures-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://github.com/sgl-project/sglang/pull/50245"
+            }
+          ],
+          "notes": [
+            "Retained measured result from a minimal reproduction of a documented upstream change."
+          ]
+        },
+        {
+          "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120",
+          "title": "SGLang Ascend MLA cache includes invalid tokens between request prefixes",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "SGLang",
+          "library_group_id": "sglang",
+          "tasks": [
+            "inference"
+          ],
+          "content": {
+            "title": {
+              "en": "SGLang Ascend MLA cache includes invalid tokens between request prefixes"
+            },
+            "summary": {
+              "en": "Baseline differs on 772/3208 paired elements. Candidate matches all 3208 paired elements."
+            },
+            "workflows": [
+              "inference"
+            ]
+          },
+          "model": {
+            "name": "Tiny MLA cache fixture",
+            "architecture": "Multi-head latent attention",
+            "size": "tiny",
+            "revision": "Fixture source Git blob d22b7fe198681be6346767e0de20dad0a3169187"
+          },
+          "environment": {
+            "hardware": "CPU (Apple M4 arm64)",
+            "libraries": [
+              {
+                "name": "SGLang",
+                "version": "not-recorded",
+                "commit": "643909b5a898665aa7640c85b48963598f41815a"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false,
+              "fixture": "deterministic synthetic tensors without model weights"
+            }
+          },
+          "problem": {
+            "summary": "SGLang Ascend MLA cache includes invalid tokens between request prefixes",
+            "trigger": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+            "expected": "Every paired observation matches its fixture reference exactly.",
+            "observed": "Baseline differs on 772/3208 paired elements. Candidate matches all 3208 paired elements.",
+            "location": "python/sglang/srt/hardware_backend/npu/attention/ascend_backend.py · _load_mla_prefix_cache"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "Whole-page gathering leaves invalid tail rows between logical prefixes while the attention consumer uses cumulative logical lengths.",
+            "components": [
+              "python/sglang/srt/hardware_backend/npu/attention/ascend_backend.py · _load_mla_prefix_cache"
+            ]
+          },
+          "repair": {
+            "summary": "Compact latent and RoPE cache rows using valid token indices before the attention boundary.",
+            "commit": "643909b5a898665aa7640c85b48963598f41815a",
+            "upstream_status": "merged"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "772/3208 elements differ from the reference."
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "3208/3208 elements match the reference."
+            }
+          ],
+          "validation": {
+            "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+            "coverage": {
+              "observed": 3208,
+              "expected": 3208,
+              "unit": "paired tensor elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 772,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "tensor value",
+                "before": 384.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "tensor value",
+                "before": 109.41395120460868,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "16 complete array pairs per arm.",
+              "Both arms report zero nonfinite elements.",
+              "The same fixture and exact reference criterion are used for both revisions."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU fixture measurements and upstream provenance",
+              "url": "evidence/submissions/ascend-precision-source-fixtures-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://github.com/sgl-project/sglang/pull/47924"
+            }
+          ],
+          "notes": [
+            "Retained measured result from a minimal reproduction of a documented upstream change."
+          ]
+        },
+        {
+          "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+          "title": "vLLM-Ascend leaves DeepSeek V4 attention sinks stale after reload",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "vLLM-Ascend",
+          "library_group_id": "vllm-ascend",
+          "tasks": [
+            "inference"
+          ],
+          "content": {
+            "title": {
+              "en": "vLLM-Ascend leaves DeepSeek V4 attention sinks stale after reload"
+            },
+            "summary": {
+              "en": "Baseline differs on 144/144 paired elements. Candidate matches all 144 paired elements."
+            },
+            "workflows": [
+              "inference"
+            ]
+          },
+          "model": {
+            "name": "Tiny DeepSeek V4 attention-sink fixture",
+            "architecture": "DeepSeek V4",
+            "size": "tiny",
+            "revision": "Fixture source Git blob eae6d4a621f8b726789dcde6d00b7dda05bb8fe5"
+          },
+          "environment": {
+            "hardware": "CPU (Apple M4 arm64)",
+            "libraries": [
+              {
+                "name": "vLLM-Ascend",
+                "version": "not-recorded",
+                "commit": "db9ad13183f6836f7f83304590e1ba4035b888e5"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false,
+              "fixture": "deterministic synthetic tensors without model weights"
+            }
+          },
+          "problem": {
+            "summary": "vLLM-Ascend leaves DeepSeek V4 attention sinks stale after reload",
+            "trigger": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+            "expected": "Every paired observation matches its fixture reference exactly.",
+            "observed": "Baseline differs on 144/144 paired elements. Candidate matches all 144 paired elements.",
+            "location": "vllm_ascend/models/deepseek_v4/{model,mtp,dspark}.py · load_weights"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "The original attention-sink loading branch bypasses the configured weight loader, preventing reload updates from being captured for replay.",
+            "components": [
+              "vllm_ascend/models/deepseek_v4/{model,mtp,dspark}.py · load_weights"
+            ]
+          },
+          "repair": {
+            "summary": "Use the configured parameter loader after selecting the correct rank-local or full sink tensor.",
+            "commit": "db9ad13183f6836f7f83304590e1ba4035b888e5",
+            "upstream_status": "merged"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "144/144 elements differ from the reference."
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "144/144 elements match the reference."
+            }
+          ],
+          "validation": {
+            "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+            "coverage": {
+              "observed": 144,
+              "expected": 144,
+              "unit": "paired tensor elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 144,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "tensor value",
+                "before": 200.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "tensor value",
+                "before": 158.11388300841898,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "12 complete array pairs per arm.",
+              "Both arms report zero nonfinite elements.",
+              "The same fixture and exact reference criterion are used for both revisions."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU fixture measurements and upstream provenance",
+              "url": "evidence/submissions/ascend-precision-source-fixtures-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://github.com/vllm-project/vllm-ascend/pull/18642"
+            }
+          ],
+          "notes": [
+            "Retained measured result from a minimal reproduction of a documented upstream change."
+          ]
+        },
+        {
+          "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+          "title": "MindSpeed TE sequence-parallel column linear omits inline bias",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "MindSpeed",
+          "library_group_id": "mindspeed",
+          "tasks": [
+            "sft"
+          ],
+          "content": {
+            "title": {
+              "en": "MindSpeed TE sequence-parallel column linear omits inline bias"
+            },
+            "summary": {
+              "en": "Baseline differs on 16/224 paired elements. Candidate matches all 224 paired elements."
+            },
+            "workflows": [
+              "sft"
+            ]
+          },
+          "model": {
+            "name": "Tiny TE column-parallel linear fixture",
+            "architecture": "Column-parallel linear",
+            "size": "tiny",
+            "revision": "Fixture source Git blob b3e73ba6caca1c70669297d0bd63ee9de9443fb8"
+          },
+          "environment": {
+            "hardware": "CPU (Apple M4 arm64)",
+            "libraries": [
+              {
+                "name": "MindSpeed",
+                "version": "not-recorded",
+                "commit": "17f1bb727be109b152e5c2e4d74664592233b2df"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false,
+              "fixture": "deterministic synthetic tensors without model weights"
+            }
+          },
+          "problem": {
+            "summary": "MindSpeed TE sequence-parallel column linear omits inline bias",
+            "trigger": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+            "expected": "Every paired observation matches its fixture reference exactly.",
+            "observed": "Baseline differs on 16/224 paired elements. Candidate matches all 224 paired elements.",
+            "location": "mindspeed/te/pytorch/module/linear.py · ColumnParallelSeq.forward"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "The all-gather matmul receives no bias and the sequence-parallel wrapper fails to add its supplied bias to the returned output.",
+            "components": [
+              "mindspeed/te/pytorch/module/linear.py · ColumnParallelSeq.forward"
+            ]
+          },
+          "repair": {
+            "summary": "Add the supplied bias once after all-gather matmul. The outer wrapper continues to return deferred bias separately.",
+            "commit": "17f1bb727be109b152e5c2e4d74664592233b2df",
+            "upstream_status": "open"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "16/224 elements differ from the reference."
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "224/224 elements match the reference."
+            }
+          ],
+          "validation": {
+            "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+            "coverage": {
+              "observed": 224,
+              "expected": 224,
+              "unit": "paired tensor elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 16,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "tensor value",
+                "before": 3.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "tensor value",
+                "before": 0.5175491695067657,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "34 complete array pairs per arm.",
+              "Both arms report zero nonfinite elements.",
+              "The same fixture and exact reference criterion are used for both revisions."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU fixture measurements and upstream provenance",
+              "url": "evidence/submissions/ascend-precision-source-fixtures-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://gitcode.com/Ascend/MindSpeed/merge_requests/4128"
+            }
+          ],
+          "notes": [
+            "Retained measured result from a minimal reproduction of a documented upstream change."
+          ]
+        },
+        {
+          "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+          "title": "MindSpeed CP1 packed MTP misinterprets cumulative sequence endpoints",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "MindSpeed",
+          "library_group_id": "mindspeed",
+          "tasks": [
+            "sft"
+          ],
+          "content": {
+            "title": {
+              "en": "MindSpeed CP1 packed MTP misinterprets cumulative sequence endpoints"
+            },
+            "summary": {
+              "en": "Baseline differs on 92/115 paired elements. Candidate matches all 115 paired elements."
+            },
+            "workflows": [
+              "sft"
+            ]
+          },
+          "model": {
+            "name": "Tiny packed multi-token prediction fixture",
+            "architecture": "Multi-token prediction",
+            "size": "tiny",
+            "revision": "Fixture source Git blob b3e73ba6caca1c70669297d0bd63ee9de9443fb8"
+          },
+          "environment": {
+            "hardware": "CPU (Apple M4 arm64)",
+            "libraries": [
+              {
+                "name": "MindSpeed",
+                "version": "not-recorded",
+                "commit": "5f4402805352459264fb526ca5f587453b811c72"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false,
+              "fixture": "deterministic synthetic tensors without model weights"
+            }
+          },
+          "problem": {
+            "summary": "MindSpeed CP1 packed MTP misinterprets cumulative sequence endpoints",
+            "trigger": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+            "expected": "Every paired observation matches its fixture reference exactly.",
+            "observed": "Baseline differs on 92/115 paired elements. Candidate matches all 115 paired elements.",
+            "location": "mindspeed/core/transformer/multi_token_prediction.py · roll_tensor_packed_seq_wrapper"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "The CP1 path interprets cumulative end offsets as though they were a zero-prefixed boundary list.",
+            "components": [
+              "mindspeed/core/transformer/multi_token_prediction.py · roll_tensor_packed_seq_wrapper"
+            ]
+          },
+          "repair": {
+            "summary": "Recognize the endpoint representation and include the first logical segment when shifting without changing the shared attention endpoints.",
+            "commit": "5f4402805352459264fb526ca5f587453b811c72",
+            "upstream_status": "merged"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "92/115 elements differ from the reference."
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "115/115 elements match the reference."
+            }
+          ],
+          "validation": {
+            "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+            "coverage": {
+              "observed": 115,
+              "expected": 115,
+              "unit": "paired tensor elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 92,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "tensor value",
+                "before": 6.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "tensor value",
+                "before": 0.7016126654687385,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "12 complete array pairs per arm.",
+              "Both arms report zero nonfinite elements.",
+              "The same fixture and exact reference criterion are used for both revisions."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU fixture measurements and upstream provenance",
+              "url": "evidence/submissions/ascend-precision-source-fixtures-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://gitcode.com/Ascend/MindSpeed/merge_requests/4115"
+            }
+          ],
+          "notes": [
+            "Retained measured result from a minimal reproduction of a documented upstream change."
+          ]
+        },
+        {
+          "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+          "title": "MindSpeed-LLM reuses padding zeros in cached GPT loss masks",
+          "date": "2026-11-20",
+          "status": "validated",
+          "affected_library": "MindSpeed-LLM",
+          "library_group_id": "mindspeed-llm",
+          "tasks": [
+            "sft"
+          ],
+          "content": {
+            "title": {
+              "en": "MindSpeed-LLM reuses padding zeros in cached GPT loss masks"
+            },
+            "summary": {
+              "en": "Baseline differs on 4/16 paired elements. Candidate matches all 16 paired elements."
+            },
+            "workflows": [
+              "sft"
+            ]
+          },
+          "model": {
+            "name": "Tiny GPT dataset cache fixture",
+            "architecture": "GPT dataset loss mask",
+            "size": "tiny",
+            "revision": "Fixture source Git blob ccf9a40a8fe8f175b69e125b921a89b22518dc13"
+          },
+          "environment": {
+            "hardware": "CPU (Apple M4 arm64)",
+            "libraries": [
+              {
+                "name": "MindSpeed-LLM",
+                "version": "not-recorded",
+                "commit": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0"
+              },
+              {
+                "name": "PyTorch",
+                "version": "2.15.0"
+              },
+              {
+                "name": "NumPy",
+                "version": "2.4.2"
+              },
+              {
+                "name": "Megatron-LM",
+                "version": "core_v0.12.1",
+                "commit": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+              }
+            ],
+            "settings": {
+              "capture_mode": "source-cpu",
+              "native_accelerator_run": false,
+              "fixture": "deterministic synthetic tensors without model weights"
+            }
+          },
+          "problem": {
+            "summary": "MindSpeed-LLM reuses padding zeros in cached GPT loss masks",
+            "trigger": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+            "expected": "Every paired observation matches its fixture reference exactly.",
+            "observed": "Baseline differs on 4/16 paired elements. Candidate matches all 16 paired elements.",
+            "location": "mindspeed_llm/core/datasets/gpt_dataset.py · gpt_dataset_getitem_wrapper"
+          },
+          "cause": {
+            "category": "source-semantics",
+            "summary": "Sample-specific padding mutates the reusable loss-mask tensor, leaking zeros into later samples.",
+            "components": [
+              "mindspeed_llm/core/datasets/gpt_dataset.py · gpt_dataset_getitem_wrapper"
+            ]
+          },
+          "repair": {
+            "summary": "Keep the reusable mask separate and apply sample-specific padding to the sample mask.",
+            "commit": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0",
+            "upstream_status": "merged"
+          },
+          "stages": [
+            {
+              "name": "CPU source baseline",
+              "result": "4/16 elements differ from the reference."
+            },
+            {
+              "name": "CPU source candidate",
+              "result": "16/16 elements match the reference."
+            }
+          ],
+          "validation": {
+            "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+            "coverage": {
+              "observed": 16,
+              "expected": 16,
+              "unit": "paired tensor elements"
+            },
+            "metrics": [
+              {
+                "id": "unequal-elements",
+                "label": "Unequal elements",
+                "unit": "elements",
+                "before": 4,
+                "after": 0
+              },
+              {
+                "id": "max-abs",
+                "label": "Maximum absolute error",
+                "unit": "tensor value",
+                "before": 1.0,
+                "after": 0.0
+              },
+              {
+                "id": "rmse",
+                "label": "Root mean square error",
+                "unit": "tensor value",
+                "before": 0.5,
+                "after": 0.0
+              }
+            ],
+            "checks": [
+              "4 complete array pairs per arm.",
+              "Both arms report zero nonfinite elements.",
+              "The same fixture and exact reference criterion are used for both revisions."
+            ],
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "remaining": [
+              "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            ]
+          },
+          "evidence": [
+            {
+              "label": "CPU fixture measurements and upstream provenance",
+              "url": "evidence/submissions/ascend-precision-source-fixtures-20261120.json"
+            },
+            {
+              "label": "Upstream pull request",
+              "url": "https://gitcode.com/Ascend/MindSpeed-LLM/merge_requests/5212"
+            }
+          ],
+          "notes": [
+            "Retained measured result from a minimal reproduction of a documented upstream change."
+          ]
+        }
+      ],
+      "library_groups": [
+        {
+          "id": "sglang",
+          "title": "SGLang",
+          "components": [
+            "SGLang"
+          ]
+        },
+        {
+          "id": "vllm-ascend",
+          "title": "vLLM-Ascend",
+          "components": [
+            "vLLM-Ascend"
+          ]
+        },
+        {
+          "id": "mindspeed",
+          "title": "MindSpeed",
+          "components": [
+            "MindSpeed"
+          ]
+        },
+        {
+          "id": "mindspeed-llm",
+          "title": "MindSpeed-LLM",
+          "components": [
+            "MindSpeed-LLM"
+          ]
+        }
+      ]
+    },
+    "relations": {
+      "entities": [
+        {
+          "id": "case-sglang-gdn-state-layout-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "SGLang Ascend GDN prefill swaps recurrent-state axes",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-gdn-state-layout-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/fixture"
+              }
+            ],
+            "limitations": [
+              "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            ],
+            "request": {
+              "hardware": "CPU (Apple M4 arm64)",
+              "model": "Tiny GDN recurrent-state fixture",
+              "framework": "SGLang",
+              "task": "inference",
+              "goal": "Reproduce the upstream symptom and verify the candidate on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "SGLang Ascend GDN prefill swaps recurrent-state axes"
+              },
+              "summary": {
+                "en": "Baseline differs on 480/704 paired elements. Candidate matches all 704 paired elements."
+              },
+              "workflows": [
+                "inference"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-sglang-gdn-state-layout-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "SGLang Ascend GDN prefill swaps recurrent-state axes",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-gdn-state-layout-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/before"
+              }
+            ],
+            "limitations": [
+              "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-sglang-gdn-state-layout-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Pinned open upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-gdn-state-layout-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/upstream"
+              }
+            ],
+            "limitations": [
+              "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "SGLang",
+              "version": null,
+              "commit": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475"
+            },
+            "applicability": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-sglang-gdn-state-layout-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-gdn-state-layout-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+              "pointer": "/cases/sglang-gdn-state-layout/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-sglang-gdn-state-layout-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Tiny GDN recurrent-state fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-gdn-state-layout-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-gdn-state-layout/fixture"
+              }
+            ],
+            "limitations": [
+              "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            ]
+          }
+        },
+        {
+          "id": "case-sglang-mla-prefix-compaction-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "SGLang Ascend MLA cache includes invalid tokens between request prefixes",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/fixture"
+              }
+            ],
+            "limitations": [
+              "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            ],
+            "request": {
+              "hardware": "CPU (Apple M4 arm64)",
+              "model": "Tiny MLA cache fixture",
+              "framework": "SGLang",
+              "task": "inference",
+              "goal": "Reproduce the upstream symptom and verify the candidate on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "SGLang Ascend MLA cache includes invalid tokens between request prefixes"
+              },
+              "summary": {
+                "en": "Baseline differs on 772/3208 paired elements. Candidate matches all 3208 paired elements."
+              },
+              "workflows": [
+                "inference"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-sglang-mla-prefix-compaction-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "SGLang Ascend MLA cache includes invalid tokens between request prefixes",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/before"
+              }
+            ],
+            "limitations": [
+              "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-sglang-mla-prefix-compaction-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Pinned merged upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/upstream"
+              }
+            ],
+            "limitations": [
+              "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "SGLang",
+              "version": null,
+              "commit": "643909b5a898665aa7640c85b48963598f41815a"
+            },
+            "applicability": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-sglang-mla-prefix-compaction-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+              "pointer": "/cases/sglang-mla-prefix-compaction/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-sglang-mla-prefix-compaction-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Tiny MLA cache fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/sglang-mla-prefix-compaction/fixture"
+              }
+            ],
+            "limitations": [
+              "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            ]
+          }
+        },
+        {
+          "id": "case-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "vLLM-Ascend leaves DeepSeek V4 attention sinks stale after reload",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/fixture"
+              }
+            ],
+            "limitations": [
+              "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            ],
+            "request": {
+              "hardware": "CPU (Apple M4 arm64)",
+              "model": "Tiny DeepSeek V4 attention-sink fixture",
+              "framework": "vLLM-Ascend",
+              "task": "inference",
+              "goal": "Reproduce the upstream symptom and verify the candidate on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "vLLM-Ascend leaves DeepSeek V4 attention sinks stale after reload"
+              },
+              "summary": {
+                "en": "Baseline differs on 144/144 paired elements. Candidate matches all 144 paired elements."
+              },
+              "workflows": [
+                "inference"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "vLLM-Ascend leaves DeepSeek V4 attention sinks stale after reload",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/before"
+              }
+            ],
+            "limitations": [
+              "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Pinned merged upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/upstream"
+              }
+            ],
+            "limitations": [
+              "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "vLLM-Ascend",
+              "version": null,
+              "commit": "db9ad13183f6836f7f83304590e1ba4035b888e5"
+            },
+            "applicability": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+              "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Tiny DeepSeek V4 attention-sink fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/vllm-ascend-deepseek-v4-sink-reload/fixture"
+              }
+            ],
+            "limitations": [
+              "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            ]
+          }
+        },
+        {
+          "id": "case-mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed TE sequence-parallel column linear omits inline bias",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/fixture"
+              }
+            ],
+            "limitations": [
+              "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            ],
+            "request": {
+              "hardware": "CPU (Apple M4 arm64)",
+              "model": "Tiny TE column-parallel linear fixture",
+              "framework": "MindSpeed",
+              "task": "sft",
+              "goal": "Reproduce the upstream symptom and verify the candidate on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "MindSpeed TE sequence-parallel column linear omits inline bias"
+              },
+              "summary": {
+                "en": "Baseline differs on 16/224 paired elements. Candidate matches all 224 paired elements."
+              },
+              "workflows": [
+                "sft"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed TE sequence-parallel column linear omits inline bias",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/before"
+              }
+            ],
+            "limitations": [
+              "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Pinned open upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/upstream"
+              }
+            ],
+            "limitations": [
+              "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "MindSpeed",
+              "version": null,
+              "commit": "17f1bb727be109b152e5c2e4d74664592233b2df"
+            },
+            "applicability": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+              "pointer": "/cases/mindspeed-te-sp-column-bias/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Tiny TE column-parallel linear fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-te-sp-column-bias/fixture"
+              }
+            ],
+            "limitations": [
+              "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            ]
+          }
+        },
+        {
+          "id": "case-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed CP1 packed MTP misinterprets cumulative sequence endpoints",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/fixture"
+              }
+            ],
+            "limitations": [
+              "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            ],
+            "request": {
+              "hardware": "CPU (Apple M4 arm64)",
+              "model": "Tiny packed multi-token prediction fixture",
+              "framework": "MindSpeed",
+              "task": "sft",
+              "goal": "Reproduce the upstream symptom and verify the candidate on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "MindSpeed CP1 packed MTP misinterprets cumulative sequence endpoints"
+              },
+              "summary": {
+                "en": "Baseline differs on 92/115 paired elements. Candidate matches all 115 paired elements."
+              },
+              "workflows": [
+                "sft"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed CP1 packed MTP misinterprets cumulative sequence endpoints",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/before"
+              }
+            ],
+            "limitations": [
+              "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Pinned merged upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/upstream"
+              }
+            ],
+            "limitations": [
+              "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "MindSpeed",
+              "version": null,
+              "commit": "5f4402805352459264fb526ca5f587453b811c72"
+            },
+            "applicability": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+              "pointer": "/cases/mindspeed-packed-mtp-first-segment/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Tiny packed multi-token prediction fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-packed-mtp-first-segment/fixture"
+              }
+            ],
+            "limitations": [
+              "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            ]
+          }
+        },
+        {
+          "id": "case-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+          "kind": "case",
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed-LLM reuses padding zeros in cached GPT loss masks",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/fixture"
+              }
+            ],
+            "limitations": [
+              "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            ],
+            "request": {
+              "hardware": "CPU (Apple M4 arm64)",
+              "model": "Tiny GPT dataset cache fixture",
+              "framework": "MindSpeed-LLM",
+              "task": "sft",
+              "goal": "Reproduce the upstream symptom and verify the candidate on the same CPU fixture."
+            },
+            "category": "repair-investigation",
+            "content": {
+              "title": {
+                "en": "MindSpeed-LLM reuses padding zeros in cached GPT loss masks"
+              },
+              "summary": {
+                "en": "Baseline differs on 4/16 paired elements. Candidate matches all 16 paired elements."
+              },
+              "workflows": [
+                "sft"
+              ]
+            }
+          }
+        },
+        {
+          "id": "issue-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+          "kind": "issue",
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "MindSpeed-LLM reuses padding zeros in cached GPT loss masks",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+                "pointer": "/problem"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/before"
+              }
+            ],
+            "limitations": [
+              "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            ],
+            "classification": "confirmed-defect"
+          }
+        },
+        {
+          "id": "candidate-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+          "kind": "candidate",
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Pinned merged upstream change",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+                "pointer": "/repair"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/upstream"
+              }
+            ],
+            "limitations": [
+              "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            ],
+            "solution_type": "patch",
+            "target": {
+              "library": "MindSpeed-LLM",
+              "version": null,
+              "commit": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0"
+            },
+            "applicability": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+            "evidence_level": "runtime-tested-in-scope",
+            "decision": "selected-for-further-study"
+          }
+        },
+        {
+          "id": "verification-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+          "kind": "verification",
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "CPU fixture reference comparison",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+                "pointer": "/validation/metrics"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/before"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/after"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/after/acceptance"
+              }
+            ],
+            "limitations": [
+              "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            ],
+            "method": "retained-measurements",
+            "outcome": "scoped-checks-passed",
+            "acceptance": {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+              "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/after/acceptance"
+            }
+          }
+        },
+        {
+          "id": "workload-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+          "kind": "workload",
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ],
+          "details": {
+            "title": "Tiny GPT dataset cache fixture",
+            "sources": [
+              {
+                "kind": "repair",
+                "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120",
+                "pointer": "/environment"
+              },
+              {
+                "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+                "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab",
+                "pointer": "/cases/mindspeed-llm-gpt-dataset-loss-mask/fixture"
+              }
+            ],
+            "limitations": [
+              "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            ]
+          }
+        }
+      ],
+      "links": [
+        {
+          "id": "includes-sglang-gdn-state-layout-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-gdn-state-layout-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-gdn-state-layout-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-gdn-state-layout-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-gdn-state-layout-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "addresses-sglang-gdn-state-layout-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Transpose state at entry to the chunk operation and restore the pool orientation on returned final and chunk states.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "verifies-sglang-gdn-state-layout-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "from": {
+            "kind": "verification",
+            "id": "verification-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Baseline differs on 480/704 paired elements. Candidate matches all 704 paired elements.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "uses-workload-sglang-gdn-state-layout-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "from": {
+            "kind": "verification",
+            "id": "verification-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-sglang-gdn-state-layout-cpu-fixture-20261120"
+          },
+          "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-mla-prefix-compaction-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-mla-prefix-compaction-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-mla-prefix-compaction-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-mla-prefix-compaction-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-sglang-mla-prefix-compaction-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "addresses-sglang-mla-prefix-compaction-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "Compact latent and RoPE cache rows using valid token indices before the attention boundary.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "verifies-sglang-mla-prefix-compaction-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "from": {
+            "kind": "verification",
+            "id": "verification-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "Baseline differs on 772/3208 paired elements. Candidate matches all 3208 paired elements.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "uses-workload-sglang-mla-prefix-compaction-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "from": {
+            "kind": "verification",
+            "id": "verification-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-sglang-mla-prefix-compaction-cpu-fixture-20261120"
+          },
+          "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "addresses-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Use the configured parameter loader after selecting the correct rank-local or full sink tensor.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "verifies-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "from": {
+            "kind": "verification",
+            "id": "verification-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Baseline differs on 144/144 paired elements. Candidate matches all 144 paired elements.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "uses-workload-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "from": {
+            "kind": "verification",
+            "id": "verification-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-vllm-ascend-deepseek-v4-sink-reload-cpu-fixture-20261120"
+          },
+          "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-te-sp-column-bias-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-te-sp-column-bias-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-te-sp-column-bias-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-te-sp-column-bias-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-te-sp-column-bias-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "addresses-mindspeed-te-sp-column-bias-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "Add the supplied bias once after all-gather matmul. The outer wrapper continues to return deferred bias separately.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "verifies-mindspeed-te-sp-column-bias-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "Baseline differs on 16/224 paired elements. Candidate matches all 224 paired elements.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "uses-workload-mindspeed-te-sp-column-bias-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-te-sp-column-bias-cpu-fixture-20261120"
+          },
+          "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "addresses-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "Recognize the endpoint representation and include the first logical segment when shifting without changing the shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "verifies-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "Baseline differs on 92/115 paired elements. Candidate matches all 115 paired elements.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "uses-workload-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-packed-mtp-first-segment-cpu-fixture-20261120"
+          },
+          "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-case-issue",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-case-candidate",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-case-verification",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "verification",
+            "id": "verification-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-case-workload",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "includes-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-case-repair",
+          "relation": "includes",
+          "from": {
+            "kind": "case",
+            "id": "case-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "repair",
+            "id": "mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "addresses-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-candidate-issue",
+          "relation": "addresses",
+          "from": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "issue",
+            "id": "issue-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Keep the reusable mask separate and apply sample-specific padding to the sample mask.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "verifies-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-verification-candidate",
+          "relation": "verifies",
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "candidate",
+            "id": "candidate-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Baseline differs on 4/16 paired elements. Candidate matches all 16 paired elements.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        },
+        {
+          "id": "uses-workload-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120-verification-workload",
+          "relation": "uses_workload",
+          "from": {
+            "kind": "verification",
+            "id": "verification-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "to": {
+            "kind": "workload",
+            "id": "workload-mindspeed-llm-gpt-dataset-loss-mask-cpu-fixture-20261120"
+          },
+          "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+          "evidence": [
+            {
+              "file": "evidence/submissions/ascend-precision-source-fixtures-20261120.json",
+              "sha256": "e90df5610f179bc69e37085faccab315e2ecaa627be2db7fe5fcc5fb3f3523ab"
+            }
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "evidence/submissions/ascend-precision-source-fixtures-20261120.json": {
+        "schema_version": 1,
+        "numericbridge_revision": "0bbb7769be0cd9f4c5ec1639f00abf160f53a254",
+        "fixture_revision": "77e18cd8a7ce1d32bc8197f337956316d3752639",
+        "observation_dates": [
+          "2026-11-20"
+        ],
+        "observation_timezone": "Asia/Shanghai",
+        "environment": {
+          "system": "Darwin",
+          "machine": "arm64",
+          "python": "3.13.9",
+          "packages": {
+            "numpy": "2.4.2",
+            "torch": "2.15.0"
+          }
+        },
+        "comparator": "skills/precision-compare/scripts/array_compare.py",
+        "native_npu_status": "not-run",
+        "workflow": {
+          "engine": "tools.workflow",
+          "plan_schema_version": 1,
+          "planned_stages": 18,
+          "source_ready": "completed",
+          "cpu_preflight": {
+            "status": "completed",
+            "device": "cpu",
+            "dtype": "torch.float32",
+            "gradient_elements": 2,
+            "finite": true
+          },
+          "verified_source_variants": 12,
+          "source_cpu_baseline_runs": 6,
+          "source_cpu_candidate_runs": 6,
+          "cpu_smoke_controls": 3,
+          "observed_runs": 15,
+          "id": "ascend-pr-cpu-rerun",
+          "status": "completed",
+          "completed_stages": 18,
+          "stage_attempts": 18,
+          "checked_assertions": 266,
+          "stage_checks": [
+            {
+              "id": "source-runtime-readiness",
+              "status": "passed",
+              "assertions": 2
+            },
+            {
+              "id": "cpu-preflight",
+              "status": "passed",
+              "assertions": 4
+            },
+            {
+              "id": "op-plugin-mul-host-scalar-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "sglang-gdn-state-layout-before",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "sglang-gdn-state-layout-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "sglang-mla-prefix-compaction-before",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "sglang-mla-prefix-compaction-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "torchnpu-inductor-expm1-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "torchnpu-triton-int64-div-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "vllm-ascend-deepseek-v4-sink-reload-before",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "vllm-ascend-deepseek-v4-sink-reload-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "mindspeed-llm-gpt-dataset-loss-mask-before",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "mindspeed-llm-gpt-dataset-loss-mask-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "mindspeed-packed-mtp-first-segment-before",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "mindspeed-packed-mtp-first-segment-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "mindspeed-te-sp-column-bias-before",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "mindspeed-te-sp-column-bias-after",
+              "status": "passed",
+              "assertions": 17
+            },
+            {
+              "id": "reconcile-results",
+              "status": "passed",
+              "assertions": 5
+            }
+          ]
+        },
+        "source_objects": [
+          {
+            "case_id": "sglang-gdn-state-layout",
+            "variant": "before",
+            "sources": [
+              {
+                "project": "sgl-project/sglang",
+                "revision": "c2578f28cfaece96167765ed93cab9a484f6fe95",
+                "files": {
+                  "python/sglang/srt/layers/attention/linear/kernels/gdn_triton.py": "28ff3db49ead2c71ffc6968e028db27e406dbf07061fbb6c6266d23936baca3f"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "sglang-gdn-state-layout",
+            "variant": "after",
+            "sources": [
+              {
+                "project": "sgl-project/sglang",
+                "revision": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475",
+                "files": {
+                  "python/sglang/srt/layers/attention/linear/kernels/gdn_triton.py": "f296825bbb6c070e243b43bbdec048b2683c89f36e776fbbd1dd37d0672fccd9"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "sglang-mla-prefix-compaction",
+            "variant": "before",
+            "sources": [
+              {
+                "project": "sgl-project/sglang",
+                "revision": "2120cf1190d32135358ea0fa73a87c4ca232803f",
+                "files": {
+                  "python/sglang/srt/hardware_backend/npu/attention/mla_cache.py": "6301c57fe29bc4a51a8a164855cc720c34b7aa8b0e680c545982feb15bf4261e",
+                  "python/sglang/srt/hardware_backend/npu/attention/ascend_backend.py": "0c9b912864b3ec2f53a3ce388551459a9a8684b469a43fd68c44905ee6a0f221"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "sglang-mla-prefix-compaction",
+            "variant": "after",
+            "sources": [
+              {
+                "project": "sgl-project/sglang",
+                "revision": "643909b5a898665aa7640c85b48963598f41815a",
+                "files": {
+                  "python/sglang/srt/hardware_backend/npu/attention/mla_cache.py": "8ed172b214dc33e5fdd4ed6362feabb9e6278c75cbc83b980f37f1bc3c5cfdf8",
+                  "python/sglang/srt/hardware_backend/npu/attention/ascend_backend.py": "dd3ce6e01104019f387178ce04a8a105169bd62b7749bfd1a5322b518cf53077"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "mindspeed-packed-mtp-first-segment",
+            "variant": "before",
+            "sources": [
+              {
+                "project": "Ascend/MindSpeed",
+                "revision": "43e884e651b6460b0a49a1eac5991d63eb4996a7",
+                "files": {
+                  "mindspeed/core/transformer/multi_token_prediction.py": "c0c8735f18d3d34a8aa14e149c8b84f9ce92604443afaa3ce64f2b5060edf63a"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "mindspeed-packed-mtp-first-segment",
+            "variant": "after",
+            "sources": [
+              {
+                "project": "Ascend/MindSpeed",
+                "revision": "5f4402805352459264fb526ca5f587453b811c72",
+                "files": {
+                  "mindspeed/core/transformer/multi_token_prediction.py": "e4058cdf6c6e3e7c2b8201e78985f3a16a4ee50b1f4ec44a6de259768f9007c7"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "mindspeed-te-sp-column-bias",
+            "variant": "before",
+            "sources": [
+              {
+                "project": "Ascend/MindSpeed",
+                "revision": "c2357e9ae4689cf1791a5f258217cd256ce41ce1",
+                "files": {
+                  "mindspeed/te/pytorch/module/linear.py": "8f40a81a47c369c379edcbbbd7061c76d9ecd6ae7d61c43bd847cb4b646ae0da"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "mindspeed-te-sp-column-bias",
+            "variant": "after",
+            "sources": [
+              {
+                "project": "Ascend/MindSpeed",
+                "revision": "17f1bb727be109b152e5c2e4d74664592233b2df",
+                "files": {
+                  "mindspeed/te/pytorch/module/linear.py": "d3cb844df26934e422a0f70d179a6e702e95e8c37d112fdc675b78542956aae8"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+            "variant": "before",
+            "sources": [
+              {
+                "project": "Ascend/MindSpeed-LLM",
+                "revision": "dd5ee0321c1179aaaded4fba4f119ed310b30639",
+                "files": {
+                  "mindspeed_llm/core/datasets/gpt_dataset.py": "125e070da084238ee59a8b0e8a1d698f83815c4affc178b8c723b0c9256dafa5"
+                }
+              },
+              {
+                "project": "NVIDIA/Megatron-LM",
+                "revision": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17",
+                "files": {
+                  "megatron/core/datasets/gpt_dataset.py": "3c7fecd01608f8af5fa23589905ed80b6a602bfd303645c389c17e2599ed50f3"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+            "variant": "after",
+            "sources": [
+              {
+                "project": "Ascend/MindSpeed-LLM",
+                "revision": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0",
+                "files": {
+                  "mindspeed_llm/core/datasets/gpt_dataset.py": "be25366895b99614323b0facde359e054c9768ac156e52efb0e69e99b6a7b137"
+                }
+              },
+              {
+                "project": "NVIDIA/Megatron-LM",
+                "revision": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17",
+                "files": {
+                  "megatron/core/datasets/gpt_dataset.py": "3c7fecd01608f8af5fa23589905ed80b6a602bfd303645c389c17e2599ed50f3"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+            "variant": "before",
+            "sources": [
+              {
+                "project": "vllm-project/vllm-ascend",
+                "revision": "cb629ea1925a280d57b41b48416a85097f6cdb6b",
+                "files": {
+                  "vllm_ascend/models/deepseek_v4/model.py": "e834918a8c9f9458452a437e8c4a66d25e76c816758358edf3eef06dc0588c71",
+                  "vllm_ascend/models/deepseek_v4/mtp.py": "65683ca8affc6a11f92c4c460eae588a108dabd871d7ecb8df764dfea3839cbe",
+                  "vllm_ascend/models/deepseek_v4/dspark.py": "24ab8bc1437ff69b6f80ed0624d032da0bb182d7e281a0d6026a072e97486dba"
+                }
+              }
+            ]
+          },
+          {
+            "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+            "variant": "after",
+            "sources": [
+              {
+                "project": "vllm-project/vllm-ascend",
+                "revision": "db9ad13183f6836f7f83304590e1ba4035b888e5",
+                "files": {
+                  "vllm_ascend/models/deepseek_v4/model.py": "7fdfedc44a328fde9913b281cca36b13f70c6777b9762857ed5ff07626a842cd",
+                  "vllm_ascend/models/deepseek_v4/mtp.py": "18b26a47da2d59a9bda2d43c49d5ae2a2bba1c9ca2da1a7148ce35c540b784f2",
+                  "vllm_ascend/models/deepseek_v4/dspark.py": "70719efc3e5b062a2c781baaa8b1e8da2ba2b77cfda5a9306062dcc66763b9d5"
+                }
+              }
+            ]
+          }
+        ],
+        "native_npu_pending": [
+          "torchnpu-inductor-expm1",
+          "torchnpu-triton-int64-div",
+          "vllm-ascend-qsfa-tnd-tail",
+          "op-plugin-mul-host-scalar"
+        ],
+        "fixture_commit": "77e18cd8a7ce1d32bc8197f337956316d3752639",
+        "fixture_docs": "https://github.com/satsuki2486441738/NumericBridge/blob/77e18cd8a7ce1d32bc8197f337956316d3752639/reports/ascend-upstream-cases-20261119/README.md",
+        "cases": {
+          "sglang-gdn-state-layout": {
+            "upstream": {
+              "project": "sgl-project/sglang",
+              "pr": "https://github.com/sgl-project/sglang/pull/50245",
+              "status": "open",
+              "date": "2026-11-13"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-cases-20261119/sglang_cases.py",
+              "scope": "Packed lengths 65 and 3, two heads, square K=V=4, with attention output, final recurrent state and chunk snapshots.",
+              "limitation": "The external NPU chunk operation is replaced by a CPU delta-rule implementation. Coverage is the extracted Python wrapper with square state and FP32 synthetic inputs."
+            },
+            "before": {
+              "case_id": "sglang-gdn-state-layout",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "c2578f28cfaece96167765ed93cab9a484f6fe95",
+              "timestamp_utc": "20261119T175001Z",
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 3,
+              "compared_elements": 704,
+              "unequal_elements": 480,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 2.0625,
+              "rmse": 0.2144104218139864,
+              "coverage": {
+                "expected_arrays": 3,
+                "side_a_arrays": 3,
+                "side_b_arrays": 3,
+                "paired_arrays": 3,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 3,
+                "compared_elements": 704
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            },
+            "after": {
+              "case_id": "sglang-gdn-state-layout",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "8e5404fa8b8a1e12f7029c7e7c17dbfed7f89475",
+              "timestamp_utc": "20261119T175001Z",
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 3,
+              "compared_elements": 704,
+              "unequal_elements": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "coverage": {
+                "expected_arrays": 3,
+                "side_a_arrays": 3,
+                "side_b_arrays": 3,
+                "paired_arrays": 3,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 3,
+                "compared_elements": 704
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            }
+          },
+          "sglang-mla-prefix-compaction": {
+            "upstream": {
+              "project": "sgl-project/sglang",
+              "pr": "https://github.com/sgl-project/sglang/pull/47924",
+              "status": "merged",
+              "date": "2026-11-04"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-cases-20261119/sglang_cases.py",
+              "scope": "DCP=1, page size four, with ND/NZ layouts and mixed [3,0,5,1] or page-aligned [4,0,8,4] prefix lengths.",
+              "limitation": "The extracted Python cache path uses synthetic CPU tensors and metadata. Ascend FIA, distributed DCP and full-model results are outside these measurements."
+            },
+            "before": {
+              "case_id": "sglang-mla-prefix-compaction",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "2120cf1190d32135358ea0fa73a87c4ca232803f",
+              "timestamp_utc": "20261119T175002Z",
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 16,
+              "compared_elements": 3208,
+              "unequal_elements": 772,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 384.0,
+              "rmse": 109.41395120460868,
+              "coverage": {
+                "expected_arrays": 16,
+                "side_a_arrays": 16,
+                "side_b_arrays": 16,
+                "paired_arrays": 16,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 16,
+                "compared_elements": 3208
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            },
+            "after": {
+              "case_id": "sglang-mla-prefix-compaction",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "643909b5a898665aa7640c85b48963598f41815a",
+              "timestamp_utc": "20261119T175003Z",
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 16,
+              "compared_elements": 3208,
+              "unequal_elements": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "coverage": {
+                "expected_arrays": 16,
+                "side_a_arrays": 16,
+                "side_b_arrays": 16,
+                "paired_arrays": 16,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 16,
+                "compared_elements": 3208
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            }
+          },
+          "vllm-ascend-deepseek-v4-sink-reload": {
+            "upstream": {
+              "project": "vllm-project/vllm-ascend",
+              "pr": "https://github.com/vllm-project/vllm-ascend/pull/18642",
+              "status": "merged",
+              "date": "2026-11-03"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-cases-20261119/vllm_cases.py",
+              "scope": "Two synthetic attention-sink updates through target, MTP and DSpark loaders with TP2 rank-local and DSA context-parallel layouts.",
+              "limitation": "The loader paths run on CPU with a sink-only deferred replay and a cold-load control. The model checkpoint, complete native reload and service output were outside this fixture."
+            },
+            "before": {
+              "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "cb629ea1925a280d57b41b48416a85097f6cdb6b",
+              "timestamp_utc": "20261119T175005Z",
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 12,
+              "compared_elements": 144,
+              "unequal_elements": 144,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 200.0,
+              "rmse": 158.11388300841898,
+              "coverage": {
+                "expected_arrays": 12,
+                "side_a_arrays": 12,
+                "side_b_arrays": 12,
+                "paired_arrays": 12,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 12,
+                "compared_elements": 144
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            },
+            "after": {
+              "case_id": "vllm-ascend-deepseek-v4-sink-reload",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "db9ad13183f6836f7f83304590e1ba4035b888e5",
+              "timestamp_utc": "20261119T175006Z",
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 12,
+              "compared_elements": 144,
+              "unequal_elements": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "coverage": {
+                "expected_arrays": 12,
+                "side_a_arrays": 12,
+                "side_b_arrays": 12,
+                "paired_arrays": 12,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 12,
+                "compared_elements": 144
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            }
+          },
+          "mindspeed-te-sp-column-bias": {
+            "upstream": {
+              "project": "Ascend/MindSpeed",
+              "pr": "https://gitcode.com/Ascend/MindSpeed/merge_requests/4128",
+              "status": "open",
+              "date": "2026-11-02"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-cases-20261119/mindspeed_cases.py",
+              "scope": "BF16 forward and backward with two simulated TP ranks and absent, zero, inline nonzero and deferred bias controls.",
+              "limitation": "The real Python wrapper and autograd code run with simulated CPU collectives. FP8, native communication, MC2 and model training are outside these measurements."
+            },
+            "before": {
+              "case_id": "mindspeed-te-sp-column-bias",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "c2357e9ae4689cf1791a5f258217cd256ce41ce1",
+              "timestamp_utc": "20261119T175009Z",
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 34,
+              "compared_elements": 224,
+              "unequal_elements": 16,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 3.0,
+              "rmse": 0.5175491695067657,
+              "coverage": {
+                "expected_arrays": 34,
+                "side_a_arrays": 34,
+                "side_b_arrays": 34,
+                "paired_arrays": 34,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 34,
+                "compared_elements": 224
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            },
+            "after": {
+              "case_id": "mindspeed-te-sp-column-bias",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "17f1bb727be109b152e5c2e4d74664592233b2df",
+              "timestamp_utc": "20261119T175010Z",
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 34,
+              "compared_elements": 224,
+              "unequal_elements": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "coverage": {
+                "expected_arrays": 34,
+                "side_a_arrays": 34,
+                "side_b_arrays": 34,
+                "paired_arrays": 34,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 34,
+                "compared_elements": 224
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            }
+          },
+          "mindspeed-packed-mtp-first-segment": {
+            "upstream": {
+              "project": "Ascend/MindSpeed",
+              "pr": "https://gitcode.com/Ascend/MindSpeed/merge_requests/4115",
+              "status": "merged",
+              "date": "2026-10-30"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-cases-20261119/mindspeed_cases.py",
+              "scope": "CP1 with one or two packed segments over six tokens; compares labels, loss mask, valid-token count, loss, logits gradient and shared attention endpoints.",
+              "limitation": "CPU execution covers the pinned shift wrapper and a synthetic loss only. This fixture does not run context-parallel communication or a full training model."
+            },
+            "before": {
+              "case_id": "mindspeed-packed-mtp-first-segment",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "43e884e651b6460b0a49a1eac5991d63eb4996a7",
+              "timestamp_utc": "20261119T175008Z",
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 12,
+              "compared_elements": 115,
+              "unequal_elements": 92,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 6.0,
+              "rmse": 0.7016126654687385,
+              "coverage": {
+                "expected_arrays": 12,
+                "side_a_arrays": 12,
+                "side_b_arrays": 12,
+                "paired_arrays": 12,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 12,
+                "compared_elements": 115
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            },
+            "after": {
+              "case_id": "mindspeed-packed-mtp-first-segment",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "5f4402805352459264fb526ca5f587453b811c72",
+              "timestamp_utc": "20261119T175008Z",
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 12,
+              "compared_elements": 115,
+              "unequal_elements": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "coverage": {
+                "expected_arrays": 12,
+                "side_a_arrays": 12,
+                "side_b_arrays": 12,
+                "paired_arrays": 12,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 12,
+                "compared_elements": 115
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              }
+            }
+          },
+          "mindspeed-llm-gpt-dataset-loss-mask": {
+            "upstream": {
+              "project": "Ascend/MindSpeed-LLM",
+              "pr": "https://gitcode.com/Ascend/MindSpeed-LLM/merge_requests/5212",
+              "status": "merged",
+              "date": "2026-11-12"
+            },
+            "fixture": {
+              "path": "reports/ascend-upstream-cases-20261119/mindspeed_llm_cases.py",
+              "scope": "Pinned MindSpeed-LLM and Megatron Core paths with a padded sample, a following unpadded sample, a batch-padding sample and cached-mask inspection.",
+              "limitation": "The production wrapper and Megatron mask code execute on CPU; document reads use synthetic tokens and no full dataloader or training step is run."
+            },
+            "before": {
+              "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+              "mode": "source-cpu",
+              "variant": "before",
+              "upstream_revision": "dd5ee0321c1179aaaded4fba4f119ed310b30639",
+              "timestamp_utc": "20261119T175006Z",
+              "acceptance": {
+                "outcome": "mismatch",
+                "expected": "mismatch",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 4,
+              "compared_elements": 16,
+              "unequal_elements": 4,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 1.0,
+              "rmse": 0.5,
+              "coverage": {
+                "expected_arrays": 4,
+                "side_a_arrays": 4,
+                "side_b_arrays": 4,
+                "paired_arrays": 4,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 4,
+                "compared_elements": 16
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              },
+              "dependencies": {
+                "NVIDIA/Megatron-LM": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+              }
+            },
+            "after": {
+              "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+              "mode": "source-cpu",
+              "variant": "after",
+              "upstream_revision": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0",
+              "timestamp_utc": "20261119T175007Z",
+              "acceptance": {
+                "outcome": "match",
+                "expected": "match",
+                "atol": 0,
+                "rtol": 0
+              },
+              "compared_arrays": 4,
+              "compared_elements": 16,
+              "unequal_elements": 0,
+              "nonfinite": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "coverage": {
+                "expected_arrays": 4,
+                "side_a_arrays": 4,
+                "side_b_arrays": 4,
+                "paired_arrays": 4,
+                "missing": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "unexpected": {
+                  "side_a": 0,
+                  "side_b": 0
+                },
+                "compared_arrays": 4,
+                "compared_elements": 16
+              },
+              "runtime": {
+                "system": "Darwin",
+                "machine": "arm64",
+                "python": "3.13.9",
+                "packages": {
+                  "numpy": "2.4.2",
+                  "torch": "2.15.0"
+                }
+              },
+              "dependencies": {
+                "NVIDIA/Megatron-LM": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+              }
+            }
+          }
+        },
+        "cpu_smoke_controls": [
+          {
+            "case_id": "op-plugin-mul-host-scalar",
+            "mode": "cpu-smoke",
+            "variant": "after",
+            "upstream_revision": null,
+            "timestamp_utc": "20261119T175000Z",
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "compared_arrays": 4,
+            "compared_elements": 4,
+            "unequal_elements": 0,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "coverage": {
+              "expected_arrays": 4,
+              "side_a_arrays": 4,
+              "side_b_arrays": 4,
+              "paired_arrays": 4,
+              "missing": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "unexpected": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "compared_arrays": 4,
+              "compared_elements": 4
+            },
+            "runtime": {
+              "system": "Darwin",
+              "machine": "arm64",
+              "python": "3.13.9",
+              "packages": {
+                "numpy": "2.4.2",
+                "torch": "2.15.0"
+              }
+            }
+          },
+          {
+            "case_id": "torchnpu-inductor-expm1",
+            "mode": "cpu-smoke",
+            "variant": "after",
+            "upstream_revision": null,
+            "timestamp_utc": "20261119T175003Z",
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 1e-06
+            },
+            "compared_arrays": 1,
+            "compared_elements": 5,
+            "unequal_elements": 0,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "coverage": {
+              "expected_arrays": 1,
+              "side_a_arrays": 1,
+              "side_b_arrays": 1,
+              "paired_arrays": 1,
+              "missing": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "unexpected": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "compared_arrays": 1,
+              "compared_elements": 5
+            },
+            "runtime": {
+              "system": "Darwin",
+              "machine": "arm64",
+              "python": "3.13.9",
+              "packages": {
+                "numpy": "2.4.2",
+                "torch": "2.15.0"
+              }
+            }
+          },
+          {
+            "case_id": "torchnpu-triton-int64-div",
+            "mode": "cpu-smoke",
+            "variant": "after",
+            "upstream_revision": null,
+            "timestamp_utc": "20261119T175004Z",
+            "acceptance": {
+              "outcome": "match",
+              "expected": "match",
+              "atol": 0,
+              "rtol": 0
+            },
+            "compared_arrays": 9,
+            "compared_elements": 58,
+            "unequal_elements": 0,
+            "nonfinite": {
+              "side_a": 0,
+              "side_b": 0
+            },
+            "max_abs": 0.0,
+            "rmse": 0.0,
+            "coverage": {
+              "expected_arrays": 9,
+              "side_a_arrays": 9,
+              "side_b_arrays": 9,
+              "paired_arrays": 9,
+              "missing": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "unexpected": {
+                "side_a": 0,
+                "side_b": 0
+              },
+              "compared_arrays": 9,
+              "compared_elements": 58
+            },
+            "runtime": {
+              "system": "Darwin",
+              "machine": "arm64",
+              "python": "3.13.9",
+              "packages": {
+                "numpy": "2.4.2",
+                "torch": "2.15.0"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
