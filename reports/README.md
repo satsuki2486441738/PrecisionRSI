@@ -14,7 +14,7 @@ numerical acceptance. These files are results, not instructions to restart work.
 | DeepSeek SGLang / vLLM services | [Service report](deepseek41-services-final-20261109/report.md) |
 | DeepSeek cache / prospective lifecycle supplement | [Report](deepseek41-cache-lifecycle-20261110/report.md) |
 | DeepSeek NPU512 physical-cache supplement | [Report](deepseek41-npu512-physical-cache-20261110/report.md) |
-| Ascend upstream precision regressions | [Cases and CPU verification](ascend-upstream-cases-20261119/README.md) |
+| Ascend upstream precision regressions | [Workflow results and community draft](ascend-upstream-workflow-20261120/README.md) |
 
 Each report links its SVG and measurement sources. The service report retains
 JSON/CSV metrics and scope ledgers; other public metrics are in
