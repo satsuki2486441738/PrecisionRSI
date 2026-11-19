@@ -11,7 +11,7 @@
   <a href="https://github.com/satsuki2486441738/NumericBridge/stargazers"><img src="https://img.shields.io/github/stars/satsuki2486441738/NumericBridge?logo=github" alt="GitHub 星标数"></a>
 </p>
 
-<p align="center"><strong>数值精度比较、诊断与修复</strong></p>
+<p align="center"><strong>面向推理、训练与强化学习的跨栈精度对齐框架与协作社区</strong></p>
 
 <p align="center"><a href="README.md">English</a> · 简体中文</p>
 

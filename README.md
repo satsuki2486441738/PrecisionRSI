@@ -11,7 +11,7 @@
   <a href="https://github.com/satsuki2486441738/NumericBridge/stargazers"><img src="https://img.shields.io/github/stars/satsuki2486441738/NumericBridge?logo=github" alt="GitHub stars"></a>
 </p>
 
-<p align="center"><strong>Numerical precision comparison, diagnosis and repair</strong></p>
+<p align="center"><strong>A framework and collaborative community for cross-stack precision alignment in inference, training, and reinforcement learning</strong></p>
 
 <p align="center">English · <a href="README.zh-CN.md">简体中文</a></p>
 
