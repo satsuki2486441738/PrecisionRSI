@@ -34,9 +34,14 @@ Start from the confirmed request, paired observations and evidence paths.
   and the source revision and code when identified. Classify the discrepancy
   as a capture or setup problem, a numerical-policy difference, a supported
   defect, or unresolved.
-  Propose a patch only when correctness evidence supports the defect. Pass
-  a focused regression check to verification, or the smallest discriminating
-  next check when the cause remains open.
+  Stage localization is a checkpoint unless it meets an explicit scope limit.
+  Otherwise, reuse the triggering case to narrow the interval until evidence
+  establishes a cause or no focused check or pending result can advance diagnosis
+  within the authorized scope and budget. Run the smallest check that can
+  distinguish the remaining explanations. If blocked, report the narrowest
+  supported interval, what was ruled out, the concrete blocker and the next check.
+  For a supported defect, propose a patch and pass a focused regression check
+  to verification when repair is in scope.
 </diagnosis_handoff>
 ```
 

@@ -39,7 +39,7 @@ def hardware_platforms(value, index):
     names = list(dict.fromkeys(name for name, _ in found))
     if any(name in names for name in ('Ascend 910C', 'Ascend 910B')):
         names = [name for name in names if name != 'Ascend NPU']
-    if any(name.startswith(('NVIDIA H', 'RTX ')) for name in names):
+    if any(name != 'NVIDIA GPU' and name.startswith(('NVIDIA ', 'RTX ')) for name in names):
         names = [name for name in names if name != 'NVIDIA GPU']
     if any(name != 'CPU' for name in names):
         names = [name for name in names if name != 'CPU']

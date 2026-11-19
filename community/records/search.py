@@ -20,6 +20,7 @@ HARDWARE_RULES = [
     dict(pattern=r'(?<![a-z0-9_])(?:[1-9][0-9]*\s*[x×]\s*)?h100(?![a-z0-9_])', name='NVIDIA H100', family='gpu'),
     dict(pattern=r'5090', name='RTX 5090', family='gpu'),
     dict(pattern=r'5060', name='RTX 5060', family='gpu'),
+    dict(pattern=r'\bb200\b', name='NVIDIA B200', family='gpu'),
     dict(pattern=r'nvidia|cuda|geforce', name='NVIDIA GPU', family='gpu'),
     dict(pattern=r'cpu|aarch64|x86_64|macos|wsl', name='CPU', family='cpu'),
 ]
@@ -163,8 +164,14 @@ def compile_index(catalog):
                 case['solutions'].append(solution)
             elif kind == 'issue':
                 issue = entity(kind, identity)
-                issue['record_ids'] = [link['to']['id'] for link in links if link['relation'] == 'documents'
-                                       and link['from'] == dict(kind='issue', id=identity) and link['to']['kind'] == 'repair']
+                endpoint = dict(kind='issue', id=identity)
+                candidates = [link['from'] for link in links
+                              if link['relation'] == 'addresses' and link['to'] == endpoint]
+                verifications = [link['from'] for link in links
+                                 if link['relation'] == 'verifies' and link['to'] in candidates]
+                issue['record_ids'] = list(dict.fromkeys(link['to']['id'] for link in links
+                    if (link['relation'] == 'documents' and link['from'] == endpoint)
+                    or (link['relation'] == 'measures' and link['from'] in verifications)))
                 case['issues'].append(issue)
             if kind not in ('comparison', 'repair'):
                 continue

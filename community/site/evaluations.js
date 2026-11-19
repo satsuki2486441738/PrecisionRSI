@@ -185,10 +185,12 @@
     });
     const maximum = section('03 / 当前比较的最大误差坐标');
     maximum.append(coordinates);
-    const evidence = section('04 / 归档与复核');
+    const evidence = section('04 / 证据与复核');
     bulletList(evidence, record.notes);
-    paragraph(evidence, '归档 revision', record.archive.revision);
-    paragraph(evidence, '归档前缀', record.archive.prefix);
+    if (record.archive) {
+      paragraph(evidence, '归档 revision', record.archive.revision);
+      paragraph(evidence, '归档前缀', record.archive.prefix);
+    }
     const links = node('ul');
     record.evidence.forEach((entry) => {
       const url = publicURL(entry.url);

@@ -29,6 +29,10 @@ jobs:
         env:
           BEFORE: ${{ github.event.before }}
         run: python -B -m scripts validate-immutability --ci
+      - name: Advertise the community submission endpoint
+        env:
+          NUMERICBRIDGE_INTAKE_URL: ${{ vars.NUMERICBRIDGE_INTAKE_URL }}
+        run: python -B -m community.service_manifest --output community/site/data/community-service.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

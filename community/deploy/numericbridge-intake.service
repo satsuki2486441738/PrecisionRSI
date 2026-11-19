@@ -1,0 +1,23 @@
+[Unit]
+Description=NumericBridge community submission inbox
+After=network.target
+
+[Service]
+User=numericbridge
+Group=numericbridge
+WorkingDirectory=/opt/numericbridge
+StateDirectory=numericbridge
+StateDirectoryMode=0700
+LoadCredential=upload-token:/etc/numericbridge/upload-token
+Environment=GIT_TERMINAL_PROMPT=0
+ExecStart=/opt/numericbridge/.venv/bin/python -B -m community.intake --inbox /var/lib/numericbridge/inbox --token-file %d/upload-token --port 8770
+Restart=on-failure
+RestartSec=5s
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target
