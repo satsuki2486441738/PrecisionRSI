@@ -13,12 +13,20 @@ import tempfile
 import numpy as np
 
 import ascend_cases
+import mindspeed_cases
+import mindspeed_llm_cases
 import sglang_cases
 import vllm_cases
 
 
 COMPARATOR = Path(__file__).resolve().parents[2] / 'skills/precision-compare/scripts/array_compare.py'
-CASES = {**ascend_cases.CASES, **sglang_cases.CASES, **vllm_cases.CASES}
+CASES = {
+    **ascend_cases.CASES,
+    **mindspeed_cases.CASES,
+    **mindspeed_llm_cases.CASES,
+    **sglang_cases.CASES,
+    **vllm_cases.CASES,
+}
 
 
 def case_metadata(case_id):
