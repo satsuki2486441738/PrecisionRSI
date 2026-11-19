@@ -2,10 +2,11 @@
 """Run a native Torch adaptation -> compare -> repair -> revalidation example.
 
 Requires Torch and NumPy. Creates a fresh compare-workflowdemo-UTC case and a
-shared workflow plan. A controlled mean-versus-sum defect in a two-step scalar
-SFT objective routes comparison to repair. This demonstration applies the known
-one-line correction; it does not invoke or benchmark an agent. The second run
-reuses environment preparation and verifies the corrected original trajectory;
+shared workflow plan. A one-update native preflight gates a two-step scalar
+SFT comparison. A controlled mean-versus-sum defect routes comparison to repair.
+This demonstration applies the known one-line correction; it does not invoke or
+benchmark an agent. The second run reuses environment preparation, rechecks the
+changed native path and verifies the corrected original trajectory;
 a third run must execute zero native commands. --prepare-only creates the task
 for an agent to complete instead. Inputs, baseline results and logs are retained.
 """
@@ -32,14 +33,14 @@ torch.set_num_threads(1)
 mode=sys.argv[1]
 out=Path(sys.argv[2])
 data=json.loads(Path('data.json').read_text())
-def native():
+def native(steps):
     model=torch.nn.Linear(1,1,bias=False)
     with torch.no_grad():model.weight.zero_()
     optimizer=torch.optim.SGD(model.parameters(),lr=data['lr'])
     x=torch.ones(len(data['targets']),1)
     y=torch.tensor(data['targets']).reshape(-1,1)
     gradients=[];parameters=[];updates=[]
-    for step in range(data['steps']):
+    for step in range(steps):
         optimizer.zero_grad(set_to_none=True)
         before=model.weight.detach().clone()
         objective(model(x),y).backward()
@@ -47,7 +48,9 @@ def native():
         optimizer.step()
         parameters.append(float(model.weight.item()))
         updates.append(float((model.weight.detach()-before).item()))
-    return {k:np.asarray(v) for k,v in [('gradients',gradients),('parameters',parameters),('updates',updates)]}
+    values={k:np.asarray(v) for k,v in [('gradients',gradients),('parameters',parameters),('updates',updates)]}
+    return values, dict(device=model.weight.device.type, dtype=str(model.weight.dtype),
+                        optimizer_steps=len(updates))
 def expected():
     # Analytic derivative of mean((w-target)**2)/2, independent of objective.py.
     w=0.;g=[];p=[];u=[]
@@ -65,19 +68,23 @@ def compare(values):
                 max_abs=maximum,coordinates=data['steps']*len(metrics),
                 tolerance_basis='FP32 scalar SGD against analytic objective')
 if mode=='adapt':
-    smoke=torch.nn.Linear(1,1)(torch.ones(1,1))
     report=inspect_runtime(dict(imports=['torch','torch._C','numpy'],symbols=['torch.nn:Linear']))
-    report['device']=str(smoke.device);report['shape']=list(smoke.shape)
     out.with_name('runtime-full.json').write_text(json.dumps(report))
-    identity=runtime_identity(report);identity.update(status=report['status'],device=report['device'])
+    identity=runtime_identity(report);identity['status']=report['status']
     out.write_text(json.dumps(identity))
+elif mode=='preflight':
+    values,receipt=native(1)
+    np.savez(out.with_suffix('.npz'),**values)
+    out.write_text(json.dumps(receipt))
 elif mode=='collect':
-    np.savez(out,**native())
+    values,_=native(data['steps'])
+    np.savez(out,**values)
 elif mode=='compare':
     with np.load(sys.argv[3]) as values:report=compare(values)
     out.write_text(json.dumps(report))
 elif mode=='regression':
-    report=compare(native());out.write_text(json.dumps(report))
+    values,_=native(data['steps'])
+    report=compare(values);out.write_text(json.dumps(report))
     if not report['correct']:raise SystemExit(1)
 '''
 
@@ -99,7 +106,13 @@ def prepare(output_root):
              inputs=['driver.py', 'environment.json', str(TOOLS / 'runtime_probe.py')],
              argv=[sys.executable, '-B', 'driver.py', 'adapt', '{run}/runtime.json'],
              outputs={'runtime': 'runtime.json'}, checks=[dict(output='runtime', pointer='/status', equals='completed')]),
-        dict(base, id='collect', skill='precision-compare', depends_on=['adapt'],
+        dict(base, id='preflight', skill='framework-adapt', depends_on=['adapt'],
+             inputs=['driver.py', 'objective.py', 'data.json'],
+             argv=[sys.executable, '-B', 'driver.py', 'preflight', '{run}/preflight.json'],
+             outputs={'receipt': 'preflight.json', 'capture': 'preflight.npz'},
+             checks=[dict(output='receipt', pointer='/' + key, equals=value)
+                     for key, value in [('device', 'cpu'), ('dtype', 'torch.float32'), ('optimizer_steps', 1)]]),
+        dict(base, id='collect', skill='precision-compare', depends_on=['preflight'],
              inputs=['driver.py', 'objective.py', 'data.json'],
              argv=[sys.executable, '-B', 'driver.py', 'collect', '{run}/trajectory.npz'],
              outputs={'trajectory': 'trajectory.npz'}),
@@ -127,16 +140,19 @@ def demonstrate(output_root, prepare_only=False):
     baseline_bytes = baseline.read_bytes()
     (root / 'objective-original.py').write_bytes((root / 'objective.py').read_bytes())
     (root / 'objective.py').write_text((root / 'objective.py').read_text().replace('.sum()', '.mean()'))
-    regression = dict(id='regression', skill='precision-repair', depends_on=['adapt'],
+    regression = dict(id='regression', skill='precision-repair', depends_on=['preflight'],
         inputs=['driver.py', 'objective.py', 'data.json', str(TOOLS / 'compare_tensors.py')], timeout=30,
         argv=[sys.executable, '-B', 'driver.py', 'regression', '{run}/regression.json'],
         outputs={'regression': 'regression.json'}, checks=[dict(output='regression', pointer='/correct', equals=True)])
-    plan['stages'].insert(2, regression)
+    plan['stages'].insert(-1, regression)
     plan['stages'][-1]['depends_on'].append('regression')
     write(root / 'task.json', plan)
     after = run_workflow(root / 'task.json', root / 'session')
     write(root / 'after.json', after)
     assert after['status'] == 'completed' and after['stages'][0]['reused'], after
+    before_probe = next(stage for stage in before['stages'] if stage['id'] == 'preflight')
+    after_probe = next(stage for stage in after['stages'] if stage['id'] == 'preflight')
+    assert not after_probe['reused'] and before_probe['run'] != after_probe['run'], after
     replay = run_workflow(root / 'task.json', root / 'session')
     assert all(s['reused'] for s in replay['stages']) and replay['attempts'] == after['attempts'], replay
     assert baseline.read_bytes() == baseline_bytes

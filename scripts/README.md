@@ -39,6 +39,26 @@ invoked**; import and validation do not refresh data. Exporters retain their
 existing scope, privacy limits and no-overwrite behavior. No public projection
 upgrades partial scientific evidence into numerical acceptance.
 
+## Evaluate workflow efficiency
+
+At equal numerical acceptance and required coverage, a workflow revision must
+demonstrate lower elapsed time or total Agent tokens against a comparable
+baseline. Report both values and their tradeoffs. Keep this evaluation separate
+from the user task and its numerical verdict.
+
+Match the task, Agent model and settings, resources, starting evidence and
+independent acceptance checks. Evaluate cold starts and repeated tasks separately.
+Reuse a verified matching baseline receipt when available.
+
+- **Time:** Measure from workflow start to the accepted handoff, including setup,
+  tool execution and retries. Report scheduler queue time separately.
+- **Tokens:** Sum reported input and output across Agent calls, including tool
+  results consumed by the Agent and retries. Keep the provider's breakdown. Do
+  not double count cached or reasoning subtotals or treat missing usage as zero.
+
+If neither gain is established, report efficiency as unproven. Repeat variable
+timings as needed to distinguish an improvement from noise.
+
 ## Migrating old script commands
 
 Run from the repository root. Replace the old script prefix and retain its flags:

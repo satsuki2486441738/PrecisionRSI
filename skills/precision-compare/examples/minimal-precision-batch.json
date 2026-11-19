@@ -1,0 +1,29 @@
+{
+  "cases": [
+    {
+      "id": "coin-short-a",
+      "prompt": "A covered coin has already landed. Guess: A for heads, B for tails. Reply with A or B only.",
+      "target": "A"
+    },
+    {
+      "id": "coin-short-b",
+      "prompt": "A second covered coin has landed. Guess: A for heads, B for tails. Reply with A or B only.",
+      "target": "B"
+    },
+    {
+      "id": "coin-long-a",
+      "prompt": "Round K17 is logged in the fictional North Hall practice session. The judge has already written the outcome on a card and put it in a sealed envelope. There are no clues in the round ID or the location. Guess the hidden outcome: A for heads, B for tails. Reply with A or B only.",
+      "target": "A"
+    },
+    {
+      "id": "coin-long-b",
+      "prompt": "Round R42 is logged in the fictional South Hall practice session. A covered coin has already landed. The recorder will open the envelope only after your reply, so make a guess now. Use A for heads and B for tails. Reply with A or B only.",
+      "target": "B"
+    }
+  ],
+  "rl_replay_groups": {
+    "mixed": ["target", "other", "target", "other"],
+    "all_correct": ["target", "target", "target", "target"],
+    "all_wrong": ["other", "other", "other", "other"]
+  }
+}

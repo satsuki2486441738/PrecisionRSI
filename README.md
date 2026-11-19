@@ -51,15 +51,11 @@ python -B -m tools.community_search \
 python skills/precision-compare/examples/compare_gradients.py
 ```
 
-For your own workload, give the agent the run commands or saved artifacts from both sides. For example, “Compare the gradients and stored weight updates in these two runs. Show which parameters were compared and which had the largest differences.”
+For your workload, start with the [NumericBridge Skill](skills/numericbridge/SKILL.md). Give the agent your hardware, model, framework and task, along with any run commands or captures you have.
 
-## Skills and guides
+## Workflow and skills
 
-| What do you need? | Skill | What you get |
-| --- | --- | --- |
-| Run a workload on a new backend | [Framework Adapt](skills/framework-adapt/SKILL.md) | A working configuration and a native run on the target stack |
-| Find where two runs diverge | [Precision Compare](skills/precision-compare/SKILL.md) | Paired measurements, coverage and the locations of differences |
-| Diagnose a difference and fix a confirmed defect | [Precision Repair](skills/precision-repair/SKILL.md) | A diagnosis with supporting evidence and, for a confirmed fix, a patch tested on the original workload |
+The [workflow](skills/numericbridge/references/workflow.md) directs the agent to [Framework Adapt](skills/framework-adapt/SKILL.md) for native setup, [Precision Compare](skills/precision-compare/SKILL.md) for numerical comparisons, and [Precision Repair](skills/precision-repair/SKILL.md) when the evidence warrants diagnosis or repair. Each skill uses the confirmed request and available evidence.
 
 Choose the guide for the quantity you want to compare. The inference guide covers token distributions on a shared history. The SFT guide covers gradients and optimizer updates. The RL guide covers action scores and losses on fixed trajectories. [Inference](skills/precision-compare/references/inference.md) · [SFT](skills/precision-compare/references/sft.md) · [RL](skills/precision-compare/references/rl.md)
 

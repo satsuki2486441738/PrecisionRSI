@@ -11,12 +11,21 @@ import shutil
 from tools.community_search import load_index
 
 ROOT = Path(__file__).resolve().parents[1]
+INSTALLABLE_SKILLS = ('framework-adapt', 'numericbridge', 'precision-compare', 'precision-repair')
+
+
+def installable_folders(source):
+    """Select the released skill packages present in a source directory."""
+    return [folder for name in INSTALLABLE_SKILLS
+            if (folder := Path(source) / name).is_dir()]
 
 
 def install_skills(source, destination):
     """Copy selected skill folders and include execution tools in Compare."""
     source, destination = Path(source), Path(destination)
-    folders = sorted(p for p in source.iterdir() if p.is_dir() and not p.name.startswith('.'))
+    folders = installable_folders(source)
+    if not folders:
+        raise ValueError(f'{source}: no installable skills')
     snapshot = ROOT / 'community/site/data/search-index.json'
     if any(folder.name == 'precision-compare' for folder in folders):
         metadata, _ = load_index(snapshot)

@@ -51,15 +51,11 @@ python -B -m tools.community_search \
 python skills/precision-compare/examples/compare_gradients.py
 ```
 
-换成自己的任务时，把两边的运行命令或已保存的结果交给 Agent。例如：“比较这两次训练的梯度和实际写入的权重更新，列出参与比较的参数，并指出哪些参数的差异最大。”
+自己的任务从 [NumericBridge Skill](skills/numericbridge/SKILL.md) 开始。告诉 Agent 目标硬件、模型、框架和任务，已有运行命令或采集结果也可以一起给它。
 
-## Skill 与使用指南
+## 工作流与 Skill
 
-| 你要做什么 | 使用哪个 Skill | 能得到什么 |
-| --- | --- | --- |
-| 在新后端上运行已有负载 | [Framework Adapt](skills/framework-adapt/SKILL.md) | 可用的配置，以及在目标执行栈上的原生运行结果 |
-| 找出两次运行从哪里开始出现差异 | [Precision Compare](skills/precision-compare/SKILL.md) | 配对测量结果、比较覆盖范围和差异位置 |
-| 诊断差异，修复已确认的缺陷 | [Precision Repair](skills/precision-repair/SKILL.md) | 有证据支撑的诊断结论，修复后还会提供补丁和原始负载的复验结果 |
+[工作流](skills/numericbridge/references/workflow.md)按阶段指引 Agent 使用对应 Skill。部署适配用 [Framework Adapt](skills/framework-adapt/SKILL.md)，精度采集与对比用 [Precision Compare](skills/precision-compare/SKILL.md)，出现需要调查的差异时用 [Precision Repair](skills/precision-repair/SKILL.md)。每一步沿用已确认的需求和已有证据。
 
 按要比较的量选择指南。推理指南讲解如何在相同的历史 token 序列上比较输出分布，SFT 指南覆盖梯度和优化器更新，RL 指南则聚焦固定轨迹上的动作评分与损失。[推理](skills/precision-compare/references/inference.md) · [SFT](skills/precision-compare/references/sft.md) · [RL](skills/precision-compare/references/rl.md)
 

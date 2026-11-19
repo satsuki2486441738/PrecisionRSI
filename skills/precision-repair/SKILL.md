@@ -5,30 +5,58 @@ description: Diagnose and repair numerical defects in model, framework or operat
 
 # Precision repair
 
-For a new hardware/model/framework task, follow [request establishment](../precision-compare/SKILL.md#establish-the-request); reuse the confirmed request when continuing comparison or adaptation.
-Reuse comparison's [community retrieval](../precision-compare/SKILL.md#retrieve-community-evidence) to inspect known issues and scoped solutions before new diagnosis; a retrieved candidate still requires applicability and original-workload checks.
+Start from the confirmed request, paired observations and evidence paths.
 
 ## Diagnose
 
-- Enter for requested diagnosis or repair. Reuse the workload execution, inputs/state, source/runtime identities, collectors, captures and completed checks.
-- Preserve model, data, algorithm and execution semantics. Ask when a choice changes intended results or permitted work.
-- Use an existing native reproduction, or reproduce only the missing evidence through the affected path.
-- Distinguish collection/configuration differences from defects. Reuse a trusted native reference/check; supply missing correctness evidence from the intended algorithm, an analytical property or matching higher-precision computation.
-- Establish causality from the reproduction, responsible code and red/green verification. Add a discriminating experiment only when causality remains ambiguous; replay propagated errors at identical inputs/state ([example](examples/causal-replay.md)). [Internal sampling](../precision-compare/references/layerwise.md) requires agreed scope/budget; reuse existing authorization.
-- Report uncertainty when evidence cannot distinguish defects from numerical-policy tradeoffs.
+1. **Reproduce the observation.** Reuse the native small case, identities,
+   collectors and captures. Check that inputs, initial state, effective settings
+   and observed coordinates are comparable; resolve capture or configuration
+   mismatches first. Repeat only when needed to distinguish a stable discrepancy
+   from run-to-run variation. Preserve the intended execution semantics.
+2. **Localize the difference.** Start at the collected stage boundaries and
+   add [internal observations](../precision-compare/references/layerwise.md)
+   only around the suspect interval within the agreed scope and budget. Report
+   the earliest **observed** divergent boundary and the nearest checked upstream
+   boundary that agreed, if one exists. Unobserved or unpaired boundaries leave
+   the true first divergence open.
+3. **Test the cause.** Inspect the responsible code. If upstream state has
+   diverged, [replay with identical inputs and state](examples/causal-replay.md)
+   to test whether the suspect stage introduces or propagates the difference.
+   Change one factor at a time when explanations compete. Judge correctness
+   using the intended algorithm, an invariant or an aligned independent
+   reference; a difference between stacks alone does not decide which is wrong.
+
+```xml
+<diagnosis_handoff>
+  Record the discrepancy, paired coordinates, coverage and checked boundaries,
+  including gaps. Cite supporting evidence and the source revision and code
+  when identified. Classify the discrepancy as a capture or setup problem,
+  a numerical-policy difference, a supported defect, or unresolved.
+  Propose a patch only when correctness evidence supports the defect. Pass
+  a focused regression check to verification, or the smallest discriminating
+  next check when the cause remains open.
+</diagnosis_handoff>
+```
 
 ## Patch and verify
 
-Execution tools own waiting, timeouts and terminal receipts. Use completion notifications when the host can resume the agent; otherwise use the longest supported blocking wait (at least 10 s when available). Keep scheduler polling inside execution adapters; inspect progress only to resolve a stall, handle interaction or answer a user request.
+- Test each patch, upgrade or settings change separately against the same verified
+  baseline. Keep framework-specific patches with the case.
+- On the original small native case, show the focused check fail before and pass
+  after. Reuse matching baseline evidence, entrypoint, collectors, inputs, initial
+  state and reference. Change only the candidate under test.
+- Reuse those runs for workload verification when coverage suffices. Extend only
+  to cover the trigger, affected behavior or agreed delivery scope.
+- Apply the agreed tolerance, or justify a regression tolerance from the computation
+  and dtype. Measure runtime and memory costs when relevant.
 
-- Patch the responsible implementation; keep framework-specific fixes with the case.
-- Use the smallest regression covering the defect: fail before the fix, pass after. Extend cases for distinct failure mechanisms.
-- Verify through the original entrypoint and collectors at identical inputs/initial state. A regression invoking that workload can also provide its before/after metrics.
-- Use task tolerance or justify one from computation/dtype. Measure runtime/memory when relevant.
-- Existing captures: `compare_arrays` / `compare_trees`; follow comparison's [tool-use requirements](../precision-compare/SKILL.md#tool-use). Missing interface details: `python ../precision-compare/scripts/tool_help.py TOOL` from this skill. Missing collection/comparison → [compare](../precision-compare/SKILL.md); reconstruction/execution or repeated commands → [shared tools](../precision-compare/references/comparison.md#tools).
+Use [precision-compare](../precision-compare/SKILL.md) for missing captures or
+metrics and [shared execution](../precision-compare/references/comparison.md#shared-tasks)
+for receipts or resumed runs.
 
 ## Return
 
-- Cause, source revision, patch/regression, original-workload before/after metrics, configuration changes and existing evidence paths.
-- Finish after regression and original-workload checks pass. Follow comparison’s [request routing](../precision-compare/SKILL.md#scope) for subsequent tasks; reuse unchanged evidence and validate requested configuration changes. Packaging, offline replay and extra reports require a request.
-- If budget prevents verification, return the unresolved question and next discriminating check.
+For each candidate, report the cause, change and tested configuration, regression
+and workload outcomes, before/after metrics, coverage and evidence paths. Mark
+verified only after both checks pass; report remaining checks for partial results.

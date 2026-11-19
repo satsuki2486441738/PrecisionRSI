@@ -4,6 +4,7 @@
 Requires Torch and NumPy in this interpreter. No model downloads or accelerators.
 All installation and execution artifacts are temporary.
 """
+from hashlib import sha256
 import json
 import math
 import os
@@ -39,6 +40,23 @@ def main():
         cwd = root / 'work'
         cwd.mkdir()
         env = {k: v for k, v in os.environ.items() if k not in ('PYTHONPATH', 'PYTHONHOME')}
+        examples = installed / 'examples'
+        batch_pin = json.loads((examples / 'precision-batch-v1.lock.json').read_text(encoding='utf-8'))
+        bundled_path = examples / 'precision-batch-v1.json'
+        if not bundled_path.is_file():
+            raise ValueError(f"installed skill is missing the pinned {batch_pin['id']} dataset")
+        bundled_batch = bundled_path.read_bytes()
+        if sha256(bundled_batch).hexdigest() != batch_pin['sha256']:
+            raise ValueError(f"bundled {batch_pin['id']} dataset does not match its lock")
+        batch_path = cwd / bundled_path.name
+        subprocess.run(
+            [sys.executable, '-I', '-S', '-B', str(examples / 'generate_precision_batch.py'),
+             '--count', str(batch_pin['count']), '--seed', str(batch_pin['seed']),
+             '--group-size', str(batch_pin['group_size']), '--output', str(batch_path)],
+            cwd=cwd, env=env, capture_output=True, text=True, check=True, timeout=30)
+        if batch_path.read_bytes() != bundled_batch:
+            raise ValueError(f"installed generator does not reproduce the bundled {batch_pin['id']} dataset")
+
         help_command = [sys.executable, '-I', '-S', '-B', str(installed / 'scripts/tool_help.py')]
         short = subprocess.run(help_command + ['compare_arrays'], cwd=cwd, env=env,
                                capture_output=True, text=True, check=True, timeout=30).stdout
@@ -230,6 +248,7 @@ assert find(catalog,'environment',dict(framework='torch',device='cpu'))==[]
                         str(installed / 'scripts'), workflow['case']], cwd=cwd, env=env,
                        capture_output=True, text=True, check=True, timeout=30)
         print(f'Clean installation of {len(folders)} skills: links valid; '
+              'precision batch v1 reproduced; '
               'CPU FP32/BF16 captures validated; array/tree/manifest metrics agree for 12 gradient values; '
               'native repair workflow verified with zero-command replay.')
 

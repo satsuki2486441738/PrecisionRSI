@@ -1,9 +1,11 @@
 # Model precision evaluation and reproduction plan
 
-This runbook defines what to measure for one complete model, how to preserve a
-meaningful comparison, and what evidence makes a result reproducible. An agent
-starting with no chat history should read this file, resolve the workload
-specification below, inspect retained evidence, and execute only missing tasks.
+Use this runbook when a task requests a full-model report or when a confirmed
+validation goal requires broader model coverage. The
+[NumericBridge workflow](../skills/numericbridge/references/workflow.md) owns
+request, execution and delivery. Use the profiles and task inventory below to
+plan the expanded measurement scope; a normal comparison or repair starts with
+the reduced native case in the workflow.
 
 The intended output is a model-specific precision report with measured scope,
 operator evidence, workload impact and execution cost. A model output difference
@@ -28,9 +30,9 @@ not by itself establish numerical acceptance.
 6. Deliver the coverage ledger, comparisons, selected replay evidence and report
    described in sections 13 and 14. Leave an exact next action for unfinished work.
 
-The generic protocol belongs here. Endpoint aliases, credentials, environment
-paths, adapters, datasets and dated decisions belong to private cases. No remote
-commands are launched by reading this document.
+This runbook owns the expanded measurement profiles. Endpoint aliases,
+credentials, environment paths, adapters, datasets and dated decisions belong
+to private cases.
 
 ### Repository components
 
@@ -53,14 +55,14 @@ implementations; writing a faster kernel is a separate task.
 
 ## 2 Define what complete means
 
-Every model gets the **core profile**: identity and inputs, native inference,
+For a full-model report, use the **core profile**: identity and inputs, native inference,
 applicable operator families, model-level impact, repeatability, resource cost
 and replay evidence. Enable additional profiles according to the model's
 intended use and the report's claims.
 
 | Profile | Enable when | Required work |
 | --- | --- | --- |
-| Core | Every model | M, D, I, O, Q, P and E tasks below |
+| Core | A full-model report is in scope | M, D, I, O, Q, P and E tasks below |
 | Training | Training precision is in scope and the checkpoint supports it | S tasks; both full-parameter and LoRA when both modes are claimed |
 | RL | Policy optimization is in scope | R tasks with a named native algorithm and backend |
 | Distributed | The claimed deployment uses multiple devices | X tasks for every claimed parallel layout |
@@ -513,7 +515,7 @@ With too few independent cases, report the observations and avoid significance
 claims unsupported by sample size. Report precision improvements together with
 latency/memory costs on the original workload.
 
-## 12 Execute in stages
+## 12 Sequence the expanded evaluation
 
 1. **Resolve and reuse:** freeze profiles/specification; audit existing evidence,
    runtime/resource identities and expected inventories. Complete M/D admission.
