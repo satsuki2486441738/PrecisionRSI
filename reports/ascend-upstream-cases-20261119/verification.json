@@ -1,6 +1,10 @@
 {
   "schema_version": 1,
-  "observed_on": "2026-11-19",
+  "observation_dates": [
+    "2026-11-19",
+    "2026-11-20"
+  ],
+  "observation_timezone": "Asia/Shanghai",
   "environment": {
     "system": "Darwin",
     "machine": "arm64",
@@ -203,6 +207,144 @@
       },
       "compared_arrays": 12,
       "compared_elements": 144,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "dd5ee0321c1179aaaded4fba4f119ed310b30639",
+      "dependencies": {
+        "NVIDIA/Megatron-LM": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+      },
+      "timestamp_utc": "20261119T170048Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 4,
+      "compared_elements": 16,
+      "unequal_elements": 4,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 1.0,
+      "rmse": 0.5
+    },
+    {
+      "case_id": "mindspeed-llm-gpt-dataset-loss-mask",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "ee7ab917d786a3b073c0e64c24c1db2e0c2efce0",
+      "dependencies": {
+        "NVIDIA/Megatron-LM": "a845aa7e12b3a117e24c2352b9e3e60bad2e3a17"
+      },
+      "timestamp_utc": "20261119T170049Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 4,
+      "compared_elements": 16,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "case_id": "mindspeed-packed-mtp-first-segment",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "43e884e651b6460b0a49a1eac5991d63eb4996a7",
+      "timestamp_utc": "20261119T170048Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 12,
+      "compared_elements": 115,
+      "unequal_elements": 92,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 6.0,
+      "rmse": 0.7016126654687385
+    },
+    {
+      "case_id": "mindspeed-packed-mtp-first-segment",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "5f4402805352459264fb526ca5f587453b811c72",
+      "timestamp_utc": "20261119T170049Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 12,
+      "compared_elements": 115,
+      "unequal_elements": 0,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "case_id": "mindspeed-te-sp-column-bias",
+      "mode": "source-cpu",
+      "variant": "before",
+      "upstream_revision": "c2357e9ae4689cf1791a5f258217cd256ce41ce1",
+      "timestamp_utc": "20261119T170048Z",
+      "acceptance": {
+        "outcome": "mismatch",
+        "expected": "mismatch",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 34,
+      "compared_elements": 224,
+      "unequal_elements": 16,
+      "nonfinite": {
+        "side_a": 0,
+        "side_b": 0
+      },
+      "max_abs": 3.0,
+      "rmse": 0.5175491695067657
+    },
+    {
+      "case_id": "mindspeed-te-sp-column-bias",
+      "mode": "source-cpu",
+      "variant": "after",
+      "upstream_revision": "17f1bb727be109b152e5c2e4d74664592233b2df",
+      "timestamp_utc": "20261119T170049Z",
+      "acceptance": {
+        "outcome": "match",
+        "expected": "match",
+        "atol": 0,
+        "rtol": 0
+      },
+      "compared_arrays": 34,
+      "compared_elements": 224,
       "unequal_elements": 0,
       "nonfinite": {
         "side_a": 0,

@@ -1,20 +1,23 @@
 # Ascend upstream precision regressions
 
-Collected on 2026-11-19 from GitCode merge requests and GitHub pull requests. Screening covered native Ascend/PyTorch, op-plugin and CANN repositories and Ascend integrations in vLLM, SGLang and training frameworks. The fixture set retains changes with a specific numerical symptom, a small deterministic input or seed, a reference or invariant, and pinned upstream revisions. The selected changes opened or merged from 2026-10-27 through 2026-11-18.
+Collected on 2026-11-19 and extended with MindSpeed Core and MindSpeed-LLM training cases on 2026-11-20. Screening covered native Ascend/PyTorch, op-plugin and CANN repositories and Ascend integrations in vLLM, SGLang and MindSpeed. The fixture set retains changes with a specific numerical symptom, a small deterministic input or seed, a reference or invariant, and pinned upstream revisions. The selected changes opened or merged from 2026-10-27 through 2026-11-18.
 
 | Case ID | Numerical check | Upstream | Mode |
 | --- | --- | --- | --- |
 | `torchnpu-inductor-expm1` | Compiled FP32 `expm1` near zero against an FP64 reference rounded to FP32 | [Ascend/pytorch !49365](https://gitcode.com/Ascend/pytorch/merge_requests/49365), merged Nov 18 | `native-npu`, `cpu-smoke` |
 | `torchnpu-triton-int64-div` | Exact floor/trunc division near `±2**40`, host/device scalars and a fused expression | [Ascend/pytorch !49540](https://gitcode.com/Ascend/pytorch/merge_requests/49540), merged Nov 17 | `native-npu`, `cpu-smoke` |
 | `sglang-gdn-state-layout` | GDN prefill attention, final recurrent state and chunk snapshots | [SGLang #50245](https://github.com/sgl-project/sglang/pull/50245), opened Nov 13 | `source-cpu` |
+| `mindspeed-llm-gpt-dataset-loss-mask` | GPT dataset loss mask isolation between padded and unpadded samples | [MindSpeed-LLM !5212](https://gitcode.com/Ascend/MindSpeed-LLM/merge_requests/5212), merged Nov 12 | `source-cpu` |
 | `sglang-mla-prefix-compaction` | Valid cache tokens and packed row counts for ND/NZ with mixed and page-aligned lengths | [SGLang #47924](https://github.com/sgl-project/sglang/pull/47924), merged Nov 4 | `source-cpu` |
 | `vllm-ascend-deepseek-v4-sink-reload` | Two attention-sink updates through target, MTP and DSpark loaders with TP rank-local and DSA CP layouts | [vLLM-Ascend #18642](https://github.com/vllm-project/vllm-ascend/pull/18642), merged Nov 3 | `source-cpu` |
 | `vllm-ascend-qsfa-tnd-tail` | Finiteness of 36 valid query rows and exact zero across 28 padding rows after a 128→64 capacity shrink | [vLLM-Ascend #20578](https://github.com/vllm-project/vllm-ascend/pull/20578), merged Nov 2 | `native-npu` |
+| `mindspeed-te-sp-column-bias` | BF16 column-parallel output and backward gradients with sequence parallelism and nonzero bias | [MindSpeed !4128](https://gitcode.com/Ascend/MindSpeed/merge_requests/4128), opened Nov 2 | `source-cpu` |
+| `mindspeed-packed-mtp-first-segment` | CP1 packed MTP label shift, loss mask, token count, loss and logits gradient | [MindSpeed !4115](https://gitcode.com/Ascend/MindSpeed/merge_requests/4115), merged Oct 30 | `source-cpu` |
 | `op-plugin-mul-host-scalar` | BF16 and FP16 bit patterns for FP32 host-scalar multiplication, including `out=` | [Ascend/op-plugin !6062](https://gitcode.com/Ascend/op-plugin/merge_requests/6062), merged Oct 27 | `native-npu`, `cpu-smoke` |
 
-The GDN case targets an open PR's candidate head. The QSFA padding check can be allocator-dependent on the baseline, so a baseline match is inconclusive. The `source-cpu` cases execute affected pinned Python code with synthetic tensors and small substitutes at runtime boundaries. The `cpu-smoke` controls exercise the reference and artifact path using eager CPU operations. Native runs exercise the installed Ascend stack.
+The SGLang GDN and MindSpeed sequence-parallel bias cases target open PR heads. [GitHub MindSpeed #2](https://github.com/Ascend/MindSpeed/pull/2) mirrors GitCode !4128 at the same candidate commit. The QSFA padding check can be allocator-dependent on the baseline, so a baseline match is inconclusive. The `source-cpu` cases execute affected pinned Python code with synthetic tensors and small substitutes at runtime boundaries. The `cpu-smoke` controls exercise the reference and artifact path using eager CPU operations. Native runs exercise the installed Ascend stack.
 
-On 2026-11-19, all three source cases reproduced the discrepancy at the baseline revision and matched their references at the candidate or merged revision. All three CPU smoke controls matched. The four native NPU cases await device execution. The [measured results](verification.json) include scope, acceptance and the environment for each CPU run.
+All source cases reproduced the discrepancy at the baseline revision and matched their references at the candidate or merged revision. All three CPU smoke controls matched. The four native NPU cases await device execution. The [measured results](verification.json) include scope, acceptance and the environment for each CPU run.
 
 ## List and run cases
 
@@ -52,6 +55,31 @@ python -B "$runner" run "$case_id" --source "$source_checkout" \
 ```
 
 Repeat with `sglang-gdn-state-layout` in the same checkout and `vllm-ascend-deepseek-v4-sink-reload` using `/tmp/nb-vllm-ascend-source`. MLA uses mock buffers and forward metadata for one DCP rank. GDN supplies a CPU implementation of the external chunk kernel to the real Python wrapper. The vLLM-Ascend reload case executes the three loader functions with a sink-only deferred replay fixture and a cold-load control.
+
+### MindSpeed training cases
+
+Fetch the four MindSpeed commit objects into one checkout. Fetch MindSpeed-LLM and its pinned Megatron dependency into the separate layout below.
+
+```sh
+git init /tmp/nb-mindspeed-source
+git -C /tmp/nb-mindspeed-source fetch --depth=1 --no-tags https://gitcode.com/Ascend/MindSpeed.git \
+  c2357e9ae4689cf1791a5f258217cd256ce41ce1 17f1bb727be109b152e5c2e4d74664592233b2df \
+  43e884e651b6460b0a49a1eac5991d63eb4996a7 5f4402805352459264fb526ca5f587453b811c72
+
+git init /tmp/nb-mindspeed-llm-source
+git -C /tmp/nb-mindspeed-llm-source fetch --depth=2 --no-tags https://gitcode.com/Ascend/MindSpeed-LLM.git \
+  ee7ab917d786a3b073c0e64c24c1db2e0c2efce0
+git init /tmp/nb-mindspeed-llm-source/Megatron-LM
+git -C /tmp/nb-mindspeed-llm-source/Megatron-LM fetch --depth=1 --no-tags https://github.com/NVIDIA/Megatron-LM.git \
+  refs/tags/core_v0.12.1
+
+python -B "$runner" run mindspeed-packed-mtp-first-segment --source /tmp/nb-mindspeed-source \
+  --mode source-cpu --variant before --expect mismatch
+python -B "$runner" run mindspeed-packed-mtp-first-segment --source /tmp/nb-mindspeed-source \
+  --mode source-cpu --variant after --expect match
+```
+
+Use the same two commands for `mindspeed-te-sp-column-bias` and use `/tmp/nb-mindspeed-llm-source` for `mindspeed-llm-gpt-dataset-loss-mask`. The bias case runs the real BF16 forward and backward with simulated collectives for two TP ranks. Packed MTP exercises the real CP1 shift wrapper and measures its effect on a synthetic loss and logits gradient. The dataset case runs the pinned MindSpeed-LLM wrapper and Megatron mask code with synthetic document reads.
 
 ## Run on Ascend
 
