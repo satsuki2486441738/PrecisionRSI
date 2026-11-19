@@ -17,7 +17,7 @@
     const hardware=text.toLowerCase().replace(/\bno\s+(?:model\s+or\s+)?(?:accelerators?|gpus?|npus?)\b/g,' ');
     let names=[...new Set(index.hardware_rules.filter(r=>new RegExp(r.pattern,'u').test(hardware)).map(r=>r.name))];
     if(names.some(n=>['Ascend 910C','Ascend 910B'].includes(n)))names=names.filter(n=>n!=='Ascend NPU');
-    if(names.some(n=>/^(NVIDIA H|RTX )/.test(n)))names=names.filter(n=>n!=='NVIDIA GPU');
+    if(names.some(n=>n!=='NVIDIA GPU'&&/^(NVIDIA |RTX )/.test(n)))names=names.filter(n=>n!=='NVIDIA GPU');
     if(names.some(n=>n!=='CPU'))names=names.filter(n=>n!=='CPU');
     if(names.length===1&&names[0]==='NVIDIA GPU'&&/(?:nvidia|geforce)\s*(?:[a-z]+\s*)?\d/.test(hardware))return [text];
     if(names.length===1&&names[0]==='CPU'&&/offload|gpu|npu|accelerator/.test(hardware))return [text];

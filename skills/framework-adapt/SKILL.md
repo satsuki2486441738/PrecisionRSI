@@ -38,13 +38,13 @@ sequence length or step count across tasks.
   boundaries. Keep any shape or scale needed to trigger the path. Read only the
   recipe for the requested task: [inference](../precision-compare/references/inference.md),
   [SFT](../precision-compare/references/sft.md) or [RL](../precision-compare/references/rl.md#native-preflight).
-- **Check execution and evidence.** Require successful native termination,
-  observed target-device and path execution, and the declared outputs or
-  collector artifacts. Imports, device enumeration, model loading alone and
-  scheduler submission do not establish that a workload path ran. Record the
-  actual configuration, reductions, checked boundaries, and terminal and
-  artifact references. Reuse a matching receipt only for its recorded scope;
-  check the current allocation/device binding before launching new work.
+- **Check execution and evidence.** Require successful native termination and
+  the observed device and runtime path. Exercise the collectors needed for that
+  path: verify representative records at each declared boundary against the
+  expected keys, shapes and sample mapping. A file or successful launch alone
+  does not establish capture coverage. Return these checks in the preflight
+  receipt; gate formal capture on them. Reuse a matching receipt only for its
+  recorded scope, and check the current device binding before new work.
 
 A pass establishes readiness for capture on the tested path. Numerical
 agreement, target scale and uncovered paths require their own evidence.
