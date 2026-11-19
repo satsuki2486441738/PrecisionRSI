@@ -17,7 +17,7 @@
 
 <p align="center"><a href="#框架概览">框架概览</a> · <a href="#快速开始">快速开始</a> · <a href="#典型案例">典型案例</a> · <a href="#评测与修复历史">评测与修复历史</a></p>
 
-NumericBridge 是一个面向推理、训练和强化学习（RL）的数值精度社区。先按当前配置实时检索社区记录，获取最新的相关案例，再在本地部署工作负载，复现并定位精度问题。修复后，重新运行原始负载验证效果，最后通过 Pull Request 将补丁和验证证据贡献回社区。
+NumericBridge 是一个面向推理、训练和强化学习（RL）的数值精度社区。先按当前配置实时检索社区记录，获取最新的相关案例，再在本地部署工作负载，复现并定位精度问题。修复后，重新运行原始负载验证效果，再把验证结果投稿给社区审核。
 
 ## 框架概览
 
@@ -25,7 +25,7 @@ NumericBridge 是一个面向推理、训练和强化学习（RL）的数值精�
 
 *图中的 Ascend 910C / Qwen3.8-27B / verl 配置仅为示例；实测结果与已验证覆盖范围见[典型案例](#典型案例)。*
 
-按硬件、模型和框架版本检索[社区案例库](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases)，可以找到已知问题、候选修复和已有测量结果。在本地环境中，对比修复前后的输出、梯度或权重更新。提交 PR 时附上运行配置、补丁及实际验证范围，便于遇到同类问题的人复验。
+按硬件、模型和框架版本检索[社区案例库](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases)，可以找到已知问题、候选修复和已有测量结果。在本地环境中，对比修复前后的输出、梯度或权重更新。投稿时附上运行配置、补丁及实际验证范围，便于遇到同类问题的人复验。
 
 ## 快速开始
 
@@ -79,7 +79,7 @@ python skills/precision-compare/examples/compare_gradients.py
 
 ## 参与贡献
 
-欢迎通过 Pull Request 分享比较结果或修复案例。请写明模型和依赖库的具体版本、运行配置、观测到的差异，并附上证据。提交修复时，请附上同一原始负载在修复前后的结果。[社区记录指南](skills/precision-compare/references/community-records.md) · [发布规则](docs/publication.md)
+通过[社区投稿 MCP](community/README.md#mcp-contribution)分享比较结果或修复案例。请附上模型和依赖库版本、运行配置、观测差异和证据。分享修复时，附上同一原始负载修复前后的结果。社区维护者负责审核、入库和必要的上游 PR。[社区记录指南](skills/precision-compare/references/community-records.md) · [发布规则](docs/publication.md)
 
 提交前，在仓库根目录运行仓库和社区记录检查。[开发指南](AGENTS.md)
 

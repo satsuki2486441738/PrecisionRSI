@@ -4,16 +4,15 @@
 
 ```xml
 <handoff>
-  Confirm, retrieve, prepare and compare. Diagnose and verify when warranted and
-  in scope, then optimize if enabled. A stage handoff is a checkpoint: record
-  its result, give a progress update if useful, and execute the next in-scope
-  step in the same turn. If one side is blocked, continue independent work on
-  the other side and use applicable reference fallbacks within scope.
-  Deliver when the request is satisfied or no authorized action or wait can
-  advance it within budget. For incomplete work, report the blocker. For resume,
-  retain the confirmed request, stage, workload, source/runtime identities,
-  evidence paths, issue record path when present, and exact next action.
-  Reuse matching evidence.
+  Confirm, retrieve, prepare and compare. Diagnose and verify when in scope,
+  then optimize if enabled. Before launching, put known dependent commands in
+  one workflow plan: resource readiness, native preflight, capture and comparison.
+  Declare stage outputs and coverage checks from the task recipe. Keep bounded
+  waits in the launcher; confirm the device binding again at native launch.
+  Run the available chain in the same turn. A preflight or progress update does
+  not pause it. If one side is blocked, advance independent work and fallbacks.
+  Keep the confirmed request, plan, workload and runtime identities, evidence,
+  remaining budget, issue record and exact next action for resume.
 </handoff>
 ```
 
@@ -22,10 +21,10 @@
   Create issues.md in the local case workspace when a finding changes the
   execution path or affects the result. Record it when found, including setup
   blockers, then update the same entry after diagnosis and each attempted change.
-  Keep the symptom, triggering configuration and workload, cause or open
-  question, and each candidate's change and outcome. Link to existing receipts,
-  patches and measurements. Keep failed attempts and open checks; distinguish a
-  verified workaround from repair of the original path.
+  Keep one current conclusion per issue: its status, affected configuration,
+  verified scope, candidate outcome and open checks. Update it at each handoff;
+  append attempts and link receipts, patches and measurements below it. Keep
+  failed attempts and distinguish a workaround from repair of the original path.
 </issue_record>
 ```
 
@@ -63,11 +62,12 @@ fields, using `--hardware`, `--model`, `--library`, `--task` and optional
   Record the returned status and index identity. If both paths are unavailable,
   record the lookup as unavailable. Continue to environment preparation after
   a successful lookup, including no-records, or when the lookup is unavailable.
-  Carry only applicable case, issue and verification references. Treat a non-null
-  recommendation as a candidate stack and verify it on the target workload.
-  With a null recommendation, continue from the confirmed request and explain
-  insufficient evidence if the user asked for a stack recommendation. Retain a
-  user-fixed version unless the user agrees to change it.
+  A case match supplies context, even when recommendation is null. Check the
+  recorded versions, triggering settings and verification scope. For an
+  applicable solution, reuse a matching local receipt or run the smallest
+  target check that can confirm it. Otherwise continue from the confirmed
+  request. A trial candidate can inform an enabled optimization; do not select
+  it as the default. Retain user-fixed versions.
 </retrieval_handoff>
 ```
 
@@ -160,9 +160,10 @@ in-scope difference that warrants investigation.
 
 ```xml
 <diagnose when="an in-scope difference needs investigation">
-  Move to repair for a supported defect within scope. If the cause is unresolved,
-  continue diagnosis while a focused check fits the budget; otherwise deliver
-  the evidence and next check. For comparison-only work, skip diagnosis and deliver.
+  Apply the diagnosis handoff's stop conditions. Keep diagnosis open while it
+  calls for a next check, even if all comparison checks are complete. Move to
+  repair for a supported defect within scope. If diagnosis cannot proceed,
+  deliver it as partial. For comparison-only work, skip diagnosis and deliver.
 </diagnose>
 ```
 
@@ -180,39 +181,55 @@ Use the [repair and verification method](../../precision-repair/SKILL.md#patch-a
 ## Optimize precision
 
 ```xml
-<optimize when="optimize_precision is enabled and the starting configuration is verified">
-  Compare against the verified configuration using the same small case and
-  reference. Recheck affected paths and measure the agreed metric and costs.
-  Stop at the first verified improvement within those limits, or when candidates
-  or budget run out. If none qualifies, deliver the verified starting configuration.
+<optimize when="optimize_precision is enabled and a matching baseline is measured">
+  After any required repair is verified, test the candidate against the current
+  baseline on the same small case and reference. Recheck affected paths, agreed
+  metrics and costs; inspect regressions across relevant samples, not just the
+  trigger. Stop at a verified improvement within the limits, or when candidates
+  or budget run out. If none qualifies, deliver the starting configuration.
 </optimize>
 ```
 
 ## Resume and deliver
 
-Use [execution receipts](../../precision-compare/references/comparison.md#shared-tasks)
-when resuming work.
+Use [execution receipts and plan checks](../../precision-compare/references/comparison.md#shared-tasks).
+For repeatable command chains, declare required evidence as output `checks`
+in the existing workflow plan. Follow `next_action` within scope; `completed`
+covers only the checks declared in that plan.
 
 ```xml
 <deliver>
-  Reuse any comparison handoff for each candidate. Include its actual configuration,
-  runnable setup when available, unresolved checks and the local issue record
-  path when present. Report whether agreed criteria were met; leave acceptance
-  unset without criteria or an assessment.
-  On follow-up, rerun only affected scope or explicitly requested fresh checks.
-  Produce extra reports, bundles or offline replay on request.
+  Before final delivery, reconcile every required check with its evidence.
+  Report native execution, aligned precision comparison, and any diagnosis
+  and repair verification separately. If a required check is still open,
+  continue if an authorized action or wait can advance it within budget.
+  Otherwise deliver a partial result with the missing evidence, concrete blocker
+  and next action. Report acceptance separately; leave it unset without criteria
+  or an assessment. Include each candidate's tested configuration, runnable
+  setup and issue record path when available. On follow-up, rerun only affected
+  scope or explicitly requested fresh checks. Produce extra reports, bundles
+  or offline replay on request.
 </deliver>
 ```
 
 Load the [community record guide](../../precision-compare/references/community-records.md)
-only after the user opts in.
+when preparing a shareable result.
 
 ```xml
-<contribute when="shareable results have been delivered">
-  Ask once whether to share anonymized results so others can reuse the findings.
-  On opt-in, remove identifying and private details. Call prepare_community_submission
-  and show its preview. Call submit_community with that draft ID and digest for
-  user confirmation. Report the submission outcome and PR link if available;
-  keep the local draft if submission cannot proceed.
+<contribute when="delivering shareable results or resuming a contribution">
+  Honor a prior decline or no-share instruction. Prepare a local preview of the
+  anonymized results and minimum evidence with prepare_community_submission.
+  Show the preview and destination with the result, then call submit_community
+  with its draft ID and digest. Its form is the sharing offer and the only
+  confirmation: share the anonymized result so others can reuse it. A refusal
+  or dismissal ends the offer; finish local delivery either way.
+  If submission is unavailable, retain the local draft, give its path and
+  report the blocker. On receipt, report the community receipt ID and that it
+  is awaiting review. Community maintainers handle publication and upstream follow-up.
+  Report "searchable" only when the deployed index returns the new record IDs.
 </contribute>
 ```
+
+If the contribution MCP is unavailable, keep the anonymized input JSON as a
+draft. From the repository, validate it with
+`python -B -m community.records.submission --input submission.json --output preview.json`.

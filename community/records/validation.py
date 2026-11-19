@@ -160,8 +160,11 @@ def validate_evaluations(site):
                         not 0 <= observed <= expected or expected <= 0 or not coverage['label'] or not coverage['unit']):
                     raise ValueError('Invalid evaluation coverage')
         archive = record['archive']
-        if (not re.fullmatch('[a-f0-9]{40}', archive['revision']) or not archive['prefix'] or
-                type(archive['replay_cases']) is not int or archive['replay_cases'] <= 0):
+        if archive is not None and (
+                not isinstance(archive, dict) or not isinstance(archive.get('revision'), str) or
+                not re.fullmatch('[a-f0-9]{40}', archive['revision']) or
+                not isinstance(archive.get('prefix'), str) or not archive['prefix'].strip() or
+                type(archive.get('replay_cases')) is not int or archive['replay_cases'] <= 0):
             raise ValueError('Evaluation archive needs a pinned revision and replay count')
         if not record['evidence']:
             raise ValueError('Evaluation needs published evidence')

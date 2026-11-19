@@ -13,6 +13,10 @@ For public record fields and wording, use the
 [record format](../community/records/README.md) and
 [writing guide](../skills/precision-compare/references/community-records.md).
 
+Community contributors send anonymized results to the
+[private intake](../community/README.md#mcp-contribution). Maintainers review
+the receipt, select records for publication and handle any upstream submission.
+
 ## Keep public
 
 - Framework and skill code, minimum reproducers, patches and workflow validators.
@@ -27,7 +31,7 @@ For public record fields and wording, use the
 - Optional RSI runner source in `research/`, its experiment state, candidates and full traces.
   Public dashboard snapshots may remain when they contain reviewed summaries only.
 
-- Execution logs, handoffs, completed one-off plans and exploratory candidates.
+- Unreviewed inbox receipts, execution logs, handoffs, completed one-off plans and exploratory candidates.
 - Raw tensors, checkpoints, full responses, traces and historical delivery ZIPs.
 - Duplicate metric snapshots and generated PNG/PDF copies when the public SVG
   and its underlying final measurements already provide the same result.
