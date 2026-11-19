@@ -17,7 +17,7 @@
 
 <p align="center"><a href="#framework-overview">Overview</a> · <a href="#getting-started">Getting started</a> · <a href="#typical-cases">Typical cases</a> · <a href="#evaluation-and-repair-history">Results and repair history</a></p>
 
-NumericBridge is a community for investigating numerical precision across inference and training stacks, including RL. Start by querying the live community case library for records that match your setup, then deploy the workload locally to reproduce and diagnose precision differences. Verify the fix by rerunning the original workload and share the patch and evidence with the community in a pull request.
+NumericBridge is a community for investigating numerical precision across inference and training stacks, including RL. Start by querying the live community case library for records that match your setup, then deploy the workload locally to reproduce and diagnose precision differences. Verify the fix by rerunning the original workload and submit the verified result to the community for review.
 
 ## Framework overview
 
@@ -25,7 +25,7 @@ NumericBridge is a community for investigating numerical precision across infere
 
 *The Ascend 910C / Qwen3.8-27B / verl configuration in the figure is an example. See [Typical cases](#typical-cases) for measured results and verified coverage.*
 
-Search the [community case library](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases) by hardware, model and framework version to retrieve known issues, candidate fixes and prior measurements. In your own environment, compare the affected outputs, gradients or weight updates before and after the change. Include the configuration, patch and measured coverage in the pull request so the next team can reproduce the result.
+Search the [community case library](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases) by hardware, model and framework version to retrieve known issues, candidate fixes and prior measurements. In your own environment, compare the affected outputs, gradients or weight updates before and after the change. Include the configuration, patch and measured coverage in the community submission so the next team can reproduce the result.
 
 ## Getting started
 
@@ -79,7 +79,7 @@ Use the [community case library](https://satsuki2486441738.github.io/NumericBrid
 
 ## Contributing
 
-To share a comparison or repair, open a pull request with the model and library revisions, run configuration, observed difference and evidence. For a fix, include the before-and-after results on the original workload. [Community record guide](skills/precision-compare/references/community-records.md) · [Publication guidelines](docs/publication.md)
+Share a comparison or repair through the [community submission MCP](community/README.md#mcp-contribution). Include the model and library revisions, run configuration, observed difference and evidence. For a fix, include before-and-after results on the original workload. Community maintainers review submissions, publish records and coordinate any upstream PRs. [Community record guide](skills/precision-compare/references/community-records.md) · [Publication guidelines](docs/publication.md)
 
 Before submitting, run the repository and record checks from the repository root. [Developer guide](AGENTS.md)
 

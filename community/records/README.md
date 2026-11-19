@@ -141,6 +141,9 @@ python -B -m scripts export-search --refresh
 python -B -m scripts export-search --check
 ```
 
+For evaluations with public evidence but no separate public replay archive,
+set `archive` to `null` and provide the usual `evidence` links.
+
 Regenerate the index after record or content changes. It pins the source catalogs
 and content file. Observation dates describe the experiments; editorial updates
 do not change them.

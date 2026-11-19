@@ -1,7 +1,8 @@
 # Community submission guide
 
-After delivery, use this guide to write a public record if the user opts in to
-sharing. For the submission procedure, see [the workflow](../../numericbridge/references/workflow.md#resume-and-deliver).
+Use this guide to prepare an anonymized local preview alongside a shareable
+result. See [the workflow](../../numericbridge/references/workflow.md#resume-and-deliver)
+for the single confirmation before submission.
 
 ## Record the result
 
