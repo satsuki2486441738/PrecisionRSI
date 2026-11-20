@@ -97,11 +97,25 @@ for the minimum workload and required evidence.
   Before capture, return the target and reference labels, effective execution
   JSON or its artifact path, source/runtime/resource identities, workload and
   preflight receipt, and any uncovered or blocked paths. A preflight pass means
-  the planned native path is ready for capture. If target preflight fails, resolve
-  the environment or adaptation within scope. If still blocked, report the cause
-  and leave that target path unverified. If only the native reference is blocked,
+  the planned native path is ready for capture. If target preflight fails, apply
+  the recovery rule below before retrying. If still blocked, report the cause and
+  leave that target path unverified. If only the native reference is blocked,
   apply the reference fallback below and record its coverage.
 </prepare_handoff>
+```
+
+```xml
+<preflight_recovery when="preflight reports failure or its final summary is missing">
+  Use next_action.run and declared_outputs to locate landed evidence. Check the
+  exact native owner's state before relaunching. If still active, follow that
+  owner. If the native workload succeeded and only the wrapper failed, preserve
+  the failed receipt. In a new recovery step, verify native terminal success,
+  the planned input/runtime/device binding, and output identities and coverage
+  against the original checks. Resume from the new verified receipt without
+  replaying that native workload. If evidence is missing, recover or rerun only
+  the missing checks after confirming the old owner is terminal. A landed
+  file or failed wrapper is not a pass receipt.
+</preflight_recovery>
 ```
 
 ### Run the comparison
@@ -204,7 +218,14 @@ covers only the checks declared in that plan.
   and repair verification separately. If a required check is still open,
   continue if an authorized action or wait can advance it within budget.
   Otherwise deliver a partial result with the missing evidence, concrete blocker
-  and next action. Report acceptance separately; leave it unset without criteria
+  and next action. A completed evaluation does not close an unresolved issue or
+  a candidate with only partial improvement. Keep it open in issues.md and link
+  it from the delivery. Record the trigger and reuse paths, the next focused
+  check (command or adapter and inputs when known), its required resources, and
+  the original-workload checks needed to close the issue. In a batch, prefer an
+  actionable open issue with a reproducible trigger over starting another case
+  when the remaining authorization, resources and budget permit.
+  Report acceptance separately; leave it unset without criteria
   or an assessment. Include each candidate's tested configuration, runnable
   setup and issue record path when available. On follow-up, rerun only affected
   scope or explicitly requested fresh checks. Produce extra reports, bundles

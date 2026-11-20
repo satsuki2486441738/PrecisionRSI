@@ -44,8 +44,11 @@ failure yields its continuation without rerunning; change its inputs or request
 --refresh. Refresh reruns the stage and descendants. cache:false stages execute
 on each run (e.g. a live environment probe); unchanged receipts permit downstream
 reuse. Failures route to the stage skill; a failed task-owned check may route to
-on_check_failure. The agent performs the indicated adaptation/repair, then calls
-run again to verify the affected dependency chain. No model service is invoked.
+on_check_failure. When next_action points to a retained run, declared_outputs
+maps output names to their planned paths relative to that run. These locations
+are inspection hints, not validation, proof of existence, or reusable outputs.
+The agent performs the indicated adaptation/repair, then calls run again to
+verify the affected dependency chain. No model service is invoked.
 
 Commands use record_run for literal argv, logs, timeout and process-group cleanup.
 Existing run bytes are preserved. A process lock prevents concurrent execution.
@@ -349,7 +352,8 @@ def _action(stage, reason, receipt=None):
                   reason=reason, inputs=stage['inputs'], depends_on=stage['depends_on'])
     if receipt and receipt.get('run'):
         result.update(run=receipt['run'], stdout=str(Path(receipt['run']) / 'stdout.bin'),
-                      stderr=str(Path(receipt['run']) / 'stderr.bin'), outputs=receipt.get('outputs', {}))
+                      stderr=str(Path(receipt['run']) / 'stderr.bin'),
+                      outputs=receipt.get('outputs', {}), declared_outputs=stage['outputs'])
         command = Path(receipt['run']) / 'command.json'
         if command.exists():
             result['execution'] = summarize_run(receipt['run'], include_tails=True)
