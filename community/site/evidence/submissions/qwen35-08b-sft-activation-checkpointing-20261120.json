@@ -1,0 +1,3370 @@
+{
+  "acceptance": null,
+  "scope": "Qwen3.5-0.8B BF16 eager SFT of 100 fixed synthetic documents; one native AdamW step, FP32 rank-8 LoRA on three text layers, with ordinary backward and non-reentrant activation checkpointing. An eight-event preserve-RNG-off arm is a deliberate control.",
+  "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "workload": {
+    "events": {
+      "preflight": 8,
+      "formal": 100
+    },
+    "microbatch_size": 4,
+    "updates": 1,
+    "scope": "Official text-only pretrained hybrid Qwen3.5, BF16 frozen base, FP32 rank-8 LoRA on early/first full attention/final text MLP down projections. Native Trainer and AdamW.",
+    "independent_numeric_reference": "FP64 full-vocabulary target scoring and AdamW replay from captured gradients.",
+    "settings": "Ordinary backward and native non-reentrant activation checkpointing with preserved RNG, with 25% LoRA dropout and zero-dropout comparator. Deliberate no-preserve control is preflight only.",
+    "dataset_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77"
+  },
+  "stack": {
+    "transformers": "5.23.0",
+    "accelerate": "1.16.0",
+    "peft": "0.22.0"
+  },
+  "targets": 240,
+  "full_vocabulary": 248320,
+  "native_runs": {
+    "ascend": {
+      "runtime": {
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "torch": "2.9.0+cpu",
+        "accelerator_runtime": "2.9.0.post2"
+      },
+      "dropout_layers": {
+        "0": "linear_attention",
+        "3": "full_attention",
+        "23": "full_attention"
+      },
+      "preserved_vs_plain": {
+        "first_micro_raw_logits_changed": 0,
+        "raw_logits_changed": 0,
+        "raw_logits_coordinates": 59596800,
+        "targets_fp64": {
+          "coordinates": 240,
+          "changed": 0,
+          "max_abs": 0.0,
+          "mae": 0.0,
+          "relative_l2": 0.0
+        },
+        "forward_dropout_trace": {
+          "0-linear_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "23-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "3-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          }
+        },
+        "forward_rng_before_diff_micros": 0,
+        "forward_rng_after_diff_micros": 0,
+        "post_backward_cpu_rng_matches": true,
+        "post_backward_device_rng_matches": true,
+        "per_adapter_layer": {
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          }
+        },
+        "total_adapter": {
+          "gradient": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "after": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavg": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavgsq": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          }
+        }
+      },
+      "no_dropout_vs_plain": {
+        "first_micro_raw_logits_changed": 0,
+        "raw_logits_changed": 0,
+        "raw_logits_coordinates": 59596800,
+        "targets_fp64": {
+          "coordinates": 240,
+          "changed": 0,
+          "max_abs": 0.0,
+          "mae": 0.0,
+          "relative_l2": 0.0
+        },
+        "forward_dropout_trace": {
+          "0-linear_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "23-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "3-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          }
+        },
+        "forward_rng_before_diff_micros": 0,
+        "forward_rng_after_diff_micros": 0,
+        "post_backward_cpu_rng_matches": true,
+        "post_backward_device_rng_matches": true,
+        "per_adapter_layer": {
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          }
+        },
+        "total_adapter": {
+          "gradient": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "after": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavg": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavgsq": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          }
+        }
+      },
+      "original_vs_recomputed": {
+        "0-linear_attention": {
+          "rows": 25,
+          "input_differences": 0,
+          "output_differences": 0,
+          "rng_before_differences": 0,
+          "rng_after_differences": 0,
+          "cpu_rng_before_differences": 0,
+          "accelerator_rng_before_differences": 0,
+          "cpu_rng_after_differences": 0,
+          "accelerator_rng_after_differences": 0
+        },
+        "23-full_attention": {
+          "rows": 25,
+          "input_differences": 0,
+          "output_differences": 0,
+          "rng_before_differences": 0,
+          "rng_after_differences": 0,
+          "cpu_rng_before_differences": 0,
+          "accelerator_rng_before_differences": 0,
+          "cpu_rng_after_differences": 0,
+          "accelerator_rng_after_differences": 0
+        },
+        "3-full_attention": {
+          "rows": 25,
+          "input_differences": 0,
+          "output_differences": 0,
+          "rng_before_differences": 0,
+          "rng_after_differences": 0,
+          "cpu_rng_before_differences": 0,
+          "accelerator_rng_before_differences": 0,
+          "cpu_rng_after_differences": 0,
+          "accelerator_rng_after_differences": 0
+        }
+      },
+      "deliberate_no_preserve_control": {
+        "comparisons": {
+          "first_micro_raw_logits_changed": 0,
+          "raw_logits_changed": 2369667,
+          "raw_logits_coordinates": 4966400,
+          "targets_fp64": {
+            "coordinates": 20,
+            "changed": 10,
+            "max_abs": 0.1715524693252113,
+            "mae": 0.0445173081426571,
+            "relative_l2": 0.027419171703848937
+          },
+          "forward_dropout_trace": {
+            "0-linear_attention": {
+              "rows": 2,
+              "input_differences": 0,
+              "output_differences": 1,
+              "rng_before_differences": 1,
+              "rng_after_differences": 1,
+              "cpu_rng_before_differences": 0,
+              "accelerator_rng_before_differences": 1,
+              "cpu_rng_after_differences": 0,
+              "accelerator_rng_after_differences": 1
+            },
+            "23-full_attention": {
+              "rows": 2,
+              "input_differences": 1,
+              "output_differences": 1,
+              "rng_before_differences": 1,
+              "rng_after_differences": 1,
+              "cpu_rng_before_differences": 0,
+              "accelerator_rng_before_differences": 1,
+              "cpu_rng_after_differences": 0,
+              "accelerator_rng_after_differences": 1
+            },
+            "3-full_attention": {
+              "rows": 2,
+              "input_differences": 1,
+              "output_differences": 1,
+              "rng_before_differences": 1,
+              "rng_after_differences": 1,
+              "cpu_rng_before_differences": 0,
+              "accelerator_rng_before_differences": 1,
+              "cpu_rng_after_differences": 0,
+              "accelerator_rng_after_differences": 1
+            }
+          },
+          "forward_rng_before_diff_micros": 1,
+          "forward_rng_after_diff_micros": 1,
+          "post_backward_cpu_rng_matches": true,
+          "post_backward_device_rng_matches": false,
+          "per_adapter_layer": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "gradient": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.15281472355127335,
+                "mae": 0.0021206681856888693,
+                "relative_l2": 0.3911846906907189
+              },
+              "after": {
+                "coordinates": 28672,
+                "changed": 14914,
+                "max_abs": 0.000599999912083149,
+                "mae": 7.273901316092893e-05,
+                "relative_l2": 0.018214660131709595
+              },
+              "expavg": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.01528147142380476,
+                "mae": 0.00021206682207444667,
+                "relative_l2": 0.39118468954127344
+              },
+              "expavgsq": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.89384360157419e-05,
+                "mae": 4.65503892104523e-08,
+                "relative_l2": 0.6474918170836518
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "gradient": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.04270690679550171,
+                "mae": 0.005943951711008033,
+                "relative_l2": 0.47711457366007887
+              },
+              "after": {
+                "coordinates": 8192,
+                "changed": 3465,
+                "max_abs": 0.000599999912083149,
+                "mae": 9.689903316711934e-05,
+                "relative_l2": 0.02081324958337138
+              },
+              "expavg": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.004270690958946943,
+                "mae": 0.0005943951803022342,
+                "relative_l2": 0.47711457314823713
+              },
+              "expavgsq": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.6593886818536703e-06,
+                "mae": 1.464064977209275e-07,
+                "relative_l2": 0.5209719113635302
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "gradient": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.521477460861206,
+                "mae": 0.002522678283269238,
+                "relative_l2": 0.29377674602443454
+              },
+              "after": {
+                "coordinates": 28672,
+                "changed": 13282,
+                "max_abs": 0.000599999912083149,
+                "mae": 3.0416864270981542e-05,
+                "relative_l2": 0.011706779961087899
+              },
+              "expavg": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.052147747948765755,
+                "mae": 0.000252267833190574,
+                "relative_l2": 0.2937767459952147
+              },
+              "expavgsq": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.000477943271107506,
+                "mae": 4.062006668534565e-07,
+                "relative_l2": 0.497835817113439
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "gradient": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.08675336930900812,
+                "mae": 0.01490700071294171,
+                "relative_l2": 0.27208203000872366
+              },
+              "after": {
+                "coordinates": 8192,
+                "changed": 2501,
+                "max_abs": 0.000599999912083149,
+                "mae": 7.39747541889102e-05,
+                "relative_l2": 0.018140598593948346
+              },
+              "expavg": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.008675337303429842,
+                "mae": 0.0014907000974209604,
+                "relative_l2": 0.2720820301166018
+              },
+              "expavgsq": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.198589785024524e-05,
+                "mae": 2.0252504243466665e-06,
+                "relative_l2": 0.3742008456311184
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "gradient": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.11467286944389343,
+                "mae": 0.0028603591222071518,
+                "relative_l2": 0.30854008254094667
+              },
+              "after": {
+                "coordinates": 28672,
+                "changed": 11059,
+                "max_abs": 0.0005999995628371835,
+                "mae": 5.1290273647046956e-05,
+                "relative_l2": 0.01515157482637669
+              },
+              "expavg": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.011467286385595798,
+                "mae": 0.0002860359164443886,
+                "relative_l2": 0.3085400818751977
+              },
+              "expavgsq": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 3.5371385820326395e-05,
+                "mae": 8.125213046605716e-08,
+                "relative_l2": 0.5257028499697219
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "gradient": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.07241988182067871,
+                "mae": 0.005112073916780702,
+                "relative_l2": 0.25711316011740293
+              },
+              "after": {
+                "coordinates": 8192,
+                "changed": 2592,
+                "max_abs": 0.000599999912083149,
+                "mae": 5.771237947804764e-05,
+                "relative_l2": 0.016133873539400035
+              },
+              "expavg": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.007241988554596901,
+                "mae": 0.000511207398815847,
+                "relative_l2": 0.25711315937966445
+              },
+              "expavgsq": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.964063605759293e-05,
+                "mae": 2.391247308202453e-07,
+                "relative_l2": 0.2824176225555817
+              }
+            }
+          },
+          "total_adapter": {
+            "gradient": {
+              "coordinates": 110592,
+              "changed": 110592,
+              "max_abs": 0.521477460861206,
+              "mae": 0.0038685922896154706,
+              "relative_l2": 0.29140453586726167
+            },
+            "after": {
+              "coordinates": 110592,
+              "changed": 47813,
+              "max_abs": 0.000599999912083149,
+              "mae": 5.6973903378550234e-05,
+              "relative_l2": 0.016022277556981598
+            },
+            "expavg": {
+              "coordinates": 110592,
+              "changed": 110592,
+              "max_abs": 0.052147747948765755,
+              "mae": 0.0003868592353719981,
+              "relative_l2": 0.2914045357377194
+            },
+            "expavgsq": {
+              "coordinates": 110592,
+              "changed": 110592,
+              "max_abs": 0.000477943271107506,
+              "mae": 3.170216893142756e-07,
+              "relative_l2": 0.47550095669920917
+            }
+          }
+        },
+        "recomputation": {
+          "0-linear_attention": {
+            "rows": 2,
+            "input_differences": 0,
+            "output_differences": 2,
+            "rng_before_differences": 2,
+            "rng_after_differences": 2,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 2,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 2
+          },
+          "23-full_attention": {
+            "rows": 2,
+            "input_differences": 0,
+            "output_differences": 2,
+            "rng_before_differences": 2,
+            "rng_after_differences": 2,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 2,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 2
+          },
+          "3-full_attention": {
+            "rows": 2,
+            "input_differences": 0,
+            "output_differences": 2,
+            "rng_before_differences": 2,
+            "rng_after_differences": 2,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 2,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 2
+          }
+        }
+      },
+      "loss_and_optimizer_replay": {
+        "ordinary-live": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.2746565745125338e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.415766098943821e-11,
+                "relative_l2": 2.9924326095285544e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 9.247464054814962e-12,
+                "mae": 4.8051641402226515e-15,
+                "relative_l2": 6.781968630025032e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.184143085143253e-09,
+                "mae": 3.2441656099861714e-10,
+                "relative_l2": 4.042533778017408e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055352342118625e-08,
+                "mae": 2.953330854251444e-08,
+                "relative_l2": 2.979598094442603e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 5.587935461570659e-10,
+                "mae": 3.0098244886427875e-11,
+                "relative_l2": 3.035785552819781e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 7.401170706844689e-13,
+                "mae": 1.3213327664755546e-14,
+                "relative_l2": 5.944371603130725e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.174243184799307e-09,
+                "mae": 3.281224937735922e-10,
+                "relative_l2": 4.008410503253941e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.045918165414887e-08,
+                "mae": 2.9865327230909365e-08,
+                "relative_l2": 2.9803397687797793e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 2.3209972941248735e-11,
+                "relative_l2": 2.6023525974019574e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 7.025249262535005e-11,
+                "mae": 4.7496297746978093e-14,
+                "relative_l2": 6.482183058754897e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2141172680012478e-09,
+                "mae": 3.2990570403855644e-10,
+                "relative_l2": 4.0862491450935135e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.05442258341804e-08,
+                "mae": 2.979152950268254e-08,
+                "relative_l2": 2.9800552224542833e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741915671575e-09,
+                "mae": 1.1683509362669727e-10,
+                "relative_l2": 3.106470435663079e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.1751024661026694e-11,
+                "mae": 2.7198638239499393e-13,
+                "relative_l2": 6.436682818319817e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.074356898057461e-09,
+                "mae": 3.4682498566304774e-10,
+                "relative_l2": 4.196701377762166e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.051231316722694e-08,
+                "mae": 3.001252473225555e-08,
+                "relative_l2": 2.9794398942540894e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 2.3687662377569895e-11,
+                "relative_l2": 3.047646555353404e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1437854108937648e-11,
+                "mae": 1.0723107486807082e-14,
+                "relative_l2": 7.023996222941888e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.22925448933875e-09,
+                "mae": 3.291398111533945e-10,
+                "relative_l2": 4.004986377347708e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055978116550897e-08,
+                "mae": 2.989477281367758e-08,
+                "relative_l2": 2.9795440650701984e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 4.554866092112473e-11,
+                "relative_l2": 2.9790805910024765e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 7.975756841538569e-12,
+                "mae": 4.101662257081313e-14,
+                "relative_l2": 5.946394245370967e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0413252720119512e-09,
+                "mae": 3.3105120899121956e-10,
+                "relative_l2": 4.059246100030007e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.050354840053673e-08,
+                "mae": 2.9666302462455534e-08,
+                "relative_l2": 2.979091466107816e-06
+              }
+            }
+          },
+          "max_memory_allocated": 4252254208
+        },
+        "checkpoint-live": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.2746565745125338e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.415766098943821e-11,
+                "relative_l2": 2.9924326095285544e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 9.247464054814962e-12,
+                "mae": 4.8051641402226515e-15,
+                "relative_l2": 6.781968630025032e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.184143085143253e-09,
+                "mae": 3.2441656099861714e-10,
+                "relative_l2": 4.042533778017408e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055352342118625e-08,
+                "mae": 2.953330854251444e-08,
+                "relative_l2": 2.979598094442603e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 5.587935461570659e-10,
+                "mae": 3.0098244886427875e-11,
+                "relative_l2": 3.035785552819781e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 7.401170706844689e-13,
+                "mae": 1.3213327664755546e-14,
+                "relative_l2": 5.944371603130725e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.174243184799307e-09,
+                "mae": 3.281224937735922e-10,
+                "relative_l2": 4.008410503253941e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.045918165414887e-08,
+                "mae": 2.9865327230909365e-08,
+                "relative_l2": 2.9803397687797793e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 2.3209972941248735e-11,
+                "relative_l2": 2.6023525974019574e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 7.025249262535005e-11,
+                "mae": 4.7496297746978093e-14,
+                "relative_l2": 6.482183058754897e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2141172680012478e-09,
+                "mae": 3.2990570403855644e-10,
+                "relative_l2": 4.0862491450935135e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.05442258341804e-08,
+                "mae": 2.979152950268254e-08,
+                "relative_l2": 2.9800552224542833e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741915671575e-09,
+                "mae": 1.1683509362669727e-10,
+                "relative_l2": 3.106470435663079e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.1751024661026694e-11,
+                "mae": 2.7198638239499393e-13,
+                "relative_l2": 6.436682818319817e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.074356898057461e-09,
+                "mae": 3.4682498566304774e-10,
+                "relative_l2": 4.196701377762166e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.051231316722694e-08,
+                "mae": 3.001252473225555e-08,
+                "relative_l2": 2.9794398942540894e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 2.3687662377569895e-11,
+                "relative_l2": 3.047646555353404e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1437854108937648e-11,
+                "mae": 1.0723107486807082e-14,
+                "relative_l2": 7.023996222941888e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.22925448933875e-09,
+                "mae": 3.291398111533945e-10,
+                "relative_l2": 4.004986377347708e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055978116550897e-08,
+                "mae": 2.989477281367758e-08,
+                "relative_l2": 2.9795440650701984e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 4.554866092112473e-11,
+                "relative_l2": 2.9790805910024765e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 7.975756841538569e-12,
+                "mae": 4.101662257081313e-14,
+                "relative_l2": 5.946394245370967e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0413252720119512e-09,
+                "mae": 3.3105120899121956e-10,
+                "relative_l2": 4.059246100030007e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.050354840053673e-08,
+                "mae": 2.9666302462455534e-08,
+                "relative_l2": 2.979091466107816e-06
+              }
+            }
+          },
+          "max_memory_allocated": 2552804864
+        },
+        "ordinary-zero": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.3026998777476706e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.411945198064145e-11,
+                "relative_l2": 3.0769113272403985e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 8.509458843944037e-12,
+                "mae": 5.133152781806878e-15,
+                "relative_l2": 5.6883985746663924e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.175816020411059e-09,
+                "mae": 3.2349248852552095e-10,
+                "relative_l2": 4.028660726539672e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.053447277470925e-08,
+                "mae": 2.9536105397141814e-08,
+                "relative_l2": 2.9801330965853784e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 5.587935461570659e-10,
+                "mae": 3.03546688564237e-11,
+                "relative_l2": 3.0385372064036746e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.247490817796911e-13,
+                "mae": 1.3708928873193985e-14,
+                "relative_l2": 5.823715783230522e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0363786837340747e-09,
+                "mae": 3.3227324778009987e-10,
+                "relative_l2": 4.047930814647275e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.046658278247019e-08,
+                "mae": 2.985935505651944e-08,
+                "relative_l2": 2.9797578178790906e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.470348369256527e-09,
+                "mae": 2.4271031101010903e-11,
+                "relative_l2": 3.104057653004812e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1110364451366594e-10,
+                "mae": 5.082296472659283e-14,
+                "relative_l2": 7.561230615944458e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.1860498966574937e-09,
+                "mae": 3.3018479114161707e-10,
+                "relative_l2": 4.1016929486537865e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.052973094972103e-08,
+                "mae": 2.9789855479460708e-08,
+                "relative_l2": 2.979846298837243e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 1.177523362876838e-10,
+                "relative_l2": 3.0532909296737354e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.91636942602587e-11,
+                "mae": 2.815723291038438e-13,
+                "relative_l2": 6.33192534552508e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.9088543454226503e-09,
+                "mae": 3.4554975774378017e-10,
+                "relative_l2": 4.173860957122754e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.051896023206993e-08,
+                "mae": 3.001434241787713e-08,
+                "relative_l2": 2.979289809560163e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 2.3918452465837723e-11,
+                "relative_l2": 3.019285890172471e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.3896651732993315e-11,
+                "mae": 1.0676371841910921e-14,
+                "relative_l2": 8.469406536792344e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2091588280925833e-09,
+                "mae": 3.2807609359369493e-10,
+                "relative_l2": 3.9914357759410744e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.052776398493553e-08,
+                "mae": 2.9893533012448006e-08,
+                "relative_l2": 2.979405728370393e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 4.6836042241171454e-11,
+                "relative_l2": 3.245180076919448e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.691642010608645e-12,
+                "mae": 3.9117790107581425e-14,
+                "relative_l2": 5.98304803248906e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.973712426134311e-09,
+                "mae": 3.3340919468911846e-10,
+                "relative_l2": 4.0633903819701534e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.04949003980837e-08,
+                "mae": 2.9664748092651693e-08,
+                "relative_l2": 2.97887413877736e-06
+              }
+            }
+          },
+          "max_memory_allocated": 4253032448
+        },
+        "checkpoint-zero": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.3026998777476706e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.411945198064145e-11,
+                "relative_l2": 3.0769113272403985e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 8.509458843944037e-12,
+                "mae": 5.133152781806878e-15,
+                "relative_l2": 5.6883985746663924e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.175816020411059e-09,
+                "mae": 3.2349248852552095e-10,
+                "relative_l2": 4.028660726539672e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.053447277470925e-08,
+                "mae": 2.9536105397141814e-08,
+                "relative_l2": 2.9801330965853784e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 5.587935461570659e-10,
+                "mae": 3.03546688564237e-11,
+                "relative_l2": 3.0385372064036746e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.247490817796911e-13,
+                "mae": 1.3708928873193985e-14,
+                "relative_l2": 5.823715783230522e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0363786837340747e-09,
+                "mae": 3.3227324778009987e-10,
+                "relative_l2": 4.047930814647275e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.046658278247019e-08,
+                "mae": 2.985935505651944e-08,
+                "relative_l2": 2.9797578178790906e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.470348369256527e-09,
+                "mae": 2.4271031101010903e-11,
+                "relative_l2": 3.104057653004812e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1110364451366594e-10,
+                "mae": 5.082296472659283e-14,
+                "relative_l2": 7.561230615944458e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.1860498966574937e-09,
+                "mae": 3.3018479114161707e-10,
+                "relative_l2": 4.1016929486537865e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.052973094972103e-08,
+                "mae": 2.9789855479460708e-08,
+                "relative_l2": 2.979846298837243e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 1.177523362876838e-10,
+                "relative_l2": 3.0532909296737354e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.91636942602587e-11,
+                "mae": 2.815723291038438e-13,
+                "relative_l2": 6.33192534552508e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.9088543454226503e-09,
+                "mae": 3.4554975774378017e-10,
+                "relative_l2": 4.173860957122754e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.051896023206993e-08,
+                "mae": 3.001434241787713e-08,
+                "relative_l2": 2.979289809560163e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 2.3918452465837723e-11,
+                "relative_l2": 3.019285890172471e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.3896651732993315e-11,
+                "mae": 1.0676371841910921e-14,
+                "relative_l2": 8.469406536792344e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2091588280925833e-09,
+                "mae": 3.2807609359369493e-10,
+                "relative_l2": 3.9914357759410744e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.052776398493553e-08,
+                "mae": 2.9893533012448006e-08,
+                "relative_l2": 2.979405728370393e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 4.6836042241171454e-11,
+                "relative_l2": 3.245180076919448e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.691642010608645e-12,
+                "mae": 3.9117790107581425e-14,
+                "relative_l2": 5.98304803248906e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.973712426134311e-09,
+                "mae": 3.3340919468911846e-10,
+                "relative_l2": 4.0633903819701534e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.04949003980837e-08,
+                "mae": 2.9664748092651693e-08,
+                "relative_l2": 2.97887413877736e-06
+              }
+            }
+          },
+          "max_memory_allocated": 2552804864
+        }
+      }
+    },
+    "b200": {
+      "runtime": {
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "torch": "2.11.0+cu130",
+        "accelerator_runtime": "13.0"
+      },
+      "dropout_layers": {
+        "0": "linear_attention",
+        "3": "full_attention",
+        "23": "full_attention"
+      },
+      "preserved_vs_plain": {
+        "first_micro_raw_logits_changed": 0,
+        "raw_logits_changed": 0,
+        "raw_logits_coordinates": 59596800,
+        "targets_fp64": {
+          "coordinates": 240,
+          "changed": 0,
+          "max_abs": 0.0,
+          "mae": 0.0,
+          "relative_l2": 0.0
+        },
+        "forward_dropout_trace": {
+          "0-linear_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "23-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "3-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          }
+        },
+        "forward_rng_before_diff_micros": 0,
+        "forward_rng_after_diff_micros": 0,
+        "post_backward_cpu_rng_matches": true,
+        "post_backward_device_rng_matches": true,
+        "per_adapter_layer": {
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          }
+        },
+        "total_adapter": {
+          "gradient": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "after": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavg": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavgsq": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          }
+        }
+      },
+      "no_dropout_vs_plain": {
+        "first_micro_raw_logits_changed": 0,
+        "raw_logits_changed": 0,
+        "raw_logits_coordinates": 59596800,
+        "targets_fp64": {
+          "coordinates": 240,
+          "changed": 0,
+          "max_abs": 0.0,
+          "mae": 0.0,
+          "relative_l2": 0.0
+        },
+        "forward_dropout_trace": {
+          "0-linear_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "23-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          },
+          "3-full_attention": {
+            "rows": 25,
+            "input_differences": 0,
+            "output_differences": 0,
+            "rng_before_differences": 0,
+            "rng_after_differences": 0,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 0,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 0
+          }
+        },
+        "forward_rng_before_diff_micros": 0,
+        "forward_rng_after_diff_micros": 0,
+        "post_backward_cpu_rng_matches": true,
+        "post_backward_device_rng_matches": true,
+        "per_adapter_layer": {
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+            "gradient": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          },
+          "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+            "gradient": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "after": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "changed": 0,
+              "max_abs": 0.0,
+              "mae": 0.0,
+              "relative_l2": 0.0
+            }
+          }
+        },
+        "total_adapter": {
+          "gradient": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "after": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavg": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          },
+          "expavgsq": {
+            "coordinates": 110592,
+            "changed": 0,
+            "max_abs": 0.0,
+            "mae": 0.0,
+            "relative_l2": 0.0
+          }
+        }
+      },
+      "original_vs_recomputed": {
+        "0-linear_attention": {
+          "rows": 25,
+          "input_differences": 0,
+          "output_differences": 0,
+          "rng_before_differences": 0,
+          "rng_after_differences": 0,
+          "cpu_rng_before_differences": 0,
+          "accelerator_rng_before_differences": 0,
+          "cpu_rng_after_differences": 0,
+          "accelerator_rng_after_differences": 0
+        },
+        "23-full_attention": {
+          "rows": 25,
+          "input_differences": 0,
+          "output_differences": 0,
+          "rng_before_differences": 0,
+          "rng_after_differences": 0,
+          "cpu_rng_before_differences": 0,
+          "accelerator_rng_before_differences": 0,
+          "cpu_rng_after_differences": 0,
+          "accelerator_rng_after_differences": 0
+        },
+        "3-full_attention": {
+          "rows": 25,
+          "input_differences": 0,
+          "output_differences": 0,
+          "rng_before_differences": 0,
+          "rng_after_differences": 0,
+          "cpu_rng_before_differences": 0,
+          "accelerator_rng_before_differences": 0,
+          "cpu_rng_after_differences": 0,
+          "accelerator_rng_after_differences": 0
+        }
+      },
+      "deliberate_no_preserve_control": {
+        "comparisons": {
+          "first_micro_raw_logits_changed": 0,
+          "raw_logits_changed": 2365026,
+          "raw_logits_coordinates": 4966400,
+          "targets_fp64": {
+            "coordinates": 20,
+            "changed": 10,
+            "max_abs": 0.17256729404837334,
+            "mae": 0.04604913964484507,
+            "relative_l2": 0.027271138865424555
+          },
+          "forward_dropout_trace": {
+            "0-linear_attention": {
+              "rows": 2,
+              "input_differences": 0,
+              "output_differences": 1,
+              "rng_before_differences": 1,
+              "rng_after_differences": 1,
+              "cpu_rng_before_differences": 0,
+              "accelerator_rng_before_differences": 1,
+              "cpu_rng_after_differences": 0,
+              "accelerator_rng_after_differences": 1
+            },
+            "23-full_attention": {
+              "rows": 2,
+              "input_differences": 1,
+              "output_differences": 1,
+              "rng_before_differences": 1,
+              "rng_after_differences": 1,
+              "cpu_rng_before_differences": 0,
+              "accelerator_rng_before_differences": 1,
+              "cpu_rng_after_differences": 0,
+              "accelerator_rng_after_differences": 1
+            },
+            "3-full_attention": {
+              "rows": 2,
+              "input_differences": 1,
+              "output_differences": 1,
+              "rng_before_differences": 1,
+              "rng_after_differences": 1,
+              "cpu_rng_before_differences": 0,
+              "accelerator_rng_before_differences": 1,
+              "cpu_rng_after_differences": 0,
+              "accelerator_rng_after_differences": 1
+            }
+          },
+          "forward_rng_before_diff_micros": 1,
+          "forward_rng_after_diff_micros": 1,
+          "post_backward_cpu_rng_matches": true,
+          "post_backward_device_rng_matches": false,
+          "per_adapter_layer": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "gradient": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.1934768259525299,
+                "mae": 0.0021233707448618283,
+                "relative_l2": 0.3844740821559353
+              },
+              "after": {
+                "coordinates": 28672,
+                "changed": 14943,
+                "max_abs": 0.0005999989807605743,
+                "mae": 7.116706160184958e-05,
+                "relative_l2": 0.018015696003114104
+              },
+              "expavg": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.01934768259525299,
+                "mae": 0.0002123370781517516,
+                "relative_l2": 0.384474079402919
+              },
+              "expavgsq": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.00010305117757525295,
+                "mae": 4.7121221775473946e-08,
+                "relative_l2": 0.6691720343965671
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "gradient": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.03228177968412638,
+                "mae": 0.0052514884367456105,
+                "relative_l2": 0.3932836644080767
+              },
+              "after": {
+                "coordinates": 8192,
+                "changed": 3197,
+                "max_abs": 0.0005999995628371835,
+                "mae": 8.27636017619593e-05,
+                "relative_l2": 0.019241812164778126
+              },
+              "expavg": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.0032281780149787664,
+                "mae": 0.0005251488514713878,
+                "relative_l2": 0.39328366367218764
+              },
+              "expavgsq": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0466045498324092e-06,
+                "mae": 1.395731412598087e-07,
+                "relative_l2": 0.42683395572530564
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "gradient": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.38483184576034546,
+                "mae": 0.0025548677320378277,
+                "relative_l2": 0.25980213053964346
+              },
+              "after": {
+                "coordinates": 28672,
+                "changed": 13254,
+                "max_abs": 0.0005999994464218616,
+                "mae": 3.0905708084267527e-05,
+                "relative_l2": 0.011800639748321668
+              },
+              "expavg": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.038483183830976486,
+                "mae": 0.00025548677820644435,
+                "relative_l2": 0.2598021310630491
+              },
+              "expavgsq": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.0005109187331981957,
+                "mae": 3.910838725102878e-07,
+                "relative_l2": 0.37712159713107984
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "gradient": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.08800966292619705,
+                "mae": 0.01203928098514151,
+                "relative_l2": 0.2110000668556252
+              },
+              "after": {
+                "coordinates": 8192,
+                "changed": 2349,
+                "max_abs": 0.000599999912083149,
+                "mae": 5.236942521880117e-05,
+                "relative_l2": 0.015262366465800833
+              },
+              "expavg": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.008800965966656804,
+                "mae": 0.0012039281168414978,
+                "relative_l2": 0.21100006629480686
+              },
+              "expavgsq": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 5.171404336579144e-05,
+                "mae": 1.589647397156059e-06,
+                "relative_l2": 0.22226480854969768
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "gradient": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.1214551255106926,
+                "mae": 0.002881866012653056,
+                "relative_l2": 0.3012320213663649
+              },
+              "after": {
+                "coordinates": 28672,
+                "changed": 11018,
+                "max_abs": 0.000599999912083149,
+                "mae": 5.179310513833145e-05,
+                "relative_l2": 0.015225606268892303
+              },
+              "expavg": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 0.012145512737333775,
+                "mae": 0.0002881866064691469,
+                "relative_l2": 0.3012320224778379
+              },
+              "expavgsq": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.5498869945295155e-05,
+                "mae": 7.951458487402666e-08,
+                "relative_l2": 0.26816814955776347
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "gradient": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.08964663743972778,
+                "mae": 0.005729594804116722,
+                "relative_l2": 0.2882467221208493
+              },
+              "after": {
+                "coordinates": 8192,
+                "changed": 2737,
+                "max_abs": 0.000599999912083149,
+                "mae": 6.599262730648536e-05,
+                "relative_l2": 0.017250417469326727
+              },
+              "expavg": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 0.008964663371443748,
+                "mae": 0.0005729594883165862,
+                "relative_l2": 0.2882467199448182
+              },
+              "expavgsq": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.051128805964254e-05,
+                "mae": 2.7413261005024406e-07,
+                "relative_l2": 0.3402799021616771
+              }
+            }
+          },
+          "total_adapter": {
+            "gradient": {
+              "coordinates": 110592,
+              "changed": 110592,
+              "max_abs": 0.38483184576034546,
+              "mae": 0.0036652392547732097,
+              "relative_l2": 0.2495953656409554
+            },
+            "after": {
+              "coordinates": 110592,
+              "changed": 47498,
+              "max_abs": 0.000599999912083149,
+              "mae": 5.47893493461345e-05,
+              "relative_l2": 0.015711881817100447
+            },
+            "expavg": {
+              "coordinates": 110592,
+              "changed": 110592,
+              "max_abs": 0.038483183830976486,
+              "mae": 0.0003665239315944571,
+              "relative_l2": 0.24959536537302118
+            },
+            "expavgsq": {
+              "coordinates": 110592,
+              "changed": 110592,
+              "max_abs": 0.0005109187331981957,
+              "mae": 2.826201500389164e-07,
+              "relative_l2": 0.35318051284533514
+            }
+          }
+        },
+        "recomputation": {
+          "0-linear_attention": {
+            "rows": 2,
+            "input_differences": 0,
+            "output_differences": 2,
+            "rng_before_differences": 2,
+            "rng_after_differences": 2,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 2,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 2
+          },
+          "23-full_attention": {
+            "rows": 2,
+            "input_differences": 0,
+            "output_differences": 2,
+            "rng_before_differences": 2,
+            "rng_after_differences": 2,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 2,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 2
+          },
+          "3-full_attention": {
+            "rows": 2,
+            "input_differences": 0,
+            "output_differences": 2,
+            "rng_before_differences": 2,
+            "rng_after_differences": 2,
+            "cpu_rng_before_differences": 0,
+            "accelerator_rng_before_differences": 2,
+            "cpu_rng_after_differences": 0,
+            "accelerator_rng_after_differences": 2
+          }
+        }
+      },
+      "loss_and_optimizer_replay": {
+        "ordinary-live": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.0832741992317096e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.4151177827180666e-11,
+                "relative_l2": 2.8818388930376157e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 8.863221165030313e-12,
+                "mae": 5.095614554052353e-15,
+                "relative_l2": 6.723606996919932e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.194358486584669e-09,
+                "mae": 3.21443617058814e-10,
+                "relative_l2": 3.9995242442393264e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055951506239721e-08,
+                "mae": 2.953762487756454e-08,
+                "relative_l2": 2.9801811239120225e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.725290319278596e-10,
+                "mae": 3.091798292638262e-11,
+                "relative_l2": 3.05486114756039e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.1748779083804858e-12,
+                "mae": 1.4172744905771362e-14,
+                "relative_l2": 6.183141115920197e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.9924116766156796e-09,
+                "mae": 3.313958457652185e-10,
+                "relative_l2": 4.0178019030088675e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.043865074731314e-08,
+                "mae": 2.9860095872222024e-08,
+                "relative_l2": 2.9796542889671276e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.470348369256527e-09,
+                "mae": 2.4683468991406836e-11,
+                "relative_l2": 3.111701326277724e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 7.330322568561976e-11,
+                "mae": 4.8752058947221295e-14,
+                "relative_l2": 6.15554817184272e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2703986746197558e-09,
+                "mae": 3.2906476302478506e-10,
+                "relative_l2": 4.088720746308375e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.056473698251574e-08,
+                "mae": 2.979069806820331e-08,
+                "relative_l2": 2.9800402640523545e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741915671575e-09,
+                "mae": 1.1699886541274676e-10,
+                "relative_l2": 3.0727540183631986e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.8909304216841935e-11,
+                "mae": 2.5871638856971853e-13,
+                "relative_l2": 5.645989445014905e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.961789838217376e-09,
+                "mae": 3.4497283685755216e-10,
+                "relative_l2": 4.1757841700064335e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.043867238625378e-08,
+                "mae": 3.0014240658914054e-08,
+                "relative_l2": 2.979748684908252e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 2.3897912652029815e-11,
+                "relative_l2": 2.993802244289139e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 3.24704624082503e-12,
+                "mae": 1.0332601326669032e-14,
+                "relative_l2": 3.909480929854976e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.243066815621475e-09,
+                "mae": 3.2855278045969373e-10,
+                "relative_l2": 4.0012106612805086e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.052068311432346e-08,
+                "mae": 2.9892970953194484e-08,
+                "relative_l2": 2.9793537252387853e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.4901161277114383e-09,
+                "mae": 4.888564682748638e-11,
+                "relative_l2": 3.2093618701154835e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.577351218066846e-12,
+                "mae": 4.3272694415058694e-14,
+                "relative_l2": 6.736389705890098e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.218495376987706e-09,
+                "mae": 3.3256879488344315e-10,
+                "relative_l2": 4.0811549370896e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.04484384041093e-08,
+                "mae": 2.9663222003381644e-08,
+                "relative_l2": 2.978969528066147e-06
+              }
+            }
+          },
+          "max_memory_allocated": 4142163968
+        },
+        "checkpoint-live": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.0832741992317096e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.4151177827180666e-11,
+                "relative_l2": 2.8818388930376157e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 8.863221165030313e-12,
+                "mae": 5.095614554052353e-15,
+                "relative_l2": 6.723606996919932e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.194358486584669e-09,
+                "mae": 3.21443617058814e-10,
+                "relative_l2": 3.9995242442393264e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055951506239721e-08,
+                "mae": 2.953762487756454e-08,
+                "relative_l2": 2.9801811239120225e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 3.725290319278596e-10,
+                "mae": 3.091798292638262e-11,
+                "relative_l2": 3.05486114756039e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.1748779083804858e-12,
+                "mae": 1.4172744905771362e-14,
+                "relative_l2": 6.183141115920197e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.9924116766156796e-09,
+                "mae": 3.313958457652185e-10,
+                "relative_l2": 4.0178019030088675e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.043865074731314e-08,
+                "mae": 2.9860095872222024e-08,
+                "relative_l2": 2.9796542889671276e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.470348369256527e-09,
+                "mae": 2.4683468991406836e-11,
+                "relative_l2": 3.111701326277724e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 7.330322568561976e-11,
+                "mae": 4.8752058947221295e-14,
+                "relative_l2": 6.15554817184272e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2703986746197558e-09,
+                "mae": 3.2906476302478506e-10,
+                "relative_l2": 4.088720746308375e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.056473698251574e-08,
+                "mae": 2.979069806820331e-08,
+                "relative_l2": 2.9800402640523545e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741915671575e-09,
+                "mae": 1.1699886541274676e-10,
+                "relative_l2": 3.0727540183631986e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.8909304216841935e-11,
+                "mae": 2.5871638856971853e-13,
+                "relative_l2": 5.645989445014905e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.961789838217376e-09,
+                "mae": 3.4497283685755216e-10,
+                "relative_l2": 4.1757841700064335e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.043867238625378e-08,
+                "mae": 3.0014240658914054e-08,
+                "relative_l2": 2.979748684908252e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 2.3897912652029815e-11,
+                "relative_l2": 2.993802244289139e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 3.24704624082503e-12,
+                "mae": 1.0332601326669032e-14,
+                "relative_l2": 3.909480929854976e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.243066815621475e-09,
+                "mae": 3.2855278045969373e-10,
+                "relative_l2": 4.0012106612805086e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.052068311432346e-08,
+                "mae": 2.9892970953194484e-08,
+                "relative_l2": 2.9793537252387853e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.4901161277114383e-09,
+                "mae": 4.888564682748638e-11,
+                "relative_l2": 3.2093618701154835e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.577351218066846e-12,
+                "mae": 4.3272694415058694e-14,
+                "relative_l2": 6.736389705890098e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.218495376987706e-09,
+                "mae": 3.3256879488344315e-10,
+                "relative_l2": 4.0811549370896e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.04484384041093e-08,
+                "mae": 2.9663222003381644e-08,
+                "relative_l2": 2.978969528066147e-06
+              }
+            }
+          },
+          "max_memory_allocated": 2556553728
+        },
+        "ordinary-zero": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.0495449025427206e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.4021559608390829e-11,
+                "relative_l2": 3.031315026402885e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.232879921279182e-12,
+                "mae": 4.713998354274428e-15,
+                "relative_l2": 4.896031491418718e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.210093767718302e-09,
+                "mae": 3.2278230085329616e-10,
+                "relative_l2": 4.028603652519752e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.057099660033982e-08,
+                "mae": 2.9534626393383957e-08,
+                "relative_l2": 2.9799825200016034e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.793967739458947e-10,
+                "mae": 2.9834250855124014e-11,
+                "relative_l2": 2.9693254992528086e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.260760883660716e-13,
+                "mae": 1.3719608962336383e-14,
+                "relative_l2": 6.183541272706585e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.1490275219082644e-09,
+                "mae": 3.3125733513344343e-10,
+                "relative_l2": 4.024203436970836e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.041615999152761e-08,
+                "mae": 2.9862990577939776e-08,
+                "relative_l2": 2.980143404211951e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.470348383134315e-09,
+                "mae": 2.408500740107553e-11,
+                "relative_l2": 3.041005340622093e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 8.56402798069672e-11,
+                "mae": 4.8782563903309124e-14,
+                "relative_l2": 6.508618514478795e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2089476046927015e-09,
+                "mae": 3.3026994813162065e-10,
+                "relative_l2": 4.098695139888837e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.056880457946945e-08,
+                "mae": 2.9791311097717058e-08,
+                "relative_l2": 2.980089859581405e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 1.1771919751471717e-10,
+                "relative_l2": 3.066159931516942e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.8216460214185923e-11,
+                "mae": 2.7606515402860776e-13,
+                "relative_l2": 5.672171373236475e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.1632850059905007e-09,
+                "mae": 3.4451567585160377e-10,
+                "relative_l2": 4.172939389153428e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.01241359789173e-08,
+                "mae": 3.0012317570772784e-08,
+                "relative_l2": 2.9792232666606155e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.4901161277114383e-09,
+                "mae": 2.3398518094668358e-11,
+                "relative_l2": 2.9932994492590626e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.711463099001112e-12,
+                "mae": 1.0297669406233979e-14,
+                "relative_l2": 4.8834981734058324e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.212696505188294e-09,
+                "mae": 3.2771046650395596e-10,
+                "relative_l2": 3.9886925721684265e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055862794562827e-08,
+                "mae": 2.9894747751099405e-08,
+                "relative_l2": 2.979562575045045e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 4.6281929931674736e-11,
+                "relative_l2": 3.033163035847591e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.164672402250807e-12,
+                "mae": 3.9790181478921986e-14,
+                "relative_l2": 6.222853650296097e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0437570108500225e-09,
+                "mae": 3.3169062286684214e-10,
+                "relative_l2": 4.060653521088001e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.036938586181928e-08,
+                "mae": 2.966270706235782e-08,
+                "relative_l2": 2.978630709123415e-06
+              }
+            }
+          },
+          "max_memory_allocated": 4140066816
+        },
+        "checkpoint-zero": {
+          "targets": 240,
+          "parameters": 110592,
+          "loss_replay_maxabs": 1.0495449025427206e-06,
+          "adamw_replay": {
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 1.4021559608390829e-11,
+                "relative_l2": 3.031315026402885e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.232879921279182e-12,
+                "mae": 4.713998354274428e-15,
+                "relative_l2": 4.896031491418718e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.210093767718302e-09,
+                "mae": 3.2278230085329616e-10,
+                "relative_l2": 4.028603652519752e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.057099660033982e-08,
+                "mae": 2.9534626393383957e-08,
+                "relative_l2": 2.9799825200016034e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.0.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.793967739458947e-10,
+                "mae": 2.9834250855124014e-11,
+                "relative_l2": 2.9693254992528086e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.260760883660716e-13,
+                "mae": 1.3719608962336383e-14,
+                "relative_l2": 6.183541272706585e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.1490275219082644e-09,
+                "mae": 3.3125733513344343e-10,
+                "relative_l2": 4.024203436970836e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.041615999152761e-08,
+                "mae": 2.9862990577939776e-08,
+                "relative_l2": 2.980143404211951e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.470348383134315e-09,
+                "mae": 2.408500740107553e-11,
+                "relative_l2": 3.041005340622093e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 8.56402798069672e-11,
+                "mae": 4.8782563903309124e-14,
+                "relative_l2": 6.508618514478795e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.2089476046927015e-09,
+                "mae": 3.3026994813162065e-10,
+                "relative_l2": 4.098695139888837e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.056880457946945e-08,
+                "mae": 2.9791311097717058e-08,
+                "relative_l2": 2.980089859581405e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.2351741846282636e-09,
+                "mae": 1.1771919751471717e-10,
+                "relative_l2": 3.066159931516942e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.8216460214185923e-11,
+                "mae": 2.7606515402860776e-13,
+                "relative_l2": 5.672171373236475e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.1632850059905007e-09,
+                "mae": 3.4451567585160377e-10,
+                "relative_l2": 4.172939389153428e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.01241359789173e-08,
+                "mae": 3.0012317570772784e-08,
+                "relative_l2": 2.9792232666606155e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_A.default.weight": {
+              "first_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 1.4901161277114383e-09,
+                "mae": 2.3398518094668358e-11,
+                "relative_l2": 2.9932994492590626e-08
+              },
+              "second_moment": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 4.711463099001112e-12,
+                "mae": 1.0297669406233979e-14,
+                "relative_l2": 4.8834981734058324e-08
+              },
+              "parameter": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 2.212696505188294e-09,
+                "mae": 3.2771046650395596e-10,
+                "relative_l2": 3.9886925721684265e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 28672,
+                "changed": 28672,
+                "max_abs": 6.055862794562827e-08,
+                "mae": 2.9894747751099405e-08,
+                "relative_l2": 2.979562575045045e-06
+              }
+            },
+            "base_model.model.model.language_model.layers.3.mlp.down_proj.lora_B.default.weight": {
+              "first_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 1.1175870957835787e-09,
+                "mae": 4.6281929931674736e-11,
+                "relative_l2": 3.033163035847591e-08
+              },
+              "second_moment": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 8.164672402250807e-12,
+                "mae": 3.9790181478921986e-14,
+                "relative_l2": 6.222853650296097e-08
+              },
+              "parameter": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 2.0437570108500225e-09,
+                "mae": 3.3169062286684214e-10,
+                "relative_l2": 4.060653521088001e-08
+              },
+              "no_decay_counterfactual": {
+                "coordinates": 8192,
+                "changed": 8192,
+                "max_abs": 6.036938586181928e-08,
+                "mae": 2.966270706235782e-08,
+                "relative_l2": 2.978630709123415e-06
+              }
+            }
+          },
+          "max_memory_allocated": 2556553728
+        }
+      }
+    }
+  },
+  "zero_dropout_cross_stack": {
+    "ordinary-zero": {
+      "fp64_target_logprob": {
+        "coordinates": 240,
+        "changed": 240,
+        "mae": 0.044185469928410416,
+        "p99": 0.16627253640158365,
+        "max_abs": 0.1980157293258884,
+        "rmse": 0.06086400651227419
+      },
+      "gradient": {
+        "coordinates": 110592,
+        "changed": 110592,
+        "mae": 9.12621349921516e-05,
+        "p99": 0.0005525851249694822,
+        "max_abs": 0.005747586488723755,
+        "rmse": 0.00015387431033344926
+      },
+      "after": {
+        "coordinates": 110592,
+        "changed": 15215,
+        "mae": 1.6429314369004111e-06,
+        "p99": 1.3048993423580717e-08,
+        "max_abs": 0.0005999794229865074,
+        "rmse": 3.135743153781586e-05
+      },
+      "expavg": {
+        "coordinates": 110592,
+        "changed": 110592,
+        "mae": 9.126213687073001e-06,
+        "p99": 5.525858141481875e-05,
+        "max_abs": 0.0005747592076659203,
+        "rmse": 1.5387432525553656e-05
+      },
+      "expavgsq": {
+        "coordinates": 110592,
+        "changed": 110592,
+        "mae": 5.124309595919393e-09,
+        "p99": 8.019029337447129e-08,
+        "max_abs": 4.850211553275585e-06,
+        "rmse": 3.8384294762788456e-08
+      }
+    },
+    "checkpoint-zero": {
+      "fp64_target_logprob": {
+        "coordinates": 240,
+        "changed": 240,
+        "mae": 0.044185469928410416,
+        "p99": 0.16627253640158365,
+        "max_abs": 0.1980157293258884,
+        "rmse": 0.06086400651227419
+      },
+      "gradient": {
+        "coordinates": 110592,
+        "changed": 110592,
+        "mae": 9.12621349921516e-05,
+        "p99": 0.0005525851249694822,
+        "max_abs": 0.005747586488723755,
+        "rmse": 0.00015387431033344926
+      },
+      "after": {
+        "coordinates": 110592,
+        "changed": 15215,
+        "mae": 1.6429314369004111e-06,
+        "p99": 1.3048993423580717e-08,
+        "max_abs": 0.0005999794229865074,
+        "rmse": 3.135743153781586e-05
+      },
+      "expavg": {
+        "coordinates": 110592,
+        "changed": 110592,
+        "mae": 9.126213687073001e-06,
+        "p99": 5.525858141481875e-05,
+        "max_abs": 0.0005747592076659203,
+        "rmse": 1.5387432525553656e-05
+      },
+      "expavgsq": {
+        "coordinates": 110592,
+        "changed": 110592,
+        "mae": 5.124309595919393e-09,
+        "p99": 8.019029337447129e-08,
+        "max_abs": 4.850211553275585e-06,
+        "rmse": 3.8384294762788456e-08
+      }
+    }
+  }
+}

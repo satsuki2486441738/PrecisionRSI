@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "model": {
+    "name": "Qwen/Qwen3-0.6B",
+    "architecture": "Qwen3",
+    "size": "0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+  },
+  "dataset_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "acceptance": null,
+  "setup_before": {
+    "target": {
+      "status": "failed",
+      "returncode": 1,
+      "stage": "prepare_model(reference, evaluation_mode=True)",
+      "exception": "ValueError: You can't train a model that has been loaded with `device_map='auto'` in any distributed mode."
+    },
+    "peer": {
+      "status": "completed",
+      "returncode": 0
+    }
+  },
+  "native_vllm": {
+    "status": "environment-blocked",
+    "failure": "ImportError: vLLM is not available and use_vllm is set to True.",
+    "scope": "Both pinned TRL environments; native vLLM sampling and weight consumption not executed."
+  },
+  "diagnosis": {
+    "target_type": "MULTI_NPU",
+    "reference_branch_covered_types": [
+      "MULTI_GPU",
+      "DEEPSPEED"
+    ],
+    "implicit_device_map_on_npu": "auto",
+    "candidate": {
+      "model_init_kwargs": {
+        "device_map": null
+      }
+    },
+    "b200_control_all_exported_gate_arrays_exact": true
+  },
+  "verified_gate": {
+    "target": {
+      "rollouts": 32,
+      "events": 8,
+      "updates": 4,
+      "mixed_groups": 3,
+      "nonzero_kl_gradient_tokens": 182,
+      "reference_probe_vocab": 151936,
+      "later_actor_fixed_probe_max_abs_logit": 3.189453125,
+      "reference_unchanged": true,
+      "raw_manifest_bytes": 78782469
+    },
+    "peer": {
+      "rollouts": 32,
+      "events": 8,
+      "updates": 4,
+      "mixed_groups": 2,
+      "nonzero_kl_gradient_tokens": 149,
+      "reference_probe_vocab": 151936,
+      "later_actor_fixed_probe_max_abs_logit": 6.5625,
+      "reference_unchanged": true,
+      "raw_manifest_bytes": 69050687
+    }
+  },
+  "verified_formal": {
+    "target": {
+      "rollouts": 400,
+      "events": 100,
+      "updates": 20,
+      "mixed_groups": 53,
+      "nonzero_kl_gradient_tokens": 3046,
+      "reference_probe_vocab": 151936,
+      "later_actor_fixed_probe_max_abs_logit": 8.5625,
+      "reference_unchanged": true,
+      "raw_manifest_bytes": 1003514053
+    },
+    "peer": {
+      "rollouts": 400,
+      "events": 100,
+      "updates": 20,
+      "mixed_groups": 14,
+      "nonzero_kl_gradient_tokens": 3026,
+      "reference_probe_vocab": 151936,
+      "later_actor_fixed_probe_max_abs_logit": 9.5625,
+      "reference_unchanged": true,
+      "raw_manifest_bytes": 1003510319
+    }
+  },
+  "metrics": {
+    "target": {
+      "native_loss_fp64_residual": {
+        "n": 40,
+        "exact": 0,
+        "mae": 2.7763455375136564e-08,
+        "p99": 2.7522271953017705e-07,
+        "max_abs": 2.779579668654719e-07
+      },
+      "native_loss_float32_formula_scaled": {
+        "n": 40,
+        "exact": 14,
+        "mae": 1.6646993710074117e-08,
+        "p99": 8.089895427698717e-08,
+        "max_abs": 9.45133488763686e-08
+      },
+      "native_score_derivative_fp64_residual": {
+        "n": 3200,
+        "exact": 146,
+        "mae": 8.659884160947678e-10,
+        "p99": 3.124224439432494e-09,
+        "max_abs": 7.949556692921078e-07
+      },
+      "fp64_kl_by_token": {
+        "n": 3078,
+        "exact": 32,
+        "mae": 2.5308751955899904,
+        "p99": 10.572817670822825,
+        "max_abs": 1397.8400586371577
+      },
+      "weighted_fp64_kl_loss": {
+        "n": 40,
+        "exact": 0,
+        "mae": 0.4895647543256866,
+        "p99": 6.577232924727119,
+        "max_abs": 7.556740269078363
+      },
+      "native_reference_minus_current_logp": {
+        "n": 3078,
+        "exact": 32,
+        "mae": 1.2630990341596577,
+        "p99": 10.554941227436066,
+        "max_abs": 13.006680130958557
+      }
+    },
+    "peer": {
+      "native_loss_fp64_residual": {
+        "n": 40,
+        "exact": 0,
+        "mae": 1.6720232406560853e-05,
+        "p99": 0.00040705480892743357,
+        "max_abs": 0.0006663940830549109
+      },
+      "native_loss_float32_formula_scaled": {
+        "n": 40,
+        "exact": 20,
+        "mae": 2.027115640156574e-08,
+        "p99": 9.626253316518591e-08,
+        "max_abs": 9.949212256195797e-08
+      },
+      "native_score_derivative_fp64_residual": {
+        "n": 3200,
+        "exact": 114,
+        "mae": 2.389078634410896e-07,
+        "p99": 6.000956946638965e-09,
+        "max_abs": 0.0007613119450979866
+      },
+      "fp64_kl_by_token": {
+        "n": 3172,
+        "exact": 146,
+        "mae": 171.60855567268308,
+        "p99": 18.355550574210973,
+        "max_abs": 533961.7515097868
+      },
+      "weighted_fp64_kl_loss": {
+        "n": 40,
+        "exact": 2,
+        "mae": 34.04086893295835,
+        "p99": 819.1683166726323,
+        "max_abs": 1338.3312204882618
+      },
+      "native_reference_minus_current_logp": {
+        "n": 3172,
+        "exact": 146,
+        "mae": 1.909617924970725,
+        "p99": 8.221983907818794,
+        "max_abs": 15.230063199996948
+      }
+    }
+  },
+  "fixed_initial_scores": {
+    "native_old_logps": {
+      "n": 53,
+      "n_exact": 0,
+      "mae": 0.04123788441142577,
+      "p99": 0.35098092079162535,
+      "max_abs": 0.45583391189575195
+    },
+    "native_reference_logps": {
+      "n": 53,
+      "n_exact": 0,
+      "mae": 0.04123788441142577,
+      "p99": 0.35098092079162535,
+      "max_abs": 0.45583391189575195
+    },
+    "native_initial_learner_logps": {
+      "n": 53,
+      "n_exact": 0,
+      "mae": 0.04123788441142577,
+      "p99": 0.35098092079162535,
+      "max_abs": 0.45583391189575195
+    },
+    "gradient": {
+      "n": 2432,
+      "rmse": 0.0019148075499527191,
+      "max_abs": 0.05640403926372528,
+      "cosine": 0.9939621248339094
+    },
+    "parameter_delta": {
+      "n": 2432,
+      "rmse": 3.2990619867997815e-06,
+      "max_abs": 2.002716064453125e-05,
+      "cosine": 0.9454667665927221
+    }
+  }
+}

@@ -1,0 +1,904 @@
+{
+  "schema_version": 1,
+  "id": "lfm3-17b-transformers523-910c-b200-inference-20261120",
+  "model": {
+    "name": "LiquidAI/LFM3-1.7B",
+    "revision": "1da06bec6a819da10b54c67e5c90972b46d81871",
+    "architecture": "LFM3",
+    "size": "1.7B"
+  },
+  "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "model_hashes": {
+    "config.json": "8c6ae8b8f6d88c87cfb98cf4b5e34e943d0ee07e24215c4121b3159a46e1399d",
+    "model.safetensors": "135922caef64e81e52af88ede8b7c3ddaa9d6da220a9737fb3065275dbfb4330",
+    "configuration_lfm3.py": "176cced35657aedfea7d7002221360582d1c05fcaca882c21508bc3a73b282e5",
+    "modeling_lfm3.py": "e8cd5254ea99ce6bd731b57b10908c2e8b5010ce8315341f895a38484885eeab",
+    "lfm3_conv.py": "80d4a985382a22774212759248a6b4c737bfbf9c2a47b3dd7f797dda748e4bb4",
+    "tokenizer.json": "7e226e34bface23ccf6e495d157bf77186c1c30a7659880e1a8994db528c3701",
+    "tokenizer_config.json": "bf028f813efc6137bc07ed045cafe71820df9a5e26a38e39954706ed1e30a457",
+    "generation_config.json": "0095ba7158e938b1e2d3082d412f00d8be85e42cbbd7608b63866f7a081cf270",
+    "chat_template.jinja": "f45005c50cd2a97329722bf3a2dee9f16c04cdf825a589b280fb7e99e6827818",
+    "special_tokens_map.json": "7946f864cbfb62a1b041bda937244210a1a87f4a6cab3a48b791131b2cd57f88"
+  },
+  "score_derivation": "FP64 normalization over all 128000 tokens before selection; exact union-with-other statistics.",
+  "comparisons": [
+    {
+      "id": "cached",
+      "title": "Native cached prefill and decode",
+      "scope": "100 fixed synthetic prompts; prefill and two decode positions per prompt.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "coverage": [
+        {
+          "label": "Paired full-vocabulary positions",
+          "observed": 300,
+          "expected": 300,
+          "unit": "positions"
+        },
+        {
+          "label": "Requested target scores",
+          "observed": 300,
+          "expected": 300,
+          "unit": "targets"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.99
+        },
+        {
+          "id": "mean-tail-merged-js",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.00045583453832546956
+        },
+        {
+          "id": "max-tail-merged-js",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0018992311405689021,
+          "coordinate": {
+            "position": 43,
+            "sample": "NB-0049-4394c7c3/cached"
+          }
+        },
+        {
+          "id": "mean-top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9766666666666667
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Fixed token log probability MAE",
+          "unit": "nats",
+          "value": 0.052397531438941894
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Fixed token log probability P99 error",
+          "unit": "nats",
+          "value": 0.2245180008310208
+        },
+        {
+          "id": "absolute-nll-difference",
+          "label": "Absolute fixed token NLL difference",
+          "unit": "nats/token",
+          "value": 0.01228288800170274,
+          "side_values": {
+            "ascend": 3.681985544794692,
+            "b200": 3.6697026567929893
+          }
+        }
+      ]
+    },
+    {
+      "id": "cache-off",
+      "title": "Cache-off full-history replay",
+      "scope": "100 fixed synthetic prompts; prefill and two decode positions per prompt.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "coverage": [
+        {
+          "label": "Paired full-vocabulary positions",
+          "observed": 300,
+          "expected": 300,
+          "unit": "positions"
+        },
+        {
+          "label": "Requested target scores",
+          "observed": 300,
+          "expected": 300,
+          "unit": "targets"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.9833333333333333
+        },
+        {
+          "id": "mean-tail-merged-js",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0004750455571004633
+        },
+        {
+          "id": "max-tail-merged-js",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0024579963689340817,
+          "coordinate": {
+            "position": 48,
+            "sample": "NB-0075-aaafb2d7/cache-off"
+          }
+        },
+        {
+          "id": "mean-top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9767333333333332
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Fixed token log probability MAE",
+          "unit": "nats",
+          "value": 0.055033544936673603
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Fixed token log probability P99 error",
+          "unit": "nats",
+          "value": 0.23143585580652268
+        },
+        {
+          "id": "absolute-nll-difference",
+          "label": "Absolute fixed token NLL difference",
+          "unit": "nats/token",
+          "value": 0.011925371374573057,
+          "side_values": {
+            "ascend": 3.6812561952964704,
+            "b200": 3.6693308239218974
+          }
+        }
+      ]
+    },
+    {
+      "id": "greedy",
+      "title": "Native greedy generation",
+      "scope": "Up to three generated tokens per prompt; positions paired only while histories agree.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "coverage": [
+        {
+          "label": "Paired native completions",
+          "observed": 100,
+          "expected": 100,
+          "unit": "requests"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "continuation-agreement",
+          "label": "Exact greedy continuation agreement",
+          "unit": "fraction",
+          "value": 0.96
+        }
+      ]
+    }
+  ],
+  "cache_mode_equivalence": {
+    "cuda": {
+      "by_stage": {
+        "first_decode": {
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9948042626581873,
+              "min": 0.9904979951644342,
+              "p1": 0.9916069121688913
+            },
+            "side_a_union": {
+              "mean": 0.9948391288974898,
+              "min": 0.9906491789112823,
+              "p1": 0.9916777593785276
+            },
+            "side_b_top100": {
+              "mean": 0.9948137556639093,
+              "min": 0.9906525268257623,
+              "p1": 0.9919516116537641
+            },
+            "side_b_union": {
+              "mean": 0.9948483334382894,
+              "min": 0.9908044802340488,
+              "p1": 0.9920270754809721
+            }
+          },
+          "max_probability_error": {
+            "max": 0.04418388407735213,
+            "max_coordinate": {
+              "position": 59,
+              "sample": "NB-0095-4eb492b9",
+              "token": 124900
+            },
+            "mean": 0.01549239448889216,
+            "p99": 0.04378891744231545
+          },
+          "probability_rmse": {
+            "max": 0.006045575404579822,
+            "max_coordinate": {
+              "position": 59,
+              "sample": "NB-0095-4eb492b9"
+            },
+            "mean": 0.001936972984902002,
+            "p99": 0.005884761427984485
+          },
+          "tail_merged_js": {
+            "max": 0.0015116102618146585,
+            "max_coordinate": {
+              "position": 59,
+              "sample": "NB-0095-4eb492b9"
+            },
+            "mean": 0.00036455230175009646,
+            "p99": 0.0014570461728231415
+          },
+          "top100_overlap": {
+            "mean": 0.9843
+          },
+          "top1_agreement": {
+            "count": 98,
+            "fraction": 0.98,
+            "total": 100
+          }
+        },
+        "later_decode": {
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9349785710789729,
+              "min": 0.8829881295899575,
+              "p1": 0.8904279832161491
+            },
+            "side_a_union": {
+              "mean": 0.9359317606813456,
+              "min": 0.8842871189047644,
+              "p1": 0.8922825297038441
+            },
+            "side_b_top100": {
+              "mean": 0.9351103088178832,
+              "min": 0.8880059395274337,
+              "p1": 0.8887257164807305
+            },
+            "side_b_union": {
+              "mean": 0.9360666190966941,
+              "min": 0.8892461608209755,
+              "p1": 0.890601246581734
+            }
+          },
+          "max_probability_error": {
+            "max": 0.05340252507345877,
+            "max_coordinate": {
+              "position": 59,
+              "sample": "NB-0063-472b02aa",
+              "token": 91180
+            },
+            "mean": 0.014271427971890316,
+            "p99": 0.04312814345232495
+          },
+          "probability_rmse": {
+            "max": 0.006997288469931884,
+            "max_coordinate": {
+              "position": 59,
+              "sample": "NB-0063-472b02aa"
+            },
+            "mean": 0.0015391225599145951,
+            "p99": 0.004498144256257005
+          },
+          "tail_merged_js": {
+            "max": 0.0024529395197690597,
+            "max_coordinate": {
+              "position": 59,
+              "sample": "NB-0063-472b02aa"
+            },
+            "mean": 0.0003247316897941096,
+            "p99": 0.0013380673152723103
+          },
+          "top100_overlap": {
+            "mean": 0.9750999999999999
+          },
+          "top1_agreement": {
+            "count": 100,
+            "fraction": 1.0,
+            "total": 100
+          }
+        },
+        "prefill": {
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9807792350709083,
+              "min": 0.9723822459972594,
+              "p1": 0.9726475642388791
+            },
+            "side_a_union": {
+              "mean": 0.9807792350709083,
+              "min": 0.9723822459972594,
+              "p1": 0.9726475642388791
+            },
+            "side_b_top100": {
+              "mean": 0.9807792350709083,
+              "min": 0.9723822459972594,
+              "p1": 0.9726475642388791
+            },
+            "side_b_union": {
+              "mean": 0.9807792350709083,
+              "min": 0.9723822459972594,
+              "p1": 0.9726475642388791
+            }
+          },
+          "max_probability_error": {
+            "max": 0.0,
+            "max_coordinate": {
+              "position": 40,
+              "sample": "NB-0001-810fa0dc",
+              "token": 39
+            },
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "probability_rmse": {
+            "max": 0.0,
+            "max_coordinate": {
+              "position": 40,
+              "sample": "NB-0001-810fa0dc"
+            },
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "tail_merged_js": {
+            "max": 0.0,
+            "max_coordinate": {
+              "position": 40,
+              "sample": "NB-0001-810fa0dc"
+            },
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "top100_overlap": {
+            "mean": 1.0
+          },
+          "top1_agreement": {
+            "count": 100,
+            "fraction": 1.0,
+            "total": 100
+          }
+        }
+      },
+      "raw_exact_rows": 100,
+      "summary": {
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.970187356269356,
+            "min": 0.8829881295899575,
+            "p1": 0.8978918369409142
+          },
+          "side_a_union": {
+            "mean": 0.9705167082165813,
+            "min": 0.8842871189047644,
+            "p1": 0.9001949445196202
+          },
+          "side_b_top100": {
+            "mean": 0.9702344331842334,
+            "min": 0.8880059395274337,
+            "p1": 0.8978124541168471
+          },
+          "side_b_union": {
+            "mean": 0.9705647292019639,
+            "min": 0.8892461608209755,
+            "p1": 0.8996180540136847
+          }
+        },
+        "max_probability_error": {
+          "max": 0.05340252507345877,
+          "max_coordinate": {
+            "position": 59,
+            "sample": "NB-0063-472b02aa",
+            "token": 91180
+          },
+          "mean": 0.009921274153594159,
+          "p99": 0.04303196748039376
+        },
+        "probability_rmse": {
+          "max": 0.006997288469931884,
+          "max_coordinate": {
+            "position": 59,
+            "sample": "NB-0063-472b02aa"
+          },
+          "mean": 0.0011586985149388657,
+          "p99": 0.004487002742001485
+        },
+        "tail_merged_js": {
+          "max": 0.0024529395197690597,
+          "max_coordinate": {
+            "position": 59,
+            "sample": "NB-0063-472b02aa"
+          },
+          "mean": 0.00022976133051473533,
+          "p99": 0.0013456968121879377
+        },
+        "top100_overlap": {
+          "mean": 0.9864666666666667
+        },
+        "top1_agreement": {
+          "count": 298,
+          "fraction": 0.9933333333333333,
+          "total": 300
+        }
+      }
+    },
+    "npu": {
+      "by_stage": {
+        "first_decode": {
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9948100026063365,
+              "min": 0.9907935714406562,
+              "p1": 0.9922534625077831
+            },
+            "side_a_union": {
+              "mean": 0.9948191447066048,
+              "min": 0.9907935714406562,
+              "p1": 0.9922534625077831
+            },
+            "side_b_top100": {
+              "mean": 0.9948050712854598,
+              "min": 0.9907935714406562,
+              "p1": 0.9922534625077831
+            },
+            "side_b_union": {
+              "mean": 0.9948143124964249,
+              "min": 0.9907935714406562,
+              "p1": 0.9922534625077831
+            }
+          },
+          "max_probability_error": {
+            "max": 0.03757047004827374,
+            "max_coordinate": {
+              "position": 47,
+              "sample": "NB-0019-22e8976c",
+              "token": 207
+            },
+            "mean": 0.0033875031749769162,
+            "p99": 0.027260313670465646
+          },
+          "probability_rmse": {
+            "max": 0.004108609339580059,
+            "max_coordinate": {
+              "position": 47,
+              "sample": "NB-0019-22e8976c"
+            },
+            "mean": 0.0004259714845509397,
+            "p99": 0.0033601115556678805
+          },
+          "tail_merged_js": {
+            "max": 0.0010296293410015317,
+            "max_coordinate": {
+              "position": 47,
+              "sample": "NB-0019-22e8976c"
+            },
+            "mean": 7.65091053230402e-05,
+            "p99": 0.0006792167893774062
+          },
+          "top100_overlap": {
+            "mean": 0.9952
+          },
+          "top1_agreement": {
+            "count": 100,
+            "fraction": 1.0,
+            "total": 100
+          }
+        },
+        "later_decode": {
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9352244521884191,
+              "min": 0.8841308036157128,
+              "p1": 0.8924575845284375
+            },
+            "side_a_union": {
+              "mean": 0.9353799111979723,
+              "min": 0.8841308036157128,
+              "p1": 0.8924575845284375
+            },
+            "side_b_top100": {
+              "mean": 0.9351943237741845,
+              "min": 0.8841308036157128,
+              "p1": 0.8916621083208007
+            },
+            "side_b_union": {
+              "mean": 0.9353489706950497,
+              "min": 0.8841308036157128,
+              "p1": 0.8924575845284375
+            }
+          },
+          "max_probability_error": {
+            "max": 0.033198952599213016,
+            "max_coordinate": {
+              "position": 57,
+              "sample": "NB-0014-07690ac1",
+              "token": 91180
+            },
+            "mean": 0.0020930958041101883,
+            "p99": 0.029487679123156835
+          },
+          "probability_rmse": {
+            "max": 0.003816792924379729,
+            "max_coordinate": {
+              "position": 55,
+              "sample": "NB-0069-fafa6c2a"
+            },
+            "mean": 0.00023930065924917472,
+            "p99": 0.003706518853491808
+          },
+          "tail_merged_js": {
+            "max": 0.0011081987296492181,
+            "max_coordinate": {
+              "position": 55,
+              "sample": "NB-0069-fafa6c2a"
+            },
+            "mean": 5.7760147091280104e-05,
+            "p99": 0.001103526188013491
+          },
+          "top100_overlap": {
+            "mean": 0.996
+          },
+          "top1_agreement": {
+            "count": 100,
+            "fraction": 1.0,
+            "total": 100
+          }
+        },
+        "prefill": {
+          "coverage": {
+            "side_a_top100": {
+              "mean": 0.9806829892728216,
+              "min": 0.9701390804732402,
+              "p1": 0.9725730193776958
+            },
+            "side_a_union": {
+              "mean": 0.9806829892728216,
+              "min": 0.9701390804732402,
+              "p1": 0.9725730193776958
+            },
+            "side_b_top100": {
+              "mean": 0.9806829892728216,
+              "min": 0.9701390804732402,
+              "p1": 0.9725730193776958
+            },
+            "side_b_union": {
+              "mean": 0.9806829892728216,
+              "min": 0.9701390804732402,
+              "p1": 0.9725730193776958
+            }
+          },
+          "max_probability_error": {
+            "max": 0.0,
+            "max_coordinate": {
+              "position": 40,
+              "sample": "NB-0001-810fa0dc",
+              "token": 39
+            },
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "probability_rmse": {
+            "max": 0.0,
+            "max_coordinate": {
+              "position": 40,
+              "sample": "NB-0001-810fa0dc"
+            },
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "tail_merged_js": {
+            "max": 0.0,
+            "max_coordinate": {
+              "position": 40,
+              "sample": "NB-0001-810fa0dc"
+            },
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "top100_overlap": {
+            "mean": 1.0
+          },
+          "top1_agreement": {
+            "count": 100,
+            "fraction": 1.0,
+            "total": 100
+          }
+        }
+      },
+      "raw_exact_rows": 259,
+      "summary": {
+        "coverage": {
+          "side_a_top100": {
+            "mean": 0.9702391480225258,
+            "min": 0.8841308036157128,
+            "p1": 0.8959282955637693
+          },
+          "side_a_union": {
+            "mean": 0.9702940150591329,
+            "min": 0.8841308036157128,
+            "p1": 0.8966688185141999
+          },
+          "side_b_top100": {
+            "mean": 0.9702274614441554,
+            "min": 0.8841308036157128,
+            "p1": 0.8959144469842575
+          },
+          "side_b_union": {
+            "mean": 0.9702820908214321,
+            "min": 0.8841308036157128,
+            "p1": 0.8959329156689796
+          }
+        },
+        "max_probability_error": {
+          "max": 0.03757047004827374,
+          "max_coordinate": {
+            "position": 47,
+            "sample": "NB-0019-22e8976c",
+            "token": 207
+          },
+          "mean": 0.0018268663263623682,
+          "p99": 0.029057593498549198
+        },
+        "probability_rmse": {
+          "max": 0.004108609339580059,
+          "max_coordinate": {
+            "position": 47,
+            "sample": "NB-0019-22e8976c"
+          },
+          "mean": 0.0002217573812667048,
+          "p99": 0.003356079512011952
+        },
+        "tail_merged_js": {
+          "max": 0.0011081987296492181,
+          "max_coordinate": {
+            "position": 55,
+            "sample": "NB-0069-fafa6c2a"
+          },
+          "mean": 4.47564174714401e-05,
+          "p99": 0.0006887019458530763
+        },
+        "top100_overlap": {
+          "mean": 0.9970666666666667
+        },
+        "top1_agreement": {
+          "count": 300,
+          "fraction": 1.0,
+          "total": 300
+        }
+      }
+    }
+  },
+  "normalization_independent": {
+    "cuda": {
+      "independent_target_values": 16,
+      "max_abs_difference": 4.440892098500626e-16
+    },
+    "npu": {
+      "independent_target_values": 32,
+      "max_abs_difference": 6.661338147750939e-16
+    }
+  },
+  "raw_capture_sha256": {
+    "npu": [
+      "be10f29de3cb05baa6f8a8967d06f4058a54ce0308ad7d31b97c6ebcc72e1991",
+      "0132718f32dc4f7d56ea520e8b95523f32596298dcc43bd9b3469c25bcecd3e1",
+      "533116ebc039d3d6be86bc0e744f430734952b7096a87cc920230b760eb36e0d",
+      "c7228ac6e50b2ffad3920ed02e19d116613019f8eb8ee11ebcc9d1241e1de4f4"
+    ],
+    "cuda": [
+      "7329afebabf93085c1243820ef36ff6ec4e764835a0c152cdaf6a630d36cf646",
+      "267ba25cb1cfb1bfdff2cb869bee5b6cf49ebe6453479556d7879bd100c5700c"
+    ]
+  },
+  "observed_compatibility": {
+    "before_version": "5.12.1",
+    "before_hardware": "NVIDIA B200",
+    "before_status": "import_error",
+    "before_message": "Transformers lacked use_kernel_func_from_hub_with_fallback used by the released model code.",
+    "after_version": "5.23.0",
+    "after_status": "completed on Ascend 910C and B200",
+    "fix_scope": "model runtime compatibility; no numerical correction asserted"
+  },
+  "probe": {
+    "event": "NB-0010-ac84dad4",
+    "prediction_position": 42,
+    "first_observed_boundary": "The recorded input and weights are identical; the layer-0 projection is the first observed difference among sampled boundaries.",
+    "projection": {
+      "norm-0-in": {
+        "elements": 88064,
+        "unequal": 0,
+        "max_abs": 0.0
+      },
+      "norm-0-out": {
+        "elements": 88064,
+        "unequal": 0,
+        "max_abs": 0.0
+      },
+      "project-0-in": {
+        "elements": 88064,
+        "unequal": 0,
+        "max_abs": 0.0
+      },
+      "project-0-out": {
+        "elements": 264192,
+        "unequal": 315,
+        "max_abs": 0.0078125
+      },
+      "shortconv-0-out": {
+        "elements": 88064,
+        "unequal": 1846,
+        "max_abs": 0.000244140625
+      }
+    },
+    "within_b200_dispatch_replay": {
+      "project-0-in": {
+        "elements": 88064,
+        "unequal": 0,
+        "max_abs": 0.0
+      },
+      "project-0-out": {
+        "elements": 264192,
+        "unequal": 0,
+        "max_abs": 0.0
+      },
+      "shortconv-0-out": {
+        "elements": 88064,
+        "unequal": 0,
+        "max_abs": 0.0
+      }
+    },
+    "independent_fp64": {
+      "checked": 32,
+      "native_differing": 315,
+      "max_fsum_vs_blas": 0.0,
+      "npu_nearest_even_count": 28,
+      "cuda_nearest_even_count": 2
+    },
+    "prefill_probability_max_absolute_difference": {
+      "ascend_b200_default": 0.05021603446410383,
+      "ascend_b200_torch_shortconv": 0.05021603446410383,
+      "b200_default_vs_torch_shortconv": 0.0
+    },
+    "conclusion": "Measured numerical discrepancy and one controlled kernel-dispatch replay. No numerical bug or correction asserted by this comparison.",
+    "original_rows_replayed": 6,
+    "cache_mode_top1_flip_replay": {
+      "event": "NB-0010-ac84dad4",
+      "position": 43,
+      "stage": "first_decode",
+      "matched_history": true,
+      "by_backend": {
+        "npu": {
+          "cached_top2": [
+            {
+              "token": 207,
+              "probability": 0.31145926694319986
+            },
+            {
+              "token": 124900,
+              "probability": 0.31145926694319986
+            }
+          ],
+          "cache_off_top2": [
+            {
+              "token": 207,
+              "probability": 0.31145926694319986
+            },
+            {
+              "token": 124900,
+              "probability": 0.31145926694319986
+            }
+          ],
+          "top1_agrees": true,
+          "max_full_vocab_probability_change": 0.0,
+          "layer_0_projection_output_for_current_token": {
+            "elements": 6144,
+            "unequal": 0,
+            "max_abs": 0.0
+          },
+          "layer_0_shortconv_output_for_current_token": {
+            "elements": 2048,
+            "unequal": 0,
+            "max_abs": 0.0
+          }
+        },
+        "cuda": {
+          "cached_top2": [
+            {
+              "token": 207,
+              "probability": 0.3220640664157243
+            },
+            {
+              "token": 124900,
+              "probability": 0.3220640664157243
+            }
+          ],
+          "cache_off_top2": [
+            {
+              "token": 124900,
+              "probability": 0.3347272443282548
+            },
+            {
+              "token": 207,
+              "probability": 0.2953957563303619
+            }
+          ],
+          "top1_agrees": false,
+          "max_full_vocab_probability_change": 0.026668310085362412,
+          "layer_0_projection_output_for_current_token": {
+            "elements": 6144,
+            "unequal": 0,
+            "max_abs": 0.0
+          },
+          "layer_0_shortconv_output_for_current_token": {
+            "elements": 2048,
+            "unequal": 0,
+            "max_abs": 0.0
+          }
+        },
+        "cuda-torch": {
+          "cached_top2": [
+            {
+              "token": 207,
+              "probability": 0.3220640664157243
+            },
+            {
+              "token": 124900,
+              "probability": 0.3220640664157243
+            }
+          ],
+          "cache_off_top2": [
+            {
+              "token": 124900,
+              "probability": 0.3347272443282548
+            },
+            {
+              "token": 207,
+              "probability": 0.2953957563303619
+            }
+          ],
+          "top1_agrees": false,
+          "max_full_vocab_probability_change": 0.026668310085362412,
+          "layer_0_projection_output_for_current_token": {
+            "elements": 6144,
+            "unequal": 0,
+            "max_abs": 0.0
+          },
+          "layer_0_shortconv_output_for_current_token": {
+            "elements": 2048,
+            "unequal": 0,
+            "max_abs": 0.0
+          }
+        }
+      },
+      "original_b200_flip_reproduced": true,
+      "torch_shortconv_flip": true,
+      "original_raw_matches_of_six": {
+        "npu": 6,
+        "cuda": 6
+      },
+      "scope": "One first-decode top-1 flip from the measured short inference workload; cache equivalence has no acceptance threshold."
+    }
+  }
+}

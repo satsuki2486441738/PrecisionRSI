@@ -1,0 +1,352 @@
+{
+  "acceptance": null,
+  "scope": "Stock TRL SFTTrainer BFD packing and separate padded documents, 100 events, one native AdamW step on a single accelerator. BF16 Qwen3-0.6B, FP32 final-layer LoRA and eager attention. The forward-only layer trace uses the earlier 8-event scope.",
+  "model": "Qwen/Qwen3-0.6B",
+  "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+  "workload": {
+    "preflight_examples": 8,
+    "formal_examples": 100,
+    "packing": "TRL BFD max_length 112",
+    "completion": "completion-only loss, native EOS, varied punctuation",
+    "precision": "Frozen BF16 base, FP32 rank-8 last MLP LoRA, eager attention, no LoRA dropout",
+    "optimizer": "one native AdamW update, LR 0.0003, no gradient clipping, matched global active targets",
+    "seed": 33161,
+    "data_seed": 78461,
+    "dataset_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77"
+  },
+  "stack": {
+    "trl": "1.18.2",
+    "transformers": "5.23.0",
+    "accelerate": "1.16.0",
+    "peft": "0.22.0",
+    "datasets": "5.0.1"
+  },
+  "targets": 240,
+  "full_vocabulary": 151936,
+  "native_runs": {
+    "ascend": {
+      "hardware": "Ascend 910C",
+      "runtimes": {
+        "trl": "1.18.2",
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "datasets": "5.0.1",
+        "torch": "2.9.0+cpu",
+        "device_runtime": "2.9.0.post2",
+        "trl_compact_native": false
+      },
+      "native_verified_mask_layers": 28,
+      "cross_document_edges_excluded": 810014,
+      "training_loss": {
+        "isolated": 9.335996627807617,
+        "packed": 9.329346656799316
+      },
+      "tiling_score_replay_error": {
+        "isolated": 2.7781532487836103e-06,
+        "packed": 2.829651794655774e-06
+      },
+      "preflight_control": {
+        "cross_document_edges_enabled": 10255,
+        "matched_target_logprob_difference": {
+          "count": 6,
+          "mae": 2.533056558051012,
+          "absolute_p99": 10.168307675717447,
+          "max_abs": 10.468712497736043,
+          "rmse": 4.646419460637143,
+          "relative_l2": 0.45680955349063324
+        }
+      },
+      "pack_vs_independent": {
+        "gradient": {
+          "count": 32768,
+          "mae": 2.0079132837491978e-05,
+          "absolute_p99": 0.000263542678439989,
+          "max_abs": 0.004374207928776741,
+          "rmse": 7.964848441148249e-05,
+          "relative_l2": 0.13702621700422743
+        },
+        "after": {
+          "count": 32768,
+          "mae": 2.7462709006886854e-07,
+          "absolute_p99": 2.5388144422322457e-08,
+          "max_abs": 0.0005981028662063181,
+          "rmse": 1.2354763367275613e-05,
+          "relative_l2": 0.0013720681261995985
+        },
+        "m": {
+          "count": 32768,
+          "mae": 2.0079133271896156e-06,
+          "absolute_p99": 2.6354266883572495e-05,
+          "max_abs": 0.0004374207928776741,
+          "rmse": 7.964848823802852e-06,
+          "relative_l2": 0.13702622084361904
+        },
+        "v": {
+          "count": 32768,
+          "mae": 8.622778375020439e-11,
+          "absolute_p99": 9.38714661558034e-10,
+          "max_abs": 2.6343138870288385e-07,
+          "rmse": 2.1502414953306513e-09,
+          "relative_l2": 0.25318273790127344
+        },
+        "full_vocab_target_logprob_nats": {
+          "count": 240,
+          "mae": 0.07460137159774931,
+          "absolute_p99": 0.3659567595485943,
+          "max_abs": 0.4475814597394052,
+          "rmse": 0.1091542852396215,
+          "relative_l2": 0.009329848666036545
+        },
+        "native_target_logprob_nats": {
+          "count": 240,
+          "mae": 0.07460134861369928,
+          "absolute_p99": 0.36595691680908116,
+          "max_abs": 0.44758129119873047,
+          "rmse": 0.1091542499230388,
+          "relative_l2": 0.009329845746805378
+        }
+      }
+    },
+    "b200": {
+      "hardware": "NVIDIA B200",
+      "runtimes": {
+        "trl": "1.18.2",
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "datasets": "5.0.1",
+        "torch": "2.9.0+cu128",
+        "device_runtime": "12.8",
+        "trl_compact_native": true
+      },
+      "native_verified_mask_layers": 28,
+      "cross_document_edges_excluded": 810014,
+      "training_loss": {
+        "isolated": 9.340758323669434,
+        "packed": 9.33727741241455
+      },
+      "tiling_score_replay_error": {
+        "isolated": 1.4239280474726002e-06,
+        "packed": 1.3344692924022183e-06
+      },
+      "preflight_control": {
+        "cross_document_edges_enabled": 10255,
+        "matched_target_logprob_difference": {
+          "count": 6,
+          "mae": 2.5861318028716287,
+          "absolute_p99": 10.086443618371945,
+          "max_abs": 10.360224965724349,
+          "rmse": 4.676873191508281,
+          "relative_l2": 0.4656298072088131
+        }
+      },
+      "pack_vs_independent": {
+        "gradient": {
+          "count": 32768,
+          "mae": 1.995985072747019e-05,
+          "absolute_p99": 0.0002596415625885123,
+          "max_abs": 0.004331640899181366,
+          "rmse": 7.931483554472284e-05,
+          "relative_l2": 0.13645412711273602
+        },
+        "after": {
+          "count": 32768,
+          "mae": 2.3585023800620775e-07,
+          "absolute_p99": 2.6939669623970545e-08,
+          "max_abs": 0.0005988430057186633,
+          "rmse": 1.1579266216074528e-05,
+          "relative_l2": 0.0012859446641605976
+        },
+        "m": {
+          "count": 32768,
+          "mae": 1.9959850963355895e-06,
+          "absolute_p99": 2.5964160158764513e-05,
+          "max_abs": 0.0004331639502197504,
+          "rmse": 7.931483203075594e-06,
+          "relative_l2": 0.136454119158042
+        },
+        "v": {
+          "count": 32768,
+          "mae": 8.589536040279081e-11,
+          "absolute_p99": 9.211327522962164e-10,
+          "max_abs": 2.610045157780405e-07,
+          "rmse": 2.1384800748908406e-09,
+          "relative_l2": 0.25171151928542135
+        },
+        "full_vocab_target_logprob_nats": {
+          "count": 240,
+          "mae": 0.05547887161793283,
+          "absolute_p99": 0.23507705490494601,
+          "max_abs": 0.2993559661253986,
+          "rmse": 0.08278303571199103,
+          "relative_l2": 0.007074323703090498
+        },
+        "native_target_logprob_nats": {
+          "count": 240,
+          "mae": 0.05547882846246163,
+          "absolute_p99": 0.2350773191452025,
+          "max_abs": 0.29935646057128906,
+          "rmse": 0.0827829962408537,
+          "relative_l2": 0.007074320327728292
+        }
+      }
+    }
+  },
+  "layer_trace": {
+    "ascend": {
+      "native-reset_versus_isolated": {
+        "first_captured_divergence": "07-layer0-attention-probabilities",
+        "native_target_logprob_nats": {
+          "matched": 20,
+          "neq": 17,
+          "max_abs": 0.3408637046813965,
+          "mae": 0.07728668600320816,
+          "rmse": 0.11188162878091121
+        }
+      },
+      "native-reset_versus_block-reset": {
+        "first_captured_divergence": null,
+        "native_target_logprob_nats": {
+          "matched": 20,
+          "neq": 0,
+          "max_abs": 0.0,
+          "mae": 0.0,
+          "rmse": 0.0
+        }
+      },
+      "block-absolute_versus_block-reset": {
+        "first_captured_divergence": "07-layer0-attention-probabilities",
+        "native_target_logprob_nats": {
+          "matched": 20,
+          "neq": 12,
+          "max_abs": 0.20049285888671875,
+          "mae": 0.03531194403767586,
+          "rmse": 0.06432397424034614
+        }
+      }
+    },
+    "b200": {
+      "native-reset_versus_isolated": {
+        "first_captured_divergence": "08-layer0-av",
+        "native_target_logprob_nats": {
+          "matched": 20,
+          "neq": 10,
+          "max_abs": 0.18597984313964844,
+          "mae": 0.01963048130273819,
+          "rmse": 0.047771104769611716
+        }
+      },
+      "native-reset_versus_block-reset": {
+        "first_captured_divergence": null,
+        "native_target_logprob_nats": {
+          "matched": 20,
+          "neq": 0,
+          "max_abs": 0.0,
+          "mae": 0.0,
+          "rmse": 0.0
+        }
+      },
+      "block-absolute_versus_block-reset": {
+        "first_captured_divergence": "07-layer0-attention-probabilities",
+        "native_target_logprob_nats": {
+          "matched": 20,
+          "neq": 12,
+          "max_abs": 0.2759742736816406,
+          "mae": 0.0585703656077385,
+          "rmse": 0.1002163545779203
+        }
+      }
+    }
+  },
+  "cross_stack": {
+    "isolated": {
+      "fp64_target_logprobs_nats": {
+        "n": 240,
+        "mae": 0.09592916207803061,
+        "p99": 0.36120468994260735,
+        "max_abs": 0.39984614355911674,
+        "rmse": 0.12821408777619134
+      },
+      "native_target_logprobs_nats": {
+        "n": 240,
+        "mae": 0.09592913892120122,
+        "p99": 0.36120440483093214,
+        "max_abs": 0.3998451232910156,
+        "rmse": 0.12821400138864153
+      },
+      "gradient": {
+        "n": 32768,
+        "mae": 6.035281412421732e-07,
+        "p99": 8.153266971930841e-06,
+        "max_abs": 3.107637166976929e-05,
+        "rmse": 1.7396320350996431e-06
+      },
+      "after": {
+        "n": 32768,
+        "mae": 2.844231912213502e-07,
+        "p99": 9.477662388235055e-09,
+        "max_abs": 0.0005983564187772572,
+        "rmse": 1.2753692313758433e-05
+      },
+      "m": {
+        "n": 32768,
+        "mae": 6.035280609161296e-08,
+        "p99": 8.153257658705095e-07,
+        "max_abs": 3.107590600848198e-06,
+        "rmse": 1.739631390028745e-07
+      },
+      "v": {
+        "n": 32768,
+        "mae": 1.0940510483223256e-12,
+        "p99": 1.9568993092633417e-11,
+        "max_abs": 1.2730083653877955e-09,
+        "rmse": 1.1925906849999173e-11
+      }
+    },
+    "packed": {
+      "fp64_target_logprobs_nats": {
+        "n": 240,
+        "mae": 0.08721177213691238,
+        "p99": 0.2985618088464467,
+        "max_abs": 0.3573784677976666,
+        "rmse": 0.11556168918742336
+      },
+      "native_target_logprobs_nats": {
+        "n": 240,
+        "mae": 0.08721184134483337,
+        "p99": 0.2985619783401489,
+        "max_abs": 0.3573784828186035,
+        "rmse": 0.11556177426358857
+      },
+      "gradient": {
+        "n": 32768,
+        "mae": 8.697172038840857e-07,
+        "p99": 1.0920334025286135e-05,
+        "max_abs": 4.9192458391189575e-05,
+        "rmse": 2.441008046655156e-06
+      },
+      "after": {
+        "n": 32768,
+        "mae": 3.0969411801695657e-07,
+        "p99": 1.9285944290459046e-08,
+        "max_abs": 0.0005989289493300021,
+        "rmse": 1.3198278331553307e-05
+      },
+      "m": {
+        "n": 32768,
+        "mae": 8.697174799831163e-08,
+        "p99": 1.092030979634728e-06,
+        "max_abs": 4.9192458391189575e-06,
+        "rmse": 2.441009889788098e-07
+      },
+      "v": {
+        "n": 32768,
+        "mae": 1.3551228649649084e-12,
+        "p99": 2.2547133049499724e-11,
+        "max_abs": 2.0712604964501224e-09,
+        "rmse": 1.8712778583075213e-11
+      }
+    }
+  }
+}

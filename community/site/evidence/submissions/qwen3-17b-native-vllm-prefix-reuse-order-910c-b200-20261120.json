@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "id": "qwen3-17b-native-vllm-prefix-reuse-order-910c-b200-20261120",
+  "model": {
+    "name": "Qwen/Qwen3-1.7B",
+    "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "architecture": "Qwen3",
+    "size": "1.7B"
+  },
+  "checkpoint_hashes": {
+    "LICENSE": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+    "config.json": "1ddb5b89ebc90dcb417a45c213d818577e65976454d29385c8f6140771d95197",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model-00001-of-00002.safetensors": "169ad53ec313c3a34b06c0809216e4fc072cce444a5d4ff2b59690d064130ed5",
+    "model-00002-of-00002.safetensors": "912becff8d60672aa8628ef08c05898d9adf17c2ad4ae3caf99b065622fdeff9",
+    "model.safetensors.index.json": "0d660e94b165eb912669a5249dff44b83188c4777a07ddb9611fb78d91b0578d",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "vocab": 151936,
+  "events": 100,
+  "native_request_count_per_side": 600,
+  "native_full_vocabulary_rows_per_side": 400,
+  "compared_input_lengths": [
+    193,
+    225,
+    257,
+    289,
+    321,
+    353,
+    385,
+    417,
+    449,
+    481
+  ],
+  "comparisons": [
+    {
+      "id": "cold-cross-stack",
+      "title": "Cold prefix comparison across stacks",
+      "scope": "Same checkpoint and history; the native scheduler reports a true cold prefix on each stack.",
+      "side_ids": [
+        "ascend",
+        "cuda"
+      ],
+      "coverage": [
+        {
+          "label": "Fixed token histories",
+          "expected": 100,
+          "observed": 100,
+          "unit": "positions"
+        },
+        {
+          "label": "Target token scores",
+          "expected": 200,
+          "observed": 200,
+          "unit": "targets"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 1.0
+        },
+        {
+          "id": "mean-tail-js",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0007191867718222735
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Target log probability mean absolute error",
+          "unit": "nats",
+          "value": 0.12401416301727294
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Target log probability P99 absolute error",
+          "unit": "nats",
+          "value": 0.47892486095428444
+        },
+        {
+          "id": "target-logprob-max",
+          "label": "Maximum target log probability absolute error",
+          "unit": "nats",
+          "value": 0.6978621482849121
+        },
+        {
+          "id": "nll-difference",
+          "label": "Absolute NLL difference",
+          "unit": "nats/token",
+          "value": 0.020914764404296626
+        }
+      ]
+    }
+  ],
+  "relative_distances": "Request positions between each seed and its matching hit; near is immediate and interleaved replays five independently seeded prefixes.",
+  "scheduler_control": {
+    "ascend": {
+      "source_sha256": "febf1ca0d1be1de9eb50f25fb559fcf3a9845438e914a1ac95175ff413d13742",
+      "block_size": 128,
+      "conditions": [
+        {
+          "arm": "near-cold",
+          "computed_prefix_tokens": [
+            0
+          ],
+          "hit_rows": 0,
+          "reuse_distance_min_max": null
+        },
+        {
+          "arm": "near-hit",
+          "computed_prefix_tokens": [
+            128,
+            256,
+            384
+          ],
+          "hit_rows": 100,
+          "reuse_distance_min_max": [
+            0,
+            0
+          ]
+        },
+        {
+          "arm": "far-cold",
+          "computed_prefix_tokens": [
+            0
+          ],
+          "hit_rows": 0,
+          "reuse_distance_min_max": null
+        },
+        {
+          "arm": "far-hit",
+          "computed_prefix_tokens": [
+            128,
+            256,
+            384
+          ],
+          "hit_rows": 100,
+          "reuse_distance_min_max": [
+            1,
+            8
+          ]
+        }
+      ],
+      "maximum_mass_error": 1.4512137969102668e-06,
+      "source_bytes": {
+        "array": 486195328,
+        "raw": 2238049040
+      },
+      "comparisons": {
+        "far-cold_vs_far-hit": {
+          "alternate_full_js_delta": {
+            "max": 1.3557948166931233e-16,
+            "mean": 4.1033926809847583e-17,
+            "p99": 1.2354443097890861e-16
+          },
+          "full_array_bytes_equal": 20,
+          "full_vocabulary_js_nats": {
+            "max": 0.0021116469050033123,
+            "mean": 0.00032910131805241437,
+            "p99": 0.0015349688276450827
+          },
+          "half_l1_probability": {
+            "max": 0.05501061643871999,
+            "mean": 0.016316244093988422,
+            "p99": 0.05068221165906083
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.5675334930419922,
+            "mean": 0.2796707010269165,
+            "p99": 0.549136028289795
+          },
+          "max_absolute_probability": {
+            "max": 0.054755811577989255,
+            "mean": 0.013193638565621437,
+            "p99": 0.04559928597547826
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.06387765645980835,
+            "max_abs_nat": 0.4163651466369629,
+            "max_coordinate": [
+              "NB-0009-393d5e70",
+              448,
+              425
+            ],
+            "nll_abs_diff_nat_per_token": 0.011426074504852224,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.2918814873695369,
+            "side_a_nll_nat_per_token": 5.865733897686004,
+            "side_b_nll_nat_per_token": 5.854307823181152,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "near-cold_vs_far-cold": {
+          "alternate_full_js_delta": {
+            "max": 6.980430697713525e-17,
+            "mean": 2.1380722296247885e-17,
+            "p99": 6.494707128292616e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              192,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 5.865733897686004,
+            "side_b_nll_nat_per_token": 5.865733897686004,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "near-cold_vs_near-hit": {
+          "alternate_full_js_delta": {
+            "max": 1.3557948166931233e-16,
+            "mean": 4.1033926809847583e-17,
+            "p99": 1.2354443097890861e-16
+          },
+          "full_array_bytes_equal": 20,
+          "full_vocabulary_js_nats": {
+            "max": 0.0021116469050033123,
+            "mean": 0.00032910131805241437,
+            "p99": 0.0015349688276450827
+          },
+          "half_l1_probability": {
+            "max": 0.05501061643871999,
+            "mean": 0.016316244093988422,
+            "p99": 0.05068221165906083
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.5675334930419922,
+            "mean": 0.2796707010269165,
+            "p99": 0.549136028289795
+          },
+          "max_absolute_probability": {
+            "max": 0.054755811577989255,
+            "mean": 0.013193638565621437,
+            "p99": 0.04559928597547826
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.06387765645980835,
+            "max_abs_nat": 0.4163651466369629,
+            "max_coordinate": [
+              "NB-0009-393d5e70",
+              448,
+              425
+            ],
+            "nll_abs_diff_nat_per_token": 0.011426074504852224,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.2918814873695369,
+            "side_a_nll_nat_per_token": 5.865733897686004,
+            "side_b_nll_nat_per_token": 5.854307823181152,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "near-hit_vs_far-hit": {
+          "alternate_full_js_delta": {
+            "max": 9.692543255727276e-17,
+            "mean": 2.3903695477529662e-17,
+            "p99": 6.948718534305453e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              192,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 5.854307823181152,
+            "side_b_nll_nat_per_token": 5.854307823181152,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        }
+      }
+    },
+    "cuda": {
+      "source_sha256": "bea7d5d56e33570cadaf39d8963d09ce1836c024585f6a4bf8ea7a03936d7a27",
+      "block_size": 16,
+      "conditions": [
+        {
+          "arm": "near-cold",
+          "computed_prefix_tokens": [
+            0
+          ],
+          "hit_rows": 0,
+          "reuse_distance_min_max": null
+        },
+        {
+          "arm": "near-hit",
+          "computed_prefix_tokens": [
+            192,
+            224,
+            256,
+            288,
+            320,
+            352,
+            384,
+            416,
+            448,
+            480
+          ],
+          "hit_rows": 100,
+          "reuse_distance_min_max": [
+            0,
+            0
+          ]
+        },
+        {
+          "arm": "far-cold",
+          "computed_prefix_tokens": [
+            0
+          ],
+          "hit_rows": 0,
+          "reuse_distance_min_max": null
+        },
+        {
+          "arm": "far-hit",
+          "computed_prefix_tokens": [
+            192,
+            224,
+            256,
+            288,
+            320,
+            352,
+            384,
+            416,
+            448,
+            480
+          ],
+          "hit_rows": 100,
+          "reuse_distance_min_max": [
+            1,
+            8
+          ]
+        }
+      ],
+      "maximum_mass_error": 1.2263205522167198e-06,
+      "source_bytes": {
+        "array": 486195328,
+        "raw": 2239391382
+      },
+      "comparisons": {
+        "far-cold_vs_far-hit": {
+          "alternate_full_js_delta": {
+            "max": 1.3812735677465326e-16,
+            "mean": 4.571570647537125e-17,
+            "p99": 1.3093584376455695e-16
+          },
+          "full_array_bytes_equal": 0,
+          "full_vocabulary_js_nats": {
+            "max": 0.0016447839455723246,
+            "mean": 0.0003492154859480209,
+            "p99": 0.001392473953202393
+          },
+          "half_l1_probability": {
+            "max": 0.0541801174356912,
+            "mean": 0.018305596447290497,
+            "p99": 0.047751028349405714
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.6474037170410156,
+            "mean": 0.27832003593444826,
+            "p99": 0.46678075790405366
+          },
+          "max_absolute_probability": {
+            "max": 0.04972180926457376,
+            "mean": 0.015236990488067701,
+            "p99": 0.04762112724572214
+          },
+          "native_greedy_equal": 99,
+          "targets": {
+            "mae_nat": 0.06340924620628358,
+            "max_abs_nat": 0.23433923721313477,
+            "max_coordinate": [
+              "NB-0097-0f6e4746",
+              384,
+              425
+            ],
+            "nll_abs_diff_nat_per_token": 0.009476419687270976,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.19847965240478516,
+            "side_a_nll_nat_per_token": 5.844819133281708,
+            "side_b_nll_nat_per_token": 5.854295552968979,
+            "target_count": 200
+          },
+          "top1_equal": 99
+        },
+        "near-cold_vs_far-cold": {
+          "alternate_full_js_delta": {
+            "max": 1.167496517438559e-16,
+            "mean": 1.924326475896318e-17,
+            "p99": 8.021317515302762e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              192,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 5.844819133281708,
+            "side_b_nll_nat_per_token": 5.844819133281708,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "near-cold_vs_near-hit": {
+          "alternate_full_js_delta": {
+            "max": 1.3812735677465326e-16,
+            "mean": 4.571570647537125e-17,
+            "p99": 1.3093584376455695e-16
+          },
+          "full_array_bytes_equal": 0,
+          "full_vocabulary_js_nats": {
+            "max": 0.0016447839455723246,
+            "mean": 0.0003492154859480209,
+            "p99": 0.001392473953202393
+          },
+          "half_l1_probability": {
+            "max": 0.0541801174356912,
+            "mean": 0.018305596447290497,
+            "p99": 0.047751028349405714
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.6474037170410156,
+            "mean": 0.27832003593444826,
+            "p99": 0.46678075790405366
+          },
+          "max_absolute_probability": {
+            "max": 0.04972180926457376,
+            "mean": 0.015236990488067701,
+            "p99": 0.04762112724572214
+          },
+          "native_greedy_equal": 99,
+          "targets": {
+            "mae_nat": 0.06340924620628358,
+            "max_abs_nat": 0.23433923721313477,
+            "max_coordinate": [
+              "NB-0097-0f6e4746",
+              384,
+              425
+            ],
+            "nll_abs_diff_nat_per_token": 0.009476419687270976,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.19847965240478516,
+            "side_a_nll_nat_per_token": 5.844819133281708,
+            "side_b_nll_nat_per_token": 5.854295552968979,
+            "target_count": 200
+          },
+          "top1_equal": 99
+        },
+        "near-hit_vs_far-hit": {
+          "alternate_full_js_delta": {
+            "max": 7.005871957673838e-17,
+            "mean": 2.151439105778405e-17,
+            "p99": 6.858994293572434e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              192,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 5.854295552968979,
+            "side_b_nll_nat_per_token": 5.854295552968979,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        }
+      }
+    }
+  },
+  "cold_cross_source_ids": [
+    "021875bda91c2f1f1a6c12724c9b64151e8a9199312bacf121f1187fdefb0226",
+    "b6a470b6597096d69e361dae1257cde8af715099e85535a4f2e64cbf1b177ec7"
+  ],
+  "acceptance": null
+}

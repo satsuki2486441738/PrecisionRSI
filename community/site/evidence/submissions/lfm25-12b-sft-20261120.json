@@ -1,0 +1,546 @@
+{
+  "acceptance": null,
+  "model": {
+    "name": "LiquidAI/LFM2.5-1.2B-Base",
+    "architecture": "LFM2.5",
+    "size": "1.2B",
+    "revision": "7453bca97ca1e67754c4035a4b4c584e1c9dd725"
+  },
+  "workload": {
+    "sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+    "events": 100,
+    "vocab_size": 65536,
+    "tokens": 200,
+    "microbatches": 34,
+    "adapter_coordinates": 81920,
+    "updates": 1
+  },
+  "formal": {
+    "ascend_release": {
+      "weighting": "global-token-mean",
+      "native_backward_divisor": 1,
+      "correction": null,
+      "native_objective": {
+        "events": 100,
+        "targets": 200,
+        "vocab_size": 65536,
+        "global_token_error_nat": -7.410385443051837e-07
+      },
+      "candidate_objective": {
+        "global_token_error_nat": -7.410385443051837e-07
+      },
+      "gradient_checks": [
+        {
+          "expected_multiplier": 1,
+          "metrics": [
+            {
+              "coordinates": 65536,
+              "nonzero_reference": 0,
+              "reference_relative_l2_after_multiplier": 0,
+              "gradient_max_abs_after_multiplier": 0.0,
+              "stored_update_max_abs": 0.0,
+              "fitted_multiplier": null
+            },
+            {
+              "coordinates": 16384,
+              "nonzero_reference": 16384,
+              "reference_relative_l2_after_multiplier": 4.7205954351966995e-07,
+              "gradient_max_abs_after_multiplier": 1.8742866814136505e-07,
+              "stored_update_max_abs": 5.820766091346741e-11,
+              "fitted_multiplier": 1.0000000032587282
+            }
+          ]
+        }
+      ]
+    },
+    "b200_release": {
+      "weighting": "global-token-mean",
+      "native_backward_divisor": 1,
+      "correction": null,
+      "native_objective": {
+        "events": 100,
+        "targets": 200,
+        "vocab_size": 65536,
+        "global_token_error_nat": -5.8122303414620546e-08
+      },
+      "candidate_objective": {
+        "global_token_error_nat": -5.8122303414620546e-08
+      },
+      "gradient_checks": [
+        {
+          "expected_multiplier": 1,
+          "metrics": [
+            {
+              "coordinates": 65536,
+              "nonzero_reference": 0,
+              "reference_relative_l2_after_multiplier": 0,
+              "gradient_max_abs_after_multiplier": 0.0,
+              "stored_update_max_abs": 0.0,
+              "fitted_multiplier": null
+            },
+            {
+              "coordinates": 16384,
+              "nonzero_reference": 16384,
+              "reference_relative_l2_after_multiplier": 0.0,
+              "gradient_max_abs_after_multiplier": 0.0,
+              "stored_update_max_abs": 0.0,
+              "fitted_multiplier": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    "ascend_installed": {
+      "weighting": "global-token-mean",
+      "native_backward_divisor": 34,
+      "correction": "native-gas1",
+      "native_objective": {
+        "events": 100,
+        "targets": 200,
+        "vocab_size": 65536,
+        "global_token_error_nat": -7.410385443051837e-07
+      },
+      "candidate_objective": {
+        "global_token_error_nat": -7.410385443051837e-07
+      },
+      "gradient_checks": [
+        {
+          "expected_multiplier": 34,
+          "metrics": [
+            {
+              "coordinates": 65536,
+              "nonzero_reference": 0,
+              "reference_relative_l2_after_multiplier": 0,
+              "gradient_max_abs_after_multiplier": 0.0,
+              "stored_update_max_abs": 0.0,
+              "fitted_multiplier": null
+            },
+            {
+              "coordinates": 16384,
+              "nonzero_reference": 16384,
+              "reference_relative_l2_after_multiplier": 0.0015206200853221678,
+              "gradient_max_abs_after_multiplier": 6.933452095836401e-05,
+              "stored_update_max_abs": 0.0005936161032877862,
+              "fitted_multiplier": 34.02330919754089
+            }
+          ]
+        },
+        {
+          "expected_multiplier": 1,
+          "metrics": [
+            {
+              "coordinates": 65536,
+              "nonzero_reference": 0,
+              "reference_relative_l2_after_multiplier": 0,
+              "gradient_max_abs_after_multiplier": 0.0,
+              "stored_update_max_abs": 0.0,
+              "fitted_multiplier": null
+            },
+            {
+              "coordinates": 16384,
+              "nonzero_reference": 16384,
+              "reference_relative_l2_after_multiplier": 4.7205954351966995e-07,
+              "gradient_max_abs_after_multiplier": 1.8742866814136505e-07,
+              "stored_update_max_abs": 5.820766091346741e-11,
+              "fitted_multiplier": 1.0000000032587282
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "comparisons": {
+    "release-native-cross-stack": {
+      "left": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 11.125873669981956,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "right": {
+        "runtime": {
+          "torch": "2.11.0+cu130",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "13.0"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -5.8122303414620546e-08,
+        "native_loss": 4.4065470695495605,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.171436130069196,
+        "peak_device_allocation_bytes": 2517299200
+      },
+      "score": {
+        "target_count": 200,
+        "side_a_nll_nat_per_token": 4.413624074015839,
+        "side_b_nll_nat_per_token": 4.406547127671864,
+        "nll_abs_diff_nat_per_token": 0.0070769463439752656,
+        "mae_nat": 0.0611855308626064,
+        "p99_nat": 0.21695993326791632,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.24542640631607426
+      },
+      "forward_logit_files_equal": false,
+      "gradient_rmse": 5.189757632449214e-05,
+      "gradient_maxabs": 0.0006664637476205826,
+      "update_rmse": 1.636190365998266e-05,
+      "update_maxabs": 0.0005999604763928801,
+      "sampled_earliest_layer_difference": "activation::model.layers.0",
+      "sampled_layer_count": 16
+    },
+    "ascend-release-fp64": {
+      "left": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 11.125873669981956,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "right": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -2.642013861020587e-07,
+        "native_loss": 4.413623809814453,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 11.297188225202262,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "score": {
+        "target_count": 200,
+        "side_a_nll_nat_per_token": 4.413624074015839,
+        "side_b_nll_nat_per_token": 4.413624074015839,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.0
+      },
+      "forward_logit_files_equal": true,
+      "gradient_rmse": 1.5519537848832404e-09,
+      "gradient_maxabs": 1.8742866814136505e-07,
+      "update_rmse": 3.9382275817135387e-13,
+      "update_maxabs": 5.820766091346741e-11,
+      "sampled_earliest_layer_difference": null,
+      "sampled_layer_count": 16
+    },
+    "b200-release-fp64": {
+      "left": {
+        "runtime": {
+          "torch": "2.11.0+cu130",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "13.0"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -5.8122303414620546e-08,
+        "native_loss": 4.4065470695495605,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.171436130069196,
+        "peak_device_allocation_bytes": 2517299200
+      },
+      "right": {
+        "runtime": {
+          "torch": "2.11.0+cu130",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "13.0"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -5.8122303414620546e-08,
+        "native_loss": 4.4065470695495605,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.421870285877958,
+        "peak_device_allocation_bytes": 2393829376
+      },
+      "score": {
+        "target_count": 200,
+        "side_a_nll_nat_per_token": 4.406547127671864,
+        "side_b_nll_nat_per_token": 4.406547127671864,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.0
+      },
+      "forward_logit_files_equal": true,
+      "gradient_rmse": 0.0,
+      "gradient_maxabs": 0.0,
+      "update_rmse": 0.0,
+      "update_maxabs": 0.0,
+      "sampled_earliest_layer_difference": null,
+      "sampled_layer_count": 16
+    },
+    "ascend-version-native": {
+      "left": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.3.0",
+          "peft": "0.20.0",
+          "accelerate": "1.14.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+          "modeling": "d9c0ac30769b89394035bbf8c2d0d000a13ecc0c35ba3f01bfe8c120f9323445",
+          "peft": "714db3bc17ac5d3d72baea44a29f836199da731cecc7e96f9cf367ebcd6089a1",
+          "accelerate": "47088e0ab3bf21eec97e16afa14595e1db511f6ead9ab85c4eaa5f6f66fe5e61",
+          "loss": "3df3438f0cb80cb7b903d6d06f522839756f4ca9301a02d793748ae099c27d9f",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 34,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.346065727062523,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "right": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.23.0",
+          "peft": "0.22.0",
+          "accelerate": "1.16.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+          "modeling": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc",
+          "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+          "accelerate": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+          "loss": "bbc1be115ce17493dcf2a94d0e9349ddc7fcc30760692c3b49f1c7dfb37cc0f0",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 11.125873669981956,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "score": {
+        "target_count": 200,
+        "side_a_nll_nat_per_token": 4.413624074015839,
+        "side_b_nll_nat_per_token": 4.413624074015839,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.0
+      },
+      "forward_logit_files_equal": true,
+      "gradient_rmse": 0.0031909945639795,
+      "gradient_maxabs": 0.03899908275343478,
+      "update_rmse": 5.550415865014753e-06,
+      "update_maxabs": 0.0005936161032877862,
+      "sampled_earliest_layer_difference": null,
+      "sampled_layer_count": 16
+    },
+    "ascend-installed-fp64": {
+      "left": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.3.0",
+          "peft": "0.20.0",
+          "accelerate": "1.14.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+          "modeling": "d9c0ac30769b89394035bbf8c2d0d000a13ecc0c35ba3f01bfe8c120f9323445",
+          "peft": "714db3bc17ac5d3d72baea44a29f836199da731cecc7e96f9cf367ebcd6089a1",
+          "accelerate": "47088e0ab3bf21eec97e16afa14595e1db511f6ead9ab85c4eaa5f6f66fe5e61",
+          "loss": "3df3438f0cb80cb7b903d6d06f522839756f4ca9301a02d793748ae099c27d9f",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.13517443696037,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "right": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.3.0",
+          "peft": "0.20.0",
+          "accelerate": "1.14.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+          "modeling": "d9c0ac30769b89394035bbf8c2d0d000a13ecc0c35ba3f01bfe8c120f9323445",
+          "peft": "714db3bc17ac5d3d72baea44a29f836199da731cecc7e96f9cf367ebcd6089a1",
+          "accelerate": "47088e0ab3bf21eec97e16afa14595e1db511f6ead9ab85c4eaa5f6f66fe5e61",
+          "loss": "3df3438f0cb80cb7b903d6d06f522839756f4ca9301a02d793748ae099c27d9f",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -2.642013861020587e-07,
+        "native_loss": 4.413623809814453,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.415872352197766,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "score": {
+        "target_count": 200,
+        "side_a_nll_nat_per_token": 4.413624074015839,
+        "side_b_nll_nat_per_token": 4.413624074015839,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.0
+      },
+      "forward_logit_files_equal": true,
+      "gradient_rmse": 1.5519537848832404e-09,
+      "gradient_maxabs": 1.8742866814136505e-07,
+      "update_rmse": 3.9382275817135387e-13,
+      "update_maxabs": 5.820766091346741e-11,
+      "sampled_earliest_layer_difference": null,
+      "sampled_layer_count": 16
+    },
+    "ascend-installed-ab": {
+      "left": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.3.0",
+          "peft": "0.20.0",
+          "accelerate": "1.14.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+          "modeling": "d9c0ac30769b89394035bbf8c2d0d000a13ecc0c35ba3f01bfe8c120f9323445",
+          "peft": "714db3bc17ac5d3d72baea44a29f836199da731cecc7e96f9cf367ebcd6089a1",
+          "accelerate": "47088e0ab3bf21eec97e16afa14595e1db511f6ead9ab85c4eaa5f6f66fe5e61",
+          "loss": "3df3438f0cb80cb7b903d6d06f522839756f4ca9301a02d793748ae099c27d9f",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 34,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.346065727062523,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "right": {
+        "runtime": {
+          "torch": "2.9.0+cpu",
+          "transformers": "5.3.0",
+          "peft": "0.20.0",
+          "accelerate": "1.14.0",
+          "runtime": "2.9.0.post2"
+        },
+        "sources": {
+          "trainer": "060eda6fcd587e79caeca7c3f246ea7bab1af410479c9776584470b8f4ac48a8",
+          "modeling": "d9c0ac30769b89394035bbf8c2d0d000a13ecc0c35ba3f01bfe8c120f9323445",
+          "peft": "714db3bc17ac5d3d72baea44a29f836199da731cecc7e96f9cf367ebcd6089a1",
+          "accelerate": "47088e0ab3bf21eec97e16afa14595e1db511f6ead9ab85c4eaa5f6f66fe5e61",
+          "loss": "3df3438f0cb80cb7b903d6d06f522839756f4ca9301a02d793748ae099c27d9f",
+          "collector": "a27b6e5903a9998260fe95219793da5406901aaf3019aae1455b6d758784dd48"
+        },
+        "loss_gap_nat": -7.410385443051837e-07,
+        "native_loss": 4.413623332977295,
+        "accelerator_backward_divisor": 1,
+        "loss_weighting": "global-token-mean",
+        "observer_inclusive_wall_seconds": 10.13517443696037,
+        "peak_device_allocation_bytes": 2573437440
+      },
+      "score": {
+        "target_count": 200,
+        "side_a_nll_nat_per_token": 4.413624074015839,
+        "side_b_nll_nat_per_token": 4.413624074015839,
+        "nll_abs_diff_nat_per_token": 0.0,
+        "mae_nat": 0.0,
+        "p99_nat": 0.0,
+        "p99_method": "global linear h=0.99*(N-1)",
+        "max_abs_nat": 0.0
+      },
+      "forward_logit_files_equal": true,
+      "gradient_rmse": 0.0031909945639795,
+      "gradient_maxabs": 0.03899908275343478,
+      "update_rmse": 5.550415865014753e-06,
+      "update_maxabs": 0.0005936161032877862,
+      "sampled_earliest_layer_difference": null,
+      "sampled_layer_count": 16
+    }
+  },
+  "runtime_note": "Wall times include observer, loading, export and hashing. Peak allocation counters come from different device allocators; neither is a throughput comparison.",
+  "reference_scope": "CPU FP64 cross-entropy and its derivative through the same native model; independent AdamW step arithmetic. Single-step, single accelerator, final down-projection LoRA."
+}

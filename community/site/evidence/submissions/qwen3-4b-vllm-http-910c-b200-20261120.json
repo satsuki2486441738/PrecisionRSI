@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "id": "qwen3-4b-vllm-http-910c-b200-20261120",
+  "model": {
+    "name": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "architecture": "Qwen3",
+    "size": "4B"
+  },
+  "model_sha256": {
+    "config.json": "8ba006f74fecfaaeb392872a60f4a480e7ec9860153d2e1b769ec81f9a147f8a",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model-00001-of-00003.safetensors": "328a91d3122359d5547f9d79521205bc0a46e1f79a792dfe650e99fc2d651223",
+    "model-00002-of-00003.safetensors": "6cd087b316306a68c562436b5492edbcf6e16c6dba3a1308279caa5a58e21ca5",
+    "model-00003-of-00003.safetensors": "e4bf436957184f4eeb86a80e9db394503f1f56446b2e6b7edeac5b81470f4ca1",
+    "model.safetensors.index.json": "6dc0981b8829fead746441f68f38f24c5ca4a3a66351f652c26c6df0efc43ab2",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "vocabulary_size": 151936,
+  "comparisons": [
+    {
+      "id": "fixed-token-histories",
+      "title": "Fixed token histories over the native HTTP service",
+      "scope": "100 prompts; score prompt and two fixed continuation branches.",
+      "side_ids": [
+        "ascend",
+        "cuda"
+      ],
+      "coverage": [
+        {
+          "label": "Fixed prompts",
+          "expected": 100,
+          "observed": 100,
+          "unit": "requests"
+        },
+        {
+          "label": "Paired full-vocabulary rows",
+          "expected": 300,
+          "observed": 300,
+          "unit": "positions"
+        },
+        {
+          "label": "Fixed target score pairs",
+          "expected": 600,
+          "observed": 600,
+          "unit": "targets"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.9633333333333334
+        },
+        {
+          "id": "mean-tail-js",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0005013354885641852
+        },
+        {
+          "id": "max-tail-js",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.004414422487040761,
+          "coordinate": {
+            "position": 56,
+            "sample": "NB-0056-eba7a839/branch-1"
+          }
+        },
+        {
+          "id": "mean-top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9841000000000001
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Target log probability mean absolute error",
+          "unit": "nats",
+          "value": 0.08219397306442261
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Target log probability P99 absolute error",
+          "unit": "nats",
+          "value": 0.3793272018432617
+        },
+        {
+          "id": "target-logprob-max",
+          "label": "Target log probability maximum absolute error",
+          "unit": "nats",
+          "value": 0.5115871429443359
+        },
+        {
+          "id": "nll-difference",
+          "label": "Absolute NLL difference",
+          "unit": "nats/token",
+          "value": 0.009996907711027347,
+          "side_values": {
+            "ascend": 16.58888863046964,
+            "cuda": 16.578891722758613
+          }
+        }
+      ]
+    }
+  ],
+  "native_score_conditions": {
+    "ascend": {
+      "fingerprinted_native_source": {
+        "vllm/__init__.py": "fd3708e5a13abe98c566afd79a6b1987cef70c0548bb19c1218ff6a7f9d43346",
+        "vllm/_version.py": "480545dffc80de7077867b799e4aae1835eef8b18f7c9c878b545e51968f6a2a",
+        "vllm/entrypoints/openai/api_server.py": "c67097ffbf190a444874622275f24d6133d193b8a4113c3a539ff340e6ec660b",
+        "vllm/entrypoints/openai/completion/protocol.py": "d529d72221c54beb3b2ddd54aa431b6bb6f9c7f0553db57768d8a1bf5f8d9b20",
+        "vllm/entrypoints/openai/completion/serving.py": "b8f4665d728b76ce1e8e37655d57260554fc1550ded25c4f8cabf24a2bd0c067",
+        "vllm/sampling_params.py": "b4cec6df516e594ef3d2024ceddd8773e885d520eba5efc15ec352d28f7558a0",
+        "vllm/v1/sample/sampler.py": "b93600890dabde54310a39b34cf2a96173fbb66211b9d4a74386c1ab9ee4ae5e",
+        "vllm/v1/worker/gpu_model_runner.py": "e164efbb988bc23ddff83842d27930a8cc904104d3c74d28c8c9369535b08f01",
+        "vllm_ascend/__init__.py": "5f986228b7d273c71cba73cea91bc61dc443e01c39cd9985ea04bc3358e8bf65",
+        "vllm_ascend/libvllm_ascend_kernels.so": "9a2bc0518a132b31cb42c1af36d09234d6c6170d82398f4500880eeb8beb32cb",
+        "vllm_ascend/platform.py": "06cff757eb3a95037f75f46966f85a4428f2688c3226f0950c184234e05e6be2",
+        "vllm_ascend/vllm_ascend_C.cpython-312-aarch64-linux-gnu.so": "6aa5f78fa29c1f4672761b831a369c9102215be034c0d4dc27ff92ae3eb4202d",
+        "vllm_ascend/worker/model_runner_v1.py": "8d35f26a9db8f63038158c139a43f92e3e970117bb4a2b43c82fd828e349b981"
+      },
+      "runtime": {
+        "tokenizers": "0.22.2",
+        "torch": "2.9.0",
+        "torch-npu": "2.9.0.post2",
+        "transformers": "4.57.6",
+        "vllm": "0.18.0+empty",
+        "vllm-ascend": "0.0.0"
+      },
+      "tp": 4
+    },
+    "cuda": {
+      "fingerprinted_native_source": {
+        "vllm/__init__.py": "fd3708e5a13abe98c566afd79a6b1987cef70c0548bb19c1218ff6a7f9d43346",
+        "vllm/_version.py": "763ed234b0648da39d230104ca1afb879dd874d64a4fb6363a43a73649592804",
+        "vllm/entrypoints/openai/api_server.py": "61122e2483b73ab9c25707604bbe565516ef4e7caa61c0f7dc785d65083cc322",
+        "vllm/entrypoints/openai/completion/protocol.py": "d971ddc235cb65134f102ec1d5a58bf087db4edc246262b09488b0bbd301c3b1",
+        "vllm/entrypoints/openai/completion/serving.py": "582b866dacfc74615428b89169a8fa948a4aa7326bec5a2a79455da6f50b2a90",
+        "vllm/sampling_params.py": "1ecf8ba062e4044f6e66f65a10ba5564840db30ac70a20490b766f41fee64c00",
+        "vllm/v1/sample/sampler.py": "1a2f18ddc91c89f3744ab5a93624be056bf20b7a8b2e6e13d0236182718a2253",
+        "vllm/v1/worker/gpu_model_runner.py": "d2b8ec101122749e1a2610383d2ab74c5a21605e9d7995eb68192bc769986694"
+      },
+      "runtime": {
+        "tokenizers": "0.22.2",
+        "torch": "2.11.0",
+        "transformers": "5.9.0",
+        "vllm": "0.24.0"
+      },
+      "tp": 2
+    }
+  },
+  "cache_replay": {
+    "status": "completed",
+    "scope": "B200 TP2, two fixed histories, three cold/warm pairs each; same service, each cache salt different across pairs",
+    "requests": 12,
+    "fully_verified_original_responses": 12,
+    "maximum_probability_mass_error": 1.2297950271467073e-06,
+    "results": [
+      {
+        "sample": "NB-0001-810fa0dc",
+        "history_count": 242,
+        "paired": [
+          {
+            "pair": "A",
+            "cached_tokens": [
+              0,
+              240
+            ],
+            "greedy": [
+              425,
+              425
+            ],
+            "logprob_max_abs": 0.15380477905273438,
+            "metrics": {
+              "union_count": 101,
+              "tail_merged_js": {
+                "value": 2.845341570854215e-05,
+                "status": "no_thresholds"
+              },
+              "top1_agreement": true,
+              "top100_overlap": 0.99,
+              "probability_rmse": 0.00011226348193132538,
+              "max_probability_error": 0.0006949256069338104,
+              "max_error_token": 198,
+              "coverage": {
+                "side_a_top100": 0.9569396292795663,
+                "side_b_top100": 0.9561933646419463,
+                "side_a_union": 0.9572803621644393,
+                "side_b_union": 0.9565332653774409
+              }
+            }
+          },
+          {
+            "pair": "B",
+            "cached_tokens": [
+              0,
+              240
+            ],
+            "greedy": [
+              425,
+              425
+            ],
+            "logprob_max_abs": 0.15380477905273438,
+            "metrics": {
+              "union_count": 101,
+              "tail_merged_js": {
+                "value": 2.845341570854215e-05,
+                "status": "no_thresholds"
+              },
+              "top1_agreement": true,
+              "top100_overlap": 0.99,
+              "probability_rmse": 0.00011226348193132538,
+              "max_probability_error": 0.0006949256069338104,
+              "max_error_token": 198,
+              "coverage": {
+                "side_a_top100": 0.9569396292795663,
+                "side_b_top100": 0.9561933646419463,
+                "side_a_union": 0.9572803621644393,
+                "side_b_union": 0.9565332653774409
+              }
+            }
+          },
+          {
+            "pair": "C",
+            "cached_tokens": [
+              0,
+              240
+            ],
+            "greedy": [
+              425,
+              425
+            ],
+            "logprob_max_abs": 0.15380477905273438,
+            "metrics": {
+              "union_count": 101,
+              "tail_merged_js": {
+                "value": 2.845341570854215e-05,
+                "status": "no_thresholds"
+              },
+              "top1_agreement": true,
+              "top100_overlap": 0.99,
+              "probability_rmse": 0.00011226348193132538,
+              "max_probability_error": 0.0006949256069338104,
+              "max_error_token": 198,
+              "coverage": {
+                "side_a_top100": 0.9569396292795663,
+                "side_b_top100": 0.9561933646419463,
+                "side_a_union": 0.9572803621644393,
+                "side_b_union": 0.9565332653774409
+              }
+            }
+          }
+        ],
+        "within_state_max_logprob_difference": {
+          "cold": 0.0,
+          "warm": 0.0
+        }
+      },
+      {
+        "sample": "NB-0026-a34930c9",
+        "history_count": 246,
+        "paired": [
+          {
+            "pair": "A",
+            "cached_tokens": [
+              0,
+              240
+            ],
+            "greedy": [
+              425,
+              425
+            ],
+            "logprob_max_abs": 0.19257736206054688,
+            "metrics": {
+              "union_count": 100,
+              "tail_merged_js": {
+                "value": 0.0006243730877556253,
+                "status": "no_thresholds"
+              },
+              "top1_agreement": true,
+              "top100_overlap": 1.0,
+              "probability_rmse": 0.003493164522433962,
+              "max_probability_error": 0.03311542518283872,
+              "max_error_token": 425,
+              "coverage": {
+                "side_a_top100": 0.9732721395281541,
+                "side_b_top100": 0.9720564835258745,
+                "side_a_union": 0.9732721395281541,
+                "side_b_union": 0.9720564835258745
+              }
+            }
+          },
+          {
+            "pair": "B",
+            "cached_tokens": [
+              0,
+              240
+            ],
+            "greedy": [
+              425,
+              425
+            ],
+            "logprob_max_abs": 0.19257736206054688,
+            "metrics": {
+              "union_count": 100,
+              "tail_merged_js": {
+                "value": 0.0006243730877556253,
+                "status": "no_thresholds"
+              },
+              "top1_agreement": true,
+              "top100_overlap": 1.0,
+              "probability_rmse": 0.003493164522433962,
+              "max_probability_error": 0.03311542518283872,
+              "max_error_token": 425,
+              "coverage": {
+                "side_a_top100": 0.9732721395281541,
+                "side_b_top100": 0.9720564835258745,
+                "side_a_union": 0.9732721395281541,
+                "side_b_union": 0.9720564835258745
+              }
+            }
+          },
+          {
+            "pair": "C",
+            "cached_tokens": [
+              0,
+              240
+            ],
+            "greedy": [
+              425,
+              425
+            ],
+            "logprob_max_abs": 0.19257736206054688,
+            "metrics": {
+              "union_count": 100,
+              "tail_merged_js": {
+                "value": 0.0006243730877556253,
+                "status": "no_thresholds"
+              },
+              "top1_agreement": true,
+              "top100_overlap": 1.0,
+              "probability_rmse": 0.003493164522433962,
+              "max_probability_error": 0.03311542518283872,
+              "max_error_token": 425,
+              "coverage": {
+                "side_a_top100": 0.9732721395281541,
+                "side_b_top100": 0.9720564835258745,
+                "side_a_union": 0.9732721395281541,
+                "side_b_union": 0.9720564835258745
+              }
+            }
+          }
+        ],
+        "within_state_max_logprob_difference": {
+          "cold": 0.0,
+          "warm": 0.0
+        }
+      }
+    ],
+    "acceptance": null,
+    "numerical_defect": null,
+    "array_sha256": "b78662a711f7a4d7fec0fcbbcfe8c61a21e9350cc838e2b6bbf7f2a33718114a"
+  },
+  "source_ids": [
+    "5fb602041f5df603152fa225af32745c25b58d7329ab9565dbdaf0914e265773",
+    "4f677415adaea0b8fa88bb1adc8bb4057b022b2ff71357bb724cc0e5bb9bc4dc"
+  ],
+  "source_audit_rows": {
+    "ascend": 300,
+    "cuda": 300
+  },
+  "usage": "The service returns each original full-vocabulary log probability; union queries retain exact complement mass.",
+  "acceptance": null
+}

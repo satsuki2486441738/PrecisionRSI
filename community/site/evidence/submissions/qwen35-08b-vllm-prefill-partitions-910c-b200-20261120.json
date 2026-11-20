@@ -1,0 +1,551 @@
+{
+  "schema_version": 1,
+  "id": "qwen35-08b-vllm-prefill-partitions-910c-b200-20261120",
+  "model": {
+    "name": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "architecture": "Qwen3.5",
+    "size": "0.8B"
+  },
+  "model_sha256": {
+    "chat_template.jinja": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80",
+    "config.json": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+    "merges.txt": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+    "model.safetensors-00001-of-00001.safetensors": "04b1c301231dd422b8860db31311ab2721511346a32cb1e079c4c4e5f1fe4696",
+    "model.safetensors.index.json": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e",
+    "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "tokenizer_config.json": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c",
+    "vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+  },
+  "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "vocabulary_size": 248320,
+  "comparisons": [
+    {
+      "id": "fixed-history-prefill-partitions",
+      "title": "Fixed token histories with a 128-token scheduling budget",
+      "scope": "100 synthetic events with three fixed token histories each; native text service; cross-stack comparison.",
+      "side_ids": [
+        "ascend",
+        "cuda"
+      ],
+      "coverage": [
+        {
+          "label": "Fixed events",
+          "expected": 100,
+          "observed": 100,
+          "unit": "events"
+        },
+        {
+          "label": "Paired fixed histories",
+          "expected": 300,
+          "observed": 300,
+          "unit": "positions"
+        },
+        {
+          "label": "Paired target scores",
+          "expected": 600,
+          "observed": 600,
+          "unit": "targets"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.9766666666666667
+        },
+        {
+          "id": "mean-tail-js",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.00029157123294082827
+        },
+        {
+          "id": "top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9815333333333333
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Target log probability mean absolute error",
+          "unit": "nats",
+          "value": 0.037530594865481055
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Target log probability P99 absolute error",
+          "unit": "nats",
+          "value": 0.13836768031120286
+        },
+        {
+          "id": "target-logprob-max",
+          "label": "Maximum target log probability absolute error",
+          "unit": "nats",
+          "value": 0.1787242889404297
+        },
+        {
+          "id": "nll-difference",
+          "label": "Absolute NLL difference",
+          "unit": "nats/token",
+          "value": 0.0035316667954123915,
+          "side_values": {
+            "ascend": 4.725061915516854,
+            "cuda": 4.728593582312266
+          }
+        }
+      ]
+    }
+  ],
+  "native_launch_binding": {
+    "ascend": {
+      "max_batched_token_budget": 128,
+      "observer_sha256": "7bfd45d5406183a7bc1357a1c79ed397a6c5b73cd889df4c631796b5c3ebe3bf",
+      "runtime": {
+        "tokenizers": "0.22.2",
+        "torch": "2.9.0",
+        "torch-npu": "2.9.0.post2",
+        "transformers": "5.3.0",
+        "vllm": "0.18.0+empty",
+        "vllm-ascend": "0.0.0"
+      },
+      "source_hashes": {
+        "vllm/__init__.py": "fd3708e5a13abe98c566afd79a6b1987cef70c0548bb19c1218ff6a7f9d43346",
+        "vllm/_version.py": "480545dffc80de7077867b799e4aae1835eef8b18f7c9c878b545e51968f6a2a",
+        "vllm/config/scheduler.py": "74451b04e063be354df1796b610bb5ef3c783c1631105f50c85669afccfceb0b",
+        "vllm/entrypoints/openai/api_server.py": "c67097ffbf190a444874622275f24d6133d193b8a4113c3a539ff340e6ec660b",
+        "vllm/entrypoints/openai/completion/protocol.py": "d529d72221c54beb3b2ddd54aa431b6bb6f9c7f0553db57768d8a1bf5f8d9b20",
+        "vllm/entrypoints/openai/completion/serving.py": "b8f4665d728b76ce1e8e37655d57260554fc1550ded25c4f8cabf24a2bd0c067",
+        "vllm/model_executor/models/qwen3_5.py": "76eeda13ad5d104b74ce8352e4a9766a0a93f29230ba359e9f7727aef4173f1d",
+        "vllm/sampling_params.py": "b4cec6df516e594ef3d2024ceddd8773e885d520eba5efc15ec352d28f7558a0",
+        "vllm/v1/core/sched/scheduler.py": "dd5dd6e7668a2f76ee0e1df92b972196485f2d515acc81d91993e9614f70608f",
+        "vllm/v1/request.py": "84c4c58ad1c140c7975e83ba1f46a950b89975d4f231b76fcd642a4884114a76",
+        "vllm/v1/sample/sampler.py": "b93600890dabde54310a39b34cf2a96173fbb66211b9d4a74386c1ab9ee4ae5e",
+        "vllm/v1/worker/gpu_model_runner.py": "e164efbb988bc23ddff83842d27930a8cc904104d3c74d28c8c9369535b08f01",
+        "vllm_ascend/__init__.py": "5f986228b7d273c71cba73cea91bc61dc443e01c39cd9985ea04bc3358e8bf65",
+        "vllm_ascend/libvllm_ascend_kernels.so": "9a2bc0518a132b31cb42c1af36d09234d6c6170d82398f4500880eeb8beb32cb",
+        "vllm_ascend/patch/worker/patch_gdn_attn.py": "51697d71ef092ef0e150b00cede972155fc2077dc5f29c8962d848d8664a4e35",
+        "vllm_ascend/patch/worker/patch_qwen3_5.py": "974f80cde5b766ab5a7072f5a415188fef538e1c58c2a6563b24a092b87c3908",
+        "vllm_ascend/platform.py": "06cff757eb3a95037f75f46966f85a4428f2688c3226f0950c184234e05e6be2",
+        "vllm_ascend/vllm_ascend_C.cpython-312-aarch64-linux-gnu.so": "6aa5f78fa29c1f4672761b831a369c9102215be034c0d4dc27ff92ae3eb4202d",
+        "vllm_ascend/worker/model_runner_v1.py": "8d35f26a9db8f63038158c139a43f92e3e970117bb4a2b43c82fd828e349b981"
+      },
+      "tensor_parallel": 4
+    },
+    "cuda": {
+      "max_batched_token_budget": 128,
+      "observer_sha256": "7bfd45d5406183a7bc1357a1c79ed397a6c5b73cd889df4c631796b5c3ebe3bf",
+      "runtime": {
+        "tokenizers": "0.22.2",
+        "torch": "2.11.0",
+        "transformers": "5.9.0",
+        "vllm": "0.24.0"
+      },
+      "source_hashes": {
+        "vllm/__init__.py": "fd3708e5a13abe98c566afd79a6b1987cef70c0548bb19c1218ff6a7f9d43346",
+        "vllm/_version.py": "763ed234b0648da39d230104ca1afb879dd874d64a4fb6363a43a73649592804",
+        "vllm/config/scheduler.py": "4102ccd3d73188200b25f47a0cba837853662647850f283012d8cc1f9e8c47c2",
+        "vllm/entrypoints/openai/api_server.py": "61122e2483b73ab9c25707604bbe565516ef4e7caa61c0f7dc785d65083cc322",
+        "vllm/entrypoints/openai/completion/protocol.py": "d971ddc235cb65134f102ec1d5a58bf087db4edc246262b09488b0bbd301c3b1",
+        "vllm/entrypoints/openai/completion/serving.py": "582b866dacfc74615428b89169a8fa948a4aa7326bec5a2a79455da6f50b2a90",
+        "vllm/model_executor/models/qwen3_5.py": "86ca256c5e3803245f27ac5c8d931cd3d3cb21611aaf2ba90961fb72646c5ca6",
+        "vllm/sampling_params.py": "1ecf8ba062e4044f6e66f65a10ba5564840db30ac70a20490b766f41fee64c00",
+        "vllm/v1/core/sched/scheduler.py": "df78076164fe02a63876d7690cefac810f1ba4d8fb58afc15e786c1608064090",
+        "vllm/v1/request.py": "06b1c6ad3cc0223c2036b4a2e317868fa4988391b4b024bc5e5f54672b7d2c80",
+        "vllm/v1/sample/sampler.py": "1a2f18ddc91c89f3744ab5a93624be056bf20b7a8b2e6e13d0236182718a2253",
+        "vllm/v1/worker/gpu_model_runner.py": "d2b8ec101122749e1a2610383d2ab74c5a21605e9d7995eb68192bc769986694"
+      },
+      "tensor_parallel": 2
+    }
+  },
+  "native_partition_summary": {
+    "splits": [
+      230,
+      230
+    ],
+    "identical": 300
+  },
+  "same_device_budget_controls": {
+    "ascend": {
+      "rows": 15,
+      "selected_events": 5,
+      "split_vs_whole_budgets": [
+        128,
+        512
+      ],
+      "greedy_matches": 15,
+      "max_full_vocabulary_probability_delta": 0.03783299187273276,
+      "tail_merged_js_nats": {
+        "max": 0.001037595372302437,
+        "max_coordinate": {
+          "position": 384,
+          "sample": "NB-0010-ac84dad4/branch-2"
+        },
+        "mean": 0.00015105752467161568,
+        "p99": 0.0009613563137971943
+      },
+      "target_logprob_mae_nats": 0.02206045389175415,
+      "observed_partitions": [
+        {
+          "split": [
+            126
+          ],
+          "whole": [
+            126
+          ]
+        },
+        {
+          "split": [
+            127
+          ],
+          "whole": [
+            127
+          ]
+        },
+        {
+          "split": [
+            127
+          ],
+          "whole": [
+            127
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            128
+          ],
+          "whole": [
+            384
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            385
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            385
+          ]
+        },
+        {
+          "split": [
+            128,
+            1
+          ],
+          "whole": [
+            129
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        },
+        {
+          "split": [
+            128,
+            128
+          ],
+          "whole": [
+            256
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            257
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            257
+          ]
+        },
+        {
+          "split": [
+            128,
+            1
+          ],
+          "whole": [
+            129
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        }
+      ],
+      "native_to_local_fp64_replay": {
+        "different_float_values": 0,
+        "floating_values": 152,
+        "maximum_absolute_difference": 0.0
+      },
+      "same_arm_preflight_rechecks": {
+        "split": {
+          "byte_identical": 6,
+          "histories": 6,
+          "max_probability_delta": 0.0,
+          "same_greedy": 6
+        },
+        "whole": {
+          "byte_identical": 6,
+          "histories": 6,
+          "max_probability_delta": 0.0,
+          "same_greedy": 6
+        }
+      }
+    },
+    "cuda": {
+      "rows": 15,
+      "selected_events": 5,
+      "split_vs_whole_budgets": [
+        128,
+        512
+      ],
+      "greedy_matches": 15,
+      "max_full_vocabulary_probability_delta": 0.02005548420130207,
+      "tail_merged_js_nats": {
+        "max": 0.0004066110119812164,
+        "max_coordinate": {
+          "position": 128,
+          "sample": "NB-0024-4aa17c39/branch-0"
+        },
+        "mean": 6.637101428725902e-05,
+        "p99": 0.0004005805631614449
+      },
+      "target_logprob_mae_nats": 0.011932468414306641,
+      "observed_partitions": [
+        {
+          "split": [
+            126
+          ],
+          "whole": [
+            126
+          ]
+        },
+        {
+          "split": [
+            127
+          ],
+          "whole": [
+            127
+          ]
+        },
+        {
+          "split": [
+            127
+          ],
+          "whole": [
+            127
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            128
+          ],
+          "whole": [
+            384
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            385
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            385
+          ]
+        },
+        {
+          "split": [
+            128,
+            1
+          ],
+          "whole": [
+            129
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        },
+        {
+          "split": [
+            128,
+            128
+          ],
+          "whole": [
+            256
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            257
+          ]
+        },
+        {
+          "split": [
+            128,
+            128,
+            1
+          ],
+          "whole": [
+            257
+          ]
+        },
+        {
+          "split": [
+            128,
+            1
+          ],
+          "whole": [
+            129
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        },
+        {
+          "split": [
+            128,
+            2
+          ],
+          "whole": [
+            130
+          ]
+        }
+      ],
+      "native_to_local_fp64_replay": {
+        "different_float_values": 27,
+        "floating_values": 152,
+        "maximum_absolute_difference": 1.1102230246251565e-16
+      },
+      "same_arm_preflight_rechecks": {
+        "split": {
+          "byte_identical": 6,
+          "histories": 6,
+          "max_probability_delta": 0.0,
+          "same_greedy": 6
+        },
+        "whole": {
+          "byte_identical": 6,
+          "histories": 6,
+          "max_probability_delta": 0.0,
+          "same_greedy": 6
+        }
+      }
+    }
+  },
+  "source_audit": {
+    "rows_per_side": 300,
+    "maximum_probability_mass_error": [
+      1.3042350419656401e-06,
+      1.5509053474804801e-06
+    ],
+    "source_ids": [
+      "3ac3b9dd8b3e1b0b528082d63c9ef87a5f0eec3cac510fc0c1f6aa8a030a8e8f",
+      "7e48e6195ce7fc1ac2271a884d367bafac65afb56df4f607304b761210c572ca"
+    ]
+  },
+  "preflight": {
+    "budgets": [
+      128,
+      512
+    ],
+    "configurations": 4,
+    "rows_per_configuration": 6
+  },
+  "acceptance": null
+}

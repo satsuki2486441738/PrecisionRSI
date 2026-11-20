@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "id": "qwen3-06b-native-vllm-ngram-910c-b200-20261120",
+  "model": {
+    "name": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "architecture": "Qwen3",
+    "size": "0.6B"
+  },
+  "workload": {
+    "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+    "events": 100,
+    "scored_events": 8,
+    "mode": "greedy repeated-pattern decoding"
+  },
+  "sides": {
+    "ascend": {
+      "mode_comparison": {
+        "corrections_match_ordinary": 1,
+        "full_vocab_bit_exact": 40,
+        "full_vocab_pairs": 40,
+        "greedy_exact": 100,
+        "greedy_total": 100,
+        "max_abs_logprob": 0.0,
+        "max_js_nats": 0.0,
+        "max_tv": 0.0,
+        "mean_tv": 0.0,
+        "paired_first_mismatch_corrections": 1,
+        "same_history_token_coordinates": 1000,
+        "scored_greedy_exact": 8
+      },
+      "source_metrics": {
+        "accepted": 837,
+        "drafted": 924,
+        "empty": 0,
+        "first_token_rejections": 1,
+        "full_vocab_traces": 8,
+        "prometheus": {
+          "num_accepted_tokens": 837,
+          "num_draft_tokens": 924,
+          "num_drafts": 308
+        },
+        "raw_http_verified_locally": 100,
+        "rejected": 87,
+        "release_verified": true,
+        "scored_short_vs_long_exact": 8,
+        "trace_sha256": "bc6820689e3c3ecc61db5372f22ca24882d9838febfb594e7b690376c60c179e"
+      },
+      "raw_origin": {
+        "ngram": {
+          "request_count": 108,
+          "positions": 40,
+          "vocab": 151936,
+          "scalars": 6077440,
+          "max_error_from_one": 8.696003221952964e-07,
+          "trace_sha256": "bc6820689e3c3ecc61db5372f22ca24882d9838febfb594e7b690376c60c179e",
+          "capture_summary_sha256": "40eddff4f528ca3977da61f895c759c81228fec4aec905d4fa1ec849fef35955"
+        },
+        "ordinary": {
+          "request_count": 108,
+          "positions": 40,
+          "vocab": 151936,
+          "scalars": 6077440,
+          "max_error_from_one": 8.696003221952964e-07,
+          "trace_sha256": "3f4ab50cb21989ad6d97a9375ce039728cb0f346221199325cda4eff8271a7bb",
+          "capture_summary_sha256": "7355fd5dc2f2aa0cd90d630b019c47944513fd83ba30a235239f00e0ea9c2be1"
+        }
+      }
+    },
+    "cuda": {
+      "mode_comparison": {
+        "corrections_match_ordinary": 2,
+        "full_vocab_bit_exact": 0,
+        "full_vocab_pairs": 40,
+        "greedy_exact": 100,
+        "greedy_total": 100,
+        "max_abs_logprob": 3.814697265625e-06,
+        "max_js_nats": 2.3189124172309665e-15,
+        "max_tv": 3.787555081179231e-08,
+        "mean_tv": 6.3342501691160705e-09,
+        "paired_first_mismatch_corrections": 2,
+        "same_history_token_coordinates": 1000,
+        "scored_greedy_exact": 8
+      },
+      "source_metrics": {
+        "accepted": 839,
+        "drafted": 924,
+        "empty": 0,
+        "first_token_rejections": 2,
+        "full_vocab_traces": 8,
+        "prometheus": {
+          "num_accepted_tokens": 839,
+          "num_draft_tokens": 924,
+          "num_drafts": 308
+        },
+        "raw_http_verified_locally": 100,
+        "rejected": 85,
+        "release_verified": true,
+        "scored_short_vs_long_exact": 8,
+        "trace_sha256": "f0bb05c21b743d56d94c083dbe4442bea1a09392b77013fa02f705ae429d4ee8"
+      },
+      "raw_origin": {
+        "ngram": {
+          "request_count": 108,
+          "positions": 40,
+          "vocab": 151936,
+          "scalars": 6077440,
+          "max_error_from_one": 7.07152421508539e-07,
+          "trace_sha256": "f0bb05c21b743d56d94c083dbe4442bea1a09392b77013fa02f705ae429d4ee8",
+          "capture_summary_sha256": "49d06daa7b93fb0c22e7f2b1f91767849f2975a499992a65b41ac63e6063b31d"
+        },
+        "ordinary": {
+          "request_count": 108,
+          "positions": 40,
+          "vocab": 151936,
+          "scalars": 6077440,
+          "max_error_from_one": 1.2455324200910667e-06,
+          "trace_sha256": "0f82c57ef88f1a77e6cb3ba8f4679cb3dca9c8493cdc3424e38250c0420bfb72",
+          "capture_summary_sha256": "fbc3f50f3f2f7f8df165d610fe9d7b67fe1df0527e65a554f97a8e9142462648"
+        }
+      }
+    }
+  },
+  "peer_comparisons": {
+    "ngram": {
+      "full_vocab_bit_exact": 0,
+      "full_vocab_pairs": 40,
+      "greedy_exact": 99,
+      "greedy_total": 100,
+      "max_abs_logprob": 1.115645408630371,
+      "max_js_nats": 0.004848030898856221,
+      "max_tv": 0.07237651930462778,
+      "mean_tv": 0.0052360680058913854,
+      "same_history_token_coordinates": 1000,
+      "scored_greedy_exact": 8
+    },
+    "ordinary": {
+      "full_vocab_bit_exact": 0,
+      "full_vocab_pairs": 40,
+      "greedy_exact": 99,
+      "greedy_total": 100,
+      "max_abs_logprob": 1.115645408630371,
+      "max_js_nats": 0.0048480293242461146,
+      "max_tv": 0.07237651828838337,
+      "mean_tv": 0.005236067074730314,
+      "same_history_token_coordinates": 1000,
+      "scored_greedy_exact": 8
+    }
+  },
+  "source_manifest_sha256_by_variant": {
+    "ascend_repair": "c97b30ee5ba9da008447bae69e2e7e01a77e53a2fff258c2f2027cc3dd10568a",
+    "original": "3e0b2f35278afc24bae60a627a937dfecfaef80db60c0f94d053d0d4d7326ad2"
+  },
+  "full_metrics_sha256": "a3b0eed9cedf087e84a5350713bd9429ac7a6c0ad41c7806424025fc7b85d386",
+  "repair": {
+    "original": {
+      "http_status": 500,
+      "error_type": "TypeError",
+      "symptom": "Full-vocabulary output in synchronous n-gram decoding failed.",
+      "cause": "NPU bookkeeping passed the filtered sampler result into scalar logprob offsets."
+    },
+    "candidate": {
+      "diff": "--- a/vllm_ascend/worker/model_runner_v1.py\n+++ b/vllm_ascend/worker/model_runner_v1.py\n@@ -1664,7 +1664,7 @@\n         sampled_token_ids = sampler_output.sampled_token_ids\n         logprobs_tensors = sampler_output.logprobs_tensors\n         invalid_req_indices = []\n-        cu_num_tokens: list[int] | None = None\n+        logprobs_lists: LogprobsLists | None = None\n         if not self.use_async_scheduling:\n             # Get the valid generated tokens.\n             max_gen_len = sampled_token_ids.shape[-1]\n@@ -1674,9 +1674,11 @@\n                 # Mask out the sampled tokens that should not be sampled.\n                 for i in discard_sampled_tokens_req_indices:\n                     valid_sampled_token_ids[int(i)].clear()\n+                if logprobs_tensors is not None:\n+                    logprobs_lists = logprobs_tensors.tolists()\n             else:\n-                # Includes spec decode tokens.\n-                valid_sampled_token_ids, cu_num_tokens = RejectionSampler.parse_output(\n+                # Includes spec decode tokens and returns already-filtered logprobs.\n+                valid_sampled_token_ids, logprobs_lists = RejectionSampler.parse_output(\n                     sampled_token_ids,\n                     self.input_batch.vocab_size,\n                     discard_sampled_tokens_req_indices,\n@@ -1732,12 +1734,6 @@\n             req_state = self.requests[req_id]\n             req_state.output_token_ids.extend(sampled_ids)\n \n-        logprobs_lists = (\n-            logprobs_tensors.tolists(cu_num_tokens)\n-            if not self.use_async_scheduling and logprobs_tensors is not None\n-            else None\n-        )\n-\n         # Compute prompt logprobs if needed.\n         prompt_logprobs_dict = self._get_prompt_logprobs_dict(\n             hidden_states[:num_scheduled_tokens],\n",
+      "diff_sha256": "3360e4f16b8b5ef283c75fea72a49bdc8cd9a06d355ba15d68ada127449b34cc",
+      "original_runner_sha256": "8d35f26a9db8f63038158c139a43f92e3e970117bb4a2b43c82fd828e349b981",
+      "patched_runner_sha256": "92fa18e43ed3b89c0a1916de5670505567a4f880e553fa55aa8cf34f70c43351"
+    },
+    "verification": {
+      "same_first_request_sha256": "c3885f5482778f8ee65a2ba2b5b7dd421e941430b5e298f746e38a730431dcf6",
+      "patched_http_status": 200,
+      "decode_sequences": 100,
+      "scored_requests": 8,
+      "vocab_rows": 40,
+      "cpu_checks": [
+        "ragged widths 2/1/3 and padding",
+        "discarded intermediate request with preserved later offset",
+        "ordinary scores unchanged",
+        "speculation without logprobs unchanged",
+        "async behavior unchanged",
+        "token identity preserved"
+      ],
+      "recapture": {
+        "greedy_requests": 10,
+        "repeat_trace_same_requests": 10,
+        "requests": 10
+      }
+    }
+  },
+  "independent_proposer_check": {
+    "ascend": {
+      "candidates": 308,
+      "exact": 308,
+      "proposed_tokens": 924
+    },
+    "cuda": {
+      "candidates": 308,
+      "exact": 308,
+      "proposed_tokens": 924
+    }
+  },
+  "acceptance": null
+}

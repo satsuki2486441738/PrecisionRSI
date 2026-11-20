@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "id": "qwen35-08b-transformers59-cached-910c-b200-20261120",
+  "model": {
+    "name": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "architecture": "Qwen3.5",
+    "size": "0.8B"
+  },
+  "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "transforms": "BF16 logits; offline FP64 log-softmax over 248320 tokens before selection, preserving tail mass.",
+  "comparisons": [
+    {
+      "id": "all",
+      "title": "Fixed-history prefill and decode",
+      "scope": "100 fixed synthetic text prompts; native BF16 logits and offline FP64 full-vocabulary normalization.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.91
+        },
+        {
+          "id": "tail-merged-js-mean",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0003934727397023719
+        },
+        {
+          "id": "tail-merged-js-max",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.003087891048904604,
+          "coordinate": {
+            "sample": "NB-0093-44fa0599",
+            "position": 55
+          }
+        },
+        {
+          "id": "probability-max-error",
+          "label": "Maximum token probability difference",
+          "unit": "fraction",
+          "value": 0.06174194885412465,
+          "coordinate": {
+            "sample": "NB-0003-73c66fb0",
+            "position": 47,
+            "token": 1330
+          }
+        },
+        {
+          "id": "top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9815666666666666
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Fixed token log probability MAE",
+          "unit": "nats",
+          "value": 0.047050847893947374
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Fixed token log probability P99 error",
+          "unit": "nats",
+          "value": 0.17572073083530668
+        },
+        {
+          "id": "absolute-nll-difference",
+          "label": "Absolute fixed token mean NLL difference",
+          "unit": "nats/token",
+          "value": 0.0028378290314776677,
+          "side_values": {
+            "ascend": 8.490578326291272,
+            "b200": 8.49341615532275
+          }
+        }
+      ],
+      "coverage": [
+        {
+          "label": "Paired full-vocabulary positions",
+          "observed": 300,
+          "expected": 300,
+          "unit": "rows"
+        },
+        {
+          "label": "Requested probe scores",
+          "observed": 300,
+          "expected": 300,
+          "unit": "targets"
+        }
+      ]
+    },
+    {
+      "id": "prefill",
+      "title": "Final prefill position",
+      "scope": "100 fixed synthetic text prompts; native BF16 logits and offline FP64 full-vocabulary normalization.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.92
+        },
+        {
+          "id": "tail-merged-js-mean",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.00021114116008813164
+        },
+        {
+          "id": "tail-merged-js-max",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.001603414585149649,
+          "coordinate": {
+            "sample": "NB-0009-393d5e70",
+            "position": 43
+          }
+        },
+        {
+          "id": "probability-max-error",
+          "label": "Maximum token probability difference",
+          "unit": "fraction",
+          "value": 0.049546495403660185,
+          "coordinate": {
+            "sample": "NB-0009-393d5e70",
+            "position": 43,
+            "token": 271
+          }
+        },
+        {
+          "id": "top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.986
+        }
+      ],
+      "coverage": [
+        {
+          "label": "Paired full-vocabulary positions",
+          "observed": 100,
+          "expected": 100,
+          "unit": "rows"
+        }
+      ]
+    },
+    {
+      "id": "first-decode",
+      "title": "First cached decode",
+      "scope": "100 fixed synthetic text prompts; native BF16 logits and offline FP64 full-vocabulary normalization.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.93
+        },
+        {
+          "id": "tail-merged-js-mean",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0006174091700175024
+        },
+        {
+          "id": "tail-merged-js-max",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.003087891048904604,
+          "coordinate": {
+            "sample": "NB-0093-44fa0599",
+            "position": 55
+          }
+        },
+        {
+          "id": "probability-max-error",
+          "label": "Maximum token probability difference",
+          "unit": "fraction",
+          "value": 0.06174194885412465,
+          "coordinate": {
+            "sample": "NB-0003-73c66fb0",
+            "position": 47,
+            "token": 1330
+          }
+        },
+        {
+          "id": "top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9775
+        }
+      ],
+      "coverage": [
+        {
+          "label": "Paired full-vocabulary positions",
+          "observed": 100,
+          "expected": 100,
+          "unit": "rows"
+        }
+      ]
+    },
+    {
+      "id": "later-decode",
+      "title": "Second cached decode",
+      "scope": "100 fixed synthetic text prompts; native BF16 logits and offline FP64 full-vocabulary normalization.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 0.88
+        },
+        {
+          "id": "tail-merged-js-mean",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.00035186788900148154
+        },
+        {
+          "id": "tail-merged-js-max",
+          "label": "Maximum tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.0010493509443888897,
+          "coordinate": {
+            "sample": "NB-0078-d8578899",
+            "position": 59
+          }
+        },
+        {
+          "id": "probability-max-error",
+          "label": "Maximum token probability difference",
+          "unit": "fraction",
+          "value": 0.03335622924642295,
+          "coordinate": {
+            "sample": "NB-0078-d8578899",
+            "position": 59,
+            "token": 1501
+          }
+        },
+        {
+          "id": "top-100-overlap",
+          "label": "Mean top-100 overlap",
+          "unit": "fraction",
+          "value": 0.9812000000000001
+        }
+      ],
+      "coverage": [
+        {
+          "label": "Paired full-vocabulary positions",
+          "observed": 100,
+          "expected": 100,
+          "unit": "rows"
+        }
+      ]
+    },
+    {
+      "id": "native-greedy",
+      "title": "Native three-token greedy generation",
+      "scope": "100 prompts; token trajectories are checked only while histories agree.",
+      "side_ids": [
+        "ascend",
+        "b200"
+      ],
+      "metrics": [
+        {
+          "id": "continuation-match",
+          "label": "Exact continuation agreement",
+          "unit": "fraction",
+          "value": 0.9
+        }
+      ],
+      "coverage": [
+        {
+          "label": "Paired native completions",
+          "observed": 100,
+          "expected": 100,
+          "unit": "requests"
+        }
+      ]
+    }
+  ],
+  "raw_capture_hashes": {
+    "npu": [
+      "3550f74364b8e99fa44caf5b9e427cfe6307a84972c2ea79a907cd4ad40b2c0f",
+      "0d387d700eefc7928f4e65b5af5d0a0fba356c7bf2f95bae355bc99e8c95dfe6",
+      "404da795ed76d494f1bd7416d137b075656546f510752e61a923225514296562",
+      "a6b9937ce3fcc1b7551e3ea358bdfddd8371f68d360629fa9924bd73a4b5507b"
+    ],
+    "cuda": [
+      "e736c00622e7977c77bb3e26b4e5fcceecfb247bd08f9401c31c7839badc3486",
+      "27518b967442880a201c371f9a52696333f2631eb79560158e51cdd01cf507d2"
+    ]
+  },
+  "source_digest": "d67880b98f47d55a9d40679c901a740aa0618b97458824cab2abe9a1f7861be6"
+}

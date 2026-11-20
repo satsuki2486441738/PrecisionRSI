@@ -1,0 +1,2613 @@
+{
+  "schema_version": 1,
+  "id": "qwen3-06b-native-vllm-fixed-history-batch-910c-b200-20261120",
+  "model": {
+    "name": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "architecture": "Qwen3",
+    "size": "0.6B"
+  },
+  "checkpoint_hashes": {
+    "LICENSE": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+    "config.json": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "batch_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "vocab": 151936,
+  "events": 100,
+  "native_request_count_per_side": 160,
+  "native_full_vocabulary_rows_per_side": 400,
+  "compared_input_lengths": [
+    73,
+    113,
+    157,
+    211,
+    307
+  ],
+  "comparisons": [
+    {
+      "id": "serial-cross-stack",
+      "title": "Serial inference across stacks",
+      "scope": "Same checkpoint and token history; one new request per observed native scheduler tick.",
+      "side_ids": [
+        "ascend",
+        "cuda"
+      ],
+      "coverage": [
+        {
+          "label": "Fixed token histories",
+          "expected": 100,
+          "observed": 100,
+          "unit": "positions"
+        },
+        {
+          "label": "Target token scores",
+          "expected": 200,
+          "observed": 200,
+          "unit": "targets"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "top-1-agreement",
+          "label": "Top-1 agreement",
+          "unit": "fraction",
+          "value": 1.0
+        },
+        {
+          "id": "mean-tail-js",
+          "label": "Mean tail-merged Jensen–Shannon divergence",
+          "unit": "nats",
+          "value": 0.00039124273593799564
+        },
+        {
+          "id": "target-logprob-mae",
+          "label": "Target log probability mean absolute error",
+          "unit": "nats",
+          "value": 0.04791124105453491
+        },
+        {
+          "id": "target-logprob-p99",
+          "label": "Target log probability P99 absolute error",
+          "unit": "nats",
+          "value": 0.13876681804656976
+        },
+        {
+          "id": "target-logprob-max",
+          "label": "Maximum target log probability absolute error",
+          "unit": "nats",
+          "value": 0.18054723739624023
+        },
+        {
+          "id": "nll-difference",
+          "label": "Absolute NLL difference",
+          "unit": "nats/token",
+          "value": 0.0041858100891118966
+        }
+      ]
+    }
+  ],
+  "scheduler_control": {
+    "ascend": {
+      "source_sha256": "9d8969f697d8192e631e27d1a6fc66f34d85ba3d30add22034fc7ca99f7b3a6a",
+      "batch_arms": {
+        "mixed": {
+          "actual_concurrency": [
+            5
+          ],
+          "full_same_tick_calls": 20,
+          "planned_calls": 20,
+          "rows": 100
+        },
+        "mixed-reversed": {
+          "actual_concurrency": [
+            5
+          ],
+          "full_same_tick_calls": 20,
+          "planned_calls": 20,
+          "rows": 100
+        },
+        "serial": {
+          "actual_concurrency": [
+            1
+          ],
+          "full_same_tick_calls": 100,
+          "planned_calls": 100,
+          "rows": 100
+        },
+        "uniform": {
+          "actual_concurrency": [
+            5
+          ],
+          "full_same_tick_calls": 20,
+          "planned_calls": 20,
+          "rows": 100
+        }
+      },
+      "maximum_mass_error": 1.5059032658637506e-06,
+      "comparisons": {
+        "mixed_vs_mixed-reversed": {
+          "alternate_full_js_delta": {
+            "max": 1.7997756063259374e-16,
+            "mean": 2.7363241472393326e-17,
+            "p99": 1.2604121305687139e-16
+          },
+          "full_array_bytes_equal": 40,
+          "full_vocabulary_js_nats": {
+            "max": 0.0010140225354166085,
+            "mean": 0.00019511430288952545,
+            "p99": 0.000794309434560922
+          },
+          "half_l1_probability": {
+            "max": 0.03990080797556938,
+            "mean": 0.011743557854305023,
+            "p99": 0.03567046990492618
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.3944225311279297,
+            "mean": 0.1528880500793457,
+            "p99": 0.3644442749023439
+          },
+          "max_absolute_probability": {
+            "max": 0.039421048796304536,
+            "mean": 0.00707753361655425,
+            "p99": 0.033285837531691044
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.024244521856307984,
+            "max_abs_nat": 0.15489816665649414,
+            "max_coordinate": [
+              "NB-0079-3ed9537d",
+              210,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0031443607807153384,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.12247464179992666,
+            "side_a_nll_nat_per_token": 6.208101897239685,
+            "side_b_nll_nat_per_token": 6.211246258020401,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "serial_vs_mixed": {
+          "alternate_full_js_delta": {
+            "max": 1.8466673502859354e-16,
+            "mean": 3.786808499887151e-17,
+            "p99": 1.8133931856123555e-16
+          },
+          "full_array_bytes_equal": 20,
+          "full_vocabulary_js_nats": {
+            "max": 0.0010140225354166085,
+            "mean": 0.00027770449161805734,
+            "p99": 0.000794309434560922
+          },
+          "half_l1_probability": {
+            "max": 0.03990080797556938,
+            "mean": 0.016084392146579727,
+            "p99": 0.03567046990492618
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.3944225311279297,
+            "mean": 0.2093472671508789,
+            "p99": 0.38076652526855476
+          },
+          "max_absolute_probability": {
+            "max": 0.039421048796304536,
+            "mean": 0.009825270184302135,
+            "p99": 0.0335945475878416
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.035144336223602295,
+            "max_abs_nat": 0.2044539451599121,
+            "max_coordinate": [
+              "NB-0009-393d5e70",
+              210,
+              425
+            ],
+            "nll_abs_diff_nat_per_token": 0.001803758144379053,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.12256925106048566,
+            "side_a_nll_nat_per_token": 6.206298139095306,
+            "side_b_nll_nat_per_token": 6.208101897239685,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "serial_vs_uniform": {
+          "alternate_full_js_delta": {
+            "max": 2.1006417091906648e-16,
+            "mean": 4.4827423023585664e-17,
+            "p99": 2.0383868204465476e-16
+          },
+          "full_array_bytes_equal": 8,
+          "full_vocabulary_js_nats": {
+            "max": 0.0009591955944129638,
+            "mean": 0.00031622961298150264,
+            "p99": 0.000864509161863198
+          },
+          "half_l1_probability": {
+            "max": 0.03899448447201776,
+            "mean": 0.01823148198286234,
+            "p99": 0.03860799319403957
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.4576244354248047,
+            "mean": 0.2500488042831421,
+            "p99": 0.40145391464233426
+          },
+          "max_absolute_probability": {
+            "max": 0.038731917090545964,
+            "mean": 0.011185890066351796,
+            "p99": 0.03414307737716157
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.042189737558364866,
+            "max_abs_nat": 0.14972877502441406,
+            "max_coordinate": [
+              "NB-0012-0e3177ec",
+              112,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0007468664646150813,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.13621109485626215,
+            "side_a_nll_nat_per_token": 6.206298139095306,
+            "side_b_nll_nat_per_token": 6.207045005559921,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "uniform_vs_mixed": {
+          "alternate_full_js_delta": {
+            "max": 2.1006417091906648e-16,
+            "mean": 4.6046599689279485e-17,
+            "p99": 1.8027842673545862e-16
+          },
+          "full_array_bytes_equal": 20,
+          "full_vocabulary_js_nats": {
+            "max": 0.0008399317109823991,
+            "mean": 0.00027568107876527155,
+            "p99": 0.0008210113886737708
+          },
+          "half_l1_probability": {
+            "max": 0.03711626578982707,
+            "mean": 0.015799350765377713,
+            "p99": 0.036400459459395046
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.5538387298583984,
+            "mean": 0.21963504791259766,
+            "p99": 0.3955691719055184
+          },
+          "max_absolute_probability": {
+            "max": 0.03686663002947288,
+            "mean": 0.009534024978520562,
+            "p99": 0.03252178368928567
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.034175490140914914,
+            "max_abs_nat": 0.14972877502441406,
+            "max_coordinate": [
+              "NB-0012-0e3177ec",
+              112,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0010568916797639716,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.13147150993347168,
+            "side_a_nll_nat_per_token": 6.207045005559921,
+            "side_b_nll_nat_per_token": 6.208101897239685,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        }
+      },
+      "length_strata": {
+        "73": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 5.644437830742156e-17,
+              "mean": 5.0740227809014845e-18,
+              "p99": 5.427680111802699e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0001-810fa0dc",
+                72,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.269162672758102,
+              "side_b_nll_nat_per_token": 6.269162672758102,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.0879968800892037e-16,
+              "mean": 4.137315490204685e-17,
+              "p99": 1.0545221380137135e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0007160489204235847,
+              "mean": 0.00033271611358351287,
+              "p99": 0.0007092301690541772
+            },
+            "half_l1_probability": {
+              "max": 0.03403074506378457,
+              "mean": 0.019621156508838774,
+              "p99": 0.03388294250079218
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3806285858154297,
+              "mean": 0.28531804084777834,
+              "p99": 0.3776457023620605
+            },
+            "max_absolute_probability": {
+              "max": 0.02962384338603996,
+              "mean": 0.01290329232363983,
+              "p99": 0.029021432653773677
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0535584568977356,
+              "max_abs_nat": 0.14175176620483398,
+              "max_coordinate": [
+                "NB-0036-5ff5dafe",
+                72,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.011035287380217973,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.13339982509613035,
+              "side_a_nll_nat_per_token": 6.258127385377884,
+              "side_b_nll_nat_per_token": 6.269162672758102,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 1.0879968800892037e-16,
+              "mean": 4.137315490204685e-17,
+              "p99": 1.0545221380137135e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0007160489204235847,
+              "mean": 0.00033271611358351287,
+              "p99": 0.0007092301690541772
+            },
+            "half_l1_probability": {
+              "max": 0.03403074506378457,
+              "mean": 0.019621156508838774,
+              "p99": 0.03388294250079218
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3806285858154297,
+              "mean": 0.28531804084777834,
+              "p99": 0.3776457023620605
+            },
+            "max_absolute_probability": {
+              "max": 0.02962384338603996,
+              "mean": 0.01290329232363983,
+              "p99": 0.029021432653773677
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0535584568977356,
+              "max_abs_nat": 0.14175176620483398,
+              "max_coordinate": [
+                "NB-0036-5ff5dafe",
+                72,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.011035287380217973,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.13339982509613035,
+              "side_a_nll_nat_per_token": 6.258127385377884,
+              "side_b_nll_nat_per_token": 6.269162672758102,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 5.644437830742156e-17,
+              "mean": 5.0740227809014845e-18,
+              "p99": 5.427680111802699e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0001-810fa0dc",
+                72,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.269162672758102,
+              "side_b_nll_nat_per_token": 6.269162672758102,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "113": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 4.9625796948601885e-17,
+              "mean": 8.767908419612409e-18,
+              "p99": 4.82457650041853e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0002-3baa679d",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.320396363735199,
+              "side_b_nll_nat_per_token": 6.320396363735199,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 4.9625796948601885e-17,
+              "mean": 8.767908419612409e-18,
+              "p99": 4.82457650041853e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0002-3baa679d",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.320396363735199,
+              "side_b_nll_nat_per_token": 6.320396363735199,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 2.1006417091906648e-16,
+              "mean": 5.139389348124412e-17,
+              "p99": 2.0122168905081777e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0004798557981284881,
+              "mean": 0.0002494751019947934,
+              "p99": 0.00047519845892429735
+            },
+            "half_l1_probability": {
+              "max": 0.02862381103385978,
+              "mean": 0.01516405976130904,
+              "p99": 0.02803127828061565
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3563232421875,
+              "mean": 0.24527225494384766,
+              "p99": 0.3522589683532715
+            },
+            "max_absolute_probability": {
+              "max": 0.02332369405117296,
+              "mean": 0.008009407608253439,
+              "p99": 0.02215913053521474
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.03484630584716797,
+              "max_abs_nat": 0.14972877502441406,
+              "max_coordinate": [
+                "NB-0012-0e3177ec",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.007839417457580211,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.12883246421813963,
+              "side_a_nll_nat_per_token": 6.320396363735199,
+              "side_b_nll_nat_per_token": 6.328235781192779,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 2.1006417091906648e-16,
+              "mean": 5.139389348124412e-17,
+              "p99": 2.0122168905081777e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0004798557981284881,
+              "mean": 0.0002494751019947934,
+              "p99": 0.00047519845892429735
+            },
+            "half_l1_probability": {
+              "max": 0.02862381103385978,
+              "mean": 0.01516405976130904,
+              "p99": 0.02803127828061565
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3563232421875,
+              "mean": 0.24527225494384766,
+              "p99": 0.3522589683532715
+            },
+            "max_absolute_probability": {
+              "max": 0.02332369405117296,
+              "mean": 0.008009407608253439,
+              "p99": 0.02215913053521474
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.03484630584716797,
+              "max_abs_nat": 0.14972877502441406,
+              "max_coordinate": [
+                "NB-0012-0e3177ec",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.007839417457580211,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.12883246421813963,
+              "side_a_nll_nat_per_token": 6.328235781192779,
+              "side_b_nll_nat_per_token": 6.320396363735199,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "157": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 1.7997756063259374e-16,
+              "mean": 4.0200183676689094e-17,
+              "p99": 1.6698936070730355e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0010140225354166085,
+              "mean": 0.000363458749984482,
+              "p99": 0.0009718553746463247
+            },
+            "half_l1_probability": {
+              "max": 0.03990080797556938,
+              "mean": 0.0203338542949805,
+              "p99": 0.039088924911506534
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3944225311279297,
+              "mean": 0.2676071643829346,
+              "p99": 0.3886691284179687
+            },
+            "max_absolute_probability": {
+              "max": 0.039421048796304536,
+              "mean": 0.012732743377759825,
+              "p99": 0.03674378301120788
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.03673200607299805,
+              "max_abs_nat": 0.12237548828125,
+              "max_coordinate": [
+                "NB-0053-8257e2a9",
+                156,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.00885362625122088,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.11337024688720702,
+              "side_a_nll_nat_per_token": 6.188624012470245,
+              "side_b_nll_nat_per_token": 6.197477638721466,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.7997756063259374e-16,
+              "mean": 4.0200183676689094e-17,
+              "p99": 1.6698936070730355e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0010140225354166085,
+              "mean": 0.000363458749984482,
+              "p99": 0.0009718553746463247
+            },
+            "half_l1_probability": {
+              "max": 0.03990080797556938,
+              "mean": 0.0203338542949805,
+              "p99": 0.039088924911506534
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3944225311279297,
+              "mean": 0.2676071643829346,
+              "p99": 0.3886691284179687
+            },
+            "max_absolute_probability": {
+              "max": 0.039421048796304536,
+              "mean": 0.012732743377759825,
+              "p99": 0.03674378301120788
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.03673200607299805,
+              "max_abs_nat": 0.12237548828125,
+              "max_coordinate": [
+                "NB-0053-8257e2a9",
+                156,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.00885362625122088,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.11337024688720702,
+              "side_a_nll_nat_per_token": 6.197477638721466,
+              "side_b_nll_nat_per_token": 6.188624012470245,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 1.3162214373974024e-16,
+              "mean": 3.299735430641743e-17,
+              "p99": 1.2498899484847387e-16
+            },
+            "full_array_bytes_equal": 8,
+            "full_vocabulary_js_nats": {
+              "max": 0.0006905291931044956,
+              "mean": 0.00021648124102693547,
+              "p99": 0.0006665415440953262
+            },
+            "half_l1_probability": {
+              "max": 0.03434962433737761,
+              "mean": 0.012922592029771371,
+              "p99": 0.03366302367532834
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3134727478027344,
+              "mean": 0.1595224380493164,
+              "p99": 0.3128997993469238
+            },
+            "max_absolute_probability": {
+              "max": 0.03409672546086473,
+              "mean": 0.008617741074788608,
+              "p99": 0.03251192702099726
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.02602299451828003,
+              "max_abs_nat": 0.11601543426513672,
+              "max_coordinate": [
+                "NB-0018-35c755b6",
+                156,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.010908091068268178,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.1077111005783081,
+              "side_a_nll_nat_per_token": 6.197477638721466,
+              "side_b_nll_nat_per_token": 6.186569547653198,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.7997756063259374e-16,
+              "mean": 4.309297059815198e-17,
+              "p99": 1.7098572991508514e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0007605223817624588,
+              "mean": 0.0003258622271560886,
+              "p99": 0.0007250358800252064
+            },
+            "half_l1_probability": {
+              "max": 0.033740030621978195,
+              "mean": 0.018547001090026705,
+              "p99": 0.03339641784462992
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.36762428283691406,
+              "mean": 0.2703746795654297,
+              "p99": 0.3654759979248047
+            },
+            "max_absolute_probability": {
+              "max": 0.027943201300250187,
+              "mean": 0.011612187782986751,
+              "p99": 0.02730528412481449
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04511338472366333,
+              "max_abs_nat": 0.1317424774169922,
+              "max_coordinate": [
+                "NB-0018-35c755b6",
+                156,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.0020544648170472968,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.12808935165405272,
+              "side_a_nll_nat_per_token": 6.186569547653198,
+              "side_b_nll_nat_per_token": 6.188624012470245,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "211": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 1.12865446155741e-16,
+              "mean": 4.2832084450397654e-17,
+              "p99": 1.1016686694842457e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0007110133721110447,
+              "mean": 0.00033485669332384866,
+              "p99": 0.0006860468511705369
+            },
+            "half_l1_probability": {
+              "max": 0.034137687871833494,
+              "mean": 0.020625656268838926,
+              "p99": 0.033237488463092484
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3263702392578125,
+              "mean": 0.2525989532470703,
+              "p99": 0.32418897628784177
+            },
+            "max_absolute_probability": {
+              "max": 0.03322386570073532,
+              "mean": 0.012275800680992382,
+              "p99": 0.031119268737668
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0426023542881012,
+              "max_abs_nat": 0.15489816665649414,
+              "max_coordinate": [
+                "NB-0079-3ed9537d",
+                210,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.002821081876755116,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.14608130931854246,
+              "side_a_nll_nat_per_token": 6.1274811089038845,
+              "side_b_nll_nat_per_token": 6.13030219078064,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.8130570829388848e-16,
+              "mean": 4.525188817411374e-17,
+              "p99": 1.7840628063411909e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.000738662617597288,
+              "mean": 0.00038538982751889746,
+              "p99": 0.0007372605903710573
+            },
+            "half_l1_probability": {
+              "max": 0.034026789589120594,
+              "mean": 0.022096914655469,
+              "p99": 0.033985428138603904
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3556861877441406,
+              "mean": 0.25295238494873046,
+              "p99": 0.3517538261413574
+            },
+            "max_absolute_probability": {
+              "max": 0.03353569404028134,
+              "mean": 0.01330315297374424,
+              "p99": 0.033114311555637835
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04872000217437744,
+              "max_abs_nat": 0.2044539451599121,
+              "max_coordinate": [
+                "NB-0009-393d5e70",
+                210,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.0005885601043704725,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.1687850141525268,
+              "side_a_nll_nat_per_token": 6.128069669008255,
+              "side_b_nll_nat_per_token": 6.1274811089038845,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 2.0377579831865056e-16,
+              "mean": 6.040903454546109e-17,
+              "p99": 1.925797845844789e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0009591955944129638,
+              "mean": 0.00041247293386826927,
+              "p99": 0.0009407710927581778
+            },
+            "half_l1_probability": {
+              "max": 0.03899448447201776,
+              "mean": 0.022310569551179462,
+              "p99": 0.03892030937826437
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.40088653564453125,
+              "mean": 0.28019964694976807,
+              "p99": 0.39165376663208
+            },
+            "max_absolute_probability": {
+              "max": 0.038731917090545964,
+              "mean": 0.013133987651255766,
+              "p99": 0.03569248175230067
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04955635666847229,
+              "max_abs_nat": 0.12061405181884766,
+              "max_coordinate": [
+                "NB-0074-85e044bd",
+                210,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.009768742322921575,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.11910921096801758,
+              "side_a_nll_nat_per_token": 6.128069669008255,
+              "side_b_nll_nat_per_token": 6.118300926685333,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.590524587036235e-16,
+              "mean": 7.294376691210913e-17,
+              "p99": 1.5224421116150072e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0008208202743070169,
+              "mean": 0.00045258098981726033,
+              "p99": 0.000796717282142575
+            },
+            "half_l1_probability": {
+              "max": 0.03639322909242098,
+              "mean": 0.024995853016895865,
+              "p99": 0.03579879097015004
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3939704895019531,
+              "mean": 0.286708402633667,
+              "p99": 0.3843187904357909
+            },
+            "max_absolute_probability": {
+              "max": 0.030470052889452703,
+              "mean": 0.01508978999382107,
+              "p99": 0.030433629645199783
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04733753800392151,
+              "max_abs_nat": 0.1314687728881836,
+              "max_coordinate": [
+                "NB-0049-4394c7c3",
+                210,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.009180182218551103,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.12226231575012206,
+              "side_a_nll_nat_per_token": 6.118300926685333,
+              "side_b_nll_nat_per_token": 6.1274811089038845,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "307": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 1.2549640146519714e-16,
+              "mean": 3.994200803436598e-17,
+              "p99": 1.1858000475636893e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0006828042400748252,
+              "mean": 0.0002772560711392966,
+              "p99": 0.0006378774809857287
+            },
+            "half_l1_probability": {
+              "max": 0.03341110305194623,
+              "mean": 0.01775827870770568,
+              "p99": 0.0322706660156278
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.32932472229003906,
+              "mean": 0.24423413276672362,
+              "p99": 0.3285491943359375
+            },
+            "max_absolute_probability": {
+              "max": 0.03290508994385599,
+              "mean": 0.010379124024019042,
+              "p99": 0.031034618952114502
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04188824892044067,
+              "max_abs_nat": 0.11591100692749023,
+              "max_coordinate": [
+                "NB-0085-80509e50",
+                306,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.004047095775604248,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.10902039051055908,
+              "side_a_nll_nat_per_token": 6.134845328330994,
+              "side_b_nll_nat_per_token": 6.138892424106598,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.8466673502859354e-16,
+              "mean": 5.374728982189547e-17,
+              "p99": 1.6853190934820728e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0007521842292813257,
+              "mean": 0.00030695776700339413,
+              "p99": 0.0007025815188040599
+            },
+            "half_l1_probability": {
+              "max": 0.03336894572851497,
+              "mean": 0.018370035273610356,
+              "p99": 0.03259190436934184
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.3180885314941406,
+              "mean": 0.24085874557495118,
+              "p99": 0.31151792526245115
+            },
+            "max_absolute_probability": {
+              "max": 0.024676366049023124,
+              "mean": 0.010187162246366779,
+              "p99": 0.02318771481011954
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.03671121597290039,
+              "max_abs_nat": 0.12068367004394531,
+              "max_coordinate": [
+                "NB-0070-d1546004",
+                306,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.00742568969726598,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.11300957679748534,
+              "side_a_nll_nat_per_token": 6.127419638633728,
+              "side_b_nll_nat_per_token": 6.134845328330994,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 1.3720578492804059e-16,
+              "mean": 3.796367788275884e-17,
+              "p99": 1.3007823984612083e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0008635527332515838,
+              "mean": 0.0003700026744340024,
+              "p99": 0.000834585109124374
+            },
+            "half_l1_probability": {
+              "max": 0.03758059132205714,
+              "mean": 0.021139032063213055,
+              "p99": 0.03704883516009278
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.4576244354248047,
+              "mean": 0.279931640625,
+              "p99": 0.43365482330322247
+            },
+            "max_absolute_probability": {
+              "max": 0.03388595285852314,
+              "mean": 0.013265021673821337,
+              "p99": 0.03311377807064082
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04696457386016846,
+              "max_abs_nat": 0.1361551284790039,
+              "max_coordinate": [
+                "NB-0070-d1546004",
+                306,
+                425
+              ],
+              "nll_abs_diff_nat_per_token": 0.005536460876465199,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.12870977401733397,
+              "side_a_nll_nat_per_token": 6.127419638633728,
+              "side_b_nll_nat_per_token": 6.132956099510193,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 1.474514954580286e-16,
+              "mean": 5.772834467399069e-17,
+              "p99": 1.430328295040639e-16
+            },
+            "full_array_bytes_equal": 0,
+            "full_vocabulary_js_nats": {
+              "max": 0.0008399317109823991,
+              "mean": 0.0003504870748582155,
+              "p99": 0.0008335676302051966
+            },
+            "half_l1_probability": {
+              "max": 0.03711626578982707,
+              "mean": 0.020289839958656956,
+              "p99": 0.03694137346072307
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.5538387298583984,
+              "mean": 0.29581990242004397,
+              "p99": 0.5191347599029539
+            },
+            "max_absolute_probability": {
+              "max": 0.03686663002947288,
+              "mean": 0.012958739507541544,
+              "p99": 0.036032770630851085
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.04358022212982178,
+              "max_abs_nat": 0.11696529388427734,
+              "max_coordinate": [
+                "NB-0080-4f9901b3",
+                306,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0018892288208007812,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.11568175315856934,
+              "side_a_nll_nat_per_token": 6.132956099510193,
+              "side_b_nll_nat_per_token": 6.134845328330994,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        }
+      }
+    },
+    "cuda": {
+      "source_sha256": "edb0c4855916e19960598c0b6dacb793bb0f14ef2e9d9d4ae1033263db1e2f48",
+      "batch_arms": {
+        "mixed": {
+          "actual_concurrency": [
+            5
+          ],
+          "full_same_tick_calls": 20,
+          "planned_calls": 20,
+          "rows": 100
+        },
+        "mixed-reversed": {
+          "actual_concurrency": [
+            5
+          ],
+          "full_same_tick_calls": 20,
+          "planned_calls": 20,
+          "rows": 100
+        },
+        "serial": {
+          "actual_concurrency": [
+            1
+          ],
+          "full_same_tick_calls": 100,
+          "planned_calls": 100,
+          "rows": 100
+        },
+        "uniform": {
+          "actual_concurrency": [
+            5
+          ],
+          "full_same_tick_calls": 20,
+          "planned_calls": 20,
+          "rows": 100
+        }
+      },
+      "maximum_mass_error": 6.525882580987741e-07,
+      "comparisons": {
+        "mixed_vs_mixed-reversed": {
+          "alternate_full_js_delta": {
+            "max": 5.652020101464016e-17,
+            "mean": 5.638608227840184e-18,
+            "p99": 5.577312383161526e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              72,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 6.210483949184418,
+            "side_b_nll_nat_per_token": 6.210483949184418,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "serial_vs_mixed": {
+          "alternate_full_js_delta": {
+            "max": 5.652020101464016e-17,
+            "mean": 5.638608227840184e-18,
+            "p99": 5.577312383161526e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              72,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 6.210483949184418,
+            "side_b_nll_nat_per_token": 6.210483949184418,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "serial_vs_uniform": {
+          "alternate_full_js_delta": {
+            "max": 5.652020101464016e-17,
+            "mean": 5.638608227840184e-18,
+            "p99": 5.577312383161526e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              72,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 6.210483949184418,
+            "side_b_nll_nat_per_token": 6.210483949184418,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        },
+        "uniform_vs_mixed": {
+          "alternate_full_js_delta": {
+            "max": 5.652020101464016e-17,
+            "mean": 5.638608227840184e-18,
+            "p99": 5.577312383161526e-17
+          },
+          "full_array_bytes_equal": 100,
+          "full_vocabulary_js_nats": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "half_l1_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "histories": 100,
+          "max_absolute_logprob": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "max_absolute_probability": {
+            "max": 0.0,
+            "mean": 0.0,
+            "p99": 0.0
+          },
+          "native_greedy_equal": 100,
+          "targets": {
+            "mae_nat": 0.0,
+            "max_abs_nat": 0.0,
+            "max_coordinate": [
+              "NB-0001-810fa0dc",
+              72,
+              362
+            ],
+            "nll_abs_diff_nat_per_token": 0.0,
+            "p99_method": "global linear h=0.99*(N-1)",
+            "p99_nat": 0.0,
+            "side_a_nll_nat_per_token": 6.210483949184418,
+            "side_b_nll_nat_per_token": 6.210483949184418,
+            "target_count": 200
+          },
+          "top1_equal": 100
+        }
+      },
+      "length_strata": {
+        "73": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 5.652020101464016e-17,
+              "mean": 8.095326035959688e-18,
+              "p99": 5.637682256537275e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0001-810fa0dc",
+                72,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.258831083774567,
+              "side_b_nll_nat_per_token": 6.258831083774567,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 5.652020101464016e-17,
+              "mean": 8.095326035959688e-18,
+              "p99": 5.637682256537275e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0001-810fa0dc",
+                72,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.258831083774567,
+              "side_b_nll_nat_per_token": 6.258831083774567,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 5.652020101464016e-17,
+              "mean": 8.095326035959688e-18,
+              "p99": 5.637682256537275e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0001-810fa0dc",
+                72,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.258831083774567,
+              "side_b_nll_nat_per_token": 6.258831083774567,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 5.652020101464016e-17,
+              "mean": 8.095326035959688e-18,
+              "p99": 5.637682256537275e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0001-810fa0dc",
+                72,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.258831083774567,
+              "side_b_nll_nat_per_token": 6.258831083774567,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "113": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0002-3baa679d",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.326452422142029,
+              "side_b_nll_nat_per_token": 6.326452422142029,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0002-3baa679d",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.326452422142029,
+              "side_b_nll_nat_per_token": 6.326452422142029,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0002-3baa679d",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.326452422142029,
+              "side_b_nll_nat_per_token": 6.326452422142029,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0002-3baa679d",
+                112,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.326452422142029,
+              "side_b_nll_nat_per_token": 6.326452422142029,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "157": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 4.786168751755399e-17,
+              "mean": 8.958147831589484e-18,
+              "p99": 4.780598656243757e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0003-73c66fb0",
+                156,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.200012671947479,
+              "side_b_nll_nat_per_token": 6.200012671947479,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 4.786168751755399e-17,
+              "mean": 8.958147831589484e-18,
+              "p99": 4.780598656243757e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0003-73c66fb0",
+                156,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.200012671947479,
+              "side_b_nll_nat_per_token": 6.200012671947479,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 4.786168751755399e-17,
+              "mean": 8.958147831589484e-18,
+              "p99": 4.780598656243757e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0003-73c66fb0",
+                156,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.200012671947479,
+              "side_b_nll_nat_per_token": 6.200012671947479,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 4.786168751755399e-17,
+              "mean": 8.958147831589484e-18,
+              "p99": 4.780598656243757e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0003-73c66fb0",
+                156,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.200012671947479,
+              "side_b_nll_nat_per_token": 6.200012671947479,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "211": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 4.2949992367853104e-17,
+              "mean": 2.147499618392655e-18,
+              "p99": 3.478949381796096e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0004-995b4fb7",
+                210,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.136745536327362,
+              "side_b_nll_nat_per_token": 6.136745536327362,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 4.2949992367853104e-17,
+              "mean": 2.147499618392655e-18,
+              "p99": 3.478949381796096e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0004-995b4fb7",
+                210,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.136745536327362,
+              "side_b_nll_nat_per_token": 6.136745536327362,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 4.2949992367853104e-17,
+              "mean": 2.147499618392655e-18,
+              "p99": 3.478949381796096e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0004-995b4fb7",
+                210,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.136745536327362,
+              "side_b_nll_nat_per_token": 6.136745536327362,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 4.2949992367853104e-17,
+              "mean": 2.147499618392655e-18,
+              "p99": 3.478949381796096e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0004-995b4fb7",
+                210,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.136745536327362,
+              "side_b_nll_nat_per_token": 6.136745536327362,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        },
+        "307": {
+          "mixed_vs_mixed-reversed": {
+            "alternate_full_js_delta": {
+              "max": 5.058125263563023e-17,
+              "mean": 8.992067653259092e-18,
+              "p99": 4.948055203473342e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0005-faf102a9",
+                306,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.130378031730652,
+              "side_b_nll_nat_per_token": 6.130378031730652,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 5.058125263563023e-17,
+              "mean": 8.992067653259092e-18,
+              "p99": 4.948055203473342e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0005-faf102a9",
+                306,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.130378031730652,
+              "side_b_nll_nat_per_token": 6.130378031730652,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "serial_vs_uniform": {
+            "alternate_full_js_delta": {
+              "max": 5.058125263563023e-17,
+              "mean": 8.992067653259092e-18,
+              "p99": 4.948055203473342e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0005-faf102a9",
+                306,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.130378031730652,
+              "side_b_nll_nat_per_token": 6.130378031730652,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          },
+          "uniform_vs_mixed": {
+            "alternate_full_js_delta": {
+              "max": 5.058125263563023e-17,
+              "mean": 8.992067653259092e-18,
+              "p99": 4.948055203473342e-17
+            },
+            "full_array_bytes_equal": 20,
+            "full_vocabulary_js_nats": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "half_l1_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "histories": 20,
+            "max_absolute_logprob": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "max_absolute_probability": {
+              "max": 0.0,
+              "mean": 0.0,
+              "p99": 0.0
+            },
+            "native_greedy_equal": 20,
+            "targets": {
+              "mae_nat": 0.0,
+              "max_abs_nat": 0.0,
+              "max_coordinate": [
+                "NB-0005-faf102a9",
+                306,
+                362
+              ],
+              "nll_abs_diff_nat_per_token": 0.0,
+              "p99_method": "global linear h=0.99*(N-1)",
+              "p99_nat": 0.0,
+              "side_a_nll_nat_per_token": 6.130378031730652,
+              "side_b_nll_nat_per_token": 6.130378031730652,
+              "target_count": 40
+            },
+            "top1_equal": 20
+          }
+        }
+      }
+    }
+  },
+  "serial_cross_source_ids": [
+    "24084a590c59559aaf23020bde71937f92c5683fc399f973fcb09c1c583917d9",
+    "8fbc7ead89d1052e42889dc17e4799044a1aa26c7103207fb6cf516a57bda357"
+  ],
+  "acceptance": null,
+  "log_odds_diagnosis": {
+    "ascend": {
+      "events": 100,
+      "resolution_nats": 1e-07,
+      "cases_with_nonuniform_change": 80,
+      "max_abs_log_odds_delta_nats": 0.46875059604644775
+    },
+    "cuda": {
+      "events": 100,
+      "resolution_nats": 1e-07,
+      "cases_with_nonuniform_change": 0,
+      "max_abs_log_odds_delta_nats": 0.0
+    }
+  },
+  "mixed_order_control": {
+    "observed_scheduler_sha256": "cf31a2dee4ca92f77ceb69fa5eb2bde3a823c280960c8b94212ba61c526f12b4",
+    "realized_total_prefill_tokens_per_mixed_group": 861,
+    "membership_and_histories_fixed": true,
+    "observations": {
+      "73": {
+        "histories": 20,
+        "native_request_ordinal": [
+          0,
+          4
+        ],
+        "score_array_exact": 20,
+        "token_counts_of_preceding_requests": [
+          0,
+          788
+        ]
+      },
+      "113": {
+        "histories": 20,
+        "native_request_ordinal": [
+          1,
+          3
+        ],
+        "score_array_exact": 20,
+        "token_counts_of_preceding_requests": [
+          73,
+          675
+        ]
+      },
+      "157": {
+        "histories": 20,
+        "native_request_ordinal": [
+          2,
+          2
+        ],
+        "score_array_exact": 0,
+        "token_counts_of_preceding_requests": [
+          186,
+          518
+        ]
+      },
+      "211": {
+        "histories": 20,
+        "native_request_ordinal": [
+          3,
+          1
+        ],
+        "score_array_exact": 0,
+        "token_counts_of_preceding_requests": [
+          343,
+          307
+        ]
+      },
+      "307": {
+        "histories": 20,
+        "native_request_ordinal": [
+          4,
+          0
+        ],
+        "score_array_exact": 0,
+        "token_counts_of_preceding_requests": [
+          554,
+          0
+        ]
+      }
+    }
+  },
+  "candidate": {
+    "activation": {
+      "ascend": {
+        "backend_reported_skip": false,
+        "backend_signal": true,
+        "checked_service_stderr_sha256": "a146c6b0ab751c0a69009dba8527d663296f24f76a38f2d3e8bbec875feee3d1",
+        "checked_service_stdout_sha256": "357e1de52eac991ee3442b5edc27e1153b43efd79c7819ab98142b00c4981d47",
+        "native_process_config": true,
+        "signal_scope": "Ascend worker path emitted activation"
+      }
+    },
+    "baseline_vs_candidate_same_arm": {
+      "ascend": {
+        "mixed": {
+          "full_array_hash_matches": 0,
+          "native_greedy_matches": 100
+        },
+        "mixed-reversed": {
+          "full_array_hash_matches": 0,
+          "native_greedy_matches": 100
+        },
+        "serial": {
+          "full_array_hash_matches": 0,
+          "native_greedy_matches": 100
+        },
+        "uniform": {
+          "full_array_hash_matches": 0,
+          "native_greedy_matches": 100
+        }
+      }
+    },
+    "failed_sides": {
+      "cuda": 1
+    },
+    "failures": {
+      "cuda": {
+        "case_argv_audit": "8b65492988ff2c3a762552489cf3796fda0242c9724188e3cada19ad34b9677c",
+        "native_exit": 1,
+        "release_status": "released",
+        "service_stderr_sha256": "bc129c7b0c209979a28739a97ce7fb056dc82e00827d8cf509b9257cd37374ee",
+        "summary": "B200 vLLM startup failed during worker warm-up with CUDA illegal memory access. The service was not ready and produced no score rows.",
+        "terminal_status": "failed"
+      }
+    },
+    "histories_per_successful_side": 100,
+    "phase": "formal",
+    "repeat_candidate_pilot": {
+      "ascend": {
+        "mixed": 25,
+        "mixed-reversed": 25,
+        "serial": 25,
+        "uniform": 25
+      }
+    },
+    "sides": {
+      "ascend": {
+        "mixed_vs_mixed-reversed": {
+          "baseline": {
+            "exact_arrays": 40,
+            "js_mean_nats": 0.00019511430288952545,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.024244521856307984
+          },
+          "candidate": {
+            "exact_arrays": 100,
+            "js_mean_nats": 0.0,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.0
+          }
+        },
+        "serial_vs_mixed": {
+          "baseline": {
+            "exact_arrays": 20,
+            "js_mean_nats": 0.00027770449161805734,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.035144336223602295
+          },
+          "candidate": {
+            "exact_arrays": 100,
+            "js_mean_nats": 0.0,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.0
+          }
+        },
+        "serial_vs_uniform": {
+          "baseline": {
+            "exact_arrays": 8,
+            "js_mean_nats": 0.00031622961298150264,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.042189737558364866
+          },
+          "candidate": {
+            "exact_arrays": 100,
+            "js_mean_nats": 0.0,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.0
+          }
+        },
+        "uniform_vs_mixed": {
+          "baseline": {
+            "exact_arrays": 20,
+            "js_mean_nats": 0.00027568107876527155,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.034175490140914914
+          },
+          "candidate": {
+            "exact_arrays": 100,
+            "js_mean_nats": 0.0,
+            "same_greedy": 100,
+            "target_logprob_mae": 0.0
+          }
+        }
+      }
+    },
+    "status": "partial",
+    "summary": "Ascend 910C exact serial vs mixed arrays: 20/100 → 100/100. B200 vLLM startup failed during worker warm-up with CUDA illegal memory access. The service was not ready and produced no score rows.",
+    "tested_configuration": "VLLM_BATCH_INVARIANT=1"
+  }
+}

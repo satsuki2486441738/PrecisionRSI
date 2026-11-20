@@ -1,0 +1,157 @@
+{
+  "model": {
+    "name": "Qwen/Qwen3-0.6B",
+    "architecture": "Qwen3",
+    "size": "0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+  },
+  "framework_versions": [
+    {
+      "name": "TRL",
+      "version": "1.18.2"
+    },
+    {
+      "name": "Transformers",
+      "version": "5.23.0"
+    },
+    {
+      "name": "Accelerate",
+      "version": "1.16.0"
+    },
+    {
+      "name": "PEFT",
+      "version": "0.22.0"
+    }
+  ],
+  "classification": "experiment configuration defect; preserved historical measurements",
+  "scope": "100 synthetic documents, 240 active targets (100 EOS), 151936 tokens per vocabulary row, one AdamW step, final-MLP LoRA, Qwen3 BF16 with eager attention.",
+  "mechanism": "The SFT Trainer divides each micro-loss by the global valid-token count, and configures Accelerate accumulation to 1. The capture worker overwrote this to the number of micro-batches, so Accelerate.backward divided the already normalized loss again.",
+  "change": "Let Trainer own micro-batch grouping; no library patch.",
+  "acceptance": null,
+  "devices": {
+    "Ascend 910C": {
+      "measurements": {
+        "old": {
+          "grad_B": {
+            "count": 8192,
+            "different": 8192,
+            "max_abs": 0.004374207928776741,
+            "mae": 8.031653134996791e-05,
+            "p99": 0.00046904359711334145,
+            "relative_l2": 0.13702621700422704
+          },
+          "update_B": {
+            "count": 8192,
+            "different": 8182,
+            "max_abs": 0.0005981028662063181,
+            "mae": 1.0985083602754742e-06,
+            "p99": 1.6170437447726755e-07,
+            "relative_l2": 0.08238265592351142
+          },
+          "full_vocab_target_logprob_nats": {
+            "count": 240,
+            "different": 227,
+            "max_abs": 0.4475814597394048,
+            "mae": 0.07460137159774932,
+            "p99": 0.36595675954859513,
+            "relative_l2": 0.009329848666036545
+          }
+        },
+        "corrected": {
+          "grad_B": {
+            "count": 8192,
+            "different": 8192,
+            "max_abs": 0.0008245036005973816,
+            "mae": 6.899662060028122e-05,
+            "p99": 0.0003438052721321583,
+            "relative_l2": 0.0035190027557498124
+          },
+          "update_B": {
+            "count": 8192,
+            "different": 4566,
+            "max_abs": 0.0005999180721119046,
+            "mae": 8.054138973534464e-07,
+            "p99": 5.918554961681383e-09,
+            "relative_l2": 0.07319026028172064
+          },
+          "full_vocab_target_logprob_nats": {
+            "count": 240,
+            "different": 227,
+            "max_abs": 0.4475814597394048,
+            "mae": 0.07460137159774932,
+            "p99": 0.36595675954859513,
+            "relative_l2": 0.009329848666036545
+          }
+        }
+      },
+      "extra_divisors_before": {
+        "isolated": 25,
+        "packed": 29
+      },
+      "extra_divisor_after": 1,
+      "target_logits_byte_identical_to_original_within_layout": true
+    },
+    "NVIDIA B200": {
+      "measurements": {
+        "old": {
+          "grad_B": {
+            "count": 8192,
+            "different": 8192,
+            "max_abs": 0.004331640899181366,
+            "mae": 7.983940290988076e-05,
+            "p99": 0.0004631382063962535,
+            "relative_l2": 0.13645412711273563
+          },
+          "update_B": {
+            "count": 8192,
+            "different": 8186,
+            "max_abs": 0.0005988430057186633,
+            "mae": 9.43400952024831e-07,
+            "p99": 2.0787032553926234e-07,
+            "relative_l2": 0.07721033288029308
+          },
+          "full_vocab_target_logprob_nats": {
+            "count": 240,
+            "different": 196,
+            "max_abs": 0.2993559661253986,
+            "mae": 0.05547887161793284,
+            "p99": 0.23507705490494601,
+            "relative_l2": 0.007074323703090502
+          }
+        },
+        "corrected": {
+          "grad_B": {
+            "count": 8192,
+            "different": 8192,
+            "max_abs": 0.0010939985513687134,
+            "mae": 6.053374538550482e-05,
+            "p99": 0.0002721292525529862,
+            "relative_l2": 0.002914993490788955
+          },
+          "update_B": {
+            "count": 8192,
+            "different": 4571,
+            "max_abs": 0.0005999534332659096,
+            "mae": 1.0989406717953898e-06,
+            "p99": 6.950285751372614e-09,
+            "relative_l2": 0.08552260590458931
+          },
+          "full_vocab_target_logprob_nats": {
+            "count": 240,
+            "different": 196,
+            "max_abs": 0.2993559661253986,
+            "mae": 0.05547887161793284,
+            "p99": 0.23507705490494601,
+            "relative_l2": 0.007074323703090502
+          }
+        }
+      },
+      "extra_divisors_before": {
+        "isolated": 25,
+        "packed": 29
+      },
+      "extra_divisor_after": 1,
+      "target_logits_byte_identical_to_original_within_layout": true
+    }
+  }
+}

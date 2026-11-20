@@ -1,0 +1,895 @@
+{
+  "acceptance": null,
+  "model": {
+    "name": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "architecture": "Qwen3.5",
+    "size": "0.8B"
+  },
+  "workload": {
+    "events": {
+      "preflight": 8,
+      "formal": 100
+    },
+    "microbatch_size": 4,
+    "updates": 1,
+    "scope": "text-only full pretrained model, BF16 frozen base, FP32 rank-8 LoRA on final text MLP down projection",
+    "document_boundaries": "one document per row, active EOS, right padding, explicit same per-document positions; no document packing",
+    "settings": "case-local tokenizer aliases PAD to EOS. The original native LM collator plus completion mask is compared with attention-aware labels under the same forward inputs. Some completions add deterministic sentence-ending punctuation to create unequal valid targets across microbatches.",
+    "reference": "explicit manual per-document targets and padding, CPU FP64 full-vocabulary CE differentiated through same native accelerator forward; mean of microbatch means matches installed native Trainer for this model.",
+    "dataset_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+    "adapter_coordinates": 36864
+  },
+  "formal": {
+    "ascend": {
+      "gate": "verified",
+      "phase": "formal",
+      "side": "ascend",
+      "vocabulary": 248320,
+      "events": 100,
+      "total_expected_targets": 240,
+      "physical_padding_positions": 211,
+      "active_eos_expected": 100,
+      "active_eos": {
+        "native": 0,
+        "mask-aware": 100,
+        "reference": 100
+      },
+      "unique_document_rows": 100,
+      "trainable_parameters": [
+        {
+          "size": 28672,
+          "name": "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight"
+        },
+        {
+          "size": 8192,
+          "name": "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight"
+        }
+      ],
+      "frozen_parameters": 473,
+      "raw_logit_pairing": "all full-vocabulary target rows bitwise equal among original, candidate and independent reference, on this host",
+      "eos_nll_mean_nats": 3.3989839379411255,
+      "training_objectives": {
+        "native": {
+          "trainer_loss": 1.9742597341537476,
+          "independent_micro_mean": 1.9742606391724575,
+          "largest_micro_error_nats": 1.447384605945956e-06,
+          "active_targets": 140,
+          "per_micro_active_counts": [
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5
+          ]
+        },
+        "mask-aware": {
+          "trainer_loss": 2.573063611984253,
+          "independent_micro_mean": 2.573064486680344,
+          "largest_micro_error_nats": 1.2651767637983369e-06,
+          "active_targets": 240,
+          "per_micro_active_counts": [
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9
+          ]
+        },
+        "reference": {
+          "trainer_loss": 2.5730645656585693,
+          "independent_micro_mean": 2.573064486680344,
+          "largest_micro_error_nats": 1.1448307990491458e-07,
+          "active_targets": 240,
+          "per_micro_active_counts": [
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9
+          ]
+        }
+      },
+      "arrays": {
+        "mask-aware-vs-reference": {
+          "gradient": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 5.250796675682068e-06,
+              "rmse": 1.1410332830618989e-07,
+              "relative_l2": 2.2191924547447154e-06,
+              "bitwise_equal": false
+            }
+          ],
+          "after": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": 0.0,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 5.820766091346741e-11,
+              "rmse": 3.279229782005122e-12,
+              "relative_l2": 1.0930799111896744e-08,
+              "bitwise_equal": false
+            }
+          ],
+          "expavg": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 5.25033101439476e-07,
+              "rmse": 1.1412917666936623e-08,
+              "relative_l2": 2.219695138361814e-06,
+              "bitwise_equal": false
+            }
+          ],
+          "expavgsq": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 5.302354111336172e-10,
+              "rmse": 8.266266484680824e-12,
+              "relative_l2": 1.1145487196657201e-06,
+              "bitwise_equal": false
+            }
+          ]
+        },
+        "native-vs-mask-aware": {
+          "gradient": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 0.28607340157032013,
+              "rmse": 0.037099619902554046,
+              "relative_l2": 0.7215494482289732,
+              "bitwise_equal": false
+            }
+          ],
+          "after": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": 0.0,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 0.0005999999702908099,
+              "rmse": 0.0002862808651376708,
+              "relative_l2": 0.9542724465637359,
+              "bitwise_equal": false
+            }
+          ],
+          "expavg": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 0.028607341460883617,
+              "rmse": 0.0037099620486139074,
+              "relative_l2": 0.7215494464056617,
+              "bitwise_equal": false
+            }
+          ],
+          "expavgsq": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 9.234023673343472e-05,
+              "rmse": 5.4922483536256084e-06,
+              "relative_l2": 0.7405251562134266,
+              "bitwise_equal": false
+            }
+          ]
+        }
+      },
+      "adamw_from_observed_gradients": {
+        "native": [
+          {
+            "after": {
+              "coordinates": 28672,
+              "max_abs": 1.2583658108578089e-09,
+              "rmse": 3.077388548310047e-10,
+              "relative_l2": 3.2135142956146165e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            }
+          },
+          {
+            "after": {
+              "coordinates": 8192,
+              "max_abs": 8.456107721595968e-11,
+              "rmse": 2.5155165096698248e-11,
+              "relative_l2": 8.385105404570304e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "max_abs": 1.1175870957835787e-09,
+              "rmse": 1.5545401340510367e-10,
+              "relative_l2": 3.033483564615615e-08,
+              "bitwise_equal": false
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "max_abs": 9.197654993859349e-12,
+              "rmse": 4.096173302306231e-13,
+              "relative_l2": 5.858792526466323e-08,
+              "bitwise_equal": false
+            }
+          }
+        ],
+        "mask-aware": [
+          {
+            "after": {
+              "coordinates": 28672,
+              "max_abs": 1.2583658108578089e-09,
+              "rmse": 3.077388548310047e-10,
+              "relative_l2": 3.2135142956146165e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            }
+          },
+          {
+            "after": {
+              "coordinates": 8192,
+              "max_abs": 8.609628277238962e-11,
+              "rmse": 2.5148025033288093e-11,
+              "relative_l2": 8.382700016361663e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "max_abs": 1.1175870957835787e-09,
+              "rmse": 1.6031720129735856e-10,
+              "relative_l2": 3.118004670709819e-08,
+              "bitwise_equal": false
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "max_abs": 1.1724984427374102e-11,
+              "rmse": 4.593328336975291e-13,
+              "relative_l2": 6.193229324327666e-08,
+              "bitwise_equal": false
+            }
+          }
+        ],
+        "reference": [
+          {
+            "after": {
+              "coordinates": 28672,
+              "max_abs": 1.2583658108578089e-09,
+              "rmse": 3.077388548310047e-10,
+              "relative_l2": 3.2135142956146165e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            }
+          },
+          {
+            "after": {
+              "coordinates": 8192,
+              "max_abs": 8.609628277238962e-11,
+              "rmse": 2.510849600988918e-11,
+              "relative_l2": 8.36952363598844e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "max_abs": 1.1175870957835787e-09,
+              "rmse": 1.602652722986984e-10,
+              "relative_l2": 3.116994817964351e-08,
+              "bitwise_equal": false
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "max_abs": 1.1724984427374102e-11,
+              "rmse": 4.592413247376886e-13,
+              "relative_l2": 6.191995591871287e-08,
+              "bitwise_equal": false
+            }
+          }
+        ]
+      },
+      "runtime": {
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "torch": "2.9.0+cpu",
+        "accelerator_runtime": "2.9.0.post2"
+      },
+      "acceptance": null
+    },
+    "b200": {
+      "gate": "verified",
+      "phase": "formal",
+      "side": "b200",
+      "vocabulary": 248320,
+      "events": 100,
+      "total_expected_targets": 240,
+      "physical_padding_positions": 211,
+      "active_eos_expected": 100,
+      "active_eos": {
+        "native": 0,
+        "mask-aware": 100,
+        "reference": 100
+      },
+      "unique_document_rows": 100,
+      "trainable_parameters": [
+        {
+          "size": 28672,
+          "name": "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_A.default.weight"
+        },
+        {
+          "size": 8192,
+          "name": "base_model.model.model.language_model.layers.23.mlp.down_proj.lora_B.default.weight"
+        }
+      ],
+      "frozen_parameters": 473,
+      "raw_logit_pairing": "all full-vocabulary target rows bitwise equal among original, candidate and independent reference, on this host",
+      "eos_nll_mean_nats": 3.3975574037218155,
+      "training_objectives": {
+        "native": {
+          "trainer_loss": 1.9727438688278198,
+          "independent_micro_mean": 1.9727447241009497,
+          "largest_micro_error_nats": 9.385736401412714e-07,
+          "active_targets": 140,
+          "per_micro_active_counts": [
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5,
+            6,
+            6,
+            5,
+            6,
+            5
+          ]
+        },
+        "mask-aware": {
+          "trainer_loss": 2.571610927581787,
+          "independent_micro_mean": 2.571611981564303,
+          "largest_micro_error_nats": 9.92444951997129e-07,
+          "active_targets": 240,
+          "per_micro_active_counts": [
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9
+          ]
+        },
+        "reference": {
+          "trainer_loss": 2.5716116428375244,
+          "independent_micro_mean": 2.571611981564303,
+          "largest_micro_error_nats": 1.1565992075190934e-07,
+          "active_targets": 240,
+          "per_micro_active_counts": [
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9,
+            10,
+            10,
+            9,
+            10,
+            9
+          ]
+        }
+      },
+      "arrays": {
+        "mask-aware-vs-reference": {
+          "gradient": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 7.059425115585327e-07,
+              "rmse": 1.7901196512863374e-08,
+              "relative_l2": 3.4778053106120996e-07,
+              "bitwise_equal": false
+            }
+          ],
+          "after": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": 0.0,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 5.820766091346741e-11,
+              "rmse": 1.9293296132306226e-12,
+              "relative_l2": 6.431119239717855e-09,
+              "bitwise_equal": false
+            }
+          ],
+          "expavg": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 7.05476850271225e-08,
+              "rmse": 1.7903397686277792e-09,
+              "relative_l2": 3.4782328945011666e-07,
+              "bitwise_equal": false
+            }
+          ],
+          "expavgsq": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 8.003553375601768e-11,
+              "rmse": 1.0970568364835315e-12,
+              "relative_l2": 1.4764782910577484e-07,
+              "bitwise_equal": false
+            }
+          ]
+        },
+        "native-vs-mask-aware": {
+          "gradient": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 0.2860787361860275,
+              "rmse": 0.0370932959982562,
+              "relative_l2": 0.7206404460966814,
+              "bitwise_equal": false
+            }
+          ],
+          "after": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": 0.0,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 0.0005999999411869794,
+              "rmse": 0.00028651120115107234,
+              "relative_l2": 0.9550403858935029,
+              "bitwise_equal": false
+            }
+          ],
+          "expavg": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 0.028607874177396297,
+              "rmse": 0.0037093296606653943,
+              "relative_l2": 0.7206404464754699,
+              "bitwise_equal": false
+            }
+          ],
+          "expavgsq": [
+            {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            {
+              "coordinates": 8192,
+              "max_abs": 9.251840310753323e-05,
+              "rmse": 5.495572820940583e-06,
+              "relative_l2": 0.7396238474736911,
+              "bitwise_equal": false
+            }
+          ]
+        }
+      },
+      "adamw_from_observed_gradients": {
+        "native": [
+          {
+            "after": {
+              "coordinates": 28672,
+              "max_abs": 1.2583658108578089e-09,
+              "rmse": 3.077388548310047e-10,
+              "relative_l2": 3.213514295614615e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            }
+          },
+          {
+            "after": {
+              "coordinates": 8192,
+              "max_abs": 8.411730567734615e-11,
+              "rmse": 2.4960416428690115e-11,
+              "relative_l2": 8.320164250267478e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "max_abs": 1.1175870957835787e-09,
+              "rmse": 1.5966776465014714e-10,
+              "relative_l2": 3.1124702378858726e-08,
+              "bitwise_equal": false
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "max_abs": 8.086081920689013e-12,
+              "rmse": 4.205780096966411e-13,
+              "relative_l2": 6.003134601276033e-08,
+              "bitwise_equal": false
+            }
+          }
+        ],
+        "mask-aware": [
+          {
+            "after": {
+              "coordinates": 28672,
+              "max_abs": 1.2583658108578089e-09,
+              "rmse": 3.077388548310047e-10,
+              "relative_l2": 3.213514295614615e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            }
+          },
+          {
+            "after": {
+              "coordinates": 8192,
+              "max_abs": 8.727645917170485e-11,
+              "rmse": 2.5138164958928195e-11,
+              "relative_l2": 8.379414630328841e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "max_abs": 1.1175870957835787e-09,
+              "rmse": 1.518794558928341e-10,
+              "relative_l2": 2.950680868388688e-08,
+              "bitwise_equal": false
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "max_abs": 1.4803557387083402e-11,
+              "rmse": 4.551220263748766e-13,
+              "relative_l2": 6.125278146189203e-08,
+              "bitwise_equal": false
+            }
+          }
+        ],
+        "reference": [
+          {
+            "after": {
+              "coordinates": 28672,
+              "max_abs": 1.2583658108578089e-09,
+              "rmse": 3.077388548310047e-10,
+              "relative_l2": 3.213514295614615e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            },
+            "expavgsq": {
+              "coordinates": 28672,
+              "max_abs": 0.0,
+              "rmse": 0.0,
+              "relative_l2": null,
+              "bitwise_equal": true
+            }
+          },
+          {
+            "after": {
+              "coordinates": 8192,
+              "max_abs": 8.727645917170485e-11,
+              "rmse": 2.5106259757439432e-11,
+              "relative_l2": 8.368779529793371e-08,
+              "bitwise_equal": false
+            },
+            "expavg": {
+              "coordinates": 8192,
+              "max_abs": 1.1175870957835787e-09,
+              "rmse": 1.51934341883245e-10,
+              "relative_l2": 2.951747167772889e-08,
+              "bitwise_equal": false
+            },
+            "expavgsq": {
+              "coordinates": 8192,
+              "max_abs": 1.4803557387083402e-11,
+              "rmse": 4.550240509750469e-13,
+              "relative_l2": 6.123959528194239e-08,
+              "bitwise_equal": false
+            }
+          }
+        ]
+      },
+      "runtime": {
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "torch": "2.11.0+cu130",
+        "accelerator_runtime": "13.0"
+      },
+      "acceptance": null
+    }
+  },
+  "paired_mask_aware_cross_stack": {
+    "all_targets": {
+      "count": 240,
+      "mae_nats": 0.039540414239044745,
+      "p99_absolute_nats": 0.13699527376805934,
+      "max_absolute_nats": 0.19241109671725676
+    },
+    "eos_only": {
+      "count": 100,
+      "mae_nats": 0.04696723514040263,
+      "p99_absolute_nats": 0.16039076852201783,
+      "max_absolute_nats": 0.19241109671725676
+    },
+    "arrays": {
+      "gradient": {
+        "max_abs": 0.0011256784200668335,
+        "rmse": 8.58625656292042e-05
+      },
+      "after": {
+        "max_abs": 0.000599946710281074,
+        "rmse": 9.8783054222785e-06
+      },
+      "expavg": {
+        "max_abs": 0.00011256802827119827,
+        "rmse": 8.586256035613633e-06
+      },
+      "expavgsq": {
+        "max_abs": 4.681787686422467e-07,
+        "rmse": 1.2590424166548785e-08
+      }
+    }
+  },
+  "reference": "Full-vocabulary FP64 CE on the native forward; explicit per-document labels and padding; gradients returned to the same accelerator. Native per-microbatch mean is preserved.",
+  "cause": "The tested native collator masks every label equal to pad_token_id, including unpadded EOS when PAD uses the EOS ID. The case uses one document per row; packing and other label policies were not tested."
+}

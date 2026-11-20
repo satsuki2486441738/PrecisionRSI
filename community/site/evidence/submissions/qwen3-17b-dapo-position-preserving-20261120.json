@@ -1,0 +1,42 @@
+{
+  "scope": {
+    "model": "Qwen/Qwen3-1.7B",
+    "hardware": "Ascend 910C",
+    "framework": "TRL 1.18.2",
+    "transformers": "5.23.0",
+    "mode": "fixed DAPO trajectories",
+    "events": 100,
+    "continuations": 400,
+    "valid_action_tokens": 1430,
+    "updates": 10,
+    "first_shared_state_actions": 120
+  },
+  "candidate": {
+    "method": "Preserve each real example’s row in the wide scorer microbatch and mask padding rows before the objective.",
+    "acceptance": null
+  },
+  "metrics": {
+    "first_state_logprob_mae_nat": {
+      "baseline": 0.0338137993,
+      "candidate": 0
+    },
+    "sampled_gradient_rmse": {
+      "baseline": 4.56885837e-05,
+      "candidate": 7.4505634e-07
+    },
+    "sampled_update_rmse": {
+      "baseline": 3.21804154e-06,
+      "candidate": 4.47535724e-07
+    }
+  },
+  "limitations": {
+    "remaining_update_difference": "One q_proj coordinate still has opposite gradient signs after near cancellation.",
+    "historical_single_run_seconds": 44.646,
+    "candidate_single_run_seconds": 47.994,
+    "b200_candidate_training_run": false
+  },
+  "source_digests": {
+    "report_sha256": "db06f593fdf86d5b7126eabb4bd65f0f8219fa07b2e5bb2b0966b95757ad4a9f",
+    "independent_replay_sha256": "7ef20f07f6f21c446fa8c349fe2fe684de005e52b9ae24bd86a4075cd6fef4b0"
+  }
+}

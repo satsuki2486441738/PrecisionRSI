@@ -1,0 +1,871 @@
+{
+  "acceptance": null,
+  "model_revision": "7453bca97ca1e67754c4035a4b4c584e1c9dd725",
+  "workload": {
+    "preflight_events": 8,
+    "formal_events": 100,
+    "formal_targets_by_rank": [
+      66,
+      134
+    ],
+    "formal_microbatches_per_rank": 17,
+    "updates": 1,
+    "inventory": "FP32 r8 LoRA on final decoder feed_forward.w2, 81920 coordinates; BF16 base frozen"
+  },
+  "checks": {
+    "ascend": {
+      "phase": "formal",
+      "side": "ascend",
+      "acceptance": null,
+      "events": 100,
+      "targets": 200,
+      "vocab": 65536,
+      "rank_microbatch_counts": [
+        17,
+        17
+      ],
+      "rank_valid_tokens": [
+        66,
+        134
+      ],
+      "adapter_coordinates": 81920,
+      "runtimes": {
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "torch": "2.9.0+cpu",
+        "runtime": "2.9.0.post2"
+      },
+      "sources": {
+        "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+        "accelerator": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+        "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+        "model": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc"
+      },
+      "rank_forward_hashes": [
+        "a425e60a946b02e95f333b8d58db87752207436a47010a21237529543165d671",
+        "dfc55f124fe6c9ca851dd379f3bca91e3d1e2ee5b180d65881643464cd59eb27"
+      ],
+      "frozen_parameter_count": 148,
+      "global_fp64_loss": 4.417903849198708,
+      "local_mean_fp64_loss": 4.420389691929678,
+      "gradient_hypothesis_difference": {
+        "max_abs": 0.0015257952721348875,
+        "rmse": 0.00023510688480991239,
+        "exact": false,
+        "relative_l2": 0.03189434631923238
+      },
+      "arms": {
+        "native": {
+          "rank_denominators": [
+            [
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200
+            ],
+            [
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200
+            ]
+          ],
+          "rank_valid_tokens": [
+            66,
+            134
+          ],
+          "rank_native_contribution_sums": [
+            2.9222822189331055,
+            5.913524329662323
+          ],
+          "native_rank_average_loss": 4.417903274297714,
+          "offline_expected_loss": 4.417903849198708,
+          "native_minus_offline": -5.749009934774563e-07,
+          "rank_largest_micro_loss_error": [
+            5.164510114008536e-08,
+            7.265226614761033e-08
+          ],
+          "native_optimizer_logged_rank_losses": [
+            2.9222822189331055,
+            5.913524627685547
+          ],
+          "reduction": [
+            {
+              "native_ddp": true,
+              "backend": "hccl",
+              "world_size": 2,
+              "rank": 0,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            },
+            {
+              "native_ddp": true,
+              "backend": "hccl",
+              "world_size": 2,
+              "rank": 1,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            }
+          ],
+          "replicas_bitwise_equal": true,
+          "math_agrees": true,
+          "tensors": {
+            "base_model.model.model.layers.15.feed_forward.w2.lora_A.default.weight": {
+              "coordinates": 65536,
+              "gradient_vs_global": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572434e-10,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572434e-10,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              },
+              "second_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              }
+            },
+            "base_model.model.model.layers.15.feed_forward.w2.lora_B.default.weight": {
+              "coordinates": 16384,
+              "gradient_vs_global": {
+                "max_abs": 9.313225746154785e-10,
+                "rmse": 2.060294727176406e-10,
+                "exact": false,
+                "relative_l2": 2.794973596854966e-08
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 0.0015257943408123129,
+                "rmse": 0.00023510688061993348,
+                "exact": false,
+                "relative_l2": 0.031882526836936244
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 9.313225746154785e-10,
+                "rmse": 2.060294727176406e-10,
+                "exact": false,
+                "relative_l2": 2.794973596854966e-08
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 9.216092748979762e-11,
+                "rmse": 2.421843021961541e-11,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 9.216092748979762e-11,
+                "rmse": 2.421842837583332e-11,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 2.7939677307853295e-10,
+                "rmse": 2.2393369817305982e-11,
+                "exact": false
+              },
+              "second_moment": {
+                "max_abs": 1.0415618245306296e-13,
+                "rmse": 6.48493157155557e-15,
+                "exact": false
+              }
+            }
+          }
+        },
+        "local-denominator": {
+          "rank_denominators": [
+            [
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66
+            ],
+            [
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134
+            ]
+          ],
+          "rank_valid_tokens": [
+            66,
+            134
+          ],
+          "rank_native_contribution_sums": [
+            4.4277003556489944,
+            4.413077801465988
+          ],
+          "native_rank_average_loss": 4.420389078557491,
+          "offline_expected_loss": 4.420389691929678,
+          "native_minus_offline": -6.133721868195607e-07,
+          "rank_largest_micro_loss_error": [
+            8.312583799074957e-08,
+            6.173812300280801e-08
+          ],
+          "native_optimizer_logged_rank_losses": [
+            4.427700996398926,
+            4.4130778312683105
+          ],
+          "reduction": [
+            {
+              "native_ddp": true,
+              "backend": "hccl",
+              "world_size": 2,
+              "rank": 0,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            },
+            {
+              "native_ddp": true,
+              "backend": "hccl",
+              "world_size": 2,
+              "rank": 1,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            }
+          ],
+          "replicas_bitwise_equal": true,
+          "math_agrees": true,
+          "tensors": {
+            "base_model.model.model.layers.15.feed_forward.w2.lora_A.default.weight": {
+              "coordinates": 65536,
+              "gradient_vs_global": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572434e-10,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572434e-10,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              },
+              "second_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              }
+            },
+            "base_model.model.model.layers.15.feed_forward.w2.lora_B.default.weight": {
+              "coordinates": 16384,
+              "gradient_vs_global": {
+                "max_abs": 0.001473098061978817,
+                "rmse": 0.0002325073168182674,
+                "exact": false,
+                "relative_l2": 0.03154169173035058
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 9.162427646064453e-05,
+                "rmse": 1.3394596367722194e-05,
+                "exact": false,
+                "relative_l2": 0.0018164231392878418
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 9.162427646064453e-05,
+                "rmse": 1.3394596367722194e-05,
+                "exact": false,
+                "relative_l2": 0.0018164231392878418
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 8.37435969094219e-11,
+                "rmse": 2.4102443067559667e-11,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 0.0005994518305125687,
+                "rmse": 1.5278663540871525e-05,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 1.3969838697294734e-10,
+                "rmse": 2.2464557704268417e-11,
+                "exact": false
+              },
+              "second_moment": {
+                "max_abs": 1.4633982803047014e-13,
+                "rmse": 6.686323507191048e-15,
+                "exact": false
+              }
+            }
+          }
+        }
+      },
+      "gate": "verified"
+    },
+    "b200": {
+      "phase": "formal",
+      "side": "b200",
+      "acceptance": null,
+      "events": 100,
+      "targets": 200,
+      "vocab": 65536,
+      "rank_microbatch_counts": [
+        17,
+        17
+      ],
+      "rank_valid_tokens": [
+        66,
+        134
+      ],
+      "adapter_coordinates": 81920,
+      "runtimes": {
+        "transformers": "5.23.0",
+        "accelerate": "1.16.0",
+        "peft": "0.22.0",
+        "torch": "2.11.0+cu130",
+        "runtime": "13.0"
+      },
+      "sources": {
+        "trainer": "da5a792ffed97570b8d936f19b7090cbac4ff699b5e29b620a67ba1033d20c7d",
+        "accelerator": "3e61d37b527b30cfbadc6bb35c9dd72cfc9fb22709fec8cc3c8eb59336f5fce0",
+        "peft": "c80fc5702d6df00a6f84756f3fbfdc5d495342bc8027dd03d09b993112bde8d2",
+        "model": "c4940553e30be672ec8bea4290138f2e4c98944be96c9361f4154f4550e3aebc"
+      },
+      "rank_forward_hashes": [
+        "e9e5f9ef304e0fd2ff8f6c79033376519f7b41ada49d42ee0cdb0f447676e938",
+        "fe25330439031dcd069496eb71ff9d8e2414c82c78b6cb06383f1c7ad91f43f9"
+      ],
+      "frozen_parameter_count": 148,
+      "global_fp64_loss": 4.409502198026952,
+      "local_mean_fp64_loss": 4.414408856846553,
+      "gradient_hypothesis_difference": {
+        "max_abs": 0.001547085795229726,
+        "rmse": 0.00023722534707580487,
+        "exact": false,
+        "relative_l2": 0.03219937151934423
+      },
+      "arms": {
+        "native": {
+          "rank_denominators": [
+            [
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200
+            ],
+            [
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200,
+              200
+            ]
+          ],
+          "rank_valid_tokens": [
+            66,
+            134
+          ],
+          "rank_native_contribution_sums": [
+            2.923034429550171,
+            5.89596962928772
+          ],
+          "native_rank_average_loss": 4.409502029418945,
+          "offline_expected_loss": 4.409502198026952,
+          "native_minus_offline": -1.6860800666762543e-07,
+          "rank_largest_micro_loss_error": [
+            2.4014919663972734e-08,
+            3.54282201353584e-08
+          ],
+          "native_optimizer_logged_rank_losses": [
+            2.92303466796875,
+            5.895969867706299
+          ],
+          "reduction": [
+            {
+              "native_ddp": true,
+              "backend": "nccl",
+              "world_size": 2,
+              "rank": 0,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            },
+            {
+              "native_ddp": true,
+              "backend": "nccl",
+              "world_size": 2,
+              "rank": 1,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            }
+          ],
+          "replicas_bitwise_equal": true,
+          "math_agrees": true,
+          "tensors": {
+            "base_model.model.model.layers.15.feed_forward.w2.lora_A.default.weight": {
+              "coordinates": 65536,
+              "gradient_vs_global": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572436e-10,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572436e-10,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              },
+              "second_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              }
+            },
+            "base_model.model.model.layers.15.feed_forward.w2.lora_B.default.weight": {
+              "coordinates": 16384,
+              "gradient_vs_global": {
+                "max_abs": 1.862645149230957e-09,
+                "rmse": 2.079367763722871e-10,
+                "exact": false,
+                "relative_l2": 2.8223938114026912e-08
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 0.001547085795229726,
+                "rmse": 0.0002372253464532021,
+                "exact": false,
+                "relative_l2": 0.03222487644285714
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 1.862645149230957e-09,
+                "rmse": 2.079367763722871e-10,
+                "exact": false,
+                "relative_l2": 2.8223938114026912e-08
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 7.612070739362875e-11,
+                "rmse": 2.4116276224007362e-11,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 7.612072300614003e-11,
+                "rmse": 2.4116275046706322e-11,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 1.862645159639298e-10,
+                "rmse": 2.218647617623101e-11,
+                "exact": false
+              },
+              "second_moment": {
+                "max_abs": 9.518349552719533e-14,
+                "rmse": 6.4150038688130156e-15,
+                "exact": false
+              }
+            }
+          }
+        },
+        "local-denominator": {
+          "rank_denominators": [
+            [
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66,
+              66
+            ],
+            [
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134,
+              134
+            ]
+          ],
+          "rank_valid_tokens": [
+            66,
+            134
+          ],
+          "rank_native_contribution_sums": [
+            4.428839989006519,
+            4.399977266788483
+          ],
+          "native_rank_average_loss": 4.414408627897501,
+          "offline_expected_loss": 4.414408856846553,
+          "native_minus_offline": -2.289490517171089e-07,
+          "rank_largest_micro_loss_error": [
+            4.577277995521101e-08,
+            2.99006429616e-08
+          ],
+          "native_optimizer_logged_rank_losses": [
+            4.428839683532715,
+            4.399977207183838
+          ],
+          "reduction": [
+            {
+              "native_ddp": true,
+              "backend": "nccl",
+              "world_size": 2,
+              "rank": 0,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            },
+            {
+              "native_ddp": true,
+              "backend": "nccl",
+              "world_size": 2,
+              "rank": 1,
+              "parameters": 2,
+              "bytes": 327680,
+              "comm_hook": null,
+              "wrapper": "DistributedDataParallel"
+            }
+          ],
+          "replicas_bitwise_equal": true,
+          "math_agrees": true,
+          "tensors": {
+            "base_model.model.model.layers.15.feed_forward.w2.lora_A.default.weight": {
+              "coordinates": 65536,
+              "gradient_vs_global": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true,
+                "relative_l2": null
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572436e-10,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 6.784442816570868e-10,
+                "rmse": 2.1118945692572436e-10,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              },
+              "second_moment": {
+                "max_abs": 0.0,
+                "rmse": 0.0,
+                "exact": true
+              }
+            },
+            "base_model.model.model.layers.15.feed_forward.w2.lora_B.default.weight": {
+              "coordinates": 16384,
+              "gradient_vs_global": {
+                "max_abs": 0.0014825370162725449,
+                "rmse": 0.00023516226939099765,
+                "exact": false,
+                "relative_l2": 0.031919343243844864
+              },
+              "gradient_vs_local_prediction": {
+                "max_abs": 8.996204636933791e-05,
+                "rmse": 1.4096069420539565e-05,
+                "exact": false,
+                "relative_l2": 0.0019148210855134482
+              },
+              "gradient_vs_selected_objective": {
+                "max_abs": 8.996204636933791e-05,
+                "rmse": 1.4096069420539565e-05,
+                "exact": false,
+                "relative_l2": 0.0019148210855134482
+              },
+              "step_vs_actual_gradient": {
+                "max_abs": 8.444933646692757e-11,
+                "rmse": 2.3921200053634266e-11,
+                "exact": false
+              },
+              "step_vs_selected_gradient": {
+                "max_abs": 0.0005996784293613044,
+                "rmse": 1.2375064365444761e-05,
+                "exact": false
+              },
+              "first_moment": {
+                "max_abs": 2.7939677307853295e-10,
+                "rmse": 2.23606499688522e-11,
+                "exact": false
+              },
+              "second_moment": {
+                "max_abs": 1.0916401022030336e-13,
+                "rmse": 6.565249430386118e-15,
+                "exact": false
+              }
+            }
+          }
+        }
+      },
+      "gate": "verified"
+    }
+  },
+  "native_cross_stack": {
+    "scores": {
+      "target_count": 200,
+      "side_a_nll_nat_per_token": 4.417903849198708,
+      "side_b_nll_nat_per_token": 4.409502198026953,
+      "nll_abs_diff_nat_per_token": 0.008401651171754843,
+      "mae_nat": 0.06531955431789527,
+      "p99_nat": 0.24482782687518514,
+      "p99_method": "global linear h=0.99*(N-1)",
+      "max_abs_nat": 0.28615861053507174,
+      "max_coordinate": [
+        9,
+        43,
+        879
+      ]
+    },
+    "array_metrics": {
+      "gradient": {
+        "max_abs": 0.0007208790630102158,
+        "rmse": 4.6765098709840896e-05,
+        "bitwise_equal": false
+      },
+      "after": {
+        "max_abs": 0.0005999645218253136,
+        "rmse": 1.612111857046333e-05,
+        "bitwise_equal": false
+      },
+      "expavg": {
+        "max_abs": 7.208785973489285e-05,
+        "rmse": 4.676509945497653e-06,
+        "bitwise_equal": false
+      },
+      "expavgsq": {
+        "max_abs": 2.6411157705297228e-08,
+        "rmse": 8.480223355977048e-10,
+        "bitwise_equal": false
+      }
+    }
+  },
+  "local_vs_global": {
+    "ascend": {
+      "gradient": {
+        "max_abs": 0.0014730971306562424,
+        "rmse": 0.00010398043127048459,
+        "bitwise_equal": false
+      },
+      "after": {
+        "max_abs": 0.0005999880086164922,
+        "rmse": 2.0876336336102613e-05,
+        "bitwise_equal": false
+      },
+      "expavg": {
+        "max_abs": 0.0001473097363486886,
+        "rmse": 1.0398043397475608e-05,
+        "bitwise_equal": false
+      },
+      "expavgsq": {
+        "max_abs": 7.256437584146624e-08,
+        "rmse": 2.017298971108354e-09,
+        "bitwise_equal": false
+      }
+    },
+    "b200": {
+      "gradient": {
+        "max_abs": 0.0014825370162725449,
+        "rmse": 0.00010516776374288247,
+        "bitwise_equal": false
+      },
+      "after": {
+        "max_abs": 0.000599987804889679,
+        "rmse": 2.266299706927676e-05,
+        "bitwise_equal": false
+      },
+      "expavg": {
+        "max_abs": 0.00014825374819338322,
+        "rmse": 1.0516776698064475e-05,
+        "bitwise_equal": false
+      },
+      "expavgsq": {
+        "max_abs": 7.785934030835051e-08,
+        "rmse": 2.0818288953455553e-09,
+        "bitwise_equal": false
+      }
+    }
+  },
+  "scope": "Single-node SFT, two data-parallel ranks, one AdamW update of final feed-forward LoRA. CPU FP64 loss evaluated on each native forward, differentiated on each local accelerator, then exactly paired and summed offline."
+}

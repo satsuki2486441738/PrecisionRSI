@@ -1,0 +1,899 @@
+{
+  "schema_version": 1,
+  "title": "TRL GRPO · Qwen3.5-0.8B 在线精度评测",
+  "dataset": "precision-batch-v1",
+  "dataset_sha256": "904f253feecb06698d403ab2dc84a41907c126a6de4717c48a01a975bc8e6a77",
+  "model_weight_sha256": "c9b36ae3f1c961447b09b9b5ab3385b7a9e6af18bdf52da2610bcaafe21d4658",
+  "formal": {
+    "mode": "formal",
+    "target": {
+      "mode": "formal",
+      "optimizer_steps": 10,
+      "events": 100,
+      "scored_completion_tokens": 400,
+      "strict_a_b_count": 122,
+      "other_decoded_count": 278,
+      "mixed_groups_all_actions": 13,
+      "mixed_groups_a_b_only": 10,
+      "mixed_nonzero_reference_before_aggregation": 13,
+      "group_controls": {
+        "mixed": 13,
+        "all_wrong": 81,
+        "all_correct": 6
+      },
+      "post_update_native_policy_rollouts": 10,
+      "trainable_tensor_sample_width": [
+        1024,
+        1024,
+        128,
+        256
+      ],
+      "updates_with_nonzero_observed_gradients": 3,
+      "updates_with_nonzero_observed_parameter_deltas": 10,
+      "native_execution": {
+        "runtime": {
+          "torch": "2.9.0",
+          "trl": "1.18.2",
+          "transformers": "5.23.0",
+          "accelerate": "1.14.0",
+          "datasets": "5.0.1",
+          "numpy": "1.26.4",
+          "tokenizers": "0.23.1",
+          "pyarrow": "24.0.0",
+          "torch-npu": "2.9.0.post2"
+        },
+        "device": "Ascend 910C",
+        "backend": "hccl",
+        "initial_state_slice_sha256": "5d550ba8e71c72f42e75efb96cd51f9bd22d89c77e9efe72ab6d07436b3f40db",
+        "native_stock_tie": [
+          true,
+          true
+        ],
+        "scorer_backend": "torch",
+        "scorer_source_sha256": "64dc966dfbb4ddc730a089fdebb204b9cf37b984eb56c35fb2b641739b6e8074",
+        "model_source_sha256": "1a475c45d900e0bfb06b9b245257d7f3234fd247474fcbd3363b03430e504a68",
+        "layer_types": [
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention"
+        ],
+        "linear_dispatch": {
+          "causal_conv1d_fn": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_fn"
+          },
+          "causal_conv1d_update": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_update"
+          },
+          "torch_chunk_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_chunk_gated_delta_rule"
+          },
+          "torch_recurrent_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_recurrent_gated_delta_rule"
+          }
+        },
+        "pnames": [
+          "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+          "model.language_model.layers.23.self_attn.o_proj.weight",
+          "model.language_model.norm.weight",
+          "model.language_model.embed_tokens.weight"
+        ],
+        "trainable_params": 752393024,
+        "frozen_vision_params": 100592896,
+        "trainer_source_sha256": "9a47a92f434b90657bff56897ee52aae7a70a615ed3901a9bc0c1cfabe06533e",
+        "collector_sha256": "f59fd6705a583f4e633066ad20e32472da3bb4a6496ec4e139dfa284956983ec"
+      },
+      "fp64_independent": {
+        "group_advantage": {
+          "count": 400,
+          "exact_count": 348,
+          "mae": 2.942959841378823e-09,
+          "p99": 1.0976980169274952e-07,
+          "max_abs": 1.0976980169274952e-07,
+          "rmse": 1.5686575985551835e-08,
+          "l2": 3.137315197110367e-07,
+          "cosine": 0.9999999999999994
+        },
+        "grpo_surrogate": {
+          "count": 20,
+          "exact_count": 16,
+          "mae": 1.3411045274303034e-09,
+          "p99": 1.078844086152552e-08,
+          "max_abs": 1.1920929124387136e-08,
+          "rmse": 3.3320009864667044e-09,
+          "l2": 1.4901161413671817e-08,
+          "cosine": 0.11313708498984758
+        },
+        "d_surrogate_d_logp": {
+          "count": 400,
+          "exact_count": 348,
+          "mae": 1.6602696738254873e-10,
+          "p99": 5.488490079086361e-09,
+          "max_abs": 5.488490079086361e-09,
+          "rmse": 8.132879404425231e-10,
+          "l2": 1.6265758808850466e-08,
+          "cosine": 0.9999999999999997
+        },
+        "full_vocab_target_logp": {
+          "count": 20,
+          "exact_count": 0,
+          "mae": 5.8470156538703574e-08,
+          "p99": 2.021190677226059e-07,
+          "max_abs": 2.038040740615088e-07,
+          "rmse": 8.391681976571854e-08,
+          "l2": 3.7528742690348934e-07,
+          "cosine": 0.9999999999999991
+        },
+        "full_vocab_entropy": {
+          "count": 20,
+          "exact_count": 0,
+          "mae": 3.156232661005731e-06,
+          "p99": 7.588037358630117e-06,
+          "max_abs": 7.645942073253309e-06,
+          "rmse": 3.917652205567636e-06,
+          "l2": 1.7520273287702423e-05,
+          "cosine": 0.9999999999946546
+        },
+        "adam_m_update": {
+          "count": 48640,
+          "exact_count": 5712,
+          "mae": 5.2993608171679906e-11,
+          "p99": 1.2107193476940115e-09,
+          "max_abs": 8.940696710757479e-09,
+          "rmse": 2.5507090839823635e-10,
+          "l2": 5.6254557385619284e-08,
+          "cosine": 1.0000000000000024
+        },
+        "adam_v_update": {
+          "count": 48640,
+          "exact_count": 138,
+          "mae": 3.453784691732797e-13,
+          "p99": 9.094947017729282e-12,
+          "max_abs": 8.80017976892522e-11,
+          "rmse": 2.1468200330353487e-12,
+          "l2": 4.734699519571669e-10,
+          "cosine": 0.9999999999999993
+        },
+        "adam_weight_after": {
+          "count": 48640,
+          "exact_count": 0,
+          "mae": 5.538335984129841e-09,
+          "p99": 1.629331669583678e-07,
+          "max_abs": 3.001720108031236e-07,
+          "rmse": 2.7461620822143204e-08,
+          "l2": 6.056517123581405e-06,
+          "cosine": 1.000000000000004
+        }
+      }
+    },
+    "peer": {
+      "mode": "formal",
+      "optimizer_steps": 10,
+      "events": 100,
+      "scored_completion_tokens": 400,
+      "strict_a_b_count": 398,
+      "other_decoded_count": 2,
+      "mixed_groups_all_actions": 9,
+      "mixed_groups_a_b_only": 9,
+      "mixed_nonzero_reference_before_aggregation": 9,
+      "group_controls": {
+        "mixed": 9,
+        "all_wrong": 45,
+        "all_correct": 46
+      },
+      "post_update_native_policy_rollouts": 10,
+      "trainable_tensor_sample_width": [
+        1024,
+        1024,
+        128,
+        256
+      ],
+      "updates_with_nonzero_observed_gradients": 1,
+      "updates_with_nonzero_observed_parameter_deltas": 10,
+      "native_execution": {
+        "runtime": {
+          "torch": "2.9.0+cu128",
+          "trl": "1.18.2",
+          "transformers": "5.23.0",
+          "accelerate": "1.14.0",
+          "datasets": "5.0.1",
+          "numpy": "1.26.4",
+          "tokenizers": "0.23.1",
+          "pyarrow": "24.0.0"
+        },
+        "device": "NVIDIA B200",
+        "backend": "nccl",
+        "initial_state_slice_sha256": "5d550ba8e71c72f42e75efb96cd51f9bd22d89c77e9efe72ab6d07436b3f40db",
+        "native_stock_tie": [
+          true,
+          true
+        ],
+        "scorer_backend": "triton",
+        "scorer_source_sha256": "64dc966dfbb4ddc730a089fdebb204b9cf37b984eb56c35fb2b641739b6e8074",
+        "model_source_sha256": "1a475c45d900e0bfb06b9b245257d7f3234fd247474fcbd3363b03430e504a68",
+        "layer_types": [
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention"
+        ],
+        "linear_dispatch": {
+          "causal_conv1d_fn": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_fn"
+          },
+          "causal_conv1d_update": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_update"
+          },
+          "torch_chunk_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_chunk_gated_delta_rule"
+          },
+          "torch_recurrent_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_recurrent_gated_delta_rule"
+          }
+        },
+        "pnames": [
+          "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+          "model.language_model.layers.23.self_attn.o_proj.weight",
+          "model.language_model.norm.weight",
+          "model.language_model.embed_tokens.weight"
+        ],
+        "trainable_params": 752393024,
+        "frozen_vision_params": 100592896,
+        "trainer_source_sha256": "9a47a92f434b90657bff56897ee52aae7a70a615ed3901a9bc0c1cfabe06533e",
+        "collector_sha256": "f59fd6705a583f4e633066ad20e32472da3bb4a6496ec4e139dfa284956983ec"
+      },
+      "fp64_independent": {
+        "group_advantage": {
+          "count": 400,
+          "exact_count": 364,
+          "mae": 6.447747231963508e-10,
+          "p99": 9.439487858031725e-09,
+          "max_abs": 9.439487858031725e-09,
+          "rmse": 2.166663264511746e-09,
+          "l2": 4.333326529023491e-08,
+          "cosine": 0.9999999999999999
+        },
+        "grpo_surrogate": {
+          "count": 20,
+          "exact_count": 18,
+          "mae": 7.450580701007237e-10,
+          "p99": 1.0222196718340226e-08,
+          "max_abs": 1.1920929116060463e-08,
+          "rmse": 2.7476383993202306e-09,
+          "l2": 1.2287812476937495e-08,
+          "cosine": 0.9170700562532351
+        },
+        "d_surrogate_d_logp": {
+          "count": 400,
+          "exact_count": 364,
+          "mae": 6.918380535993196e-11,
+          "p99": 1.962090517837467e-09,
+          "max_abs": 1.962090517837467e-09,
+          "rmse": 3.086817099812096e-10,
+          "l2": 6.1736341996241924e-09,
+          "cosine": 0.9999999999999996
+        },
+        "full_vocab_target_logp": {
+          "count": 20,
+          "exact_count": 0,
+          "mae": 2.2970515800579962e-08,
+          "p99": 2.9171797244487126e-07,
+          "max_abs": 3.3278588773555384e-07,
+          "rmse": 7.885535369077135e-08,
+          "l2": 3.5265186248470735e-07,
+          "cosine": 0.9999999999999912
+        },
+        "full_vocab_entropy": {
+          "count": 20,
+          "exact_count": 0,
+          "mae": 6.599815507790651e-06,
+          "p99": 1.8450596991499415e-05,
+          "max_abs": 1.9597005959326452e-05,
+          "rmse": 7.88725358345475e-06,
+          "l2": 3.5272870336767266e-05,
+          "cosine": 0.999999999607196
+        },
+        "adam_m_update": {
+          "count": 48640,
+          "exact_count": 6236,
+          "mae": 2.271459913686371e-11,
+          "p99": 5.587935426876189e-10,
+          "max_abs": 2.2351741776893697e-09,
+          "rmse": 1.0679129886744064e-10,
+          "l2": 2.3552263518205604e-08,
+          "cosine": 0.9999999999999957
+        },
+        "adam_v_update": {
+          "count": 48640,
+          "exact_count": 134,
+          "mae": 9.353795104529168e-14,
+          "p99": 2.357410273934324e-12,
+          "max_abs": 3.0380761003711426e-11,
+          "rmse": 6.484789295749021e-13,
+          "l2": 1.430186428794173e-10,
+          "cosine": 0.999999999999999
+        },
+        "adam_weight_after": {
+          "count": 48640,
+          "exact_count": 0,
+          "mae": 5.392191799233917e-09,
+          "p99": 1.586503759476443e-07,
+          "max_abs": 2.99436935691233e-07,
+          "rmse": 2.6428045319099752e-08,
+          "l2": 5.828567441614729e-06,
+          "cosine": 0.9999999999999986
+        }
+      }
+    },
+    "paired_common_initial_state": {
+      "single_action_logp": {
+        "count": 28,
+        "exact_count": 0,
+        "mae": 0.02160799184015819,
+        "p99": 0.06703134953975677,
+        "max_abs": 0.06714707612991333,
+        "rmse": 0.03573908209450866,
+        "l2": 0.18911344661558266,
+        "cosine": 0.9987097600686821
+      },
+      "full_vocab": null,
+      "first_selected_gradient": null,
+      "first_selected_parameter_update": null
+    },
+    "acceptance": null
+  },
+  "matched_replay": {
+    "mode": "replay",
+    "target": {
+      "mode": "replay",
+      "optimizer_steps": 2,
+      "events": 4,
+      "scored_completion_tokens": 16,
+      "strict_a_b_count": 16,
+      "other_decoded_count": 0,
+      "mixed_groups_all_actions": 2,
+      "mixed_groups_a_b_only": 2,
+      "mixed_nonzero_reference_before_aggregation": 2,
+      "group_controls": {
+        "mixed": 2,
+        "all_correct": 1,
+        "all_wrong": 1
+      },
+      "post_update_native_policy_rollouts": 0,
+      "trainable_tensor_sample_width": [
+        1024,
+        1024,
+        128,
+        256
+      ],
+      "updates_with_nonzero_observed_gradients": 2,
+      "updates_with_nonzero_observed_parameter_deltas": 2,
+      "native_execution": {
+        "runtime": {
+          "torch": "2.9.0",
+          "trl": "1.18.2",
+          "transformers": "5.23.0",
+          "accelerate": "1.14.0",
+          "datasets": "5.0.1",
+          "numpy": "1.26.4",
+          "tokenizers": "0.23.1",
+          "pyarrow": "24.0.0",
+          "torch-npu": "2.9.0.post2"
+        },
+        "device": "Ascend 910C",
+        "backend": "hccl",
+        "initial_state_slice_sha256": "5d550ba8e71c72f42e75efb96cd51f9bd22d89c77e9efe72ab6d07436b3f40db",
+        "native_stock_tie": [
+          true,
+          true
+        ],
+        "scorer_backend": "torch",
+        "scorer_source_sha256": "64dc966dfbb4ddc730a089fdebb204b9cf37b984eb56c35fb2b641739b6e8074",
+        "model_source_sha256": "1a475c45d900e0bfb06b9b245257d7f3234fd247474fcbd3363b03430e504a68",
+        "layer_types": [
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention"
+        ],
+        "linear_dispatch": {
+          "causal_conv1d_fn": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_fn"
+          },
+          "causal_conv1d_update": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_update"
+          },
+          "torch_chunk_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_chunk_gated_delta_rule"
+          },
+          "torch_recurrent_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_recurrent_gated_delta_rule"
+          }
+        },
+        "pnames": [
+          "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+          "model.language_model.layers.23.self_attn.o_proj.weight",
+          "model.language_model.norm.weight",
+          "model.language_model.embed_tokens.weight"
+        ],
+        "trainable_params": 752393024,
+        "frozen_vision_params": 100592896,
+        "trainer_source_sha256": "9a47a92f434b90657bff56897ee52aae7a70a615ed3901a9bc0c1cfabe06533e",
+        "collector_sha256": "f59fd6705a583f4e633066ad20e32472da3bb4a6496ec4e139dfa284956983ec"
+      },
+      "fp64_independent": {
+        "group_advantage": {
+          "count": 16,
+          "exact_count": 8,
+          "mae": 3.4030711582033746e-09,
+          "p99": 6.806142316406749e-09,
+          "max_abs": 6.806142316406749e-09,
+          "rmse": 4.812669385651929e-09,
+          "l2": 1.9250677542607716e-08,
+          "cosine": 0.9999999999999999
+        },
+        "grpo_surrogate": {
+          "count": 4,
+          "exact_count": 4,
+          "mae": 0.0,
+          "p99": 0.0,
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "l2": 0.0,
+          "cosine": null
+        },
+        "d_surrogate_d_logp": {
+          "count": 16,
+          "exact_count": 8,
+          "mae": 8.507677895508436e-10,
+          "p99": 1.7015355791016873e-09,
+          "max_abs": 1.7015355791016873e-09,
+          "rmse": 1.2031673464129822e-09,
+          "l2": 4.812669385651929e-09,
+          "cosine": 0.9999999999999999
+        },
+        "full_vocab_target_logp": {
+          "count": 4,
+          "exact_count": 0,
+          "mae": 2.537570917837684e-07,
+          "p99": 6.2322268338022e-07,
+          "max_abs": 6.333990825169167e-07,
+          "rmse": 3.509063574316803e-07,
+          "l2": 7.018127148633606e-07,
+          "cosine": 0.9999999999999992
+        },
+        "full_vocab_entropy": {
+          "count": 4,
+          "exact_count": 0,
+          "mae": 2.775279764222205e-06,
+          "p99": 5.87297931687658e-06,
+          "max_abs": 5.929273513061162e-06,
+          "rmse": 3.613467879970889e-06,
+          "l2": 7.226935759941778e-06,
+          "cosine": 0.9999999999962343
+        },
+        "adam_m_update": {
+          "count": 9728,
+          "exact_count": 1144,
+          "mae": 2.6374335210654064e-10,
+          "p99": 5.960464483090178e-09,
+          "max_abs": 1.5646219209131118e-08,
+          "rmse": 1.1665443881227542e-09,
+          "l2": 1.1505700097966071e-07,
+          "cosine": 1.0000000000000002
+        },
+        "adam_v_update": {
+          "count": 9728,
+          "exact_count": 36,
+          "mae": 5.5063786904738785e-12,
+          "p99": 1.4233381298231357e-10,
+          "max_abs": 1.1440706663284894e-09,
+          "rmse": 3.757259476918653e-11,
+          "l2": 3.7058084691688357e-09,
+          "cosine": 0.9999999999999998
+        },
+        "adam_weight_after": {
+          "count": 9728,
+          "exact_count": 0,
+          "mae": 5.470629362594787e-09,
+          "p99": 1.5824567603850412e-07,
+          "max_abs": 2.6766098892849755e-07,
+          "rmse": 2.7022188008235548e-08,
+          "l2": 2.6652152663812423e-06,
+          "cosine": 1.0000000000000022
+        }
+      }
+    },
+    "peer": {
+      "mode": "replay",
+      "optimizer_steps": 2,
+      "events": 4,
+      "scored_completion_tokens": 16,
+      "strict_a_b_count": 16,
+      "other_decoded_count": 0,
+      "mixed_groups_all_actions": 2,
+      "mixed_groups_a_b_only": 2,
+      "mixed_nonzero_reference_before_aggregation": 2,
+      "group_controls": {
+        "mixed": 2,
+        "all_correct": 1,
+        "all_wrong": 1
+      },
+      "post_update_native_policy_rollouts": 0,
+      "trainable_tensor_sample_width": [
+        1024,
+        1024,
+        128,
+        256
+      ],
+      "updates_with_nonzero_observed_gradients": 2,
+      "updates_with_nonzero_observed_parameter_deltas": 2,
+      "native_execution": {
+        "runtime": {
+          "torch": "2.9.0+cu128",
+          "trl": "1.18.2",
+          "transformers": "5.23.0",
+          "accelerate": "1.14.0",
+          "datasets": "5.0.1",
+          "numpy": "1.26.4",
+          "tokenizers": "0.23.1",
+          "pyarrow": "24.0.0"
+        },
+        "device": "NVIDIA B200",
+        "backend": "nccl",
+        "initial_state_slice_sha256": "5d550ba8e71c72f42e75efb96cd51f9bd22d89c77e9efe72ab6d07436b3f40db",
+        "native_stock_tie": [
+          true,
+          true
+        ],
+        "scorer_backend": "triton",
+        "scorer_source_sha256": "64dc966dfbb4ddc730a089fdebb204b9cf37b984eb56c35fb2b641739b6e8074",
+        "model_source_sha256": "1a475c45d900e0bfb06b9b245257d7f3234fd247474fcbd3363b03430e504a68",
+        "layer_types": [
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention",
+          "linear_attention",
+          "linear_attention",
+          "linear_attention",
+          "full_attention"
+        ],
+        "linear_dispatch": {
+          "causal_conv1d_fn": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_fn"
+          },
+          "causal_conv1d_update": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "causal_conv1d_update"
+          },
+          "torch_chunk_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_chunk_gated_delta_rule"
+          },
+          "torch_recurrent_gated_delta_rule": {
+            "module": "transformers.models.qwen3_5.modeling_qwen3_5",
+            "name": "torch_recurrent_gated_delta_rule"
+          }
+        },
+        "pnames": [
+          "model.language_model.layers.0.linear_attn.in_proj_qkv.weight",
+          "model.language_model.layers.23.self_attn.o_proj.weight",
+          "model.language_model.norm.weight",
+          "model.language_model.embed_tokens.weight"
+        ],
+        "trainable_params": 752393024,
+        "frozen_vision_params": 100592896,
+        "trainer_source_sha256": "9a47a92f434b90657bff56897ee52aae7a70a615ed3901a9bc0c1cfabe06533e",
+        "collector_sha256": "f59fd6705a583f4e633066ad20e32472da3bb4a6496ec4e139dfa284956983ec"
+      },
+      "fp64_independent": {
+        "group_advantage": {
+          "count": 16,
+          "exact_count": 8,
+          "mae": 3.4030711582033746e-09,
+          "p99": 6.806142316406749e-09,
+          "max_abs": 6.806142316406749e-09,
+          "rmse": 4.812669385651929e-09,
+          "l2": 1.9250677542607716e-08,
+          "cosine": 0.9999999999999999
+        },
+        "grpo_surrogate": {
+          "count": 4,
+          "exact_count": 4,
+          "mae": 0.0,
+          "p99": 0.0,
+          "max_abs": 0.0,
+          "rmse": 0.0,
+          "l2": 0.0,
+          "cosine": null
+        },
+        "d_surrogate_d_logp": {
+          "count": 16,
+          "exact_count": 8,
+          "mae": 8.507677895508436e-10,
+          "p99": 1.7015355791016873e-09,
+          "max_abs": 1.7015355791016873e-09,
+          "rmse": 1.2031673464129822e-09,
+          "l2": 4.812669385651929e-09,
+          "cosine": 0.9999999999999999
+        },
+        "full_vocab_target_logp": {
+          "count": 4,
+          "exact_count": 0,
+          "mae": 2.579102975630576e-07,
+          "p99": 4.4186370715237897e-07,
+          "max_abs": 4.483065048077606e-07,
+          "rmse": 2.8201576172476804e-07,
+          "l2": 5.640315234495361e-07,
+          "cosine": 0.9999999999999998
+        },
+        "full_vocab_entropy": {
+          "count": 4,
+          "exact_count": 0,
+          "mae": 1.2944373314560664e-05,
+          "p99": 3.14533376678483e-05,
+          "max_abs": 3.1888812134894806e-05,
+          "rmse": 1.81845565616472e-05,
+          "l2": 3.63691131232944e-05,
+          "cosine": 0.9999999998606904
+        },
+        "adam_m_update": {
+          "count": 9728,
+          "exact_count": 1136,
+          "mae": 2.294604238129086e-10,
+          "p99": 5.587935447692871e-09,
+          "max_abs": 1.2665987036974968e-08,
+          "rmse": 9.802341428886072e-10,
+          "l2": 9.668110522577289e-08,
+          "cosine": 0.9999999999999997
+        },
+        "adam_v_update": {
+          "count": 9728,
+          "exact_count": 22,
+          "mae": 5.620588282658924e-12,
+          "p99": 1.4757737507725607e-10,
+          "max_abs": 8.898857692396511e-10,
+          "rmse": 3.506906016467981e-11,
+          "l2": 3.458883288801816e-09,
+          "cosine": 1.0000000000000002
+        },
+        "adam_weight_after": {
+          "count": 9728,
+          "exact_count": 0,
+          "mae": 5.575098493171875e-09,
+          "p99": 1.6042202787946938e-07,
+          "max_abs": 2.948016675219378e-07,
+          "rmse": 2.782913654877479e-08,
+          "l2": 2.7448051045088477e-06,
+          "cosine": 0.9999999999999986
+        }
+      }
+    },
+    "paired_common_initial_state": {
+      "single_action_logp": {
+        "count": 8,
+        "exact_count": 0,
+        "mae": 0.0003550797700881958,
+        "p99": 0.0005237162113189697,
+        "max_abs": 0.0005237162113189697,
+        "rmse": 0.0003930901858520804,
+        "l2": 0.0011118269441355451,
+        "cosine": 0.9999998110193806
+      },
+      "full_vocab": {
+        "count": 496640,
+        "exact_count": 62930,
+        "mae": 0.03049841093228885,
+        "p99": 0.09375,
+        "max_abs": 0.1875,
+        "rmse": 0.03857716546644899,
+        "l2": 27.18636613187319,
+        "cosine": 0.9999191549156585
+      },
+      "first_selected_gradient": {
+        "count": 2432,
+        "exact_count": 111,
+        "mae": 0.000949779208684647,
+        "p99": 0.0202789306640625,
+        "max_abs": 0.02703857421875,
+        "rmse": 0.0035977902142496337,
+        "l2": 0.17742614701172157,
+        "cosine": 0.9999073156882281
+      },
+      "first_selected_parameter_update": {
+        "count": 2432,
+        "exact_count": 2060,
+        "mae": 6.415238690680636e-07,
+        "p99": 1.9997358322143555e-05,
+        "max_abs": 2.002716064453125e-05,
+        "rmse": 3.579488525024826e-06,
+        "l2": 0.00017652359349703845,
+        "cosine": 0.9359554711754788
+      }
+    },
+    "acceptance": null
+  },
+  "fp32_diagnostic": null,
+  "environment_observation": "The native text-only task uses the official conditional generation checkpoint, keeps all text parameters trainable, and freezes only the unused vision encoder.",
+  "crossed_first_10_events": {
+    "scope": "Both stacks applied one native update from each of the two source action batches. Post-update probabilities used a full vocabulary and matched prompts.",
+    "arms": {
+      "target <- target": {
+        "a_b_count": 2,
+        "full_vocab_mean_a_b_mass": 0.04686793307226263,
+        "a_b_top1_prompts": 0
+      },
+      "peer <- target": {
+        "a_b_count": 3,
+        "full_vocab_mean_a_b_mass": 0.020822834844986957,
+        "a_b_top1_prompts": 0
+      },
+      "target <- peer": {
+        "a_b_count": 40,
+        "full_vocab_mean_a_b_mass": 0.9999885532876446,
+        "a_b_top1_prompts": 10
+      },
+      "peer <- peer": {
+        "a_b_count": 40,
+        "full_vocab_mean_a_b_mass": 0.999991868936166,
+        "a_b_top1_prompts": 10
+      }
+    },
+    "full_vocab": {
+      "matched_target_actions": {
+        "raw_logit_difference": {
+          "count": 2483200,
+          "differing": 2459106,
+          "max_abs": 1.3046875,
+          "mae": 0.248884799113922
+        },
+        "same_top1": 10,
+        "prompts": 10,
+        "mean_full_vocab_total_variation": 0.058963912759471195,
+        "max_full_vocab_total_variation": 0.07659153965299978,
+        "configurations": [
+          "target <- target",
+          "peer <- target"
+        ]
+      },
+      "matched_peer_actions": {
+        "raw_logit_difference": {
+          "count": 2483200,
+          "differing": 2429104,
+          "max_abs": 2.55078125,
+          "mae": 0.18398130285338204
+        },
+        "same_top1": 10,
+        "prompts": 10,
+        "mean_full_vocab_total_variation": 3.4551815254180177e-06,
+        "max_full_vocab_total_variation": 6.004931371320496e-06,
+        "configurations": [
+          "target <- peer",
+          "peer <- peer"
+        ]
+      },
+      "target_action_batch_effect": {
+        "raw_logit_difference": {
+          "count": 2483200,
+          "differing": 2479518,
+          "max_abs": 16.875,
+          "mae": 1.9713520021917397
+        },
+        "same_top1": 0,
+        "prompts": 10,
+        "mean_full_vocab_total_variation": 0.9531992067170357,
+        "max_full_vocab_total_variation": 0.9875244583629575,
+        "configurations": [
+          "target <- target",
+          "target <- peer"
+        ]
+      },
+      "peer_action_batch_effect": {
+        "raw_logit_difference": {
+          "count": 2483200,
+          "differing": 2479574,
+          "max_abs": 18.125,
+          "mae": 2.0436812625142604
+        },
+        "same_top1": 0,
+        "prompts": 10,
+        "mean_full_vocab_total_variation": 0.9792185061284668,
+        "max_full_vocab_total_variation": 0.9969912242179358,
+        "configurations": [
+          "peer <- target",
+          "peer <- peer"
+        ]
+      }
+    }
+  }
+}
