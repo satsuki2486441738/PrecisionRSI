@@ -7,7 +7,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml"><img src="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
-  <a href="https://satsuki2486441738.github.io/NumericBridge/"><img src="https://img.shields.io/badge/Homepage-Community-2563EB.svg" alt="Project homepage: NumericBridge community"></a>
+  <a href="https://freedomintelligence.github.io/NumericBridge/"><img src="https://img.shields.io/badge/Homepage-Community-2563EB.svg" alt="Project homepage: NumericBridge community"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/stargazers"><img src="https://img.shields.io/github/stars/satsuki2486441738/NumericBridge?logo=github" alt="GitHub stars"></a>
 </p>
 
@@ -25,7 +25,7 @@ NumericBridge is a community for investigating numerical precision across infere
 
 *The Ascend 910C / Qwen3.8-27B / verl configuration in the figure is an example. See [Typical cases](#typical-cases) for measured results and verified coverage.*
 
-Search the [community case library](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases) by hardware, model and framework version to retrieve known issues, candidate fixes and prior measurements. In your own environment, compare the affected outputs, gradients or weight updates before and after the change. Include the configuration, patch and measured coverage in the community submission so the next team can reproduce the result.
+Search the [community case library](https://freedomintelligence.github.io/NumericBridge/index.html#/cases) by hardware, model and framework version to retrieve known issues, candidate fixes and prior measurements. In your own environment, compare the affected outputs, gradients or weight updates before and after the change. Include the configuration, patch and measured coverage in the community submission so the next team can reproduce the result.
 
 ## Getting started
 
@@ -41,7 +41,7 @@ python -B -m scripts install --output ../numericbridge-skills
 
 ```sh
 python -B -m tools.community_search \
-  --index https://satsuki2486441738.github.io/NumericBridge/data/search-index.json \
+  --index https://freedomintelligence.github.io/NumericBridge/data/search-index.json \
   --library peft --limit 1
 ```
 
@@ -72,10 +72,10 @@ The three model comparisons report measurements for the configurations tested. N
 
 ## Evaluation and repair history
 
-Use the [community case library](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases) to select your model, hardware and framework version. Open a matching case to see the observed difference, candidate fixes and the workload used to verify each tested fix.
+Use the [community case library](https://freedomintelligence.github.io/NumericBridge/index.html#/cases) to select your model, hardware and framework version. Open a matching case to see the observed difference, candidate fixes and the workload used to verify each tested fix.
 
-- [History archive](https://satsuki2486441738.github.io/NumericBridge/archive.html) — look up earlier evaluations and repairs by configuration.
-- [Results and evidence](https://satsuki2486441738.github.io/NumericBridge/paper.html) — find the figures, measured values and source records behind a report.
+- [History archive](https://freedomintelligence.github.io/NumericBridge/archive.html) — look up earlier evaluations and repairs by configuration.
+- [Results and evidence](https://freedomintelligence.github.io/NumericBridge/paper.html) — find the figures, measured values and source records behind a report.
 
 ## Contributing
 

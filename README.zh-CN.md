@@ -7,7 +7,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-009688.svg" alt="License: MIT"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml"><img src="https://github.com/satsuki2486441738/NumericBridge/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI 状态"></a>
-  <a href="https://satsuki2486441738.github.io/NumericBridge/"><img src="https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E4%B8%BB%E9%A1%B5-%E7%A4%BE%E5%8C%BA-2563EB.svg" alt="项目主页：NumericBridge 社区"></a>
+  <a href="https://freedomintelligence.github.io/NumericBridge/"><img src="https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E4%B8%BB%E9%A1%B5-%E7%A4%BE%E5%8C%BA-2563EB.svg" alt="项目主页：NumericBridge 社区"></a>
   <a href="https://github.com/satsuki2486441738/NumericBridge/stargazers"><img src="https://img.shields.io/github/stars/satsuki2486441738/NumericBridge?logo=github" alt="GitHub 星标数"></a>
 </p>
 
@@ -25,7 +25,7 @@ NumericBridge 是一个面向推理、训练和强化学习（RL）的数值精�
 
 *图中的 Ascend 910C / Qwen3.8-27B / verl 配置仅为示例；实测结果与已验证覆盖范围见[典型案例](#典型案例)。*
 
-按硬件、模型和框架版本检索[社区案例库](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases)，可以找到已知问题、候选修复和已有测量结果。在本地环境中，对比修复前后的输出、梯度或权重更新。投稿时附上运行配置、补丁及实际验证范围，便于遇到同类问题的人复验。
+按硬件、模型和框架版本检索[社区案例库](https://freedomintelligence.github.io/NumericBridge/index.html#/cases)，可以找到已知问题、候选修复和已有测量结果。在本地环境中，对比修复前后的输出、梯度或权重更新。投稿时附上运行配置、补丁及实际验证范围，便于遇到同类问题的人复验。
 
 ## 快速开始
 
@@ -41,7 +41,7 @@ python -B -m scripts install --output ../numericbridge-skills
 
 ```sh
 python -B -m tools.community_search \
-  --index https://satsuki2486441738.github.io/NumericBridge/data/search-index.json \
+  --index https://freedomintelligence.github.io/NumericBridge/data/search-index.json \
   --library peft --limit 1
 ```
 
@@ -72,10 +72,10 @@ python skills/precision-compare/examples/compare_gradients.py
 
 ## 评测与修复历史
 
-在[社区案例库](https://satsuki2486441738.github.io/NumericBridge/index.html#/cases)中选择模型、硬件和框架版本。打开匹配的案例，可以查看观测到的差异、候选修复，以及每个已测试修复所用的验证负载。
+在[社区案例库](https://freedomintelligence.github.io/NumericBridge/index.html#/cases)中选择模型、硬件和框架版本。打开匹配的案例，可以查看观测到的差异、候选修复，以及每个已测试修复所用的验证负载。
 
-- [历史归档](https://satsuki2486441738.github.io/NumericBridge/archive.html)可按配置查找既有评测和修复记录。
-- [结果与证据](https://satsuki2486441738.github.io/NumericBridge/paper.html)可查阅报告中的图表、实测数值及其来源。
+- [历史归档](https://freedomintelligence.github.io/NumericBridge/archive.html)可按配置查找既有评测和修复记录。
+- [结果与证据](https://freedomintelligence.github.io/NumericBridge/paper.html)可查阅报告中的图表、实测数值及其来源。
 
 ## 参与贡献
 
