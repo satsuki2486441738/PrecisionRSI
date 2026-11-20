@@ -23,6 +23,10 @@ The RSI dashboard lives in `community/site/rsi.html`. After hourly maintenance, 
 
 ## Changes
 
+Use the configured, authorized human identity for commits. Do not add AI tools
+or assistants as commit authors or co-authors, or list them as contributors in
+project materials. Check authorship and co-author trailers before pushing.
+
 Confirm the approach before editing and change at most three files per batch. For a bug fix, reproduce the behavior temporarily, add a meaningful regression and remove the temporary reproducer. Preserve permanent tests.
 
 Create new runs exclusively as `<side>-<task>-<UTC YYYYmmddTHHMMSSZ>`, using the task's side ID or `compare`. Keep model/data/environment resources in place and preserve historical run bytes and paths. Use a new run for later validation. For undated migrations, use `<side>-<task>-migrated-<UTC migration timestamp>` and retain the path mapping.
