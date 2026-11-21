@@ -68,7 +68,7 @@ compatible entrypoints. From a repository checkout, export skills with
 export includes the core so installed commands work without the checkout or RSI.
 Numerical comparison and task-specific collection remain in this skill.
 
-Keep full execution options and identity manifests in files consumed by adapters; expose their paths and compact check receipts to the agent. `runtime_probe.save_identity(paths, manifest_path, results=None)` retains selected file hashes and completed results in a new manifest. Include source/config/data/runtime identities and evidence files relevant to those results. `check_identity(manifest_path)` returns saved results only if every identity matches; it neither runs the workload nor recomputes metrics. CLI: `python scripts/runtime_probe.py --identity MANIFEST`. Existing manually prepared manifests may use retained metadata for large resources. Reuse one execution JSON across native preflight and capture:
+Keep execution options and identity manifests in adapter files; return their paths and compact receipts. `runtime_probe.save_identity(paths, manifest_path, results=None)` retains selected file hashes and completed results in a new manifest. Include source/config/data/runtime identities and evidence files relevant to those results. `check_identity(manifest_path)` returns saved results only if every identity matches; it neither runs the workload nor recomputes metrics. CLI: `python scripts/runtime_probe.py --identity MANIFEST`. Existing manually prepared manifests may use retained metadata for large resources. Reuse one execution JSON across native preflight and capture:
 
 ```json
 {"argv_prefix":["/env/bin/python"],"path_prepend":["/env/bin"],"env":{"HF_HUB_OFFLINE":"1"}}
@@ -78,11 +78,9 @@ Fields are optional and literal; `env` values of null remove inherited variables
 
 ### Wait for native execution
 
-Use completion notifications when supported, or the longest supported blocking
-wait (at least 10 seconds when available). Let the execution tool own the
-timeout and terminal receipt. Keep scheduler polling in the case adapter:
-propagate the job's terminal status, and inspect progress to resolve a stall,
-handle interaction or answer a user request. Batch independent probes.
+Use completion notifications or a bounded blocking wait. Keep scheduler polling,
+timeout and native terminal status in the launcher or case adapter; batch
+independent probes.
 
 Use `record_run` to retain logs and obtain a compact failure diagnostic:
 
@@ -111,7 +109,22 @@ python scripts/workflow.py run --plan task.json --workspace work
 python scripts/workflow.py status --plan task.json --workspace work
 ```
 
-`status` reviews reuse without launching commands. `run` both reuses valid results and executes missing work, so a known command chain needs one invocation. Continue with `next_action` only when execution stops for adaptation or repair.
+`status` inspects reuse without launching. `run` reuses valid stages and runs
+missing work; an unchanged failed attempt returns `next_action` for inspection.
+
+### Recover an interrupted stage
+
+Use the same plan and workspace for preflight, capture, diagnosis or verification.
+Inspect `next_action` and the recorder. When `next_action.run` and
+`declared_outputs` are present, they locate candidate artifacts; otherwise use the
+workspace attempt history and the case's scheduler job or process identifiers.
+Check the exact native job/process, since a launcher can fail while it is active.
+Follow an active job. If its state is unknown, keep the dependent run blocked
+and advance independent work. Once terminal, verify actual success and the
+original input, runtime, device, output and coverage checks before reusing any
+landed result. Preserve a failed wrapper receipt and record verified recovery
+separately. Resume only missing or affected work. A file or wrapper exit alone
+is not proof of native success. The runner does not wake a stopped session.
 
 For result-review requests, return verified retained outputs and their source paths. For fresh measurements, use `--refresh` on the requested capture or comparison stage(s); descendants rerun while valid preparation and unrelated stages remain reusable. Changed inputs invalidate affected stages automatically. Reopen instructions/interfaces when they change or an integration question remains. Task-owned correctness checks can route to repair.
 

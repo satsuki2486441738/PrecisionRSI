@@ -5,20 +5,19 @@ description: Establish native execution when a requested model, framework or har
 
 # Framework adaptation
 
-Start from the confirmed target, runtime requirements and existing evidence.
-
 ## Execute
 
 Use [shared execution tools](../precision-compare/references/comparison.md#wait-for-native-execution) for waiting and receipts.
 
-- Enter for missing native execution. Reuse environments, adapters and receipts matching source, dependencies and target.
+- Reuse environments, adapters and receipts matching source, dependencies and target.
 - Missing support: inspect the selected revision's support declarations and closest native example; implement the required model/backend integration.
 - Run or reuse a [native preflight](#native-preflight) before capture. Verify only the
   planned native path within the agreed scope and budget, then hand its receipt to
   comparison. A preflight is a readiness check and does not establish numerical
   agreement.
 - Preserve native state transitions; record checkpoint conversions and tensor-layout changes.
-- Patches need a focused regression and original-workload verification. Keep implementations and environment declarations with the case.
+- Keep implementations and environment declarations with the case. Use
+  [repair verification](../precision-repair/SKILL.md#patch-and-verify) for patches.
 
 ## Native preflight
 
@@ -46,14 +45,15 @@ sequence length or step count across tasks.
   receipt; gate formal capture on them. Reuse a matching receipt only for its
   recorded scope, and check the current device binding before new work.
 
-A pass establishes readiness for capture on the tested path. Numerical
-agreement, target scale and uncovered paths require their own evidence.
-
 ## Continue
 
-When requested work needs [comparison](../precision-compare/SKILL.md) or [repair](../precision-repair/SKILL.md), continue with the same execution JSON (`argv_prefix`, `env`, `path_prepend`), inputs/state and evidence. Use [shared task tools](../precision-compare/references/comparison.md#shared-tasks) directly for repeated command chains.
+Hand the execution JSON, inputs/state and receipts to the next stage.
 
 ## Return
 
-Return support and gaps, effective settings, device execution, source/dependency
-identities, runnable command and evidence paths.
+Return the runnable command, effective settings, readiness and gaps, and the
+native receipt. In the actual worker, record device binding, imported framework
+and backend versions/revisions, driver, runtime/toolkit (CANN or CUDA where
+applicable) and the loaded collective library (HCCL or NCCL when used). Use
+[the runtime probe](../precision-compare/scripts/runtime_probe.py) or an equivalent
+native check; keep unconfirmed versions unknown.

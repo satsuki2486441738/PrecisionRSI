@@ -77,11 +77,11 @@ Record the RL framework, training backend and rollout engine separately. Preserv
 
 ### Other/custom
 
-Follow [native adaptation](../SKILL.md#collect). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
+Follow [native adaptation](../../framework-adapt/SKILL.md#execute). Locate native trajectory preparation, action scoring, objective evaluation and actor/critic updates. Preserve sample/group mappings and effective masks, then capture the objective state and training stages above.
 
 ## Metrics
 
-Select measures for the requested observations and task criteria. For exact-equivalence checks, report equality, coverage and mismatch coordinates; use the measures below to quantify numerical differences.
+For exact-equivalence checks, report equality, coverage and mismatch coordinates. Quantify other differences with the relevant metrics below.
 
 | Observations | Available measures |
 |---|---|

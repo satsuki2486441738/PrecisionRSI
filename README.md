@@ -17,15 +17,13 @@
 
 <p align="center"><a href="#framework-overview">Overview</a> · <a href="#getting-started">Getting started</a> · <a href="#typical-cases">Typical cases</a> · <a href="#evaluation-and-repair-history">Results and repair history</a></p>
 
-NumericBridge is a community for investigating numerical precision across inference and training stacks, including RL. Start by querying the live community case library for records that match your setup, then deploy the workload locally to reproduce and diagnose precision differences. Verify the fix by rerunning the original workload and submit the verified result to the community for review.
+NumericBridge helps compare, diagnose and repair numerical differences across inference, training and RL stacks. Confirm the setup, look up community cases, then run the checks in your environment. Verify fixes on the original workload and share results with the community if you choose.
 
 ## Framework overview
 
-![NumericBridge workflow: target setup, numerical comparison, issue diagnosis, repair and optimization, regression testing, deliverables, and community knowledge retrieval](docs/images/numericbridge-overview.svg)
+![NumericBridge workflow: community lookup, native setup, comparison, diagnosis, repair, verification and delivery](docs/images/numericbridge-overview.svg)
 
 *The Ascend 910C / Qwen3.8-27B / verl configuration in the figure is an example. See [Typical cases](#typical-cases) for measured results and verified coverage.*
-
-Search the [community case library](https://freedomintelligence.github.io/NumericBridge/index.html#/cases) by hardware, model and framework version to retrieve known issues, candidate fixes and prior measurements. In your own environment, compare the affected outputs, gradients or weight updates before and after the change. Include the configuration, patch and measured coverage in the community submission so the next team can reproduce the result.
 
 ## Getting started
 
@@ -55,9 +53,9 @@ For your workload, start with the [NumericBridge Skill](skills/numericbridge/SKI
 
 ## Workflow and skills
 
-The [workflow](skills/numericbridge/references/workflow.md) directs the agent to [Framework Adapt](skills/framework-adapt/SKILL.md) for native setup, [Precision Compare](skills/precision-compare/SKILL.md) for numerical comparisons, and [Precision Repair](skills/precision-repair/SKILL.md) when the evidence warrants diagnosis or repair. Each skill uses the confirmed request and available evidence.
+The [workflow](skills/numericbridge/references/workflow.md) loads only the method it needs: [Framework Adapt](skills/framework-adapt/SKILL.md) for native setup, [Precision Compare](skills/precision-compare/SKILL.md) for measurement, and [Precision Repair](skills/precision-repair/SKILL.md) for supported-path failures or numerical findings that warrant diagnosis. Each stage reuses the confirmed request and evidence.
 
-Choose the guide for the quantity you want to compare. The inference guide covers token distributions on a shared history. The SFT guide covers gradients and optimizer updates. The RL guide covers action scores and losses on fixed trajectories. [Inference](skills/precision-compare/references/inference.md) · [SFT](skills/precision-compare/references/sft.md) · [RL](skills/precision-compare/references/rl.md)
+Task recipes: [Inference](skills/precision-compare/references/inference.md) · [SFT](skills/precision-compare/references/sft.md) · [RL](skills/precision-compare/references/rl.md).
 
 ## Typical cases
 

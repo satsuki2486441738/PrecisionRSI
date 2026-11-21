@@ -1,41 +1,56 @@
 # Community submission guide
 
-Use this guide to prepare an anonymized local preview alongside a shareable
-result. See [the workflow](../../numericbridge/references/workflow.md#resume-and-deliver)
-for the single confirmation before submission.
+Select public findings from the local issue record and linked evidence. Follow
+[the workflow](../../numericbridge/references/workflow.md#community-contribution)
+for preview and consent.
 
 ## Record the result
 
-Use the case's local issue record and linked evidence to select shareable
-findings. Preserve the distinction between a workaround verified on an
-alternative path and a fix verified on the original path.
-
 | Work completed | What to record |
 |---|---|
-| Compared two configurations | The tested configurations, workload, coverage and measured differences. A comparison can stand on its own. Record acceptance separately when criteria were supplied. |
-| Investigated a difference | Link the comparison to the investigation. Describe the observed issue and the evidence for its classification. |
-| Evaluated a solution | Link each patch, upgrade or settings change to the issue it addresses. Give each evaluated solution its own verification, with the tested configuration, workload, measured outcome and tradeoffs. Keep a source-only finding distinct from an executed check. |
+| Comparison | Tested configurations, workload, coverage and measured differences. It can stand alone; record acceptance separately. |
+| Diagnosis | Link the observed issue and investigation to the comparison or native failure. Cite the evidence for its classification. |
+| Solution | Link each candidate to the issue and record its own scope, configuration, outcome and tradeoffs. Distinguish source review, workaround and original-path verification. |
 
-To make the submitted record searchable, record the hardware, model checkpoint
-and revision, tested framework and version, and actual task and settings. Use
-`model.architecture` and `model.size` for search facets. Use `tiny` for a custom
-miniature fixture; retain its dimensions and seed with the experiment. List
-tested frameworks in `frameworks`, dependencies in `libraries`, and the repair
-target in `affected_library`. Keep release versions and commits in their fields;
-put patch or backport descriptions on the solution.
+Record hardware, checkpoint and revision, tested framework/version, task and
+settings. Use `model.architecture` and `model.size` for search; use `tiny` for a
+custom miniature fixture and retain its dimensions and seed. Use `frameworks`
+for tested frameworks, `libraries` for dependencies and `affected_library` for
+the repair target. Keep versions and commits in their own fields.
 
 ## Write the public entry
 
-Use a short title for the task or symptom, for example "LoRA output changes
-after merging". Use the summary for the observed effect, the change or a
-condition that affects use. Put versions, settings and measurements in their
-structured fields. Keep implementation detail with the technical evidence.
+Describe the symptom or observed effect in a short title and summary; keep
+settings and metrics in structured fields. Use `content.title` and optional
+`content.summary` in `zh` and/or `en` (`details.content` for lifecycle entities).
+`content.workflows` describes affected tasks; experiment settings describe what
+ran. Clarify historical wording by typed ID in `data/content.json`.
 
-Use `content.title` and optional `content.summary` in `zh` and/or `en`;
-lifecycle entities use `details.content`. `content.workflows` lists affected
-workflows; the experiment configuration records what actually ran. To clarify
-historical wording, use the typed ID in `data/content.json`.
+Include only the evidence needed to trace the result. Keep raw logs, prompts,
+private paths and host details local; retain public stack identities.
 
-Include the minimum public evidence needed to trace each measurement. Keep raw
-logs, prompts, private paths and host details with the local experiment. Retain
-public hardware, model and software identities needed to interpret the result.
+## Prepare an upstream PR draft
+
+For a verified patch intended for upstream, identify the repository and base
+branch. Read that branch's contribution guide, PR template and relevant linked
+requirements. Use the template, or **Problem / Change / Validation / Patch**
+if absent or unreadable; record which guidance could not be checked.
+
+Include a title, any existing issue link, affected setup, minimal reproducer,
+matched before/after results, commands run and the patch or public link. Keep
+pending checks and attestations unchecked. Record a PR URL only once it exists.
+
+Attach the draft through the record's `evidence` reference. In the
+`prepare_community_submission` evidence map, add `upstream_pr_draft` to a new
+`evidence/submissions/*.json` document with `repository`, `base_branch`, `title`,
+`body_markdown`, `guidance_urls` and `pending_checks`. Put the patch or link in
+the body or same document; the regular preview and consent cover it.
+
+## Local preview
+
+If contribution MCP is unavailable, retain the anonymized input. From the
+repository checkout, validate the local draft:
+
+```sh
+python -B -m community.records.submission --input submission.json --output preview.json
+```

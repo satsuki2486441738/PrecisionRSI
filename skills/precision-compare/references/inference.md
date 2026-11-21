@@ -36,11 +36,11 @@ Resolve score availability at the native execution layer and export the observat
 
 ### Other/custom
 
-Follow [native adaptation](../SKILL.md#collect). Locate the model or engine's native scoring path, resolve score transforms and map outputs to token/vocabulary coordinates. For cached execution, replay the fixed continuation through its native cache and identify prefill/decode boundaries.
+Follow [native adaptation](../../framework-adapt/SKILL.md#execute). Locate the model or engine's native scoring path, resolve score transforms and map outputs to token/vocabulary coordinates. For cached execution, replay the fixed continuation through its native cache and identify prefill/decode boundaries.
 
 ## Metrics
 
-Select measures for the requested observations and task criteria. For exact-equivalence checks, report equality, coverage and mismatch coordinates; use the measures below to quantify numerical differences.
+For exact-equivalence checks, report equality, coverage and mismatch coordinates. Quantify other differences with the relevant metrics below.
 
 | Observations | Available measures |
 |---|---|

@@ -65,7 +65,7 @@ community records or run model workloads.
 
 ## MCP contribution
 
-The [workflow](../skills/numericbridge/references/workflow.md#resume-and-deliver)
+The [workflow](../skills/numericbridge/references/workflow.md#community-contribution)
 prepares an anonymized preview and asks once before sending it to the community.
 The contributor needs no GitHub account or fork.
 

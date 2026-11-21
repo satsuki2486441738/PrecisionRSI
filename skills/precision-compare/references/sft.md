@@ -50,11 +50,11 @@ Resolve the distributed backend as part of framework integration: FSDP/ZeRO shar
 
 ### Other/custom
 
-Follow [native adaptation](../SKILL.md#collect). Locate the framework's effective labels, loss reduction and trainable-parameter storage, then map them to the selected full-parameter or LoRA inventory and training stages.
+Follow [native adaptation](../../framework-adapt/SKILL.md#execute). Locate the framework's effective labels, loss reduction and trainable-parameter storage, then map them to the selected full-parameter or LoRA inventory and training stages.
 
 ## Metrics
 
-Select measures for the requested observations and task criteria. For exact-equivalence checks, report equality, coverage and mismatch coordinates; use the measures below to quantify numerical differences.
+For exact-equivalence checks, report equality, coverage and mismatch coordinates. Quantify other differences with the relevant metrics below.
 
 | Observations | Available measures |
 |---|---|
@@ -63,4 +63,4 @@ Select measures for the requested observations and task criteria. For exact-equi
 | Requested gradients, postclip gradients and updates | L2 error, RMSE, cosine and maximum absolute error |
 | Coverage | Valid targets, paired parameters/elements, gradient presence and optimizer events; for LoRA, adapter coverage and frozen-base checks |
 
-Use [comparison](comparison.md) for score/tensor definitions and tool usage. Native loss keeps its implemented reduction and additional terms.
+See [shared metric definitions and tools](comparison.md).

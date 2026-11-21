@@ -4,7 +4,7 @@
 
 ## 使用与交付
 
-Agent 从 [NumericBridge Skill](../skills/numericbridge/SKILL.md) 进入。[流程规范](../skills/numericbridge/references/workflow.md)定义执行分支和交接。Agent 按当前步骤读取适配、对比或修复 Skill，沿用已确认的需求、运行身份和证据位置。在输入中开启[精度优化](../skills/numericbridge/references/workflow.md#optimize-precision)后，可以在验证通过的配置上继续改善精度。RL 采集与指标见 [RL 方法](../skills/precision-compare/references/rl.md)。
+Agent 从 [NumericBridge Skill](../skills/numericbridge/SKILL.md) 进入。[流程规范](../skills/numericbridge/references/workflow.md)定义执行分支和交接。Agent 按当前步骤读取适配、对比或修复 Skill，沿用已确认的需求、运行身份和证据位置。RL 采集与指标见 [RL 方法](../skills/precision-compare/references/rl.md)。
 
 [RL 首例设计](rl-precision-workflow-proposal.md)用于选择研究案例和设计对照。[整模型评测手册](model-precision-evaluation-plan.md)用于明确要求整模型覆盖的任务。
 

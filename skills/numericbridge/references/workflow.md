@@ -2,255 +2,245 @@
 
 ## Stages and handoffs
 
-```xml
-<handoff>
-  Confirm, retrieve, prepare and compare. Diagnose and verify when in scope,
-  then optimize if enabled. Before launching, put known dependent commands in
-  one workflow plan: resource readiness, native preflight, capture and comparison.
-  Declare stage outputs and coverage checks from the task recipe. Keep bounded
-  waits in the launcher; confirm the device binding again at native launch.
-  Run the available chain in the same turn. A preflight or progress update does
-  not pause it. If one side is blocked, advance independent work and fallbacks.
-  Keep the confirmed request, plan, workload and runtime identities, evidence,
-  remaining budget, issue record and exact next action for resume.
-</handoff>
-```
+Use the [shared execution tools](../../precision-compare/references/comparison.md#shared-tasks) for plans, receipts and recovery.
 
 ```xml
+<handoff>
+  Keep the confirmed request, plan, workspace, runtime and workload identities,
+  native job/process IDs, evidence, issue record, remaining budget and next action.
+  Put known dependent commands and required output checks in one plan. Plan
+  completion covers only its declared checks. Continue authorized work without
+  pausing at a progress update; advance independent work when one path blocks.
+  In a batch, prioritize actionable open issues over new cases within budget.
+</handoff>
+
 <issue_record>
-  Create issues.md in the local case workspace when a finding changes the
-  execution path or affects the result. Record it when found, including setup
-  blockers, then update the same entry after diagnosis and each attempted change.
-  Keep one current conclusion per issue: its status, affected configuration,
-  verified scope, candidate outcome and open checks. Update it at each handoff;
-  append attempts and link receipts, patches and measurements below it. Keep
-  failed attempts and distinguish a workaround from repair of the original path.
+  Record findings that affect execution or results in the case's issues.md when
+  found, including setup blockers. Update the same entry after diagnosis and
+  every candidate: affected configuration, current conclusion, verified scope,
+  open checks and linked attempts, including failures. Distinguish workarounds
+  from fixes on the original path.
 </issue_record>
 ```
 
 ## Request and execution inputs
 
-Start from the [confirmed request](request.md) and authorization.
-
-```xml
-<authorization>
-  Carry authorization across stages and skills. Resolve routine setup, retries
-  and evidence collection within the agreed scope and limits. Ask only for
-  required inputs the agent cannot resolve or actions that require new approval.
-  Before launching each native side, resolve placement, host or queue, launch
-  method, resource limits and budget, checkpoint and revision, runtime and settings.
-</authorization>
-```
+Start from the [confirmed request](request.md). Carry its authorization forward;
+resolve routine setup and retries within scope. Before native launch, resolve
+placement, host or queue, launch method, allocation and budget, checkpoint and
+revision, runtime and settings. Ask only for missing required inputs the agent
+cannot resolve or new authorization.
 
 ## Route community results
 
-If the community MCP cannot be reached or cannot read its index, run the bundled
-[search CLI](../../precision-compare/scripts/community_search.py) with the same
-fields, using `--hardware`, `--model`, `--library`, `--task` and optional
-`--version` or `--model-size`.
-
 ```xml
-<retrieve>
-  Call search_community with hardware, model, library (the tested framework)
-  and task (inference, sft or rl). Pass version when fixed and model_size when
-  needed. Resolve missing or invalid search fields before retrying the request.
-</retrieve>
+<entry>
+  The target and task are confirmed.
+</entry>
+
+<action>
+  Call search_community with hardware, model, library and task (inference,
+  sft or rl). Pass version only when pinned and model_size when needed.
+  Correct invalid inputs; use the same query with CLI fallback if unavailable.
+</action>
+
+<output>
+  Record lookup status, source and index identity. Carry matching issues,
+  recommendations and solutions with their tested settings and scope.
+  Distinguish no match from unavailable lookup.
+</output>
+
+<next>
+  Prepare the environment even without a match. Preserve pinned versions.
+</next>
 ```
 
-```xml
-<retrieval_handoff>
-  Record the returned status and index identity. If both paths are unavailable,
-  record the lookup as unavailable. Continue to environment preparation after
-  a successful lookup, including no-records, or when the lookup is unavailable.
-  A case match supplies context, even when recommendation is null. Check the
-  recorded versions, triggering settings and verification scope. For an
-  applicable solution, reuse a matching local receipt or run the smallest
-  target check that can confirm it. Otherwise continue from the confirmed
-  request. A trial candidate can inform an enabled optimization; do not select
-  it as the default. Retain user-fixed versions.
-</retrieval_handoff>
-```
+Use the [bundled search CLI](../../precision-compare/scripts/community_search.py)
+when MCP or its index is unavailable (`--model-size` for `model_size`).
 
 ## Prepare and compare
 
 ### Prepare the environment
 
-Use [framework-adapt](../../framework-adapt/SKILL.md#execute) when deployment or
-backend adaptation is needed. See its [native preflight contract](../../framework-adapt/SKILL.md#native-preflight)
-for the minimum workload and required evidence.
+Use [framework-adapt](../../framework-adapt/SKILL.md#execute) and its
+[native preflight contract](../../framework-adapt/SKILL.md#native-preflight).
 
 ```xml
-<prepare>
-  Resolve the measured stack from the confirmed request and retrieval result.
-  Keep the target configuration separate from the reference configuration. For
-  each side needing a native run, resolve placement, launch method, resource
-  limits, source and runtime identity, model and data state, and the settings
-  that affect the requested path. Reuse a runnable configuration and matching
-  preflight receipt when their identities and scope still match.
-  Use framework-adapt for deployment or backend adaptation. In an existing
-  environment, verify device binding and run preflight if no matching receipt exists.
-</prepare>
-```
+<entry>
+  Community lookup finished or was unavailable.
+</entry>
 
-```xml
-<prepare_handoff>
-  Before capture, return the target and reference labels, effective execution
-  JSON or its artifact path, source/runtime/resource identities, workload and
-  preflight receipt, and any uncovered or blocked paths. A preflight pass means
-  the planned native path is ready for capture. If target preflight fails, apply
-  the recovery rule below before retrying. If still blocked, report the cause and
-  leave that target path unverified. If only the native reference is blocked,
-  apply the reference fallback below and record its coverage.
-</prepare_handoff>
-```
+<action>
+  Prepare target and reference independently. Reuse matching environments and
+  receipts. Confirm device binding before launch and preflight each unverified
+  native path and its required collectors.
+</action>
 
-```xml
-<preflight_recovery when="preflight reports failure or its final summary is missing">
-  Use next_action.run and declared_outputs to locate landed evidence. Check the
-  exact native owner's state before relaunching. If still active, follow that
-  owner. If the native workload succeeded and only the wrapper failed, preserve
-  the failed receipt. In a new recovery step, verify native terminal success,
-  the planned input/runtime/device binding, and output identities and coverage
-  against the original checks. Resume from the new verified receipt without
-  replaying that native workload. If evidence is missing, recover or rerun only
-  the missing checks after confirming the old owner is terminal. A landed
-  file or failed wrapper is not a pass receipt.
-</preflight_recovery>
+<output>
+  Record side labels, effective execution JSON, runtime and resource receipts,
+  workload, readiness and any uncovered paths.
+</output>
+
+<next>
+  Compare ready paths. For a failed preflight, first recover the original run
+  if interrupted. Then distinguish setup or resource problems, unsupported
+  capabilities, and reproducible failures of a supported path. Correct setup
+  within scope or report the blocker. Route supported-path failures to diagnosis
+  with a native reproducer, even without comparison metrics. If the reference
+  remains blocked, use the fallback below when applicable.
+</next>
 ```
 
 ### Run the comparison
 
-Use [precision-compare](../../precision-compare/SKILL.md#collect) to choose the
-task recipe and comparison tools. Use the [fixed 100-example batch](../../precision-compare/examples/precision-batch-v1.json)
-when no dataset is specified.
-The repository path is `skills/precision-compare/examples/precision-batch-v1.json`.
-See the [dataset guide](../../precision-compare/examples/minimal-precision-batch.md) for task views.
+Use [precision-compare](../../precision-compare/SKILL.md#collect) and its task
+recipe. Without a specified dataset, use the
+[fixed 100-example batch](../../precision-compare/examples/precision-batch-v1.json)
+in order on both sides; see the [task views](../../precision-compare/examples/minimal-precision-batch.md).
 
 ```xml
-<compare>
-  Align inputs, initial state and coordinates. Declare intended differences.
-  If no dataset is specified, load examples/precision-batch-v1.json from the
-  precision-compare Skill root. Use all 100 events in the same order on both
-  sides for formal comparison. For RL online, keep event IDs, prompts and order
-  aligned while allowing each side to produce its native samples; pair only
-  matching histories. Task recipes define grouping, sampling, update counts and
-  when to use fixed RL replay.
-  Cover the requested stages; expand only to exercise an uncovered path, isolate
-  a difference or meet the delivery scope. Use triggering examples for
-  diagnostic replay and record any injected or recomputed dependencies.
-</compare>
-```
+<entry>
+  Native capture is ready on the paths under test. If no usable reference is
+  available, run only standalone checks and state their limits.
+</entry>
 
-```xml
-<comparison_handoff>
-  Return the workload and batch identities, selected stages, target/reference
-  labels, expected and paired observations, missing or unavailable observations,
-  metrics and their coordinates, execution receipts, and evidence paths. Keep
-  native and offline-derived dtypes distinct. A successful comparison command
-  means metrics were computed; it does not mean the user's tolerance was met.
-  Leave acceptance unset when the user supplied no criteria.
-</comparison_handoff>
+<action>
+  Align inputs, initial state and coordinates; declare intended differences.
+  For online RL, allow native sampling and pair only matching histories.
+  Follow the task recipe for grouping, sampling, updates and fixed replay.
+</action>
+
+<output>
+  Record workload and side identities, expected and paired observations by
+  stage, gaps, metrics with coordinates and evidence. Identify derived dtypes.
+</output>
+
+<next>
+  For critical missing or unpairable observations, recover the needed setup or
+  capture; unmatched observations are coverage gaps. Unless limited to comparison,
+  route tolerance violations, reproducible output flips, clear error amplification
+  after updates, or failed independent reference or invariant checks to diagnosis.
+  Hand off the trigger, coordinates, observed values and evidence. Otherwise deliver.
+</next>
 ```
 
 ### Choose a baseline and reference
 
 ```xml
 <reference>
-  For cross-platform diagnosis, prefer executable access to both platforms.
-  Reuse matching captures and return to either side only for missing observations.
-  With only the target accelerator, run the native case there and independently
-  recompute planned checkpoints on CPU, using FP64 where suitable. Record exactly
-  what the reference covers. Two configurations reveal differences; judge
-  accuracy using an analytic result, a validated independent implementation or
-  an equivalent higher-precision path. Without a suitable reference, report any
-  repeatability or invariant checks and leave remaining accuracy unverified.
+  For cross-platform work, prefer executable access to both sides. With only
+  the target accelerator, independently recompute suitable checkpoints on CPU
+  (FP64 where appropriate) and report their coverage. Judge accuracy against
+  an analytic result, validated independent implementation or equivalent
+  higher-precision path. Without one, report observed differences, repeatability
+  or invariant checks and leave other accuracy claims unverified.
 </reference>
 ```
 
 ## Diagnose a difference
 
-Use the [diagnosis method](../../precision-repair/SKILL.md#diagnose) for an
-in-scope difference that warrants investigation.
+Use the [diagnosis method](../../precision-repair/SKILL.md#diagnose).
 
 ```xml
-<diagnose when="an in-scope difference needs investigation">
-  Apply the diagnosis handoff's stop conditions. Keep diagnosis open while it
-  calls for a next check, even if all comparison checks are complete. Move to
-  repair for a supported defect within scope. If diagnosis cannot proceed,
-  deliver it as partial. For comparison-only work, skip diagnosis and deliver.
-</diagnose>
+<entry>
+  An in-scope comparison trigger or reproducible failure on a supported native
+  path has its inputs and evidence recorded.
+</entry>
+
+<action>
+  Reuse the trigger and run the smallest check that separates remaining causes.
+  Treat localization as progress unless it meets the agreed scope.
+</action>
+
+<output>
+  Update issues.md with the classification, checked boundary, ruled-out
+  explanations and evidence. Hand off the reproducer and focused check for repair.
+</output>
+
+<next>
+  Correct setup or capture and repeat affected checks. Explain expected numerical
+  differences. Route supported defects to authorized repair. For unresolved causes,
+  continue while a check or pending result can advance them; otherwise deliver the
+  blocker and next check. Keep independent issues moving before final delivery.
+</next>
 ```
 
 ## Repair and verify
 
-Use the [repair and verification method](../../precision-repair/SKILL.md#patch-and-verify).
+Use the [repair method](../../precision-repair/SKILL.md#patch-and-verify).
 
 ```xml
-<verify when="a supported candidate fits the agreed scope">
-  If verification fails, return to diagnosis or try another supported candidate
-  within budget. If neither can proceed, deliver the evidence and unresolved checks.
-</verify>
+<entry>
+  Repair is authorized and the defect has evidence, a reproducible trigger
+  and a baseline (the original failure for an execution defect).
+</entry>
+
+<action>
+  Test one candidate at a time. Default to the original small native case;
+  extend only for missing coverage or an agreed delivery requirement.
+</action>
+
+<output>
+  Record each candidate and its evidence in issues.md. Mark a fix verified
+  when the focused regression and original-case check both pass.
+</output>
+
+<next>
+  After fixing a preflight blocker, re-enter comparison for any outstanding
+  numerical checks. Otherwise deliver the verified scope. On failure, return
+  to diagnosis or try another supported candidate within budget.
+</next>
 ```
 
-## Optimize precision
+## Local delivery
 
 ```xml
-<optimize when="optimize_precision is enabled and a matching baseline is measured">
-  After any required repair is verified, test the candidate against the current
-  baseline on the same small case and reference. Recheck affected paths, agreed
-  metrics and costs; inspect regressions across relevant samples, not just the
-  trigger. Stop at a verified improvement within the limits, or when candidates
-  or budget run out. If none qualifies, deliver the starting configuration.
-</optimize>
+<entry>
+  No required check remains actionable within authorization and budget.
+  Follow active in-scope runs and finish available checks before final delivery.
+</entry>
+
+<action>
+  Reconcile native execution, comparison, diagnosis and repair verification
+  separately against the confirmed scope and actual evidence.
+</action>
+
+<output>
+  Mark each stage complete, partial, blocked or not applicable. Use not
+  applicable only when the stage was outside scope or its trigger was not
+  met after the prerequisite check completed. For example, a CPU slice does
+  not complete an agreed dual-native comparison. Give tested configuration,
+  coverage, result, runnable setup and evidence links. For open issues, link
+  issues.md with the blocker, trigger, next check, resources and remaining
+  original-workload verification. Leave acceptance unset without criteria
+  or assessment. Provide reports, bundles or offline replay when requested.
+</output>
+
+<next>
+  Output “NumericBridge 链路已完成” only when all required, applicable stages
+  have completion evidence. Then, or after a shareable partial delivery, offer
+  community contribution independently of the local result.
+</next>
 ```
 
-## Resume and deliver
+## Community contribution
 
-Use [execution receipts and plan checks](../../precision-compare/references/comparison.md#shared-tasks).
-For repeatable command chains, declare required evidence as output `checks`
-in the existing workflow plan. Follow `next_action` within scope; `completed`
-covers only the checks declared in that plan.
+Use the [community record guide](../../precision-compare/references/community-records.md).
 
 ```xml
-<deliver>
-  Before final delivery, reconcile every required check with its evidence.
-  Report native execution, aligned precision comparison, and any diagnosis
-  and repair verification separately. If a required check is still open,
-  continue if an authorized action or wait can advance it within budget.
-  Otherwise deliver a partial result with the missing evidence, concrete blocker
-  and next action. A completed evaluation does not close an unresolved issue or
-  a candidate with only partial improvement. Keep it open in issues.md and link
-  it from the delivery. Record the trigger and reuse paths, the next focused
-  check (command or adapter and inputs when known), its required resources, and
-  the original-workload checks needed to close the issue. In a batch, prefer an
-  actionable open issue with a reproducible trigger over starting another case
-  when the remaining authorization, resources and budget permit.
-  Report acceptance separately; leave it unset without criteria
-  or an assessment. Include each candidate's tested configuration, runnable
-  setup and issue record path when available. On follow-up, rerun only affected
-  scope or explicitly requested fresh checks. Produce extra reports, bundles
-  or offline replay on request.
-</deliver>
-```
-
-Load the [community record guide](../../precision-compare/references/community-records.md)
-when preparing a shareable result.
-
-```xml
-<contribute when="delivering shareable results or resuming a contribution">
-  Honor a prior decline or no-share instruction. Prepare a local preview of the
-  anonymized results and minimum evidence with prepare_community_submission.
-  Show the preview and destination with the result, then call submit_community
-  with its draft ID and digest. Its form is the sharing offer and the only
-  confirmation: share the anonymized result so others can reuse it. A refusal
-  or dismissal ends the offer; finish local delivery either way.
-  If submission is unavailable, retain the local draft, give its path and
-  report the blocker. On receipt, report the community receipt ID and that it
-  is awaiting review. Community maintainers handle publication and upstream follow-up.
-  Report "searchable" only when the deployed index returns the new record IDs.
+<contribute when="local delivery has a shareable result or a contribution is being resumed">
+  Honor a prior decline or no-share instruction. Prepare an anonymized draft with
+  minimum evidence and a PR draft for any verified patch intended for upstream.
+  If prepare_community_submission returns invalid, correct its findings or
+  report what blocks the draft. Only on ready, show the exact preview and
+  destination and call submit_community with its draft ID and digest. Its form is the only approval: share the anonymized result so
+  others can reuse it. Decline or dismissal ends the offer.
+  If submission is unavailable, retain the local draft and report its path and
+  blocker. A receipt means pending review; call the result searchable only when
+  the deployed index returns its IDs. Maintainers handle publication and upstream
+  follow-up. Contribution status does not change local delivery status.
 </contribute>
 ```
 
-If the contribution MCP is unavailable, keep the anonymized input JSON as a
-draft. From the repository, validate it with
-`python -B -m community.records.submission --input submission.json --output preview.json`.
+If MCP is unavailable, keep an anonymized draft and use the
+[local preview command](../../precision-compare/references/community-records.md#local-preview).

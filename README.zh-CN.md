@@ -17,15 +17,13 @@
 
 <p align="center"><a href="#框架概览">框架概览</a> · <a href="#快速开始">快速开始</a> · <a href="#典型案例">典型案例</a> · <a href="#评测与修复历史">评测与修复历史</a></p>
 
-NumericBridge 是一个面向推理、训练和强化学习（RL）的数值精度社区。先按当前配置实时检索社区记录，获取最新的相关案例，再在本地部署工作负载，复现并定位精度问题。修复后，重新运行原始负载验证效果，再把验证结果投稿给社区审核。
+NumericBridge 用于对比、诊断和修复推理、训练与强化学习（RL）中的数值差异。确认配置后先查社区案例，再在自己的环境中运行检查。修复用原负载复验，结果可选择分享给社区。
 
 ## 框架概览
 
-![NumericBridge 工作流程：目标设置、数值比较、问题诊断、修复优化、回归测试、结果交付，以及社区知识检索](docs/images/numericbridge-overview.svg)
+![NumericBridge 工作流：社区检索、原生准备、对比、诊断、修复、复验与交付](docs/images/numericbridge-overview.svg)
 
 *图中的 Ascend 910C / Qwen3.8-27B / verl 配置仅为示例；实测结果与已验证覆盖范围见[典型案例](#典型案例)。*
-
-按硬件、模型和框架版本检索[社区案例库](https://freedomintelligence.github.io/NumericBridge/index.html#/cases)，可以找到已知问题、候选修复和已有测量结果。在本地环境中，对比修复前后的输出、梯度或权重更新。投稿时附上运行配置、补丁及实际验证范围，便于遇到同类问题的人复验。
 
 ## 快速开始
 
@@ -55,9 +53,9 @@ python skills/precision-compare/examples/compare_gradients.py
 
 ## 工作流与 Skill
 
-[工作流](skills/numericbridge/references/workflow.md)按阶段指引 Agent 使用对应 Skill。部署适配用 [Framework Adapt](skills/framework-adapt/SKILL.md)，精度采集与对比用 [Precision Compare](skills/precision-compare/SKILL.md)，出现需要调查的差异时用 [Precision Repair](skills/precision-repair/SKILL.md)。每一步沿用已确认的需求和已有证据。
+[工作流](skills/numericbridge/references/workflow.md)按需加载各阶段的 Skill：[Framework Adapt](skills/framework-adapt/SKILL.md) 准备原生环境，[Precision Compare](skills/precision-compare/SKILL.md) 采集和对比，支持的路径运行失败或发现值得调查的数值差异时，进入 [Precision Repair](skills/precision-repair/SKILL.md)。每一步沿用已确认的需求和证据。
 
-按要比较的量选择指南。推理指南讲解如何在相同的历史 token 序列上比较输出分布，SFT 指南覆盖梯度和优化器更新，RL 指南则聚焦固定轨迹上的动作评分与损失。[推理](skills/precision-compare/references/inference.md) · [SFT](skills/precision-compare/references/sft.md) · [RL](skills/precision-compare/references/rl.md)
+任务配方：[推理](skills/precision-compare/references/inference.md) · [SFT](skills/precision-compare/references/sft.md) · [RL](skills/precision-compare/references/rl.md)。
 
 ## 典型案例
 

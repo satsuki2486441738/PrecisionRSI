@@ -1,70 +1,54 @@
 ---
 name: precision-repair
-description: Diagnose and repair numerical defects in model, framework or operator implementations; verify the original workload.
+description: Diagnose reproducible failures of supported native paths and numerical defects; verify fixes on the original workload.
 ---
 
 # Precision repair
 
-Start from the confirmed request, paired observations and evidence paths.
-
 ## Diagnose
 
-1. **Reproduce the observation.** Reuse the native small case, identities,
-   collectors and captures. Check that inputs, initial state, effective settings
-   and observed coordinates are comparable; resolve capture or configuration
-   mismatches first. Repeat only when needed to distinguish a stable discrepancy
-   from run-to-run variation. Preserve the intended execution semantics.
-2. **Localize the difference.** Start at the collected stage boundaries and
-   add [internal observations](../precision-compare/references/layerwise.md)
-   only around the suspect interval within the agreed scope and budget. Report
-   the earliest **observed** divergent boundary and the nearest checked upstream
-   boundary that agreed, if one exists. Unobserved or unpaired boundaries leave
-   the true first divergence open.
-3. **Test the cause.** Inspect the responsible code. If upstream state has
-   diverged, [replay with identical inputs and state](examples/causal-replay.md)
-   to test whether the suspect stage introduces or propagates the difference.
-   Change one factor at a time when explanations compete. Judge correctness
-   using the intended algorithm, an invariant or an aligned independent
-   reference; a difference between stacks alone does not decide which is wrong.
+1. **Reproduce.** Reuse the native trigger and evidence. For a preflight failure,
+   confirm support on the tested revision, then retain the failing command,
+   configuration and earliest failing operation. For a numerical difference,
+   check input/state, settings and coordinate alignment before replaying it.
+   Repeat only to resolve reproducibility or variation.
+2. **Localize.** Start with captured boundaries; add [internal observations](../precision-compare/references/layerwise.md)
+   only around the suspect interval. Report the earliest observed failure or
+   divergence and the closest checked upstream boundary that passed, if known.
+3. **Test the cause.** Inspect the relevant source and change one factor at a
+   time. For diverged upstream state, [replay with identical inputs and state](examples/causal-replay.md)
+   to distinguish introduced from propagated error. Judge numerical correctness
+   against the intended algorithm, an invariant or an independent reference.
 
 ```xml
 <diagnosis_handoff>
-  Update the case's local issues.md with the discrepancy, paired coordinates,
-  coverage and checked boundaries, including gaps. Cite supporting evidence
-  and the source revision and code when identified. Classify the discrepancy
-  as a capture or setup problem, a numerical-policy difference, a supported
-  defect, or unresolved.
-  Stage localization is a checkpoint unless it meets an explicit scope limit.
-  Otherwise, reuse the triggering case to narrow the interval until evidence
-  establishes a cause or no focused check or pending result can advance diagnosis
-  within the authorized scope and budget. Run the smallest check that can
-  distinguish the remaining explanations. If blocked, report the narrowest
-  supported interval, what was ruled out, the concrete blocker and the next check.
-  For a supported defect, propose a patch and pass a focused regression check
-  to verification when repair is in scope.
+  In issues.md, classify the issue as setup/capture, unsupported capability,
+  expected numerical policy, supported defect or unresolved. Link source and
+  evidence, checked boundaries and ruled-out explanations. Continue beyond
+  localization while a focused check can advance the cause within scope and
+  budget. If blocked, leave the concrete blocker and next check. For a supported
+  defect, hand off the trigger and focused regression to authorized repair.
 </diagnosis_handoff>
 ```
 
 ## Patch and verify
 
-- Test each patch, upgrade or settings change separately against the same verified
-  baseline. Keep framework-specific patches with the case.
-- On the original small native case, show the focused check fail before and pass
-  after. Reuse matching baseline evidence, entrypoint, collectors, inputs, initial
-  state and reference. Change only the candidate under test.
-- Reuse those runs for workload verification when coverage suffices. Extend only
-  to cover the trigger, affected behavior or agreed delivery scope.
-- Apply the agreed tolerance, or justify a regression tolerance from the computation
-  and dtype. Measure runtime and memory costs when relevant.
+- Test one patch, upgrade or configuration change at a time. Keep case-specific
+  patches with the case and reuse matching before evidence, inputs and settings.
+- Show the focused regression fail before and pass after, then verify the
+  original small native case. For an execution defect, verify the original
+  failing path and its required evidence; report numerical coverage separately.
+  Reuse the regression run when it covers both checks. Extend only for missing
+  coverage or agreed scope.
+- Use the agreed numerical tolerance or justify the regression tolerance from
+  the computation and dtype. Measure runtime and memory when relevant.
 
-Use [precision-compare](../precision-compare/SKILL.md) for missing captures or
-metrics and [shared execution](../precision-compare/references/comparison.md#shared-tasks)
-for receipts or resumed runs.
+Use [precision-compare](../precision-compare/SKILL.md#collect) for missing captures
+or metrics, and [shared execution](../precision-compare/references/comparison.md#recover-an-interrupted-stage)
+for resumed runs.
 
 ## Return
 
-Update the same issue entry after each candidate attempt with its change and
-tested configuration, regression and workload outcomes, before/after metrics
-when measured, coverage and evidence paths. Mark verified only after both
-checks pass; retain failed candidates and remaining checks for partial results.
-Return the issue record path with the diagnosis and candidate outcomes.
+Update the same issues.md entry with each candidate, tested configuration,
+before/after observations, regression and workload outcomes, evidence and
+remaining checks. Mark verified only after both checks pass.
