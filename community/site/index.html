@@ -171,7 +171,7 @@ br.d{display:inline}
 .result h3{font-size:17px;font-weight:400;letter-spacing:-.01em;margin-top:10px}
 .result p{font:11.5px/1.6 var(--mono);color:var(--muted);margin-top:12px}
 .result p i{font-style:normal;color:var(--red);padding:0 6px}
-:is(#v-overview,#v-cite) .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}
+#v-overview .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}
 #v-overview .sec-head .h2{max-width:none;word-break:normal}
 .home-intro{padding:62px 0 42px;text-align:center}
 .home-intro .h1{max-width:none;font-size:64px;letter-spacing:0;color:var(--red)}
@@ -183,7 +183,7 @@ br.d{display:inline}
 .home-section-title{position:relative;min-width:0;padding-inline-start:14px;color:var(--ink);font-size:32px;font-weight:650;line-height:1.25}
 .home-section-title::before{content:"";position:absolute;inset-inline-start:0;top:.19em;width:3px;height:.87em;background:var(--red);border-radius:2px}
 .home-results .home-section-title{margin-bottom:18px}
-.home-coverage-head,.home-citation{display:flex;align-items:baseline;justify-content:space-between;gap:6px 20px;flex-wrap:wrap}
+.home-coverage-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px 20px;flex-wrap:wrap}
 .home-coverage-head{margin-bottom:18px}
 .home-coverage h3{color:var(--muted);font-size:13px;font-weight:550}
 .home-platforms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0 18px}
@@ -201,7 +201,7 @@ br.d{display:inline}
 .home-frameworks>div{display:grid;grid-template-columns:82px minmax(0,1fr);gap:8px 12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
 .home-frameworks dt{font-size:13px;font-weight:550}
 .home-citation{margin:48px 0 44px;padding-top:20px;border-top:1px solid var(--line)}
-.home-citation p,.home-coverage-status{margin-top:4px;color:var(--muted);font-size:13px}
+.home-coverage-status{margin-top:4px;color:var(--muted);font-size:13px}
 .home-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 24px}
 .home-stat{display:flex;flex-direction:column;align-items:flex-start;min-width:0;border-top:1px solid var(--line);padding-top:12px}
 .home-stat dt{font-size:14px;font-weight:500;line-height:1.4}
@@ -504,17 +504,10 @@ a.plink:hover{border-color:var(--ink)}
 .rows-dl dd ul.notes{list-style:none;padding-left:0;margin-top:6px}
 .rows-dl dd .fold .notes li:last-child{border-bottom:0}
 /* cite */
-.cite{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;align-items:stretch}
-.cite-meta{display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:20px 22px}
-.spec2{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 20px;font-size:13.5px}
-.spec2 dt{font:500 10px/2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-.spec2 dd{color:var(--ink);overflow-wrap:anywhere}
-.spec2 dd.mono{font-size:12.5px}
-.cite-dl{display:flex;flex-wrap:wrap;gap:8px}
-.cite-code{display:flex;flex-direction:column;overflow:hidden}
-.cc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px 10px 16px;background:var(--wash);border-bottom:1px solid var(--line)}
+.cite-code{margin-top:14px;max-width:760px;overflow:hidden}
+.cc-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px 10px 16px;background:var(--wash);border-bottom:1px solid var(--line)}
 .cc-top .seg{height:30px}
-.cite pre{margin:0;flex:1;padding:16px 18px;font:12px/1.75 var(--mono);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+.cite-code pre{margin:0;padding:16px 18px;font:12px/1.75 var(--mono);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
 .cc-note{padding:0 18px 14px}
 .foot-links{display:flex;gap:18px}
 
@@ -1343,7 +1336,6 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   .ev-how summary{padding:12px 16px}
   .ev-how-b{padding:0 16px 18px}
   .ev-q,.ev-a{font-size:18px}
-  .cite{grid-template-columns:1fr}
   .evcard .cmptbl{margin:0 -16px}
   .tw-c{padding-left:11px;padding-right:11px}
   .tw-c.m.hd strong{font-size:20px}
@@ -1437,7 +1429,6 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
   <p class="wrap empty" id="boot">正在读取内嵌数据…</p>
   <section class="view" id="v-home" hidden></section>
   <section class="view" id="v-overview" hidden></section>
-  <section class="view" id="v-cite" hidden></section>
   <section class="view" id="v-list" hidden></section>
   <section class="view" id="v-records" hidden></section>
   <section class="view" id="v-compare" hidden></section>
@@ -1453,7 +1444,7 @@ button.pcard:hover{border-color:var(--ink);transform:translateY(-1px)}
 <footer class="foot"><div class="wrap">
   <a class="brand" href="#/"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 26Q24 -2 43 26" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M13 16.7V26M35 16.7V26M19 13V26M29 13V26" stroke="currentColor" stroke-width="1.7"/><rect x="7.5" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="36" y="32.5" width="4.5" height="5.5" rx=".8" fill="currentColor"/><rect x="4" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="12.25" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="28.75" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="37" y="26" width="7" height="6.5" rx="1" fill="currentColor"/><rect x="20.5" y="22" width="7" height="6.5" rx="1" fill="var(--red)"/></svg><span><b>NumericBridge</b><small>cross-stack numerics</small></span></a>
   <span id="footNote">跨硬件与软件栈的精度评测与修复记录。</span>
-  <span class="foot-links"><a href="#/cite" id="footCite">引用与数据</a><a href="#top" id="toTop">回到顶部 ↑</a></span>
+  <span class="foot-links"><a href="#/?section=citation" id="footCite">引用</a><a href="#top" id="toTop">回到顶部 ↑</a></span>
 </div></footer>
 
 <div class="scrim" id="scrim"></div>
@@ -2033,7 +2024,7 @@ function writeQuery(name, params) {
   const s = qs.toString().replace(/%2C/g, ",").replace(/%7C/g, "|");
   history.replaceState(null, "", `#/${name}${s ? "?" + s : ""}`);
 }
-const VIEWS = { "": "v-home", overview: "v-overview", cite: "v-cite", list: "v-list", records: "v-records", compare: "v-compare", platform: "v-platform", repairs: "v-repairs", cases: "v-cases", report: "v-report", how: "v-how" };
+const VIEWS = { "": "v-home", overview: "v-overview", list: "v-list", records: "v-records", compare: "v-compare", platform: "v-platform", repairs: "v-repairs", cases: "v-cases", report: "v-report", how: "v-how" };
 const RENDER = {};
 RENDER.cases = h => NumericBridgeCases.mount(byId("v-cases"), h, { lang: LANG });
 RENDER.report = h => NumericBridgeCases.mountReport(byId("v-report"), h, { lang: LANG, copyLink: copyText });
@@ -2052,7 +2043,13 @@ RENDER.records = () => {
 let lastView = null;
 function route() {
   const h = parseHash();
+  if (h.name === "cite") {
+    writeQuery("", { section: "citation" });
+    h.name = "";
+    h.q.set("section", "citation");
+  }
   const name = VIEWS[h.name] ? h.name : "";
+  const citeJump = name === "" && h.q.get("section") === "citation";
   if (isOpen()) closeDrawer(true);
   byId("v-cases")._lifecycleCleanup?.();
   hideTip();
@@ -2060,20 +2057,21 @@ function route() {
   const navKey = name === "platform" ? "compare" : name === "report" ? "cases" : name;
   $$("#nav a").forEach(a => a.dataset.route === navKey ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   byId("csv").hidden = !(name === "list" || name === "repairs");
-  byId("mockbar").hidden = ["", "how", "overview", "cite", "cases", "report", "compare", "repairs", "records"].includes(name);
+  byId("mockbar").hidden = ["", "how", "overview", "cases", "report", "compare", "repairs", "records"].includes(name);
   byId("mbTag").textContent = tx("● 实测记录", "● Measured records");
   byId("mbDesc").textContent = tx("读数与结构直接取自 data/evaluations.json 与 data/repairs.json", "Read directly from data/evaluations.json and data/repairs.json");
   byId("updated").textContent = S.updated_at ? tx(`数据更新于 ${S.updated_at}`, `Updated ${S.updated_at}`) : "";
-  const key = name + "/" + (h.arg || "");
+  const key = name + "/" + (h.arg || "") + (citeJump ? "?section=citation" : "");
   RENDER[name](h);
-  if (key !== lastView) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  if (citeJump) byId("homeCitation").scrollIntoView({ block: "start", behavior: "instant" });
+  else if (key !== lastView) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
   lastView = key;
   setupOutline(byId(VIEWS[name]));
   syncOutline();
   observeReveal(byId(VIEWS[name]));
   document.title = (TITLES[name] ? TITLES[name](h) + " · " : "") + "NumericBridge";
 }
-const TITLES = { overview: () => tx("评测概览", "Evaluation Overview"), cite: () => tx("数据与引用", "Data & Citation"), cases: () => tx("精度案例库", "Precision Case Library"), report: () => tx("实测报告", "Measured Report"), list: () => tx("评测记录", "Evaluation Records"), records: () => tx("全部记录", "All Records"), compare: () => tx("硬件平台比较", "Hardware Comparison"), platform: h => platDisp(h.arg || tx("平台", "Platform")), repairs: () => tx("修复记录", "Repair Records"), how: () => tx("框架实现", "Framework Implementation") };
+const TITLES = { overview: () => tx("评测概览", "Evaluation Overview"), cases: () => tx("精度案例库", "Precision Case Library"), report: () => tx("实测报告", "Measured Report"), list: () => tx("评测记录", "Evaluation Records"), records: () => tx("全部记录", "All Records"), compare: () => tx("硬件平台比较", "Hardware Comparison"), platform: h => platDisp(h.arg || tx("平台", "Platform")), repairs: () => tx("修复记录", "Repair Records"), how: () => tx("框架实现", "Framework Implementation") };
 
 /* ---------- outline (right-edge reading outline) ---------- */
 let OL_SECS = [], OL_LINKS = [], OL_JUMP = null;
@@ -2361,23 +2359,18 @@ RENDER[""] = function renderHome() {
       <div id="homeCoverageList"></div>
     </section>
     ${homeResultsHtml()}
-    <section class="home-citation" aria-labelledby="homeCitationTitle" data-ol="${tx("论文引用", "Paper citation")}">
-      <div><h2 class="home-section-title" id="homeCitationTitle">${tx("论文引用", "Paper Citation")}</h2><p>${tx("论文发布后补充引用信息。", "Citation details will be added when the paper is available.")}</p></div>
-      <a class="link" href="#/cite">${tx("数据引用", "Cite the dataset")} <span aria-hidden="true">→</span></a>
+    <section class="home-citation" id="homeCitation" aria-labelledby="homeCitationTitle" data-ol="${tx("引用", "Citation")}">
+      <h2 class="home-section-title" id="homeCitationTitle">${tx("引用", "Citation")}</h2>
+      <div class="panel cite-code">
+        <div class="cc-top"><div class="seg" role="group" aria-label="${tx("数据引用格式", "Data citation format")}"><button type="button" data-ct="bib">BibTeX</button><button type="button" data-ct="txt">${tx("纯文本", "Plain text")}</button></div><button class="btn sm" type="button" id="citeCopy">${tx("复制", "Copy")}</button></div>
+        <pre id="citePre"></pre>
+      </div>
     </section>
   </div>`;
   sceneFlow();
   renderHomeCoverage(byId("homeCoverageList"));
-  byId("homePrTrigger").addEventListener("click", () => byId("homePrDialog").showModal());
-};
-RENDER.cite = function renderCitationPage() {
-  const view = byId("v-cite");
-  if (view.firstElementChild) return;
-  view.innerHTML = `<div class="wrap sec first">
-    <header class="sec-head"><h1 class="h2">${tx("数据与引用", "Data &amp; Citation")}</h1><a class="link" href="#/overview">${tx("评测概览 →", "Evaluation overview →")}</a></header>
-    <div class="cite" id="citeBox"></div>
-  </div>`;
   renderCite();
+  byId("homePrTrigger").addEventListener("click", () => byId("homePrDialog").showModal());
 };
 const SW = { kind: "", task: "" };
 const HERO_BAR_LABELS = {
@@ -2516,30 +2509,17 @@ function citeText() {
   author       = {Xie, Xinyuan and Yu, Zheng and Zhang, Ruijie and Wang, Benyou},
   year         = {${String(d).slice(0, 4)}},
   note         = {Data snapshot ${d}: ${ROWS.length} pairwise comparisons, ${EVALS.size} evaluations, ${REPAIRS.length} repairs${h ? `. ${h}` : ""}},
-  howpublished = {https://numericbridge.org}
+  howpublished = {https://numericbridge.com}
 }`;
   return LANG === "en"
     ? `Xinyuan XIE, Zheng YU, Ruijie ZHANG, Benyou WANG. NumericBridge: Cross-Stack Numerical Consistency Records. Data snapshot ${d} (${fmtInt(ROWS.length)} comparisons, ${fmtInt(EVALS.size)} evaluations, ${REPAIRS.length} repairs)${h ? `, ${h}` : ""}.`
     : `Xinyuan XIE, Zheng YU, Ruijie ZHANG, Benyou WANG. NumericBridge：跨栈数值一致性记录. 数据快照 ${d}（${fmtInt(ROWS.length)} 条成对比较、${fmtInt(EVALS.size)} 个评测、${REPAIRS.length} 项修复）${h ? `，${h}` : ""}.`;
 }
 function renderCite() {
-  const box = byId("citeBox"); if (!box) return;
-  const d = S.updated_at || "snapshot";
-  box.innerHTML = `<div class="panel cite-meta"><dl class="spec2">
-      <dt>${tx("快照日期", "Snapshot")}</dt><dd class="mono">${esc(S.updated_at || "—")}</dd>
-      </dl>
-      <div class="cite-dl"><button class="btn sm" type="button" data-dl="rows">${tx("比较记录 JSON", "Evaluations JSON")} <span>↓</span></button><button class="btn sm" type="button" data-dl="repairs">${tx("修复记录 JSON", "Repairs JSON")} <span>↓</span></button><button class="btn sm" type="button" data-dl="csv">${tx("全部比较 CSV", "Comparisons CSV")} <span>↓</span></button></div></div>
-    <div class="panel cite-code"><div class="cc-top"><div class="seg" role="group" aria-label="${tx("引用格式", "Citation format")}"><button type="button" data-ct="bib">BibTeX</button><button type="button" data-ct="txt">${tx("纯文本", "Plain text")}</button></div><button class="btn sm" type="button" id="citeCopy">${tx("复制", "Copy")}</button></div>
-      <pre id="citePre"></pre></div>`;
-  const paint = () => { byId("citePre").textContent = citeText(); $$("[data-ct]", box).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.ct === CITE.tab))); };
-  $$("[data-ct]", box).forEach(b => b.onclick = () => { CITE.tab = b.dataset.ct; paint(); });
+  const box = byId("homeCitation");
+  const paint = () => { byId("citePre").textContent = citeText(); $$('[data-ct]', box).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.ct === CITE.tab))); };
+  $$('[data-ct]', box).forEach(b => b.onclick = () => { CITE.tab = b.dataset.ct; paint(); });
   byId("citeCopy").onclick = e => copyText(citeText(), e.currentTarget);
-  const save = (name, text, type) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 500); };
-  $$("[data-dl]", box).forEach(b => b.onclick = () => {
-    if (b.dataset.dl === "rows") save(`numericbridge-evaluations-${d}.json`, JSON.stringify({ summary: DATA.summary, rows: DATA.rows }), "application/json");
-    else if (b.dataset.dl === "repairs") save(`numericbridge-repairs-${d}.json`, JSON.stringify(DATA.repairs), "application/json");
-    else exportRowsCsv(ROWS, `numericbridge-comparisons-${d}.csv`);
-  });
   paint();
   const raw = JSON.stringify(DATA);
   const done = hx => { CITE.hash = hx; paint(); };
@@ -4375,7 +4355,7 @@ if (LANG === "en") {
   const NAV_EN = { "": "Home", cases: "Cases", compare: "Hardware Comparison", how: "Framework Implementation" };
   $$("#nav a").forEach(a => { a.textContent = NAV_EN[a.dataset.route] ?? a.textContent; });
   const setT = (id, t) => { const el = byId(id); if (el) el.textContent = t; };
-  setT("footCite", "Cite & data"); setT("toTop", "Back to top ↑");
+  setT("footCite", "Citation"); setT("toTop", "Back to top ↑");
   setT("mbTag", "● Measured records"); setT("mbDesc", "Read directly from data/evaluations.json and data/repairs.json");
   setT("footNote", "Precision evaluations and repairs across hardware and software stacks.");
   byId("csv").innerHTML = "Export CSV <span>↓</span>";
